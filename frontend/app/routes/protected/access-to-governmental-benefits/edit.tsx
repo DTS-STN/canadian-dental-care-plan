@@ -66,7 +66,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('update-governmental-benefit');
 
   const instrumentationService = getInstrumentationService();
@@ -76,7 +76,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const { CANADA_COUNTRY_ID } = getEnv();
   const lookupService = getLookupService();
-  const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
+  const federalSocialPrograms = serviceProvider.getFederalGovernmentInsurancePlanService().findAll();
   const allRegions = localizeAndSortRegions(lookupService.getAllRegions(), locale);
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
   const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();

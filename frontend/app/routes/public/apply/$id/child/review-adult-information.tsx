@@ -150,13 +150,13 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/child/review-adult-information');
 
   const state = loadApplyChildStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = getEnv();
-  const benefitApplicationService = getBenefitApplicationService();
+  const benefitApplicationService = getBenefitApplicationService({ federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService() });
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();

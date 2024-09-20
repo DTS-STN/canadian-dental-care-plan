@@ -58,7 +58,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   }
 
   const lookupService = getLookupService();
-  const allFederalSocialPrograms = lookupService.getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
 
   // Getting province by Id
@@ -130,6 +129,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
       throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
     }
 
+    const federalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
+
     return {
       id: child.id,
       firstName: child.information.firstName,
@@ -141,10 +142,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
           access: child.dentalBenefits.hasFederalBenefits,
-          benefit: allFederalSocialPrograms
-            .filter((obj) => obj.id === child.dentalBenefits?.federalSocialProgram)
-            .map((obj) => getNameByLanguage(locale, obj))
-            .join(', '),
+          benefit: federalGovernmentInsurancePlan && getNameByLanguage(locale, federalGovernmentInsurancePlan),
         },
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,

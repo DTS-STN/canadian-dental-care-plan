@@ -179,7 +179,14 @@ describe('Applications Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '800009979', sub: '00000000-0000-0000-0000-000000000000' });
 
-      const mockAppLoadContext = mock<AppLoadContext>({ configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) } });
+      const mockAppLoadContext = mock<AppLoadContext>({
+        configProvider: {
+          getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }),
+        },
+        serviceProvider: {
+          getFederalGovernmentInsurancePlanService: vi.fn(),
+        },
+      });
 
       const response = await loader({
         request: new Request('http://localhost/applications?sort=asc'),

@@ -59,12 +59,9 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   }
 
   const lookupService = getLookupService();
-  const allFederalSocialPrograms = lookupService.getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
-  const selectedFederalBenefits = allFederalSocialPrograms
-    .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram)
-    .map((obj) => getNameByLanguage(locale, obj))
-    .join(', ');
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : null;
+
   const selectedProvincialBenefits = allProvincialTerritorialSocialPrograms
     .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
@@ -133,7 +130,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const dentalInsurance = {
     acessToDentalInsurance: state.dentalInsurance,
-    selectedFederalBenefits,
+    selectedFederalBenefits: selectedFederalGovernmentInsurancePlan && getNameByLanguage(locale, selectedFederalGovernmentInsurancePlan),
     selectedProvincialBenefits,
   };
 

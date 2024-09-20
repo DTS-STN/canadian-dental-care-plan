@@ -131,14 +131,14 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram && localizeFederalSocialProgram(lookupService.getFederalSocialProgramById(state.dentalBenefits.federalSocialProgram), locale);
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : null;
   const selectedProvincialBenefit =
     state.dentalBenefits.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(state.dentalBenefits.provincialTerritorialSocialProgram), locale);
 
   const dentalBenefit = {
     federalBenefit: {
       access: state.dentalBenefits.hasFederalBenefits,
-      benefit: selectedFederalBenefit ? selectedFederalBenefit.name : '',
+      benefit: selectedFederalGovernmentInsurancePlan && localizeFederalSocialProgram(selectedFederalGovernmentInsurancePlan, locale).name,
     },
     provTerrBenefit: {
       access: state.dentalBenefits.hasProvincialTerritorialBenefits,
@@ -172,13 +172,13 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult/review-information');
 
   const state = loadApplyAdultStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = getEnv();
-  const benefitApplicationService = getBenefitApplicationService();
+  const benefitApplicationService = getBenefitApplicationService({ federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService() });
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();

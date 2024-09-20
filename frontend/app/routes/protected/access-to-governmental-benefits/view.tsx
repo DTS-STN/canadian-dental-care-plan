@@ -36,7 +36,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('update-governmental-benefit');
 
   const instrumentationService = getInstrumentationService();
@@ -50,11 +50,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
 
-  const federalSocialProgramName =
-    lookupService
-      .getAllFederalSocialPrograms()
-      .filter((federalSocialProgram) => federalSocialProgram.id === personalInformation.federalDentalPlanId)
-      .map((federalSocialProgram) => getNameByLanguage(locale, federalSocialProgram))[0] ?? '';
+  const federalSocialProgram = personalInformation.federalDentalPlanId ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(personalInformation.federalDentalPlanId) : null;
+  const federalSocialProgramName = federalSocialProgram && getNameByLanguage(locale, federalSocialProgram);
+
   const provincialAndTerritorialProgramName =
     lookupService
       .getAllProvincialTerritorialSocialPrograms()

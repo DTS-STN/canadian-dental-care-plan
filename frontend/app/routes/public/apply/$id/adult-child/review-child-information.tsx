@@ -53,7 +53,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
@@ -73,7 +73,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const payload = viewPayloadEnabled ? toBenefitApplicationRequestFromApplyAdultChildState(state) : undefined;
 
   const children = state.children.map((child) => {
-    const selectedFederalBenefit = child.dentalBenefits.federalSocialProgram && localizeFederalSocialProgram(lookupService.getFederalSocialProgramById(child.dentalBenefits.federalSocialProgram), locale);
+    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
     const selectedProvincialBenefit =
       child.dentalBenefits.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(child.dentalBenefits.provincialTerritorialSocialProgram), locale);
 
@@ -88,7 +88,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
           access: child.dentalBenefits.hasFederalBenefits,
-          benefit: selectedFederalBenefit && selectedFederalBenefit.name,
+          benefit: selectedFederalGovernmentInsurancePlan && localizeFederalSocialProgram(selectedFederalGovernmentInsurancePlan, locale).name,
         },
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,
@@ -110,13 +110,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult-child/review-child-information');
 
   const state = loadApplyAdultChildStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = getEnv();
-  const benefitApplicationService = getBenefitApplicationService();
+  const benefitApplicationService = getBenefitApplicationService({ federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService() });
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();

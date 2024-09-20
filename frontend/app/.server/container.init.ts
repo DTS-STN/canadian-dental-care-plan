@@ -2,6 +2,8 @@ import { error } from 'console';
 import { Container } from 'inversify';
 import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
 
+import type { FederalGovernmentInsurancePlanService } from './domain/services/federal-government-insurance-plan.service';
+import { FederalGovernmentInsurancePlanServiceImpl } from './domain/services/federal-government-insurance-plan.service';
 import type { ClientConfig } from '~/.server/configs/client.config';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
@@ -94,6 +96,7 @@ export function initContainer() {
   //configure services
   container.bind<ClientFriendlyStatusService>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE).to(ClientFriendlyStatusServiceImpl);
   container.bind<CountryService>(SERVICE_IDENTIFIER.COUNTRY_SERVICE).to(CountryServiceImpl);
+  container.bind<FederalGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(FederalGovernmentInsurancePlanServiceImpl);
   container.bind<MaritalStatusService>(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE).to(MaritalStatusServiceImpl);
   container.bind<PreferredCommunicationMethodService>(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE).to(PreferredCommunicationMethodServiceImpl);
   container.bind<PreferredLanguageService>(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).to(PreferredLanguageServiceImpl);
@@ -128,7 +131,7 @@ function createLoggerMidddlware(log: Logger) {
         return;
       }
 
-      log.debug(textSerializer(out));
+      log.trace(textSerializer(out));
     },
   );
 }

@@ -49,7 +49,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
@@ -66,7 +66,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:review-child-information.page-title') }) };
 
   const children = state.children.map((child) => {
-    const selectedFederalBenefit = child.dentalBenefits.federalSocialProgram && localizeFederalSocialProgram(lookupService.getFederalSocialProgramById(child.dentalBenefits.federalSocialProgram), locale);
+    const selectFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
     const selectedProvincialBenefit =
       child.dentalBenefits.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(child.dentalBenefits.provincialTerritorialSocialProgram), locale);
 
@@ -81,7 +81,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
           access: child.dentalBenefits.hasFederalBenefits,
-          benefit: selectedFederalBenefit && selectedFederalBenefit.name,
+          benefit: selectFederalGovernmentInsurancePlan && localizeFederalSocialProgram(selectFederalGovernmentInsurancePlan, locale).name,
         },
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,

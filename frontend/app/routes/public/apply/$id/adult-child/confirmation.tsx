@@ -60,12 +60,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   }
 
   const lookupService = getLookupService();
-  const allFederalSocialPrograms = lookupService.getAllFederalSocialPrograms();
+  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : null;
   const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
-  const selectedFederalBenefits = allFederalSocialPrograms
-    .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram)
-    .map((obj) => getNameByLanguage(locale, obj))
-    .join(', ');
   const selectedProvincialBenefits = allProvincialTerritorialSocialPrograms
     .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
@@ -134,7 +130,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const dentalInsurance = {
     acessToDentalInsurance: state.dentalInsurance,
-    selectedFederalBenefits,
+    selectedFederalBenefit: selectedFederalBenefit && getNameByLanguage(locale, selectedFederalBenefit),
     selectedProvincialBenefits,
   };
 
@@ -145,6 +141,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
       child.information === undefined) {
       throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
     }
+
+    const federalBenefit = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
 
     return {
       id: child.id,
@@ -157,10 +155,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
           access: child.dentalBenefits.hasFederalBenefits,
-          benefit: allFederalSocialPrograms
-            .filter((obj) => obj.id === child.dentalBenefits?.federalSocialProgram)
-            .map((obj) => getNameByLanguage(locale, obj))
-            .join(', '),
+          benefit: federalBenefit && getNameByLanguage(locale, federalBenefit),
         },
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,
@@ -383,12 +378,12 @@ export default function ApplyFlowConfirm() {
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dental-public')}>
-              {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
+              {dentalInsurance.selectedFederalBenefit || dentalInsurance.selectedProvincialBenefits ? (
                 <>
                   <p>{t('apply-adult-child:confirm.yes')}</p>
                   <p>{t('apply-adult-child:confirm.dental-benefit-has-access')}</p>
                   <ul className="ml-6 list-disc">
-                    {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
+                    {dentalInsurance.selectedFederalBenefit && <li>{dentalInsurance.selectedFederalBenefit}</li>}
                     {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
                   </ul>
                 </>
