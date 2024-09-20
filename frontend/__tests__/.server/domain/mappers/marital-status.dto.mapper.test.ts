@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { ServerConfig } from '~/.server/configs/server.config';
 import type { MaritalStatusDto } from '~/.server/domain/dtos';
-import type { MaritalStatusEntity } from '~/.server/domain/entities/marital-status.entity';
+import type { MaritalStatusEntity } from '~/.server/domain/entities';
 import { MaritalStatusDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('MaritalStatusDtoMapperImpl', () => {

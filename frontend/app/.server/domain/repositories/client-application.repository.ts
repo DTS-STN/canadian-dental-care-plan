@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import { ClientApplicationEntity } from '~/.server/domain/entities/client-application.entity';
+import { ClientApplicationEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 

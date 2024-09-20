@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import type { MaritalStatusEntity } from '~/.server/domain/entities/marital-status.entity';
+import type { MaritalStatusEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 import maritalStatusJsonDataSource from '~/.server/resources/power-platform/marital-status.json';
 

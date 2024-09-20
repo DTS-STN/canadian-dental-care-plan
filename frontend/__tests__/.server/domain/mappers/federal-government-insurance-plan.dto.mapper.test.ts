@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
-import type { FederalGovernmentInsurancePlanEntity } from '~/.server/domain/entities/federal-government-insurance-plan.entity';
+import type { FederalGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
 import { FederalGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('FederalGovernmentInsurancePlanDtoMapperImpl', () => {

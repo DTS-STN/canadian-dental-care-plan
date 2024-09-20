@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { ServerConfig } from '~/.server/configs/server.config';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos';
-import type { PreferredLanguageEntity } from '~/.server/domain/entities/preferred-language.entity';
+import type { PreferredLanguageEntity } from '~/.server/domain/entities';
 import { PreferredLanguageDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('PreferredLanguageDtoMapperImpl', () => {

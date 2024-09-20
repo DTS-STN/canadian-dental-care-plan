@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { CountryDto } from '~/.server/domain/dtos';
-import type { CountryEntity } from '~/.server/domain/entities/country.entity';
+import type { CountryEntity } from '~/.server/domain/entities';
 import { CountryDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('CountryDtoMapperImpl', () => {

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import type { ProvinceTerritoryStateEntity } from '~/.server/domain/entities/province-territory-state.entity';
+import type { ProvinceTerritoryStateEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 import provinceTerritoryStateJsonDataSource from '~/.server/resources/power-platform/province-territory-state.json';
 

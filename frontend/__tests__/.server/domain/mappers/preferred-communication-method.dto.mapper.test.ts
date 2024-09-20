@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { ServerConfig } from '~/.server/configs/server.config';
 import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
-import type { PreferredCommunicationMethodEntity } from '~/.server/domain/entities/preferred-communication-method.entity';
+import type { PreferredCommunicationMethodEntity } from '~/.server/domain/entities';
 import { PreferredCommunicationMethodDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('PreferredCommunicationMethodDtoMapperImpl', () => {

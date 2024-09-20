@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos';
-import type { PreferredLanguageEntity } from '~/.server/domain/entities/preferred-language.entity';
+import type { PreferredLanguageEntity } from '~/.server/domain/entities';
 
 export interface PreferredLanguageDtoMapper {
   mapPreferredLanguageEntityToPreferredLanguageDto(preferredLanguageEntity: PreferredLanguageEntity): PreferredLanguageDto;

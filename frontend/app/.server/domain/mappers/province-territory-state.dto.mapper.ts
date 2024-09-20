@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 
 import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
-import type { ProvinceTerritoryStateEntity } from '~/.server/domain/entities/province-territory-state.entity';
+import type { ProvinceTerritoryStateEntity } from '~/.server/domain/entities';
 
 export interface ProvinceTerritoryStateDtoMapper {
   mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity: ProvinceTerritoryStateEntity): ProvinceTerritoryStateDto;

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import type { PreferredLanguageEntity } from '~/.server/domain/entities/preferred-language.entity';
+import type { PreferredLanguageEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 import preferredLanguageJsonDataSource from '~/.server/resources/power-platform/preferred-language.json';
 
