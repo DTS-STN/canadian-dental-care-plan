@@ -18,7 +18,7 @@ import { extractDateParts, parseDateTimeString, toLocaleDateString } from '~/uti
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
-import { localizeCountries, localizeFederalSocialProgram, localizeMaritalStatuses, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountries, localizeFederalSocialProgram, localizeMaritalStatus, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -61,8 +61,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const locale = getLocale(request);
   const lookupService = getLookupService();
 
-  const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
-  const maritalStatus = maritalStatuses.find((maritalStatus) => maritalStatus.id === applicationDetails.applicantInformation?.maritalStatus);
+  const maritalStatus = applicationDetails.applicantInformation?.maritalStatus ? serviceProvider.getMaritalStatusService().findById(applicationDetails.applicantInformation.maritalStatus) : undefined;
 
   const allRegions = localizeRegions(lookupService.getAllRegions(), locale);
   const mailingProvince = allRegions.find((region) => region.provinceTerritoryStateId === applicationDetails.personalInformation?.mailingProvince);
@@ -79,7 +78,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const communicationPreference = allCommunicationPreferences.find((communicationType) => communicationType.id === applicationDetails.communicationPreferences?.preferredMethod);
   const communicationPreferenceLang = communicationPreference ? getNameByLanguage(locale, communicationPreference) : '';
 
-  const applicantFederalSocialProgram = applicationDetails.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(applicationDetails.dentalBenefits.federalSocialProgram) : null;
+  const applicantFederalSocialProgram = applicationDetails.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(applicationDetails.dentalBenefits.federalSocialProgram) : undefined;
   const applicantProvincialTerritorialSocialProgram =
     applicationDetails.dentalBenefits?.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(applicationDetails.dentalBenefits.provincialTerritorialSocialProgram), locale);
 
@@ -96,7 +95,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   };
 
   const children = applicationDetails.children?.map((child) => {
-    const selectedFederalBenefit = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
+    const selectedFederalBenefit = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
     const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
       ? localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(child.dentalBenefits.provincialTerritorialSocialProgram), locale)
       : undefined;
@@ -133,7 +132,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     locale,
     applicationDetails,
     dentalBenefit,
-    maritalStatus,
+    maritalStatus: maritalStatus && localizeMaritalStatus(maritalStatus, locale),
     mailingProvince,
     homeProvince,
     mailingCountry,

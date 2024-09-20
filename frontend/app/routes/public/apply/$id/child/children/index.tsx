@@ -60,7 +60,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
 
   const children = getChildrenState(state).map((child) => {
-    const federalGovernmentInsurancePlanService = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
+    const federalGovernmentInsurancePlanService = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
 
     const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === child.dentalBenefits?.province).find((p) => p.id === child.dentalBenefits?.provincialTerritorialSocialProgram);
     const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(i18n, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;

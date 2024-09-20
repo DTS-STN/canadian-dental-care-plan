@@ -24,6 +24,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeFederalSocialProgram } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -51,7 +52,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const i18n = getLocale(request);
+  const locale = getLocale(request);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.index.page-title') }) };
@@ -60,17 +61,16 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
 
   const children = getChildrenState(state).map((child) => {
-    const federalSocialProgramEntity = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
-    const federalSocialProgram = federalSocialProgramEntity ? getNameByLanguage(i18n, federalSocialProgramEntity) : null;
+    const federalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
 
     const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === child.dentalBenefits?.province).find((p) => p.id === child.dentalBenefits?.provincialTerritorialSocialProgram);
-    const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(i18n, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;
+    const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(locale, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;
 
     return {
       ...child,
       dentalBenefits: {
         ...child.dentalBenefits,
-        federalSocialProgram,
+        federalSocialProgram: federalGovernmentInsurancePlan && localizeFederalSocialProgram(federalGovernmentInsurancePlan, locale).name,
         provincialTerritorialSocialProgram,
       },
     };

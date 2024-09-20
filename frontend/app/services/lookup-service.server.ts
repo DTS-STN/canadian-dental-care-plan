@@ -1,7 +1,6 @@
 import moize from 'moize';
 import { z } from 'zod';
 
-import maritalStatusesJson from '~/resources/power-platform/marital-statuses.json';
 import preferredMethodOfCommunicationJson from '~/resources/power-platform/preferred-method-of-communication.json';
 import provincialProgramsJson from '~/resources/power-platform/provincial-programs.json';
 import regionsJson from '~/resources/power-platform/regions.json';
@@ -88,7 +87,6 @@ function createLookupService() {
     LOOKUP_SVC_ALL_INDIGENOUS_GROUP_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_INDIGENOUS_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_LAST_TIME_DENTIST_VISIT_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS,
@@ -363,19 +361,6 @@ function createLookupService() {
     return regions;
   }
 
-  function getAllMaritalStatuses() {
-    log.debug('Fetching all marital statuses');
-
-    const maritalStatuses = maritalStatusesJson.value[0].OptionSet.Options.map((o) => ({
-      id: o.Value.toString(),
-      nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
-      nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
-    }));
-
-    log.trace('Returning marital statuses: [%j]', maritalStatuses);
-    return maritalStatuses;
-  }
-
   async function getAllEquityTypes() {
     log.debug('Fetching all equality types');
     const url = `${INTEROP_API_BASE_URI}/lookups/equity-types/`;
@@ -431,10 +416,6 @@ function createLookupService() {
       maxAge: 1000 * LOOKUP_SVC_ALL_LAST_TIME_DENTIST_VISIT_TYPES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllLastTimeDentistVisitTypes memo'),
     }),
-    getAllMaritalStatuses: moize(getAllMaritalStatuses, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS,
-      onCacheAdd: () => log.info('Creating new AllMaritalStatuses memo'),
-    }),
     getAllMouthPainTypes: moize.promise(getAllMouthPainTypes, {
       maxAge: 1000 * LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllMouthPainTypes memo'),
@@ -464,9 +445,6 @@ function createLookupService() {
 }
 
 export type GetLookupService = typeof getLookupService;
-
-export type GetAllMaritalStatuses = Pick<ReturnType<typeof getLookupService>, 'getAllMaritalStatuses'>['getAllMaritalStatuses'];
-export type MaritalStatus = ReturnType<GetAllMaritalStatuses>[number];
 
 export type GetAllRegions = Pick<ReturnType<typeof getLookupService>, 'getAllRegions'>['getAllRegions'];
 export type Region = ReturnType<GetAllRegions>[number];

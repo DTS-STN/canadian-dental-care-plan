@@ -50,7 +50,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
 
-  const federalSocialProgram = personalInformation.federalDentalPlanId ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(personalInformation.federalDentalPlanId) : null;
+  const federalSocialProgram = personalInformation.federalDentalPlanId ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(personalInformation.federalDentalPlanId) : undefined;
   const federalSocialProgramName = federalSocialProgram && getNameByLanguage(locale, federalSocialProgram);
 
   const provincialAndTerritorialProgramName =

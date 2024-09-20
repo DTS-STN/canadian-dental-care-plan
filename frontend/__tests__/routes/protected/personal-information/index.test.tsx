@@ -16,7 +16,6 @@ vi.mock('~/services/lookup-service.server', () => ({
   // prettier-ignore
   getLookupService: vi.fn().mockReturnValue({
     getAllRegions: vi.fn().mockReturnValue([{ provinceTerritoryStateId: 'SP', countryId: "CAN", nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }]),
-    getAllMaritalStatuses: vi.fn().mockReturnValue([{ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single but in french' }]),
   }),
 }));
 
@@ -96,6 +95,10 @@ describe('_gcweb-app.personal-information._index', () => {
         getCountryService: () => ({
           findAll: vi.fn(),
           findById: () => ({ id: '1', nameEn: 'super country', nameFr: 'super country fr' }),
+        }),
+        getMaritalStatusService: () => ({
+          findAll: vi.fn(),
+          findById: () => ({ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single fr' }),
         }),
         getPreferredLanguageService: () => ({
           findById: () => ({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
