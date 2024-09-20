@@ -28,12 +28,12 @@ export function loadApplyAdultChildState({ params, request, session }: LoadApply
   const applyState = loadApplyState({ params, session });
 
   if (applyState.typeOfApplication !== 'adult-child') {
-    throw redirect(getPathById('$lang/_public/apply/$id/type-application', params));
+    throw redirect(getPathById('public/apply/$id/type-application', params));
   }
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('$lang/_public/apply/$id/adult-child/confirmation', params);
+  const confirmationRouteUrl = getPathById('public/apply/$id/adult-child/confirmation', params);
   if (applyState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', applyState.id, confirmationRouteUrl);
     throw redirect(confirmationRouteUrl);
@@ -41,7 +41,7 @@ export function loadApplyAdultChildState({ params, request, session }: LoadApply
 
   // Redirect to the first flow page if the application has not been submitted and
   // the current route is the confirmation page.
-  const termsAndConditionsRouteUrl = getPathById('$lang/_public/apply/$id/terms-and-conditions', params);
+  const termsAndConditionsRouteUrl = getPathById('public/apply/$id/terms-and-conditions', params);
   if (!applyState.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has not been submitted; sessionId: [%s], ', applyState.id, termsAndConditionsRouteUrl);
     throw redirect(termsAndConditionsRouteUrl);
@@ -68,7 +68,7 @@ export function loadApplyAdultSingleChildState({ params, request, session }: Loa
 
   if (!parsedChildId.success) {
     log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/children/index', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/children/index', params));
   }
 
   const childId = parsedChildId.data;
@@ -76,7 +76,7 @@ export function loadApplyAdultSingleChildState({ params, request, session }: Loa
 
   if (childStateIndex === -1) {
     log.warn('Apply single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/children/index', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/children/index', params));
   }
 
   const childState = applyState.children[childStateIndex];
@@ -142,93 +142,93 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
   } = state;
 
   if (typeOfApplication === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/type-application', params));
+    throw redirect(getPathById('public/apply/$id/type-application', params));
   }
 
   if (typeOfApplication === 'delegate') {
-    throw redirect(getPathById('$lang/_public/apply/$id/application-delegate', params));
+    throw redirect(getPathById('public/apply/$id/application-delegate', params));
   }
 
   if (typeOfApplication !== 'adult-child') {
-    throw redirect(getPathById('$lang/_public/apply/$id/type-application', params));
+    throw redirect(getPathById('public/apply/$id/type-application', params));
   }
 
   if (taxFiling2023 === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/tax-filing', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/tax-filing', params));
   }
 
   if (taxFiling2023 === false) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/file-taxes', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/file-taxes', params));
   }
 
   if (dateOfBirth === undefined || allChildrenUnder18 === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/date-of-birth', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/date-of-birth', params));
   }
 
   const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
 
   if (ageCategory === 'children' && allChildrenUnder18) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/contact-apply-child', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/contact-apply-child', params));
   }
 
   if (ageCategory === 'children' && !allChildrenUnder18) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/parent-or-guardian', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
   }
 
   if (ageCategory === 'youth' && !allChildrenUnder18) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/parent-or-guardian', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
   }
 
   if (ageCategory === 'youth' && allChildrenUnder18 && livingIndependently === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/living-independently', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/living-independently', params));
   }
 
   if (ageCategory === 'adults' && disabilityTaxCredit === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/disability-tax-credit', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/disability-tax-credit', params));
   }
 
   if (ageCategory === 'adults' && disabilityTaxCredit === true && !allChildrenUnder18) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/apply-yourself', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/apply-yourself', params));
   }
 
   if (ageCategory === 'adults' && disabilityTaxCredit === false && allChildrenUnder18) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/apply-children', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/apply-children', params));
   }
 
   if (ageCategory === 'adults' && disabilityTaxCredit === false && !allChildrenUnder18) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/dob-eligibility', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/dob-eligibility', params));
   }
 
   if (ageCategory === 'seniors' && !allChildrenUnder18) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/apply-yourself', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/apply-yourself', params));
   }
 
   if (applicantInformation === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/applicant-information', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
   if (applicantInformationStateHasPartner(applicantInformation) && !partnerInformation) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/partner-information', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/partner-information', params));
   }
 
   if (!applicantInformationStateHasPartner(applicantInformation) && partnerInformation) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/applicant-information', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
   if (contactInformation === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/contact-information', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/contact-information', params));
   }
 
   if (communicationPreferences === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/communication-preference', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/communication-preference', params));
   }
 
   if (dentalInsurance === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/dental-insurance', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/dental-insurance', params));
   }
 
   if (dentalBenefits === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/federal-provincial-territorial-benefits', params));
   }
 
   const children = validateChildrenStateForReview({ childrenState: state.children, params });
@@ -264,32 +264,32 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult-child/children/index', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/children/index', params));
   }
 
   return children.map(({ id, dentalBenefits, dentalInsurance, information }) => {
     const childId = id;
 
     if (information === undefined) {
-      throw redirect(getPathById('$lang/_public/apply/$id/adult-child/children/$childId/information', { ...params, childId }));
+      throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/information', { ...params, childId }));
     }
 
     if (!information.isParent) {
-      throw redirect(getPathById('$lang/_public/apply/$id/adult-child/children/$childId/parent-or-guardian', { ...params, childId }));
+      throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/parent-or-guardian', { ...params, childId }));
     }
 
     const ageCategory = getAgeCategoryFromDateString(information.dateOfBirth);
 
     if (ageCategory === 'adults' || ageCategory === 'seniors') {
-      throw redirect(getPathById('$lang/_public/apply/$id/adult-child/children/$childId/cannot-apply-child', { ...params, childId }));
+      throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/cannot-apply-child', { ...params, childId }));
     }
 
     if (dentalInsurance === undefined) {
-      throw redirect(getPathById('$lang/_public/apply/$id/adult-child/children/$childId/dental-insurance', { ...params, childId }));
+      throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/dental-insurance', { ...params, childId }));
     }
 
     if (dentalBenefits === undefined) {
-      throw redirect(getPathById('$lang/_public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
+      throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
     }
 
     return {

@@ -43,7 +43,7 @@ describe('apply-adult-route-helpers.server', () => {
         typeOfApplication: undefined,
       };
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if typeOfApplication is delegate', () => {
@@ -52,7 +52,7 @@ describe('apply-adult-route-helpers.server', () => {
         typeOfApplication: 'delegate',
       } satisfies ApplyState;
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/application-delegate, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/application-delegate, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if typeOfApplication is not adult', () => {
@@ -61,7 +61,7 @@ describe('apply-adult-route-helpers.server', () => {
         typeOfApplication: 'child',
       } satisfies ApplyState;
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if taxFiling2023 is undefined', () => {
@@ -72,7 +72,7 @@ describe('apply-adult-route-helpers.server', () => {
         taxFiling2023: undefined,
       } satisfies ApplyState;
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/tax-filing, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/tax-filing, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if taxFiling2023 is no', () => {
@@ -83,7 +83,7 @@ describe('apply-adult-route-helpers.server', () => {
         taxFiling2023: false,
       } satisfies ApplyState;
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if dateOfBirth is undefined', () => {
@@ -95,7 +95,7 @@ describe('apply-adult-route-helpers.server', () => {
         dateOfBirth: undefined,
       } satisfies ApplyState;
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/date-of-birth, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/date-of-birth, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if age category is "children"', () => {
@@ -109,7 +109,7 @@ describe('apply-adult-route-helpers.server', () => {
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/parent-or-guardian, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/parent-or-guardian, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if age category is "youth" and livingIndependently is undefined', () => {
@@ -124,7 +124,7 @@ describe('apply-adult-route-helpers.server', () => {
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('youth');
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/living-independently, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/living-independently, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if age category is "youth" and livingIndependently is false', () => {
@@ -139,7 +139,7 @@ describe('apply-adult-route-helpers.server', () => {
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('youth');
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/parent-or-guardian, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/parent-or-guardian, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if age category is "adult" and disabilityTaxCredit is undefined', () => {
@@ -154,7 +154,7 @@ describe('apply-adult-route-helpers.server', () => {
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('adults');
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/disability-tax-credit, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/disability-tax-credit, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if age category is "adult" and disabilityTaxCredit is false', () => {
@@ -169,7 +169,7 @@ describe('apply-adult-route-helpers.server', () => {
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('adults');
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/dob-eligibility, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/dob-eligibility, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if applicantInformation is undefined', () => {
@@ -184,7 +184,7 @@ describe('apply-adult-route-helpers.server', () => {
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if partnerInformation is undefined and applicant has partner', () => {
@@ -206,7 +206,7 @@ describe('apply-adult-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/partner-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/partner-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if partnerInformation is not undefined and applicant has no partner', () => {
@@ -234,7 +234,7 @@ describe('apply-adult-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockReturnValue(false);
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if contactInformation is undefined', () => {
@@ -263,7 +263,7 @@ describe('apply-adult-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/contact-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/contact-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if communicationPreferences is undefined', () => {
@@ -298,7 +298,7 @@ describe('apply-adult-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/communication-preference, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/communication-preference, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if dentalInsurance is undefined', () => {
@@ -337,7 +337,7 @@ describe('apply-adult-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/dental-insurance, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/dental-insurance, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if dentalBenefits is undefined', () => {
@@ -377,7 +377,7 @@ describe('apply-adult-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should not redirect if state is valid', () => {

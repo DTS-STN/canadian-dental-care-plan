@@ -26,12 +26,12 @@ export function loadApplyAdultState({ params, request, session }: LoadApplyAdult
   const applyState = loadApplyState({ params, session });
 
   if (applyState.typeOfApplication !== 'adult') {
-    throw redirect(getPathById('$lang/_public/apply/$id/type-application', params));
+    throw redirect(getPathById('public/apply/$id/type-application', params));
   }
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('$lang/_public/apply/$id/adult/confirmation', params);
+  const confirmationRouteUrl = getPathById('public/apply/$id/adult/confirmation', params);
   if (applyState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', applyState.id, confirmationRouteUrl);
     throw redirect(confirmationRouteUrl);
@@ -39,7 +39,7 @@ export function loadApplyAdultState({ params, request, session }: LoadApplyAdult
 
   // Redirect to the first flow page if the application has not been submitted and
   // the current route is the confirmation page.
-  const termsAndConditionsRouteUrl = getPathById('$lang/_public/apply/$id/terms-and-conditions', params);
+  const termsAndConditionsRouteUrl = getPathById('public/apply/$id/terms-and-conditions', params);
   if (!applyState.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has not been submitted; sessionId: [%s], ', applyState.id, termsAndConditionsRouteUrl);
     throw redirect(termsAndConditionsRouteUrl);
@@ -98,77 +98,77 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
   } = state;
 
   if (typeOfApplication === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/type-application', params));
+    throw redirect(getPathById('public/apply/$id/type-application', params));
   }
 
   if (typeOfApplication === 'delegate') {
-    throw redirect(getPathById('$lang/_public/apply/$id/application-delegate', params));
+    throw redirect(getPathById('public/apply/$id/application-delegate', params));
   }
 
   if (typeOfApplication !== 'adult') {
-    throw redirect(getPathById('$lang/_public/apply/$id/type-application', params));
+    throw redirect(getPathById('public/apply/$id/type-application', params));
   }
 
   if (taxFiling2023 === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/tax-filing', params));
+    throw redirect(getPathById('public/apply/$id/adult/tax-filing', params));
   }
 
   if (taxFiling2023 === false) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/file-taxes', params));
+    throw redirect(getPathById('public/apply/$id/adult/file-taxes', params));
   }
 
   if (dateOfBirth === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/date-of-birth', params));
+    throw redirect(getPathById('public/apply/$id/adult/date-of-birth', params));
   }
 
   const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/parent-or-guardian', params));
+    throw redirect(getPathById('public/apply/$id/adult/parent-or-guardian', params));
   }
 
   if (ageCategory === 'youth' && livingIndependently === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/living-independently', params));
+    throw redirect(getPathById('public/apply/$id/adult/living-independently', params));
   }
 
   if (ageCategory === 'youth' && livingIndependently === false) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/parent-or-guardian', params));
+    throw redirect(getPathById('public/apply/$id/adult/parent-or-guardian', params));
   }
 
   if (ageCategory === 'adults' && disabilityTaxCredit === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/disability-tax-credit', params));
+    throw redirect(getPathById('public/apply/$id/adult/disability-tax-credit', params));
   }
 
   if (ageCategory === 'adults' && disabilityTaxCredit === false) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/dob-eligibility', params));
+    throw redirect(getPathById('public/apply/$id/adult/dob-eligibility', params));
   }
 
   if (applicantInformation === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/applicant-information', params));
+    throw redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
   if (applicantInformationStateHasPartner(applicantInformation) && !partnerInformation) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/partner-information', params));
+    throw redirect(getPathById('public/apply/$id/adult/partner-information', params));
   }
 
   if (!applicantInformationStateHasPartner(applicantInformation) && partnerInformation) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/applicant-information', params));
+    throw redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
   if (contactInformation === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/contact-information', params));
+    throw redirect(getPathById('public/apply/$id/adult/contact-information', params));
   }
 
   if (communicationPreferences === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/communication-preference', params));
+    throw redirect(getPathById('public/apply/$id/adult/communication-preference', params));
   }
 
   if (dentalInsurance === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/dental-insurance', params));
+    throw redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
   }
 
   if (dentalBenefits === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('public/apply/$id/adult/federal-provincial-territorial-benefits', params));
   }
 
   return {
