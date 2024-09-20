@@ -1,7 +1,7 @@
 import type { SyntheticEvent } from 'react';
 
-import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { redirect, useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../page-ids.json';
+import pageIds from '../../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -22,8 +22,8 @@ import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { localizeClientFriendlyStatus } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 enum FormAction {

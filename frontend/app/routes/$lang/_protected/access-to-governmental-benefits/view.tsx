@@ -4,7 +4,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../../page-ids.json';
+import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
@@ -18,8 +18,8 @@ import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { UserinfoToken } from '~/utils/raoidc-utils.server';
-import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {

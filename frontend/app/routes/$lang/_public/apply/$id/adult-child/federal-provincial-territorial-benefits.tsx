@@ -9,7 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
+import pageIds from '../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';

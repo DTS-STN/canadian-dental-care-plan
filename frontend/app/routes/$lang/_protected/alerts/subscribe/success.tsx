@@ -4,7 +4,7 @@ import { useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans } from 'react-i18next';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { getRaoidcService } from '~/services/raoidc-service.server';

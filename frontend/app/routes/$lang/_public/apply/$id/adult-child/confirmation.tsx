@@ -6,7 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
+import pageIds from '../../../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';

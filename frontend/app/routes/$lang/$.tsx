@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 
-import pageIds from './page-ids.json';
+import pageIds from '../page-ids.json';
 import { NotFoundError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';

@@ -9,7 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
-import pageIds from '../../page-ids.json';
+import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
@@ -24,8 +24,8 @@ import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { localizeAndSortRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 

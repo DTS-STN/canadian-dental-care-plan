@@ -7,7 +7,7 @@ import { useLoaderData, useParams, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../page-ids.json';
+import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
