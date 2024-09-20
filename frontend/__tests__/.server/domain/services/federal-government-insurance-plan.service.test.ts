@@ -4,7 +4,7 @@ import { mock } from 'vitest-mock-extended';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
-import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories/federal-government-insurance-plan.repository';
+import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { FederalGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 

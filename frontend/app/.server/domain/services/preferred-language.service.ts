@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos';
 import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
-import type { PreferredLanguageRepository } from '~/.server/domain/repositories/preferred-language.repository';
+import type { PreferredLanguageRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
 export interface PreferredLanguageService {

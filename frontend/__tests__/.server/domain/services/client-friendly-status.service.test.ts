@@ -4,7 +4,7 @@ import { mock } from 'vitest-mock-extended';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
-import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories/client-friendly-status.repository';
+import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories';
 import { ClientFriendlyStatusServiceImpl } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 

@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
-import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories/province-territory-state.repository';
+import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
 export interface ProvinceTerritoryStateService {

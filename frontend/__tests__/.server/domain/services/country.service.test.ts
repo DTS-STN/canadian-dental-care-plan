@@ -4,7 +4,7 @@ import { mock } from 'vitest-mock-extended';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import type { CountryDto } from '~/.server/domain/dtos';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
-import type { CountryRepository } from '~/.server/domain/repositories/country.repository';
+import type { CountryRepository } from '~/.server/domain/repositories';
 import { CountryServiceImpl } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 

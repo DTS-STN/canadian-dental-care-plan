@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { ProvincialGovernmentInsurancePlanRepositoryImpl } from '~/.server/domain/repositories/provincial-government-insurance-plan.repository';
+import { ProvincialGovernmentInsurancePlanRepositoryImpl } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
 const dataSource = vi.hoisted(() => ({

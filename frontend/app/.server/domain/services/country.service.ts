@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import type { CountryDto } from '~/.server/domain/dtos';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
-import type { CountryRepository } from '~/.server/domain/repositories/country.repository';
+import type { CountryRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
 export interface CountryService {

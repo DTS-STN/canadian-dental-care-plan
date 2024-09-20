@@ -4,7 +4,7 @@ import { mock } from 'vitest-mock-extended';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos';
 import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
-import type { PreferredLanguageRepository } from '~/.server/domain/repositories/preferred-language.repository';
+import type { PreferredLanguageRepository } from '~/.server/domain/repositories';
 import { PreferredLanguageServiceImpl } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
