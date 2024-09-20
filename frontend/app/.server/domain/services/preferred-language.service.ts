@@ -4,7 +4,7 @@ import moize from 'moize';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos/preferred-language.dto';
-import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers/preferred-language.dto.mapper';
+import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories/preferred-language.repository';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 

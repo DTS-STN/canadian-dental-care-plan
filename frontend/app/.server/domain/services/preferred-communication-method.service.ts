@@ -4,7 +4,7 @@ import moize from 'moize';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos/preferred-communication-method.dto';
-import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers/preferred-communication-method.dto.mapper';
+import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories/preferred-communication-method.repository';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 

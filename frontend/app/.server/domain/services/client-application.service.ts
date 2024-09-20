@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
-import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers/client-application.dto.mapper';
+import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { ClientApplicationRepository } from '~/.server/domain/repositories/client-application.repository';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 

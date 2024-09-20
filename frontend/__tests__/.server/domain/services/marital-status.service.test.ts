@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs/server.config';
 import type { MaritalStatusDto } from '~/.server/domain/dtos/marital-status.dto';
-import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers/marital-status.dto.mapper';
+import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
 import type { MaritalStatusRepository } from '~/.server/domain/repositories/marital-status.repository';
 import { MaritalStatusServiceImpl } from '~/.server/domain/services/marital-status.service';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';

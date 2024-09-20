@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos/preferred-communication-method.dto';
 import type { PreferredCommunicationMethodEntity } from '~/.server/domain/entities/preferred-communication-method.entity';
-import { PreferredCommunicationMethodDtoMapperImpl } from '~/.server/domain/mappers/preferred-communication-method.dto.mapper';
+import { PreferredCommunicationMethodDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('PreferredCommunicationMethodDtoMapperImpl', () => {
   afterEach(() => {

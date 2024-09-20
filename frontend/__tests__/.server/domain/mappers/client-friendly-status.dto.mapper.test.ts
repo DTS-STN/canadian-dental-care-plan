@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos/client-friendly-status.dto';
 import type { ClientFriendlyStatusEntity } from '~/.server/domain/entities/client-friendly-status.entity';
-import { ClientFriendlyStatusDtoMapperImpl } from '~/.server/domain/mappers/client-friendly-status.dto.mapper';
+import { ClientFriendlyStatusDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('ClientFriendlyStatusDtoMapperImpl', () => {
   afterEach(() => {
