@@ -16,7 +16,7 @@ import type statusCheck from '../public/locales/en/status-check.json';
 import type status from '../public/locales/en/status.json';
 import type stubLogin from '../public/locales/en/stub-login.json';
 import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
-import type { ContainerConfigProvider , ContainerServiceProvider } from '~/.server/providers';
+import type { ContainerConfigProvider, ContainerServiceProvider } from '~/.server/providers';
 import type { ClientEnv } from '~/utils/env-utils.server';
 import type { APP_LOCALES } from '~/utils/locale-utils';
 

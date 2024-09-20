@@ -1,8 +1,8 @@
 import { ContainerModule } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import { ConfigFactoryImpl , LogFactoryImpl } from '~/.server/factories';
-import type { ConfigFactory , LogFactory } from '~/.server/factories';
+import { ConfigFactoryImpl, LogFactoryImpl } from '~/.server/factories';
+import type { ConfigFactory, LogFactory } from '~/.server/factories';
 
 /**
  * Container module for factories.
