@@ -144,5 +144,5 @@ interface GetStatusResultUrlArgs {
 }
 
 export function getStatusResultUrl({ id, params }: GetStatusResultUrlArgs) {
-  return getPathById('$lang/_public/status/result', params) + `?id=${id}`;
+  return getPathById('public/status/result', params) + `?id=${id}`;
 }
