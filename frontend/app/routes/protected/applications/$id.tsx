@@ -79,14 +79,14 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const communicationPreference = allCommunicationPreferences.find((communicationType) => communicationType.id === applicationDetails.communicationPreferences?.preferredMethod);
   const communicationPreferenceLang = communicationPreference ? getNameByLanguage(locale, communicationPreference) : '';
 
-  const applicantFederalSocialProgram = applicationDetails.dentalBenefits?.federalSocialProgram ? localizeFederalSocialProgram(lookupService.getFederalSocialProgramById(applicationDetails.dentalBenefits.federalSocialProgram), locale) : '';
+  const applicantFederalSocialProgram = applicationDetails.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(applicationDetails.dentalBenefits.federalSocialProgram) : null;
   const applicantProvincialTerritorialSocialProgram =
     applicationDetails.dentalBenefits?.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(applicationDetails.dentalBenefits.provincialTerritorialSocialProgram), locale);
 
   const dentalBenefit = {
     federalBenefit: {
       access: applicationDetails.dentalBenefits?.hasFederalBenefits,
-      benefit: applicantFederalSocialProgram ? applicantFederalSocialProgram.name : '',
+      benefit: applicantFederalSocialProgram && localizeFederalSocialProgram(applicantFederalSocialProgram, locale).name,
     },
     provTerrBenefit: {
       access: applicationDetails.dentalBenefits?.hasProvincialTerritorialBenefits,
@@ -96,7 +96,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   };
 
   const children = applicationDetails.children?.map((child) => {
-    const selectedFederalBenefit = child.dentalBenefits?.federalSocialProgram ? localizeFederalSocialProgram(lookupService.getFederalSocialProgramById(child.dentalBenefits.federalSocialProgram), locale) : undefined;
+    const selectedFederalBenefit = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
     const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
       ? localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(child.dentalBenefits.provincialTerritorialSocialProgram), locale)
       : undefined;
@@ -111,7 +111,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
           access: !!child.dentalBenefits?.hasFederalBenefits,
-          benefit: selectedFederalBenefit?.name,
+          benefit: selectedFederalBenefit && localizeFederalSocialProgram(selectedFederalBenefit, locale).name,
         },
         provincialTerritorialBenefit: {
           access: !!child.dentalBenefits?.hasProvincialTerritorialBenefits,

@@ -1,7 +1,6 @@
 import moize from 'moize';
 import { z } from 'zod';
 
-import federalProgramsJson from '~/resources/power-platform/federal-programs.json';
 import maritalStatusesJson from '~/resources/power-platform/marital-statuses.json';
 import preferredMethodOfCommunicationJson from '~/resources/power-platform/preferred-method-of-communication.json';
 import provincialProgramsJson from '~/resources/power-platform/provincial-programs.json';
@@ -85,7 +84,6 @@ function createLookupService() {
     LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_GENDER_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_INDIGENOUS_GROUP_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_INDIGENOUS_TYPES_CACHE_TTL_SECONDS,
@@ -96,7 +94,6 @@ function createLookupService() {
     LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS,
     LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS,
   } = getEnv();
 
@@ -324,32 +321,6 @@ function createLookupService() {
     return preferredCommunicationMethods;
   }
 
-  function getAllFederalSocialPrograms() {
-    log.debug('Fetching all federal social programs');
-
-    const federalSocialPrograms = federalProgramsJson.value.map((federalSocialProgram) => ({
-      id: federalSocialProgram.esdc_governmentinsuranceplanid,
-      nameEn: federalSocialProgram.esdc_nameenglish,
-      nameFr: federalSocialProgram.esdc_namefrench,
-    }));
-
-    log.trace('Returning federal social programs: [%j]', federalSocialPrograms);
-    return federalSocialPrograms;
-  }
-
-  function getFederalSocialProgramsById(id: string) {
-    log.debug('Fetching federal social program with id: [%s]', id);
-
-    const federalSocialProgram = getAllFederalSocialPrograms().find((program) => program.id === id);
-
-    if (!federalSocialProgram) {
-      throw new Error(`Failed to find federal social program; id: ${id}`);
-    }
-
-    log.trace('Returning federal social program: [%j]', federalSocialProgram);
-    return federalSocialProgram;
-  }
-
   function getAllProvincialTerritorialSocialPrograms() {
     log.debug('Fetching all provincial/territorial social programs');
 
@@ -444,15 +415,6 @@ function createLookupService() {
       maxAge: 1000 * LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllEquityTypes memo'),
     }),
-    getAllFederalSocialPrograms: moize(getAllFederalSocialPrograms, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
-      onCacheAdd: () => log.info('Creating new AllFederalSocialPrograms memo'),
-    }),
-    getFederalSocialProgramById: moize(getFederalSocialProgramsById, {
-      maxAge: 1000 * LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS,
-      maxSize: Infinity,
-      onCacheAdd: () => log.info('Creating new FederalSocialProgramById memo'),
-    }),
     getAllGenderTypes: moize.promise(getAllGenderTypes, {
       maxAge: 1000 * LOOKUP_SVC_ALL_GENDER_TYPES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllGenderTypes memo'),
@@ -508,9 +470,6 @@ export type MaritalStatus = ReturnType<GetAllMaritalStatuses>[number];
 
 export type GetAllRegions = Pick<ReturnType<typeof getLookupService>, 'getAllRegions'>['getAllRegions'];
 export type Region = ReturnType<GetAllRegions>[number];
-
-export type GetAllFederalSocialPrograms = Pick<ReturnType<typeof getLookupService>, 'getAllFederalSocialPrograms'>['getAllFederalSocialPrograms'];
-export type FederalSocialProgram = ReturnType<GetAllFederalSocialPrograms>[number];
 
 export type GetAllProvincialTerritorialSocialPrograms = Pick<ReturnType<typeof getLookupService>, 'getAllProvincialTerritorialSocialPrograms'>['getAllProvincialTerritorialSocialPrograms'];
 export type ProvincialTerritorialSocialProgram = ReturnType<GetAllProvincialTerritorialSocialPrograms>[number];

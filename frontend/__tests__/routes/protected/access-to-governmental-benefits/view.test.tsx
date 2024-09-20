@@ -35,23 +35,6 @@ vi.mock('~/services/session-service.server', () => ({
 vi.mock('~/services/lookup-service.server', () => ({
   // prettier-ignore
   getLookupService: vi.fn().mockReturnValue({
-    getAllFederalSocialPrograms: vi.fn().mockReturnValue([
-      {
-        id: '1788f1db-25c5-ee11-9079-000d3a09d640',
-        nameEn: 'Non-Insured Health Benefits Program by Indigenous Services Canada',
-        nameFr: 'Programme des services de santé non assurés par Services aux Autochtones Canada'
-      },
-      {
-        id: 'e174250d-26c5-ee11-9079-000d3a09d640',
-        nameEn: 'Veterans Affairs Canada - Basic dental coverage',
-        nameFr: 'Anciens Combattants Canada - Couverture des soins dentaires de base'
-      },
-      {
-        id: '758bb862-26c5-ee11-9079-000d3a09d640',
-        nameEn: 'Interim Federal Health Program for asylum seekers or refugee claimants',
-        nameFr: "Programme fédéral de santé intérimaire pour les personnes demandant l'asile ou les personnes revendiquant le statut de réfugié"
-      }
-    ]),
     getAllProvincialTerritorialSocialPrograms: vi.fn().mockReturnValue([
       {
         id: 'b3f25fea-a7a9-ee11-a569-000d3af4f898',
@@ -137,6 +120,19 @@ describe('Access View Governmental Page', () => {
     vi.clearAllMocks();
   });
 
+  const mockAppLoadContext = mock<AppLoadContext>({
+    serviceProvider: {
+      getFederalGovernmentInsurancePlanService: () => ({
+        findAll: vi.fn(),
+        findById: vi.fn().mockReturnValue({
+          id: '1788f1db-25c5-ee11-9079-000d3a09d640',
+          nameEn: 'Non-Insured Health Benefits Program by Indigenous Services Canada',
+          nameFr: 'Programme des services de santé non assurés par Services aux Autochtones Canada',
+        }),
+      }),
+    },
+  });
+
   describe('loader()', () => {
     it('should return Governmental Access Benefit View page with Federal and Provincial and Territorial listed', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
@@ -144,7 +140,7 @@ describe('Access View Governmental Page', () => {
       session.set('userInfoToken', { sin: '999999999' });
       const response = await loader({
         request: new Request('http://localhost:3000/en/access-to-governmental-benefits/view'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -165,7 +161,7 @@ describe('Access View Governmental Page', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/access-to-governmental-benefits/view'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -188,52 +184,9 @@ describe('Access View Governmental Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '999999999' });
 
-      vi.mock('~/services/lookup-service.server', () => ({
-        // prettier-ignore
-        getLookupService: vi.fn().mockReturnValue({
-          getAllFederalSocialPrograms: vi.fn().mockReturnValue([
-            {
-              id: '1788f1db-25c5-ee11-9079-000d3a09d640',
-              nameEn: 'Non-Insured Health Benefits Program by Indigenous Services Canada',
-              nameFr: 'Programme des services de santé non assurés par Services aux Autochtones Canada'
-            },
-            {
-              id: 'e174250d-26c5-ee11-9079-000d3a09d640',
-              nameEn: 'Veterans Affairs Canada - Basic dental coverage',
-              nameFr: 'Anciens Combattants Canada - Couverture des soins dentaires de base'
-            },
-            {
-              id: '758bb862-26c5-ee11-9079-000d3a09d640',
-              nameEn: 'Interim Federal Health Program for asylum seekers or refugee claimants',
-              nameFr: "Programme fédéral de santé intérimaire pour les personnes demandant l'asile ou les personnes revendiquant le statut de réfugié"
-            }
-          ]),
-          getAllProvincialTerritorialSocialPrograms: vi.fn().mockReturnValue([
-            {
-              id: 'b3f25fea-a7a9-ee11-a569-000d3af4f898',
-              nameEn: 'Healthy Kids Program',
-              nameFr: "Programme d'enfants en santé",
-              provinceTerritoryStateId: '9c440baa-35b3-eb11-8236-0022486d8d5f'
-            },
-            {
-              id: 'b5f25fea-a7a9-ee11-a569-000d3af4f898',
-              nameEn: 'BC Employment and Assistance (BCEA) Program',
-              nameFr: "Programme d'emploi et d'assistance de la Colombie-Britannique",
-              provinceTerritoryStateId: '9c440baa-35b3-eb11-8236-0022486d8d5f'
-            },
-            {
-              id: 'b7f25fea-a7a9-ee11-a569-000d3af4f898',
-              nameEn: 'Children in Care and Youth Agreements - Post Majority (MCFD)',
-              nameFr: "Accords sur les enfants pris en charge et les jeunes - Après l'âge de majorité (MDEF)",
-              provinceTerritoryStateId: '9c440baa-35b3-eb11-8236-0022486d8d5f'
-            }
-          ]),
-        }),
-      }));
-
       const response = await loader({
         request: new Request('http://localhost:3000/en/access-to-governmental-benefits/view'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 

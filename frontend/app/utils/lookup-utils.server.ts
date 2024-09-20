@@ -1,8 +1,9 @@
 import { getEnv } from './env-utils.server';
 import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos/client-friendly-status.dto';
 import type { CountryDto } from '~/.server/domain/dtos/country.dto';
+import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos/federal-government-insurance-plan.dto';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos/preferred-language.dto';
-import type { FederalSocialProgram, MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
+import type { MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
 
 /**
  * Localizes a single country object by adding a localized name.
@@ -161,7 +162,7 @@ export function localizeAndSortPreferredLanguages(languages: PreferredLanguageDt
  * @param locale - The locale code for localization.
  * @returns The localized federal social program object with a localized name.
  */
-export function localizeFederalSocialProgram(program: FederalSocialProgram, locale: string) {
+export function localizeFederalSocialProgram(program: FederalGovernmentInsurancePlanDto, locale: string) {
   const { nameEn, nameFr, ...rest } = program;
   return {
     ...rest,
@@ -176,7 +177,7 @@ export function localizeFederalSocialProgram(program: FederalSocialProgram, loca
  * @param locale - The locale code for localization.
  * @returns The localized and sorted array of federal social program objects.
  */
-export function localizeAndSortFederalSocialPrograms(programs: FederalSocialProgram[], locale: string) {
+export function localizeAndSortFederalSocialPrograms(programs: FederalGovernmentInsurancePlanDto[], locale: string) {
   const mappedFederalSocialPrograms = programs.map((program) => localizeFederalSocialProgram(program, locale));
   return mappedFederalSocialPrograms.toSorted((a, b) => a.name.localeCompare(b.name, locale));
 }

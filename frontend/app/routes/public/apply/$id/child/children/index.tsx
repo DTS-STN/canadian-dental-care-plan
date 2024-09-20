@@ -48,7 +48,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const i18n = getLocale(request);
@@ -57,12 +57,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:children.index.page-title') }) };
 
   const lookupService = getLookupService();
-  const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
   const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
 
   const children = getChildrenState(state).map((child) => {
-    const federalSocialProgramEntity = federalSocialPrograms.find((p) => p.id === child.dentalBenefits?.federalSocialProgram);
-    const federalSocialProgram = federalSocialProgramEntity ? getNameByLanguage(i18n, federalSocialProgramEntity) : federalSocialProgramEntity;
+    const federalGovernmentInsurancePlanService = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
 
     const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === child.dentalBenefits?.province).find((p) => p.id === child.dentalBenefits?.provincialTerritorialSocialProgram);
     const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(i18n, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;
@@ -71,7 +69,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       ...child,
       dentalBenefits: {
         ...child.dentalBenefits,
-        federalSocialProgram,
+        federalSocialProgram: federalGovernmentInsurancePlanService && getNameByLanguage(i18n, federalGovernmentInsurancePlanService),
         provincialTerritorialSocialProgram,
       },
     };

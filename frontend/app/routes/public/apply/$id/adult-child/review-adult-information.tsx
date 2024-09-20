@@ -127,14 +127,14 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram && localizeFederalSocialProgram(lookupService.getFederalSocialProgramById(state.dentalBenefits.federalSocialProgram), locale);
+  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : null;
   const selectedProvincialBenefit =
     state.dentalBenefits.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(state.dentalBenefits.provincialTerritorialSocialProgram), locale);
 
   const dentalBenefit = {
     federalBenefit: {
       access: state.dentalBenefits.hasFederalBenefits,
-      benefit: selectedFederalBenefit && selectedFederalBenefit.name,
+      benefit: selectedFederalBenefit && localizeFederalSocialProgram(selectedFederalBenefit, locale).name,
     },
     provTerrBenefit: {
       access: state.dentalBenefits.hasProvincialTerritorialBenefits,

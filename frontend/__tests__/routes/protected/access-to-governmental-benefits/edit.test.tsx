@@ -35,23 +35,6 @@ vi.mock('~/services/session-service.server', () => ({
 vi.mock('~/services/lookup-service.server', () => ({
   // prettier-ignore
   getLookupService: vi.fn().mockReturnValue({
-    getAllFederalSocialPrograms: vi.fn().mockReturnValue([
-      {
-        id: '1788f1db-25c5-ee11-9079-000d3a09d640',
-        nameEn: 'Federal program 1',
-        nameFr: 'Federal program 1 but in French',
-      },
-      {
-        id: '1788f1db-25c5-ee11-9079-000d3a09d640',
-        nameEn: 'Federal program 2',
-        nameFr: 'Federal program 2 but in French',
-      },
-      {
-        id: '1788f1db-25c5-ee11-9079-000d3a09d640',
-        nameEn: 'Federal program 3',
-        nameFr: 'Federal program 3 but in French',
-      }
-    ]),
     getAllProvincialTerritorialSocialPrograms: vi.fn().mockReturnValue([
       {
         id: 'b3f25fea-a7a9-ee11-a569-000d3af4f898',
@@ -142,9 +125,34 @@ describe('Access View Governmental Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '999999999' });
 
+      const mockAppLoadContext = mock<AppLoadContext>({
+        serviceProvider: {
+          getFederalGovernmentInsurancePlanService: () => ({
+            findAll: vi.fn().mockReturnValue([
+              {
+                id: '1788f1db-25c5-ee11-9079-000d3a09d640',
+                nameEn: 'Federal program 1',
+                nameFr: 'Federal program 1 but in French',
+              },
+              {
+                id: '1788f1db-25c5-ee11-9079-000d3a09d640',
+                nameEn: 'Federal program 2',
+                nameFr: 'Federal program 2 but in French',
+              },
+              {
+                id: '1788f1db-25c5-ee11-9079-000d3a09d640',
+                nameEn: 'Federal program 3',
+                nameFr: 'Federal program 3 but in French',
+              },
+            ]),
+            findById: vi.fn(),
+          }),
+        },
+      });
+
       const response = await loader({
         request: new Request('http://localhost:3000/en/access-to-governmental-benefits/edit'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 

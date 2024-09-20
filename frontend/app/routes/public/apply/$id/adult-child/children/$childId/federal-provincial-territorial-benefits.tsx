@@ -50,7 +50,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title, data.meta.dcTermsTitle);
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultSingleChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -58,7 +58,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const { CANADA_COUNTRY_ID } = getEnv();
   const lookupService = getLookupService();
-  const federalSocialPrograms = localizeAndSortFederalSocialPrograms(lookupService.getAllFederalSocialPrograms(), locale);
+  const federalSocialPrograms = localizeAndSortFederalSocialPrograms(serviceProvider.getFederalGovernmentInsurancePlanService().findAll(), locale);
   const provincialTerritorialSocialPrograms = localizeAndSortProvincialTerritorialSocialPrograms(lookupService.getAllProvincialTerritorialSocialPrograms(), locale);
   const allRegions = localizeAndSortRegions(lookupService.getAllRegions(), locale);
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);

@@ -1,7 +1,8 @@
 import { sort } from 'moderndash';
 import moize from 'moize';
 
-import { toBenefitApplication } from '~/mappers/application-history-mapper.server';
+import type { FederalGovernmentInsurancePlanService } from '~/.server/domain/services/federal-government-insurance-plan.service';
+import { getApplicationHistoryMapper } from '~/mappers/application-history-mapper.server';
 import { applicationListSchema } from '~/schemas/application-history-service-schemas.server';
 import type { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
 import { benefitApplicationRequestSchema, benefitApplicationResponseSchema } from '~/schemas/benefit-application-service-schemas.server';
@@ -12,7 +13,11 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('benefit-application-service.server');
 
-function createBenefitApplicationService() {
+export interface CreateBenefitApplicationServiceArgs {
+  federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService;
+}
+
+function createBenefitApplicationService({ federalGovernmentInsurancePlanService }: CreateBenefitApplicationServiceArgs) {
   // prettier-ignore
   const {
     HTTP_PROXY_URL,
@@ -97,7 +102,7 @@ function createBenefitApplicationService() {
 
     const data = await response.json();
     log.trace('Applications for user id [%s]: [%j]', userId, data);
-    const applications = toBenefitApplication(applicationListSchema.parse(data)); // TODO: Update schema once application-history service becomes avaliable
+    const applications = getApplicationHistoryMapper({ federalGovernmentInsurancePlanService }).toBenefitApplication(applicationListSchema.parse(data)); // TODO: Update schema once application-history service becomes avaliable
     return sort(applications, {
       order: sortOrder,
       by: (item) => item.submittedOn,
