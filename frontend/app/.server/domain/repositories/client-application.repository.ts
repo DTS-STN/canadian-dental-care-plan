@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 
-import { ServerConfig } from '~/.server/configs';
+import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import { ClientApplicationEntity } from '~/.server/domain/entities';
+import type { ClientApplicationEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 
@@ -16,6 +16,7 @@ export interface FindByFirstNameLastNameDobClientNumberSearchCriteria {
   /** The client number assigned to the client. */
   clientNumber: string;
 }
+
 export interface ClientApplicationRepository {
   /**
    * Finds client application data by Social Insurance Number (SIN).
@@ -85,9 +86,9 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
     return data;
   }
 
-  async findByFirstNameLastNameDobClientNumber(args: { firstName: string; lastName: string; dateOfBirth: string; clientNumber: string }): Promise<ClientApplicationEntity | null> {
-    const { firstName, lastName, dateOfBirth, clientNumber } = args;
-    this.log.trace('Fetching client application for first name [%s], lastname [%s], date of birth [%s] client number [%s]', firstName, lastName, dateOfBirth, clientNumber);
+  async findByFirstNameLastNameDobClientNumber(searchCriteria: FindByFirstNameLastNameDobClientNumberSearchCriteria): Promise<ClientApplicationEntity | null> {
+    this.log.trace('Fetching client application for searchCriteria [%j]', searchCriteria);
+    const { firstName, lastName, dateOfBirth, clientNumber } = searchCriteria;
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/v1/client-application_fnlndob`);
     const clientApplicationRequest = {
