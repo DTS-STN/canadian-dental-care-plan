@@ -2,8 +2,9 @@ import { getEnv } from './env-utils.server';
 import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos/client-friendly-status.dto';
 import type { CountryDto } from '~/.server/domain/dtos/country.dto';
 import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos/federal-government-insurance-plan.dto';
+import type { MaritalStatusDto } from '~/.server/domain/dtos/marital-status.dto';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos/preferred-language.dto';
-import type { MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
+import type { ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
 
 /**
  * Localizes a single country object by adding a localized name.
@@ -55,7 +56,7 @@ export function localizeAndSortCountries(countries: CountryDto[], locale: AppLoc
  * @param locale - The locale code for localization.
  * @returns The localized maritalStatus object with a localized name.
  */
-export function localizeMaritalStatus(maritalStatus: MaritalStatus, locale: AppLocale) {
+export function localizeMaritalStatus(maritalStatus: MaritalStatusDto, locale: AppLocale) {
   const { nameEn, nameFr, ...rest } = maritalStatus;
   return {
     ...rest,
@@ -70,7 +71,7 @@ export function localizeMaritalStatus(maritalStatus: MaritalStatus, locale: AppL
  * @param locale - The locale code for localization.
  * @returns The localized array of maritalStatus objects.
  */
-export function localizeMaritalStatuses(maritalStatuses: MaritalStatus[], locale: AppLocale) {
+export function localizeMaritalStatuses(maritalStatuses: MaritalStatusDto[], locale: AppLocale) {
   return maritalStatuses.map((maritalStatus) => localizeMaritalStatus(maritalStatus, locale));
 }
 
@@ -82,8 +83,8 @@ export function localizeMaritalStatuses(maritalStatuses: MaritalStatus[], locale
  * @param locale - The locale code for localization.
  * @returns The localized and sorted array of maritalStatus objects, with Canada first if found.
  */
-export function localizeAndSortMaritalStatuses(maritalStatuses: MaritalStatus[], locale: AppLocale) {
-  return localizeMaritalStatuses(maritalStatuses, locale).toSorted((a, b) => (a.name ?? '').localeCompare(b.name ?? '', locale));
+export function localizeAndSortMaritalStatuses(maritalStatuses: MaritalStatusDto[], locale: AppLocale) {
+  return localizeMaritalStatuses(maritalStatuses, locale).toSorted((a, b) => a.name.localeCompare(b.name, locale));
 }
 
 /**
@@ -130,7 +131,7 @@ export function localizeAndSortRegions(regions: ReadonlyArray<Region>, locale: A
  * @param locale - The locale code for localization.
  * @returns The localized language object with a localized name.
  */
-export function localizeLanguage(language: PreferredLanguageDto, locale: string) {
+export function localizePreferredLanguage(language: PreferredLanguageDto, locale: string) {
   const { nameEn, nameFr, ...rest } = language;
   return {
     ...rest,
@@ -147,7 +148,7 @@ export function localizeLanguage(language: PreferredLanguageDto, locale: string)
  * @returns The localized and sorted array of language objects.
  */
 export function localizeAndSortPreferredLanguages(languages: PreferredLanguageDto[], locale: string, firstLanguageId?: number) {
-  const mappedLanguages = languages.map((language) => localizeLanguage(language, locale));
+  const mappedLanguages = languages.map((language) => localizePreferredLanguage(language, locale));
   return mappedLanguages.toSorted((a, b) => {
     if (firstLanguageId && a.id === firstLanguageId.toString()) return -1;
     if (firstLanguageId && b.id === firstLanguageId.toString()) return 1;

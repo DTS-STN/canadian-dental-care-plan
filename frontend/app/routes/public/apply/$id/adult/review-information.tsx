@@ -32,7 +32,7 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatuses, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -72,8 +72,9 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   // Getting Country by Id
   const countryMailing = serviceProvider.getCountryService().findById(state.contactInformation.mailingCountry);
-  const countryHome = state.contactInformation.homeCountry ? serviceProvider.getCountryService().findById(state.contactInformation.homeCountry) : null;
   invariant(countryMailing, `Unexpected mailing address country: ${state.contactInformation.mailingCountry}`);
+
+  const countryHome = state.contactInformation.homeCountry ? serviceProvider.getCountryService().findById(state.contactInformation.homeCountry) : undefined;
   invariant(countryHome, `Unexpected home address country: ${state.contactInformation.homeCountry}`);
 
   // Getting CommunicationPreference by Id
@@ -81,8 +82,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
-  const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
-  const maritalStatus = maritalStatuses.find((obj) => obj.id === state.applicantInformation.maritalStatus)?.name;
+  const maritalStatus = serviceProvider.getMaritalStatusService().findById(state.applicantInformation.maritalStatus);
   invariant(maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
 
   const userInfo = {
@@ -93,7 +93,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     preferredLanguage: state.communicationPreferences.preferredLanguage,
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    maritalStatus,
+    maritalStatus: localizeMaritalStatus(maritalStatus, locale).name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: getNameByLanguage(locale, communicationPreference),
@@ -131,7 +131,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : null;
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : undefined;
   const selectedProvincialBenefit =
     state.dentalBenefits.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(state.dentalBenefits.provincialTerritorialSocialProgram), locale);
 

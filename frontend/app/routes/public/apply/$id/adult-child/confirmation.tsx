@@ -22,7 +22,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeMaritalStatus, localizePreferredLanguage, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -60,7 +60,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   }
 
   const lookupService = getLookupService();
-  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : null;
+  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : undefined;
   const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
   const selectedProvincialBenefits = allProvincialTerritorialSocialPrograms
     .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
@@ -74,13 +74,15 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   // Getting Country by Id
   const countryMailing = serviceProvider.getCountryService().findById(state.contactInformation.mailingCountry);
-  const countryHome = state.contactInformation.homeCountry ? serviceProvider.getCountryService().findById(state.contactInformation.homeCountry) : null;
+  invariant(countryMailing, `Unexpected mailing address country: ${state.contactInformation.mailingCountry}`);
 
-  const preferredLang = serviceProvider.getPreferredLanguageService().findById(state.communicationPreferences.preferredLanguage);
-  const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
+  const countryHome = state.contactInformation.homeCountry ? serviceProvider.getCountryService().findById(state.contactInformation.homeCountry) : undefined;
+  invariant(countryHome, `Unexpected home address country: ${state.contactInformation.homeCountry}`);
 
-  const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
-  const maritalStatus = maritalStatuses.find((obj) => obj.id === state.applicantInformation?.maritalStatus)?.name;
+  const preferredLanguage = serviceProvider.getPreferredLanguageService().findById(state.communicationPreferences.preferredLanguage);
+  invariant(preferredLanguage, `Unexpected preferred language: ${state.communicationPreferences.preferredLanguage}`);
+
+  const maritalStatus = serviceProvider.getMaritalStatusService().findById(state.applicantInformation.maritalStatus);
   invariant(maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
 
   const communicationPreferences = lookupService.getAllPreferredCommunicationMethods();
@@ -92,10 +94,10 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.contactInformation.phoneNumber,
     altPhoneNumber: state.contactInformation.phoneNumberAlt,
-    preferredLanguage: preferredLanguage,
+    preferredLanguage: localizePreferredLanguage(preferredLanguage, locale).name,
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    martialStatus: maritalStatus,
+    martialStatus: localizeMaritalStatus(maritalStatus, locale).name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: getNameByLanguage(locale, communicationPreference),
@@ -115,7 +117,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     city: state.contactInformation.mailingCity,
     province: provinceMailing,
     postalCode: state.contactInformation.mailingPostalCode,
-    country: countryMailing && localizeCountry(countryMailing, locale),
+    country: localizeCountry(countryMailing, locale),
     apartment: state.contactInformation.mailingApartment,
   };
 
@@ -124,7 +126,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     city: state.contactInformation.homeCity,
     province: provinceHome,
     postalCode: state.contactInformation.homePostalCode,
-    country: countryHome && localizeCountry(countryHome, locale),
+    country: localizeCountry(countryHome, locale),
     apartment: state.contactInformation.homeApartment,
   };
 
@@ -142,7 +144,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
       throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
     }
 
-    const federalBenefit = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
+    const federalBenefit = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
 
     return {
       id: child.id,
@@ -345,7 +347,7 @@ export default function ApplyFlowConfirm() {
                 city={mailingAddressInfo.city}
                 provinceState={mailingAddressInfo.province?.abbr}
                 postalZipCode={mailingAddressInfo.postalCode}
-                country={mailingAddressInfo.country?.name ?? ''}
+                country={mailingAddressInfo.country.name}
                 apartment={mailingAddressInfo.apartment}
               />
             </DescriptionListItem>
@@ -355,7 +357,7 @@ export default function ApplyFlowConfirm() {
                 city={homeAddressInfo.city ?? ''}
                 provinceState={homeAddressInfo.province?.abbr}
                 postalZipCode={homeAddressInfo.postalCode}
-                country={homeAddressInfo.country?.name ?? ''}
+                country={homeAddressInfo.country.name}
                 apartment={homeAddressInfo.apartment}
               />
             </DescriptionListItem>

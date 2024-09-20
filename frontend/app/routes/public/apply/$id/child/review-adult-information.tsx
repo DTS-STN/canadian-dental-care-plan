@@ -32,7 +32,7 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeMaritalStatus, localizePreferredLanguage, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -72,8 +72,9 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   // Getting Country by Id
   const countryMailing = serviceProvider.getCountryService().findById(state.contactInformation.mailingCountry);
-  const countryHome = state.contactInformation.homeCountry ? serviceProvider.getCountryService().findById(state.contactInformation.homeCountry) : null;
   invariant(countryMailing, `Unexpected mailing address country: ${state.contactInformation.mailingCountry}`);
+
+  const countryHome = state.contactInformation.homeCountry ? serviceProvider.getCountryService().findById(state.contactInformation.homeCountry) : undefined;
   invariant(countryHome, `Unexpected home address country: ${state.contactInformation.homeCountry}`);
 
   // Getting CommunicationPreference by Id
@@ -81,23 +82,25 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
-  const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
-  const maritalStatus = maritalStatuses.find((obj) => obj.id === state.applicantInformation.maritalStatus)?.name;
+  const maritalStatus = serviceProvider.getMaritalStatusService().findById(state.applicantInformation.maritalStatus);
   invariant(maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
+
+  const preferredLanguage = serviceProvider.getPreferredLanguageService().findById(state.communicationPreferences.preferredLanguage);
+  invariant(preferredLanguage, `Unexpected preferred language: ${state.communicationPreferences.preferredLanguage}`);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.contactInformation.phoneNumber,
     altPhoneNumber: state.contactInformation.phoneNumberAlt,
-    preferredLanguage: state.communicationPreferences.preferredLanguage,
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    maritalStatus,
+    maritalStatus: localizeMaritalStatus(maritalStatus, locale).name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: getNameByLanguage(locale, communicationPreference),
   };
+
   const spouseInfo = state.partnerInformation
     ? {
         firstName: state.partnerInformation.firstName,
@@ -107,8 +110,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
         consent: state.partnerInformation.confirm,
       }
     : undefined;
-
-  const preferredLanguage = serviceProvider.getPreferredLanguageService().findById(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
     address: state.contactInformation.mailingAddress,
@@ -139,7 +140,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     id: state.id,
     userInfo,
     spouseInfo,
-    preferredLanguage,
+    preferredLanguage: localizePreferredLanguage(preferredLanguage, locale).name,
     homeAddressInfo,
     mailingAddressInfo,
     csrfToken,
@@ -193,7 +194,7 @@ export async function action({ context: { serviceProvider, session }, params, re
 
 export default function ReviewInformation() {
   const params = useParams();
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -376,16 +377,14 @@ export default function ReviewInformation() {
                   </InlineLink>
                 </p>
               </DescriptionListItem>
-              {preferredLanguage && (
-                <DescriptionListItem term={t('apply-child:review-adult-information.lang-pref-title')}>
-                  {getNameByLanguage(i18n.language, preferredLanguage)}
-                  <p className="mt-4">
-                    <InlineLink id="change-language-preference" routeId="public/apply/$id/child/communication-preference" params={params}>
-                      {t('apply-child:review-adult-information.lang-pref-change')}
-                    </InlineLink>
-                  </p>
-                </DescriptionListItem>
-              )}
+              <DescriptionListItem term={t('apply-child:review-adult-information.lang-pref-title')}>
+                {preferredLanguage}
+                <p className="mt-4">
+                  <InlineLink id="change-language-preference" routeId="public/apply/$id/child/communication-preference" params={params}>
+                    {t('apply-child:review-adult-information.lang-pref-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
             </dl>
           </div>
         </div>

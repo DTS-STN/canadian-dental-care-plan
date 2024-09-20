@@ -20,7 +20,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
-import { localizeCountry, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeMaritalStatus, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -59,8 +59,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const regionList = localizeRegions(lookupService.getAllRegions(), locale);
 
-  const maritalStatusList = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
-  const maritalStatus = maritalStatusList.find((maritalStatus) => maritalStatus.id === personalInformation.maritalStatusId)?.name;
+  const maritalStatus = personalInformation.maritalStatusId ? serviceProvider.getMaritalStatusService().findById(personalInformation.maritalStatusId) : undefined;
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
@@ -69,8 +68,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');
 
-  const homeAddressCountry = personalInformation.homeAddress?.countryId ? serviceProvider.getCountryService().findById(personalInformation.homeAddress.countryId) : null;
-  const mailingAddressCountry = personalInformation.mailingAddress?.countryId ? serviceProvider.getCountryService().findById(personalInformation.mailingAddress.countryId) : null;
+  const homeAddressCountry = personalInformation.homeAddress?.countryId ? serviceProvider.getCountryService().findById(personalInformation.homeAddress.countryId) : undefined;
+  const mailingAddressCountry = personalInformation.mailingAddress?.countryId ? serviceProvider.getCountryService().findById(personalInformation.mailingAddress.countryId) : undefined;
   const homeAddressRegion = regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress?.provinceTerritoryStateId)?.abbr;
   const mailingAddressRegion = regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress?.provinceTerritoryStateId)?.abbr;
 
@@ -83,7 +82,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     meta,
     homeAddressRegion,
     mailingAddressRegion,
-    maritalStatus,
+    maritalStatus: maritalStatus && localizeMaritalStatus(maritalStatus, locale).name,
     updatedInfo,
     SCCH_BASE_URI,
   });

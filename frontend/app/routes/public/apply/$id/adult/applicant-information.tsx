@@ -22,7 +22,6 @@ import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import type { ApplicantInformationState } from '~/route-helpers/apply-route-helpers.server';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -51,12 +50,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const lookupService = getLookupService();
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
+  const maritalStatuses = localizeMaritalStatuses(serviceProvider.getMaritalStatusService().findAll(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:applicant-information.page-title') }) };

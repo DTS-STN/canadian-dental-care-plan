@@ -22,7 +22,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeMaritalStatus, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -67,13 +67,12 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   // Getting Country by Id
   const countryMailing = serviceProvider.getCountryService().findById(state.contactInformation.mailingCountry);
-  const countryHome = state.contactInformation.homeCountry ? serviceProvider.getCountryService().findById(state.contactInformation.homeCountry) : null;
+  const countryHome = state.contactInformation.homeCountry ? serviceProvider.getCountryService().findById(state.contactInformation.homeCountry) : undefined;
 
   const preferredLang = serviceProvider.getPreferredLanguageService().findById(state.communicationPreferences.preferredLanguage);
   const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
 
-  const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
-  const maritalStatus = maritalStatuses.find((obj) => obj.id === state.applicantInformation?.maritalStatus)?.name;
+  const maritalStatus = serviceProvider.getMaritalStatusService().findById(state.applicantInformation.maritalStatus);
   invariant(maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
 
   const communicationPreferences = lookupService.getAllPreferredCommunicationMethods();
@@ -88,7 +87,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     preferredLanguage: preferredLanguage,
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    martialStatus: maritalStatus,
+    martialStatus: localizeMaritalStatus(maritalStatus, locale).name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: getNameByLanguage(locale, communicationPreference),
@@ -129,7 +128,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
       throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
     }
 
-    const federalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : null;
+    const federalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
 
     return {
       id: child.id,

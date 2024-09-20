@@ -10,9 +10,9 @@ import {
   localizeCountries,
   localizeCountry,
   localizeFederalSocialProgram,
-  localizeLanguage,
   localizeMaritalStatus,
   localizeMaritalStatuses,
+  localizePreferredLanguage,
   localizeProvincialTerritorialSocialProgram,
   localizeRegion,
   localizeRegions,
@@ -305,14 +305,14 @@ describe('localizAndSortRegions', () => {
 
 describe('localizeLanguage', () => {
   it('should return the language id and english name', () => {
-    expect(localizeLanguage(mockLanguages[0], 'en')).toEqual({
+    expect(localizePreferredLanguage(mockLanguages[0], 'en')).toEqual({
       id: '001',
       name: 'englishLanguageOne',
     });
   });
 
   it('should return the language id and french name', () => {
-    expect(localizeLanguage(mockLanguages[0], 'fr')).toEqual({
+    expect(localizePreferredLanguage(mockLanguages[0], 'fr')).toEqual({
       id: '001',
       name: 'frenchLanguageOne',
     });
