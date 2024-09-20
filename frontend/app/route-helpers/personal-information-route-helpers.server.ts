@@ -42,7 +42,7 @@ async function getPersonalInformation(userInfoToken: UserinfoToken, params: Para
   }
 
   log.debug('No personal information found in session or from service for userId [%s]; Redirecting to "/data-unavailable"', userInfoToken.sub);
-  throw redirect(getPathById('$lang/_protected/data-unavailable', params));
+  throw redirect(getPathById('protected/data-unavailable', params));
 }
 
 export function getPersonalInformationRouteHelpers() {
