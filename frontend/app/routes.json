@@ -704,32 +704,32 @@
         ]
       },
       {
-        "id": "$lang/_protected/_route",
-        "file": "routes/$lang/_protected/_route.tsx",
+        "id": "protected/_route",
+        "file": "routes/protected/_route.tsx",
         "children": [
           {
-            "id": "$lang/_protected/data-unavailable",
-            "file": "routes/$lang/_protected/data-unavailable.tsx",
+            "id": "protected/data-unavailable",
+            "file": "routes/protected/data-unavailable.tsx",
             "paths": {
               "en": "/:lang/data-unavailable",
               "fr": "/:lang/donnees-indisponibles"
             }
           },
           {
-            "id": "$lang/_protected/home",
-            "file": "routes/$lang/_protected/home.tsx",
+            "id": "protected/home",
+            "file": "routes/protected/home.tsx",
             "paths": {
               "en": "/:lang/home",
               "fr": "/:lang/accueil"
             }
           },
           {
-            "id": "$lang/_protected/letters/_route",
-            "file": "routes/$lang/_protected/letters/_route.tsx",
+            "id": "protected/letters/_route",
+            "file": "routes/protected/letters/_route.tsx",
             "children": [
               {
-                "id": "$lang/_protected/letters/index",
-                "file": "routes/$lang/_protected/letters/index.tsx",
+                "id": "protected/letters/index",
+                "file": "routes/protected/letters/index.tsx",
                 "index": true,
                 "paths": {
                   "en": "/:lang/letters",
@@ -737,8 +737,8 @@
                 }
               },
               {
-                "id": "$lang/_protected/letters/$id.download",
-                "file": "routes/$lang/_protected/letters/$id.download.tsx",
+                "id": "protected/letters/$id.download",
+                "file": "routes/protected/letters/$id.download.tsx",
                 "paths": {
                   "en": "/:lang/letters/:id/download",
                   "fr": "/:lang/lettres/:id/telecharger"
@@ -747,12 +747,12 @@
             ]
           },
           {
-            "id": "$lang/_protected/personal-information/_route",
-            "file": "routes/$lang/_protected/personal-information/_route.tsx",
+            "id": "protected/personal-information/_route",
+            "file": "routes/protected/personal-information/_route.tsx",
             "children": [
               {
-                "id": "$lang/_protected/personal-information/index",
-                "file": "routes/$lang/_protected/personal-information/index.tsx",
+                "id": "protected/personal-information/index",
+                "file": "routes/protected/personal-information/index.tsx",
                 "index": true,
                 "paths": {
                   "en": "/:lang/personal-information",
@@ -760,16 +760,16 @@
                 }
               },
               {
-                "id": "$lang/_protected/personal-information/home-address/_route",
-                "file": "routes/$lang/_protected/personal-information/home-address/_route.tsx",
+                "id": "protected/personal-information/home-address/_route",
+                "file": "routes/protected/personal-information/home-address/_route.tsx",
                 "paths": {
                   "en": "/:lang/personal-information/home-address",
                   "fr": "/:lang/informations-personnelles/adresse-domicile"
                 },
                 "children": [
                   {
-                    "id": "$lang/_protected/personal-information/home-address/edit",
-                    "file": "routes/$lang/_protected/personal-information/home-address/edit.tsx",
+                    "id": "protected/personal-information/home-address/edit",
+                    "file": "routes/protected/personal-information/home-address/edit.tsx",
                     "paths": {
                       "en": "/:lang/personal-information/home-address/edit",
                       "fr": "/:lang/informations-personnelles/adresse-domicile/modifier"
@@ -778,16 +778,16 @@
                 ]
               },
               {
-                "id": "$lang/_protected/personal-information/mailing-address/_route",
-                "file": "routes/$lang/_protected/personal-information/mailing-address/_route.tsx",
+                "id": "protected/personal-information/mailing-address/_route",
+                "file": "routes/protected/personal-information/mailing-address/_route.tsx",
                 "paths": {
                   "en": "/:lang/personal-information/mailing-address",
                   "fr": "/:lang/informations-personnelles/adresse-postale"
                 },
                 "children": [
                   {
-                    "id": "$lang/_protected/personal-information/mailing-address/edit",
-                    "file": "routes/$lang/_protected/personal-information/mailing-address/edit.tsx",
+                    "id": "protected/personal-information/mailing-address/edit",
+                    "file": "routes/protected/personal-information/mailing-address/edit.tsx",
                     "paths": {
                       "en": "/:lang/personal-information/mailing-address/edit",
                       "fr": "/:lang/informations-personnelles/adresse-postale/modifier"
@@ -796,16 +796,16 @@
                 ]
               },
               {
-                "id": "$lang/_protected/personal-information/phone-number/_route",
-                "file": "routes/$lang/_protected/personal-information/phone-number/_route.tsx",
+                "id": "protected/personal-information/phone-number/_route",
+                "file": "routes/protected/personal-information/phone-number/_route.tsx",
                 "paths": {
                   "en": "/:lang/personal-information/phone-number",
                   "fr": "/:lang/informations-personnelles/numero-telephone"
                 },
                 "children": [
                   {
-                    "id": "$lang/_protected/personal-information/phone-number/edit",
-                    "file": "routes/$lang/_protected/personal-information/phone-number/edit.tsx",
+                    "id": "protected/personal-information/phone-number/edit",
+                    "file": "routes/protected/personal-information/phone-number/edit.tsx",
                     "paths": {
                       "en": "/:lang/personal-information/phone-number/edit",
                       "fr": "/:lang/informations-personnelles/numero-telephone/modifier"
@@ -814,16 +814,16 @@
                 ]
               },
               {
-                "id": "$lang/_protected/personal-information/email-address/_route",
-                "file": "routes/$lang/_protected/personal-information/email-address/_route.tsx",
+                "id": "protected/personal-information/email-address/_route",
+                "file": "routes/protected/personal-information/email-address/_route.tsx",
                 "paths": {
                   "en": "/:lang/personal-information/email-address",
                   "fr": "/:lang/informations-personnelles/adresse-courriel"
                 },
                 "children": [
                   {
-                    "id": "$lang/_protected/personal-information/email-address/edit",
-                    "file": "routes/$lang/_protected/personal-information/email-address/edit.tsx",
+                    "id": "protected/personal-information/email-address/edit",
+                    "file": "routes/protected/personal-information/email-address/edit.tsx",
                     "paths": {
                       "en": "/:lang/personal-information/email-address/edit",
                       "fr": "/:lang/informations-personnelles/adresse-courriel/modifier"
@@ -832,16 +832,16 @@
                 ]
               },
               {
-                "id": "$lang/_protected/personal-information/preferred-language/_route",
-                "file": "routes/$lang/_protected/personal-information/preferred-language/_route.tsx",
+                "id": "protected/personal-information/preferred-language/_route",
+                "file": "routes/protected/personal-information/preferred-language/_route.tsx",
                 "paths": {
                   "en": "/:lang/personal-information/preferred-language",
                   "fr": "/:lang/informations-personnelles/langue-preferee"
                 },
                 "children": [
                   {
-                    "id": "$lang/_protected/personal-information/preferred-language/edit",
-                    "file": "routes/$lang/_protected/personal-information/preferred-language/edit.tsx",
+                    "id": "protected/personal-information/preferred-language/edit",
+                    "file": "routes/protected/personal-information/preferred-language/edit.tsx",
                     "paths": {
                       "en": "/:lang/personal-information/preferred-language/edit",
                       "fr": "/:lang/informations-personnelles/langue-preferee/modifier"
@@ -852,28 +852,28 @@
             ]
           },
           {
-            "id": "$lang/_protected/access-to-governmental-benefits/_route",
-            "file": "routes/$lang/_protected/access-to-governmental-benefits/_route.tsx",
+            "id": "protected/access-to-governmental-benefits/_route",
+            "file": "routes/protected/access-to-governmental-benefits/_route.tsx",
             "children": [
               {
-                "id": "$lang/_protected/access-to-governmental-benefits/edit",
-                "file": "routes/$lang/_protected/access-to-governmental-benefits/edit.tsx",
+                "id": "protected/access-to-governmental-benefits/edit",
+                "file": "routes/protected/access-to-governmental-benefits/edit.tsx",
                 "paths": {
                   "en": "/:lang/access-to-governmental-benefits/edit",
                   "fr": "/:lang/access-to-governmental-benefits/edit"
                 }
               },
               {
-                "id": "$lang/_protected/access-to-governmental-benefits/view",
-                "file": "routes/$lang/_protected/access-to-governmental-benefits/view.tsx",
+                "id": "protected/access-to-governmental-benefits/view",
+                "file": "routes/protected/access-to-governmental-benefits/view.tsx",
                 "paths": {
                   "en": "/:lang/access-to-governmental-benefits/view",
                   "fr": "/:lang/access-to-governmental-benefits/view"
                 }
               },
               {
-                "id": "$lang/_protected/access-to-governmental-benefits/index",
-                "file": "routes/$lang/_protected/access-to-governmental-benefits/index.tsx",
+                "id": "protected/access-to-governmental-benefits/index",
+                "file": "routes/protected/access-to-governmental-benefits/index.tsx",
                 "index": true,
                 "paths": {
                   "en": "/:lang/access-to-governmental-benefits/index",
@@ -883,12 +883,12 @@
             ]
           },
           {
-            "id": "$lang/_protected/alerts/_route",
-            "file": "routes/$lang/_protected/alerts/_route.tsx",
+            "id": "protected/alerts/_route",
+            "file": "routes/protected/alerts/_route.tsx",
             "children": [
               {
-                "id": "$lang/_protected/alerts/index",
-                "file": "routes/$lang/_protected/alerts/index.tsx",
+                "id": "protected/alerts/index",
+                "file": "routes/protected/alerts/index.tsx",
                 "index": true,
                 "paths": {
                   "en": "/:lang/alerts",
@@ -896,12 +896,12 @@
                 }
               },
               {
-                "id": "$lang/_protected/alerts/subscribe/_route",
-                "file": "routes/$lang/_protected/alerts/subscribe/_route.tsx",
+                "id": "protected/alerts/subscribe/_route",
+                "file": "routes/protected/alerts/subscribe/_route.tsx",
                 "children": [
                   {
-                    "id": "$lang/_protected/alerts/subscribe/index",
-                    "file": "routes/$lang/_protected/alerts/subscribe/index.tsx",
+                    "id": "protected/alerts/subscribe/index",
+                    "file": "routes/protected/alerts/subscribe/index.tsx",
                     "index": true,
                     "paths": {
                       "en": "/:lang/alerts/subscribe",
@@ -911,12 +911,12 @@
                 ]
               },
               {
-                "id": "$lang/_protected/alerts/unsubscribe/_route",
-                "file": "routes/$lang/_protected/alerts/unsubscribe/_route.tsx",
+                "id": "protected/alerts/unsubscribe/_route",
+                "file": "routes/protected/alerts/unsubscribe/_route.tsx",
                 "children": [
                   {
-                    "id": "$lang/_protected/alerts/unsubscribe/index",
-                    "file": "routes/$lang/_protected/alerts/unsubscribe/index.tsx",
+                    "id": "protected/alerts/unsubscribe/index",
+                    "file": "routes/protected/alerts/unsubscribe/index.tsx",
                     "index": true,
                     "paths": {
                       "en": "/:lang/alerts/unsubscribe",
@@ -924,8 +924,8 @@
                     }
                   },
                   {
-                    "id": "$lang/_protected/alerts/unsubscribe/success",
-                    "file": "routes/$lang/_protected/alerts/unsubscribe/success.tsx",
+                    "id": "protected/alerts/unsubscribe/success",
+                    "file": "routes/protected/alerts/unsubscribe/success.tsx",
                     "paths": {
                       "en": "/:lang/alerts/unsubscribe/success",
                       "fr": "/:lang/alertes/desabonner/succes"
@@ -934,12 +934,12 @@
                 ]
               },
               {
-                "id": "$lang/_protected/alerts/manage/_route",
-                "file": "routes/$lang/_protected/alerts/manage/_route.tsx",
+                "id": "protected/alerts/manage/_route",
+                "file": "routes/protected/alerts/manage/_route.tsx",
                 "children": [
                   {
-                    "id": "$lang/_protected/alerts/manage/index",
-                    "file": "routes/$lang/_protected/alerts/manage/index.tsx",
+                    "id": "protected/alerts/manage/index",
+                    "file": "routes/protected/alerts/manage/index.tsx",
                     "index": true,
                     "paths": {
                       "en": "/:lang/alerts/manage",
@@ -949,16 +949,16 @@
                 ]
               },
               {
-                "id": "$lang/_protected/alerts/subscribe/confirm",
-                "file": "routes/$lang/_protected/alerts/subscribe/confirm.tsx",
+                "id": "protected/alerts/subscribe/confirm",
+                "file": "routes/protected/alerts/subscribe/confirm.tsx",
                 "paths": {
                   "en": "/:lang/alerts/subscribe/confirm",
                   "fr": "/:lang/alertes/abonner/confirmer"
                 }
               },
               {
-                "id": "$lang/_protected/alerts/subscribe/success",
-                "file": "routes/$lang/_protected/alerts/subscribe/success.tsx",
+                "id": "protected/alerts/subscribe/success",
+                "file": "routes/protected/alerts/subscribe/success.tsx",
                 "paths": {
                   "en": "/:lang/alerts/subscribe/success",
                   "fr": "/:lang/alertes/abonner/succes"
@@ -967,12 +967,12 @@
             ]
           },
           {
-            "id": "$lang/_protected/status-check/_route",
-            "file": "routes/$lang/_protected/status-check/_route.tsx",
+            "id": "protected/status-check/_route",
+            "file": "routes/protected/status-check/_route.tsx",
             "children": [
               {
-                "id": "$lang/_protected/status-check/index",
-                "file": "routes/$lang/_protected/status-check/index.tsx",
+                "id": "protected/status-check/index",
+                "file": "routes/protected/status-check/index.tsx",
                 "index": true,
                 "paths": {
                   "en": "/:lang/status-check",
@@ -982,12 +982,12 @@
             ]
           },
           {
-            "id": "$lang/_protected/dependent-status-checker/_route",
-            "file": "routes/$lang/_protected/dependent-status-checker/_route.tsx",
+            "id": "protected/dependent-status-checker/_route",
+            "file": "routes/protected/dependent-status-checker/_route.tsx",
             "children": [
               {
-                "id": "$lang/_protected/dependent-status-checker/index",
-                "file": "routes/$lang/_protected/dependent-status-checker/index.tsx",
+                "id": "protected/dependent-status-checker/index",
+                "file": "routes/protected/dependent-status-checker/index.tsx",
                 "paths": {
                   "en": "/:lang/dependent-status-checker",
                   "fr": "/:lang/verification-de-statut-a-charge"
@@ -996,12 +996,12 @@
             ]
           },
           {
-            "id": "$lang/_protected/applications/_route",
-            "file": "routes/$lang/_protected/applications/_route.tsx",
+            "id": "protected/applications/_route",
+            "file": "routes/protected/applications/_route.tsx",
             "children": [
               {
-                "id": "$lang/_protected/applications/index",
-                "file": "routes/$lang/_protected/applications/index.tsx",
+                "id": "protected/applications/index",
+                "file": "routes/protected/applications/index.tsx",
                 "paths": {
                   "en": "/:lang/applications",
                   "fr": "/:lang/candidatures"
@@ -1009,8 +1009,8 @@
                 "index": true
               },
               {
-                "id": "$lang/_protected/applications/$id",
-                "file": "routes/$lang/_protected/applications/$id.tsx",
+                "id": "protected/applications/$id",
+                "file": "routes/protected/applications/$id.tsx",
                 "paths": {
                   "en": "/:lang/applications/:id/",
                   "fr": "/:lang/candidatures/:id/"
@@ -1019,8 +1019,8 @@
             ]
           },
           {
-            "id": "$lang/_protected/stub-login",
-            "file": "routes/$lang/_protected/stub-login.tsx",
+            "id": "protected/stub-login",
+            "file": "routes/protected/stub-login.tsx",
             "paths": {
               "en": "/:lang/stub-login",
               "fr": "/:lang/stub-login"
