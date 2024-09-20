@@ -1,16 +1,18 @@
 import type { Container } from 'inversify';
 import { injectable } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import type { ClientApplicationService } from '~/.server/domain/services/client-application.service';
-import type { ClientFriendlyStatusService } from '~/.server/domain/services/client-friendly-status.service';
-import type { CountryService } from '~/.server/domain/services/country.service';
-import type { FederalGovernmentInsurancePlanService } from '~/.server/domain/services/federal-government-insurance-plan.service';
-import type { MaritalStatusService } from '~/.server/domain/services/marital-status.service';
-import type { PreferredCommunicationMethodService } from '~/.server/domain/services/preferred-communication-method.service';
-import type { PreferredLanguageService } from '~/.server/domain/services/preferred-language.service';
-import type { ProvinceTerritoryStateService } from '~/.server/domain/services/province-territory-state.service';
-import type { ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services/provincial-government-insurance-plan.service';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type {
+  ClientApplicationService,
+  ClientFriendlyStatusService,
+  CountryService,
+  FederalGovernmentInsurancePlanService,
+  MaritalStatusService,
+  PreferredCommunicationMethodService,
+  PreferredLanguageService,
+  ProvinceTerritoryStateService,
+  ProvincialGovernmentInsurancePlanService,
+} from '~/.server/domain/services';
 
 export interface ContainerServiceProvider {
   getClientApplicationService(): ClientApplicationService;

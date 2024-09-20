@@ -1,12 +1,12 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
-import type { ServerConfig } from '~/.server/configs/server.config';
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import type { MaritalStatusDto } from '~/.server/domain/dtos/marital-status.dto';
-import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers/marital-status.dto.mapper';
-import type { MaritalStatusRepository } from '~/.server/domain/repositories/marital-status.repository';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { ServerConfig } from '~/.server/configs';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type { MaritalStatusDto } from '~/.server/domain/dtos';
+import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
+import type { MaritalStatusRepository } from '~/.server/domain/repositories';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface MaritalStatusService {
   findAll(): MaritalStatusDto[];

@@ -1,9 +1,5 @@
 import { getEnv } from './env-utils.server';
-import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos/client-friendly-status.dto';
-import type { CountryDto } from '~/.server/domain/dtos/country.dto';
-import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos/federal-government-insurance-plan.dto';
-import type { MaritalStatusDto } from '~/.server/domain/dtos/marital-status.dto';
-import type { PreferredLanguageDto } from '~/.server/domain/dtos/preferred-language.dto';
+import type { ClientFriendlyStatusDto, CountryDto, FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredLanguageDto } from '~/.server/domain/dtos';
 import type { ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
 
 /**

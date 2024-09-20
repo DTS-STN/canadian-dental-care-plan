@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
 
-import type { ServerConfig } from '~/.server/configs/server.config';
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import type { MaritalStatusDto } from '~/.server/domain/dtos/marital-status.dto';
-import type { MaritalStatusEntity } from '~/.server/domain/entities/marital-status.entity';
+import type { ServerConfig } from '~/.server/configs';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type { MaritalStatusDto } from '~/.server/domain/dtos';
+import type { MaritalStatusEntity } from '~/.server/domain/entities';
 
 export interface MaritalStatusDtoMapper {
   mapMaritalStatusEntityToMaritalStatusDto(maritalStatusEntity: MaritalStatusEntity): MaritalStatusDto;

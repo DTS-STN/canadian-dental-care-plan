@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 
-import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos/provincial-government-insurance-plan.dto';
-import type { ProvincialGovernmentInsurancePlanEntity } from '~/.server/domain/entities/provincial-government-insurance-plan.entity';
+import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
+import type { ProvincialGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
 
 export interface ProvincialGovernmentInsurancePlanDtoMapper {
   mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity: ProvincialGovernmentInsurancePlanEntity): ProvincialGovernmentInsurancePlanDto;

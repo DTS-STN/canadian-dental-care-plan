@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 
 describe('SERVICE_IDENTIFIER', () => {
   it('should have unique Symbol values', () => {

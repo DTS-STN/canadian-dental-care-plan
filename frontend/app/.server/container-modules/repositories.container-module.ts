@@ -1,24 +1,28 @@
 import { ContainerModule } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import type { ClientApplicationRepository } from '~/.server/domain/repositories/client-application.repository';
-import { ClientApplicationRepositoryImpl } from '~/.server/domain/repositories/client-application.repository';
-import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories/client-friendly-status.repository';
-import { ClientFriendlyStatusRepositoryImpl } from '~/.server/domain/repositories/client-friendly-status.repository';
-import type { CountryRepository } from '~/.server/domain/repositories/country.repository';
-import { CountryRepositoryImpl } from '~/.server/domain/repositories/country.repository';
-import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories/federal-government-insurance-plan.repository';
-import { FederalGovernmentInsurancePlanRepositoryImpl } from '~/.server/domain/repositories/federal-government-insurance-plan.repository';
-import type { MaritalStatusRepository } from '~/.server/domain/repositories/marital-status.repository';
-import { MaritalStatusRepositoryImpl } from '~/.server/domain/repositories/marital-status.repository';
-import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories/preferred-communication-method.repository';
-import { PreferredCommunicationMethodRepositoryImpl } from '~/.server/domain/repositories/preferred-communication-method.repository';
-import type { PreferredLanguageRepository } from '~/.server/domain/repositories/preferred-language.repository';
-import { PreferredLanguageRepositoryImpl } from '~/.server/domain/repositories/preferred-language.repository';
-import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories/province-territory-state.repository';
-import { ProvinceTerritoryStateRepositoryImpl } from '~/.server/domain/repositories/province-territory-state.repository';
-import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories/provincial-government-insurance-plan.repository';
-import { ProvincialGovernmentInsurancePlanRepositoryImpl } from '~/.server/domain/repositories/provincial-government-insurance-plan.repository';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type {
+  ClientApplicationRepository,
+  ClientFriendlyStatusRepository,
+  CountryRepository,
+  FederalGovernmentInsurancePlanRepository,
+  MaritalStatusRepository,
+  PreferredCommunicationMethodRepository,
+  PreferredLanguageRepository,
+  ProvinceTerritoryStateRepository,
+  ProvincialGovernmentInsurancePlanRepository,
+} from '~/.server/domain/repositories';
+import {
+  ClientApplicationRepositoryImpl,
+  ClientFriendlyStatusRepositoryImpl,
+  CountryRepositoryImpl,
+  FederalGovernmentInsurancePlanRepositoryImpl,
+  MaritalStatusRepositoryImpl,
+  PreferredCommunicationMethodRepositoryImpl,
+  PreferredLanguageRepositoryImpl,
+  ProvinceTerritoryStateRepositoryImpl,
+  ProvincialGovernmentInsurancePlanRepositoryImpl,
+} from '~/.server/domain/repositories';
 
 /**
  * Container module for repositories.

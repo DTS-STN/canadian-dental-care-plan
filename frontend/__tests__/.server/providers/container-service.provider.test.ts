@@ -2,8 +2,8 @@ import type { Container } from 'inversify';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import { ContainerServiceProviderImpl } from '~/.server/providers/container-service.provider';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { ContainerServiceProviderImpl } from '~/.server/providers';
 
 describe('ContainerServiceProviderImpl', () => {
   it("should call the container's get function with the correct identifier", () => {

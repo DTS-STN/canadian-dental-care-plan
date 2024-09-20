@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ServerConfig } from '~/.server/configs/server.config';
-import type { PreferredLanguageDto } from '~/.server/domain/dtos/preferred-language.dto';
-import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers/preferred-language.dto.mapper';
-import type { PreferredLanguageRepository } from '~/.server/domain/repositories/preferred-language.repository';
-import { PreferredLanguageServiceImpl } from '~/.server/domain/services/preferred-language.service';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { ServerConfig } from '~/.server/configs';
+import type { PreferredLanguageDto } from '~/.server/domain/dtos';
+import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
+import type { PreferredLanguageRepository } from '~/.server/domain/repositories';
+import { PreferredLanguageServiceImpl } from '~/.server/domain/services';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 

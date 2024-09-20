@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { ClientFriendlyStatusRepositoryImpl } from '~/.server/domain/repositories/client-friendly-status.repository';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import { ClientFriendlyStatusRepositoryImpl } from '~/.server/domain/repositories';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 const dataSource = vi.hoisted(() => ({
   default: {

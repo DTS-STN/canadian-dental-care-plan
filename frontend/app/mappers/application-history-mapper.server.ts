@@ -1,4 +1,4 @@
-import type { FederalGovernmentInsurancePlanService } from '~/.server/domain/services/federal-government-insurance-plan.service';
+import type { FederalGovernmentInsurancePlanService } from '~/.server/domain/services';
 import type { ApplicationResponse } from '~/schemas/application-history-service-schemas.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env-utils.server';

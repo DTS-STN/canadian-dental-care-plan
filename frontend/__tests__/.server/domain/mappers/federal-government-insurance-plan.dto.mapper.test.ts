@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos/federal-government-insurance-plan.dto';
-import type { FederalGovernmentInsurancePlanEntity } from '~/.server/domain/entities/federal-government-insurance-plan.entity';
-import { FederalGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers/federal-government-insurance-plan.dto.mapper';
+import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
+import type { FederalGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
+import { FederalGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('FederalGovernmentInsurancePlanDtoMapperImpl', () => {
   afterEach(() => {

@@ -2,14 +2,10 @@ import { error } from 'console';
 import { Container } from 'inversify';
 import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
 
-import type { ServerConfig } from '~/.server/configs/server.config';
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import { configsContainerModule } from '~/.server/container-modules/configs.container-module';
-import { factoriesContainerModule } from '~/.server/container-modules/factories.container-module';
-import { mappersContainerModule } from '~/.server/container-modules/mappers.container-module';
-import { repositoriesContainerModule } from '~/.server/container-modules/repositories.container-module';
-import { servicesContainerModule } from '~/.server/container-modules/services.container-module';
-import type { Logger } from '~/.server/factories/log.factory';
+import type { ServerConfig } from '~/.server/configs';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule } from '~/.server/container-modules';
+import type { Logger } from '~/.server/factories';
 import { getLogger } from '~/utils/logging.server';
 
 export function initContainer() {

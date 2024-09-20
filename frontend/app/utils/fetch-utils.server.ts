@@ -4,9 +4,6 @@ import { getEnv } from './env-utils.server';
 import { getLogger } from './logging.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 
-const log = getLogger('fetch-utils.server');
-const instrumentationService = getInstrumentationService();
-
 /**
  * A custom fetch(..) function that can be used for making HTTP requests.
  * Primarily used for intercepting responses or configuring an HTTP proxy.
@@ -18,6 +15,8 @@ export type FetchFn = typeof fetch;
  * If no proxy has been provided, simply return global.fetch().
  */
 export function getFetchFn(proxyUrl?: string, timeout?: number): FetchFn {
+  const log = getLogger('fetch-utils.server/getFetchFn');
+
   if (proxyUrl) {
     const { HTTP_PROXY_TLS_TIMEOUT } = getEnv();
     const proxyTlsTimeout = timeout ?? HTTP_PROXY_TLS_TIMEOUT;
@@ -46,6 +45,7 @@ export function getFetchFn(proxyUrl?: string, timeout?: number): FetchFn {
  * @throws The original error thrown by the underlying fetch() call
  */
 export async function instrumentedFetch(fetchFn: FetchFn, metricPrefix: string, input: RequestInfo | URL, init?: RequestInit) {
+  const instrumentationService = getInstrumentationService();
   try {
     const response = await fetchFn(input, init);
     instrumentationService.countHttpStatus(metricPrefix, response.status);

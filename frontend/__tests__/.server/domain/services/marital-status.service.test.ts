@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ServerConfig } from '~/.server/configs/server.config';
-import type { MaritalStatusDto } from '~/.server/domain/dtos/marital-status.dto';
-import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers/marital-status.dto.mapper';
-import type { MaritalStatusRepository } from '~/.server/domain/repositories/marital-status.repository';
-import { MaritalStatusServiceImpl } from '~/.server/domain/services/marital-status.service';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { ServerConfig } from '~/.server/configs';
+import type { MaritalStatusDto } from '~/.server/domain/dtos';
+import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
+import type { MaritalStatusRepository } from '~/.server/domain/repositories';
+import { MaritalStatusServiceImpl } from '~/.server/domain/services';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 

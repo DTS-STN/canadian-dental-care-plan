@@ -1,24 +1,28 @@
 import { ContainerModule } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import { ClientApplicationDtoMapperImpl } from '~/.server/domain/mappers/client-application.dto.mapper';
-import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers/client-application.dto.mapper';
-import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers/client-friendly-status.dto.mapper';
-import { ClientFriendlyStatusDtoMapperImpl } from '~/.server/domain/mappers/client-friendly-status.dto.mapper';
-import type { CountryDtoMapper } from '~/.server/domain/mappers/country.dto.mapper';
-import { CountryDtoMapperImpl } from '~/.server/domain/mappers/country.dto.mapper';
-import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers/federal-government-insurance-plan.dto.mapper';
-import { FederalGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers/federal-government-insurance-plan.dto.mapper';
-import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers/marital-status.dto.mapper';
-import { MaritalStatusDtoMapperImpl } from '~/.server/domain/mappers/marital-status.dto.mapper';
-import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers/preferred-communication-method.dto.mapper';
-import { PreferredCommunicationMethodDtoMapperImpl } from '~/.server/domain/mappers/preferred-communication-method.dto.mapper';
-import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers/preferred-language.dto.mapper';
-import { PreferredLanguageDtoMapperImpl } from '~/.server/domain/mappers/preferred-language.dto.mapper';
-import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers/province-territory-state.dto.mapper';
-import { ProvinceTerritoryStateDtoMapperImpl } from '~/.server/domain/mappers/province-territory-state.dto.mapper';
-import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers/provincial-government-insurance-plan.dto.mapper';
-import { ProvincialGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers/provincial-government-insurance-plan.dto.mapper';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import {
+  ClientApplicationDtoMapperImpl,
+  ClientFriendlyStatusDtoMapperImpl,
+  CountryDtoMapperImpl,
+  FederalGovernmentInsurancePlanDtoMapperImpl,
+  MaritalStatusDtoMapperImpl,
+  PreferredCommunicationMethodDtoMapperImpl,
+  PreferredLanguageDtoMapperImpl,
+  ProvinceTerritoryStateDtoMapperImpl,
+  ProvincialGovernmentInsurancePlanDtoMapperImpl,
+} from '~/.server/domain/mappers';
+import type {
+  ClientApplicationDtoMapper,
+  ClientFriendlyStatusDtoMapper,
+  CountryDtoMapper,
+  FederalGovernmentInsurancePlanDtoMapper,
+  MaritalStatusDtoMapper,
+  PreferredCommunicationMethodDtoMapper,
+  PreferredLanguageDtoMapper,
+  ProvinceTerritoryStateDtoMapper,
+  ProvincialGovernmentInsurancePlanDtoMapper,
+} from '~/.server/domain/mappers';
 
 /**
  * Container module for mappers.

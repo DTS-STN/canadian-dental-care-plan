@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ServerConfig } from '~/.server/configs/server.config';
-import type { CountryDto } from '~/.server/domain/dtos/country.dto';
-import type { CountryDtoMapper } from '~/.server/domain/mappers/country.dto.mapper';
-import type { CountryRepository } from '~/.server/domain/repositories/country.repository';
-import { CountryServiceImpl } from '~/.server/domain/services/country.service';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { ServerConfig } from '~/.server/configs';
+import type { CountryDto } from '~/.server/domain/dtos';
+import type { CountryDtoMapper } from '~/.server/domain/mappers';
+import type { CountryRepository } from '~/.server/domain/repositories';
+import { CountryServiceImpl } from '~/.server/domain/services';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 
