@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 
-import type { ServerConfig } from '~/.server/configs/server.config';
+import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
 import type { PreferredCommunicationMethodEntity } from '~/.server/domain/entities';

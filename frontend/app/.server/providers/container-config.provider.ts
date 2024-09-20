@@ -1,7 +1,6 @@
 import { Container, injectable } from 'inversify';
 
-import type { ClientConfig } from '~/.server/configs/client.config';
-import type { ServerConfig } from '~/.server/configs/server.config';
+import type { ClientConfig , ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 
 export interface ContainerConfigProvider {

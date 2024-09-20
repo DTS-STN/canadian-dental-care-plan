@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 
-import { ServerConfig } from '~/.server/configs/server.config';
+import { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import { ClientApplicationEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';

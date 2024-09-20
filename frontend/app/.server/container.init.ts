@@ -2,7 +2,7 @@ import { error } from 'console';
 import { Container } from 'inversify';
 import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
 
-import type { ServerConfig } from '~/.server/configs/server.config';
+import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import { configsContainerModule } from '~/.server/container-modules/configs.container-module';
 import { factoriesContainerModule } from '~/.server/container-modules/factories.container-module';

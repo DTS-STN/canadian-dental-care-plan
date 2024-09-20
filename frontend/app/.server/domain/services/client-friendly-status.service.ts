@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
-import type { ServerConfig } from '~/.server/configs/server.config';
+import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
