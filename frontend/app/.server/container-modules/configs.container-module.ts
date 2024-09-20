@@ -1,7 +1,7 @@
 import { ContainerModule } from 'inversify';
 
-import type { ClientConfig , ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
+import type { ClientConfig, ServerConfig } from '~/.server/configs';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { ConfigFactory } from '~/.server/factories/config.factory';
 
 /**

@@ -1,8 +1,28 @@
 import { ContainerModule } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import type { ClientApplicationService , ClientFriendlyStatusService , CountryService , FederalGovernmentInsurancePlanService , MaritalStatusService , PreferredCommunicationMethodService , PreferredLanguageService , ProvinceTerritoryStateService , ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
-import { ClientApplicationServiceImpl , ClientFriendlyStatusServiceImpl , CountryServiceImpl , FederalGovernmentInsurancePlanServiceImpl , MaritalStatusServiceImpl , PreferredCommunicationMethodServiceImpl , PreferredLanguageServiceImpl , ProvinceTerritoryStateServiceImpl , ProvincialGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type {
+  ClientApplicationService,
+  ClientFriendlyStatusService,
+  CountryService,
+  FederalGovernmentInsurancePlanService,
+  MaritalStatusService,
+  PreferredCommunicationMethodService,
+  PreferredLanguageService,
+  ProvinceTerritoryStateService,
+  ProvincialGovernmentInsurancePlanService,
+} from '~/.server/domain/services';
+import {
+  ClientApplicationServiceImpl,
+  ClientFriendlyStatusServiceImpl,
+  CountryServiceImpl,
+  FederalGovernmentInsurancePlanServiceImpl,
+  MaritalStatusServiceImpl,
+  PreferredCommunicationMethodServiceImpl,
+  PreferredLanguageServiceImpl,
+  ProvinceTerritoryStateServiceImpl,
+  ProvincialGovernmentInsurancePlanServiceImpl,
+} from '~/.server/domain/services';
 
 /**
  * Container module for services.

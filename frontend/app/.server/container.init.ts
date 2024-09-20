@@ -3,7 +3,7 @@ import { Container } from 'inversify';
 import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { configsContainerModule } from '~/.server/container-modules/configs.container-module';
 import { factoriesContainerModule } from '~/.server/container-modules/factories.container-module';
 import { mappersContainerModule } from '~/.server/container-modules/mappers.container-module';

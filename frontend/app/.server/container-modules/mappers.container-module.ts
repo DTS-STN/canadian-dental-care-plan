@@ -1,6 +1,6 @@
 import { ContainerModule } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import {
   ClientApplicationDtoMapperImpl,
   ClientFriendlyStatusDtoMapperImpl,

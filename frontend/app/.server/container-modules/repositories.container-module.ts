@@ -1,8 +1,28 @@
 import { ContainerModule } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import type { ClientApplicationRepository , ClientFriendlyStatusRepository , CountryRepository , FederalGovernmentInsurancePlanRepository , MaritalStatusRepository , PreferredCommunicationMethodRepository , PreferredLanguageRepository , ProvinceTerritoryStateRepository , ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
-import { ClientApplicationRepositoryImpl , ClientFriendlyStatusRepositoryImpl , CountryRepositoryImpl , FederalGovernmentInsurancePlanRepositoryImpl , MaritalStatusRepositoryImpl , PreferredCommunicationMethodRepositoryImpl , PreferredLanguageRepositoryImpl , ProvinceTerritoryStateRepositoryImpl , ProvincialGovernmentInsurancePlanRepositoryImpl } from '~/.server/domain/repositories';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type {
+  ClientApplicationRepository,
+  ClientFriendlyStatusRepository,
+  CountryRepository,
+  FederalGovernmentInsurancePlanRepository,
+  MaritalStatusRepository,
+  PreferredCommunicationMethodRepository,
+  PreferredLanguageRepository,
+  ProvinceTerritoryStateRepository,
+  ProvincialGovernmentInsurancePlanRepository,
+} from '~/.server/domain/repositories';
+import {
+  ClientApplicationRepositoryImpl,
+  ClientFriendlyStatusRepositoryImpl,
+  CountryRepositoryImpl,
+  FederalGovernmentInsurancePlanRepositoryImpl,
+  MaritalStatusRepositoryImpl,
+  PreferredCommunicationMethodRepositoryImpl,
+  PreferredLanguageRepositoryImpl,
+  ProvinceTerritoryStateRepositoryImpl,
+  ProvincialGovernmentInsurancePlanRepositoryImpl,
+} from '~/.server/domain/repositories';
 
 /**
  * Container module for repositories.

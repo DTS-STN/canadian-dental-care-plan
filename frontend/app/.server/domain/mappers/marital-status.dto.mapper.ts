@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { MaritalStatusDto } from '~/.server/domain/dtos';
 import type { MaritalStatusEntity } from '~/.server/domain/entities';
 
