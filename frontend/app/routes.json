@@ -82,626 +82,590 @@
         }
       },
       {
-        "id": "public/_route",
-        "file": "routes/public/_route.tsx",
+        "id": "public/apply/_route",
+        "file": "routes/public/apply/_route.tsx",
         "children": [
           {
-            "id": "public/apply/_route",
-            "file": "routes/public/apply/_route.tsx",
-            "children": [
-              {
-                "id": "public/apply/index",
-                "file": "routes/public/apply/index.tsx",
-                "paths": {
-                  "en": "/:lang/apply",
-                  "fr": "/:lang/demander"
-                },
-                "index": true
-              },
-              {
-                "id": "public/apply/$id/_route",
-                "file": "routes/public/apply/$id/_route.tsx",
-                "paths": {
-                  "en": "/:lang/apply/:id",
-                  "fr": "/:lang/demander/:id"
-                },
-                "children": [
-                  {
-                    "id": "public/apply/$id/adult/_route",
-                    "file": "routes/public/apply/$id/adult/_route.tsx",
-                    "children": [
-                      {
-                        "id": "public/apply/$id/adult/applicant-information",
-                        "file": "routes/public/apply/$id/adult/applicant-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/applicant-information",
-                          "fr": "/:lang/demander/:id/adulte/renseignements-demandeur"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/communication-preference",
-                        "file": "routes/public/apply/$id/adult/communication-preference.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/communication-preference",
-                          "fr": "/:lang/demander/:id/adult/preference-communication"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/confirmation",
-                        "file": "routes/public/apply/$id/adult/confirmation.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/confirmation",
-                          "fr": "/:lang/demander/:id/adulte/confirmation"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/date-of-birth",
-                        "file": "routes/public/apply/$id/adult/date-of-birth.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/date-of-birth",
-                          "fr": "/:lang/demander/:id/adulte/date-de-naissance"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/dental-insurance",
-                        "file": "routes/public/apply/$id/adult/dental-insurance.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/dental-insurance",
-                          "fr": "/:lang/demander/:id/adulte/assurance-dentaire"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/dob-eligibility",
-                        "file": "routes/public/apply/$id/adult/dob-eligibility.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/dob-eligibility",
-                          "fr": "/:lang/demander/:id/adulte/ddn-admissibilite"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/exit-application",
-                        "file": "routes/public/apply/$id/adult/exit-application.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/exit-application",
-                          "fr": "/:lang/demander/:id/adulte/quitter-demande"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/federal-provincial-territorial-benefits",
-                        "file": "routes/public/apply/$id/adult/federal-provincial-territorial-benefits.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/federal-provincial-territorial-benefits",
-                          "fr": "/:lang/demander/:id/adulte/prestations-dentaires-federales-provinciales-territoriales"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/file-taxes",
-                        "file": "routes/public/apply/$id/adult/file-taxes.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/file-taxes",
-                          "fr": "/:lang/demander/:id/adulte/produire-declaration-revenus"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/partner-information",
-                        "file": "routes/public/apply/$id/adult/partner-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/partner-information",
-                          "fr": "/:lang/demander/:id/adulte/renseignements-partenaire"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/contact-information",
-                        "file": "routes/public/apply/$id/adult/contact-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/contact-information",
-                          "fr": "/:lang/demander/:id/adulte/renseignements-personnels"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/review-information",
-                        "file": "routes/public/apply/$id/adult/review-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/review-information",
-                          "fr": "/:lang/demander/:id/adulte/revue-renseignements"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/tax-filing",
-                        "file": "routes/public/apply/$id/adult/tax-filing.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/tax-filing",
-                          "fr": "/:lang/demander/:id/adulte/declaration-impot"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/disability-tax-credit",
-                        "file": "routes/public/apply/$id/adult/disability-tax-credit.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/disability-tax-credit",
-                          "fr": "/:lang/demander/:id/adulte/credit-impot-personnes-handicapees"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/parent-or-guardian",
-                        "file": "routes/public/apply/$id/adult/parent-or-guardian.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/parent-or-guardian",
-                          "fr": "/:lang/demander/:id/adulte/parent-ou-tuteur"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult/living-independently",
-                        "file": "routes/public/apply/$id/adult/living-independently.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/living-independently",
-                          "fr": "/:lang/demander/:id/adulte/vivre-maniere-independante"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "id": "public/apply/$id/adult-child/_route",
-                    "file": "routes/public/apply/$id/adult-child/_route.tsx",
-                    "children": [
-                      {
-                        "id": "public/apply/$id/adult-child/children/_route",
-                        "file": "routes/public/apply/$id/adult-child/children/_route.tsx",
-                        "children": [
-                          {
-                            "id": "public/apply/$id/adult-child/children/index",
-                            "file": "routes/public/apply/$id/adult-child/children/index.tsx",
-                            "index": true,
-                            "paths": {
-                              "en": "/:lang/apply/:id/adult-child/children",
-                              "fr": "/:lang/demander/:id/adulte-enfant/enfants"
-                            }
-                          },
-                          {
-                            "id": "public/apply/$id/adult-child/children/$childId/_route",
-                            "file": "routes/public/apply/$id/adult-child/children/$childId/_route.tsx",
-                            "children": [
-                              {
-                                "id": "public/apply/$id/adult-child/children/$childId/information",
-                                "file": "routes/public/apply/$id/adult-child/children/$childId/information.tsx",
-                                "paths": {
-                                  "en": "/:lang/apply/:id/adult-child/children/:childId/information",
-                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/information"
-                                }
-                              },
-                              {
-                                "id": "public/apply/$id/adult-child/children/$childId/dental-insurance",
-                                "file": "routes/public/apply/$id/adult-child/children/$childId/dental-insurance.tsx",
-                                "paths": {
-                                  "en": "/:lang/apply/:id/adult-child/children/:childId/dental-insurance",
-                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/assurance-dentaire"
-                                }
-                              },
-                              {
-                                "id": "public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits",
-                                "file": "routes/public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits.tsx",
-                                "paths": {
-                                  "en": "/:lang/apply/:id/adult-child/children/:childId/federal-provincial-territorial-benefits",
-                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/prestations-dentaires-federales-provinciales-territoriales"
-                                }
-                              },
-                              {
-                                "id": "public/apply/$id/adult-child/children/$childId/parent-or-guardian",
-                                "file": "routes/public/apply/$id/adult-child/children/$childId/parent-or-guardian.tsx",
-                                "paths": {
-                                  "en": "/:lang/apply/:id/adult-child/children/:childId/parent-or-guardian",
-                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/parent-ou-tuteur"
-                                }
-                              },
-                              {
-                                "id": "public/apply/$id/adult-child/children/$childId/cannot-apply-child",
-                                "file": "routes/public/apply/$id/adult-child/children/$childId/cannot-apply-child.tsx",
-                                "paths": {
-                                  "en": "/:lang/apply/:id/adult-child/children/:childId/cannot-apply-child",
-                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/pas-demande-enfant"
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/tax-filing",
-                        "file": "routes/public/apply/$id/adult-child/tax-filing.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/tax-filing",
-                          "fr": "/:lang/demander/:id/adulte-enfant/declaration-impot"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/date-of-birth",
-                        "file": "routes/public/apply/$id/adult-child/date-of-birth.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/date-of-birth",
-                          "fr": "/:lang/demander/:id/adulte-enfant/date-de-naissance"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/apply-children",
-                        "file": "routes/public/apply/$id/adult-child/apply-children.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/apply-children",
-                          "fr": "/:lang/demander/:id/adult-child/demande-enfant"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/confirmation",
-                        "file": "routes/public/apply/$id/adult-child/confirmation.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/confirmation",
-                          "fr": "/:lang/demander/:id/adulte-enfant/confirmation"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/federal-provincial-territorial-benefits",
-                        "file": "routes/public/apply/$id/adult-child/federal-provincial-territorial-benefits.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/federal-provincial-territorial-benefits",
-                          "fr": "/:lang/demander/:id/adulte-enfant/prestations-dentaires-federales-provinciales-territoriales"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/review-adult-information",
-                        "file": "routes/public/apply/$id/adult-child/review-adult-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/review-adult-information",
-                          "fr": "/:lang/demander/:id/adulte-enfant/revue-renseignements-adulte"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/review-child-information",
-                        "file": "routes/public/apply/$id/adult-child/review-child-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/review-child-information",
-                          "fr": "/:lang/demander/:id/adulte-enfant/revue-renseignements-enfant"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/communication-preference",
-                        "file": "routes/public/apply/$id/adult-child/communication-preference.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/communication-preference",
-                          "fr": "/:lang/demander/:id/adulte-enfant/preference-communication"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/apply-yourself",
-                        "file": "routes/public/apply/$id/adult-child/apply-yourself.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/apply-yourself",
-                          "fr": "/:lang/demander/:id/adulte-enfant/postulez-vous-meme"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/dental-insurance",
-                        "file": "routes/public/apply/$id/adult-child/dental-insurance.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/dental-insurance",
-                          "fr": "/:lang/demander/:id/adulte-enfant/assurance-dentaire"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/disability-tax-credit",
-                        "file": "routes/public/apply/$id/adult-child/disability-tax-credit.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/disability-tax-credit",
-                          "fr": "/:lang/demander/:id/adulte-enfant/credit-impot-personnes-handicapees"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/parent-or-guardian",
-                        "file": "routes/public/apply/$id/adult-child/parent-or-guardian.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/parent-or-guardian",
-                          "fr": "/:lang/demander/:id/adulte-enfant/parent-ou-tuteur"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/living-independently",
-                        "file": "routes/public/apply/$id/adult-child/living-independently.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/living-independently",
-                          "fr": "/:lang/demander/:id/adulte-enfant/vivre-maniere-independante"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/contact-information",
-                        "file": "routes/public/apply/$id/adult-child/contact-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/contact-information",
-                          "fr": "/:lang/demander/:id/adulte-enfant/renseignements-personnels"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/partner-information",
-                        "file": "routes/public/apply/$id/adult-child/partner-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/partner-information",
-                          "fr": "/:lang/demander/:id/adulte-enfant/renseignements-partenaire"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/applicant-information",
-                        "file": "routes/public/apply/$id/adult-child/applicant-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/applicant-information",
-                          "fr": "/:lang/demander/:id/adulte-enfant/renseignements-demandeur"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/contact-apply-child",
-                        "file": "routes/public/apply/$id/adult-child/contact-apply-child.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/contact-apply-child",
-                          "fr": "/:lang/demander/:id/adulte-enfant/contact-demande-enfant"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/dob-eligibility",
-                        "file": "routes/public/apply/$id/adult-child/dob-eligibility.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/dob-eligibility",
-                          "fr": "/:lang/demander/:id/adulte-enfant/ddn-admissibilite"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/file-taxes",
-                        "file": "routes/public/apply/$id/adult-child/file-taxes.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/file-taxes",
-                          "fr": "/:lang/demander/:id/adulte-enfant/produire-declaration-revenus"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/adult-child/exit-application",
-                        "file": "routes/public/apply/$id/adult-child/exit-application.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/exit-application",
-                          "fr": "/:lang/demander/:id/adulte-enfant/quitter-demande"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "id": "public/apply/$id/child/_route",
-                    "file": "routes/public/apply/$id/child/_route.tsx",
-                    "children": [
-                      {
-                        "id": "public/apply/$id/child/children/_route",
-                        "file": "routes/public/apply/$id/child/children/_route.tsx",
-                        "children": [
-                          {
-                            "id": "public/apply/$id/child/children/index",
-                            "file": "routes/public/apply/$id/child/children/index.tsx",
-                            "index": true,
-                            "paths": {
-                              "en": "/:lang/apply/:id/child/children",
-                              "fr": "/:lang/demander/:id/enfant/enfants"
-                            }
-                          },
-                          {
-                            "id": "public/apply/$id/child/children/$childId/_route",
-                            "file": "routes/public/apply/$id/child/children/$childId/_route.tsx",
-                            "children": [
-                              {
-                                "id": "public/apply/$id/child/children/$childId/information",
-                                "file": "routes/public/apply/$id/child/children/$childId/information.tsx",
-                                "paths": {
-                                  "en": "/:lang/apply/:id/child/children/:childId/information",
-                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/information"
-                                }
-                              },
-                              {
-                                "id": "public/apply/$id/child/children/$childId/dental-insurance",
-                                "file": "routes/public/apply/$id/child/children/$childId/dental-insurance.tsx",
-                                "paths": {
-                                  "en": "/:lang/apply/:id/child/children/:childId/dental-insurance",
-                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/assurance-dentaire"
-                                }
-                              },
-                              {
-                                "id": "public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits",
-                                "file": "routes/public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits.tsx",
-                                "paths": {
-                                  "en": "/:lang/apply/:id/child/children/:childId/federal-provincial-territorial-benefits",
-                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/prestations-dentaires-federales-provinciales-territoriales"
-                                }
-                              },
-                              {
-                                "id": "public/apply/$id/child/children/$childId/parent-or-guardian",
-                                "file": "routes/public/apply/$id/child/children/$childId/parent-or-guardian.tsx",
-                                "paths": {
-                                  "en": "/:lang/apply/:id/child/children/:childId/parent-or-guardian",
-                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/parent-ou-tuteur"
-                                }
-                              },
-                              {
-                                "id": "public/apply/$id/child/children/$childId/cannot-apply-child",
-                                "file": "routes/public/apply/$id/child/children/$childId/cannot-apply-child.tsx",
-                                "paths": {
-                                  "en": "/:lang/apply/:id/child/children/:childId/cannot-apply-child",
-                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/pas-demande-enfant"
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "id": "public/apply/$id/child/applicant-information",
-                        "file": "routes/public/apply/$id/child/applicant-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/applicant-information",
-                          "fr": "/:lang/demander/:id/enfant/renseignements-demandeur"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/child/communication-preference",
-                        "file": "routes/public/apply/$id/child/communication-preference.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/communication-preference",
-                          "fr": "/:lang/demander/:id/child/preference-communication"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/child/confirmation",
-                        "file": "routes/public/apply/$id/child/confirmation.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/confirmation",
-                          "fr": "/:lang/demander/:id/enfant/confirmation"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/child/contact-apply-child",
-                        "file": "routes/public/apply/$id/child/contact-apply-child.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/contact-apply-child",
-                          "fr": "/:lang/demander/:id/enfant/contact-demande-enfant"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/child/exit-application",
-                        "file": "routes/public/apply/$id/child/exit-application.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/exit-application",
-                          "fr": "/:lang/demander/:id/enfant/quitter-demande"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/child/file-taxes",
-                        "file": "routes/public/apply/$id/child/file-taxes.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/file-taxes",
-                          "fr": "/:lang/demander/:id/enfant/produire-declaration-revenus"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/child/partner-information",
-                        "file": "routes/public/apply/$id/child/partner-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/partner-information",
-                          "fr": "/:lang/demander/:id/enfant/renseignements-partenaire"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/child/contact-information",
-                        "file": "routes/public/apply/$id/child/contact-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/contact-information",
-                          "fr": "/:lang/demander/:id/enfant/renseignements-personnels"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/child/review-adult-information",
-                        "file": "routes/public/apply/$id/child/review-adult-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/review-adult-information",
-                          "fr": "/:lang/demander/:id/enfant/revue-adulte-renseignements"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/child/review-child-information",
-                        "file": "routes/public/apply/$id/child/review-child-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/review-child-information",
-                          "fr": "/:lang/demander/:id/enfant/revue-enfant-renseignements"
-                        }
-                      },
-                      {
-                        "id": "public/apply/$id/child/tax-filing",
-                        "file": "routes/public/apply/$id/child/tax-filing.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/tax-filing",
-                          "fr": "/:lang/demander/:id/enfant/declaration-impot"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "id": "public/apply/$id/terms-and-conditions",
-                    "file": "routes/public/apply/$id/terms-and-conditions.tsx",
-                    "paths": {
-                      "en": "/:lang/apply/:id/terms-and-conditions",
-                      "fr": "/:lang/demander/:id/conditions-utilisation"
-                    }
-                  },
-                  {
-                    "id": "public/apply/$id/type-application",
-                    "file": "routes/public/apply/$id/type-application.tsx",
-                    "paths": {
-                      "en": "/:lang/apply/:id/type-application",
-                      "fr": "/:lang/demander/:id/type-demande"
-                    }
-                  },
-                  {
-                    "id": "public/apply/$id/application-delegate",
-                    "file": "routes/public/apply/$id/application-delegate.tsx",
-                    "paths": {
-                      "en": "/:lang/apply/:id/application-delegate",
-                      "fr": "/:lang/demander/:id/delegue-demande"
-                    }
-                  }
-                ]
-              }
-            ]
+            "id": "public/apply/index",
+            "file": "routes/public/apply/index.tsx",
+            "paths": {
+              "en": "/:lang/apply",
+              "fr": "/:lang/demander"
+            },
+            "index": true
           },
           {
-            "id": "public/status/_route",
-            "file": "routes/public/status/_route.tsx",
+            "id": "public/apply/$id/_route",
+            "file": "routes/public/apply/$id/_route.tsx",
             "paths": {
-              "en": "/:lang/status",
-              "fr": "/:lang/etat"
+              "en": "/:lang/apply/:id",
+              "fr": "/:lang/demander/:id"
             },
             "children": [
               {
-                "id": "public/status/index",
-                "file": "routes/public/status/index.tsx",
+                "id": "public/apply/$id/adult/applicant-information",
+                "file": "routes/public/apply/$id/adult/applicant-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/applicant-information",
+                  "fr": "/:lang/demander/:id/adulte/renseignements-demandeur"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/communication-preference",
+                "file": "routes/public/apply/$id/adult/communication-preference.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/communication-preference",
+                  "fr": "/:lang/demander/:id/adult/preference-communication"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/confirmation",
+                "file": "routes/public/apply/$id/adult/confirmation.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/confirmation",
+                  "fr": "/:lang/demander/:id/adulte/confirmation"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/date-of-birth",
+                "file": "routes/public/apply/$id/adult/date-of-birth.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/date-of-birth",
+                  "fr": "/:lang/demander/:id/adulte/date-de-naissance"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/dental-insurance",
+                "file": "routes/public/apply/$id/adult/dental-insurance.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/dental-insurance",
+                  "fr": "/:lang/demander/:id/adulte/assurance-dentaire"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/dob-eligibility",
+                "file": "routes/public/apply/$id/adult/dob-eligibility.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/dob-eligibility",
+                  "fr": "/:lang/demander/:id/adulte/ddn-admissibilite"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/exit-application",
+                "file": "routes/public/apply/$id/adult/exit-application.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/exit-application",
+                  "fr": "/:lang/demander/:id/adulte/quitter-demande"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/federal-provincial-territorial-benefits",
+                "file": "routes/public/apply/$id/adult/federal-provincial-territorial-benefits.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/federal-provincial-territorial-benefits",
+                  "fr": "/:lang/demander/:id/adulte/prestations-dentaires-federales-provinciales-territoriales"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/file-taxes",
+                "file": "routes/public/apply/$id/adult/file-taxes.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/file-taxes",
+                  "fr": "/:lang/demander/:id/adulte/produire-declaration-revenus"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/partner-information",
+                "file": "routes/public/apply/$id/adult/partner-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/partner-information",
+                  "fr": "/:lang/demander/:id/adulte/renseignements-partenaire"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/contact-information",
+                "file": "routes/public/apply/$id/adult/contact-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/contact-information",
+                  "fr": "/:lang/demander/:id/adulte/renseignements-personnels"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/review-information",
+                "file": "routes/public/apply/$id/adult/review-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/review-information",
+                  "fr": "/:lang/demander/:id/adulte/revue-renseignements"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/tax-filing",
+                "file": "routes/public/apply/$id/adult/tax-filing.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/tax-filing",
+                  "fr": "/:lang/demander/:id/adulte/declaration-impot"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/disability-tax-credit",
+                "file": "routes/public/apply/$id/adult/disability-tax-credit.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/disability-tax-credit",
+                  "fr": "/:lang/demander/:id/adulte/credit-impot-personnes-handicapees"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/parent-or-guardian",
+                "file": "routes/public/apply/$id/adult/parent-or-guardian.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/parent-or-guardian",
+                  "fr": "/:lang/demander/:id/adulte/parent-ou-tuteur"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult/living-independently",
+                "file": "routes/public/apply/$id/adult/living-independently.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult/living-independently",
+                  "fr": "/:lang/demander/:id/adulte/vivre-maniere-independante"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/children/index",
+                "file": "routes/public/apply/$id/adult-child/children/index.tsx",
                 "index": true,
                 "paths": {
-                  "en": "/:lang/status",
-                  "fr": "/:lang/etat"
+                  "en": "/:lang/apply/:id/adult-child/children",
+                  "fr": "/:lang/demander/:id/adulte-enfant/enfants"
                 }
               },
               {
-                "id": "public/status/myself",
-                "file": "routes/public/status/myself.tsx",
+                "id": "public/apply/$id/adult-child/children/$childId/_route",
+                "file": "routes/public/apply/$id/adult-child/children/$childId/_route.tsx",
+                "children": [
+                  {
+                    "id": "public/apply/$id/adult-child/children/$childId/information",
+                    "file": "routes/public/apply/$id/adult-child/children/$childId/information.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/adult-child/children/:childId/information",
+                      "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/information"
+                    }
+                  },
+                  {
+                    "id": "public/apply/$id/adult-child/children/$childId/dental-insurance",
+                    "file": "routes/public/apply/$id/adult-child/children/$childId/dental-insurance.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/adult-child/children/:childId/dental-insurance",
+                      "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/assurance-dentaire"
+                    }
+                  },
+                  {
+                    "id": "public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits",
+                    "file": "routes/public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/adult-child/children/:childId/federal-provincial-territorial-benefits",
+                      "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/prestations-dentaires-federales-provinciales-territoriales"
+                    }
+                  },
+                  {
+                    "id": "public/apply/$id/adult-child/children/$childId/parent-or-guardian",
+                    "file": "routes/public/apply/$id/adult-child/children/$childId/parent-or-guardian.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/adult-child/children/:childId/parent-or-guardian",
+                      "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/parent-ou-tuteur"
+                    }
+                  },
+                  {
+                    "id": "public/apply/$id/adult-child/children/$childId/cannot-apply-child",
+                    "file": "routes/public/apply/$id/adult-child/children/$childId/cannot-apply-child.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/adult-child/children/:childId/cannot-apply-child",
+                      "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/pas-demande-enfant"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "public/apply/$id/adult-child/tax-filing",
+                "file": "routes/public/apply/$id/adult-child/tax-filing.tsx",
                 "paths": {
-                  "en": "/:lang/status/myself",
-                  "fr": "/:lang/etat/moi-meme"
+                  "en": "/:lang/apply/:id/adult-child/tax-filing",
+                  "fr": "/:lang/demander/:id/adulte-enfant/declaration-impot"
                 }
               },
               {
-                "id": "public/status/child",
-                "file": "routes/public/status/child.tsx",
+                "id": "public/apply/$id/adult-child/date-of-birth",
+                "file": "routes/public/apply/$id/adult-child/date-of-birth.tsx",
                 "paths": {
-                  "en": "/:lang/status/child",
-                  "fr": "/:lang/etat/enfant"
+                  "en": "/:lang/apply/:id/adult-child/date-of-birth",
+                  "fr": "/:lang/demander/:id/adulte-enfant/date-de-naissance"
                 }
               },
               {
-                "id": "public/status/result",
-                "file": "routes/public/status/result.tsx",
+                "id": "public/apply/$id/adult-child/apply-children",
+                "file": "routes/public/apply/$id/adult-child/apply-children.tsx",
                 "paths": {
-                  "en": "/:lang/status/result",
-                  "fr": "/:lang/etat/resultat"
+                  "en": "/:lang/apply/:id/adult-child/apply-children",
+                  "fr": "/:lang/demander/:id/adult-child/demande-enfant"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/confirmation",
+                "file": "routes/public/apply/$id/adult-child/confirmation.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/confirmation",
+                  "fr": "/:lang/demander/:id/adulte-enfant/confirmation"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/federal-provincial-territorial-benefits",
+                "file": "routes/public/apply/$id/adult-child/federal-provincial-territorial-benefits.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/federal-provincial-territorial-benefits",
+                  "fr": "/:lang/demander/:id/adulte-enfant/prestations-dentaires-federales-provinciales-territoriales"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/review-adult-information",
+                "file": "routes/public/apply/$id/adult-child/review-adult-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/review-adult-information",
+                  "fr": "/:lang/demander/:id/adulte-enfant/revue-renseignements-adulte"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/review-child-information",
+                "file": "routes/public/apply/$id/adult-child/review-child-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/review-child-information",
+                  "fr": "/:lang/demander/:id/adulte-enfant/revue-renseignements-enfant"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/communication-preference",
+                "file": "routes/public/apply/$id/adult-child/communication-preference.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/communication-preference",
+                  "fr": "/:lang/demander/:id/adulte-enfant/preference-communication"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/apply-yourself",
+                "file": "routes/public/apply/$id/adult-child/apply-yourself.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/apply-yourself",
+                  "fr": "/:lang/demander/:id/adulte-enfant/postulez-vous-meme"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/dental-insurance",
+                "file": "routes/public/apply/$id/adult-child/dental-insurance.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/dental-insurance",
+                  "fr": "/:lang/demander/:id/adulte-enfant/assurance-dentaire"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/disability-tax-credit",
+                "file": "routes/public/apply/$id/adult-child/disability-tax-credit.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/disability-tax-credit",
+                  "fr": "/:lang/demander/:id/adulte-enfant/credit-impot-personnes-handicapees"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/parent-or-guardian",
+                "file": "routes/public/apply/$id/adult-child/parent-or-guardian.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/parent-or-guardian",
+                  "fr": "/:lang/demander/:id/adulte-enfant/parent-ou-tuteur"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/living-independently",
+                "file": "routes/public/apply/$id/adult-child/living-independently.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/living-independently",
+                  "fr": "/:lang/demander/:id/adulte-enfant/vivre-maniere-independante"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/contact-information",
+                "file": "routes/public/apply/$id/adult-child/contact-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/contact-information",
+                  "fr": "/:lang/demander/:id/adulte-enfant/renseignements-personnels"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/partner-information",
+                "file": "routes/public/apply/$id/adult-child/partner-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/partner-information",
+                  "fr": "/:lang/demander/:id/adulte-enfant/renseignements-partenaire"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/applicant-information",
+                "file": "routes/public/apply/$id/adult-child/applicant-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/applicant-information",
+                  "fr": "/:lang/demander/:id/adulte-enfant/renseignements-demandeur"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/contact-apply-child",
+                "file": "routes/public/apply/$id/adult-child/contact-apply-child.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/contact-apply-child",
+                  "fr": "/:lang/demander/:id/adulte-enfant/contact-demande-enfant"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/dob-eligibility",
+                "file": "routes/public/apply/$id/adult-child/dob-eligibility.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/dob-eligibility",
+                  "fr": "/:lang/demander/:id/adulte-enfant/ddn-admissibilite"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/file-taxes",
+                "file": "routes/public/apply/$id/adult-child/file-taxes.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/file-taxes",
+                  "fr": "/:lang/demander/:id/adulte-enfant/produire-declaration-revenus"
+                }
+              },
+              {
+                "id": "public/apply/$id/adult-child/exit-application",
+                "file": "routes/public/apply/$id/adult-child/exit-application.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/adult-child/exit-application",
+                  "fr": "/:lang/demander/:id/adulte-enfant/quitter-demande"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/children/index",
+                "file": "routes/public/apply/$id/child/children/index.tsx",
+                "index": true,
+                "paths": {
+                  "en": "/:lang/apply/:id/child/children",
+                  "fr": "/:lang/demander/:id/enfant/enfants"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/children/$childId/_route",
+                "file": "routes/public/apply/$id/child/children/$childId/_route.tsx",
+                "children": [
+                  {
+                    "id": "public/apply/$id/child/children/$childId/information",
+                    "file": "routes/public/apply/$id/child/children/$childId/information.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/child/children/:childId/information",
+                      "fr": "/:lang/demander/:id/enfant/enfants/:childId/information"
+                    }
+                  },
+                  {
+                    "id": "public/apply/$id/child/children/$childId/dental-insurance",
+                    "file": "routes/public/apply/$id/child/children/$childId/dental-insurance.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/child/children/:childId/dental-insurance",
+                      "fr": "/:lang/demander/:id/enfant/enfants/:childId/assurance-dentaire"
+                    }
+                  },
+                  {
+                    "id": "public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits",
+                    "file": "routes/public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/child/children/:childId/federal-provincial-territorial-benefits",
+                      "fr": "/:lang/demander/:id/enfant/enfants/:childId/prestations-dentaires-federales-provinciales-territoriales"
+                    }
+                  },
+                  {
+                    "id": "public/apply/$id/child/children/$childId/parent-or-guardian",
+                    "file": "routes/public/apply/$id/child/children/$childId/parent-or-guardian.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/child/children/:childId/parent-or-guardian",
+                      "fr": "/:lang/demander/:id/enfant/enfants/:childId/parent-ou-tuteur"
+                    }
+                  },
+                  {
+                    "id": "public/apply/$id/child/children/$childId/cannot-apply-child",
+                    "file": "routes/public/apply/$id/child/children/$childId/cannot-apply-child.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/child/children/:childId/cannot-apply-child",
+                      "fr": "/:lang/demander/:id/enfant/enfants/:childId/pas-demande-enfant"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "public/apply/$id/child/applicant-information",
+                "file": "routes/public/apply/$id/child/applicant-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/applicant-information",
+                  "fr": "/:lang/demander/:id/enfant/renseignements-demandeur"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/communication-preference",
+                "file": "routes/public/apply/$id/child/communication-preference.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/communication-preference",
+                  "fr": "/:lang/demander/:id/child/preference-communication"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/confirmation",
+                "file": "routes/public/apply/$id/child/confirmation.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/confirmation",
+                  "fr": "/:lang/demander/:id/enfant/confirmation"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/contact-apply-child",
+                "file": "routes/public/apply/$id/child/contact-apply-child.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/contact-apply-child",
+                  "fr": "/:lang/demander/:id/enfant/contact-demande-enfant"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/exit-application",
+                "file": "routes/public/apply/$id/child/exit-application.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/exit-application",
+                  "fr": "/:lang/demander/:id/enfant/quitter-demande"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/file-taxes",
+                "file": "routes/public/apply/$id/child/file-taxes.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/file-taxes",
+                  "fr": "/:lang/demander/:id/enfant/produire-declaration-revenus"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/partner-information",
+                "file": "routes/public/apply/$id/child/partner-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/partner-information",
+                  "fr": "/:lang/demander/:id/enfant/renseignements-partenaire"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/contact-information",
+                "file": "routes/public/apply/$id/child/contact-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/contact-information",
+                  "fr": "/:lang/demander/:id/enfant/renseignements-personnels"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/review-adult-information",
+                "file": "routes/public/apply/$id/child/review-adult-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/review-adult-information",
+                  "fr": "/:lang/demander/:id/enfant/revue-adulte-renseignements"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/review-child-information",
+                "file": "routes/public/apply/$id/child/review-child-information.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/review-child-information",
+                  "fr": "/:lang/demander/:id/enfant/revue-enfant-renseignements"
+                }
+              },
+              {
+                "id": "public/apply/$id/child/tax-filing",
+                "file": "routes/public/apply/$id/child/tax-filing.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/child/tax-filing",
+                  "fr": "/:lang/demander/:id/enfant/declaration-impot"
+                }
+              },
+              {
+                "id": "public/apply/$id/terms-and-conditions",
+                "file": "routes/public/apply/$id/terms-and-conditions.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/terms-and-conditions",
+                  "fr": "/:lang/demander/:id/conditions-utilisation"
+                }
+              },
+              {
+                "id": "public/apply/$id/type-application",
+                "file": "routes/public/apply/$id/type-application.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/type-application",
+                  "fr": "/:lang/demander/:id/type-demande"
+                }
+              },
+              {
+                "id": "public/apply/$id/application-delegate",
+                "file": "routes/public/apply/$id/application-delegate.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id/application-delegate",
+                  "fr": "/:lang/demander/:id/delegue-demande"
                 }
               }
             ]
+          }
+        ]
+      },
+      {
+        "id": "public/status/_route",
+        "file": "routes/public/status/_route.tsx",
+        "paths": {
+          "en": "/:lang/status",
+          "fr": "/:lang/etat"
+        },
+        "children": [
+          {
+            "id": "public/status/index",
+            "file": "routes/public/status/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/status",
+              "fr": "/:lang/etat"
+            }
           },
           {
-            "id": "public/unable-to-process-request",
-            "file": "routes/public/unable-to-process-request.tsx",
+            "id": "public/status/myself",
+            "file": "routes/public/status/myself.tsx",
             "paths": {
-              "en": "/:lang/unable-to-process-request",
-              "fr": "/:lang/impossible-de-traiter-la-demande"
+              "en": "/:lang/status/myself",
+              "fr": "/:lang/etat/moi-meme"
+            }
+          },
+          {
+            "id": "public/status/child",
+            "file": "routes/public/status/child.tsx",
+            "paths": {
+              "en": "/:lang/status/child",
+              "fr": "/:lang/etat/enfant"
+            }
+          },
+          {
+            "id": "public/status/result",
+            "file": "routes/public/status/result.tsx",
+            "paths": {
+              "en": "/:lang/status/result",
+              "fr": "/:lang/etat/resultat"
             }
           }
         ]
+      },
+      {
+        "id": "public/unable-to-process-request",
+        "file": "routes/public/unable-to-process-request.tsx",
+        "paths": {
+          "en": "/:lang/unable-to-process-request",
+          "fr": "/:lang/impossible-de-traiter-la-demande"
+        }
       },
       {
         "id": "protected/_route",
@@ -724,299 +688,189 @@
             }
           },
           {
-            "id": "protected/letters/_route",
-            "file": "routes/protected/letters/_route.tsx",
-            "children": [
-              {
-                "id": "protected/letters/index",
-                "file": "routes/protected/letters/index.tsx",
-                "index": true,
-                "paths": {
-                  "en": "/:lang/letters",
-                  "fr": "/:lang/lettres"
-                }
-              },
-              {
-                "id": "protected/letters/$id.download",
-                "file": "routes/protected/letters/$id.download.tsx",
-                "paths": {
-                  "en": "/:lang/letters/:id/download",
-                  "fr": "/:lang/lettres/:id/telecharger"
-                }
-              }
-            ]
+            "id": "protected/letters/index",
+            "file": "routes/protected/letters/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/letters",
+              "fr": "/:lang/lettres"
+            }
           },
           {
-            "id": "protected/personal-information/_route",
-            "file": "routes/protected/personal-information/_route.tsx",
-            "children": [
-              {
-                "id": "protected/personal-information/index",
-                "file": "routes/protected/personal-information/index.tsx",
-                "index": true,
-                "paths": {
-                  "en": "/:lang/personal-information",
-                  "fr": "/:lang/informations-personnelles"
-                }
-              },
-              {
-                "id": "protected/personal-information/home-address/_route",
-                "file": "routes/protected/personal-information/home-address/_route.tsx",
-                "paths": {
-                  "en": "/:lang/personal-information/home-address",
-                  "fr": "/:lang/informations-personnelles/adresse-domicile"
-                },
-                "children": [
-                  {
-                    "id": "protected/personal-information/home-address/edit",
-                    "file": "routes/protected/personal-information/home-address/edit.tsx",
-                    "paths": {
-                      "en": "/:lang/personal-information/home-address/edit",
-                      "fr": "/:lang/informations-personnelles/adresse-domicile/modifier"
-                    }
-                  }
-                ]
-              },
-              {
-                "id": "protected/personal-information/mailing-address/_route",
-                "file": "routes/protected/personal-information/mailing-address/_route.tsx",
-                "paths": {
-                  "en": "/:lang/personal-information/mailing-address",
-                  "fr": "/:lang/informations-personnelles/adresse-postale"
-                },
-                "children": [
-                  {
-                    "id": "protected/personal-information/mailing-address/edit",
-                    "file": "routes/protected/personal-information/mailing-address/edit.tsx",
-                    "paths": {
-                      "en": "/:lang/personal-information/mailing-address/edit",
-                      "fr": "/:lang/informations-personnelles/adresse-postale/modifier"
-                    }
-                  }
-                ]
-              },
-              {
-                "id": "protected/personal-information/phone-number/_route",
-                "file": "routes/protected/personal-information/phone-number/_route.tsx",
-                "paths": {
-                  "en": "/:lang/personal-information/phone-number",
-                  "fr": "/:lang/informations-personnelles/numero-telephone"
-                },
-                "children": [
-                  {
-                    "id": "protected/personal-information/phone-number/edit",
-                    "file": "routes/protected/personal-information/phone-number/edit.tsx",
-                    "paths": {
-                      "en": "/:lang/personal-information/phone-number/edit",
-                      "fr": "/:lang/informations-personnelles/numero-telephone/modifier"
-                    }
-                  }
-                ]
-              },
-              {
-                "id": "protected/personal-information/email-address/_route",
-                "file": "routes/protected/personal-information/email-address/_route.tsx",
-                "paths": {
-                  "en": "/:lang/personal-information/email-address",
-                  "fr": "/:lang/informations-personnelles/adresse-courriel"
-                },
-                "children": [
-                  {
-                    "id": "protected/personal-information/email-address/edit",
-                    "file": "routes/protected/personal-information/email-address/edit.tsx",
-                    "paths": {
-                      "en": "/:lang/personal-information/email-address/edit",
-                      "fr": "/:lang/informations-personnelles/adresse-courriel/modifier"
-                    }
-                  }
-                ]
-              },
-              {
-                "id": "protected/personal-information/preferred-language/_route",
-                "file": "routes/protected/personal-information/preferred-language/_route.tsx",
-                "paths": {
-                  "en": "/:lang/personal-information/preferred-language",
-                  "fr": "/:lang/informations-personnelles/langue-preferee"
-                },
-                "children": [
-                  {
-                    "id": "protected/personal-information/preferred-language/edit",
-                    "file": "routes/protected/personal-information/preferred-language/edit.tsx",
-                    "paths": {
-                      "en": "/:lang/personal-information/preferred-language/edit",
-                      "fr": "/:lang/informations-personnelles/langue-preferee/modifier"
-                    }
-                  }
-                ]
-              }
-            ]
+            "id": "protected/letters/$id.download",
+            "file": "routes/protected/letters/$id.download.tsx",
+            "paths": {
+              "en": "/:lang/letters/:id/download",
+              "fr": "/:lang/lettres/:id/telecharger"
+            }
           },
           {
-            "id": "protected/access-to-governmental-benefits/_route",
-            "file": "routes/protected/access-to-governmental-benefits/_route.tsx",
-            "children": [
-              {
-                "id": "protected/access-to-governmental-benefits/edit",
-                "file": "routes/protected/access-to-governmental-benefits/edit.tsx",
-                "paths": {
-                  "en": "/:lang/access-to-governmental-benefits/edit",
-                  "fr": "/:lang/access-to-governmental-benefits/edit"
-                }
-              },
-              {
-                "id": "protected/access-to-governmental-benefits/view",
-                "file": "routes/protected/access-to-governmental-benefits/view.tsx",
-                "paths": {
-                  "en": "/:lang/access-to-governmental-benefits/view",
-                  "fr": "/:lang/access-to-governmental-benefits/view"
-                }
-              },
-              {
-                "id": "protected/access-to-governmental-benefits/index",
-                "file": "routes/protected/access-to-governmental-benefits/index.tsx",
-                "index": true,
-                "paths": {
-                  "en": "/:lang/access-to-governmental-benefits/index",
-                  "fr": "/:lang/access-to-governmental-benefits/index"
-                }
-              }
-            ]
+            "id": "protected/personal-information/index",
+            "file": "routes/protected/personal-information/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/personal-information",
+              "fr": "/:lang/informations-personnelles"
+            }
           },
           {
-            "id": "protected/alerts/_route",
-            "file": "routes/protected/alerts/_route.tsx",
-            "children": [
-              {
-                "id": "protected/alerts/index",
-                "file": "routes/protected/alerts/index.tsx",
-                "index": true,
-                "paths": {
-                  "en": "/:lang/alerts",
-                  "fr": "/:lang/alertes"
-                }
-              },
-              {
-                "id": "protected/alerts/subscribe/_route",
-                "file": "routes/protected/alerts/subscribe/_route.tsx",
-                "children": [
-                  {
-                    "id": "protected/alerts/subscribe/index",
-                    "file": "routes/protected/alerts/subscribe/index.tsx",
-                    "index": true,
-                    "paths": {
-                      "en": "/:lang/alerts/subscribe",
-                      "fr": "/:lang/alertes/abonner"
-                    }
-                  }
-                ]
-              },
-              {
-                "id": "protected/alerts/unsubscribe/_route",
-                "file": "routes/protected/alerts/unsubscribe/_route.tsx",
-                "children": [
-                  {
-                    "id": "protected/alerts/unsubscribe/index",
-                    "file": "routes/protected/alerts/unsubscribe/index.tsx",
-                    "index": true,
-                    "paths": {
-                      "en": "/:lang/alerts/unsubscribe",
-                      "fr": "/:lang/alertes/desabonner"
-                    }
-                  },
-                  {
-                    "id": "protected/alerts/unsubscribe/success",
-                    "file": "routes/protected/alerts/unsubscribe/success.tsx",
-                    "paths": {
-                      "en": "/:lang/alerts/unsubscribe/success",
-                      "fr": "/:lang/alertes/desabonner/succes"
-                    }
-                  }
-                ]
-              },
-              {
-                "id": "protected/alerts/manage/_route",
-                "file": "routes/protected/alerts/manage/_route.tsx",
-                "children": [
-                  {
-                    "id": "protected/alerts/manage/index",
-                    "file": "routes/protected/alerts/manage/index.tsx",
-                    "index": true,
-                    "paths": {
-                      "en": "/:lang/alerts/manage",
-                      "fr": "/:lang/alertes/gerer"
-                    }
-                  }
-                ]
-              },
-              {
-                "id": "protected/alerts/subscribe/confirm",
-                "file": "routes/protected/alerts/subscribe/confirm.tsx",
-                "paths": {
-                  "en": "/:lang/alerts/subscribe/confirm",
-                  "fr": "/:lang/alertes/abonner/confirmer"
-                }
-              },
-              {
-                "id": "protected/alerts/subscribe/success",
-                "file": "routes/protected/alerts/subscribe/success.tsx",
-                "paths": {
-                  "en": "/:lang/alerts/subscribe/success",
-                  "fr": "/:lang/alertes/abonner/succes"
-                }
-              }
-            ]
+            "id": "protected/personal-information/home-address/edit",
+            "file": "routes/protected/personal-information/home-address/edit.tsx",
+            "paths": {
+              "en": "/:lang/personal-information/home-address/edit",
+              "fr": "/:lang/informations-personnelles/adresse-domicile/modifier"
+            }
           },
           {
-            "id": "protected/status-check/_route",
-            "file": "routes/protected/status-check/_route.tsx",
-            "children": [
-              {
-                "id": "protected/status-check/index",
-                "file": "routes/protected/status-check/index.tsx",
-                "index": true,
-                "paths": {
-                  "en": "/:lang/status-check",
-                  "fr": "/:lang/verification-de-statut"
-                }
-              }
-            ]
+            "id": "protected/personal-information/mailing-address/edit",
+            "file": "routes/protected/personal-information/mailing-address/edit.tsx",
+            "paths": {
+              "en": "/:lang/personal-information/mailing-address/edit",
+              "fr": "/:lang/informations-personnelles/adresse-postale/modifier"
+            }
           },
           {
-            "id": "protected/dependent-status-checker/_route",
-            "file": "routes/protected/dependent-status-checker/_route.tsx",
-            "children": [
-              {
-                "id": "protected/dependent-status-checker/index",
-                "file": "routes/protected/dependent-status-checker/index.tsx",
-                "paths": {
-                  "en": "/:lang/dependent-status-checker",
-                  "fr": "/:lang/verification-de-statut-a-charge"
-                }
-              }
-            ]
+            "id": "protected/personal-information/phone-number/edit",
+            "file": "routes/protected/personal-information/phone-number/edit.tsx",
+            "paths": {
+              "en": "/:lang/personal-information/phone-number/edit",
+              "fr": "/:lang/informations-personnelles/numero-telephone/modifier"
+            }
           },
           {
-            "id": "protected/applications/_route",
-            "file": "routes/protected/applications/_route.tsx",
-            "children": [
-              {
-                "id": "protected/applications/index",
-                "file": "routes/protected/applications/index.tsx",
-                "paths": {
-                  "en": "/:lang/applications",
-                  "fr": "/:lang/candidatures"
-                },
-                "index": true
-              },
-              {
-                "id": "protected/applications/$id",
-                "file": "routes/protected/applications/$id.tsx",
-                "paths": {
-                  "en": "/:lang/applications/:id/",
-                  "fr": "/:lang/candidatures/:id/"
-                }
-              }
-            ]
+            "id": "protected/personal-information/email-address/edit",
+            "file": "routes/protected/personal-information/email-address/edit.tsx",
+            "paths": {
+              "en": "/:lang/personal-information/email-address/edit",
+              "fr": "/:lang/informations-personnelles/adresse-courriel/modifier"
+            }
+          },
+          {
+            "id": "protected/personal-information/preferred-language/edit",
+            "file": "routes/protected/personal-information/preferred-language/edit.tsx",
+            "paths": {
+              "en": "/:lang/personal-information/preferred-language/edit",
+              "fr": "/:lang/informations-personnelles/langue-preferee/modifier"
+            }
+          },
+          {
+            "id": "protected/access-to-governmental-benefits/edit",
+            "file": "routes/protected/access-to-governmental-benefits/edit.tsx",
+            "paths": {
+              "en": "/:lang/access-to-governmental-benefits/edit",
+              "fr": "/:lang/access-to-governmental-benefits/edit"
+            }
+          },
+          {
+            "id": "protected/access-to-governmental-benefits/view",
+            "file": "routes/protected/access-to-governmental-benefits/view.tsx",
+            "paths": {
+              "en": "/:lang/access-to-governmental-benefits/view",
+              "fr": "/:lang/access-to-governmental-benefits/view"
+            }
+          },
+          {
+            "id": "protected/access-to-governmental-benefits/index",
+            "file": "routes/protected/access-to-governmental-benefits/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/access-to-governmental-benefits/index",
+              "fr": "/:lang/access-to-governmental-benefits/index"
+            }
+          },
+          {
+            "id": "protected/alerts/index",
+            "file": "routes/protected/alerts/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/alerts",
+              "fr": "/:lang/alertes"
+            }
+          },
+          {
+            "id": "protected/alerts/subscribe/index",
+            "file": "routes/protected/alerts/subscribe/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/alerts/subscribe",
+              "fr": "/:lang/alertes/abonner"
+            }
+          },
+          {
+            "id": "protected/alerts/unsubscribe/index",
+            "file": "routes/protected/alerts/unsubscribe/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/alerts/unsubscribe",
+              "fr": "/:lang/alertes/desabonner"
+            }
+          },
+          {
+            "id": "protected/alerts/unsubscribe/success",
+            "file": "routes/protected/alerts/unsubscribe/success.tsx",
+            "paths": {
+              "en": "/:lang/alerts/unsubscribe/success",
+              "fr": "/:lang/alertes/desabonner/succes"
+            }
+          },
+          {
+            "id": "protected/alerts/manage/index",
+            "file": "routes/protected/alerts/manage/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/alerts/manage",
+              "fr": "/:lang/alertes/gerer"
+            }
+          },
+          {
+            "id": "protected/alerts/subscribe/confirm",
+            "file": "routes/protected/alerts/subscribe/confirm.tsx",
+            "paths": {
+              "en": "/:lang/alerts/subscribe/confirm",
+              "fr": "/:lang/alertes/abonner/confirmer"
+            }
+          },
+          {
+            "id": "protected/alerts/subscribe/success",
+            "file": "routes/protected/alerts/subscribe/success.tsx",
+            "paths": {
+              "en": "/:lang/alerts/subscribe/success",
+              "fr": "/:lang/alertes/abonner/succes"
+            }
+          },
+          {
+            "id": "protected/status-check/index",
+            "file": "routes/protected/status-check/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/status-check",
+              "fr": "/:lang/verification-de-statut"
+            }
+          },
+          {
+            "id": "protected/dependent-status-checker/index",
+            "file": "routes/protected/dependent-status-checker/index.tsx",
+            "paths": {
+              "en": "/:lang/dependent-status-checker",
+              "fr": "/:lang/verification-de-statut-a-charge"
+            }
+          },
+          {
+            "id": "protected/applications/index",
+            "file": "routes/protected/applications/index.tsx",
+            "paths": {
+              "en": "/:lang/applications",
+              "fr": "/:lang/candidatures"
+            },
+            "index": true
+          },
+          {
+            "id": "protected/applications/$id",
+            "file": "routes/protected/applications/$id.tsx",
+            "paths": {
+              "en": "/:lang/applications/:id/",
+              "fr": "/:lang/candidatures/:id/"
+            }
           },
           {
             "id": "protected/stub-login",
