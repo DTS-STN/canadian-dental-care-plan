@@ -7,6 +7,8 @@ import { FederalGovernmentInsurancePlanServiceImpl } from './domain/services/fed
 import type { ClientConfig } from '~/.server/configs/client.config';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
+import { ClientApplicationDtoMapperImpl } from '~/.server/domain/mappers/client-application.dto.mapper';
+import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers/client-application.dto.mapper';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers/client-friendly-status.dto.mapper';
 import { ClientFriendlyStatusDtoMapperImpl } from '~/.server/domain/mappers/client-friendly-status.dto.mapper';
 import type { CountryDtoMapper } from '~/.server/domain/mappers/country.dto.mapper';
@@ -23,6 +25,8 @@ import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers/p
 import { ProvinceTerritoryStateDtoMapperImpl } from '~/.server/domain/mappers/province-territory-state.dto.mapper';
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers/provincial-government-insurance-plan.dto.mapper';
 import { ProvincialGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers/provincial-government-insurance-plan.dto.mapper';
+import type { ClientApplicationRepository } from '~/.server/domain/repositories/client-application.repository';
+import { ClientApplicationRepositoryImpl } from '~/.server/domain/repositories/client-application.repository';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories/client-friendly-status.repository';
 import { ClientFriendlyStatusRepositoryImpl } from '~/.server/domain/repositories/client-friendly-status.repository';
 import type { CountryRepository } from '~/.server/domain/repositories/country.repository';
@@ -39,6 +43,8 @@ import type { ProvinceTerritoryStateRepository } from '~/.server/domain/reposito
 import { ProvinceTerritoryStateRepositoryImpl } from '~/.server/domain/repositories/province-territory-state.repository';
 import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories/provincial-government-insurance-plan.repository';
 import { ProvincialGovernmentInsurancePlanRepositoryImpl } from '~/.server/domain/repositories/provincial-government-insurance-plan.repository';
+import type { ClientApplicationService } from '~/.server/domain/services/client-application.service';
+import { ClientApplicationServiceImpl } from '~/.server/domain/services/client-application.service';
 import type { ClientFriendlyStatusService } from '~/.server/domain/services/client-friendly-status.service';
 import { ClientFriendlyStatusServiceImpl } from '~/.server/domain/services/client-friendly-status.service';
 import type { CountryService } from '~/.server/domain/services/country.service';
@@ -74,6 +80,7 @@ export function initContainer() {
   container.bind<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG).toDynamicValue((context) => context.container.get<ConfigFactory>(SERVICE_IDENTIFIER.CONFIG_FACTORY).createServerConfig());
 
   // configure repositories
+  container.bind<ClientApplicationRepository>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_REPOSITORY).to(ClientApplicationRepositoryImpl);
   container.bind<ClientFriendlyStatusRepository>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_REPOSITORY).to(ClientFriendlyStatusRepositoryImpl);
   container.bind<CountryRepository>(SERVICE_IDENTIFIER.COUNTRY_REPOSITORY).to(CountryRepositoryImpl);
   container.bind<FederalGovernmentInsurancePlanRepository>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY).to(FederalGovernmentInsurancePlanRepositoryImpl);
@@ -84,6 +91,7 @@ export function initContainer() {
   container.bind<ProvincialGovernmentInsurancePlanRepository>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY).to(ProvincialGovernmentInsurancePlanRepositoryImpl);
 
   // configure mappers
+  container.bind<ClientApplicationDtoMapper>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_DTO_MAPPER).to(ClientApplicationDtoMapperImpl);
   container.bind<ClientFriendlyStatusDtoMapper>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_DTO_MAPPER).to(ClientFriendlyStatusDtoMapperImpl);
   container.bind<CountryDtoMapper>(SERVICE_IDENTIFIER.COUNTRY_DTO_MAPPER).to(CountryDtoMapperImpl);
   container.bind<FederalGovernmentInsurancePlanDtoMapper>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER).to(FederalGovernmentInsurancePlanDtoMapperImpl);
@@ -94,6 +102,7 @@ export function initContainer() {
   container.bind<ProvincialGovernmentInsurancePlanDtoMapper>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER).to(ProvincialGovernmentInsurancePlanDtoMapperImpl);
 
   //configure services
+  container.bind<ClientApplicationService>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE).to(ClientApplicationServiceImpl);
   container.bind<ClientFriendlyStatusService>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE).to(ClientFriendlyStatusServiceImpl);
   container.bind<CountryService>(SERVICE_IDENTIFIER.COUNTRY_SERVICE).to(CountryServiceImpl);
   container.bind<FederalGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(FederalGovernmentInsurancePlanServiceImpl);
