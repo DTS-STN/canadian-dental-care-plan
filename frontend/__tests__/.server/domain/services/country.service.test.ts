@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs/server.config';
-import type { CountryDto } from '~/.server/domain/dtos/country.dto';
+import type { CountryDto } from '~/.server/domain/dtos';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories/country.repository';
 import { CountryServiceImpl } from '~/.server/domain/services/country.service';

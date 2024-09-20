@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos/federal-government-insurance-plan.dto';
+import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanEntity } from '~/.server/domain/entities/federal-government-insurance-plan.entity';
 
 export interface FederalGovernmentInsurancePlanDtoMapper {

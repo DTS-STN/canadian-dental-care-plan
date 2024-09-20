@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs/server.config';
-import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos/client-friendly-status.dto';
+import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories/client-friendly-status.repository';
 import { ClientFriendlyStatusServiceImpl } from '~/.server/domain/services/client-friendly-status.service';

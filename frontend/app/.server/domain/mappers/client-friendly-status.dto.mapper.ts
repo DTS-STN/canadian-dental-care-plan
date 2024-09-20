@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos/client-friendly-status.dto';
+import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos';
 import type { ClientFriendlyStatusEntity } from '~/.server/domain/entities/client-friendly-status.entity';
 
 export interface ClientFriendlyStatusDtoMapper {

@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import type { CountryDto } from '~/.server/domain/dtos/country.dto';
+import type { CountryDto } from '~/.server/domain/dtos';
 import type { CountryEntity } from '~/.server/domain/entities/country.entity';
 
 export interface CountryDtoMapper {

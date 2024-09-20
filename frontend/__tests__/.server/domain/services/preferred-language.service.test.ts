@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs/server.config';
-import type { PreferredLanguageDto } from '~/.server/domain/dtos/preferred-language.dto';
+import type { PreferredLanguageDto } from '~/.server/domain/dtos';
 import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories/preferred-language.repository';
 import { PreferredLanguageServiceImpl } from '~/.server/domain/services/preferred-language.service';

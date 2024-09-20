@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos/province-territory-state.dto';
+import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
 import type { ProvinceTerritoryStateEntity } from '~/.server/domain/entities/province-territory-state.entity';
 import { ProvinceTerritoryStateDtoMapperImpl } from '~/.server/domain/mappers';
 

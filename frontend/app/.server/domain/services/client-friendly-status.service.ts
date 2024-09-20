@@ -3,7 +3,7 @@ import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
-import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos/client-friendly-status.dto';
+import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories/client-friendly-status.repository';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs/server.config';
-import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos/provincial-government-insurance-plan.dto';
+import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories/provincial-government-insurance-plan.repository';
 import { ProvincialGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services/provincial-government-insurance-plan.service';

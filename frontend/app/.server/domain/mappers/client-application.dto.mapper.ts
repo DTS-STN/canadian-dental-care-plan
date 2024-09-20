@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
+import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import type { ClientApplicationEntity } from '~/.server/domain/entities/client-application.entity';
 
 export interface ClientApplicationDtoMapper {
