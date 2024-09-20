@@ -6,7 +6,7 @@ import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { CountryDto } from '~/.server/domain/dtos';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface CountryService {
   findAll(): CountryDto[];

@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { ClientFriendlyStatusEntity } from '~/.server/domain/entities';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { LogFactory, Logger } from '~/.server/factories';
 import clientFriendlyStatusJsonDataSource from '~/.server/resources/power-platform/client-friendly-status.json';
 
 export interface ClientFriendlyStatusRepository {

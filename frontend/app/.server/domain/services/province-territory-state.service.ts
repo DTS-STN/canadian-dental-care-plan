@@ -6,7 +6,7 @@ import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface ProvinceTerritoryStateService {
   findAll(): ProvinceTerritoryStateDto[];

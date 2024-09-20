@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import { PreferredCommunicationMethodRepositoryImpl } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 const dataSource = vi.hoisted(() => ({
   default: {

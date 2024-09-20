@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { CountryEntity } from '~/.server/domain/entities';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { LogFactory, Logger } from '~/.server/factories';
 import countryJsonDataSource from '~/.server/resources/power-platform/country.json';
 
 export interface CountryRepository {

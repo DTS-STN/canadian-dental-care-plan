@@ -6,7 +6,7 @@ import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { FederalGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 

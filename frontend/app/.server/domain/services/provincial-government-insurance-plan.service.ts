@@ -6,7 +6,7 @@ import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface ProvincialGovernmentInsurancePlanService {
   findAll(): ProvincialGovernmentInsurancePlanDto[];

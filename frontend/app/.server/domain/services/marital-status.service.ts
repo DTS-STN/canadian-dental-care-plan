@@ -6,7 +6,7 @@ import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { MaritalStatusDto } from '~/.server/domain/dtos';
 import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
 import type { MaritalStatusRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface MaritalStatusService {
   findAll(): MaritalStatusDto[];

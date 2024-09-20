@@ -6,7 +6,7 @@ import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
 import { ProvinceTerritoryStateServiceImpl } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories/log.factory';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 
