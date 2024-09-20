@@ -2,6 +2,7 @@ import type { Container } from 'inversify';
 import { injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
+import type { ClientApplicationService } from '~/.server/domain/services/client-application.service';
 import type { ClientFriendlyStatusService } from '~/.server/domain/services/client-friendly-status.service';
 import type { CountryService } from '~/.server/domain/services/country.service';
 import type { FederalGovernmentInsurancePlanService } from '~/.server/domain/services/federal-government-insurance-plan.service';
@@ -12,6 +13,7 @@ import type { ProvinceTerritoryStateService } from '~/.server/domain/services/pr
 import type { ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services/provincial-government-insurance-plan.service';
 
 export interface ContainerServiceProvider {
+  getClientApplicationService(): ClientApplicationService;
   getClientFriendlyStatusService(): ClientFriendlyStatusService;
   getCountryService(): CountryService;
   getFederalGovernmentInsurancePlanService(): FederalGovernmentInsurancePlanService;
@@ -25,6 +27,10 @@ export interface ContainerServiceProvider {
 @injectable()
 export class ContainerServiceProviderImpl implements ContainerServiceProvider {
   constructor(private readonly container: Container) {}
+
+  getClientApplicationService(): ClientApplicationService {
+    return this.container.get<ClientApplicationService>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE);
+  }
 
   getClientFriendlyStatusService(): ClientFriendlyStatusService {
     return this.container.get<ClientFriendlyStatusService>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE);
