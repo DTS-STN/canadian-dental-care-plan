@@ -8,7 +8,7 @@ import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { useErrorSummary } from '~/components/error-summary';

@@ -4,7 +4,7 @@ import { useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
-import pageIds from '../page-ids.json';
+import pageIds from '../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getRaoidcService } from '~/services/raoidc-service.server';

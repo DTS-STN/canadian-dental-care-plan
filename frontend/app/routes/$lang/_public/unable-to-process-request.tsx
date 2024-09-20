@@ -3,7 +3,7 @@ import { json } from '@remix-run/node';
 
 import { Trans, useTranslation } from 'react-i18next';
 
-import pageIds from '../page-ids.json';
+import pageIds from '../../page-ids.json';
 import { InlineLink } from '~/components/inline-link';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';

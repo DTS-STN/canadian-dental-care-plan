@@ -8,7 +8,7 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
-import pageIds from '../../../../page-ids.json';
+import pageIds from '../../../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { LoadingButton } from '~/components/loading-button';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';

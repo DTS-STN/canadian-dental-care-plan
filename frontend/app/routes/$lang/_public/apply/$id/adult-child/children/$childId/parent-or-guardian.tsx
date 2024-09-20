@@ -7,7 +7,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../../../../../../page-ids.json';
+import pageIds from '../../../../../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { LoadingButton } from '~/components/loading-button';
 import { loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';

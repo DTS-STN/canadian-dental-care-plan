@@ -6,7 +6,7 @@ import { useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../page-ids.json';
+import pageIds from '../../page-ids.json';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
 import { useFeature } from '~/root';

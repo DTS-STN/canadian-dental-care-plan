@@ -4,7 +4,7 @@ import { useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../../page-ids.json';
+import pageIds from '../../../page-ids.json';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
