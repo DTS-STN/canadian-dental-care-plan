@@ -74,7 +74,6 @@ module.exports = {
         'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
         // Note: aria-props for aria-description is only supported in the upcoming WAI-ARIA 1.3 spec
         'jsx-a11y/aria-props': 'warn',
-        'import/no-useless-path-segments': 'error',
       },
     },
     {
