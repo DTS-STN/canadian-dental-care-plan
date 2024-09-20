@@ -4,11 +4,7 @@ import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middlewar
 
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import { configsContainerModule } from '~/.server/container-modules/configs.container-module';
-import { factoriesContainerModule } from '~/.server/container-modules/factories.container-module';
-import { mappersContainerModule } from '~/.server/container-modules/mappers.container-module';
-import { repositoriesContainerModule } from '~/.server/container-modules/repositories.container-module';
-import { servicesContainerModule } from '~/.server/container-modules/services.container-module';
+import { configsContainerModule , factoriesContainerModule , mappersContainerModule , repositoriesContainerModule , servicesContainerModule } from '~/.server/container-modules';
 import type { Logger } from '~/.server/factories/log.factory';
 import { getLogger } from '~/utils/logging.server';
 
