@@ -1,7 +1,6 @@
 import moize from 'moize';
 import { z } from 'zod';
 
-import regionsJson from '~/resources/power-platform/regions.json';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -84,7 +83,6 @@ function createLookupService() {
     LOOKUP_SVC_ALL_INDIGENOUS_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_LAST_TIME_DENTIST_VISIT_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
   } = getEnv();
 
@@ -299,21 +297,6 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  function getAllRegions() {
-    log.debug('Fetching all regions');
-
-    const regions = regionsJson.value.map((region) => ({
-      provinceTerritoryStateId: region.esdc_provinceterritorystateid,
-      countryId: region._esdc_countryid_value,
-      nameEn: region.esdc_nameenglish,
-      nameFr: region.esdc_namefrench,
-      abbr: region.esdc_internationalalphacode,
-    }));
-
-    log.trace('Returning regions: [%j]', regions);
-    return regions;
-  }
-
   async function getAllEquityTypes() {
     log.debug('Fetching all equality types');
     const url = `${INTEROP_API_BASE_URI}/lookups/equity-types/`;
@@ -373,18 +356,9 @@ function createLookupService() {
       maxAge: 1000 * LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllMouthPainTypes memo'),
     }),
-    getAllRegions: moize(getAllRegions, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS,
-      onCacheAdd: () => log.info('Creating new AllRegions memo'),
-    }),
     getAllSexAtBirthTypes: moize.promise(getAllSexAtBirthTypes, {
       maxAge: 1000 * LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllSexAtBirthTypes memo'),
     }),
   };
 }
-
-export type GetLookupService = typeof getLookupService;
-
-export type GetAllRegions = Pick<ReturnType<typeof getLookupService>, 'getAllRegions'>['getAllRegions'];
-export type Region = ReturnType<GetAllRegions>[number];

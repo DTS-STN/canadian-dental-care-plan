@@ -24,12 +24,11 @@ import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import type { ContactInformationState } from '~/route-helpers/apply-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortCountries, localizeAndSortRegions } from '~/utils/lookup-utils.server';
+import { localizeAndSortCountries, localizeAndSortProvinceTerritoryStates } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -49,14 +48,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
-  const lookupService = getLookupService();
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
 
   const countryList = localizeAndSortCountries(serviceProvider.getCountryService().findAll(), locale);
-  const regionList = localizeAndSortRegions(lookupService.getAllRegions(), locale);
+  const regionList = localizeAndSortProvinceTerritoryStates(serviceProvider.getProvinceTerritoryStateService().findAll(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:contact-information.page-title') }) };
@@ -290,8 +288,8 @@ export default function ApplyFlowPersonalInformation() {
   };
 
   useEffect(() => {
-    const filteredRegions = regionList.filter((region) => region.countryId === selectedMailingCountry);
-    setMailingCountryRegions(filteredRegions);
+    const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedMailingCountry);
+    setMailingCountryRegions(filteredProvinceTerritoryStates);
   }, [selectedMailingCountry, regionList]);
 
   const mailingCountryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
@@ -303,14 +301,11 @@ export default function ApplyFlowPersonalInformation() {
   }, [countryList]);
 
   // populate mailing region/province/state list with selected country or current address country
-  const mailingRegions: InputOptionProps[] = mailingCountryRegions.map(({ provinceTerritoryStateId, name }) => ({
-    children: name,
-    value: provinceTerritoryStateId,
-  }));
+  const mailingRegions: InputOptionProps[] = mailingCountryRegions.map(({ id, name }) => ({ children: name, value: id }));
 
   useEffect(() => {
-    const filteredRegions = regionList.filter((region) => region.countryId === selectedHomeCountry);
-    setHomeCountryRegions(filteredRegions);
+    const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedHomeCountry);
+    setHomeCountryRegions(filteredProvinceTerritoryStates);
   }, [selectedHomeCountry, regionList]);
 
   const homeCountryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
@@ -318,10 +313,7 @@ export default function ApplyFlowPersonalInformation() {
   };
 
   // populate home region/province/state list with selected country or current address country
-  const homeRegions: InputOptionProps[] = homeCountryRegions.map(({ provinceTerritoryStateId, name }) => ({
-    children: name,
-    value: provinceTerritoryStateId,
-  }));
+  const homeRegions: InputOptionProps[] = homeCountryRegions.map(({ id, name }) => ({ children: name, value: id }));
 
   const dummyOption: InputOptionProps = { children: t('apply-adult:contact-information.address-field.select-one'), value: '' };
 

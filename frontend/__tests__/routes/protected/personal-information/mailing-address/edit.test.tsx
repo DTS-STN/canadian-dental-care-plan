@@ -13,19 +13,6 @@ vi.mock('~/services/address-service.server', () => ({
   }),
 }));
 
-vi.mock('~/services/lookup-service.server', () => ({
-  getLookupService: vi.fn().mockReturnValue({
-    getAllRegions: vi.fn().mockReturnValue([
-      {
-        code: 'SP',
-        countryId: 'CAN',
-        nameEn: 'sample',
-        nameFr: '(FR) sample',
-      },
-    ]),
-  }),
-}));
-
 vi.mock('~/services/raoidc-service.server', () => ({
   getRaoidcService: vi.fn().mockResolvedValue({
     handleSessionValidation: vi.fn().mockResolvedValue(true),
@@ -70,18 +57,14 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
 
       const mockAppLoadContext = mock<AppLoadContext>({
         serviceProvider: {
-          getCountryService() {
-            return {
-              findAll: vi.fn().mockReturnValue([
-                {
-                  id: '1',
-                  nameEn: 'super country',
-                  nameFr: '(FR) super country',
-                },
-              ]),
-              findById: vi.fn(),
-            };
-          },
+          getCountryService: () => ({
+            findAll: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
+            findById: vi.fn(),
+          }),
+          getProvinceTerritoryStateService: () => ({
+            findAll: () => [{ id: 'SP', countryId: 'CAN', nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }],
+            findById: vi.fn(),
+          }),
         },
       });
 
@@ -109,9 +92,10 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
         csrfToken: 'csrfToken',
         regionList: [
           {
-            code: 'SP',
+            id: 'SP',
             countryId: 'CAN',
             name: 'sample',
+            abbr: 'SP',
           },
         ],
         CANADA_COUNTRY_ID: 'CAN',

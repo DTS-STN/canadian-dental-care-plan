@@ -17,19 +17,6 @@ vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   }),
 }));
 
-vi.mock('~/services/lookup-service.server', () => ({
-  getLookupService: vi.fn().mockReturnValue({
-    getAllRegions: vi.fn().mockReturnValue([
-      {
-        code: 'SP',
-        countryId: 'CAN',
-        nameEn: 'sample',
-        nameFr: '(FR) sample',
-      },
-    ]),
-  }),
-}));
-
 vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     CANADA_COUNTRY_ID: 'CAN',
@@ -48,18 +35,14 @@ describe('_public.apply.id.contact-information', () => {
 
       const mockAppLoadContext = mock<AppLoadContext>({
         serviceProvider: {
-          getCountryService() {
-            return {
-              findAll: vi.fn().mockReturnValue([
-                {
-                  id: '1',
-                  nameEn: 'super country',
-                  nameFr: '(FR) super country',
-                },
-              ]),
-              findById: vi.fn(),
-            };
-          },
+          getCountryService: () => ({
+            findAll: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
+            findById: vi.fn(),
+          }),
+          getProvinceTerritoryStateService: () => ({
+            findAll: () => [{ id: 'SP', countryId: 'CAN', nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }],
+            findById: vi.fn(),
+          }),
         },
       });
 
@@ -73,19 +56,8 @@ describe('_public.apply.id.contact-information', () => {
 
       expect(data).toMatchObject({
         id: '123',
-        countryList: [
-          {
-            id: '1',
-            name: 'super country',
-          },
-        ],
-        regionList: [
-          {
-            code: 'SP',
-            countryId: 'CAN',
-            name: 'sample',
-          },
-        ],
+        countryList: [{ id: '1', name: 'super country' }],
+        regionList: [{ id: 'SP', countryId: 'CAN', name: 'sample', abbr: 'SP' }],
         CANADA_COUNTRY_ID: 'CAN',
         USA_COUNTRY_ID: 'USA',
       });

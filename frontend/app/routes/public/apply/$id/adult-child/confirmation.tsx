@@ -16,13 +16,12 @@ import { InlineLink } from '~/components/inline-link';
 import { useFeature } from '~/root';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState, getChildrenState } from '~/route-helpers/apply-route-helpers.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialGovernmentInsurancePlan, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -59,14 +58,12 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
-  const lookupService = getLookupService();
   const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : undefined;
   const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().findById(state.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
 
   // Getting province by Id
-  const allRegions = localizeRegions(lookupService.getAllRegions(), locale);
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation?.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation?.homeProvince);
+  const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().findById(state.contactInformation.mailingProvince)?.abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().findById(state.contactInformation.homeProvince)?.abbr : undefined;
 
   // Getting Country by Id
   const countryMailing = serviceProvider.getCountryService().findById(state.contactInformation.mailingCountry);
@@ -98,19 +95,17 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     communicationPreference: localizePreferredCommunicationMethod(communicationPreference, locale).name,
   };
 
-  const spouseInfo = state.partnerInformation
-    ? {
-        firstName: state.partnerInformation.firstName,
-        lastName: state.partnerInformation.lastName,
-        birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
-        sin: state.partnerInformation.socialInsuranceNumber,
-      }
-    : undefined;
+  const spouseInfo = state.partnerInformation && {
+    firstName: state.partnerInformation.firstName,
+    lastName: state.partnerInformation.lastName,
+    birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
+    sin: state.partnerInformation.socialInsuranceNumber,
+  };
 
   const mailingAddressInfo = {
     address: state.contactInformation.mailingAddress,
     city: state.contactInformation.mailingCity,
-    province: provinceMailing,
+    province: mailingProvinceTerritoryStateAbbr,
     postalCode: state.contactInformation.mailingPostalCode,
     country: localizeCountry(countryMailing, locale),
     apartment: state.contactInformation.mailingApartment,
@@ -119,7 +114,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const homeAddressInfo = {
     address: state.contactInformation.homeAddress,
     city: state.contactInformation.homeCity,
-    province: provinceHome,
+    province: homeProvinceTerritoryStateAbbr,
     postalCode: state.contactInformation.homePostalCode,
     country: localizeCountry(countryHome, locale),
     apartment: state.contactInformation.homeApartment,
@@ -338,7 +333,7 @@ export default function ApplyFlowConfirm() {
               <Address
                 address={mailingAddressInfo.address}
                 city={mailingAddressInfo.city}
-                provinceState={mailingAddressInfo.province?.abbr}
+                provinceState={mailingAddressInfo.province}
                 postalZipCode={mailingAddressInfo.postalCode}
                 country={mailingAddressInfo.country.name}
                 apartment={mailingAddressInfo.apartment}
@@ -348,7 +343,7 @@ export default function ApplyFlowConfirm() {
               <Address
                 address={homeAddressInfo.address ?? ''}
                 city={homeAddressInfo.city ?? ''}
-                provinceState={homeAddressInfo.province?.abbr}
+                provinceState={homeAddressInfo.province}
                 postalZipCode={homeAddressInfo.postalCode}
                 country={homeAddressInfo.country.name}
                 apartment={homeAddressInfo.apartment}

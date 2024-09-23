@@ -18,12 +18,11 @@ import { LoadingButton } from '~/components/loading-button';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/route-helpers/apply-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortFederalSocialPrograms, localizeAndSortProvincialGovernmentInsurancePlans, localizeAndSortRegions } from '~/utils/lookup-utils.server';
+import { localizeAndSortFederalSocialPrograms, localizeAndSortProvinceTerritoryStates, localizeAndSortProvincialGovernmentInsurancePlans } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -57,11 +56,10 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const locale = getLocale(request);
 
   const { CANADA_COUNTRY_ID } = getEnv();
-  const lookupService = getLookupService();
+
   const federalSocialPrograms = localizeAndSortFederalSocialPrograms(serviceProvider.getFederalGovernmentInsurancePlanService().findAll(), locale);
   const provincialTerritorialSocialPrograms = localizeAndSortProvincialGovernmentInsurancePlans(serviceProvider.getProvincialGovernmentInsurancePlanService().findAll(), locale);
-  const allRegions = localizeAndSortRegions(lookupService.getAllRegions(), locale);
-  const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
+  const provinceTerritoryStates = localizeAndSortProvinceTerritoryStates(serviceProvider.getProvinceTerritoryStateService().findAll(), locale).filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
 
   const csrfToken = String(session.get('csrfToken'));
 
@@ -80,7 +78,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
     federalSocialPrograms,
     meta,
     provincialTerritorialSocialPrograms,
-    regions,
+    provinceTerritoryStates,
     childName,
     i18nOptions: { childName },
   });
@@ -192,7 +190,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function AccessToDentalInsuranceQuestion() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, editMode, childName } = useLoaderData<typeof loader>();
+  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, editMode, childName } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -306,10 +304,10 @@ export default function AccessToDentalInsuranceQuestion() {
                         onChange={handleOnRegionChanged}
                         options={[
                           { children: t('apply-adult-child:children.dental-benefits.select-one'), value: '', hidden: true },
-                          ...regions.map((region) => ({
-                            id: region.provinceTerritoryStateId,
-                            value: region.provinceTerritoryStateId,
-                            children: region.name,
+                          ...provinceTerritoryStates.map((provinceTerritoryState) => ({
+                            id: provinceTerritoryState.id,
+                            value: provinceTerritoryState.id,
+                            children: provinceTerritoryState.name,
                           })),
                         ]}
                         defaultValue={provinceValue}

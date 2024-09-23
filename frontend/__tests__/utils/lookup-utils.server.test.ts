@@ -5,17 +5,17 @@ import {
   localizeAndSortFederalSocialPrograms,
   localizeAndSortMaritalStatuses,
   localizeAndSortPreferredLanguages,
+  localizeAndSortProvinceTerritoryStates,
   localizeAndSortProvincialGovernmentInsurancePlans,
-  localizeAndSortRegions,
   localizeCountries,
   localizeCountry,
   localizeFederalSocialProgram,
   localizeMaritalStatus,
   localizeMaritalStatuses,
   localizePreferredLanguage,
+  localizeProvinceTerritoryState,
+  localizeProvinceTerritoryStates,
   localizeProvincialGovernmentInsurancePlan,
-  localizeRegion,
-  localizeRegions,
 } from '~/utils/lookup-utils.server';
 
 const mockCountries = [
@@ -30,10 +30,10 @@ const mockMaritalStatuses = [
   { id: '003', nameEn: 'englishMaritalStatusThree', nameFr: 'frenchMaritalStatusThree' },
 ];
 
-const mockRegions = [
-  { countryId: '001', provinceTerritoryStateId: '001', nameEn: 'englishCountryOne', nameFr: 'frenchCountryOne', abbr: 'one' },
-  { countryId: '002', provinceTerritoryStateId: '002', nameEn: 'englishCountryTwo', nameFr: 'frenchCountryTwo', abbr: 'two' },
-  { countryId: '003', provinceTerritoryStateId: '003', nameEn: 'englishCountryThree', nameFr: 'frenchCountryThree', abbr: 'three' },
+const mockProvinceTerritoryStates = [
+  { id: '001', countryId: '001', nameEn: 'englishCountryOne', nameFr: 'frenchCountryOne', abbr: 'one' },
+  { id: '002', countryId: '002', nameEn: 'englishCountryTwo', nameFr: 'frenchCountryTwo', abbr: 'two' },
+  { id: '003', countryId: '003', nameEn: 'englishCountryThree', nameFr: 'frenchCountryThree', abbr: 'three' },
 ];
 
 const mockLanguages = [
@@ -187,67 +187,67 @@ describe('localizeAndSortMaritalStatuses', () => {
   });
 });
 
-describe('localizeRegion', () => {
-  it('should return the region id and english name', () => {
-    expect(localizeRegion(mockRegions[0], 'en')).toEqual({
+describe('localizeProvinceTerritoryState', () => {
+  it('should return the province territory state id and english name', () => {
+    expect(localizeProvinceTerritoryState(mockProvinceTerritoryStates[0], 'en')).toEqual({
+      id: '001',
       countryId: '001',
-      provinceTerritoryStateId: '001',
       abbr: 'one',
       name: 'englishCountryOne',
     });
   });
 
-  it('should return the region id and french name', () => {
-    expect(localizeRegion(mockRegions[0], 'fr')).toEqual({
+  it('should return the province territory state id and french name', () => {
+    expect(localizeProvinceTerritoryState(mockProvinceTerritoryStates[0], 'fr')).toEqual({
+      id: '001',
       countryId: '001',
-      provinceTerritoryStateId: '001',
       abbr: 'one',
       name: 'frenchCountryOne',
     });
   });
 });
 
-describe('localizeRegions', () => {
-  it('should return an array of region ids and english names', () => {
-    expect(localizeRegions(mockRegions, 'en')).toEqual([
+describe('localizeProvinceTerritoryStates', () => {
+  it('should return an array of province territory state ids and english names', () => {
+    expect(localizeProvinceTerritoryStates(mockProvinceTerritoryStates, 'en')).toEqual([
       {
+        id: '001',
         countryId: '001',
-        provinceTerritoryStateId: '001',
         abbr: 'one',
         name: 'englishCountryOne',
       },
       {
+        id: '002',
         countryId: '002',
-        provinceTerritoryStateId: '002',
         abbr: 'two',
         name: 'englishCountryTwo',
       },
       {
+        id: '003',
         countryId: '003',
-        provinceTerritoryStateId: '003',
         abbr: 'three',
         name: 'englishCountryThree',
       },
     ]);
   });
 
-  it('should return an array of region ids and french name', () => {
-    expect(localizeRegions(mockRegions, 'fr')).toEqual([
+  it('should return an array of province territory state ids and french name', () => {
+    expect(localizeProvinceTerritoryStates(mockProvinceTerritoryStates, 'fr')).toEqual([
       {
+        id: '001',
         countryId: '001',
-        provinceTerritoryStateId: '001',
         abbr: 'one',
         name: 'frenchCountryOne',
       },
       {
+        id: '002',
         countryId: '002',
-        provinceTerritoryStateId: '002',
         abbr: 'two',
         name: 'frenchCountryTwo',
       },
       {
+        id: '003',
         countryId: '003',
-        provinceTerritoryStateId: '003',
         abbr: 'three',
         name: 'frenchCountryThree',
       },
@@ -255,47 +255,48 @@ describe('localizeRegions', () => {
   });
 });
 
-describe('localizAndSortRegions', () => {
-  it('should return a sorted array of region ids and english names', () => {
-    expect(localizeAndSortRegions(mockRegions, 'en')).toEqual([
+describe('localizeAndSortProvinceTerritoryStates', () => {
+  it('should return a sorted array of province territory state ids and english names', () => {
+    expect(localizeAndSortProvinceTerritoryStates(mockProvinceTerritoryStates, 'en')).toEqual([
       {
+        id: '001',
         countryId: '001',
-        provinceTerritoryStateId: '001',
         abbr: 'one',
         name: 'englishCountryOne',
       },
       {
+        id: '003',
         countryId: '003',
-        provinceTerritoryStateId: '003',
         abbr: 'three',
         name: 'englishCountryThree',
       },
       {
+        id: '002',
         countryId: '002',
-        provinceTerritoryStateId: '002',
         abbr: 'two',
         name: 'englishCountryTwo',
       },
     ]);
   });
 
-  it('should return a sorted array of region ids and french name', () => {
-    expect(localizeAndSortRegions(mockRegions, 'fr')).toEqual([
+  it('should return a sorted array of province territory state ids and french name', () => {
+    expect(localizeAndSortProvinceTerritoryStates(mockProvinceTerritoryStates, 'fr')).toEqual([
       {
+        id: '001',
         countryId: '001',
-        provinceTerritoryStateId: '001',
         abbr: 'one',
         name: 'frenchCountryOne',
       },
       {
+        id: '003',
         countryId: '003',
-        provinceTerritoryStateId: '003',
         abbr: 'three',
         name: 'frenchCountryThree',
       },
       {
+        id: '002',
         countryId: '002',
-        provinceTerritoryStateId: '002',
+
         abbr: 'two',
         name: 'frenchCountryTwo',
       },
@@ -303,15 +304,15 @@ describe('localizAndSortRegions', () => {
   });
 });
 
-describe('localizeLanguage', () => {
-  it('should return the language id and english name', () => {
+describe('localizePreferredLanguage', () => {
+  it('should return the preferred language id and english name', () => {
     expect(localizePreferredLanguage(mockLanguages[0], 'en')).toEqual({
       id: '001',
       name: 'englishLanguageOne',
     });
   });
 
-  it('should return the language id and french name', () => {
+  it('should return the preferred language id and french name', () => {
     expect(localizePreferredLanguage(mockLanguages[0], 'fr')).toEqual({
       id: '001',
       name: 'frenchLanguageOne',
@@ -320,7 +321,7 @@ describe('localizeLanguage', () => {
 });
 
 describe('localizeAndSortPreferredLanguages', () => {
-  it('should return a sorted array of language ids and english names', () => {
+  it('should return a sorted array of preferred language ids and english names', () => {
     expect(localizeAndSortPreferredLanguages(mockLanguages, 'en')).toEqual([
       {
         id: '001',
@@ -337,7 +338,7 @@ describe('localizeAndSortPreferredLanguages', () => {
     ]);
   });
 
-  it('should return a sorted array of language ids and french name', () => {
+  it('should return a sorted array of preferred language ids and french name', () => {
     expect(localizeAndSortPreferredLanguages(mockLanguages, 'fr')).toEqual([
       {
         id: '001',

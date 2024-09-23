@@ -21,14 +21,13 @@ import { LoadingButton } from '~/components/loading-button';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled, getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortCountries, localizeAndSortRegions } from '~/utils/lookup-utils.server';
+import { localizeAndSortCountries, localizeAndSortProvinceTerritoryStates } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
@@ -71,9 +70,9 @@ export async function loader({ context: { serviceProvider, session }, params, re
 
   const csrfToken = String(session.get('csrfToken'));
   const locale = getLocale(request);
-  const lookupService = getLookupService();
+
   const countryList = localizeAndSortCountries(serviceProvider.getCountryService().findAll(), locale);
-  const regionList = localizeAndSortRegions(lookupService.getAllRegions(), locale);
+  const regionList = localizeAndSortProvinceTerritoryStates(serviceProvider.getProvinceTerritoryStateService().findAll(), locale);
 
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
@@ -215,8 +214,8 @@ export default function PersonalInformationMailingAddressEdit() {
   });
 
   useEffect(() => {
-    const filteredRegions = regionList.filter((region) => region.countryId === selectedCountry);
-    setCountryRegions(filteredRegions);
+    const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedCountry);
+    setCountryRegions(filteredProvinceTerritoryStates);
   }, [selectedCountry, regionList]);
 
   const countryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
@@ -238,10 +237,10 @@ export default function PersonalInformationMailingAddressEdit() {
   );
 
   // populate region/province/state list with selected country or current address country
-  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === addressInfo.countryId)).map((region) => ({
+  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter(({ countryId }) => countryId === addressInfo.countryId)).map((region) => ({
     children: region.name,
-    value: region.provinceTerritoryStateId,
-    id: region.provinceTerritoryStateId,
+    value: region.id,
+    id: region.id,
   }));
 
   return (
