@@ -1,7 +1,7 @@
 import { sort } from 'moderndash';
 import moize from 'moize';
 
-import type { FederalGovernmentInsurancePlanService } from '~/.server/domain/services';
+import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
 import { getApplicationHistoryMapper } from '~/mappers/application-history-mapper.server';
 import { applicationListSchema } from '~/schemas/application-history-service-schemas.server';
 import type { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
@@ -15,9 +15,10 @@ const log = getLogger('benefit-application-service.server');
 
 export interface CreateBenefitApplicationServiceArgs {
   federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService;
+  provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService;
 }
 
-function createBenefitApplicationService({ federalGovernmentInsurancePlanService }: CreateBenefitApplicationServiceArgs) {
+function createBenefitApplicationService({ federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService }: CreateBenefitApplicationServiceArgs) {
   // prettier-ignore
   const {
     HTTP_PROXY_URL,
@@ -102,7 +103,7 @@ function createBenefitApplicationService({ federalGovernmentInsurancePlanService
 
     const data = await response.json();
     log.trace('Applications for user id [%s]: [%j]', userId, data);
-    const applications = getApplicationHistoryMapper({ federalGovernmentInsurancePlanService }).toBenefitApplication(applicationListSchema.parse(data)); // TODO: Update schema once application-history service becomes avaliable
+    const applications = getApplicationHistoryMapper({ federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService }).toBenefitApplication(applicationListSchema.parse(data)); // TODO: Update schema once application-history service becomes avaliable
     return sort(applications, {
       order: sortOrder,
       by: (item) => item.submittedOn,

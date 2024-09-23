@@ -5,7 +5,7 @@ import {
   localizeAndSortFederalSocialPrograms,
   localizeAndSortMaritalStatuses,
   localizeAndSortPreferredLanguages,
-  localizeAndSortProvincialTerritorialSocialPrograms,
+  localizeAndSortProvincialGovernmentInsurancePlans,
   localizeAndSortRegions,
   localizeCountries,
   localizeCountry,
@@ -13,7 +13,7 @@ import {
   localizeMaritalStatus,
   localizeMaritalStatuses,
   localizePreferredLanguage,
-  localizeProvincialTerritorialSocialProgram,
+  localizeProvincialGovernmentInsurancePlan,
   localizeRegion,
   localizeRegions,
 } from '~/utils/lookup-utils.server';
@@ -409,7 +409,7 @@ describe('localizeAndSortFederalSocialPrograms', () => {
 
 describe('localizeProvincialTerritorialSocialProgram', () => {
   it('should return the provincial/territorial social program id and english name', () => {
-    expect(localizeProvincialTerritorialSocialProgram(mockProvincialTerritorialSocialPrograms[0], 'en')).toEqual({
+    expect(localizeProvincialGovernmentInsurancePlan(mockProvincialTerritorialSocialPrograms[0], 'en')).toEqual({
       id: '001',
       provinceTerritoryStateId: '001',
       name: 'englishProgramOne',
@@ -417,7 +417,7 @@ describe('localizeProvincialTerritorialSocialProgram', () => {
   });
 
   it('should return the provincial/territorial social program id and french name', () => {
-    expect(localizeProvincialTerritorialSocialProgram(mockProvincialTerritorialSocialPrograms[0], 'fr')).toEqual({
+    expect(localizeProvincialGovernmentInsurancePlan(mockProvincialTerritorialSocialPrograms[0], 'fr')).toEqual({
       id: '001',
       provinceTerritoryStateId: '001',
       name: 'frenchProgramOne',
@@ -427,7 +427,7 @@ describe('localizeProvincialTerritorialSocialProgram', () => {
 
 describe('localizeAndSortProvincialTerritorialSocialPrograms', () => {
   it('should return an array of localized provincial/territorial social program ids and english names', () => {
-    expect(localizeAndSortProvincialTerritorialSocialPrograms(mockProvincialTerritorialSocialPrograms, 'en')).toEqual([
+    expect(localizeAndSortProvincialGovernmentInsurancePlans(mockProvincialTerritorialSocialPrograms, 'en')).toEqual([
       {
         id: '001',
         name: 'englishProgramOne',
@@ -447,7 +447,7 @@ describe('localizeAndSortProvincialTerritorialSocialPrograms', () => {
   });
 
   it('should return an array of localized provincial/territorial social program ids and french names', () => {
-    expect(localizeAndSortProvincialTerritorialSocialPrograms(mockProvincialTerritorialSocialPrograms, 'fr')).toEqual([
+    expect(localizeAndSortProvincialGovernmentInsurancePlans(mockProvincialTerritorialSocialPrograms, 'fr')).toEqual([
       {
         id: '001',
         name: 'frenchProgramOne',

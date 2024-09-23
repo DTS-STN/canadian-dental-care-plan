@@ -53,7 +53,10 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
-  const benefitApplicationService = getBenefitApplicationService({ federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService() });
+  const benefitApplicationService = getBenefitApplicationService({
+    federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService(),
+    provincialGovernmentInsurancePlanService: serviceProvider.getProvincialGovernmentInsurancePlanService(),
+  });
   const applications = await benefitApplicationService.getApplications(userInfoToken.sub, sortOrder);
   session.set('applications', applications);
 

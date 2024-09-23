@@ -19,12 +19,11 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeFederalSocialProgram } from '~/utils/lookup-utils.server';
+import { localizeFederalSocialProgram, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -57,21 +56,15 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.index.page-title') }) };
 
-  const lookupService = getLookupService();
-  const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
-
   const children = getChildrenState(state).map((child) => {
     const federalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
-
-    const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === child.dentalBenefits?.province).find((p) => p.id === child.dentalBenefits?.provincialTerritorialSocialProgram);
-    const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(locale, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;
-
+    const provincialTerritorialSocialProgram = child.dentalBenefits?.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().findById(child.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
     return {
       ...child,
       dentalBenefits: {
         ...child.dentalBenefits,
         federalSocialProgram: federalGovernmentInsurancePlan && localizeFederalSocialProgram(federalGovernmentInsurancePlan, locale).name,
-        provincialTerritorialSocialProgram,
+        provincialTerritorialSocialProgram: provincialTerritorialSocialProgram && localizeProvincialGovernmentInsurancePlan(provincialTerritorialSocialProgram, locale).name,
       },
     };
   });

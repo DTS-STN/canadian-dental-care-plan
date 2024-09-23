@@ -24,14 +24,13 @@ import { loadApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-c
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeFederalSocialProgram, localizeProvincialTerritorialSocialProgram } from '~/utils/lookup-utils.server';
+import { localizeFederalSocialProgram, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -62,7 +61,6 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const lookupService = getLookupService();
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
@@ -74,8 +72,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
 
   const children = state.children.map((child) => {
     const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
-    const selectedProvincialBenefit =
-      child.dentalBenefits.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(child.dentalBenefits.provincialTerritorialSocialProgram), locale);
+    const selectedProvincialBenefit = child.dentalBenefits.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().findById(child.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
 
     return {
       id: child.id,
@@ -93,7 +90,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,
           province: child.dentalBenefits.province,
-          benefit: selectedProvincialBenefit && selectedProvincialBenefit.name,
+          benefit: selectedProvincialBenefit && localizeProvincialGovernmentInsurancePlan(selectedProvincialBenefit, locale).name,
         },
       },
     };
@@ -116,7 +113,10 @@ export async function action({ context: { serviceProvider, session }, params, re
   const state = loadApplyAdultChildStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = getEnv();
-  const benefitApplicationService = getBenefitApplicationService({ federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService() });
+  const benefitApplicationService = getBenefitApplicationService({
+    federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService(),
+    provincialGovernmentInsurancePlanService: serviceProvider.getProvincialGovernmentInsurancePlanService(),
+  });
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();

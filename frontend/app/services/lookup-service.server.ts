@@ -1,7 +1,6 @@
 import moize from 'moize';
 import { z } from 'zod';
 
-import provincialProgramsJson from '~/resources/power-platform/provincial-programs.json';
 import regionsJson from '~/resources/power-platform/regions.json';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -86,9 +85,7 @@ function createLookupService() {
     LOOKUP_SVC_ALL_LAST_TIME_DENTIST_VISIT_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS,
   } = getEnv();
 
   async function getAllIndigenousTypes() {
@@ -302,33 +299,6 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  function getAllProvincialTerritorialSocialPrograms() {
-    log.debug('Fetching all provincial/territorial social programs');
-
-    const provincialTerritorialSocialPrograms = provincialProgramsJson.value.map((provincialSocialProgram) => ({
-      id: provincialSocialProgram.esdc_governmentinsuranceplanid,
-      nameEn: provincialSocialProgram.esdc_nameenglish,
-      nameFr: provincialSocialProgram.esdc_namefrench,
-      provinceTerritoryStateId: provincialSocialProgram._esdc_provinceterritorystateid_value,
-    }));
-
-    log.trace('Returning provincial/territorial social programs: [%j]', provincialTerritorialSocialPrograms);
-    return provincialTerritorialSocialPrograms;
-  }
-
-  function getProvincialTerritorialSocialProgramById(id: string) {
-    log.debug('Fetching provincial/territorial social program with id: [%s]', id);
-
-    const provincialTerritorialSocialProgram = getAllProvincialTerritorialSocialPrograms().find((program) => program.id === id);
-
-    if (!provincialTerritorialSocialProgram) {
-      throw new Error(`Failed to find provincial/territorial social program; id: ${id}`);
-    }
-
-    log.trace('Returning provincial/territorial social program: [%j]', provincialTerritorialSocialProgram);
-    return provincialTerritorialSocialProgram;
-  }
-
   function getAllRegions() {
     log.debug('Fetching all regions');
 
@@ -403,15 +373,6 @@ function createLookupService() {
       maxAge: 1000 * LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllMouthPainTypes memo'),
     }),
-    getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
-      onCacheAdd: () => log.info('Creating new AllProvincialTerritorialSocialPrograms memo'),
-    }),
-    getProvincialTerritorialSocialProgramById: moize(getProvincialTerritorialSocialProgramById, {
-      maxAge: 1000 * LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS,
-      maxSize: Infinity,
-      onCacheAdd: () => log.info('Creating new ProvincialTerritorialSocialProgramById memo'),
-    }),
     getAllRegions: moize(getAllRegions, {
       maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllRegions memo'),
@@ -427,6 +388,3 @@ export type GetLookupService = typeof getLookupService;
 
 export type GetAllRegions = Pick<ReturnType<typeof getLookupService>, 'getAllRegions'>['getAllRegions'];
 export type Region = ReturnType<GetAllRegions>[number];
-
-export type GetAllProvincialTerritorialSocialPrograms = Pick<ReturnType<typeof getLookupService>, 'getAllProvincialTerritorialSocialPrograms'>['getAllProvincialTerritorialSocialPrograms'];
-export type ProvincialTerritorialSocialProgram = ReturnType<GetAllProvincialTerritorialSocialPrograms>[number];

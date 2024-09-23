@@ -156,7 +156,10 @@ export async function action({ context: { serviceProvider, session }, params, re
   const state = loadApplyChildStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = getEnv();
-  const benefitApplicationService = getBenefitApplicationService({ federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService() });
+  const benefitApplicationService = getBenefitApplicationService({
+    federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService(),
+    provincialGovernmentInsurancePlanService: serviceProvider.getProvincialGovernmentInsurancePlanService(),
+  });
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();

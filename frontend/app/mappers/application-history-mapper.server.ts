@@ -1,13 +1,13 @@
-import type { FederalGovernmentInsurancePlanService } from '~/.server/domain/services';
+import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
 import type { ApplicationResponse } from '~/schemas/application-history-service-schemas.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env-utils.server';
 
 export interface GetApplicationHistoryMapperArgs {
   federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService;
+  provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService;
 }
 
-export function getApplicationHistoryMapper({ federalGovernmentInsurancePlanService }: GetApplicationHistoryMapperArgs) {
+export function getApplicationHistoryMapper({ federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService }: GetApplicationHistoryMapperArgs) {
   function toBenefitApplication(applications: ApplicationResponse[]) {
     return applications.map((application) => {
       return {
@@ -124,9 +124,6 @@ export function getApplicationHistoryMapper({ federalGovernmentInsurancePlanServ
   }
 
   function toDentalBenefits(insurancePlan?: ToInsurancePlanArgs) {
-    const lookupService = getLookupService();
-    const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
-
     const insuranceInfo: { hasFederalBenefits: boolean; federalSocialProgram?: string; hasProvincialTerritorialBenefits: boolean; provincialTerritorialSocialProgram?: string; province?: string } = {
       hasFederalBenefits: false,
       federalSocialProgram: undefined,
@@ -141,11 +138,11 @@ export function getApplicationHistoryMapper({ federalGovernmentInsurancePlanServ
         insuranceInfo.hasFederalBenefits = true;
         insuranceInfo.federalSocialProgram = insuranceId.IdentificationID;
       }
-      const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.find((provincialTerritorialSocialInsurance) => provincialTerritorialSocialInsurance.id === insuranceId.IdentificationID);
-      if (provincialTerritorialSocialProgramEntity) {
+      const provincialGovernmentInsurancePlan = insuranceId.IdentificationID ? provincialGovernmentInsurancePlanService.findById(insuranceId.IdentificationID) : undefined;
+      if (provincialGovernmentInsurancePlan) {
         insuranceInfo.hasProvincialTerritorialBenefits = true;
         insuranceInfo.provincialTerritorialSocialProgram = insuranceId.IdentificationID;
-        insuranceInfo.province = provincialTerritorialSocialProgramEntity.provinceTerritoryStateId;
+        insuranceInfo.province = provincialGovernmentInsurancePlan.provinceTerritoryStateId;
       }
     });
 
