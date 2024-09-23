@@ -754,31 +754,6 @@
             }
           },
           {
-            "id": "protected/access-to-governmental-benefits/edit",
-            "file": "routes/protected/access-to-governmental-benefits/edit.tsx",
-            "paths": {
-              "en": "/:lang/access-to-governmental-benefits/edit",
-              "fr": "/:lang/access-to-governmental-benefits/edit"
-            }
-          },
-          {
-            "id": "protected/access-to-governmental-benefits/view",
-            "file": "routes/protected/access-to-governmental-benefits/view.tsx",
-            "paths": {
-              "en": "/:lang/access-to-governmental-benefits/view",
-              "fr": "/:lang/access-to-governmental-benefits/view"
-            }
-          },
-          {
-            "id": "protected/access-to-governmental-benefits/index",
-            "file": "routes/protected/access-to-governmental-benefits/index.tsx",
-            "index": true,
-            "paths": {
-              "en": "/:lang/access-to-governmental-benefits/index",
-              "fr": "/:lang/access-to-governmental-benefits/index"
-            }
-          },
-          {
             "id": "protected/alerts/index",
             "file": "routes/protected/alerts/index.tsx",
             "index": true,

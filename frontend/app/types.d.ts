@@ -1,6 +1,5 @@
 import type { Session } from '@remix-run/node';
 
-import type accessToGovernmentalBenefits from '../public/locales/en/access-to-governmental-benefits.json';
 import type alerts from '../public/locales/en/alerts.json';
 import type applications from '../public/locales/en/applications.json';
 import type applyAdultChild from '../public/locales/en/apply-adult-child.json';
@@ -70,7 +69,6 @@ declare module 'i18next' {
       gcweb: typeof gcweb;
       index: typeof index;
       letters: typeof letters;
-      'access-to-governmental-benefits': typeof accessToGovernmentalBenefits;
       'personal-information': typeof personalInformation;
       alerts: typeof alerts;
       applications: typeof applications;
