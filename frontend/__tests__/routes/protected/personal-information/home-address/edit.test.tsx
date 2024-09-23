@@ -19,19 +19,6 @@ vi.mock('~/services/instrumentation-service.server', () => ({
   }),
 }));
 
-vi.mock('~/services/lookup-service.server', () => ({
-  getLookupService: vi.fn().mockReturnValue({
-    getAllRegions: vi.fn().mockReturnValue([
-      {
-        code: 'SP',
-        countryId: 'CAN',
-        nameEn: 'sample',
-        nameFr: '(FR) sample',
-      },
-    ]),
-  }),
-}));
-
 vi.mock('~/services/raoidc-service.server', () => ({
   getRaoidcService: vi.fn().mockResolvedValue({
     handleSessionValidation: vi.fn().mockResolvedValue(true),
@@ -74,18 +61,14 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
       const mockAppLoadContext = mock<AppLoadContext>({
         serviceProvider: {
-          getCountryService() {
-            return {
-              findAll: vi.fn().mockReturnValue([
-                {
-                  id: '1',
-                  nameEn: 'super country',
-                  nameFr: '(FR) super country',
-                },
-              ]),
-              findById: vi.fn(),
-            };
-          },
+          getCountryService: () => ({
+            findAll: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
+            findById: vi.fn(),
+          }),
+          getProvinceTerritoryStateService: () => ({
+            findAll: () => [{ id: 'SP', countryId: 'CAN', nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }],
+            findById: vi.fn(),
+          }),
         },
       });
 
@@ -98,25 +81,10 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
       const data = await response.json();
 
       expect(data).toMatchObject({
-        addressInfo: {
-          streetName: '111 Fake Home St',
-          cityName: 'city',
-          countryId: 'country',
-        },
-        countryList: [
-          {
-            id: '1',
-            name: 'super country',
-          },
-        ],
+        addressInfo: { streetName: '111 Fake Home St', cityName: 'city', countryId: 'country' },
+        countries: [{ id: '1', name: 'super country' }],
         meta: {},
-        regionList: [
-          {
-            code: 'SP',
-            countryId: 'CAN',
-            name: 'sample',
-          },
-        ],
+        provinceTerritoryStates: [{ id: 'SP', countryId: 'CAN', name: 'sample', abbr: 'SP' }],
       });
     });
 

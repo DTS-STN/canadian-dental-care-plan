@@ -12,13 +12,6 @@ vi.mock('~/services/audit-service.server', () => ({
   }),
 }));
 
-vi.mock('~/services/lookup-service.server', () => ({
-  // prettier-ignore
-  getLookupService: vi.fn().mockReturnValue({
-    getAllRegions: vi.fn().mockReturnValue([{ provinceTerritoryStateId: 'SP', countryId: "CAN", nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }]),
-  }),
-}));
-
 vi.mock('~/services/raoidc-service.server', () => ({
   getRaoidcService: vi.fn().mockResolvedValue({
     handleSessionValidation: vi.fn().mockResolvedValue(true),
@@ -104,6 +97,10 @@ describe('_gcweb-app.personal-information._index', () => {
           findById: () => ({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
           findAll: vi.fn(),
         }),
+        getProvinceTerritoryStateService: () => ({
+          findAll: vi.fn(),
+          findById: () => ({ id: 'SP', countryId: 'CAN', nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }),
+        }),
       },
     });
 
@@ -159,8 +156,8 @@ describe('_gcweb-app.personal-information._index', () => {
           nameEn: 'French',
           nameFr: 'Français',
         },
-        homeAddressRegion: 'SP',
-        mailingAddressRegion: 'SP',
+        homeAddressProvinceTerritoryStateAbbr: 'SP',
+        mailingAddressProvinceTerritoryStateAbbr: 'SP',
         maritalStatus: 'Single',
         personalInformation: {
           clientNumber: '999999999',

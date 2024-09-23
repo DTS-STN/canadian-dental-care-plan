@@ -68,7 +68,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:review-child-information.page-title') }) };
 
-  const payload = viewPayloadEnabled ? toBenefitApplicationRequestFromApplyAdultChildState(state) : undefined;
+  const payload = viewPayloadEnabled && toBenefitApplicationRequestFromApplyAdultChildState(state);
 
   const children = state.children.map((child) => {
     const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;

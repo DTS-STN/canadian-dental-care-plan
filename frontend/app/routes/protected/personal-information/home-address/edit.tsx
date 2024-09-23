@@ -21,14 +21,13 @@ import { LoadingButton } from '~/components/loading-button';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled, getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortCountries, localizeAndSortRegions } from '~/utils/lookup-utils.server';
+import { localizeAndSortCountries, localizeAndSortProvinceTerritoryStates } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
@@ -56,7 +55,6 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('edit-personal-info');
   const instrumentationService = getInstrumentationService();
-  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
 
   await raoidcService.handleSessionValidation(request, session);
@@ -74,8 +72,8 @@ export async function loader({ context: { serviceProvider, session }, params, re
     throw new Response(null, { status: 404 });
   }
 
-  const countryList = localizeAndSortCountries(serviceProvider.getCountryService().findAll(), locale);
-  const regionList = localizeAndSortRegions(lookupService.getAllRegions(), locale);
+  const countries = localizeAndSortCountries(serviceProvider.getCountryService().findAll(), locale);
+  const provinceTerritoryStates = localizeAndSortProvinceTerritoryStates(serviceProvider.getProvinceTerritoryStateService().findAll(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
 
@@ -83,7 +81,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:home-address.edit.page-title') }) };
 
   instrumentationService.countHttpStatus('home-address.edit', 302);
-  return json({ addressInfo, countryList, csrfToken, meta, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
+  return json({ addressInfo, countries, csrfToken, meta, provinceTerritoryStates, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -200,10 +198,10 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function PersonalInformationHomeAddressEdit() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { addressInfo, countryList, csrfToken, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
+  const { addressInfo, countries, csrfToken, provinceTerritoryStates, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const params = useParams();
   const [selectedCountry, setSelectedCountry] = useState(addressInfo.countryId);
-  const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
+  const [countryRegions, setCountryRegions] = useState<typeof provinceTerritoryStates>([]);
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -219,30 +217,30 @@ export default function PersonalInformationHomeAddressEdit() {
   });
 
   useEffect(() => {
-    const filteredRegions = regionList.filter((region) => region.countryId === selectedCountry);
-    setCountryRegions(filteredRegions);
-  }, [selectedCountry, regionList]);
+    const filteredProvinceTerritoryStates = provinceTerritoryStates.filter(({ countryId }) => countryId === selectedCountry);
+    setCountryRegions(filteredProvinceTerritoryStates);
+  }, [selectedCountry, provinceTerritoryStates]);
 
   const countryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
     setSelectedCountry(event.currentTarget.value);
   };
 
-  const countries = useMemo<InputOptionProps[]>(
+  const countryInputOptions = useMemo<InputOptionProps[]>(
     () =>
-      countryList.map((country) => ({
+      countries.map((country) => ({
         children: country.name,
         value: country.id,
         id: country.id,
       })),
-    [countryList],
+    [countries],
   );
 
   // populate region/province/state list with selected country or current address country
-  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === addressInfo.countryId)).map((region) => {
+  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : provinceTerritoryStates.filter(({ countryId }) => countryId === addressInfo.countryId)).map((region) => {
     return {
       children: region.name,
-      value: region.provinceTerritoryStateId,
-      id: region.provinceTerritoryStateId,
+      value: region.id,
+      id: region.id,
     };
   });
 
@@ -273,7 +271,7 @@ export default function PersonalInformationHomeAddressEdit() {
               label={t('personal-information:home-address.edit.field.country')}
               defaultValue={addressInfo.countryId}
               required
-              options={countries}
+              options={countryInputOptions}
               onChange={countryChangeHandler}
               errorMessage={errors?.countryId}
             />

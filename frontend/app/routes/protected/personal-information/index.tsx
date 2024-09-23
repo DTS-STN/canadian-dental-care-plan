@@ -14,13 +14,12 @@ import { InlineLink } from '~/components/inline-link';
 import { useFeature } from '~/root';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getAuditService } from '~/services/audit-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
-import { localizeCountry, localizeMaritalStatus, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeMaritalStatus } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -41,7 +40,6 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-personal-info');
 
-  const lookupService = getLookupService();
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const raoidcService = await getRaoidcService();
 
@@ -57,8 +55,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const preferredLanguage = personalInformation.preferredLanguageId ? serviceProvider.getPreferredLanguageService().findById(personalInformation.preferredLanguageId) : undefined;
   const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(parseDateString(personalInformation.birthDate), locale) : undefined;
 
-  const regionList = localizeRegions(lookupService.getAllRegions(), locale);
-
   const maritalStatus = personalInformation.maritalStatusId ? serviceProvider.getMaritalStatusService().findById(personalInformation.maritalStatusId) : undefined;
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -70,8 +66,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const homeAddressCountry = personalInformation.homeAddress?.countryId ? serviceProvider.getCountryService().findById(personalInformation.homeAddress.countryId) : undefined;
   const mailingAddressCountry = personalInformation.mailingAddress?.countryId ? serviceProvider.getCountryService().findById(personalInformation.mailingAddress.countryId) : undefined;
-  const homeAddressRegion = regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress?.provinceTerritoryStateId)?.abbr;
-  const mailingAddressRegion = regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress?.provinceTerritoryStateId)?.abbr;
+  const homeAddressProvinceTerritoryStateAbbr = personalInformation.homeAddress?.provinceTerritoryStateId ? serviceProvider.getProvinceTerritoryStateService().findById(personalInformation.homeAddress.provinceTerritoryStateId)?.abbr : undefined;
+  const mailingAddressProvinceTerritoryStateAbbr = personalInformation.mailingAddress?.provinceTerritoryStateId ? serviceProvider.getProvinceTerritoryStateService().findById(personalInformation.mailingAddress.provinceTerritoryStateId)?.abbr : undefined;
 
   return json({
     preferredLanguage,
@@ -80,8 +76,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     personalInformation,
     birthParsedFormat,
     meta,
-    homeAddressRegion,
-    mailingAddressRegion,
+    homeAddressProvinceTerritoryStateAbbr,
+    mailingAddressProvinceTerritoryStateAbbr,
     maritalStatus: maritalStatus && localizeMaritalStatus(maritalStatus, locale).name,
     updatedInfo,
     SCCH_BASE_URI,
@@ -89,7 +85,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 }
 
 export default function PersonalInformationIndex() {
-  const { personalInformation, preferredLanguage, homeAddressCountry, mailingAddressCountry, birthParsedFormat, maritalStatus, homeAddressRegion, mailingAddressRegion, updatedInfo, SCCH_BASE_URI } = useLoaderData<typeof loader>();
+  const { personalInformation, preferredLanguage, homeAddressCountry, mailingAddressCountry, birthParsedFormat, maritalStatus, homeAddressProvinceTerritoryStateAbbr, mailingAddressProvinceTerritoryStateAbbr, updatedInfo, SCCH_BASE_URI } =
+    useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const params = useParams();
 
@@ -111,7 +108,7 @@ export default function PersonalInformationIndex() {
                   address={personalInformation.homeAddress.streetName ?? ''}
                   apartment={personalInformation.homeAddress.apartment}
                   city={personalInformation.homeAddress.cityName ?? ''}
-                  provinceState={homeAddressRegion}
+                  provinceState={homeAddressProvinceTerritoryStateAbbr}
                   postalZipCode={personalInformation.homeAddress.postalCode}
                   country={homeAddressCountry ?? ''}
                 />
@@ -135,7 +132,7 @@ export default function PersonalInformationIndex() {
                   address={personalInformation.mailingAddress.streetName ?? ''}
                   apartment={personalInformation.mailingAddress.apartment}
                   city={personalInformation.mailingAddress.cityName ?? ''}
-                  provinceState={mailingAddressRegion}
+                  provinceState={mailingAddressProvinceTerritoryStateAbbr}
                   postalZipCode={personalInformation.mailingAddress.postalCode}
                   country={mailingAddressCountry ?? ''}
                 />

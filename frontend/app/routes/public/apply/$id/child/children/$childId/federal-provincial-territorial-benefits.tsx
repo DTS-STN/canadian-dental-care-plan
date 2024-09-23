@@ -18,12 +18,11 @@ import { LoadingButton } from '~/components/loading-button';
 import { loadApplyChildState, loadApplySingleChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/route-helpers/apply-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortFederalSocialPrograms, localizeAndSortProvincialGovernmentInsurancePlans, localizeAndSortRegions } from '~/utils/lookup-utils.server';
+import { localizeAndSortFederalSocialPrograms, localizeAndSortProvinceTerritoryStates, localizeAndSortProvincialGovernmentInsurancePlans } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -56,11 +55,11 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const { CANADA_COUNTRY_ID } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const lookupService = getLookupService();
+
   const federalSocialPrograms = localizeAndSortFederalSocialPrograms(serviceProvider.getFederalGovernmentInsurancePlanService().findAll(), locale);
   const provincialTerritorialSocialPrograms = localizeAndSortProvincialGovernmentInsurancePlans(serviceProvider.getProvincialGovernmentInsurancePlanService().findAll(), locale);
-  const allRegions = localizeAndSortRegions(lookupService.getAllRegions(), locale);
-  const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
+  const allRegions = localizeAndSortProvinceTerritoryStates(serviceProvider.getProvinceTerritoryStateService().findAll(), locale);
+  const regions = allRegions.filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
 
   const csrfToken = String(session.get('csrfToken'));
 
@@ -305,12 +304,12 @@ export default function AccessToDentalInsuranceQuestion() {
                         label={t('apply-child:children.dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
                         onChange={handleOnRegionChanged}
                         options={[
-                          { children: t('apply-child:children.dental-benefits.select-one'), value: '', hidden: true },
-                          ...regions.map((region) => ({
-                            id: region.provinceTerritoryStateId,
-                            value: region.provinceTerritoryStateId,
-                            children: region.name,
-                          })),
+                          {
+                            children: t('apply-child:children.dental-benefits.select-one'),
+                            value: '',
+                            hidden: true,
+                          },
+                          ...regions.map((region) => ({ id: region.id, value: region.id, children: region.name })),
                         ]}
                         defaultValue={provinceValue}
                         errorMessage={errors?.province}

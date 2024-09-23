@@ -25,14 +25,13 @@ import { loadApplyChildStateForReview } from '~/route-helpers/apply-child-route-
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -63,12 +62,10 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const lookupService = getLookupService();
 
   // Getting province by Id
-  const allRegions = localizeRegions(lookupService.getAllRegions(), locale);
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation.homeProvince);
+  const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().findById(state.contactInformation.mailingProvince)?.abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().findById(state.contactInformation.homeProvince)?.abbr : undefined;
 
   // Getting Country by Id
   const countryMailing = serviceProvider.getCountryService().findById(state.contactInformation.mailingCountry);
@@ -100,20 +97,18 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     communicationPreference: localizePreferredCommunicationMethod(communicationPreference, locale).name,
   };
 
-  const spouseInfo = state.partnerInformation
-    ? {
-        firstName: state.partnerInformation.firstName,
-        lastName: state.partnerInformation.lastName,
-        birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
-        sin: state.partnerInformation.socialInsuranceNumber,
-        consent: state.partnerInformation.confirm,
-      }
-    : undefined;
+  const spouseInfo = state.partnerInformation && {
+    firstName: state.partnerInformation.firstName,
+    lastName: state.partnerInformation.lastName,
+    birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
+    sin: state.partnerInformation.socialInsuranceNumber,
+    consent: state.partnerInformation.confirm,
+  };
 
   const mailingAddressInfo = {
     address: state.contactInformation.mailingAddress,
     city: state.contactInformation.mailingCity,
-    province: provinceMailing,
+    province: mailingProvinceTerritoryStateAbbr,
     postalCode: state.contactInformation.mailingPostalCode,
     country: localizeCountry(countryMailing, locale),
     apartment: state.contactInformation.mailingApartment,
@@ -122,7 +117,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const homeAddressInfo = {
     address: state.contactInformation.homeAddress,
     city: state.contactInformation.homeCity,
-    province: provinceHome,
+    province: homeProvinceTerritoryStateAbbr,
     postalCode: state.contactInformation.homePostalCode,
     country: localizeCountry(countryHome, locale),
     apartment: state.contactInformation.homeApartment,
@@ -133,7 +128,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:review-adult-information.page-title') }) };
-  const payload = viewPayloadEnabled ? toBenefitApplicationRequestFromApplyChildState(state) : undefined;
+  const payload = viewPayloadEnabled && toBenefitApplicationRequestFromApplyChildState(state);
 
   return json({
     id: state.id,
@@ -339,7 +334,7 @@ export default function ReviewInformation() {
                 <Address
                   address={mailingAddressInfo.address}
                   city={mailingAddressInfo.city}
-                  provinceState={mailingAddressInfo.province?.abbr}
+                  provinceState={mailingAddressInfo.province}
                   postalZipCode={mailingAddressInfo.postalCode}
                   country={mailingAddressInfo.country.name}
                   apartment={mailingAddressInfo.apartment}
@@ -354,7 +349,7 @@ export default function ReviewInformation() {
                 <Address
                   address={homeAddressInfo.address ?? ''}
                   city={homeAddressInfo.city ?? ''}
-                  provinceState={homeAddressInfo.province?.abbr}
+                  provinceState={homeAddressInfo.province}
                   postalZipCode={homeAddressInfo.postalCode}
                   country={homeAddressInfo.country.name}
                   apartment={homeAddressInfo.apartment}

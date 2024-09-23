@@ -1,6 +1,5 @@
 import { getEnv } from './env-utils.server';
-import type { ClientFriendlyStatusDto, CountryDto, FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredCommunicationMethodDto, PreferredLanguageDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
-import type { Region } from '~/services/lookup-service.server';
+import type { ClientFriendlyStatusDto, CountryDto, FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredCommunicationMethodDto, PreferredLanguageDto, ProvinceTerritoryStateDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 
 /**
  * Localizes a single country object by adding a localized name.
@@ -84,14 +83,14 @@ export function localizeAndSortMaritalStatuses(maritalStatuses: MaritalStatusDto
 }
 
 /**
- * Localizes a single region object by adding a localized name.
+ * Localizes a single province territory state object by adding a localized name.
  *
- * @param region - The region object to localize.
+ * @param provinceTerritoryState - The province territory state object to localize.
  * @param locale - The locale code for localization.
- * @returns The localized region object with a localized name.
+ * @returns The localized province territory state object with a localized name.
  */
-export function localizeRegion(region: Region, locale: AppLocale) {
-  const { nameEn, nameFr, ...rest } = region;
+export function localizeProvinceTerritoryState(provinceTerritoryState: ProvinceTerritoryStateDto, locale: AppLocale) {
+  const { nameEn, nameFr, ...rest } = provinceTerritoryState;
   return {
     ...rest,
     name: locale === 'fr' ? nameFr : nameEn,
@@ -99,25 +98,25 @@ export function localizeRegion(region: Region, locale: AppLocale) {
 }
 
 /**
- * Localizes an array of region objects by adding localized names.
+ * Localizes an array of province territory state objects by adding localized names.
  *
- * @param regions - The array of region objects to localize.
+ * @param provinceTerritoryStates - The array of province territory state objects to localize.
  * @param locale - The locale code for localization.
- * @returns The localized array of region objects.
+ * @returns The localized array of province territory state objects.
  */
-export function localizeRegions(regions: ReadonlyArray<Region>, locale: AppLocale) {
-  return regions.map((region) => localizeRegion(region, locale));
+export function localizeProvinceTerritoryStates(provinceTerritoryStates: ReadonlyArray<ProvinceTerritoryStateDto>, locale: AppLocale) {
+  return provinceTerritoryStates.map((region) => localizeProvinceTerritoryState(region, locale));
 }
 
 /**
- * Localizes an array of region objects by adding localized names and sorting them.
+ * Localizes an array of province territory state objects by adding localized names and sorting them.
  *
- * @param regions - The array of region objects to localize.
+ * @param provinceTerritoryStates - The array of province territory state objects to localize.
  * @param locale - The locale code for localization.
- * @returns The localized and sorted array of region objects.
+ * @returns The localized and sorted array of province territory state objects.
  */
-export function localizeAndSortRegions(regions: ReadonlyArray<Region>, locale: AppLocale) {
-  return localizeRegions(regions, locale).toSorted((a, b) => a.name.localeCompare(b.name, locale));
+export function localizeAndSortProvinceTerritoryStates(provinceTerritoryStates: ReadonlyArray<ProvinceTerritoryStateDto>, locale: AppLocale) {
+  return localizeProvinceTerritoryStates(provinceTerritoryStates, locale).toSorted((a, b) => a.name.localeCompare(b.name, locale));
 }
 
 /**
