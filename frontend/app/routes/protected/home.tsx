@@ -74,16 +74,6 @@ export default function Index() {
             {t('index:view-cdcp-desc')}
           </CardLink>
         )}
-        {useFeature('authenticated-status-check') && (
-          <CardLink title={t('index:status-check')} routeId="protected/status-check/index" params={params}>
-            {t('index:status-check-desc')}
-          </CardLink>
-        )}
-        {useFeature('dependent-status-checker') && (
-          <CardLink title={t('index:dependent-status-checker')} routeId="protected/dependent-status-checker/index" params={params}>
-            {t('index:dependent-status-checker-desc')}
-          </CardLink>
-        )}
       </div>
     </>
   );
