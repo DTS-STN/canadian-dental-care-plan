@@ -754,23 +754,6 @@
             }
           },
           {
-            "id": "protected/status-check/index",
-            "file": "routes/protected/status-check/index.tsx",
-            "index": true,
-            "paths": {
-              "en": "/:lang/status-check",
-              "fr": "/:lang/verification-de-statut"
-            }
-          },
-          {
-            "id": "protected/dependent-status-checker/index",
-            "file": "routes/protected/dependent-status-checker/index.tsx",
-            "paths": {
-              "en": "/:lang/dependent-status-checker",
-              "fr": "/:lang/verification-de-statut-a-charge"
-            }
-          },
-          {
             "id": "protected/stub-login",
             "file": "routes/protected/stub-login.tsx",
             "paths": {

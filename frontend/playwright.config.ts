@@ -30,7 +30,7 @@ export default defineConfig({
       AUTH_RAOIDC_BASE_URL: 'http://localhost:3000/auth',
       AUTH_RAOIDC_CLIENT_ID: 'CDCP',
       AUTH_RASCL_LOGOUT_URL: 'http://localhost:3000/',
-      ENABLED_FEATURES: "doc-upload,hcaptcha,view-personal-info,view-letters,view-messages,edit-personal-info,status,show-prototype-banner,dependent-status-checker",
+      ENABLED_FEATURES: "doc-upload,hcaptcha,view-personal-info,view-letters,view-messages,edit-personal-info,status,show-prototype-banner",
       ENABLED_MOCKS: 'cct,lookup,power-platform,raoidc,status-check,wsaddress,user-api',
       HCAPTCHA_SECRET_KEY: '0x0000000000000000000000000000000000000000',
       HCAPTCHA_SITE_KEY: '10000000-ffff-ffff-ffff-000000000001',

@@ -15,12 +15,6 @@
     "letters": {
       "index": "CDCP-PROT-0015"
     },
-    "status-check": {
-      "index": "CDCP-PROT-0021"
-    },
-    "dependent-status-checker": {
-      "index": "CDCP-PROT-0023"
-    },
     "dataUnavailable": "CDCP-PROT-0099"
   },
   "public": {
