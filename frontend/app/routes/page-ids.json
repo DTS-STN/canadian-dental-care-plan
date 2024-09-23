@@ -18,10 +18,6 @@
     "status-check": {
       "index": "CDCP-PROT-0021"
     },
-    "applications": {
-      "index": "CDCP-PROT-0022",
-      "view": "CDCP-PROT-0024"
-    },
     "dependent-status-checker": {
       "index": "CDCP-PROT-0023"
     },

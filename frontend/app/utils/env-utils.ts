@@ -4,7 +4,6 @@ const validFeatureNames = [
   'doc-upload',
   'hcaptcha',
   'view-personal-info',
-  'view-applications',
   'view-letters',
   'view-messages',
   'edit-personal-info',
