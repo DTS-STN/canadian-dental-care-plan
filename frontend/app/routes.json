@@ -754,66 +754,6 @@
             }
           },
           {
-            "id": "protected/alerts/index",
-            "file": "routes/protected/alerts/index.tsx",
-            "index": true,
-            "paths": {
-              "en": "/:lang/alerts",
-              "fr": "/:lang/alertes"
-            }
-          },
-          {
-            "id": "protected/alerts/subscribe/index",
-            "file": "routes/protected/alerts/subscribe/index.tsx",
-            "index": true,
-            "paths": {
-              "en": "/:lang/alerts/subscribe",
-              "fr": "/:lang/alertes/abonner"
-            }
-          },
-          {
-            "id": "protected/alerts/unsubscribe/index",
-            "file": "routes/protected/alerts/unsubscribe/index.tsx",
-            "index": true,
-            "paths": {
-              "en": "/:lang/alerts/unsubscribe",
-              "fr": "/:lang/alertes/desabonner"
-            }
-          },
-          {
-            "id": "protected/alerts/unsubscribe/success",
-            "file": "routes/protected/alerts/unsubscribe/success.tsx",
-            "paths": {
-              "en": "/:lang/alerts/unsubscribe/success",
-              "fr": "/:lang/alertes/desabonner/succes"
-            }
-          },
-          {
-            "id": "protected/alerts/manage/index",
-            "file": "routes/protected/alerts/manage/index.tsx",
-            "index": true,
-            "paths": {
-              "en": "/:lang/alerts/manage",
-              "fr": "/:lang/alertes/gerer"
-            }
-          },
-          {
-            "id": "protected/alerts/subscribe/confirm",
-            "file": "routes/protected/alerts/subscribe/confirm.tsx",
-            "paths": {
-              "en": "/:lang/alerts/subscribe/confirm",
-              "fr": "/:lang/alertes/abonner/confirmer"
-            }
-          },
-          {
-            "id": "protected/alerts/subscribe/success",
-            "file": "routes/protected/alerts/subscribe/success.tsx",
-            "paths": {
-              "en": "/:lang/alerts/subscribe/success",
-              "fr": "/:lang/alertes/abonner/succes"
-            }
-          },
-          {
             "id": "protected/status-check/index",
             "file": "routes/protected/status-check/index.tsx",
             "index": true,

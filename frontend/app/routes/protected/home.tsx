@@ -79,11 +79,6 @@ export default function Index() {
             {t('index:view-cdcp-desc')}
           </CardLink>
         )}
-        {useFeature('email-alerts') && (
-          <CardLink title={t('index:subscribe')} routeId="protected/alerts/index" params={params}>
-            {t('index:subscribe-desc')}
-          </CardLink>
-        )}
         {useFeature('authenticated-status-check') && (
           <CardLink title={t('index:status-check')} routeId="protected/status-check/index" params={params}>
             {t('index:status-check-desc')}
