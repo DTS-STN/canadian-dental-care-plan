@@ -771,23 +771,6 @@
             }
           },
           {
-            "id": "protected/applications/index",
-            "file": "routes/protected/applications/index.tsx",
-            "paths": {
-              "en": "/:lang/applications",
-              "fr": "/:lang/candidatures"
-            },
-            "index": true
-          },
-          {
-            "id": "protected/applications/$id",
-            "file": "routes/protected/applications/$id.tsx",
-            "paths": {
-              "en": "/:lang/applications/:id/",
-              "fr": "/:lang/candidatures/:id/"
-            }
-          },
-          {
             "id": "protected/stub-login",
             "file": "routes/protected/stub-login.tsx",
             "paths": {

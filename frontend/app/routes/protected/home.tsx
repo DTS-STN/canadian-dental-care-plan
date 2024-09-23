@@ -64,11 +64,6 @@ export default function Index() {
             {t('index:view-letters-desc')}
           </CardLink>
         )}
-        {useFeature('view-applications') && (
-          <CardLink title={t('index:view-my-application')} routeId="protected/applications/index" params={params}>
-            {t('index:view-my-application-desc')}
-          </CardLink>
-        )}
         {useFeature('doc-upload') && (
           <CardLink title={t('index:upload')} routeId="protected/home" params={params}>
             {t('index:upload-desc')}
