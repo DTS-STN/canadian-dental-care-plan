@@ -1,6 +1,6 @@
 import { getEnv } from './env-utils.server';
-import type { ClientFriendlyStatusDto, CountryDto, FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredCommunicationMethodDto, PreferredLanguageDto } from '~/.server/domain/dtos';
-import type { ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
+import type { ClientFriendlyStatusDto, CountryDto, FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredCommunicationMethodDto, PreferredLanguageDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
+import type { Region } from '~/services/lookup-service.server';
 
 /**
  * Localizes a single country object by adding a localized name.
@@ -180,14 +180,14 @@ export function localizeAndSortFederalSocialPrograms(programs: FederalGovernment
 }
 
 /**
- * Localizes a single provincial/territorial social program object by adding a localized name.
+ * Localizes a single provincial government insurance plan object by adding a localized name.
  *
- * @param program - The provincial/territorial social program object to localize.
+ * @param provincialGovernmentInsurancePlans - The provincial government insurance plan object to localize.
  * @param locale - The locale code for localization.
- * @returns The localized provincial/territorial social program object with a localized name.
+ * @returns The localized provincial government insurance plan object with a localized name.
  */
-export function localizeProvincialTerritorialSocialProgram(program: ProvincialTerritorialSocialProgram, locale: string) {
-  const { nameEn, nameFr, ...rest } = program;
+export function localizeProvincialGovernmentInsurancePlan(provincialGovernmentInsurancePlans: ProvincialGovernmentInsurancePlanDto, locale: string) {
+  const { nameEn, nameFr, ...rest } = provincialGovernmentInsurancePlans;
   return {
     ...rest,
     name: locale === 'fr' ? nameFr : nameEn,
@@ -195,15 +195,15 @@ export function localizeProvincialTerritorialSocialProgram(program: ProvincialTe
 }
 
 /**
- * Localizes an array of provincial/territorial social program objects by adding localized names and sorting them.
+ * Localizes an array of provincial government insurance plan objects by adding localized names and sorting them.
  *
- * @param program - The array of provincial/territorial social program objects to localize.
+ * @param provincialGovernmentInsurancePlans - The array of provincial government insurance plan objects to localize.
  * @param locale - The locale code for localization.
- * @returns The localized and sorted array of provincial/territorial social program objects.
+ * @returns The localized and sorted array of provincial government insurance plan objects.
  */
-export function localizeAndSortProvincialTerritorialSocialPrograms(programs: ProvincialTerritorialSocialProgram[], locale: string) {
-  const mappedProvincialTerritorialSocialPrograms = programs.map((program) => localizeProvincialTerritorialSocialProgram(program, locale));
-  return mappedProvincialTerritorialSocialPrograms.toSorted((a, b) => a.name.localeCompare(b.name, locale));
+export function localizeAndSortProvincialGovernmentInsurancePlans(provincialGovernmentInsurancePlans: ProvincialGovernmentInsurancePlanDto[], locale: string) {
+  const mappedProvincialGovernmentInsurancePlans = provincialGovernmentInsurancePlans.map((provincialGovernmentInsurancePlan) => localizeProvincialGovernmentInsurancePlan(provincialGovernmentInsurancePlan, locale));
+  return mappedProvincialGovernmentInsurancePlans.toSorted((a, b) => a.name.localeCompare(b.name, locale));
 }
 
 /**

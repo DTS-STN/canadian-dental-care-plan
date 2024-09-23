@@ -19,10 +19,10 @@ import { clearApplyState, getChildrenState } from '~/route-helpers/apply-route-h
 import { getLookupService } from '~/services/lookup-service.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialGovernmentInsurancePlan, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -61,11 +61,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const lookupService = getLookupService();
   const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : undefined;
-  const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
-  const selectedProvincialBenefits = allProvincialTerritorialSocialPrograms
-    .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
-    .map((obj) => getNameByLanguage(locale, obj))
-    .join(', ');
+  const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().findById(state.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
 
   // Getting province by Id
   const allRegions = localizeRegions(lookupService.getAllRegions(), locale);
@@ -132,7 +128,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const dentalInsurance = {
     acessToDentalInsurance: state.dentalInsurance,
     selectedFederalBenefit: selectedFederalBenefit && localizeFederalSocialProgram(selectedFederalBenefit, locale).name,
-    selectedProvincialBenefits,
+    selectedProvincialBenefits: selectedProvincialBenefits && localizeProvincialGovernmentInsurancePlan(selectedProvincialBenefits, locale).name,
   };
 
   const children = getChildrenState(state).map((child) => {
@@ -144,6 +140,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     }
 
     const federalBenefit = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
+    const provincialTerritorialSocialProgram = child.dentalBenefits.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().findById(child.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
 
     return {
       id: child.id,
@@ -161,10 +158,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,
           province: child.dentalBenefits.province,
-          benefit: allProvincialTerritorialSocialPrograms
-            .filter((obj) => obj.id === child.dentalBenefits?.provincialTerritorialSocialProgram)
-            .map((obj) => getNameByLanguage(locale, obj))
-            .join(', '),
+          benefit: provincialTerritorialSocialProgram && localizeProvincialGovernmentInsurancePlan(provincialTerritorialSocialProgram, locale).name,
         },
       },
     };

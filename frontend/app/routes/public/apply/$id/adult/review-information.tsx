@@ -32,7 +32,7 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialGovernmentInsurancePlan, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -129,10 +129,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   };
 
   const dentalInsurance = state.dentalInsurance;
-
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : undefined;
-  const selectedProvincialBenefit =
-    state.dentalBenefits.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(state.dentalBenefits.provincialTerritorialSocialProgram), locale);
+  const selectedProvincialBenefit = state.dentalBenefits.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().findById(state.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
 
   const dentalBenefit = {
     federalBenefit: {
@@ -142,7 +140,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     provTerrBenefit: {
       access: state.dentalBenefits.hasProvincialTerritorialBenefits,
       province: state.dentalBenefits.province,
-      benefit: selectedProvincialBenefit && selectedProvincialBenefit.name,
+      benefit: selectedProvincialBenefit && localizeProvincialGovernmentInsurancePlan(selectedProvincialBenefit, locale).name,
     },
   };
 
@@ -177,7 +175,10 @@ export async function action({ context: { serviceProvider, session }, params, re
   const state = loadApplyAdultStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = getEnv();
-  const benefitApplicationService = getBenefitApplicationService({ federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService() });
+  const benefitApplicationService = getBenefitApplicationService({
+    federalGovernmentInsurancePlanService: serviceProvider.getFederalGovernmentInsurancePlanService(),
+    provincialGovernmentInsurancePlanService: serviceProvider.getProvincialGovernmentInsurancePlanService(),
+  });
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();
