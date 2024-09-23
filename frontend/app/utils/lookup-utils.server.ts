@@ -1,5 +1,5 @@
 import { getEnv } from './env-utils.server';
-import type { ClientFriendlyStatusDto, CountryDto, FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredLanguageDto } from '~/.server/domain/dtos';
+import type { ClientFriendlyStatusDto, CountryDto, FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredCommunicationMethodDto, PreferredLanguageDto } from '~/.server/domain/dtos';
 import type { ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
 
 /**
@@ -204,6 +204,33 @@ export function localizeProvincialTerritorialSocialProgram(program: ProvincialTe
 export function localizeAndSortProvincialTerritorialSocialPrograms(programs: ProvincialTerritorialSocialProgram[], locale: string) {
   const mappedProvincialTerritorialSocialPrograms = programs.map((program) => localizeProvincialTerritorialSocialProgram(program, locale));
   return mappedProvincialTerritorialSocialPrograms.toSorted((a, b) => a.name.localeCompare(b.name, locale));
+}
+
+/**
+ * Localizes a single preferred communication method object by adding a localized name.
+ *
+ * @param program - The preferred communication method object to localize.
+ * @param locale - The locale code for localization.
+ * @returns The localized federal preferred communication method object with a localized name.
+ */
+export function localizePreferredCommunicationMethod(preferredCommunicationMethod: PreferredCommunicationMethodDto, locale: string) {
+  const { nameEn, nameFr, ...rest } = preferredCommunicationMethod;
+  return {
+    ...rest,
+    name: locale === 'fr' ? nameFr : nameEn,
+  };
+}
+
+/**
+ * Localizes an array of preferred communication method objects by adding localized names and sorting them.
+ *
+ * @param preferredCommunicationMethods - The array of preferred communication method objects to localize.
+ * @param locale - The locale code for localization.
+ * @returns The localized and sorted array of preferred communication method objects.
+ */
+export function localizeAndSortPreferredCommunicationMethods(preferredCommunicationMethods: PreferredCommunicationMethodDto[], locale: string) {
+  const mappedPreferredCommunicationMethods = preferredCommunicationMethods.map((preferredCommunicationMethod) => localizeFederalSocialProgram(preferredCommunicationMethod, locale));
+  return mappedPreferredCommunicationMethods.toSorted((a, b) => a.name.localeCompare(b.name, locale));
 }
 
 export function localizeClientFriendlyStatus(clientFriendlyStatus: ClientFriendlyStatusDto, locale: string) {

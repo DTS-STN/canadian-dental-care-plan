@@ -21,12 +21,11 @@ import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import type { CommunicationPreferencesState } from '~/route-helpers/apply-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env-utils.server';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortPreferredLanguages } from '~/utils/lookup-utils.server';
+import { localizeAndSortPreferredCommunicationMethods, localizeAndSortPreferredLanguages } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -46,13 +45,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const { COMMUNICATION_METHOD_EMAIL_ID, ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = getEnv();
 
-  const lookupService = getLookupService();
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const preferredLanguages = serviceProvider.getPreferredLanguageService().findAll();
-  const localizedAndSortedPreferredLanguages = localizeAndSortPreferredLanguages(preferredLanguages, locale, locale === 'en' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE);
-  const preferredCommunicationMethods = lookupService.getAllPreferredCommunicationMethods();
+  const preferredLanguages = localizeAndSortPreferredLanguages(serviceProvider.getPreferredLanguageService().findAll(), locale, locale === 'en' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE);
+  const preferredCommunicationMethods = localizeAndSortPreferredCommunicationMethods(serviceProvider.getPreferredCommunicationMethodService().findAll(), locale);
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
   if (!communicationMethodEmail) {
@@ -68,7 +65,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     csrfToken,
     meta,
     preferredCommunicationMethods,
-    preferredLanguages: localizedAndSortedPreferredLanguages,
+    preferredLanguages,
     defaultState: {
       ...(state.communicationPreferences ?? {}),
       email: state.communicationPreferences?.email ?? state.contactInformation?.email,
@@ -146,7 +143,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowCommunicationPreferencePage() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode, isReadOnlyEmail } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -168,7 +165,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
   const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
     .filter((method) => method.id !== communicationMethodEmail.id)
     .map((method) => ({
-      children: i18n.language === 'fr' ? method.nameFr : method.nameEn,
+      children: method.name,
       value: method.id,
       defaultChecked: defaultState.preferredMethod === method.id,
       onChange: handleOnPreferredMethodChecked,
@@ -176,7 +173,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
 
   const options: InputRadiosProps['options'] = [
     {
-      children: getNameByLanguage(i18n.language, communicationMethodEmail),
+      children: communicationMethodEmail.name,
       value: communicationMethodEmail.id,
       defaultChecked: defaultState.preferredMethod === communicationMethodEmail.id,
       append: preferredMethodValue === communicationMethodEmail.id && (

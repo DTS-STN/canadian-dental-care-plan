@@ -29,10 +29,10 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeMaritalStatus, localizePreferredLanguage, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -78,8 +78,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   invariant(countryHome, `Unexpected home address country: ${state.contactInformation.homeCountry}`);
 
   // Getting CommunicationPreference by Id
-  const communicationPreferences = lookupService.getAllPreferredCommunicationMethods();
-  const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
+  const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().findById(state.communicationPreferences.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
   const maritalStatus = serviceProvider.getMaritalStatusService().findById(state.applicantInformation.maritalStatus);
@@ -98,7 +97,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     maritalStatus: localizeMaritalStatus(maritalStatus, locale).name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
-    communicationPreference: getNameByLanguage(locale, communicationPreference),
+    communicationPreference: localizePreferredCommunicationMethod(communicationPreference, locale).name,
   };
 
   const spouseInfo = state.partnerInformation

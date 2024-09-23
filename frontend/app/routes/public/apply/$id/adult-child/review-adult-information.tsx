@@ -25,10 +25,10 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -75,9 +75,11 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   invariant(countryHome, `Unexpected home address country: ${state.contactInformation.homeCountry}`);
 
   // Getting CommunicationPreference by Id
-  const communicationPreferences = lookupService.getAllPreferredCommunicationMethods();
-  const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
+  const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().findById(state.communicationPreferences.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
+
+  const preferredLanguage = serviceProvider.getPreferredLanguageService().findById(state.communicationPreferences.preferredLanguage);
+  invariant(preferredLanguage, `Unexpected preferred language: ${state.communicationPreferences.preferredLanguage}`);
 
   const maritalStatus = serviceProvider.getMaritalStatusService().findById(state.applicantInformation.maritalStatus);
   invariant(maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
@@ -87,14 +89,14 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.contactInformation.phoneNumber,
     altPhoneNumber: state.contactInformation.phoneNumberAlt,
-    preferredLanguage: state.communicationPreferences.preferredLanguage,
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: localizeMaritalStatus(maritalStatus, locale).name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
-    communicationPreference: getNameByLanguage(locale, communicationPreference),
+    communicationPreference: localizePreferredCommunicationMethod(communicationPreference, locale).name,
   };
+
   const spouseInfo = state.partnerInformation
     ? {
         firstName: state.partnerInformation.firstName,
@@ -104,8 +106,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
         consent: state.partnerInformation.confirm,
       }
     : undefined;
-
-  const preferredLanguage = serviceProvider.getPreferredLanguageService().findById(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
     address: state.contactInformation.mailingAddress,
@@ -152,7 +152,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     id: state.id,
     userInfo,
     spouseInfo,
-    preferredLanguage,
+    preferredLanguage: localizePreferredLanguage(preferredLanguage, locale).name,
     homeAddressInfo,
     mailingAddressInfo,
     dentalInsurance,
@@ -204,7 +204,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ReviewInformation() {
   const params = useParams();
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -389,7 +389,7 @@ export default function ReviewInformation() {
               </DescriptionListItem>
               {preferredLanguage && (
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.lang-pref-title')}>
-                  {getNameByLanguage(i18n.language, preferredLanguage)}
+                  {preferredLanguage}
                   <p className="mt-4">
                     <InlineLink id="change-language-preference" routeId="public/apply/$id/adult-child/communication-preference" params={params}>
                       {t('apply-adult-child:review-adult-information.lang-pref-change')}

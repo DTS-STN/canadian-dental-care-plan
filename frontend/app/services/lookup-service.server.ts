@@ -1,7 +1,6 @@
 import moize from 'moize';
 import { z } from 'zod';
 
-import preferredMethodOfCommunicationJson from '~/resources/power-platform/preferred-method-of-communication.json';
 import provincialProgramsJson from '~/resources/power-platform/provincial-programs.json';
 import regionsJson from '~/resources/power-platform/regions.json';
 import { getEnv } from '~/utils/env-utils.server';
@@ -76,8 +75,6 @@ export const getLookupService = moize(createLookupService, { onCacheAdd: () => l
 
 function createLookupService() {
   const {
-    ENGLISH_LANGUAGE_CODE,
-    FRENCH_LANGUAGE_CODE,
     INTEROP_API_BASE_URI,
     LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS,
@@ -88,7 +85,6 @@ function createLookupService() {
     LOOKUP_SVC_ALL_INDIGENOUS_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_LAST_TIME_DENTIST_VISIT_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
@@ -306,19 +302,6 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  function getAllPreferredCommunicationMethods() {
-    log.debug('Fetching all preferred communication methods');
-
-    const preferredCommunicationMethods = preferredMethodOfCommunicationJson.value[0].OptionSet.Options.map((o) => ({
-      id: o.Value.toString(),
-      nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
-      nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
-    }));
-
-    log.trace('Returning preferred communication methods: [%j]', preferredCommunicationMethods);
-    return preferredCommunicationMethods;
-  }
-
   function getAllProvincialTerritorialSocialPrograms() {
     log.debug('Fetching all provincial/territorial social programs');
 
@@ -419,10 +402,6 @@ function createLookupService() {
     getAllMouthPainTypes: moize.promise(getAllMouthPainTypes, {
       maxAge: 1000 * LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllMouthPainTypes memo'),
-    }),
-    getAllPreferredCommunicationMethods: moize(getAllPreferredCommunicationMethods, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS,
-      onCacheAdd: () => log.info('Creating new AllPreferredCommunicationMethods memo'),
     }),
     getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, {
       maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,

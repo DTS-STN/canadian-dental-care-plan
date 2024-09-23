@@ -16,9 +16,9 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { extractDateParts, parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env-utils.server';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
-import { localizeCountries, localizeFederalSocialProgram, localizeMaritalStatus, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -67,20 +67,14 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const mailingProvince = allRegions.find((region) => region.provinceTerritoryStateId === applicationDetails.personalInformation?.mailingProvince);
   const homeProvince = allRegions.find((region) => region.provinceTerritoryStateId === applicationDetails.personalInformation?.homeProvince);
 
-  const allCountries = localizeCountries(serviceProvider.getCountryService().findAll(), locale);
-  const mailingCountry = allCountries.find((country) => country.id === applicationDetails.personalInformation?.mailingCountry);
-  const homeCountry = allCountries.find((country) => country.id === applicationDetails.personalInformation?.homeCountry);
-
+  const mailingCountry = applicationDetails.personalInformation?.mailingCountry ? serviceProvider.getCountryService().findById(applicationDetails.personalInformation.mailingCountry) : undefined;
+  const homeCountry = applicationDetails.personalInformation?.homeCountry ? serviceProvider.getCountryService().findById(applicationDetails.personalInformation.homeCountry) : undefined;
   const preferredLang = applicationDetails.communicationPreferences?.preferredLanguage ? serviceProvider.getPreferredLanguageService().findById(applicationDetails.communicationPreferences.preferredLanguage) : undefined;
-  const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : '';
-
-  const allCommunicationPreferences = lookupService.getAllPreferredCommunicationMethods();
-  const communicationPreference = allCommunicationPreferences.find((communicationType) => communicationType.id === applicationDetails.communicationPreferences?.preferredMethod);
-  const communicationPreferenceLang = communicationPreference ? getNameByLanguage(locale, communicationPreference) : '';
-
+  const communicationPreference = applicationDetails.communicationPreferences?.preferredMethod ? serviceProvider.getPreferredCommunicationMethodService().findById(applicationDetails.communicationPreferences.preferredMethod) : undefined;
   const applicantFederalSocialProgram = applicationDetails.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(applicationDetails.dentalBenefits.federalSocialProgram) : undefined;
-  const applicantProvincialTerritorialSocialProgram =
-    applicationDetails.dentalBenefits?.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(applicationDetails.dentalBenefits.provincialTerritorialSocialProgram), locale);
+  const applicantProvincialTerritorialSocialProgram = applicationDetails.dentalBenefits?.provincialTerritorialSocialProgram
+    ? lookupService.getProvincialTerritorialSocialProgramById(applicationDetails.dentalBenefits.provincialTerritorialSocialProgram)
+    : undefined;
 
   const dentalBenefit = {
     federalBenefit: {
@@ -90,7 +84,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     provTerrBenefit: {
       access: applicationDetails.dentalBenefits?.hasProvincialTerritorialBenefits,
       province: applicationDetails.dentalBenefits?.province,
-      benefit: applicantProvincialTerritorialSocialProgram && applicantProvincialTerritorialSocialProgram.name,
+      benefit: applicantProvincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(applicantProvincialTerritorialSocialProgram, locale).name,
     },
   };
 
@@ -135,10 +129,10 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     maritalStatus: maritalStatus && localizeMaritalStatus(maritalStatus, locale),
     mailingProvince,
     homeProvince,
-    mailingCountry,
-    homeCountry,
-    communicationPreferenceLang,
-    preferredLanguage,
+    mailingCountry: mailingCountry && localizeCountry(mailingCountry, locale).name,
+    homeCountry: homeCountry && localizeCountry(homeCountry, locale).name,
+    communicationPreferenceLang: communicationPreference && localizePreferredCommunicationMethod(communicationPreference, locale).name,
+    preferredLanguage: preferredLang && localizePreferredLanguage(preferredLang, locale).name,
     year,
     meta,
     children,
@@ -249,7 +243,7 @@ export default function ViewApplication() {
                     city={applicationDetails.personalInformation?.mailingCity ?? ''}
                     provinceState={mailingProvince?.name}
                     postalZipCode={applicationDetails.personalInformation?.mailingPostalCode}
-                    country={mailingCountry?.name ?? ''}
+                    country={mailingCountry ?? ''}
                     apartment={applicationDetails.personalInformation?.mailingApartment}
                     altFormat={true}
                   />
@@ -260,7 +254,7 @@ export default function ViewApplication() {
                     city={applicationDetails.personalInformation?.homeCity ?? ''}
                     provinceState={homeProvince?.name}
                     postalZipCode={applicationDetails.personalInformation?.homePostalCode ?? ''}
-                    country={homeCountry?.name ?? ''}
+                    country={homeCountry ?? ''}
                     apartment={applicationDetails.personalInformation?.homeApartment}
                     altFormat={true}
                   />
