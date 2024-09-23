@@ -12,7 +12,6 @@ const validFeatureNames = [
   'status',
   'show-prototype-banner',
   'authenticated-status-check',
-  'update-governmental-benefit',
   'dependent-status-checker',
   'view-payload',
   'status-checker-redirects',

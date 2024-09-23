@@ -1,11 +1,5 @@
 {
   "protected": {
-    "accessToGovermentalBenefits": {
-      "confirm": "To be determined",
-      "edit": "To be determined",
-      "index": "To be determined",
-      "view": "To be determined"
-    },
     "home": "CDCP-PROT-0001",
     "personalInformation": {
       "index": "CDCP-PROT-0002",
