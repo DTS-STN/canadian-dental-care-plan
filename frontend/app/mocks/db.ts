@@ -38,19 +38,6 @@ const db = factory({
     privateDentalPlanId: String,
     sinIdentification: primaryKey(String),
   },
-  subscription: {
-    id: primaryKey(faker.string.uuid),
-    userId: String,
-    msLanguageCode: String,
-    alertTypeCode: String,
-  },
-  subscriptionConfirmationCode: {
-    id: primaryKey(faker.string.uuid),
-    userId: String,
-    code: String,
-    createdDate: () => faker.date.future({ years: 1 }),
-    expiryDate: () => faker.date.future({ years: 1 }),
-  },
   user: {
     id: primaryKey(faker.string.uuid),
     email: faker.internet.email,
@@ -124,78 +111,6 @@ db.personalInformation.create({
   provincialTerritorialDentalPlanId: '39449f70-37b3-eb11-8236-0022486d8d5f',
   privateDentalPlanId: '1111111',
   sinIdentification: '800000002',
-});
-
-const unverifiedUserAttributes = [
-  db.userAttributes.create({
-    name: 'RAOIDC_USER_ID',
-    value: '1f9009b16b880729c91ac7f291a0bd9b',
-  }),
-];
-
-const unverifiedUser = db.user.create({
-  id: '86a1ba9b-0146-493e-b226-933571d371d5',
-  email: 'unverified@example.com',
-  emailVerified: false,
-  userAttributes: unverifiedUserAttributes,
-});
-
-db.subscription.create({
-  id: '10001',
-  userId: unverifiedUser.id,
-  msLanguageCode: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
-  alertTypeCode: 'CDCP',
-});
-
-const verifiedUserAttributes = [
-  db.userAttributes.create({
-    name: 'RAOIDC_USER_ID',
-    value: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
-  }),
-];
-
-const verifiedUser = db.user.create({
-  id: 'f9f33652-0ebd-46bc-8d93-04cef538a689',
-  email: 'verified@example.com',
-  emailVerified: true,
-  userAttributes: verifiedUserAttributes,
-});
-
-db.subscription.create({
-  id: '10003',
-  userId: verifiedUser.id,
-  msLanguageCode: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
-  alertTypeCode: 'CDCP',
-});
-
-db.subscriptionConfirmationCode.create({
-  id: '0000001',
-  userId: unverifiedUser.id,
-  code: '0001',
-  createdDate: new Date(new Date().getTime() - 12 * 24 * 60 * 60 * 1000), // current date  date - 12 days
-  expiryDate: new Date(new Date().getTime() - 10 * 24 * 60 * 60 * 1000), // current date  date - 10 days
-});
-db.subscriptionConfirmationCode.create({
-  id: '0000002',
-  userId: unverifiedUser.id,
-  code: '1234',
-  createdDate: new Date(new Date().getTime() - 4 * 24 * 60 * 60 * 1000),
-  expiryDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // current date date + 2 days
-});
-db.subscriptionConfirmationCode.create({
-  id: '0000003',
-  userId: unverifiedUser.id,
-  code: '1001',
-  createdDate: new Date(new Date().getTime() - 8 * 24 * 60 * 60 * 1000), // current date date - 8 days
-  expiryDate: new Date(new Date().getTime() - 6 * 24 * 60 * 60 * 1000), // current date date - 6 days
-});
-
-db.subscriptionConfirmationCode.create({
-  id: '0000007',
-  userId: verifiedUser.id,
-  code: '2002',
-  createdDate: new Date(new Date().getTime() - 4 * 24 * 60 * 60 * 1000), // current date date - 4 days
-  expiryDate: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000), // current date date - 2 days
 });
 
 export { db };

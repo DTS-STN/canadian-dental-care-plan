@@ -10,7 +10,6 @@ import { Button } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputPatternField } from '~/components/input-pattern-field';
-import { getSubscriptionService } from '~/services/subscription-service.server';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -115,10 +114,6 @@ export async function action({ context: { session }, params, request }: ActionFu
     session.set('userInfoToken', userInfoToken);
   }
   session.set('idToken', idToken);
-
-  const subscriptionService = getSubscriptionService();
-  const user = await subscriptionService.getUserByRaoidcUserId(session.get('userInfoToken').sub);
-  session.set('userId', user?.id);
 
   return redirect(getPathById('protected/home', params));
 }

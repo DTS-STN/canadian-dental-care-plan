@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 const validFeatureNames = [
   'doc-upload',
-  'email-alerts',
   'hcaptcha',
   'view-personal-info',
   'view-applications',

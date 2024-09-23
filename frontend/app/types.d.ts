@@ -1,6 +1,5 @@
 import type { Session } from '@remix-run/node';
 
-import type alerts from '../public/locales/en/alerts.json';
 import type applications from '../public/locales/en/applications.json';
 import type applyAdultChild from '../public/locales/en/apply-adult-child.json';
 import type applyAdult from '../public/locales/en/apply-adult.json';
@@ -70,7 +69,6 @@ declare module 'i18next' {
       index: typeof index;
       letters: typeof letters;
       'personal-information': typeof personalInformation;
-      alerts: typeof alerts;
       applications: typeof applications;
       status: typeof status;
       'dependent-status-checker': typeof statusCheck;
