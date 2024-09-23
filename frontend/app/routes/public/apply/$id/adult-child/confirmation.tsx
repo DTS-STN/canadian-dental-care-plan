@@ -22,7 +22,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountry, localizeMaritalStatus, localizePreferredLanguage, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -85,8 +85,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const maritalStatus = serviceProvider.getMaritalStatusService().findById(state.applicantInformation.maritalStatus);
   invariant(maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
 
-  const communicationPreferences = lookupService.getAllPreferredCommunicationMethods();
-  const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
+  const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().findById(state.communicationPreferences.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
   const userInfo = {
@@ -100,7 +99,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     martialStatus: localizeMaritalStatus(maritalStatus, locale).name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
-    communicationPreference: getNameByLanguage(locale, communicationPreference),
+    communicationPreference: localizePreferredCommunicationMethod(communicationPreference, locale).name,
   };
 
   const spouseInfo = state.partnerInformation
@@ -132,7 +131,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const dentalInsurance = {
     acessToDentalInsurance: state.dentalInsurance,
-    selectedFederalBenefit: selectedFederalBenefit && getNameByLanguage(locale, selectedFederalBenefit),
+    selectedFederalBenefit: selectedFederalBenefit && localizeFederalSocialProgram(selectedFederalBenefit, locale).name,
     selectedProvincialBenefits,
   };
 
@@ -157,7 +156,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
           access: child.dentalBenefits.hasFederalBenefits,
-          benefit: federalBenefit && getNameByLanguage(locale, federalBenefit),
+          benefit: federalBenefit && localizeFederalSocialProgram(federalBenefit, locale).name,
         },
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,

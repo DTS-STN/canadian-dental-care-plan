@@ -17,23 +17,6 @@ vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   }),
 }));
 
-vi.mock('~/services/lookup-service.server', () => ({
-  getLookupService: vi.fn().mockReturnValue({
-    getAllPreferredCommunicationMethods: vi.fn().mockReturnValue([
-      {
-        id: 'email',
-        nameEn: 'Email',
-        nameFr: 'Adresse courriel',
-      },
-      {
-        id: 'mail',
-        nameEn: 'Mail',
-        nameFr: 'Par la poste',
-      },
-    ]),
-  }),
-}));
-
 vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     COMMUNICATION_METHOD_EMAIL_ID: 'email',
@@ -58,6 +41,13 @@ describe('_public.apply.id.communication-preference', () => {
 
       const mockAppLoadContext = mock<AppLoadContext>({
         serviceProvider: {
+          getPreferredCommunicationMethodService: () => ({
+            findAll: () => [
+              { id: 'email', nameEn: 'Email', nameFr: 'Adresse courriel' },
+              { id: 'mail', nameEn: 'Mail', nameFr: 'Par la poste' },
+            ],
+            findById: vi.fn(),
+          }),
           getPreferredLanguageService: vi.fn().mockReturnValue({
             findAll: vi.fn().mockReturnValue([
               { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
@@ -76,34 +66,16 @@ describe('_public.apply.id.communication-preference', () => {
       const data = await response.json();
 
       expect(data).toMatchObject({
-        communicationMethodEmail: {
-          id: 'email',
-          nameEn: 'Email',
-          nameFr: 'Adresse courriel',
-        },
+        communicationMethodEmail: { id: 'email', name: 'Email' },
         id: '123',
         meta: {},
         preferredCommunicationMethods: [
-          {
-            id: 'email',
-            nameEn: 'Email',
-            nameFr: 'Adresse courriel',
-          },
-          {
-            id: 'mail',
-            nameEn: 'Mail',
-            nameFr: 'Par la poste',
-          },
+          { id: 'email', name: 'Email' },
+          { id: 'mail', name: 'Mail' },
         ],
         preferredLanguages: [
-          {
-            id: 'fr',
-            name: 'French',
-          },
-          {
-            id: 'en',
-            name: 'English',
-          },
+          { id: 'fr', name: 'French' },
+          { id: 'en', name: 'English' },
         ],
       });
 
