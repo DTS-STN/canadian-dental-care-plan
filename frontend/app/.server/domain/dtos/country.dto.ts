@@ -3,3 +3,8 @@ export interface CountryDto {
   nameEn: string;
   nameFr: string;
 }
+
+export interface CountryLocalizedDto extends OmitStrict<CountryDto, 'nameEn' | 'nameFr'> {
+  id: string;
+  name: string;
+}
