@@ -1,9 +1,9 @@
-export * from './client-application.dto';
-export * from './client-friendly-status.dto';
-export * from './country.dto';
-export * from './federal-government-insurance-plan.dto';
-export * from './marital-status.dto';
-export * from './preferred-communication-method.dto';
-export * from './preferred-language.dto';
-export * from './province-territory-state.dto';
-export * from './provincial-government-insurance-plan.dto';
+export type * from './client-application.dto';
+export type * from './client-friendly-status.dto';
+export type * from './country.dto';
+export type * from './federal-government-insurance-plan.dto';
+export type * from './marital-status.dto';
+export type * from './preferred-communication-method.dto';
+export type * from './preferred-language.dto';
+export type * from './province-territory-state.dto';
+export type * from './provincial-government-insurance-plan.dto';
