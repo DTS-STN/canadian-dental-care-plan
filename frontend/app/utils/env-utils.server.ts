@@ -21,7 +21,7 @@ function tryOrElseFalse(fn: () => unknown) {
   catch { return false; }
 }
 
-const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'status-check', 'wsaddress', 'user-api', 'client-application'] as const;
+const validMockNames = ['cct', 'power-platform', 'raoidc', 'status-check', 'wsaddress', 'user-api', 'client-application'] as const;
 export type MockName = (typeof validMockNames)[number];
 
 // refiners
@@ -50,9 +50,6 @@ const serverEnv = clientEnvSchema.extend({
   CANADA_COUNTRY_ID: z.string().trim().min(1).default('0cf5389e-97ae-eb11-8236-000d3af4bfc3'),
   USA_COUNTRY_ID: z.string().trim().min(1).default('fcf7389e-97ae-eb11-8236-000d3af4bfc3'),
   COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('775170000'),
-  FIRST_NATIONS_YES_TYPE_ID: z.string().trim().min(1).default('first-nations-yes'),
-  OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
-  OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
   CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1).default('51af5170-614e-ee11-be6f-000d3a09d640'),
   INVALID_CLIENT_FRIENDLY_STATUS: z.string().trim().min(1).default('504fba6e-604e-ee11-be6f-000d3a09d640'),
 
