@@ -145,5 +145,8 @@
       "@trivago/prettier-plugin-sort-imports",
       "prettier-plugin-tailwindcss"
     ]
+  },
+  "overrides": {
+    "esbuild": "0.21.5"
   }
 }
