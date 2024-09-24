@@ -59,7 +59,6 @@
     "moize": "^6.1.6",
     "morgan": "^1.10.0",
     "msw": "^2.4.9",
-    "oauth4webapi": "^2.17.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.0.2",
