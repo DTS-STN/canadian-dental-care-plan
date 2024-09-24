@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { CountryDto } from '~/.server/domain/dtos';
+import type { CountryDto, CountryLocalizedDto } from '~/.server/domain/dtos';
 import { CountryNotFoundException } from '~/.server/domain/exceptions/CountryNotFoundException';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories';
@@ -105,6 +105,82 @@ describe('CountryServiceImpl', () => {
       expect(() => service.getCountryById(id)).toThrow(CountryNotFoundException);
       expect(mockCountryRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('listLocalizedCountries', () => {
+    it('fetches all localized countries', () => {
+      const mockCountryRepository = mock<CountryRepository>();
+      mockCountryRepository.findAll.mockReturnValueOnce([
+        {
+          esdc_countryid: '1',
+          esdc_nameenglish: 'Canada English',
+          esdc_namefrench: 'Canada Français',
+          esdc_countrycodealpha3: 'CAN',
+        },
+        {
+          esdc_countryid: '2',
+          esdc_nameenglish: 'United States English',
+          esdc_namefrench: 'États-Unis Français',
+          esdc_countrycodealpha3: 'USA',
+        },
+      ]);
+
+      const mockDtos: CountryLocalizedDto[] = [
+        { id: '1', name: 'Canada English' },
+        { id: '2', name: 'United States English' },
+      ];
+
+      const mockCountryDtoMapper = mock<CountryDtoMapper>();
+      mockCountryDtoMapper.mapCountryDtosToCountryLocalizedDtos.mockReturnValueOnce(mockDtos);
+
+      const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
+
+      const dtos = service.listLocalizedCountries('en');
+
+      expect(dtos).toEqual(mockDtos);
+      expect(mockCountryRepository.findAll).toHaveBeenCalledTimes(1);
+      expect(mockCountryDtoMapper.mapCountryDtosToCountryLocalizedDtos).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getLocalizedCountryById', () => {
+    it('fetches localized country by id', () => {
+      const id = '1';
+      const mockCountryRepository = mock<CountryRepository>();
+      mockCountryRepository.findById.mockReturnValueOnce({
+        esdc_countryid: '1',
+        esdc_nameenglish: 'Canada English',
+        esdc_namefrench: 'Canada Français',
+        esdc_countrycodealpha3: 'CAN',
+      });
+
+      const mockDto: CountryLocalizedDto = { id: '1', name: 'Canada English' };
+
+      const mockCountryDtoMapper = mock<CountryDtoMapper>();
+      mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto.mockReturnValueOnce(mockDto);
+
+      const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
+
+      const dto = service.getLocalizedCountryById(id, 'en');
+
+      expect(dto).toEqual(mockDto);
+      expect(mockCountryRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).toHaveBeenCalledTimes(1);
+    });
+
+    it('fetches localized country by id throws not found exception', () => {
+      const id = '1033';
+      const mockCountryRepository = mock<CountryRepository>();
+      mockCountryRepository.findById.mockReturnValueOnce(null);
+
+      const mockCountryDtoMapper = mock<CountryDtoMapper>();
+
+      const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
+
+      expect(() => service.getCountryById(id)).toThrow(CountryNotFoundException);
+      expect(mockCountryRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).not.toHaveBeenCalled();
     });
   });
 });
