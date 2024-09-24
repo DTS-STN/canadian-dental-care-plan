@@ -37,7 +37,6 @@ export default defineConfig({
       INTEROP_API_BASE_URI: 'https://api.example.com',
       INTEROP_API_SUBSCRIPTION_KEY: '00000000000000000000000000000000',
       MOCK_AUTH_ALLOWED_REDIRECTS: 'http://localhost:3000/auth/callback/raoidc',
-      CDCP_API_BASE_URI : 'https://api.cdcp.example.com',
       PORT: port,
     },
   },
