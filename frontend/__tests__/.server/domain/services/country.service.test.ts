@@ -3,6 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { CountryDto } from '~/.server/domain/dtos';
+import { CountryNotFoundException } from '~/.server/domain/exceptions/CountryNotFoundException';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories';
 import { CountryServiceImpl } from '~/.server/domain/services';
@@ -26,12 +27,12 @@ describe('CountryServiceImpl', () => {
 
       const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig); // Act and Assert
 
-      expect(service.findAll.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.findById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.listCountries.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect(service.getCountryById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
-  describe('findAll', () => {
+  describe('listCountries', () => {
     it('fetches all countries', () => {
       const mockCountryRepository = mock<CountryRepository>();
       mockCountryRepository.findAll.mockReturnValueOnce([
@@ -59,7 +60,7 @@ describe('CountryServiceImpl', () => {
 
       const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      const dtos = service.findAll();
+      const dtos = service.listCountries();
 
       expect(dtos).toEqual(mockDtos);
       expect(mockCountryRepository.findAll).toHaveBeenCalledTimes(1);
@@ -67,7 +68,7 @@ describe('CountryServiceImpl', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('getCountry', () => {
     it('fetches country by id', () => {
       const id = '1';
       const mockCountryRepository = mock<CountryRepository>();
@@ -85,14 +86,14 @@ describe('CountryServiceImpl', () => {
 
       const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      const dto = service.findById(id);
+      const dto = service.getCountryById(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockCountryRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).toHaveBeenCalledTimes(1);
     });
 
-    it('fetches country by id returns null if not found', () => {
+    it('fetches country by id throws not found exception', () => {
       const id = '1033';
       const mockCountryRepository = mock<CountryRepository>();
       mockCountryRepository.findById.mockReturnValueOnce(null);
@@ -101,9 +102,7 @@ describe('CountryServiceImpl', () => {
 
       const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      const dto = service.findById(id);
-
-      expect(dto).toEqual(null);
+      expect(() => service.getCountryById(id)).toThrow(CountryNotFoundException);
       expect(mockCountryRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).not.toHaveBeenCalled();
     });

@@ -65,11 +65,10 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().findById(state.contactInformation.homeProvince)?.abbr : undefined;
 
   // Getting Country by Id
-  const countryMailing = serviceProvider.getCountryService().findById(state.contactInformation.mailingCountry);
-  invariant(countryMailing, `Unexpected mailing country: ${state.contactInformation.mailingCountry}`);
+  const countryMailing = serviceProvider.getCountryService().getCountryById(state.contactInformation.mailingCountry);
 
-  const countryHome = state.contactInformation.homeCountry ? serviceProvider.getCountryService().findById(state.contactInformation.homeCountry) : undefined;
-  invariant(countryHome, `Unexpected home country: ${state.contactInformation.homeCountry}`);
+  invariant(state.contactInformation.homeCountry, `Unexpected home country: ${state.contactInformation.homeCountry}`);
+  const countryHome = serviceProvider.getCountryService().getCountryById(state.contactInformation.homeCountry);
 
   const preferredLanguage = serviceProvider.getPreferredLanguageService().findById(state.communicationPreferences.preferredLanguage);
   invariant(preferredLanguage, `Unexpected preferred language: ${state.communicationPreferences.preferredLanguage}`);
