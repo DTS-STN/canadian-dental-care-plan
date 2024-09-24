@@ -1,17 +1,6 @@
 {
   "protected": {
     "home": "CDCP-PROT-0001",
-    "personalInformation": {
-      "index": "CDCP-PROT-0002",
-      "homeAddressEdit": "CDCP-PROT-0003",
-      "homeAddressConfirm": "CDCP-PROT-0004",
-      "mailingAddressEdit": "CDCP-PROT-0007",
-      "preferredLanguageEdit": "CDCP-PROT-00011",
-      "preferredLanguageConfirm": "CDCP-PROT-0012",
-      "telephoneNumberEdit": "CDCP-PROT-0013",
-      "telephoneNumberConfirm": "CDCP-PROT-0014",
-      "emailAddressEdit": "CDCP-PROT-0015"
-    },
     "letters": {
       "index": "CDCP-PROT-0015"
     },

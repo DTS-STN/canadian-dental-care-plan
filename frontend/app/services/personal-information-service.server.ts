@@ -1,9 +1,8 @@
 import moize from 'moize';
 
 import { getAuditService } from './audit-service.server';
-import { toGetApplicantRequest, toPersonalInformation, toUpdateApplicantRequest } from '~/mappers/personal-information-service-mappers.server';
-import type { PersonalInformation } from '~/schemas/personal-informaton-service-schemas.server';
-import { getApplicantResponseSchema, updateApplicantRequestSchema } from '~/schemas/personal-informaton-service-schemas.server';
+import { toGetApplicantRequest, toPersonalInformation } from '~/mappers/personal-information-service-mappers.server';
+import { getApplicantResponseSchema } from '~/schemas/personal-informaton-service-schemas.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -67,41 +66,5 @@ function createPersonalInformationService() {
     throw new Error(`Failed to 'POST' for applicant. Status:  ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  async function updatePersonalInformation(sin: string, newPersonalInformation: PersonalInformation) {
-    log.debug('Updating personal information for with new information [%j]', newPersonalInformation);
-    log.trace('Updating personal information for sin [%s] and new information [%j]', sin, newPersonalInformation);
-
-    const updateApplicantRequest = toUpdateApplicantRequest(newPersonalInformation);
-    const parsedUpdateApplicantRequest = await updateApplicantRequestSchema.safeParseAsync(updateApplicantRequest);
-
-    if (!parsedUpdateApplicantRequest.success) {
-      throw new Error(`Invalid persional information update request: ${parsedUpdateApplicantRequest.error}`);
-    }
-
-    // TODO: The Interop API for updating dental applicant information is not yet available.
-    const url = `${INTEROP_APPLICANT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/${sin}`;
-    const response = await instrumentedFetch(fetchFn, 'http.client.interop-api.applicant.puts', url, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': INTEROP_APPLICANT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
-      },
-      body: JSON.stringify(parsedUpdateApplicantRequest.data),
-    });
-
-    if (!response.ok) {
-      log.error('%j', {
-        message: 'Failed to update data',
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-    }
-    log.trace('Updated personal information: [%j]', await response.text());
-  }
-
-  return { getPersonalInformation, updatePersonalInformation };
+  return { getPersonalInformation };
 }

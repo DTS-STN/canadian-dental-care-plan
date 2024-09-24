@@ -48,9 +48,9 @@ describe('useBreadcrumbs()', () => {
 
   it('expect correctly coalesced breadcrumbs from useBreadcrumbs() if the loaders provide data', async () => {
     const breadcrumbs: Breadcrumbs = [
-      { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.personal-information', to: '/personal-information' },
-      { labelI18nKey: 'personal-information:preferred-language.edit.page-title', to: '/personal-information/preferred-language' },
-      { labelI18nKey: 'personal-information:preferred-language.edit.page-title' },
+      { labelI18nKey: 'gcweb:breadcrumbs.canada-ca', to: 'canada.ca' },
+      { labelI18nKey: 'gcweb:breadcrumbs.home', to: '/home' },
+      { labelI18nKey: 'gcweb:breadcrumbs.benefits', to: '/benefits' },
     ];
 
     const RemixStub = createRemixStub([
