@@ -8,7 +8,6 @@ import type dataUnavailable from '../public/locales/en/data-unavailable.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type letters from '../public/locales/en/letters.json';
-import type personalInformation from '../public/locales/en/personal-information.json';
 import type status from '../public/locales/en/status.json';
 import type stubLogin from '../public/locales/en/stub-login.json';
 import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
@@ -66,7 +65,6 @@ declare module 'i18next' {
       gcweb: typeof gcweb;
       index: typeof index;
       letters: typeof letters;
-      'personal-information': typeof personalInformation;
       status: typeof status;
       'stub-login': typeof stubLogin;
       'unable-to-process-request': typeof unableToProcessRequest;

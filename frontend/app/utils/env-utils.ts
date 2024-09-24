@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const validFeatureNames = ['doc-upload', 'hcaptcha', 'view-personal-info', 'view-letters', 'view-messages', 'edit-personal-info', 'status', 'show-prototype-banner', 'view-payload', 'status-checker-redirects', 'stub-login'] as const;
+const validFeatureNames = ['doc-upload', 'hcaptcha', 'view-letters', 'view-messages', 'status', 'show-prototype-banner', 'view-payload', 'status-checker-redirects', 'stub-login'] as const;
 export type FeatureName = (typeof validFeatureNames)[number];
 
 // refiners

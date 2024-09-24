@@ -705,55 +705,6 @@
             }
           },
           {
-            "id": "protected/personal-information/index",
-            "file": "routes/protected/personal-information/index.tsx",
-            "index": true,
-            "paths": {
-              "en": "/:lang/personal-information",
-              "fr": "/:lang/informations-personnelles"
-            }
-          },
-          {
-            "id": "protected/personal-information/home-address/edit",
-            "file": "routes/protected/personal-information/home-address/edit.tsx",
-            "paths": {
-              "en": "/:lang/personal-information/home-address/edit",
-              "fr": "/:lang/informations-personnelles/adresse-domicile/modifier"
-            }
-          },
-          {
-            "id": "protected/personal-information/mailing-address/edit",
-            "file": "routes/protected/personal-information/mailing-address/edit.tsx",
-            "paths": {
-              "en": "/:lang/personal-information/mailing-address/edit",
-              "fr": "/:lang/informations-personnelles/adresse-postale/modifier"
-            }
-          },
-          {
-            "id": "protected/personal-information/phone-number/edit",
-            "file": "routes/protected/personal-information/phone-number/edit.tsx",
-            "paths": {
-              "en": "/:lang/personal-information/phone-number/edit",
-              "fr": "/:lang/informations-personnelles/numero-telephone/modifier"
-            }
-          },
-          {
-            "id": "protected/personal-information/email-address/edit",
-            "file": "routes/protected/personal-information/email-address/edit.tsx",
-            "paths": {
-              "en": "/:lang/personal-information/email-address/edit",
-              "fr": "/:lang/informations-personnelles/adresse-courriel/modifier"
-            }
-          },
-          {
-            "id": "protected/personal-information/preferred-language/edit",
-            "file": "routes/protected/personal-information/preferred-language/edit.tsx",
-            "paths": {
-              "en": "/:lang/personal-information/preferred-language/edit",
-              "fr": "/:lang/informations-personnelles/langue-preferee/modifier"
-            }
-          },
-          {
             "id": "protected/stub-login",
             "file": "routes/protected/stub-login.tsx",
             "paths": {

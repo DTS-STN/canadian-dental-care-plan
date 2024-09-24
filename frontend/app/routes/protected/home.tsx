@@ -54,11 +54,6 @@ export default function Index() {
   return (
     <>
       <div className="grid gap-4">
-        {useFeature('view-personal-info') && (
-          <CardLink title={t('index:personal-info')} routeId="protected/personal-information/index" params={params}>
-            {t('index:personal-info-desc')}
-          </CardLink>
-        )}
         {useFeature('view-letters') && (
           <CardLink title={t('index:view-letters')} routeId="protected/letters/index" params={params}>
             {t('index:view-letters-desc')}
