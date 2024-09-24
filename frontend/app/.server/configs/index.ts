@@ -1,2 +1,2 @@
-export * from './client.config';
-export * from './server.config';
+export type * from './client.config';
+export type * from './server.config';
