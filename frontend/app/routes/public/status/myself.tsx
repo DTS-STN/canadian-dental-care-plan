@@ -16,7 +16,6 @@ import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
-import { useFeature } from '~/root';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
@@ -169,8 +168,6 @@ export default function StatusCheckerMyself() {
     }
   }, [fetcher.data]);
 
-  const statusCheckerRedirectFlag = useFeature('status-checker-redirects');
-
   return (
     <div className="max-w-prose">
       <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
@@ -193,11 +190,9 @@ export default function StatusCheckerMyself() {
           <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          {statusCheckerRedirectFlag && (
-            <ButtonLink id="back-button" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-              {t('status:myself.form.back-btn')}
-            </ButtonLink>
-          )}
+          <ButtonLink id="back-button" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
+            {t('status:myself.form.back-btn')}
+          </ButtonLink>
           <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
             {t('status:myself.form.submit')}
           </LoadingButton>

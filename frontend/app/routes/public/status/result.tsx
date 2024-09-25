@@ -13,7 +13,6 @@ import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
-import { useFeature } from '~/root';
 import { clearStatusState, getStatusStateIdFromUrl, loadStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getContextualAlertType } from '~/utils/application-code-utils.server';
 import { featureEnabled } from '~/utils/env-utils.server';
@@ -102,8 +101,6 @@ export default function StatusCheckerResult() {
   const isSubmitting = fetcher.state !== 'idle';
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const statusCheckerRedirectFlag = useFeature('status-checker-redirects');
-
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
 
@@ -134,13 +131,11 @@ export default function StatusCheckerResult() {
             {t('status:result.check-another')}
           </Button>
         </div>
-        {statusCheckerRedirectFlag && (
-          <div className="mt-6">
-            <Button id="exit-button" name="_action" value={FormAction.Exit} disabled={isSubmitting} className="mt-6">
-              {t('status:result.exit-btn')}
-            </Button>
-          </div>
-        )}
+        <div className="mt-6">
+          <Button id="exit-button" name="_action" value={FormAction.Exit} disabled={isSubmitting} className="mt-6">
+            {t('status:result.exit-btn')}
+          </Button>
+        </div>
       </div>
     </fetcher.Form>
   );

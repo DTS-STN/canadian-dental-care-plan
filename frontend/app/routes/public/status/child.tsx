@@ -20,7 +20,6 @@ import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
-import { useFeature } from '~/root';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
@@ -281,8 +280,6 @@ export default function StatusCheckerChild() {
     setChildHasSinState(e.target.value === ChildHasSin.Yes);
   }
 
-  const statusCheckerRedirectFlag = useFeature('status-checker-redirects');
-
   return (
     <div className="max-w-prose">
       <p className="mb-4 italic">{t('status:child.form.complete-fields')}</p>
@@ -356,11 +353,9 @@ export default function StatusCheckerChild() {
           )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          {statusCheckerRedirectFlag && (
-            <ButtonLink id="back-button" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-              {t('status:child.form.back-btn')}
-            </ButtonLink>
-          )}
+          <ButtonLink id="back-button" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
+            {t('status:child.form.back-btn')}
+          </ButtonLink>
           <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
             {t('status:child.form.submit')}
           </LoadingButton>
