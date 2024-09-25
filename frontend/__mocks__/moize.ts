@@ -6,7 +6,7 @@ import type { AnyFn, Moizeable, Options } from 'moize';
  * @constant DEFAULT_OPTIONS
  * @see https://github.com/planttheidea/moize/blob/master/src/constants.ts
  */
-export const DEFAULT_OPTIONS: Options<AnyFn> = {
+const DEFAULT_OPTIONS: Options<AnyFn> = {
   isDeepEqual: false,
   isPromise: false,
   isReact: false,

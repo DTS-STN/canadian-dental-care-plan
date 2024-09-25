@@ -4,7 +4,7 @@ import moize from 'moize';
 import { CountryNotFoundException } from '../exceptions/CountryNotFoundException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { CountryDto } from '~/.server/domain/dtos';
+import type { CountryDto, CountryLocalizedDto } from '~/.server/domain/dtos';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
@@ -15,17 +15,37 @@ import type { LogFactory, Logger } from '~/.server/factories';
 export interface CountryService {
   /**
    * Retrieves a list of all countries.
+   *
    * @returns An array of Country DTOs.
    */
   listCountries(): CountryDto[];
 
   /**
    * Retrieves a specific country by its ID.
+   *
    * @param id - The ID of the country to retrieve.
    * @returns The Country DTO corresponding to the specified ID.
    * @throws {CountryNotFoundException} If no country is found with the specified ID.
    */
   getCountryById(id: string): CountryDto;
+
+  /**
+   * Retrieves a list of all countries in the specified locale.
+   *
+   * @param locale - The desired locale (e.g., 'en' or 'fr').
+   * @returns An array of Country DTOs in the specified locale.
+   */
+  listLocalizedCountries(locale: AppLocale): CountryLocalizedDto[];
+
+  /**
+   * Retrieves a specific country by its ID in the specified locale.
+   *
+   * @param id - The ID of the country to retrieve.
+   * @param locale - The desired locale (e.g., 'en' or 'fr').
+   * @returns The Country DTO corresponding to the specified ID in the given locale.
+   * @throws {CountryNotFoundException} If no country is found with the specified ID.
+   */
+  getLocalizedCountryById(id: string, locale: AppLocale): CountryLocalizedDto;
 }
 
 @injectable()
@@ -74,4 +94,20 @@ export class CountryServiceImpl implements CountryService {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new findById memo'),
   });
+
+  listLocalizedCountries(locale: AppLocale): CountryLocalizedDto[] {
+    this.log.debug('Get all localized countries with locale: [%s]', locale);
+    const countryDtos = this.listCountries();
+    const localizedCountryDtos = this.countryDtoMapper.mapCountryDtosToCountryLocalizedDtos(countryDtos, locale);
+    this.log.trace('Returning localized countries: [%j]', localizedCountryDtos);
+    return localizedCountryDtos;
+  }
+
+  getLocalizedCountryById(id: string, locale: AppLocale): CountryLocalizedDto {
+    this.log.debug('Get locolized country with id: [%s] and locale: [%]', id, locale);
+    const countryDto = this.getCountryById(id);
+    const localizedCountryDto = this.countryDtoMapper.mapCountryDtoToCountryLocalizedDto(countryDto, locale);
+    this.log.trace('Returning locolized country: [%j]', localizedCountryDto);
+    return localizedCountryDto;
+  }
 }
