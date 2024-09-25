@@ -3,12 +3,11 @@ import { HttpResponse, http } from 'msw';
 import getPdfByLetterIdJson from './cct-data/get-pdf-by-letter-id.json';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('cct-api.server');
-
 /**
  * Server-side MSW mocks for the CCT API.
  */
 export function getCCTApiMockHandlers() {
+  const log = getLogger('cct-api.server');
   log.info('Initializing CCT API mock handlers');
 
   return [

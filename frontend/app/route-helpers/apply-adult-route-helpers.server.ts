@@ -8,8 +8,6 @@ import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, load
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
-const log = getLogger('apply-route-helpers.server');
-
 interface LoadApplyAdultStateArgs {
   params: Params;
   request: Request;
@@ -22,6 +20,7 @@ interface LoadApplyAdultStateArgs {
  * @returns The loaded adult state.
  */
 export function loadApplyAdultState({ params, request, session }: LoadApplyAdultStateArgs) {
+  const log = getLogger('apply-adult-route-helpers.server/loadApplyAdultState');
   const { pathname } = new URL(request.url);
   const applyState = loadApplyState({ params, session });
 

@@ -6,12 +6,15 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('application-status-service.server');
-
 /**
  * Return a singleton instance (by means of memomization) of the application status service.
  */
-export const getApplicationStatusService = moize(createApplicationStatusService, { onCacheAdd: () => log.info('Creating new application status service') });
+export const getApplicationStatusService = moize(createApplicationStatusService, {
+  onCacheAdd: () => {
+    const log = getLogger('application-status-service.server/getApplicationStatusService');
+    log.info('Creating new application status service');
+  },
+});
 
 function createApplicationStatusService() {
   // prettier-ignore
@@ -41,6 +44,7 @@ function createApplicationStatusService() {
    * @returns the status id of a dental application given the sin and application code
    */
   async function getStatusIdWithSin({ sin, applicationCode }: GetStatusIdWithSinArgs) {
+    const log = getLogger('application-status-service.server/getStatusIdWithSin');
     log.debug('Fetching status id of dental application for application code [%s]', applicationCode);
     log.trace('Fetching status id of dental application for sin [%s], application code [%s]', sin, applicationCode);
 
@@ -105,6 +109,7 @@ function createApplicationStatusService() {
    * @returns the status id of a dental application given the application code and client information without the SIN
    */
   async function getStatusIdWithoutSin({ applicationCode, firstName, lastName, dateOfBirth }: GetStatusIdWithoutSinArgs) {
+    const log = getLogger('application-status-service.server/getStatusIdWithoutSin');
     log.debug('Fetching status id of dental application for application code [%s]', applicationCode);
     log.trace('Fetching status id of dental application for application code [%s], first name [%s], lastname [%s], date of birth [%s]', applicationCode, firstName, lastName, dateOfBirth);
 

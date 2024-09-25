@@ -10,8 +10,6 @@ import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getC
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
-const log = getLogger('apply-route-helpers.server');
-
 interface LoadApplyAdultChildStateArgs {
   params: Params;
   request: Request;
@@ -24,6 +22,7 @@ interface LoadApplyAdultChildStateArgs {
  * @returns The loaded adult child(ren) state.
  */
 export function loadApplyAdultChildState({ params, request, session }: LoadApplyAdultChildStateArgs) {
+  const log = getLogger('apply-adult-child-route-helpers.server/loadApplyAdultChildState');
   const { pathname } = new URL(request.url);
   const applyState = loadApplyState({ params, session });
 
@@ -62,6 +61,7 @@ interface LoadApplyAdultSingleChildStateArgs {
  * @returns The loaded child state.
  */
 export function loadApplyAdultSingleChildState({ params, request, session }: LoadApplyAdultSingleChildStateArgs) {
+  const log = getLogger('apply-adult-child-route-helpers.server/loadApplyAdultSingleChildState');
   const applyState = loadApplyAdultChildState({ params, request, session });
 
   const parsedChildId = z.string().uuid().safeParse(params.childId);

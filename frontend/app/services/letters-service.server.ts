@@ -8,12 +8,15 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('letters-service.server');
-
 /**
  * Return a singleton instance (by means of memomization) of the letters service.
  */
-export const getLettersService = moize(createLettersService, { onCacheAdd: () => log.info('Creating new letters service') });
+export const getLettersService = moize(createLettersService, {
+  onCacheAdd: () => {
+    const log = getLogger('letters-service.server/getLettersService');
+    log.info('Creating new letters service');
+  },
+});
 
 function createLettersService() {
   // prettier-ignore
@@ -35,6 +38,7 @@ function createLettersService() {
    * @returns returns all the letter types
    */
   function getAllLetterTypes() {
+    const log = getLogger('letters-service.server/getAllLetterTypes');
     log.debug('Fetching letter types');
 
     const letterTypes = letterTypesJson.value[0].OptionSet.Options.map((option) => {
@@ -57,6 +61,7 @@ function createLettersService() {
    * @returns array of letters given the clientId with optional sort parameter
    */
   async function getLetters(clientId: string, userId: string, sortOrder: 'asc' | 'desc' = 'desc') {
+    const log = getLogger('letters-service.server/getLetters');
     log.debug('Fetching letters for user id [%s]', userId);
 
     const auditService = getAuditService();
@@ -112,6 +117,7 @@ function createLettersService() {
    * @returns a promise that resolves to a base64 encoded string representing the PDF document
    */
   async function getPdf(letterId: string, userId: string) {
+    const log = getLogger('letters-service.server/getPdf');
     log.debug('Fetching PDF with letter id [%s] and user id [%s]', letterId, userId);
 
     const url = new URL(`${INTEROP_CCT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
@@ -147,7 +153,13 @@ function createLettersService() {
   }
 
   return {
-    getAllLetterTypes: moize(getAllLetterTypes, { maxAge: 1000 * GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new getAllLetterTypes memo') }),
+    getAllLetterTypes: moize(getAllLetterTypes, {
+      maxAge: 1000 * GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => {
+        const log = getLogger('letters-service.server/getAllLetterTypes');
+        log.info('Creating new getAllLetterTypes memo');
+      },
+    }),
     getLetters,
     getPdf,
   };

@@ -9,8 +9,6 @@ import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 import { getCdcpWebsiteStatusUrl } from '~/utils/url-utils.server';
 
-const log = getLogger('status-route-helpers.server');
-
 export interface StatusState {
   readonly id: string;
   readonly statusCheckResult: {
@@ -49,6 +47,7 @@ interface LoadStateArgs {
  * @returns The loaded state.
  */
 export function loadStatusState({ id, params, session }: LoadStateArgs) {
+  const log = getLogger('status-route-helpers.server/loadStatusState');
   const locale = getLocaleFromParams(params);
   const cdcpWebsiteStatusUrl = getCdcpWebsiteStatusUrl(locale);
 
@@ -84,6 +83,7 @@ interface SaveStateArgs {
  * @returns The new status state.
  */
 export function saveStatusState({ id, params, session, state }: SaveStateArgs) {
+  const log = getLogger('status-route-helpers.server/saveStatusState');
   const currentState = loadStatusState({ id, params, session });
 
   const newState = {
@@ -108,6 +108,7 @@ interface ClearStateArgs {
  * @param args - The arguments.
  */
 export function clearStatusState({ id, params, session }: ClearStateArgs) {
+  const log = getLogger('status-route-helpers.server/clearStatusState');
   const state = loadStatusState({ id, params, session });
   const sessionName = getSessionName(state.id);
   session.unset(sessionName);
@@ -125,6 +126,7 @@ interface StartArgs {
  * @returns The initial status state.
  */
 export function startStatusState({ id, session }: StartArgs) {
+  const log = getLogger('status-route-helpers.server/startStatusState');
   const parsedId = idSchema.parse(id);
 
   const initialState: StatusState = {

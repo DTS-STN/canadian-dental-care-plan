@@ -6,8 +6,6 @@ import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('[.]well-known.jwks[.]json');
-
 /**
  * JsonWebKey with an additional `kid` (key id) property.
  */
@@ -20,6 +18,7 @@ interface JWK extends JsonWebKey {
  * keys have been configured, this function returns an empty array.
  */
 async function getJwks() {
+  const log = getLogger('[.]well-known.jwks[.]json');
   const { AUTH_JWT_PUBLIC_KEY } = getEnv();
 
   if (!AUTH_JWT_PUBLIC_KEY) {

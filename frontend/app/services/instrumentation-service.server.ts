@@ -40,12 +40,15 @@ import { getBuildInfoService } from '~/services/build-info-service.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('instrumentation.server');
-
 /**
  * Return a singleton instance (by means of memomization) of the instrumentation service.
  */
-export const getInstrumentationService = moize(createInstrumentationService, { onCacheAdd: () => log.info('Creating new OpenTelemetry instrumentation service') });
+export const getInstrumentationService = moize(createInstrumentationService, {
+  onCacheAdd: () => {
+    const log = getLogger('instrumentation.server/getInstrumentationService');
+    log.info('Creating new OpenTelemetry instrumentation service');
+  },
+});
 
 function createInstrumentationService() {
   const env = getEnv();
@@ -79,6 +82,7 @@ function createInstrumentationService() {
   }
 
   const getMetricExporter = (): PushMetricExporter => {
+    const log = getLogger('instrumentation.server/getMetricExporter');
     if (env.OTEL_USE_CONSOLE_EXPORTERS) {
       log.info(`Exporting metrics to console every ${env.OTEL_METRICS_EXPORT_INTERVAL_MILLIS} ms`);
       return new ConsoleMetricExporter();
@@ -110,6 +114,7 @@ function createInstrumentationService() {
   };
 
   const getTraceExporter = (): SpanExporter => {
+    const log = getLogger('instrumentation.server/getTraceExporter');
     if (env.OTEL_USE_CONSOLE_EXPORTERS) {
       log.info(`Exporting traces to console every 30000 ms`);
       return new ConsoleSpanExporter();
@@ -177,6 +182,11 @@ function createInstrumentationService() {
     createHistogram,
     startActiveSpan,
     // the OpenTelemetry SDK should only be started once during runtime, so memoize the call to be sure it is
-    startInstrumentation: moize(startInstrumentation, { onCacheAdd: () => log.info('Starting OpenTelemetry instrumentation listener') }),
+    startInstrumentation: moize(startInstrumentation, {
+      onCacheAdd: () => {
+        const log = getLogger('instrumentation.server/startInstrumentation');
+        log.info('Starting OpenTelemetry instrumentation listener');
+      },
+    }),
   };
 }

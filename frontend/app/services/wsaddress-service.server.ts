@@ -4,8 +4,6 @@ import { z } from 'zod';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('wsaddress-service.server');
-
 const correctAddressResponseSchema = z.object({
   'wsaddr:CorrectionResults': z.object({
     'nc:AddressFullText': z.string().optional(),
@@ -36,9 +34,15 @@ const validateAddressResponseSchema = z.object({
   }),
 });
 
-export const getWSAddressService = moize(createWSAddressService, { onCacheAdd: () => log.info('Creating new WSAddress service') });
+export const getWSAddressService = moize(createWSAddressService, {
+  onCacheAdd: () => {
+    const log = getLogger('wsaddress-service.serve/getWSAddressService');
+    log.info('Creating new WSAddress service');
+  },
+});
 
 function createWSAddressService() {
+  const log = getLogger('wsaddress-service.serve/createWSAddressService');
   const { INTEROP_API_BASE_URI } = getEnv();
 
   async function correctAddress({ address, city, province, postalCode, country }: { address: string; city: string; province?: string; postalCode?: string; country: string }) {

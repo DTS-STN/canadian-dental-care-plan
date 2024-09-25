@@ -10,8 +10,6 @@ import invariant from 'tiny-invariant';
 import type { FetchFn } from './fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('raoidc-utils.server');
-
 /**
  * An OIDC ID token.
  */
@@ -147,6 +145,7 @@ export interface JWKSet {
  * @see https://datatracker.ietf.org/doc/html/rfc8414#section-3
  */
 export async function fetchServerMetadata(authServerUrl: string, fetchFn?: FetchFn) {
+  const log = getLogger('raoidc-utils.server/fetchServerMetadata');
   const discoveryUrl = authServerUrl + '/.well-known/openid-configuration';
   log.info('Fetching OIDC server metadata from [%s]', discoveryUrl);
 
@@ -188,6 +187,7 @@ export async function fetchServerMetadata(authServerUrl: string, fetchFn?: Fetch
  * @see https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.1
  */
 export function generateAuthorizationRequest(authorizationUri: string, clientId: string, codeChallenge: string, redirectUri: string, scope: string, state: string) {
+  const log = getLogger('raoidc-utils.server/generateAuthorizationRequest');
   const codeChallengeMethod = 'S256';
   const nonce = generateRandomNonce();
   const responseType = 'code';
@@ -212,6 +212,7 @@ export function generateAuthorizationRequest(authorizationUri: string, clientId:
  * @see https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.3
  */
 export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwks: JWKSet, authCode: string, client: ClientMetadata, codeVerifier: string, redirectUri: string, fetchFn?: FetchFn) {
+  const log = getLogger('raoidc-utils.server/fetchAccessToken');
   log.debug('Exchanging authorization code for access/id tokens');
 
   const clientAssertion = await createClientAssertion(serverMetadata.issuer, client);
@@ -260,6 +261,7 @@ export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwk
  * Fetch the current user's info from the auth server's userinfo endpoint.
  */
 export async function fetchUserInfo(userinfoUri: string, serverJwks: JWKSet, accessToken: string, client: ClientMetadata, fetchFn?: FetchFn) {
+  const log = getLogger('raoidc-utils.server/fetchUserInfo');
   log.debug('Fetching user info');
 
   const fetchOptions = {
@@ -297,6 +299,7 @@ export async function fetchUserInfo(userinfoUri: string, serverJwks: JWKSet, acc
  * another TTL (typically 20 minutes).
  */
 export async function validateSession(authUrl: string, clientId: string, sessionId: string, fetchFn?: FetchFn) {
+  const log = getLogger('raoidc-utils.server/validateSession');
   const validateUrl = new URL('validatesession', authUrl + '/');
   log.debug('Validating/extending session [%s] via [%s]', sessionId, validateUrl);
 
@@ -326,6 +329,7 @@ export async function validateSession(authUrl: string, clientId: string, session
  * @see https://datatracker.ietf.org/doc/html/rfc7521
  */
 async function createClientAssertion(issuer: string, client: ClientMetadata) {
+  const log = getLogger('raoidc-utils.server/createClientAssertion');
   log.debug(`Creating client [%s] assertion for issuer [%s]`, client.clientId, issuer);
 
   const now = Math.floor(UTCDate.now() / 1000); // current time, rounded down to the nearest second
@@ -417,6 +421,7 @@ export function generateRandomString(len: number) {
 }
 
 function validateAuthorizationToken(tokenEndpointResponse: TokenEndpointResponse) {
+  const log = getLogger('raoidc-utils.server/validateAuthorizationToken');
   if (!tokenEndpointResponse.access_token) {
     throw new Error('Authorization token is missing access_token claim');
   }
@@ -429,6 +434,7 @@ function validateAuthorizationToken(tokenEndpointResponse: TokenEndpointResponse
 }
 
 function validateUserInfoTokenResponse(userInfoResponse: UserinfoResponse) {
+  const log = getLogger('raoidc-utils.server/validateUserInfoTokenResponse');
   if (!userInfoResponse.userinfo_token) {
     throw new Error('Userinfo token is missing userinfo_token claim');
   }
@@ -440,6 +446,7 @@ function validateUserInfoTokenResponse(userInfoResponse: UserinfoResponse) {
  * Throw if the JWK set is fubar.
  */
 function validateJwkSet(jwkSet: JWKSet) {
+  const log = getLogger('raoidc-utils.server/validateJwkSet');
   if (jwkSet.keys.length === 0) {
     throw new Error('JWK set has no keys');
   }
@@ -451,6 +458,7 @@ function validateJwkSet(jwkSet: JWKSet) {
  * Throw if the server metadata is fubar.
  */
 function validateServerMetadata(serverMetadata: ServerMetadata) {
+  const log = getLogger('raoidc-utils.server/validateServerMetadata');
   log.debug('Validating server metadata');
 
   if (!serverMetadata.issuer) {
@@ -480,6 +488,7 @@ function validateServerMetadata(serverMetadata: ServerMetadata) {
  * Verify a JWT by checking it against a collection of JWKs.
  */
 async function verifyJwt<Payload = JWTPayload>(jwt: string, jwks: JWKSet, alg = 'RSA-OAEP') {
+  const log = getLogger('raoidc-utils.server/verifyJwt');
   for (const key of jwks.keys) {
     const { kty, ...restOfKey } = key;
     invariant(kty, 'Expected JWK to have a key type');

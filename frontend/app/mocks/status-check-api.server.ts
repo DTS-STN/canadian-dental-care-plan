@@ -4,8 +4,6 @@ import { z } from 'zod';
 import clientFriendlyStatusDataSource from '~/.server/resources/power-platform/client-friendly-status.json';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('status-check-api.server');
-
 /**
  * Mock mapping for application codes to application status codes
  * which can then be used to render on the frontend
@@ -23,6 +21,7 @@ const MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP: Record<string, string> = clien
  * Server-side MSW mocks for the Status Check API
  */
 export function getStatusCheckApiMockHandlers() {
+  const log = getLogger('status-check-api.server');
   log.info('Initializing Status Check mock handlers');
 
   return [

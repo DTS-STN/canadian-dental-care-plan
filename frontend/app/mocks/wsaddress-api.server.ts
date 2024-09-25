@@ -2,12 +2,11 @@ import { HttpResponse, http } from 'msw';
 
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('wsaddress-api.server');
-
 /**
  * Server-side MSW mocks for the WSAddress API.
  */
 export function getWSAddressApiMockHandlers() {
+  const log = getLogger('wsaddress-api.server');
   log.info('Initializing WSAddress API mock handlers');
 
   return [

@@ -4,9 +4,12 @@ import type { BuildInfo } from '~/utils/build-info.server';
 import { readBuildInfo } from '~/utils/build-info.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('build-info-service.server');
-
-export const getBuildInfoService = moize(createBuildInfoService, { onCacheAdd: () => log.info('Creating new buildinfo service') });
+export const getBuildInfoService = moize(createBuildInfoService, {
+  onCacheAdd: () => {
+    const log = getLogger('build-info-service.server/getBuildInfoService');
+    log.info('Creating new buildinfo service');
+  },
+});
 
 const defaultBuildInfo: BuildInfo = {
   buildDate: '2000-01-01T00:00:00Z',

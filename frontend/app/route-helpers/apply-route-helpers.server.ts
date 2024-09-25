@@ -13,8 +13,6 @@ import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
 
-const log = getLogger('apply-route-helpers.server');
-
 export interface ApplyState {
   readonly id: string;
   readonly editMode: boolean;
@@ -142,6 +140,7 @@ interface LoadStateArgs {
  * @returns The loaded state.
  */
 export function loadApplyState({ params, session }: LoadStateArgs) {
+  const log = getLogger('apply-route-helpers.server/loadApplyState');
   const locale = getLocaleFromParams(params);
   const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
 
@@ -188,6 +187,7 @@ interface SaveStateArgs {
  * @returns The new apply state.
  */
 export function saveApplyState({ params, session, state, remove = undefined }: SaveStateArgs) {
+  const log = getLogger('apply-route-helpers.server/saveApplyState');
   const currentState = loadApplyState({ params, session });
 
   let newState = {
@@ -216,6 +216,7 @@ interface ClearStateArgs {
  * @param args - The arguments.
  */
 export function clearApplyState({ params, session }: ClearStateArgs) {
+  const log = getLogger('apply-route-helpers.server/clearApplyState');
   const { id } = loadApplyState({ params, session });
 
   const sessionName = getSessionName(id);
@@ -234,6 +235,7 @@ interface StartArgs {
  * @returns The initial apply state.
  */
 export function startApplyState({ id, session }: StartArgs) {
+  const log = getLogger('apply-route-helpers.server/startApplyState');
   const parsedId = idSchema.parse(id);
 
   const initialState: ApplyState = {

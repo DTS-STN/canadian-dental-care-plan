@@ -22,14 +22,18 @@ import moize from 'moize';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('redis-service.server');
-
 /**
  * Return a singleton instance (by means of memomization) of the redis service.
  */
-export const getRedisService = moize.promise(createRedisService, { onCacheAdd: () => log.info('Creating new redis service') });
+export const getRedisService = moize.promise(createRedisService, {
+  onCacheAdd: () => {
+    const log = getLogger('redis-service.server/getRedisService');
+    log.info('Creating new redis service');
+  },
+});
 
 async function createRedisService() {
+  const log = getLogger('redis-service.server/createRedisService');
   const env = getEnv();
 
   // prettier-ignore

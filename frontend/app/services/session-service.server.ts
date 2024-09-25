@@ -32,14 +32,18 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { createFileSessionStorage } from '~/utils/session-utils.server';
 
-const log = getLogger('session-service.server');
-
 /**
  * Return a singleton instance (by means of memomization) of the session service.
  */
-export const getSessionService = moize.promise(createSessionService, { onCacheAdd: () => log.info('Creating new session service') });
+export const getSessionService = moize.promise(createSessionService, {
+  onCacheAdd: () => {
+    const log = getLogger('session-service.server/getSessionService');
+    log.info('Creating new session service');
+  },
+});
 
 async function createSessionService() {
+  const log = getLogger('session-service.server/createSessionService');
   const env = getEnv();
 
   const sessionCookie = createCookie(env.SESSION_COOKIE_NAME, {
