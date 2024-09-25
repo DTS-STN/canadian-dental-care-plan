@@ -36,8 +36,8 @@ describe('_public.apply.id.contact-information', () => {
       const mockAppLoadContext = mock<AppLoadContext>({
         serviceProvider: {
           getCountryService: () => ({
-            findAll: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
-            findById: vi.fn(),
+            listCountries: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
+            getCountryById: vi.fn(),
           }),
           getProvinceTerritoryStateService: () => ({
             findAll: () => [{ id: 'SP', countryId: 'CAN', nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }],
