@@ -3,6 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
+import { ProvinceTerritoryStateNotFoundException } from '~/.server/domain/exceptions/ProvinceTerritoryStateNotFoundException';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
 import { ProvinceTerritoryStateServiceImpl } from '~/.server/domain/services';
@@ -26,8 +27,8 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
 
       const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig); // Act and Assert
 
-      expect(service.findAll.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.findById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.listProvinceTerritoryStates.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect(service.getProvinceTerritoryStateById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
@@ -61,7 +62,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
 
       const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
-      const dtos = service.findAll();
+      const dtos = service.listProvinceTerritoryStates();
 
       expect(dtos).toEqual(mockDtos);
       expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledTimes(1);
@@ -88,14 +89,14 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
 
       const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
-      const dto = service.findById(id);
+      const dto = service.getProvinceTerritoryStateById(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).toHaveBeenCalledTimes(1);
     });
 
-    it('fetches province territory state by id returns null if not found', () => {
+    it('fetches province territory state by id throws not found exception', () => {
       const id = '1033';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
       mockProvinceTerritoryStateRepository.findById.mockReturnValueOnce(null);
@@ -104,9 +105,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
 
       const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
-      const dto = service.findById(id);
-
-      expect(dto).toEqual(null);
+      expect(() => service.getProvinceTerritoryStateById(id)).toThrow(ProvinceTerritoryStateNotFoundException);
       expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).not.toHaveBeenCalled();
     });

@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
+import { ProvinceTerritoryStateNotFoundException } from '../exceptions/ProvinceTerritoryStateNotFoundException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
@@ -8,9 +9,25 @@ import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
+/**
+ * Service interface for managing province territory state data.
+ */
 export interface ProvinceTerritoryStateService {
-  findAll(): ProvinceTerritoryStateDto[];
-  findById(id: string): ProvinceTerritoryStateDto | null;
+  /**
+   * Retrieves a list of all province territory states.
+   *
+   * @returns An array of province territory state DTOs.
+   */
+  listProvinceTerritoryStates(): ProvinceTerritoryStateDto[];
+
+  /**
+   * Retrieves a specific province territory state by its ID.
+   *
+   * @param id - The ID of the province territory state to retrieve.
+   * @returns The province territory state DTO corresponding to the specified ID.
+   * @throws {ProvinceTerritoryStateNotFoundException} If no province territory state is found with the specified ID.
+   */
+  getProvinceTerritoryStateById(id: string): ProvinceTerritoryStateDto;
 }
 
 @injectable()
@@ -26,11 +43,11 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
     this.log = logFactory.createLogger('ProvinceTerritoryStateServiceImpl');
 
     // set moize options
-    this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS;
-    this.findById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS;
+    this.listProvinceTerritoryStates.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS;
+    this.getProvinceTerritoryStateById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS;
   }
 
-  private findAllImpl(): ProvinceTerritoryStateDto[] {
+  private listProvinceTerritoryStatesImpl(): ProvinceTerritoryStateDto[] {
     this.log.debug('Get all province territory states');
     const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.findAll();
     const provinceTerritoryStateDtos = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(provinceTerritoryStateEntities);
@@ -38,20 +55,25 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
     return provinceTerritoryStateDtos;
   }
 
-  findAll = moize(this.findAllImpl, {
-    onCacheAdd: () => this.log.info('Creating new findAll memo'),
+  listProvinceTerritoryStates = moize(this.listProvinceTerritoryStatesImpl, {
+    onCacheAdd: () => this.log.info('Creating new listProvinceTerritoryStates memo'),
   });
 
-  private findByIdImpl(id: string): ProvinceTerritoryStateDto | null {
+  private getProvinceTerritoryStateByIdImpl(id: string): ProvinceTerritoryStateDto {
     this.log.debug('Get province territory state with id: [%s]', id);
     const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findById(id);
-    const provinceTerritoryStateDto = provinceTerritoryStateEntity ? this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity) : null;
+
+    if (!provinceTerritoryStateEntity) {
+      throw new ProvinceTerritoryStateNotFoundException(`Province territory state: [${id}] not found`);
+    }
+
+    const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity);
     this.log.trace('Returning province territory state: [%j]', provinceTerritoryStateDto);
     return provinceTerritoryStateDto;
   }
 
-  findById = moize(this.findByIdImpl, {
+  getProvinceTerritoryStateById = moize(this.getProvinceTerritoryStateByIdImpl, {
     maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new findById memo'),
+    onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateById memo'),
   });
 }
