@@ -115,7 +115,7 @@ export default defineConfig({
     include: ['./__tests__/**/*.test.{ts,tsx}'],
     coverage: {
       include: ['**/app/**/*.{ts,tsx}'],
-      exclude: ['**/app/mocks/**', ...coverageConfigDefaults.exclude.filter((pattern) => pattern !== '**/[.]**'), '**/[.]!(server|client)**'],
+      exclude: ['!**/app/[.]client/**', '!**/app/[.]server/**', '**/app/mocks/**', ...coverageConfigDefaults.exclude],
     },
     globals: true,
   },
