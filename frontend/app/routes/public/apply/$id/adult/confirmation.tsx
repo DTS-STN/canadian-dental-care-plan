@@ -58,7 +58,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   }
 
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : undefined;
-  const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().findById(state.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
+  const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().getPlanById(state.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
 
   // Getting province by Id
   const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;

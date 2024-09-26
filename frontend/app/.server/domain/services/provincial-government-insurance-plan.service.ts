@@ -9,8 +9,8 @@ import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/doma
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface ProvincialGovernmentInsurancePlanService {
-  findAll(): ProvincialGovernmentInsurancePlanDto[];
-  findById(id: string): ProvincialGovernmentInsurancePlanDto | null;
+  listPlans(): ProvincialGovernmentInsurancePlanDto[];
+  getPlanById(id: string): ProvincialGovernmentInsurancePlanDto | null;
 }
 
 @injectable()
@@ -26,11 +26,11 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
     this.log = logFactory.createLogger('ProvincialGovernmentInsurancePlanServiceImpl');
 
     // set moize options
-    this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS;
-    this.findById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS;
+    this.listPlans.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS;
+    this.getPlanById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS;
   }
 
-  private findAllImpl(): ProvincialGovernmentInsurancePlanDto[] {
+  private listPlansImpl(): ProvincialGovernmentInsurancePlanDto[] {
     this.log.debug('Get all provincial government insurance plans');
     const provincialGovernmentInsurancePlanEntities = this.provincialGovernmentInsurancePlanRepository.findAll();
     const provincialGovernmentInsurancePlanDtos = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities);
@@ -38,11 +38,11 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
     return provincialGovernmentInsurancePlanDtos;
   }
 
-  findAll = moize(this.findAllImpl, {
+  listPlans = moize(this.listPlansImpl, {
     onCacheAdd: () => this.log.info('Creating new findAll memo'),
   });
 
-  private findByIdImpl(id: string): ProvincialGovernmentInsurancePlanDto | null {
+  private getPlanByIdImpl(id: string): ProvincialGovernmentInsurancePlanDto | null {
     this.log.debug('Get provincial government insurance plan with id: [%s]', id);
     const provincialGovernmentInsurancePlanEntity = this.provincialGovernmentInsurancePlanRepository.findById(id);
     const provincialGovernmentInsurancePlanDto = provincialGovernmentInsurancePlanEntity
@@ -52,7 +52,7 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
     return provincialGovernmentInsurancePlanDto;
   }
 
-  findById = moize(this.findByIdImpl, {
+  getPlanById = moize(this.getPlanByIdImpl, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new findById memo'),
   });
