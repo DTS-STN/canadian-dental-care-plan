@@ -3,6 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
+import { ProvincialGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions/ProvincialGovernmentInsurancePlanException';
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { ProvincialGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services';
@@ -107,7 +108,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).toHaveBeenCalledTimes(1);
     });
 
-    it('fetches provincial government insurance plan by id returns null if not found', () => {
+    it('fetches provincial government insurance plan by id and throws exception if not found', () => {
       const id = '1033';
       const mockProvincialGovernmentInsurancePlanRepository = mock<ProvincialGovernmentInsurancePlanRepository>();
       mockProvincialGovernmentInsurancePlanRepository.findById.mockReturnValueOnce(null);
@@ -116,9 +117,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
 
       const service = new ProvincialGovernmentInsurancePlanServiceImpl(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
-      const dto = service.getProvincialGovernmentInsurancePlanById(id);
-
-      expect(dto).toEqual(null);
+      expect(() => service.getProvincialGovernmentInsurancePlanById(id)).toThrow(ProvincialGovernmentInsurancePlanNotFoundException);
       expect(mockProvincialGovernmentInsurancePlanRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
     });

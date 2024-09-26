@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
+import { ProvincialGovernmentInsurancePlanNotFoundException } from '../exceptions/ProvincialGovernmentInsurancePlanException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
@@ -42,12 +43,13 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
     onCacheAdd: () => this.log.info('Creating new findAll memo'),
   });
 
-  private getProvincialGovernmentInsurancePlanByIdImpl(id: string): ProvincialGovernmentInsurancePlanDto | null {
+  private getProvincialGovernmentInsurancePlanByIdImpl(id: string): ProvincialGovernmentInsurancePlanDto {
     this.log.debug('Get provincial government insurance plan with id: [%s]', id);
     const provincialGovernmentInsurancePlanEntity = this.provincialGovernmentInsurancePlanRepository.findById(id);
-    const provincialGovernmentInsurancePlanDto = provincialGovernmentInsurancePlanEntity
-      ? this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity)
-      : null;
+
+    if (!provincialGovernmentInsurancePlanEntity) throw new ProvincialGovernmentInsurancePlanNotFoundException(`Provincial government insurance plan with id: [${id}] not found`);
+
+    const provincialGovernmentInsurancePlanDto = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity);
     this.log.trace('Returning provincial government insurance plan: [%j]', provincialGovernmentInsurancePlanDto);
     return provincialGovernmentInsurancePlanDto;
   }
