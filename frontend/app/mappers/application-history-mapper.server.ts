@@ -138,7 +138,7 @@ export function getApplicationHistoryMapper({ federalGovernmentInsurancePlanServ
         insuranceInfo.hasFederalBenefits = true;
         insuranceInfo.federalSocialProgram = insuranceId.IdentificationID;
       }
-      const provincialGovernmentInsurancePlan = insuranceId.IdentificationID ? provincialGovernmentInsurancePlanService.getPlanById(insuranceId.IdentificationID) : undefined;
+      const provincialGovernmentInsurancePlan = insuranceId.IdentificationID ? provincialGovernmentInsurancePlanService.getProvincialInsurancePlanById(insuranceId.IdentificationID) : undefined;
       if (provincialGovernmentInsurancePlan) {
         insuranceInfo.hasProvincialTerritorialBenefits = true;
         insuranceInfo.provincialTerritorialSocialProgram = insuranceId.IdentificationID;

@@ -26,8 +26,8 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
 
       const service = new ProvincialGovernmentInsurancePlanServiceImpl(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
 
-      expect(service.listPlans.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.getPlanById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.listProvincialInsurancePlans.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect(service.getProvincialInsurancePlanById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
@@ -69,7 +69,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
 
       const service = new ProvincialGovernmentInsurancePlanServiceImpl(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
-      const dtos = service.listPlans();
+      const dtos = service.listProvincialInsurancePlans();
 
       expect(dtos).toEqual(mockDtos);
       expect(mockProvincialGovernmentInsurancePlanRepository.findAll).toHaveBeenCalledTimes(1);
@@ -100,7 +100,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
 
       const service = new ProvincialGovernmentInsurancePlanServiceImpl(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
-      const dto = service.getPlanById(id);
+      const dto = service.getProvincialInsurancePlanById(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockProvincialGovernmentInsurancePlanRepository.findById).toHaveBeenCalledTimes(1);
@@ -116,7 +116,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
 
       const service = new ProvincialGovernmentInsurancePlanServiceImpl(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
-      const dto = service.getPlanById(id);
+      const dto = service.getProvincialInsurancePlanById(id);
 
       expect(dto).toEqual(null);
       expect(mockProvincialGovernmentInsurancePlanRepository.findById).toHaveBeenCalledTimes(1);

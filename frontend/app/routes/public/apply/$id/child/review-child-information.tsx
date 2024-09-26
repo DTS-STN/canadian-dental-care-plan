@@ -65,7 +65,9 @@ export async function loader({ context: { serviceProvider, session }, params, re
 
   const children = state.children.map((child) => {
     const selectFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
-    const selectedProvincialBenefit = child.dentalBenefits.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().getPlanById(child.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
+    const selectedProvincialBenefit = child.dentalBenefits.provincialTerritorialSocialProgram
+      ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram)
+      : undefined;
 
     return {
       id: child.id,
