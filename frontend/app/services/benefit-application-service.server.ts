@@ -1,9 +1,5 @@
-import { sort } from 'moderndash';
 import moize from 'moize';
 
-import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
-import { getApplicationHistoryMapper } from '~/mappers/application-history-mapper.server';
-import { applicationListSchema } from '~/schemas/application-history-service-schemas.server';
 import type { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
 import { benefitApplicationRequestSchema, benefitApplicationResponseSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
@@ -11,12 +7,7 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-export interface CreateBenefitApplicationServiceArgs {
-  federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService;
-  provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService;
-}
-
-function createBenefitApplicationService({ federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService }: CreateBenefitApplicationServiceArgs) {
+function createBenefitApplicationService() {
   // prettier-ignore
   const {
     HTTP_PROXY_URL,
@@ -82,35 +73,7 @@ function createBenefitApplicationService({ federalGovernmentInsurancePlanService
     return parsedBenefitApplicationResponse.data.BenefitApplication.BenefitApplicationIdentification[0].IdentificationID;
   }
 
-  /**
-   * @returns array of applications
-   */
-  async function getApplications(userId: string, sortOrder: 'asc' | 'desc' = 'desc') {
-    const log = getLogger('benefit-application-service.server/getApplications');
-    log.debug('Fetching applications for user id [%s]', userId);
-
-    const auditService = getAuditService();
-    auditService.audit('applications.get', { userId });
-
-    const url = new URL(`${INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? INTEROP_API_BASE_URI}/v1/users/${userId}/applications`);
-
-    const response = await instrumentedFetch(fetchFn, 'http.client.application-history-api.applications.gets', url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const data = await response.json();
-    log.trace('Applications for user id [%s]: [%j]', userId, data);
-    const applications = getApplicationHistoryMapper({ federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService }).toBenefitApplication(applicationListSchema.parse(data)); // TODO: Update schema once application-history service becomes avaliable
-    return sort(applications, {
-      order: sortOrder,
-      by: (item) => item.submittedOn,
-    });
-  }
-
-  return { submitApplication, getApplications };
+  return { submitApplication };
 }
 
 /**
