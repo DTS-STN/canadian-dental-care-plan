@@ -3,6 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
+import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/exceptions/PreferredCommunicationMethodNotFoundException';
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
 import { PreferredCommunicationMethodServiceImpl } from '~/.server/domain/services';
@@ -26,12 +27,12 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
 
       const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig); // Act and Assert
 
-      expect(service.findAll.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.findById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.listPreferredCommunicationMethods.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect(service.getPreferredCommunicationMethodById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
-  describe('findAll', () => {
+  describe('listPreferredCommunicationMethods', () => {
     it('fetches all preferred communication methods', () => {
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
       mockPreferredCommunicationMethodRepository.findAll.mockReturnValueOnce([
@@ -65,7 +66,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
 
       const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
-      const dtos = service.findAll();
+      const dtos = service.listPreferredCommunicationMethods();
 
       expect(dtos).toEqual(mockDtos);
       expect(mockPreferredCommunicationMethodRepository.findAll).toHaveBeenCalledTimes(1);
@@ -73,7 +74,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('getPreferredCommunicationMethodById', () => {
     it('fetches preferred communication method by id', () => {
       const id = '1';
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
@@ -94,14 +95,14 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
 
       const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
-      const dto = service.findById(id);
+      const dto = service.getPreferredCommunicationMethodById(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).toHaveBeenCalledTimes(1);
     });
 
-    it('fetches preferred communication method by id returns null if not found', () => {
+    it('fetches preferred communication method by id and throws exception if not found', () => {
       const id = '1033';
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
       mockPreferredCommunicationMethodRepository.findById.mockReturnValueOnce(null);
@@ -110,9 +111,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
 
       const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
-      const dto = service.findById(id);
-
-      expect(dto).toEqual(null);
+      expect(() => service.getPreferredCommunicationMethodById(id)).toThrow(PreferredCommunicationMethodNotFoundException);
       expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).not.toHaveBeenCalled();
     });

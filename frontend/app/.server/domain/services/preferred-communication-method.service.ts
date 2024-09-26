@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
+import { PreferredCommunicationMethodNotFoundException } from '../exceptions/PreferredCommunicationMethodNotFoundException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
@@ -9,8 +10,8 @@ import type { PreferredCommunicationMethodRepository } from '~/.server/domain/re
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface PreferredCommunicationMethodService {
-  findAll(): PreferredCommunicationMethodDto[];
-  findById(id: string): PreferredCommunicationMethodDto | null;
+  listPreferredCommunicationMethods(): PreferredCommunicationMethodDto[];
+  getPreferredCommunicationMethodById(id: string): PreferredCommunicationMethodDto;
 }
 
 @injectable()
@@ -26,11 +27,11 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
     this.log = logFactory.createLogger('PreferredCommunicationMethodServiceImpl');
 
     // set moize options
-    this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS;
-    this.findById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS;
+    this.listPreferredCommunicationMethods.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS;
+    this.getPreferredCommunicationMethodById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS;
   }
 
-  private findAllImpl(): PreferredCommunicationMethodDto[] {
+  private listPreferredCommunicationMethodsImpl(): PreferredCommunicationMethodDto[] {
     this.log.debug('Get all preferred communication methods');
     const preferredCommunicationMethodEntities = this.preferredCommunicationMethodRepository.findAll();
     const preferredCommunicationMethodDtos = this.preferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos(preferredCommunicationMethodEntities);
@@ -38,20 +39,24 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
     return preferredCommunicationMethodDtos;
   }
 
-  findAll = moize(this.findAllImpl, {
-    onCacheAdd: () => this.log.info('Creating new findAll memo'),
+  listPreferredCommunicationMethods = moize(this.listPreferredCommunicationMethodsImpl, {
+    onCacheAdd: () => this.log.info('Creating new listPreferredCommunicationMethods memo'),
   });
 
-  private findByIdImpl(id: string): PreferredCommunicationMethodDto | null {
+  private getPreferredCommunicationMethodByIdImpl(id: string): PreferredCommunicationMethodDto {
     this.log.debug('Get preferred communication method with id: [%s]', id);
     const preferredCommunicationMethodEntity = this.preferredCommunicationMethodRepository.findById(id);
-    const preferredCommunicationMethodDto = preferredCommunicationMethodEntity ? this.preferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto(preferredCommunicationMethodEntity) : null;
+
+    if (!preferredCommunicationMethodEntity) throw new PreferredCommunicationMethodNotFoundException(`Perferred communication method with id: [${id}] not found`);
+
+    const preferredCommunicationMethodDto = this.preferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto(preferredCommunicationMethodEntity);
+
     this.log.trace('Returning preferred communication method: [%j]', preferredCommunicationMethodDto);
     return preferredCommunicationMethodDto;
   }
 
-  findById = moize(this.findByIdImpl, {
+  getPreferredCommunicationMethodById = moize(this.getPreferredCommunicationMethodByIdImpl, {
     maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new findById memo'),
+    onCacheAdd: () => this.log.info('Creating new getPreferredCommunicationMethodById memo'),
   });
 }

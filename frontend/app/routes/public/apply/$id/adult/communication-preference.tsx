@@ -49,7 +49,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const preferredLanguages = localizeAndSortPreferredLanguages(serviceProvider.getPreferredLanguageService().listPreferredLanguages(), locale, locale === 'en' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE);
-  const preferredCommunicationMethods = localizeAndSortPreferredCommunicationMethods(serviceProvider.getPreferredCommunicationMethodService().findAll(), locale);
+  const preferredCommunicationMethods = localizeAndSortPreferredCommunicationMethods(serviceProvider.getPreferredCommunicationMethodService().listPreferredCommunicationMethods(), locale);
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
   if (!communicationMethodEmail) {

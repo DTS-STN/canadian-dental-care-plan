@@ -42,11 +42,11 @@ describe('_public.apply.id.communication-preference', () => {
       const mockAppLoadContext = mock<AppLoadContext>({
         serviceProvider: {
           getPreferredCommunicationMethodService: () => ({
-            findAll: () => [
+            listPreferredCommunicationMethods: () => [
               { id: 'email', nameEn: 'Email', nameFr: 'Adresse courriel' },
               { id: 'mail', nameEn: 'Mail', nameFr: 'Par la poste' },
             ],
-            findById: vi.fn(),
+            getPreferredCommunicationMethodById: vi.fn(),
           }),
           getPreferredLanguageService: vi.fn().mockReturnValue({
             listPreferredLanguages: vi.fn().mockReturnValue([
