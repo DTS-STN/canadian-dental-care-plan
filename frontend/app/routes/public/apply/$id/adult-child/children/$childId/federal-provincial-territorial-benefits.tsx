@@ -59,7 +59,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
 
   const federalSocialPrograms = localizeAndSortFederalSocialPrograms(serviceProvider.getFederalGovernmentInsurancePlanService().findAll(), locale);
   const provincialTerritorialSocialPrograms = localizeAndSortProvincialGovernmentInsurancePlans(serviceProvider.getProvincialGovernmentInsurancePlanService().findAll(), locale);
-  const provinceTerritoryStates = localizeAndSortProvinceTerritoryStates(serviceProvider.getProvinceTerritoryStateService().findAll(), locale).filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
+  const provinceTerritoryStates = localizeAndSortProvinceTerritoryStates(serviceProvider.getProvinceTerritoryStateService().listProvinceTerritoryStates(), locale).filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
 
   const csrfToken = String(session.get('csrfToken'));
 
