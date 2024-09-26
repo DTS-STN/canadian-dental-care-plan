@@ -8,8 +8,6 @@ import { getLogger } from '~/utils/logging.server';
 import type { UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 
-const log = getLogger('personal-information-route-helpers.server');
-
 /**
  * This function first checks the session for cached personal information.
  * If not found, it retrieves the information from the personal information service using the user's SIN provided in the user info token.
@@ -22,6 +20,8 @@ const log = getLogger('personal-information-route-helpers.server');
  * @returns The user's personal information
  */
 async function getPersonalInformation(userInfoToken: UserinfoToken, params: Params, request: Request, session: Session) {
+  const log = getLogger('personal-information-route-helpers.server/getPersonalInformation');
+
   if (!userInfoToken.sin) {
     log.warn('No SIN found in userInfoToken for userId [%s]', userInfoToken.sub);
     throw new Response(null, { status: 401 });

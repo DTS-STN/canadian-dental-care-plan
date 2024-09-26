@@ -7,13 +7,16 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('personal-information-service.server');
-
 /**
  * Return a singleton instance (by means of memomization) of the personal-information service.
  */
 
-export const getPersonalInformationService = moize(createPersonalInformationService, { onCacheAdd: () => log.info('Creating new user service') });
+export const getPersonalInformationService = moize(createPersonalInformationService, {
+  onCacheAdd: () => {
+    const log = getLogger('personal-information-service.server/getPersonalInformationService');
+    log.info('Creating new user service');
+  },
+});
 
 function createPersonalInformationService() {
   // prettier-ignore
@@ -28,6 +31,7 @@ function createPersonalInformationService() {
   const fetchFn = getFetchFn(HTTP_PROXY_URL);
 
   async function getPersonalInformation(sin: string, userId: string) {
+    const log = getLogger('personal-information-service.server/getPersonalInformation');
     log.debug('Fetching personal information for user id [%s]', userId);
     log.trace('Fetching personal information for sin [%s] and user id [%s]', sin, userId);
 

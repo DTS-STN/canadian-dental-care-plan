@@ -7,12 +7,11 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import type { JWKSet, ServerMetadata, TokenEndpointResponse, UserinfoResponse } from '~/utils/raoidc-utils.server';
 
-const log = getLogger('raoidc.server');
-
 /**
  * Server-side MSW mocks for the RAOIDC authentication service.
  */
 export function getRaoidcMockHandlers() {
+  const log = getLogger('raoidc.server');
   log.info('Initializing RAOIDC mock handlers');
   const { AUTH_RAOIDC_BASE_URL } = getEnv();
 

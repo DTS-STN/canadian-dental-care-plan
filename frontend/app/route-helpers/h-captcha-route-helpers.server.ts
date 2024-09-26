@@ -3,8 +3,6 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getClientIpAddress } from '~/utils/ip-address-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('h-captcha-route-helpers.server');
-
 /**
  * Verifies an hCaptcha response token and the client's IP address from the request object and calling the hCaptchaService with these two pieces of data.
  *
@@ -15,6 +13,7 @@ const log = getLogger('h-captcha-route-helpers.server');
  * - 'true' otherwise
  */
 async function verifyHCaptchaResponse(hCaptchaResponse: string, request: Request) {
+  const log = getLogger('h-captcha-route-helpers.server/verifyHCaptchaResponse');
   const { HCAPTCHA_MAX_SCORE } = getEnv();
   const clientIpAddress = getClientIpAddress(request);
 

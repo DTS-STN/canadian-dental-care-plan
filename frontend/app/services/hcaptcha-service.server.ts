@@ -6,14 +6,18 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('hcaptcha-service.server');
-
 /**
  * Return a singleton instance (by means of memomization) of the hCaptcha service.
  */
-export const getHCaptchaService = moize(createHCaptchaService, { onCacheAdd: () => log.info('Creating new hCaptcha service') });
+export const getHCaptchaService = moize(createHCaptchaService, {
+  onCacheAdd: () => {
+    const log = getLogger('hcaptcha-service.server/getHCaptchaService');
+    log.info('Creating new hCaptcha service');
+  },
+});
 
 function createHCaptchaService() {
+  const log = getLogger('hcaptcha-service.server/createHCaptchaService');
   const { HCAPTCHA_SECRET_KEY, HCAPTCHA_VERIFY_URL } = getEnv();
 
   /**

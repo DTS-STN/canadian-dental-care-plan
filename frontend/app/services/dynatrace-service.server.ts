@@ -8,8 +8,6 @@ import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { expandTemplate } from '~/utils/string-utils';
 
-const log = getLogger('dynatrace-service.server');
-
 function createDynatraceService() {
   // prettier-ignore
   const {
@@ -22,6 +20,7 @@ function createDynatraceService() {
   const fetchFn = getFetchFn(HTTP_PROXY_URL);
 
   function generateRetrieveRumScriptUrl() {
+    const log = getLogger('dynatrace-service.server/generateRetrieveRumScriptUrl');
     if (DYNATRACE_API_RUM_SCRIPT_URI === undefined) {
       log.debug('DYNATRACE_API_RUM_SCRIPT_URI is undefined; returning undefined');
       return;
@@ -36,6 +35,7 @@ function createDynatraceService() {
    * Retrieve Dynatrace RUM Script metadata via Dynatrace API.
    */
   async function retrieveRumScript() {
+    const log = getLogger('dynatrace-service.server/retrieveRumScript');
     log.debug('Retrieve RUM Script via Dynatrace API');
 
     try {
@@ -90,11 +90,22 @@ function createDynatraceService() {
   }
 
   return {
-    retrieveRumScript: moize.promise(retrieveRumScript, { maxAge: DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new retrieveRumScript memo') }),
+    retrieveRumScript: moize.promise(retrieveRumScript, {
+      maxAge: DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS,
+      onCacheAdd: () => {
+        const log = getLogger('dynatrace-service.server/retrieveRumScript');
+        log.info('Creating new retrieveRumScript memo');
+      },
+    }),
   };
 }
 
 /**
  * Return a singleton instance (by means of memomization) of the dynatrace service.
  */
-export const getDynatraceService = moize(createDynatraceService, { onCacheAdd: () => log.info('Creating new dynatrace service') });
+export const getDynatraceService = moize(createDynatraceService, {
+  onCacheAdd: () => {
+    const log = getLogger('dynatrace-service.server/getDynatraceService');
+    log.info('Creating new dynatrace service');
+  },
+});

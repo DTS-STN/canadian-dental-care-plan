@@ -13,13 +13,13 @@ import { getLogger } from '~/utils/logging.server';
 import type { IdToken } from '~/utils/raoidc-utils.server';
 import { generateCallbackUri, generateRandomString } from '~/utils/raoidc-utils.server';
 
-const log = getLogger('auth.$');
 const defaultProviderId = 'raoidc';
 
 /**
  * A do-all authentication handler for the application
  */
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
+  const log = getLogger('auth.$/loader');
   const { '*': slug } = params;
 
   switch (slug) {
@@ -58,6 +58,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
  * Handler for /auth/login requests
  */
 function handleLoginRequest({ request }: LoaderFunctionArgs) {
+  const log = getLogger('auth.$/handleLoginRequest');
   log.debug('Handling login request');
   getInstrumentationService().createCounter('auth.login.requests').add(1);
 
@@ -72,6 +73,7 @@ function handleLoginRequest({ request }: LoaderFunctionArgs) {
  * Handler for /auth/logout requests
  */
 async function handleLogoutRequest({ context: { session }, request }: LoaderFunctionArgs) {
+  const log = getLogger('auth.$/handleLogoutRequest');
   log.debug('Handling RAOIDC logout request');
   getInstrumentationService().createCounter('auth.logout.requests').add(1);
 
@@ -103,6 +105,7 @@ async function handleLogoutRequest({ context: { session }, request }: LoaderFunc
  * Handler for /auth/login/raoidc requests
  */
 async function handleRaoidcLoginRequest({ context: { session }, request }: LoaderFunctionArgs) {
+  const log = getLogger('auth.$/handleRaoidcLoginRequest');
   log.debug('Handling RAOIDC login request');
   getInstrumentationService().createCounter('auth.login.raoidc.requests').add(1);
 
@@ -137,6 +140,7 @@ async function handleRaoidcLoginRequest({ context: { session }, request }: Loade
  * Handler for /auth/callback/raoidc requests
  */
 async function handleRaoidcCallbackRequest({ context: { session }, request }: LoaderFunctionArgs) {
+  const log = getLogger('auth.$/handleRaoidcCallbackRequest');
   log.debug('Handling RAOIDC callback request');
   getInstrumentationService().createCounter('auth.callback.raoidc.requests').add(1);
 
@@ -162,6 +166,7 @@ async function handleRaoidcCallbackRequest({ context: { session }, request }: Lo
  * @see https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint
  */
 function handleMockAuthorizeRequest({ request }: LoaderFunctionArgs) {
+  const log = getLogger('auth.$/handleMockAuthorizeRequest');
   log.debug('Handling (mock) RAOIDC authorize request');
   getInstrumentationService().createCounter('auth.authorize.requests').add(1);
 

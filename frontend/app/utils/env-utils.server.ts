@@ -7,8 +7,6 @@ import type { FeatureName } from '~/utils/env-utils';
 import { clientEnvSchema } from '~/utils/env-utils';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('env-utils.server');
-
 // none, error, warn, info, debug, verbose, all
 const otelLogLevels = Object.keys(DiagLogLevel).map((key) => key.toLowerCase());
 
@@ -215,6 +213,7 @@ export function getClientEnv() {
  * is enabled. If the feature is not enabled, a 404 response will be thrown.
  */
 export function featureEnabled(feature: FeatureName) {
+  const log = getLogger('env-utils.server/featureEnabled');
   const { ENABLED_FEATURES } = getEnv();
   if (!ENABLED_FEATURES.includes(feature)) {
     log.warn('Feature [%s] is not enabled; returning 404 response', feature);

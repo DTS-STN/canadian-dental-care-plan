@@ -22,25 +22,28 @@ import { getLogger } from '~/utils/logging.server';
 
 const { NODE_ENV } = getEnv();
 
-const log = getLogger('express.server');
 const logFormat = NODE_ENV === 'development' ? 'dev' : 'tiny';
 const sessionService = await getSessionService();
 
 // global IoC container singleton
 const container = initContainer();
 
-const loggingRequestHandler = morgan(logFormat, {
-  skip: (request) => {
-    const ignoredUrls = ['/api/readyz'];
-    return request.url ? ignoredUrls.includes(request.url) : false;
-  },
-  stream: {
-    write: (str: string) => log.info(str.trim()),
-  },
-});
+const loggingRequestHandler = (() => {
+  const log = getLogger('express.server/loggingRequestHandler');
+  return morgan(logFormat, {
+    skip: (request) => {
+      const ignoredUrls = ['/api/readyz'];
+      return request.url ? ignoredUrls.includes(request.url) : false;
+    },
+    stream: {
+      write: (str: string) => log.info(str.trim()),
+    },
+  });
+})();
 
 // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
 function securityHeadersRequestHandler(request: Request, response: Response, next: NextFunction) {
+  const log = getLogger('express.server/securityHeadersRequestHandler');
   log.debug('Adding security headers to response');
 
   response.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
@@ -80,8 +83,8 @@ export const expressApp = await createExpressApp({
      * remix has performed all of its request processing.
      */
     return ({ build, getLoadContext, mode }) => {
+      const log = getLogger('express.server/customRequestHandler');
       const remixRequestHandler = createRequestHandler(build, mode);
-
       return async (request: Request, response: Response, next: NextFunction) => {
         try {
           const loadContext = await getLoadContext?.(request, response);
@@ -109,6 +112,7 @@ export const expressApp = await createExpressApp({
     };
   },
   getLoadContext: async (request: Request, response: Response) => {
+    const log = getLogger('express.server/getLoadContext');
     if (shouldSkipSessionHandling(request)) {
       log.debug('Stateless request to [%s] detected; bypassing session init', request.url);
       return {} as AppLoadContext;

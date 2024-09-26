@@ -34,12 +34,15 @@ import type { ClientMetadata, IdToken, UserinfoToken } from '~/utils/raoidc-util
 import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
 import { expandTemplate } from '~/utils/string-utils';
 
-const log = getLogger('raoidc-service.server');
-
 /**
  * Return a singleton instance (by means of memomization) of the RAOIDC service.
  */
-export const getRaoidcService = moize.promise(createRaoidcService, { onCacheAdd: () => log.info('Creating new RAOIDC service') });
+export const getRaoidcService = moize.promise(createRaoidcService, {
+  onCacheAdd: () => {
+    const log = getLogger('raoidc-service.server/getRaoidcService');
+    log.info('Creating new RAOIDC service');
+  },
+});
 
 /**
  * Create and intialize an instance of the RAOID service.
@@ -54,6 +57,7 @@ async function createRaoidcService() {
    * Used to kickstart the OIDC login process.
    */
   function generateSigninRequest(redirectUri: string) {
+    const log = getLogger('raoidc-service.server/generateSigninRequest');
     log.debug('Generating OIDC signin request');
 
     const { codeChallenge, codeVerifier } = generateCodeChallenge();
@@ -69,6 +73,7 @@ async function createRaoidcService() {
    * Handle an OIDC login callback.
    */
   async function handleCallback(request: Request, codeVerifier: string, expectedState: string, redirectUri: string) {
+    const log = getLogger('raoidc-service.server/handleCallback');
     log.debug('Handling OIDC callback');
 
     const authCode = new URL(request.url).searchParams.get('code');
@@ -115,6 +120,7 @@ async function createRaoidcService() {
    * Handle a RAOIDC session validation call.
    */
   async function handleSessionValidation(request: Request, session: Session) {
+    const log = getLogger('raoidc-service.server/handleSessionValidation');
     log.debug('Performing RAOIDC session validation check');
     const { pathname, searchParams } = new URL(request.url);
     const returnTo = encodeURIComponent(`${pathname}?${searchParams}`);

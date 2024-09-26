@@ -7,8 +7,6 @@ import type { webcrypto } from 'node:crypto';
 
 import { getLogger } from './logging.server';
 
-const log = getLogger('crypto-utils.server');
-
 export type CryptoKeyAlgorithm = 'encrypt' | 'decrypt' | 'sign' | 'verify';
 
 /**
@@ -24,6 +22,7 @@ export function generateJwkId(jwk: webcrypto.JsonWebKey) {
  * Converts a PEM encoded string to a webcrypto CryptoKey.
  */
 export async function generateCryptoKey(pem: string, algorithm: CryptoKeyAlgorithm) {
+  const log = getLogger('crypto-utils.server/generateCryptoKey');
   log.debug('Converting PEM to [%s] CryptoKey', algorithm);
   log.trace('PEM value: [%s]', pem);
 

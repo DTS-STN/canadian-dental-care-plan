@@ -11,8 +11,6 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('benefit-application-service.server');
-
 export interface CreateBenefitApplicationServiceArgs {
   federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService;
   provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService;
@@ -35,6 +33,7 @@ function createBenefitApplicationService({ federalGovernmentInsurancePlanService
    * @returns the status id of a dental application given the sin and application code
    */
   async function submitApplication(benefitApplicationRequest: BenefitApplicationRequest) {
+    const log = getLogger('benefit-application-service.server/submitApplication');
     log.debug('Submitting CDCP application');
     log.trace('CDCP application data: [%j]', benefitApplicationRequest);
 
@@ -87,6 +86,7 @@ function createBenefitApplicationService({ federalGovernmentInsurancePlanService
    * @returns array of applications
    */
   async function getApplications(userId: string, sortOrder: 'asc' | 'desc' = 'desc') {
+    const log = getLogger('benefit-application-service.server/getApplications');
     log.debug('Fetching applications for user id [%s]', userId);
 
     const auditService = getAuditService();
@@ -116,4 +116,9 @@ function createBenefitApplicationService({ federalGovernmentInsurancePlanService
 /**
  * Return a singleton instance (by means of memomization) of the benefit application service.
  */
-export const getBenefitApplicationService = moize(createBenefitApplicationService, { onCacheAdd: () => log.info('Creating new benefit application service') });
+export const getBenefitApplicationService = moize(createBenefitApplicationService, {
+  onCacheAdd: () => {
+    const log = getLogger('benefit-application-service.server/getBenefitApplicationService');
+    log.info('Creating new benefit application service');
+  },
+});

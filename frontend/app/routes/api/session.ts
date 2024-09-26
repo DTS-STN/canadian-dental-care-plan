@@ -11,8 +11,6 @@ import { getApiSessionRedirectToUrl } from '~/utils/api-session-utils.server';
 import { APP_LOCALES } from '~/utils/locale-utils';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('routes/api/session');
-
 const API_SESSION_ACTIONS = ['end', 'extend'] as const;
 export type ApiSessionAction = (typeof API_SESSION_ACTIONS)[number];
 
@@ -20,6 +18,7 @@ const API_SESSION_REDIRECT_TO_OPTIONS = ['cdcp-website', 'cdcp-website-apply', '
 export type ApiSessionRedirectTo = (typeof API_SESSION_REDIRECT_TO_OPTIONS)[number];
 
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
+  const log = getLogger('routes/api/session');
   const sessionId = session.id;
   log.debug("Action with user's server-side session; sessionId: [%s]", sessionId);
 

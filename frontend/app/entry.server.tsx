@@ -27,11 +27,10 @@ const abortDelay = 5_000;
 const instrumentationService = getInstrumentationService();
 instrumentationService.startInstrumentation();
 
-const log = getLogger('entry.server');
-
 const { ENABLED_MOCKS } = getEnv();
 
 if (ENABLED_MOCKS.length > 0) {
+  const log = getLogger('entry.server');
   server.listen({ onUnhandledRequest: 'bypass' });
   log.info('‼️ Mock Service Worker has been enabled with the following mocks: %s', ENABLED_MOCKS);
 }
@@ -49,6 +48,7 @@ if (ENABLED_MOCKS.length > 0) {
  */
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function handleDataRequest(response: Response, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
+  const log = getLogger('entry.server/handleDataRequest');
   log.debug('Touching session to extend its lifetime');
   instrumentationService.createCounter('http.server.requests').add(1);
 
@@ -63,6 +63,7 @@ export async function handleDataRequest(response: Response, { request }: LoaderF
 export function handleError(error: unknown, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
   // note that you generally want to avoid logging when the request was aborted, since remix's
   // cancellation and race-condition handling can cause a lot of requests to be aborted
+  const log = getLogger('entry.server/handleError');
   if (!request.signal.aborted) {
     if (error instanceof Error) {
       log.error(error);
@@ -75,6 +76,7 @@ export function handleError(error: unknown, { request }: LoaderFunctionArgs | Ac
 }
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
+  const log = getLogger('entry.server/handleRequest');
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
   instrumentationService.createCounter('http.server.requests').add(1);

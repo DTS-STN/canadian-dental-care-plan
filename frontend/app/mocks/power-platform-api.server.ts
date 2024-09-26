@@ -6,8 +6,6 @@ import type { BenefitApplicationResponse } from '~/schemas/benefit-application-s
 import { benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('power-platform-api.server');
-
 const sinIdSchema = z.object({
   Applicant: z.object({
     PersonSINIdentification: z.object({
@@ -20,6 +18,7 @@ const sinIdSchema = z.object({
  * Server-side MSW mocks for the Power Platform API.
  */
 export function getPowerPlatformApiMockHandlers() {
+  const log = getLogger('power-platform-api.server');
   log.info('Initializing Power Platform mock handlers');
 
   return [
