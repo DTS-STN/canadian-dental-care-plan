@@ -74,7 +74,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().findById(state.communicationPreferences.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
-  const preferredLanguage = serviceProvider.getPreferredLanguageService().findById(state.communicationPreferences.preferredLanguage);
+  const preferredLanguage = serviceProvider.getPreferredLanguageService().findPreferredLanguageById(state.communicationPreferences.preferredLanguage);
   invariant(preferredLanguage, `Unexpected preferred language: ${state.communicationPreferences.preferredLanguage}`);
 
   const maritalStatus = serviceProvider.getMaritalStatusService().findById(state.applicantInformation.maritalStatus);

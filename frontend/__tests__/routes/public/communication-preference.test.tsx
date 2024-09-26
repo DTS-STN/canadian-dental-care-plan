@@ -49,7 +49,7 @@ describe('_public.apply.id.communication-preference', () => {
             findById: vi.fn(),
           }),
           getPreferredLanguageService: vi.fn().mockReturnValue({
-            findAll: vi.fn().mockReturnValue([
+            listPreferredLanguages: vi.fn().mockReturnValue([
               { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
               { id: 'fr', nameEn: 'French', nameFr: 'Français' },
             ]),
@@ -79,7 +79,7 @@ describe('_public.apply.id.communication-preference', () => {
         ],
       });
 
-      expect(mockAppLoadContext.serviceProvider.getPreferredLanguageService().findAll).toHaveBeenCalledTimes(1);
+      expect(mockAppLoadContext.serviceProvider.getPreferredLanguageService().listPreferredLanguages).toHaveBeenCalledTimes(1);
     });
   });
 
