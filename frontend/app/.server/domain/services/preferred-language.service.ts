@@ -39,7 +39,7 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
   }
 
   listPreferredLanguages = moize(this.listPreferredLanguagesImpl, {
-    onCacheAdd: () => this.log.info('Creating new findAll memo'),
+    onCacheAdd: () => this.log.info('Creating new listPreferredLanguages memo'),
   });
 
   private findPreferredLanguageByIdImpl(id: string): PreferredLanguageDto | null {
@@ -52,6 +52,6 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
 
   findPreferredLanguageById = moize(this.findPreferredLanguageByIdImpl, {
     maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new findById memo'),
+    onCacheAdd: () => this.log.info('Creating new findPreferredLanguageById memo'),
   });
 }

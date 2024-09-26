@@ -77,8 +77,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const maritalStatus = serviceProvider.getMaritalStatusService().findById(state.applicantInformation.maritalStatus);
   invariant(maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
 
-  const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().findById(state.communicationPreferences.preferredMethod);
-  invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
+  const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
