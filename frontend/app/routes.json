@@ -660,6 +660,25 @@
         ]
       },
       {
+        "id": "public/renew/_route",
+        "file": "routes/public/renew/_route.tsx",
+        "paths": {
+          "en": "/:lang/renew",
+          "fr": "/:lang/renew"
+        },
+        "children": [
+          {
+            "id": "public/renew/index",
+            "file": "routes/public/renew/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/renew",
+              "fr": "/:lang/renew"
+            }
+          }
+        ]
+      },
+      {
         "id": "public/unable-to-process-request",
         "file": "routes/public/unable-to-process-request.tsx",
         "paths": {

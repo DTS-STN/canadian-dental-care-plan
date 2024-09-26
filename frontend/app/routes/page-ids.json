@@ -80,6 +80,9 @@
       "child": "CDCP-STAT-0003",
       "result": "CDCP-STAT-0004"
     },
+    "renew": {
+      "index": "CDCP-RENW-0001"
+    },
     "unableToProcessRequest": "CDCP-UNAB-0001",
     "notFound": "CDCP-ERR-0404"
   }
