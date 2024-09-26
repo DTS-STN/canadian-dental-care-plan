@@ -27,8 +27,8 @@ describe('PreferredLanguageServiceImpl', () => {
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       // Act and Assert
-      expect(service.findAll.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.findById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.listPreferredLanguages.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect(service.findPreferredLanguageById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
@@ -66,7 +66,7 @@ describe('PreferredLanguageServiceImpl', () => {
 
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
-      const dtos = service.findAll();
+      const dtos = service.listPreferredLanguages();
 
       expect(dtos).toEqual(mockDtos);
       expect(mockPreferredLanguageRepository.findAll).toHaveBeenCalledTimes(1);
@@ -95,7 +95,7 @@ describe('PreferredLanguageServiceImpl', () => {
 
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
-      const dto = service.findById(id);
+      const dto = service.findPreferredLanguageById(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledTimes(1);
@@ -111,7 +111,7 @@ describe('PreferredLanguageServiceImpl', () => {
 
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
-      const dto = service.findById(id);
+      const dto = service.findPreferredLanguageById(id);
 
       expect(dto).toEqual(null);
       expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledTimes(1);
