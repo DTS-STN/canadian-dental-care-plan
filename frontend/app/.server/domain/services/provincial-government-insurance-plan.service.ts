@@ -11,7 +11,7 @@ import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface ProvincialGovernmentInsurancePlanService {
   listProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanDto[];
-  getProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto | null;
+  getProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto;
 }
 
 @injectable()
