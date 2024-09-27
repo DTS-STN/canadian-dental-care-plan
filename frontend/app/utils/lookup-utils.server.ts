@@ -1,48 +1,4 @@
-import { getEnv } from './env-utils.server';
-import type { ClientFriendlyStatusDto, CountryDto, FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredCommunicationMethodDto, PreferredLanguageDto, ProvinceTerritoryStateDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
-
-/**
- * Localizes a single country object by adding a localized name.
- *
- * @param country - The country object to localize.
- * @param locale - The locale code for localization.
- * @returns The localized country object with a localized name.
- */
-export function localizeCountry(country: CountryDto, locale: AppLocale) {
-  const { nameEn, nameFr, ...rest } = country;
-  return {
-    ...rest,
-    name: locale === 'fr' ? nameFr : nameEn,
-  };
-}
-
-/**
- * Localizes an array of country objects by adding localized names.
- *
- * @param countries - The array of country objects to localize.
- * @param locale - The locale code for localization.
- * @returns The localized array of country objects.
- */
-export function localizeCountries(countries: CountryDto[], locale: AppLocale) {
-  return countries.map((country) => localizeCountry(country, locale));
-}
-
-/**
- * Localizes an array of country objects by adding localized names and sorting them.
- * If a Canada country object is found, it is moved to the beginning of the sorted array.
- *
- * @param countries - The array of country objects to localize.
- * @param locale - The locale code for localization.
- * @returns The localized and sorted array of country objects, with Canada first if found.
- */
-export function localizeAndSortCountries(countries: CountryDto[], locale: AppLocale) {
-  const { CANADA_COUNTRY_ID } = getEnv();
-  return localizeCountries(countries, locale).toSorted((a, b) => {
-    if (a.id === CANADA_COUNTRY_ID) return -1;
-    if (b.id === CANADA_COUNTRY_ID) return 1;
-    return a.name.localeCompare(b.name, locale);
-  });
-}
+import type { ClientFriendlyStatusDto, FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredCommunicationMethodDto, PreferredLanguageDto, ProvinceTerritoryStateDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 
 /**
  * Localizes a single maritalStatus object by adding a localized name.
