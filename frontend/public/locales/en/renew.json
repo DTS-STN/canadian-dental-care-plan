@@ -1,5 +1,20 @@
 {
   "index": {
-    "page-title": "Renew"
+    "page-title": "Renew",
+    "eligibility": "To renew your Canadian Dental Care Plan, you'll need to provide the following information for each applicant:",
+    "full-name": "Full name",
+    "client-number": "Client number",
+    "dob": "Date of birth",
+    "sin": "Spouse or common-law partner's Social Insurance Number (SIN) (if applicable)",
+    "address": "Home and mailing address",
+    "dental-coverage": "List of the dental coverage you currently have through government social programs (if applicable)",
+    "renew-now": "Renew now",
+    "to-apply": "To apply for the Canadian Dental Care Plan, click the button below.",
+    "start-button": "Renew now",
+    "back-button": "Back",
+    "apply-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html"
+  },
+  "terms-and-conditions": {
+    "page-title": "Terms and conditions"
   }
 }
