@@ -39,7 +39,7 @@ describe('_public.apply.id.contact-information', () => {
             getCountryById: vi.fn(),
             getLocalizedCountryById: vi.fn(),
             listCountries: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
-            listLocalizedCountries: () => [{ id: '1', name: 'super country' }],
+            listAndSortLocalizedCountries: () => [{ id: '1', name: 'super country' }],
           }),
           getProvinceTerritoryStateService: () => ({
             listProvinceTerritoryStates: () => [{ id: 'SP', countryId: 'CAN', nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }],

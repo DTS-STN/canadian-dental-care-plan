@@ -8,6 +8,7 @@ import type { CountryDto, CountryLocalizedDto } from '~/.server/domain/dtos';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { moveToTop } from '~/utils/collection-utils';
 
 /**
  * Service interface for managing country data.
@@ -18,7 +19,7 @@ export interface CountryService {
    *
    * @returns An array of Country DTOs.
    */
-  listCountries(): CountryDto[];
+  listCountries(): ReadonlyArray<CountryDto>;
 
   /**
    * Retrieves a specific country by its ID.
@@ -35,7 +36,7 @@ export interface CountryService {
    * @param locale - The desired locale (e.g., 'en' or 'fr').
    * @returns An array of Country DTOs in the specified locale.
    */
-  listLocalizedCountries(locale: AppLocale): CountryLocalizedDto[];
+  listAndSortLocalizedCountries(locale: AppLocale): ReadonlyArray<CountryLocalizedDto>;
 
   /**
    * Retrieves a specific country by its ID in the specified locale.
@@ -56,7 +57,7 @@ export class CountryServiceImpl implements CountryService {
     @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
     @inject(SERVICE_IDENTIFIER.COUNTRY_DTO_MAPPER) private readonly countryDtoMapper: CountryDtoMapper,
     @inject(SERVICE_IDENTIFIER.COUNTRY_REPOSITORY) private readonly countryRepository: CountryRepository,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS'>,
+    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID' | 'LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('CountryServiceImpl');
 
@@ -65,7 +66,7 @@ export class CountryServiceImpl implements CountryService {
     this.getCountryById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS;
   }
 
-  private listCountriesImpl(): CountryDto[] {
+  private listCountriesImpl(): ReadonlyArray<CountryDto> {
     this.log.debug('Get all countries');
     const countryEntities = this.countryRepository.findAll();
     const countryDtos = this.countryDtoMapper.mapCountryEntitiesToCountryDtos(countryEntities);
@@ -95,12 +96,15 @@ export class CountryServiceImpl implements CountryService {
     onCacheAdd: () => this.log.info('Creating new findById memo'),
   });
 
-  listLocalizedCountries(locale: AppLocale): CountryLocalizedDto[] {
-    this.log.debug('Get all localized countries with locale: [%s]', locale);
+  listAndSortLocalizedCountries(locale: AppLocale): ReadonlyArray<CountryLocalizedDto> {
+    this.log.debug('Get and sort all localized countries with locale: [%s]', locale);
     const countryDtos = this.listCountries();
     const localizedCountryDtos = this.countryDtoMapper.mapCountryDtosToCountryLocalizedDtos(countryDtos, locale);
-    this.log.trace('Returning localized countries: [%j]', localizedCountryDtos);
-    return localizedCountryDtos;
+    const sortByNamePredicate = (a: CountryLocalizedDto, b: CountryLocalizedDto) => a.name.localeCompare(b.name, locale);
+    const moveCanadaToTopPredicate = (country: CountryLocalizedDto) => country.id === this.serverConfig.CANADA_COUNTRY_ID;
+    const sortedLocalizedCountryDtos = moveToTop(localizedCountryDtos.toSorted(sortByNamePredicate), moveCanadaToTopPredicate);
+    this.log.trace('Returning sorted localized countries: [%j]', sortedLocalizedCountryDtos);
+    return sortedLocalizedCountryDtos;
   }
 
   getLocalizedCountryById(id: string, locale: AppLocale): CountryLocalizedDto {

@@ -108,7 +108,7 @@ describe('CountryServiceImpl', () => {
     });
   });
 
-  describe('listLocalizedCountries', () => {
+  describe('listAndSortLocalizedCountries', () => {
     it('fetches all localized countries', () => {
       const mockCountryRepository = mock<CountryRepository>();
       mockCountryRepository.findAll.mockReturnValueOnce([
@@ -136,7 +136,7 @@ describe('CountryServiceImpl', () => {
 
       const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      const dtos = service.listLocalizedCountries('en');
+      const dtos = service.listAndSortLocalizedCountries('en');
 
       expect(dtos).toEqual(mockDtos);
       expect(mockCountryRepository.findAll).toHaveBeenCalledTimes(1);
