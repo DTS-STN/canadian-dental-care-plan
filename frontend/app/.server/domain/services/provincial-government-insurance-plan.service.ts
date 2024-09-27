@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
+import { ProvincialGovernmentInsurancePlanNotFoundException } from '../exceptions/ProvincialGovernmentInsurancePlanException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
@@ -9,8 +10,8 @@ import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/doma
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface ProvincialGovernmentInsurancePlanService {
-  findAll(): ProvincialGovernmentInsurancePlanDto[];
-  findById(id: string): ProvincialGovernmentInsurancePlanDto | null;
+  listProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanDto[];
+  getProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto;
 }
 
 @injectable()
@@ -26,11 +27,11 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
     this.log = logFactory.createLogger('ProvincialGovernmentInsurancePlanServiceImpl');
 
     // set moize options
-    this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS;
-    this.findById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS;
+    this.listProvincialGovernmentInsurancePlans.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS;
+    this.getProvincialGovernmentInsurancePlanById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS;
   }
 
-  private findAllImpl(): ProvincialGovernmentInsurancePlanDto[] {
+  private listProvincialGovernmentInsurancePlansImpl(): ProvincialGovernmentInsurancePlanDto[] {
     this.log.debug('Get all provincial government insurance plans');
     const provincialGovernmentInsurancePlanEntities = this.provincialGovernmentInsurancePlanRepository.findAll();
     const provincialGovernmentInsurancePlanDtos = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities);
@@ -38,21 +39,22 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
     return provincialGovernmentInsurancePlanDtos;
   }
 
-  findAll = moize(this.findAllImpl, {
+  listProvincialGovernmentInsurancePlans = moize(this.listProvincialGovernmentInsurancePlansImpl, {
     onCacheAdd: () => this.log.info('Creating new findAll memo'),
   });
 
-  private findByIdImpl(id: string): ProvincialGovernmentInsurancePlanDto | null {
+  private getProvincialGovernmentInsurancePlanByIdImpl(id: string): ProvincialGovernmentInsurancePlanDto {
     this.log.debug('Get provincial government insurance plan with id: [%s]', id);
     const provincialGovernmentInsurancePlanEntity = this.provincialGovernmentInsurancePlanRepository.findById(id);
-    const provincialGovernmentInsurancePlanDto = provincialGovernmentInsurancePlanEntity
-      ? this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity)
-      : null;
+
+    if (!provincialGovernmentInsurancePlanEntity) throw new ProvincialGovernmentInsurancePlanNotFoundException(`Provincial government insurance plan with id: [${id}] not found`);
+
+    const provincialGovernmentInsurancePlanDto = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity);
     this.log.trace('Returning provincial government insurance plan: [%j]', provincialGovernmentInsurancePlanDto);
     return provincialGovernmentInsurancePlanDto;
   }
 
-  findById = moize(this.findByIdImpl, {
+  getProvincialGovernmentInsurancePlanById = moize(this.getProvincialGovernmentInsurancePlanByIdImpl, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new findById memo'),
   });

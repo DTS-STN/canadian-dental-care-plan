@@ -3,6 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
+import { ProvincialGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions/ProvincialGovernmentInsurancePlanException';
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { ProvincialGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services';
@@ -26,8 +27,8 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
 
       const service = new ProvincialGovernmentInsurancePlanServiceImpl(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
 
-      expect(service.findAll.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.findById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.listProvincialGovernmentInsurancePlans.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect(service.getProvincialGovernmentInsurancePlanById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
@@ -69,7 +70,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
 
       const service = new ProvincialGovernmentInsurancePlanServiceImpl(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
-      const dtos = service.findAll();
+      const dtos = service.listProvincialGovernmentInsurancePlans();
 
       expect(dtos).toEqual(mockDtos);
       expect(mockProvincialGovernmentInsurancePlanRepository.findAll).toHaveBeenCalledTimes(1);
@@ -100,14 +101,14 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
 
       const service = new ProvincialGovernmentInsurancePlanServiceImpl(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
-      const dto = service.findById(id);
+      const dto = service.getProvincialGovernmentInsurancePlanById(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockProvincialGovernmentInsurancePlanRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).toHaveBeenCalledTimes(1);
     });
 
-    it('fetches provincial government insurance plan by id returns null if not found', () => {
+    it('fetches provincial government insurance plan by id and throws exception if not found', () => {
       const id = '1033';
       const mockProvincialGovernmentInsurancePlanRepository = mock<ProvincialGovernmentInsurancePlanRepository>();
       mockProvincialGovernmentInsurancePlanRepository.findById.mockReturnValueOnce(null);
@@ -116,9 +117,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
 
       const service = new ProvincialGovernmentInsurancePlanServiceImpl(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
-      const dto = service.findById(id);
-
-      expect(dto).toEqual(null);
+      expect(() => service.getProvincialGovernmentInsurancePlanById(id)).toThrow(ProvincialGovernmentInsurancePlanNotFoundException);
       expect(mockProvincialGovernmentInsurancePlanRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
     });

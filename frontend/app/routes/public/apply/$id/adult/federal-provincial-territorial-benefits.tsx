@@ -57,8 +57,8 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const locale = getLocale(request);
 
   const federalSocialPrograms = localizeAndSortFederalSocialPrograms(serviceProvider.getFederalGovernmentInsurancePlanService().findAll(), locale);
-  const provincialTerritorialSocialPrograms = localizeAndSortProvincialGovernmentInsurancePlans(serviceProvider.getProvincialGovernmentInsurancePlanService().findAll(), locale);
   const provinceTerritoryStates = localizeAndSortProvinceTerritoryStates(serviceProvider.getProvinceTerritoryStateService().listProvinceTerritoryStates(), locale).filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
+  const provincialTerritorialSocialPrograms = localizeAndSortProvincialGovernmentInsurancePlans(serviceProvider.getProvincialGovernmentInsurancePlanService().listProvincialGovernmentInsurancePlans(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:dental-benefits.title') }) };

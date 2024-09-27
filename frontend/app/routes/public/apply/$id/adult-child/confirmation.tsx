@@ -59,7 +59,9 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   }
 
   const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(state.dentalBenefits.federalSocialProgram) : undefined;
-  const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().findById(state.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
+  const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram
+    ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram)
+    : undefined;
 
   // Getting province by Id
   const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
@@ -133,7 +135,9 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     }
 
     const federalBenefit = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
-    const provincialTerritorialSocialProgram = child.dentalBenefits.provincialTerritorialSocialProgram ? serviceProvider.getProvincialGovernmentInsurancePlanService().findById(child.dentalBenefits.provincialTerritorialSocialProgram) : undefined;
+    const provincialTerritorialSocialProgram = child.dentalBenefits.provincialTerritorialSocialProgram
+      ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram)
+      : undefined;
 
     return {
       id: child.id,
