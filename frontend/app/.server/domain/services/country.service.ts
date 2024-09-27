@@ -8,7 +8,7 @@ import type { CountryDto, CountryLocalizedDto } from '~/.server/domain/dtos';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { moveToTop } from '~/utils/collection-utils';
+import { moveToTop } from '~/.server/utils/collection.utils';
 
 /**
  * Service interface for managing country data.

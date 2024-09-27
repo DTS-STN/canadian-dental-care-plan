@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { moveToTop } from '~/utils/collection-utils';
+import { moveToTop } from '~/.server/utils/collection.utils';
 
 describe('moveToTop', () => {
   it('should move the targeted element to the top of the array', () => {
