@@ -1,22 +1,23 @@
 /**
  * Represents a Data Transfer Object (DTO) for a country.
  */
-export interface CountryDto {
+export type CountryDto = Readonly<{
   /** Unique identifier for the country. */
-  readonly id: string;
+  id: string;
 
   /** Country name in English. */
-  readonly nameEn: string;
+  nameEn: string;
 
   /** Country name in French. */
-  readonly nameFr: string;
-}
+  nameFr: string;
+}>;
 
 /**
  * Represents a localized version of the Country DTO.
  * Inherits the country ID and provides a single localized name.
  */
-export interface CountryLocalizedDto extends OmitStrict<Readonly<CountryDto>, 'nameEn' | 'nameFr'> {
-  /** Localized name for the country. */
-  readonly name: string;
-}
+export type CountryLocalizedDto = OmitStrict<CountryDto, 'nameEn' | 'nameFr'> &
+  Readonly<{
+    /** Localized name for the country. */
+    name: string;
+  }>;
