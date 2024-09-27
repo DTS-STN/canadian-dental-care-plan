@@ -1,14 +1,11 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import {
-  localizeAndSortCountries,
   localizeAndSortFederalSocialPrograms,
   localizeAndSortMaritalStatuses,
   localizeAndSortPreferredLanguages,
   localizeAndSortProvinceTerritoryStates,
   localizeAndSortProvincialGovernmentInsurancePlans,
-  localizeCountries,
-  localizeCountry,
   localizeFederalSocialProgram,
   localizeMaritalStatus,
   localizeMaritalStatuses,
@@ -17,12 +14,6 @@ import {
   localizeProvinceTerritoryStates,
   localizeProvincialGovernmentInsurancePlan,
 } from '~/utils/lookup-utils.server';
-
-const mockCountries = [
-  { id: '001', nameEn: 'englishCountryOne', nameFr: 'frenchCountryOne' },
-  { id: '002', nameEn: 'englishCountryTwo', nameFr: 'frenchCountryTwo' },
-  { id: '003', nameEn: 'englishCountryThree', nameFr: 'frenchCountryThree' },
-];
 
 const mockMaritalStatuses = [
   { id: '001', nameEn: 'englishMaritalStatusOne', nameFr: 'frenchMaritalStatusOne' },
@@ -53,93 +44,6 @@ const mockProvincialTerritorialSocialPrograms = [
   { id: '002', provinceTerritoryStateId: '002', nameEn: 'englishProgramTwo', nameFr: 'frenchProgramTwo' },
   { id: '003', provinceTerritoryStateId: '003', nameEn: 'englishProgramThree', nameFr: 'frenchProgramThree' },
 ];
-
-describe('localizeCountry', () => {
-  it('should return the country id and english name', () => {
-    expect(localizeCountry(mockCountries[0], 'en')).toEqual({ id: '001', name: 'englishCountryOne' });
-  });
-
-  it('should return the country id and french name', () => {
-    expect(localizeCountry(mockCountries[0], 'fr')).toEqual({ id: '001', name: 'frenchCountryOne' });
-  });
-});
-
-describe('localizeCountries', () => {
-  it('should return an array of country ids and english names', () => {
-    expect(localizeCountries(mockCountries, 'en')).toEqual([
-      { id: '001', name: 'englishCountryOne' },
-      { id: '002', name: 'englishCountryTwo' },
-      { id: '003', name: 'englishCountryThree' },
-    ]);
-  });
-
-  it('should return an array of country ids and french names', () => {
-    expect(localizeCountries(mockCountries, 'fr')).toEqual([
-      { id: '001', name: 'frenchCountryOne' },
-      { id: '002', name: 'frenchCountryTwo' },
-      { id: '003', name: 'frenchCountryThree' },
-    ]);
-  });
-});
-
-describe('localizeAndSortCountries', () => {
-  vi.mock('~/utils/env-utils.server', () => ({
-    getEnv: vi.fn().mockReturnValue({
-      CANADA_COUNTRY_ID: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
-    }),
-  }));
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('should return an array of sorted country ids and english names', () => {
-    expect(localizeAndSortCountries(mockCountries, 'en')).toEqual([
-      { id: '001', name: 'englishCountryOne' },
-      { id: '003', name: 'englishCountryThree' },
-      { id: '002', name: 'englishCountryTwo' },
-    ]);
-  });
-
-  it('should return an array of sorted country ids and french names', () => {
-    expect(localizeAndSortCountries(mockCountries, 'fr')).toEqual([
-      { id: '001', name: 'frenchCountryOne' },
-      { id: '003', name: 'frenchCountryThree' },
-      { id: '002', name: 'frenchCountryTwo' },
-    ]);
-  });
-
-  it('should return an array of sorted country ids and french names with Canada first', () => {
-    const countries = [
-      {
-        id: '06f5389e-97ae-eb11-8236-000d3af4bfc3',
-        nameEn: 'Botswana',
-        nameFr: 'Botswana',
-      },
-      {
-        id: '08f5389e-97ae-eb11-8236-000d3af4bfc3',
-        nameEn: 'Central African Republic',
-        nameFr: 'Centrafrique',
-      },
-      {
-        id: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
-        nameEn: 'Canada',
-        nameFr: 'Canada',
-      },
-    ];
-    expect(localizeAndSortCountries(countries, 'fr')).toEqual([
-      { id: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', name: 'Canada' },
-      {
-        id: '06f5389e-97ae-eb11-8236-000d3af4bfc3',
-        name: 'Botswana',
-      },
-      {
-        id: '08f5389e-97ae-eb11-8236-000d3af4bfc3',
-        name: 'Centrafrique',
-      },
-    ]);
-  });
-});
 
 describe('localizeMaritalStatus', () => {
   it('should return the marital status id and english name', () => {
