@@ -32,7 +32,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
     });
   });
 
-  describe('findAll', () => {
+  describe('listFederalGovernmentInsurancePlans', () => {
     it('fetches all federal government insurance plans', () => {
       const mockFederalGovernmentInsurancePlanRepository = mock<FederalGovernmentInsurancePlanRepository>();
       mockFederalGovernmentInsurancePlanRepository.findAll.mockReturnValueOnce([
@@ -74,7 +74,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('getFederalGovernmentInsurancePlanById', () => {
     it('fetches federal government insurance plan by id', () => {
       const id = '1';
       const mockFederalGovernmentInsurancePlanRepository = mock<FederalGovernmentInsurancePlanRepository>();

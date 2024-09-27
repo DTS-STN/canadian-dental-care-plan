@@ -32,7 +32,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
     });
   });
 
-  describe('findAll', () => {
+  describe('listProvincialGovernmentInsurancePlans', () => {
     it('fetches all provincial government insurance plans', () => {
       const mockProvincialGovernmentInsurancePlanRepository = mock<ProvincialGovernmentInsurancePlanRepository>();
       mockProvincialGovernmentInsurancePlanRepository.findAll.mockReturnValueOnce([
@@ -78,7 +78,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('getProvincialGovernmentInsurancePlanById', () => {
     it('fetches provincial government insurance plan by id', () => {
       const id = '1';
       const mockProvincialGovernmentInsurancePlanRepository = mock<ProvincialGovernmentInsurancePlanRepository>();
