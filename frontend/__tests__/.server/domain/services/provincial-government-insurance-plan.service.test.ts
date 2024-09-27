@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
-import { ProvincialGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions/ProvincialGovernmentInsurancePlanException';
+import { ProvincialGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions/ProvincialGovernmentInsurancePlanNotFoundException';
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { ProvincialGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services';
