@@ -675,6 +675,24 @@
               "en": "/:lang/renew",
               "fr": "/:lang/renew"
             }
+          },
+          {
+            "id": "public/renew/$id/_route",
+            "file": "routes/public/renew/$id/_route.tsx",
+            "paths": {
+              "en": "/:lang/renew/:id",
+              "fr": "/:lang/renew/:id"
+            },
+            "children": [
+              {
+                "id": "public/renew/$id/terms-and-conditions",
+                "file": "routes/public/renew/$id/terms-and-conditions.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/terms-and-conditions",
+                  "fr": "/:lang/renew/:id/conditions-utilisation"
+                }
+              }
+            ]
           }
         ]
       },

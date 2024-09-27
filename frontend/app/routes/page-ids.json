@@ -81,7 +81,8 @@
       "result": "CDCP-STAT-0004"
     },
     "renew": {
-      "index": "CDCP-RENW-0001"
+      "index": "CDCP-RENW-0001",
+      "termsAndConditions": "CDCP-RENW-0002"
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
     "notFound": "CDCP-ERR-0404"
