@@ -14,7 +14,7 @@ export interface CountryDtoMapper {
    * @param locale The desired locale for localization (e.g., 'en' or 'fr').
    * @returns An array of CountryLocalizedDto objects, each representing a localized version of the corresponding CountryDto.
    */
-  mapCountryDtosToCountryLocalizedDtos(countryDtos: CountryDto[], locale: AppLocale): CountryLocalizedDto[];
+  mapCountryDtosToCountryLocalizedDtos(countryDtos: ReadonlyArray<CountryDto>, locale: AppLocale): ReadonlyArray<CountryLocalizedDto>;
 
   /**
    * Maps a single CountryDto object to a CountryLocalizedDto object, applying localization based on the provided locale.
@@ -31,7 +31,7 @@ export interface CountryDtoMapper {
    * @param countryEntities The array of CountryEntity objects to be mapped.
    * @returns An array of CountryDto objects, representing the mapped country data.
    */
-  mapCountryEntitiesToCountryDtos(countryEntities: CountryEntity[]): CountryDto[];
+  mapCountryEntitiesToCountryDtos(countryEntities: ReadonlyArray<CountryEntity>): ReadonlyArray<CountryDto>;
 
   /**
    * Maps a single CountryEntity object to a CountryDto object.
@@ -52,7 +52,7 @@ export class CountryDtoMapperImpl implements CountryDtoMapper {
     };
   }
 
-  mapCountryDtosToCountryLocalizedDtos(countryDtos: CountryDto[], locale: AppLocale): CountryLocalizedDto[] {
+  mapCountryDtosToCountryLocalizedDtos(countryDtos: ReadonlyArray<CountryDto>, locale: AppLocale): ReadonlyArray<CountryLocalizedDto> {
     return countryDtos.map((dto) => this.mapCountryDtoToCountryLocalizedDto(dto, locale));
   }
 
@@ -63,7 +63,7 @@ export class CountryDtoMapperImpl implements CountryDtoMapper {
     return { id, nameEn, nameFr };
   }
 
-  mapCountryEntitiesToCountryDtos(countryEntities: CountryEntity[]): CountryDto[] {
+  mapCountryEntitiesToCountryDtos(countryEntities: ReadonlyArray<CountryEntity>): ReadonlyArray<CountryDto> {
     return countryEntities.map((entity) => this.mapCountryEntityToCountryDto(entity));
   }
 }

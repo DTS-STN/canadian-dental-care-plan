@@ -10,7 +10,7 @@ export interface CountryRepository {
    * Fetch all country entities.
    * @returns All country entities.
    */
-  findAll(): CountryEntity[];
+  findAll(): ReadonlyArray<CountryEntity>;
 
   /**
    * Fetch a country entity by its id.
@@ -28,7 +28,7 @@ export class CountryRepositoryImpl implements CountryRepository {
     this.log = logFactory.createLogger('CountryRepositoryImpl');
   }
 
-  findAll(): CountryEntity[] {
+  findAll(): ReadonlyArray<CountryEntity> {
     this.log.debug('Fetching all countries');
     const countryEntities = countryJsonDataSource.value;
 
