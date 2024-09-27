@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
-import { ProvincialGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions/ProvincialGovernmentInsurancePlanException';
+import { ProvincialGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions/ProvincialGovernmentInsurancePlanNotFoundException';
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { ProvincialGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services';
@@ -32,7 +32,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
     });
   });
 
-  describe('findAll', () => {
+  describe('listProvincialGovernmentInsurancePlans', () => {
     it('fetches all provincial government insurance plans', () => {
       const mockProvincialGovernmentInsurancePlanRepository = mock<ProvincialGovernmentInsurancePlanRepository>();
       mockProvincialGovernmentInsurancePlanRepository.findAll.mockReturnValueOnce([
@@ -78,7 +78,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('getProvincialGovernmentInsurancePlanById', () => {
     it('fetches provincial government insurance plan by id', () => {
       const id = '1';
       const mockProvincialGovernmentInsurancePlanRepository = mock<ProvincialGovernmentInsurancePlanRepository>();

@@ -121,7 +121,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
       throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
     }
 
-    const federalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
+    const federalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram) : undefined;
     const provincialGovernmentInsurancePlan = child.dentalBenefits.provincialTerritorialSocialProgram
       ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram)
       : undefined;

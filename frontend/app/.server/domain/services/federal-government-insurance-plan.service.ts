@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
+import { FederalGovernmentInsurancePlanNotFoundException } from '../exceptions/FederalGovernmentInsurancePlanNotFoundException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
@@ -9,8 +10,8 @@ import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface FederalGovernmentInsurancePlanService {
-  findAll(): FederalGovernmentInsurancePlanDto[];
-  findById(id: string): FederalGovernmentInsurancePlanDto | null;
+  listFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanDto[];
+  getFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanDto;
 }
 
 @injectable()
@@ -26,11 +27,11 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
     this.log = logFactory.createLogger('FederalGovernmentInsurancePlanServiceImpl');
 
     // set moize options
-    this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS;
-    this.findById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS;
+    this.listFederalGovernmentInsurancePlans.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS;
+    this.getFederalGovernmentInsurancePlanById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS;
   }
 
-  private findAllImpl(): FederalGovernmentInsurancePlanDto[] {
+  private listFederalGovernmentInsurancePlansImpl(): FederalGovernmentInsurancePlanDto[] {
     this.log.debug('Get all federal government insurance plans');
     const federalGovernmentInsurancePlanEntities = this.federalGovernmentInsurancePlanRepository.findAll();
     const federalGovernmentInsurancePlanDtos = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(federalGovernmentInsurancePlanEntities);
@@ -38,19 +39,22 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
     return federalGovernmentInsurancePlanDtos;
   }
 
-  findAll = moize(this.findAllImpl, {
+  listFederalGovernmentInsurancePlans = moize(this.listFederalGovernmentInsurancePlansImpl, {
     onCacheAdd: () => this.log.info('Creating new findAll memo'),
   });
 
-  private findByIdImpl(id: string): FederalGovernmentInsurancePlanDto | null {
+  private getFederalGovernmentInsurancePlanByIdImpl(id: string): FederalGovernmentInsurancePlanDto {
     this.log.debug('Get federal government insurance plan with id: [%s]', id);
     const federalGovernmentInsurancePlanEntity = this.federalGovernmentInsurancePlanRepository.findById(id);
-    const federalGovernmentInsurancePlanDto = federalGovernmentInsurancePlanEntity ? this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto(federalGovernmentInsurancePlanEntity) : null;
+
+    if (!federalGovernmentInsurancePlanEntity) throw new FederalGovernmentInsurancePlanNotFoundException(`Federal government insurance plan with id: [${id}] not found`);
+
+    const federalGovernmentInsurancePlanDto = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto(federalGovernmentInsurancePlanEntity);
     this.log.trace('Returning federal government insurance plan: [%j]', federalGovernmentInsurancePlanDto);
     return federalGovernmentInsurancePlanDto;
   }
 
-  findById = moize(this.findByIdImpl, {
+  getFederalGovernmentInsurancePlanById = moize(this.getFederalGovernmentInsurancePlanByIdImpl, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new findById memo'),
   });

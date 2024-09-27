@@ -57,7 +57,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:children.index.page-title') }) };
 
   const children = getChildrenState(state).map((child) => {
-    const federalGovernmentInsurancePlanService = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
+    const federalGovernmentInsurancePlanService = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram) : undefined;
     const provincialTerritorialSocialProgram = child.dentalBenefits?.provincialTerritorialSocialProgram
       ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram)
       : undefined;

@@ -71,7 +71,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const payload = viewPayloadEnabled && toBenefitApplicationRequestFromApplyAdultChildState(state);
 
   const children = state.children.map((child) => {
-    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().findById(child.dentalBenefits.federalSocialProgram) : undefined;
+    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram) : undefined;
     const selectedProvincialBenefit = child.dentalBenefits.provincialTerritorialSocialProgram
       ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram)
       : undefined;
