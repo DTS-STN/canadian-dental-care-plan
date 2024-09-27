@@ -28,7 +28,7 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortCountries, localizeAndSortProvinceTerritoryStates } from '~/utils/lookup-utils.server';
+import { localizeAndSortProvinceTerritoryStates } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -53,7 +53,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const locale = getLocale(request);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
 
-  const countryList = localizeAndSortCountries(serviceProvider.getCountryService().listCountries(), locale);
+  const countryList = serviceProvider.getCountryService().listAndSortLocalizedCountries(locale);
   const regionList = localizeAndSortProvinceTerritoryStates(serviceProvider.getProvinceTerritoryStateService().listProvinceTerritoryStates(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
