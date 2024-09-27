@@ -2,8 +2,8 @@ import { isEmpty, omit } from 'moderndash';
 import os from 'node:os';
 import util from 'node:util';
 import { LEVEL, MESSAGE, SPLAT } from 'triple-beam';
-import type { LeveledLogMethod, Logger } from 'winston';
-import { createLogger, format, transports } from 'winston';
+import type { LeveledLogMethod, Logger as WinstonLogger } from 'winston';
+import winston, { format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import { fullFormat } from 'winston-error-format';
 import { z } from 'zod';
@@ -29,11 +29,19 @@ function formatLabel(label: string, size: number) {
   return str.length <= size ? str : `…${str.slice(-size + 1)}`;
 }
 
+// required so typescript knows about log.audit(..), log.trace(..), etc
+type LeveledLogMethods = { [level in keyof typeof logLevels]: LeveledLogMethod };
+type Logger = WinstonLogger & LeveledLogMethods;
+
 /**
  * Returns a logger for the specified logging category.
  */
-export const getLogger = (category: string) => {
-  const logger = createLogger({
+export const getLogger = (category: string): Logger => {
+  if (winston.loggers.has(category)) {
+    return winston.loggers.get(category) as Logger;
+  }
+
+  const logger = winston.loggers.add(category, {
     level: env.logLevel,
     levels: logLevels,
     format: format.combine(
@@ -73,8 +81,5 @@ export const getLogger = (category: string) => {
     );
   }
 
-  // required so typescript knows about log.audit(..), log.trace(..), etc
-  type LeveledLogMethods = { [level in keyof typeof logLevels]: LeveledLogMethod };
-
-  return logger as Logger & LeveledLogMethods;
+  return logger as Logger;
 };
