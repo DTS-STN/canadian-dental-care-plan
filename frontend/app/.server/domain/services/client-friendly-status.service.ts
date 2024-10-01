@@ -4,7 +4,7 @@ import moize from 'moize';
 import { ClientFriendlyStatusNotFoundException } from '../exceptions/ClientFriendlyStatusNotFoundException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos';
+import type { ClientFriendlyStatusDto, ClientFriendlyStatusLocalizedDto } from '~/.server/domain/dtos';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
@@ -14,13 +14,6 @@ import type { LogFactory, Logger } from '~/.server/factories';
  */
 export interface ClientFriendlyStatusService {
   /**
-   * Retrieves a list of all client friendly statuses.
-   *
-   * @returns An array of ClientFriendlyStatus DTOs.
-   */
-  listClientFriendlyStatuses(): ReadonlyArray<ClientFriendlyStatusDto>;
-
-  /**
    * Retrieves a specific client friendly status by its ID.
    *
    * @param id - The ID of the client friendly status to retrieve.
@@ -28,7 +21,19 @@ export interface ClientFriendlyStatusService {
    * @throws {ClientFriendlyStatusNotFoundException} If no client friendly status is found with the specified ID.
    */
   getClientFriendlyStatusById(id: string): ClientFriendlyStatusDto;
+
+  /**
+   * Retrieves a specific client friendly status by its ID with localized names.
+   *
+   * @param id - The ID of the client friendly status to retrieve.
+   * @param locale - The desired locale (e.g., 'en' or 'fr').
+   * @returns The ClientFriendlyStatusLocalized DTO corresponding to the specified ID.
+   * @throws {ClientFriendlyStatusNotFoundException} If no client friendly status is found with the specified ID.
+   */
+  getLocalizedClientFriendlyStatusById(id: string, locale: AppLocale): ClientFriendlyStatusLocalizedDto;
 }
+
+export type ClientFriendlyStatusServiceImpl_ServerConfig = Pick<ServerConfig, 'LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS'>;
 
 /**
  * Implementation of the ClientFriendlyStatusService interface.
@@ -53,12 +58,11 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
     @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
     @inject(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_DTO_MAPPER) private readonly clientFriendlyStatusDtoMapper: ClientFriendlyStatusDtoMapper,
     @inject(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_REPOSITORY) private readonly clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS'>,
+    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
   ) {
     this.log = logFactory.createLogger('ClientFriendlyStatusServiceImpl');
 
     // Configure caching for client friendly status operations
-    this.listClientFriendlyStatuses.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS;
     this.getClientFriendlyStatusById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS;
   }
 
@@ -72,23 +76,12 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
     onCacheAdd: () => this.log.info('Creating new getClientFriendlyStatusById memo'),
   });
 
-  /**
-   * Retrieves a specific client friendly status by its ID.
-   *
-   * @param id - The ID of the client friendly status to retrieve.
-   * @returns The ClientFriendlyStatus DTO corresponding to the specified ID.
-   * @throws {ClientFriendlyStatusNotFoundException} If no client friendly status is found with the specified ID.
-   */
-  listClientFriendlyStatuses = moize(this.listClientFriendlyStatusesImpl, {
-    onCacheAdd: () => this.log.info('Creating new listClientFriendlyStatuses memo'),
-  });
-
-  private listClientFriendlyStatusesImpl(): ReadonlyArray<ClientFriendlyStatusDto> {
-    this.log.debug('Get all client friendly statuses');
-    const clientFriendlyStatusEntities = this.clientFriendlyStatusRepository.findAll();
-    const clientFriendlyStatusDtos = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntitiesToClientFriendlyStatusDtos(clientFriendlyStatusEntities);
-    this.log.trace('Returning client friendly statuses: [%j]', clientFriendlyStatusDtos);
-    return clientFriendlyStatusDtos;
+  getLocalizedClientFriendlyStatusById(id: string, locale: AppLocale): ClientFriendlyStatusLocalizedDto {
+    this.log.debug('Get localized client friendly status with id: [%s] and locale: [%s]', id, locale);
+    const clientFriendlyStatusDto = this.getClientFriendlyStatusById(id);
+    const clientFriendlyStatusLocalizedDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto(clientFriendlyStatusDto, locale);
+    this.log.trace('Returning localized client friendly status: [%j]', clientFriendlyStatusLocalizedDto);
+    return clientFriendlyStatusLocalizedDto;
   }
 
   private getClientFriendlyStatusByIdImpl(id: string): ClientFriendlyStatusDto {

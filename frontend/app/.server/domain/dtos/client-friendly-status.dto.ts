@@ -11,3 +11,12 @@ export type ClientFriendlyStatusDto = Readonly<{
   /** Client friendly status name in French. */
   nameFr: string;
 }>;
+
+/**
+ * Represents a Data Transfer Object (DTO) for a client friendly status with localized names.
+ */
+export type ClientFriendlyStatusLocalizedDto = OmitStrict<ClientFriendlyStatusDto, 'nameEn' | 'nameFr'> &
+  Readonly<{
+    /** Client friendly status name. */
+    name: string;
+  }>;

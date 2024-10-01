@@ -19,7 +19,6 @@ import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeClientFriendlyStatus } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -55,13 +54,10 @@ export async function loader({ context: { serviceProvider, session }, params, re
 
   const statusId = statusCheckResult.statusId ?? null;
   const alertType = getContextualAlertType(statusId);
-  const clientFriendlyStatus = statusId ? serviceProvider.getClientFriendlyStatusService().getClientFriendlyStatusById(statusId) : null;
+  const clientFriendlyStatus = statusId ? serviceProvider.getClientFriendlyStatusService().getLocalizedClientFriendlyStatusById(statusId, locale) : null;
 
   return json({
-    statusResult: {
-      alertType,
-      clientFriendlyStatus: clientFriendlyStatus && localizeClientFriendlyStatus(clientFriendlyStatus, locale),
-    },
+    statusResult: { alertType, clientFriendlyStatus },
     csrfToken,
     meta,
   });

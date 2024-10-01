@@ -1,4 +1,4 @@
-import type { ClientFriendlyStatusDto, FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredCommunicationMethodDto, PreferredLanguageDto, ProvinceTerritoryStateDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
+import type { FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredCommunicationMethodDto, PreferredLanguageDto, ProvinceTerritoryStateDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 
 /**
  * Localizes a single maritalStatus object by adding a localized name.
@@ -186,12 +186,4 @@ export function localizePreferredCommunicationMethod(preferredCommunicationMetho
 export function localizeAndSortPreferredCommunicationMethods(preferredCommunicationMethods: PreferredCommunicationMethodDto[], locale: string) {
   const mappedPreferredCommunicationMethods = preferredCommunicationMethods.map((preferredCommunicationMethod) => localizeFederalSocialProgram(preferredCommunicationMethod, locale));
   return mappedPreferredCommunicationMethods.toSorted((a, b) => a.name.localeCompare(b.name, locale));
-}
-
-export function localizeClientFriendlyStatus(clientFriendlyStatus: ClientFriendlyStatusDto, locale: string) {
-  const { nameEn, nameFr, ...rest } = clientFriendlyStatus;
-  return {
-    ...rest,
-    name: locale === 'fr' ? nameFr : nameEn,
-  };
 }

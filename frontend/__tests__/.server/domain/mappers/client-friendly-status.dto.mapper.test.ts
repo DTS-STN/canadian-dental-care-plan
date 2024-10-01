@@ -1,13 +1,29 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos';
+import type { ClientFriendlyStatusDto, ClientFriendlyStatusLocalizedDto } from '~/.server/domain/dtos';
 import type { ClientFriendlyStatusEntity } from '~/.server/domain/entities';
 import { ClientFriendlyStatusDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('ClientFriendlyStatusDtoMapperImpl', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-    vi.clearAllMocks();
+  describe('mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto', () => {
+    it('maps a ClientFriendlyStatusDto with both English and French labels to a ClientFriendlyStatusLocalizedDto', () => {
+      const mockDto: ClientFriendlyStatusDto = {
+        id: '1',
+        nameEn: 'You have qualified for the Canadian Dental Care Plan.',
+        nameFr: 'Vous êtes admissible au Régime canadien de soins dentaires.',
+      };
+
+      const expectedLocalizedDto: ClientFriendlyStatusLocalizedDto = {
+        id: '1',
+        name: 'You have qualified for the Canadian Dental Care Plan.',
+      };
+
+      const mapper = new ClientFriendlyStatusDtoMapperImpl();
+
+      const localizedDto = mapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto(mockDto, 'en');
+
+      expect(localizedDto).toEqual(expectedLocalizedDto);
+    });
   });
 
   describe('mapClientFriendlyStatusEntityToClientFriendlyStatusDto', () => {
@@ -29,42 +45,6 @@ describe('ClientFriendlyStatusDtoMapperImpl', () => {
       const dto = mapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto(mockEntity);
 
       expect(dto).toEqual(expectedDto);
-    });
-  });
-
-  describe('mapClientFriendlyStatusEntitiesToClientFriendlyStatusDtos', () => {
-    it('maps an array of ClientFriendlyStatusEntities to an array of ClientFriendlyStatusDtos', () => {
-      const mockEntities: ClientFriendlyStatusEntity[] = [
-        {
-          esdc_clientfriendlystatusid: '1',
-          esdc_descriptionenglish: 'You have qualified for the Canadian Dental Care Plan.',
-          esdc_descriptionfrench: 'Vous êtes admissible au Régime canadien de soins dentaires.',
-        },
-        {
-          esdc_clientfriendlystatusid: '2',
-          esdc_descriptionenglish: 'We reviewed your application for the Canadian Dental Care Plan.',
-          esdc_descriptionfrench: "Nous avons examiné votre demande d'adhésion au Régime canadien de soins dentaires.",
-        },
-      ];
-
-      const expectedDtos: ClientFriendlyStatusDto[] = [
-        {
-          id: '1',
-          nameEn: 'You have qualified for the Canadian Dental Care Plan.',
-          nameFr: 'Vous êtes admissible au Régime canadien de soins dentaires.',
-        },
-        {
-          id: '2',
-          nameEn: 'We reviewed your application for the Canadian Dental Care Plan.',
-          nameFr: "Nous avons examiné votre demande d'adhésion au Régime canadien de soins dentaires.",
-        },
-      ];
-
-      const mapper = new ClientFriendlyStatusDtoMapperImpl();
-
-      const dtos = mapper.mapClientFriendlyStatusEntitiesToClientFriendlyStatusDtos(mockEntities);
-
-      expect(dtos).toEqual(expectedDtos);
     });
   });
 });

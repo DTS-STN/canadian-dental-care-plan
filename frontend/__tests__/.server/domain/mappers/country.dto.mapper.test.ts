@@ -1,15 +1,10 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import type { CountryDto, CountryLocalizedDto } from '~/.server/domain/dtos';
 import type { CountryEntity } from '~/.server/domain/entities';
 import { CountryDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('CountryDtoMapperImpl', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-    vi.clearAllMocks();
-  });
-
   describe('mapCountryDtoToCountryLocalizedDto', () => {
     it.each([
       ['en' as const, 'Canada (English)'],
