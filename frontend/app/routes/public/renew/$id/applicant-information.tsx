@@ -131,10 +131,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('public/renew/$id/review-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/adult/type-renewal', params));
+  return redirect(getPathById('public/renew/$id/type-renewal', params));
 }
 
-export default function ApplyFlowApplicationInformation() {
+export default function RenewApplicationInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode, csrfToken } = useLoaderData<typeof loader>();
   const params = useParams();

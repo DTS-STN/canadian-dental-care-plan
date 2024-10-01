@@ -83,7 +83,8 @@
     "renew": {
       "index": "CDCP-RENW-0001",
       "termsAndConditions": "CDCP-RENW-0002",
-      "applicantInformation": "CDCP-RNEW-0003"
+      "applicantInformation": "CDCP-RNEW-0003",
+      "typeOfRenewal": "CDCP-RENW-0004"
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
     "notFound": "CDCP-ERR-0404"

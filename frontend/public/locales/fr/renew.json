@@ -131,5 +131,19 @@
       "please-review": "Please make sure the information you entered is correct.",
       "contact-service-canada": "Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
     }
+  },
+  "type-of-renewal": {
+    "page-title": "Type of renewal",
+    "form-instructions": "Who are you renewing for?",
+    "radio-options": {
+      "personal-and-child": "I am renewing for <strong>myself and my child(ren)</strong>",
+      "child": "I am renewing for <strong>my child(ren)</strong>",
+      "delegate": "I am renewing on behalf of someone else as a <strong>legal delegate or Power of Attorney</strong>"
+    },
+    "error-message": {
+      "type-of-application-required": "Select who this renewal is for"
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
   }
 }

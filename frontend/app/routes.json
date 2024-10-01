@@ -699,6 +699,14 @@
                   "en": "/:lang/renew/:id/applicant-information",
                   "fr": "/:lang/renew/:id/renseignements-demandeur"
                 }
+              },
+              {
+                "id": "public/renew/$id/type-renewal",
+                "file": "routes/public/renew/$id/type-renewal.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/type-renewal",
+                  "fr": "/:lang/renew/:id/type-renewal"
+                }
               }
             ]
           }

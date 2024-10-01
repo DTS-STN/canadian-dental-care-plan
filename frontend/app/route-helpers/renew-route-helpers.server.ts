@@ -17,9 +17,11 @@ export interface RenewState {
     dateOfBirth: string;
     clientNumber: string;
   };
+  readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
 }
 
 export type ApplicantInformationState = NonNullable<RenewState['applicantInformation']>;
+export type TypeOfApplicationState = NonNullable<RenewState['typeOfRenewal']>;
 
 /**
  * Schema for validating UUID.
