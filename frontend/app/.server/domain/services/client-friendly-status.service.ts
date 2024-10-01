@@ -27,7 +27,7 @@ export interface ClientFriendlyStatusService {
    * @returns The ClientFriendlyStatus DTO corresponding to the specified ID.
    * @throws {ClientFriendlyStatusNotFoundException} If no client friendly status is found with the specified ID.
    */
-  getClientFriendlyStatus(id: string): ClientFriendlyStatusDto;
+  getClientFriendlyStatusById(id: string): ClientFriendlyStatusDto;
 }
 
 /**
@@ -59,7 +59,7 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
 
     // Configure caching for client friendly status operations
     this.listClientFriendlyStatuses.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS;
-    this.getClientFriendlyStatus.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS;
+    this.getClientFriendlyStatusById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS;
   }
 
   /**
@@ -67,9 +67,9 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
    *
    * @returns An array of ClientFriendlyStatus DTOs.
    */
-  getClientFriendlyStatus = moize(this.getClientFriendlyStatusImpl, {
+  getClientFriendlyStatusById = moize(this.getClientFriendlyStatusByIdImpl, {
     maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new getClientFriendlyStatus memo'),
+    onCacheAdd: () => this.log.info('Creating new getClientFriendlyStatusById memo'),
   });
 
   /**
@@ -91,7 +91,7 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
     return clientFriendlyStatusDtos;
   }
 
-  private getClientFriendlyStatusImpl(id: string): ClientFriendlyStatusDto {
+  private getClientFriendlyStatusByIdImpl(id: string): ClientFriendlyStatusDto {
     this.log.debug('Get client friendly status with id: [%s]', id);
     const clientFriendlyStatusEntity = this.clientFriendlyStatusRepository.findById(id);
 

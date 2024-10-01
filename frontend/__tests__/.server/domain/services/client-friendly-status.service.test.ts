@@ -28,7 +28,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig); // Act and Assert
 
       expect(service.listClientFriendlyStatuses.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.getClientFriendlyStatus.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.getClientFriendlyStatusById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
@@ -74,7 +74,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
     });
   });
 
-  describe('getClientFriendlyStatus', () => {
+  describe('getClientFriendlyStatusById', () => {
     it('fetches client friendly status by id', () => {
       const id = '1';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
@@ -95,7 +95,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
 
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
-      const dto = service.getClientFriendlyStatus(id);
+      const dto = service.getClientFriendlyStatusById(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledTimes(1);
@@ -111,7 +111,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
 
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
-      expect(() => service.getClientFriendlyStatus(id)).toThrow(ClientFriendlyStatusNotFoundException);
+      expect(() => service.getClientFriendlyStatusById(id)).toThrow(ClientFriendlyStatusNotFoundException);
       expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).not.toHaveBeenCalled();
     });
