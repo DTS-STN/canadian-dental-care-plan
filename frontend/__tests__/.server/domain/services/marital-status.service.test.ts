@@ -3,6 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { MaritalStatusDto } from '~/.server/domain/dtos';
+import { MaritalStatusNotFoundException } from '~/.server/domain/exceptions/MaritalStatusNotFoundException';
 import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
 import type { MaritalStatusRepository } from '~/.server/domain/repositories';
 import { MaritalStatusServiceImpl } from '~/.server/domain/services';
@@ -27,12 +28,12 @@ describe('MaritalStatusServiceImpl', () => {
       const service = new MaritalStatusServiceImpl(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       // Act and Assert
-      expect(service.findAll.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.findById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.listMaritalStatuses.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect(service.getMaritalStatusById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
-  describe('findAll', () => {
+  describe('listMaritalStatuses', () => {
     it('fetches all marital statuses', () => {
       const mockMaritalStatusRepository = mock<MaritalStatusRepository>();
       mockMaritalStatusRepository.findAll.mockReturnValueOnce([
@@ -66,7 +67,7 @@ describe('MaritalStatusServiceImpl', () => {
 
       const service = new MaritalStatusServiceImpl(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
-      const dtos = service.findAll();
+      const dtos = service.listMaritalStatuses();
 
       expect(dtos).toEqual(mockDtos);
       expect(mockMaritalStatusRepository.findAll).toHaveBeenCalledTimes(1);
@@ -74,7 +75,7 @@ describe('MaritalStatusServiceImpl', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('getMaritalStatusById', () => {
     it('fetches marital status by id', () => {
       const id = '1';
       const mockMaritalStatusRepository = mock<MaritalStatusRepository>();
@@ -95,14 +96,14 @@ describe('MaritalStatusServiceImpl', () => {
 
       const service = new MaritalStatusServiceImpl(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
-      const dto = service.findById(id);
+      const dto = service.getMaritalStatusById(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockMaritalStatusRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).toHaveBeenCalledTimes(1);
     });
 
-    it('fetches marital status by id returns null if not found', () => {
+    it('fetches marital status by id throws not found exception', () => {
       const id = '1033';
       const mockMaritalStatusRepository = mock<MaritalStatusRepository>();
       mockMaritalStatusRepository.findById.mockReturnValueOnce(null);
@@ -111,9 +112,7 @@ describe('MaritalStatusServiceImpl', () => {
 
       const service = new MaritalStatusServiceImpl(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
-      const dto = service.findById(id);
-
-      expect(dto).toEqual(null);
+      expect(() => service.getMaritalStatusById(id)).toThrow(MaritalStatusNotFoundException);
       expect(mockMaritalStatusRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).not.toHaveBeenCalled();
     });

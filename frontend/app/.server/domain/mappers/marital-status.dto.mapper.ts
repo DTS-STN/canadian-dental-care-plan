@@ -7,7 +7,7 @@ import type { MaritalStatusEntity } from '~/.server/domain/entities';
 
 export interface MaritalStatusDtoMapper {
   mapMaritalStatusEntityToMaritalStatusDto(maritalStatusEntity: MaritalStatusEntity): MaritalStatusDto;
-  mapMaritalStatusEntitiesToMaritalStatusDtos(maritalStatusEntities: MaritalStatusEntity[]): MaritalStatusDto[];
+  mapMaritalStatusEntitiesToMaritalStatusDtos(maritalStatusEntities: ReadonlyArray<MaritalStatusEntity>): ReadonlyArray<MaritalStatusDto>;
 }
 
 @injectable()
@@ -28,7 +28,7 @@ export class MaritalStatusDtoMapperImpl implements MaritalStatusDtoMapper {
     return { id, nameEn, nameFr };
   }
 
-  mapMaritalStatusEntitiesToMaritalStatusDtos(maritalStatusEntities: MaritalStatusEntity[]): MaritalStatusDto[] {
+  mapMaritalStatusEntitiesToMaritalStatusDtos(maritalStatusEntities: ReadonlyArray<MaritalStatusEntity>): ReadonlyArray<MaritalStatusDto> {
     return maritalStatusEntities.map((entity) => this.mapMaritalStatusEntityToMaritalStatusDto(entity));
   }
 }

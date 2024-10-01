@@ -47,7 +47,10 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
     this.log.debug('Get federal government insurance plan with id: [%s]', id);
     const federalGovernmentInsurancePlanEntity = this.federalGovernmentInsurancePlanRepository.findById(id);
 
-    if (!federalGovernmentInsurancePlanEntity) throw new FederalGovernmentInsurancePlanNotFoundException(`Federal government insurance plan with id: [${id}] not found`);
+    if (!federalGovernmentInsurancePlanEntity) {
+      this.log.error('Federal government insurance plan with id: [%s] not found', id);
+      throw new FederalGovernmentInsurancePlanNotFoundException(`Federal government insurance plan with id: [${id}] not found`);
+    }
 
     const federalGovernmentInsurancePlanDto = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto(federalGovernmentInsurancePlanEntity);
     this.log.trace('Returning federal government insurance plan: [%j]', federalGovernmentInsurancePlanDto);

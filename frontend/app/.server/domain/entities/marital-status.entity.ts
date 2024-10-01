@@ -1,9 +1,11 @@
-export interface MaritalStatusEntity {
+export type MaritalStatusEntity = Readonly<{
   Value: number;
-  Label: {
-    LocalizedLabels: {
-      LanguageCode: number;
-      Label: string;
-    }[];
-  };
-}
+  Label: Readonly<{
+    LocalizedLabels: ReadonlyArray<
+      Readonly<{
+        LanguageCode: number;
+        Label: string;
+      }>
+    >;
+  }>;
+}>;

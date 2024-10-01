@@ -1,5 +1,5 @@
-export interface MaritalStatusDto {
+export type MaritalStatusDto = Readonly<{
   id: string;
   nameEn: string;
   nameFr: string;
-}
+}>;

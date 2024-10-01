@@ -22,7 +22,7 @@ export function localizeMaritalStatus(maritalStatus: MaritalStatusDto, locale: A
  * @param locale - The locale code for localization.
  * @returns The localized array of maritalStatus objects.
  */
-export function localizeMaritalStatuses(maritalStatuses: MaritalStatusDto[], locale: AppLocale) {
+export function localizeMaritalStatuses(maritalStatuses: ReadonlyArray<MaritalStatusDto>, locale: AppLocale) {
   return maritalStatuses.map((maritalStatus) => localizeMaritalStatus(maritalStatus, locale));
 }
 
@@ -34,7 +34,7 @@ export function localizeMaritalStatuses(maritalStatuses: MaritalStatusDto[], loc
  * @param locale - The locale code for localization.
  * @returns The localized and sorted array of maritalStatus objects, with Canada first if found.
  */
-export function localizeAndSortMaritalStatuses(maritalStatuses: MaritalStatusDto[], locale: AppLocale) {
+export function localizeAndSortMaritalStatuses(maritalStatuses: ReadonlyArray<MaritalStatusDto>, locale: AppLocale) {
   return localizeMaritalStatuses(maritalStatuses, locale).toSorted((a, b) => a.name.localeCompare(b.name, locale));
 }
 
