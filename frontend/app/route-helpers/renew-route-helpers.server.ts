@@ -10,7 +10,16 @@ import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
 
 export interface RenewState {
   readonly id: string;
+  readonly editMode: boolean;
+  readonly applicantInformation?: {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    clientNumber: string;
+  };
 }
+
+export type ApplicantInformationState = NonNullable<RenewState['applicantInformation']>;
 
 /**
  * Schema for validating UUID.
@@ -124,6 +133,7 @@ export function startRenewState({ id, session }: StartArgs) {
 
   const initialState: RenewState = {
     id: parsedId,
+    editMode: false,
   };
 
   const sessionName = getSessionName(parsedId);

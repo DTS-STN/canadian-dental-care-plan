@@ -53,7 +53,7 @@ export async function action({ context: { session }, request, params }: ActionFu
 
   saveRenewState({ params, session, state: {} });
 
-  return redirect(getPathById('public/renew/$id/personal-information', params));
+  return redirect(getPathById('public/renew/$id/applicant-information', params));
 }
 
 export default function RenewTermsAndConditions() {
