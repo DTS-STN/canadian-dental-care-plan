@@ -691,6 +691,14 @@
                   "en": "/:lang/renew/:id/terms-and-conditions",
                   "fr": "/:lang/renew/:id/conditions-utilisation"
                 }
+              },
+              {
+                "id": "public/renew/$id/applicant-information",
+                "file": "routes/public/renew/$id/applicant-information.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/applicant-information",
+                  "fr": "/:lang/renew/:id/renseignements-demandeur"
+                }
               }
             ]
           }

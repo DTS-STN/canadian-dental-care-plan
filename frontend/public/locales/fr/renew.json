@@ -89,5 +89,47 @@
       "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy",
       "sun-life": "https://www.sunlife.ca/fr/"
     }
+  },
+  "applicant-information": {
+    "page-title": "Applicant information",
+    "required-information": "We will use the information you provide below to verify your identity.",
+    "client-number": "Client number",
+    "date-of-birth": "Date of birth",
+    "last-name": "Last name",
+    "first-name": "First name",
+    "single-legal-name": "If you have a single legal name",
+    "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
+    "no-client-number": "I don't have a client number",
+    "unique-client-number": "All CDCP members have unique client number. It is also your Sun Life Member ID.",
+    "not-eligible": "If you are not a CDCP member and do not have a client number, you are not eligible for renewal.",
+    "check-eligibility": "<eligibilityLink>Check if you are eligible to apply for the CDCP.</eligibilityLink>",
+    "eligibility-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "help-message": {
+      "client-number": "You can find your client number in the upper right corner of the renewal letter from Service Canada or on your Sun Life member card."
+    },
+    "error-message": {
+      "confirm-required": "Checkbox must be selected",
+      "date-of-birth-day-number": "Day must be a number",
+      "date-of-birth-day-required": "Date of birth must include a day",
+      "date-of-birth-is-past": "Date of birth must be in the past",
+      "date-of-birth-is-past-valid": "Date of birth too far in the past",
+      "date-of-birth-month-required": "Date of birth must include a month",
+      "date-of-birth-valid": "Day must be valid for the given month and year",
+      "date-of-birth-year-number": "Year must be a number, for example 1950",
+      "date-of-birth-year-required": "Date of birth must include a year",
+      "first-name-required": "Enter first name",
+      "last-name-required": "Enter last name",
+      "client-number-required": "Enter client number",
+      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+    },
+    "status-not-found": {
+      "heading": "We could not find your application with the information you gave us.",
+      "please-review": "Please make sure the information you entered is correct.",
+      "contact-service-canada": "Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
+    }
   }
 }
