@@ -1,106 +1,135 @@
-interface InsurancePlanIdentification {
-  IdentificationID: string;
-}
-
-interface InsurancePlan {
-  InsurancePlanIdentification: InsurancePlanIdentification[];
-}
-
-interface ApplicantDetail {
-  PrivateDentalInsuranceIndicator: boolean;
-  InsurancePlan?: InsurancePlan[];
-  ConsentToSharePersonalInformationIndicator?: boolean;
-  AttestParentOrGuardianIndicator?: boolean;
-}
-
-interface PersonBirthDate {
-  date: string;
-}
-
-interface ReferenceData {
-  ReferenceDataID: string;
-  ReferenceDataName?: string;
-}
-
-interface Address {
-  AddressCategoryCode: {
-    ReferenceDataName: string;
-  };
-  AddressCityName: string;
-  AddressCountry: {
-    CountryCode: ReferenceData;
-  };
-  AddressPostalCode: string;
-  AddressProvince: {
-    ProvinceCode: ReferenceData;
-  };
-  AddressSecondaryUnitText: string;
-  AddressStreet: {
-    StreetName: string;
-  };
-}
-
-interface EmailAddress {
-  EmailAddressID: string;
-}
-
-interface TelephoneNumber {
-  TelephoneNumberCategoryCode: ReferenceData;
-}
-
-interface PersonContactInformation {
-  Address: Address[];
-  EmailAddress: EmailAddress[];
-  TelephoneNumber: TelephoneNumber[];
-}
-
-interface PersonLanguage {
-  CommunicationCategoryCode: ReferenceData;
-  PreferredIndicator: boolean;
-}
-
-interface PersonMaritalStatus {
-  StatusCode: ReferenceData;
-}
-
-interface PersonName {
-  PersonGivenName: string[];
-  PersonSurName: string;
-}
-
-interface PersonSINIdentification {
-  IdentificationID: string;
-}
-
-interface RelatedPerson {
-  PersonBirthDate: PersonBirthDate;
-  PersonName: PersonName[];
-  PersonRelationshipCode: {
-    ReferenceDataName: string;
-  };
-  PersonSINIdentification: PersonSINIdentification;
-  ApplicantDetail: ApplicantDetail;
-}
-
-interface Applicant {
-  ApplicantDetail: ApplicantDetail;
-  PersonBirthDate: PersonBirthDate;
-  PersonContactInformation: PersonContactInformation[];
-  PersonLanguage: PersonLanguage[];
-  PersonMaritalStatus: PersonMaritalStatus;
-  PersonName: PersonName[];
-  PersonSINIdentification: PersonSINIdentification;
-  RelatedPerson: RelatedPerson[];
-  MailingSameAsHomeIndicator: boolean;
-  PreferredMethodCommunicationCode: ReferenceData;
-}
-
-interface BenefitApplication {
-  Applicant: Applicant;
-  BenefitApplicationCategoryCode: ReferenceData;
-  BenefitApplicationChannelCode: ReferenceData;
-}
-
-export interface ClientApplicationEntity {
-  BenefitApplication: BenefitApplication;
-}
+export type ClientApplicationEntity = Readonly<{
+  BenefitApplication: Readonly<{
+    Applicant: Readonly<{
+      ApplicantDetail: Readonly<{
+        PrivateDentalInsuranceIndicator: boolean;
+        InsurancePlan?: ReadonlyArray<
+          Readonly<{
+            InsurancePlanIdentification: ReadonlyArray<
+              Readonly<{
+                IdentificationID: string;
+              }>
+            >;
+          }>
+        >;
+        ConsentToSharePersonalInformationIndicator?: boolean;
+        AttestParentOrGuardianIndicator?: boolean;
+      }>;
+      PersonBirthDate: Readonly<{
+        date: string;
+      }>;
+      PersonContactInformation: ReadonlyArray<
+        Readonly<{
+          Address: ReadonlyArray<
+            Readonly<{
+              AddressCategoryCode: Readonly<{
+                ReferenceDataName: string;
+              }>;
+              AddressCityName: string;
+              AddressCountry: Readonly<{
+                CountryCode: Readonly<{
+                  ReferenceDataID: string;
+                  ReferenceDataName?: string;
+                }>;
+              }>;
+              AddressPostalCode: string;
+              AddressProvince: Readonly<{
+                ProvinceCode: Readonly<{
+                  ReferenceDataID: string;
+                  ReferenceDataName?: string;
+                }>;
+              }>;
+              AddressSecondaryUnitText: string;
+              AddressStreet: Readonly<{
+                StreetName: string;
+              }>;
+            }>
+          >;
+          EmailAddress: ReadonlyArray<
+            Readonly<{
+              EmailAddressID: string;
+            }>
+          >;
+          TelephoneNumber: ReadonlyArray<
+            Readonly<{
+              TelephoneNumberCategoryCode: Readonly<{
+                ReferenceDataID: string;
+                ReferenceDataName?: string;
+              }>;
+            }>
+          >;
+        }>
+      >;
+      PersonLanguage: ReadonlyArray<
+        Readonly<{
+          CommunicationCategoryCode: Readonly<{
+            ReferenceDataID: string;
+            ReferenceDataName?: string;
+          }>;
+          PreferredIndicator: boolean;
+        }>
+      >;
+      PersonMaritalStatus: Readonly<{
+        StatusCode: Readonly<{
+          ReferenceDataID: string;
+          ReferenceDataName?: string;
+        }>;
+      }>;
+      PersonName: ReadonlyArray<
+        Readonly<{
+          PersonGivenName: ReadonlyArray<string>;
+          PersonSurName: string;
+        }>
+      >;
+      PersonSINIdentification: Readonly<{
+        IdentificationID: string;
+      }>;
+      RelatedPerson: ReadonlyArray<
+        Readonly<{
+          PersonBirthDate: Readonly<{
+            date: string;
+          }>;
+          PersonName: ReadonlyArray<
+            Readonly<{
+              PersonGivenName: ReadonlyArray<string>;
+              PersonSurName: string;
+            }>
+          >;
+          PersonRelationshipCode: Readonly<{
+            ReferenceDataName: string;
+          }>;
+          PersonSINIdentification: Readonly<{
+            IdentificationID: string;
+          }>;
+          ApplicantDetail: Readonly<{
+            PrivateDentalInsuranceIndicator: boolean;
+            InsurancePlan?: ReadonlyArray<
+              Readonly<{
+                InsurancePlanIdentification: ReadonlyArray<
+                  Readonly<{
+                    IdentificationID: string;
+                  }>
+                >;
+              }>
+            >;
+            ConsentToSharePersonalInformationIndicator?: boolean;
+            AttestParentOrGuardianIndicator?: boolean;
+          }>;
+        }>
+      >;
+      MailingSameAsHomeIndicator: boolean;
+      PreferredMethodCommunicationCode: Readonly<{
+        ReferenceDataID: string;
+        ReferenceDataName?: string;
+      }>;
+    }>;
+    BenefitApplicationCategoryCode: Readonly<{
+      ReferenceDataID: string;
+      ReferenceDataName?: string;
+    }>;
+    BenefitApplicationChannelCode: Readonly<{
+      ReferenceDataID: string;
+      ReferenceDataName?: string;
+    }>;
+  }>;
+}>;

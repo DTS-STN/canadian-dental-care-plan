@@ -40,7 +40,7 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
   }
 
   listFederalGovernmentInsurancePlans = moize(this.listFederalGovernmentInsurancePlansImpl, {
-    onCacheAdd: () => this.log.info('Creating new findAll memo'),
+    onCacheAdd: () => this.log.info('Creating new listFederalGovernmentInsurancePlans memo'),
   });
 
   private getFederalGovernmentInsurancePlanByIdImpl(id: string): FederalGovernmentInsurancePlanDto {
@@ -59,6 +59,6 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
 
   getFederalGovernmentInsurancePlanById = moize(this.getFederalGovernmentInsurancePlanByIdImpl, {
     maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new findById memo'),
+    onCacheAdd: () => this.log.info('Creating new getFederalGovernmentInsurancePlanById memo'),
   });
 }

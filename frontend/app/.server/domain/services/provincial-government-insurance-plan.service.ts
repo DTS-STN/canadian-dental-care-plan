@@ -40,7 +40,7 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
   }
 
   listProvincialGovernmentInsurancePlans = moize(this.listProvincialGovernmentInsurancePlansImpl, {
-    onCacheAdd: () => this.log.info('Creating new findAll memo'),
+    onCacheAdd: () => this.log.info('Creating new listProvincialGovernmentInsurancePlans memo'),
   });
 
   private getProvincialGovernmentInsurancePlanByIdImpl(id: string): ProvincialGovernmentInsurancePlanDto {
@@ -56,6 +56,6 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
 
   getProvincialGovernmentInsurancePlanById = moize(this.getProvincialGovernmentInsurancePlanByIdImpl, {
     maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new findById memo'),
+    onCacheAdd: () => this.log.info('Creating new getProvincialGovernmentInsurancePlanById memo'),
   });
 }

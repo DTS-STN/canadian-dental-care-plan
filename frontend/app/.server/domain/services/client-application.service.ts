@@ -6,7 +6,7 @@ import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { ClientApplicationRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
-export interface FindByFirstNameLastNameDobClientNumberSearchCriteria {
+export interface FindByPersonalInfoSearchCriteria {
   /** The first name of the client. */
   firstName: string;
   /** The last name of the client. */
@@ -16,6 +16,7 @@ export interface FindByFirstNameLastNameDobClientNumberSearchCriteria {
   /** The client number assigned to the client. */
   clientNumber: string;
 }
+
 export interface ClientApplicationService {
   /**
    * Finds client application data by Social Insurance Number (SIN).
@@ -23,14 +24,15 @@ export interface ClientApplicationService {
    * @param sin The Social Insurance Number of the client.
    * @returns A Promise that resolves to the client application data if found, or `null` if not found.
    */
-  findBySin(sin: string): Promise<ClientApplicationDto | null>;
+  findClientApplicationBySin(sin: string): Promise<ClientApplicationDto | null>;
+
   /**
    * Finds client application data by first name, last name, date of birth, and client number.
    *
    * @param searchCriteria An object containing the search criteria.
    * @returns A Promise that resolves to the client application data if found, or `null` if not found.
    */
-  findByFirstNameLastNameDobClientNumber(searchCriteria: FindByFirstNameLastNameDobClientNumberSearchCriteria): Promise<ClientApplicationDto | null>;
+  findClientApplicationByPersonalInfo(searchCriteria: FindByPersonalInfoSearchCriteria): Promise<ClientApplicationDto | null>;
 }
 
 @injectable()
@@ -45,7 +47,7 @@ export class ClientApplicationServiceImpl implements ClientApplicationService {
     this.log = logFactory.createLogger('ClientApplicationServiceImpl');
   }
 
-  async findBySin(sin: string): Promise<ClientApplicationDto | null> {
+  async findClientApplicationBySin(sin: string): Promise<ClientApplicationDto | null> {
     this.log.debug('Get client application by sin');
     this.log.trace('Get client application with sin: [%s]', sin);
     const clientApplicationEntity = await this.ClientApplicationRepository.findBySin(sin);
@@ -54,8 +56,7 @@ export class ClientApplicationServiceImpl implements ClientApplicationService {
     return clientApplicationDto;
   }
 
-  async findByFirstNameLastNameDobClientNumber(args: { firstName: string; lastName: string; dateOfBirth: string; clientNumber: string }): Promise<ClientApplicationDto | null> {
-    const { firstName, lastName, dateOfBirth, clientNumber } = args;
+  async findClientApplicationByPersonalInfo({ firstName, lastName, dateOfBirth, clientNumber }: FindByPersonalInfoSearchCriteria): Promise<ClientApplicationDto | null> {
     this.log.debug('Get client application with first name: [%s], last name: [%s], date of birth: [%s], client number: [%s]', firstName, lastName, dateOfBirth, clientNumber);
     const clientApplicationEntity = await this.ClientApplicationRepository.findByFirstNameLastNameDobClientNumber({ firstName, lastName, dateOfBirth, clientNumber });
     const clientApplicationDto = clientApplicationEntity ? this.ClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity) : null;

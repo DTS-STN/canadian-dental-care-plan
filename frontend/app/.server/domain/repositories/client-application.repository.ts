@@ -45,7 +45,7 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
     this.log = logFactory.createLogger('ClientApplicationRepositoryImpl');
   }
 
-  async findBySin(sin: string): Promise<ClientApplicationEntity> {
+  async findBySin(sin: string): Promise<ClientApplicationEntity | null> {
     this.log.trace('Fetching client application for sin [%s]', sin);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/v1/client-application`);
