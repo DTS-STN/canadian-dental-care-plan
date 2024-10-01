@@ -55,7 +55,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
 
   const statusId = statusCheckResult.statusId ?? null;
   const alertType = getContextualAlertType(statusId);
-  const clientFriendlyStatus = statusId ? serviceProvider.getClientFriendlyStatusService().findById(statusId) : null;
+  const clientFriendlyStatus = statusId ? serviceProvider.getClientFriendlyStatusService().getClientFriendlyStatus(statusId) : null;
 
   return json({
     statusResult: {

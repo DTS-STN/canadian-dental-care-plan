@@ -5,7 +5,7 @@ import type { ClientFriendlyStatusEntity } from '~/.server/domain/entities';
 
 export interface ClientFriendlyStatusDtoMapper {
   mapClientFriendlyStatusEntityToClientFriendlyStatusDto(clientFriendlyStatusEntity: ClientFriendlyStatusEntity): ClientFriendlyStatusDto;
-  mapClientFriendlyStatusEntitiesToClientFriendlyStatusDtos(clientFriendlyStatusEntities: ClientFriendlyStatusEntity[]): ClientFriendlyStatusDto[];
+  mapClientFriendlyStatusEntitiesToClientFriendlyStatusDtos(clientFriendlyStatusEntities: ReadonlyArray<ClientFriendlyStatusEntity>): ReadonlyArray<ClientFriendlyStatusDto>;
 }
 
 @injectable()
@@ -17,7 +17,7 @@ export class ClientFriendlyStatusDtoMapperImpl implements ClientFriendlyStatusDt
     return { id, nameEn, nameFr };
   }
 
-  mapClientFriendlyStatusEntitiesToClientFriendlyStatusDtos(clientFriendlyStatusEntities: ClientFriendlyStatusEntity[]): ClientFriendlyStatusDto[] {
+  mapClientFriendlyStatusEntitiesToClientFriendlyStatusDtos(clientFriendlyStatusEntities: ReadonlyArray<ClientFriendlyStatusEntity>): ReadonlyArray<ClientFriendlyStatusDto> {
     return clientFriendlyStatusEntities.map((entity) => this.mapClientFriendlyStatusEntityToClientFriendlyStatusDto(entity));
   }
 }
