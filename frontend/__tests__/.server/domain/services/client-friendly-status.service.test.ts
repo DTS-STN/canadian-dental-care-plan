@@ -3,6 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos';
+import { ClientFriendlyStatusNotFoundException } from '~/.server/domain/exceptions/ClientFriendlyStatusNotFoundException';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories';
 import { ClientFriendlyStatusServiceImpl } from '~/.server/domain/services';
@@ -26,12 +27,12 @@ describe('ClientFriendlyStatusServiceImpl', () => {
 
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig); // Act and Assert
 
-      expect(service.findAll.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.findById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.listClientFriendlyStatuses.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect(service.getClientFriendlyStatus.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
-  describe('findAll', () => {
+  describe('listClientFriendlyStatuses', () => {
     it('fetches all client friendly statuses', () => {
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
       mockClientFriendlyStatusRepository.findAll.mockReturnValueOnce([
@@ -65,7 +66,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
 
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
-      const dtos = service.findAll();
+      const dtos = service.listClientFriendlyStatuses();
 
       expect(dtos).toEqual(mockDtos);
       expect(mockClientFriendlyStatusRepository.findAll).toHaveBeenCalledTimes(1);
@@ -73,7 +74,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('getClientFriendlyStatus', () => {
     it('fetches client friendly status by id', () => {
       const id = '1';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
@@ -94,14 +95,14 @@ describe('ClientFriendlyStatusServiceImpl', () => {
 
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
-      const dto = service.findById(id);
+      const dto = service.getClientFriendlyStatus(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).toHaveBeenCalledTimes(1);
     });
 
-    it('fetches client friendly status by id returns null if not found', () => {
+    it('fetches client friendly status by id throws not found exception', () => {
       const id = '1033';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
       mockClientFriendlyStatusRepository.findById.mockReturnValueOnce(null);
@@ -110,9 +111,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
 
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
-      const dto = service.findById(id);
-
-      expect(dto).toEqual(null);
+      expect(() => service.getClientFriendlyStatus(id)).toThrow(ClientFriendlyStatusNotFoundException);
       expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).not.toHaveBeenCalled();
     });
