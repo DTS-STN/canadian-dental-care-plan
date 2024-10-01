@@ -1,42 +1,4 @@
-import type { FederalGovernmentInsurancePlanDto, MaritalStatusDto, PreferredCommunicationMethodDto, PreferredLanguageDto, ProvinceTerritoryStateDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
-
-/**
- * Localizes a single maritalStatus object by adding a localized name.
- *
- * @param maritalStatus - The maritalStatus object to localize.
- * @param locale - The locale code for localization.
- * @returns The localized maritalStatus object with a localized name.
- */
-export function localizeMaritalStatus(maritalStatus: MaritalStatusDto, locale: AppLocale) {
-  const { nameEn, nameFr, ...rest } = maritalStatus;
-  return {
-    ...rest,
-    name: locale === 'fr' ? nameFr : nameEn,
-  };
-}
-
-/**
- * Localizes an array of maritalStatus objects by adding localized names.
- *
- * @param maritalStatuses - The array of maritalStatus objects to localize.
- * @param locale - The locale code for localization.
- * @returns The localized array of maritalStatus objects.
- */
-export function localizeMaritalStatuses(maritalStatuses: ReadonlyArray<MaritalStatusDto>, locale: AppLocale) {
-  return maritalStatuses.map((maritalStatus) => localizeMaritalStatus(maritalStatus, locale));
-}
-
-/**
- * Localizes an array of maritalStatus objects by adding localized names and sorting them.
- * If a Canada maritalStatus object is found, it is moved to the beginning of the sorted array.
- *
- * @param maritalStatuses - The array of maritalStatus objects to localize.
- * @param locale - The locale code for localization.
- * @returns The localized and sorted array of maritalStatus objects, with Canada first if found.
- */
-export function localizeAndSortMaritalStatuses(maritalStatuses: ReadonlyArray<MaritalStatusDto>, locale: AppLocale) {
-  return localizeMaritalStatuses(maritalStatuses, locale).toSorted((a, b) => a.name.localeCompare(b.name, locale));
-}
+import type { FederalGovernmentInsurancePlanDto, PreferredCommunicationMethodDto, PreferredLanguageDto, ProvinceTerritoryStateDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 
 /**
  * Localizes a single province territory state object by adding a localized name.

@@ -21,7 +21,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeFederalSocialProgram, localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
+import { localizeFederalSocialProgram, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -75,8 +75,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const preferredLanguage = serviceProvider.getPreferredLanguageService().findPreferredLanguageById(state.communicationPreferences.preferredLanguage);
   invariant(preferredLanguage, `Unexpected preferred language: ${state.communicationPreferences.preferredLanguage}`);
 
-  const maritalStatus = serviceProvider.getMaritalStatusService().getMaritalStatusById(state.applicantInformation.maritalStatus);
-  invariant(maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
+  invariant(state.applicantInformation.maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
+  const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
 
   const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod);
 
@@ -88,7 +88,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     preferredLanguage: localizePreferredLanguage(preferredLanguage, locale).name,
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    martialStatus: localizeMaritalStatus(maritalStatus, locale).name,
+    martialStatus: maritalStatus.name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: localizePreferredCommunicationMethod(communicationPreference, locale).name,

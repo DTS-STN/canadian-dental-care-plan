@@ -2,24 +2,15 @@ import { describe, expect, it } from 'vitest';
 
 import {
   localizeAndSortFederalSocialPrograms,
-  localizeAndSortMaritalStatuses,
   localizeAndSortPreferredLanguages,
   localizeAndSortProvinceTerritoryStates,
   localizeAndSortProvincialGovernmentInsurancePlans,
   localizeFederalSocialProgram,
-  localizeMaritalStatus,
-  localizeMaritalStatuses,
   localizePreferredLanguage,
   localizeProvinceTerritoryState,
   localizeProvinceTerritoryStates,
   localizeProvincialGovernmentInsurancePlan,
 } from '~/utils/lookup-utils.server';
-
-const mockMaritalStatuses = [
-  { id: '001', nameEn: 'englishMaritalStatusOne', nameFr: 'frenchMaritalStatusOne' },
-  { id: '002', nameEn: 'englishMaritalStatusTwo', nameFr: 'frenchMaritalStatusTwo' },
-  { id: '003', nameEn: 'englishMaritalStatusThree', nameFr: 'frenchMaritalStatusThree' },
-];
 
 const mockProvinceTerritoryStates = [
   { id: '001', countryId: '001', nameEn: 'englishCountryOne', nameFr: 'frenchCountryOne', abbr: 'one' },
@@ -44,52 +35,6 @@ const mockProvincialTerritorialSocialPrograms = [
   { id: '002', provinceTerritoryStateId: '002', nameEn: 'englishProgramTwo', nameFr: 'frenchProgramTwo' },
   { id: '003', provinceTerritoryStateId: '003', nameEn: 'englishProgramThree', nameFr: 'frenchProgramThree' },
 ];
-
-describe('localizeMaritalStatus', () => {
-  it('should return the marital status id and english name', () => {
-    expect(localizeMaritalStatus(mockMaritalStatuses[0], 'en')).toEqual({ id: '001', name: 'englishMaritalStatusOne' });
-  });
-
-  it('should return the marital status id and french name', () => {
-    expect(localizeMaritalStatus(mockMaritalStatuses[0], 'fr')).toEqual({ id: '001', name: 'frenchMaritalStatusOne' });
-  });
-});
-
-describe('localizeMaritalStatuses', () => {
-  it('should return an array of marital status ids and english names', () => {
-    expect(localizeMaritalStatuses(mockMaritalStatuses, 'en')).toEqual([
-      { id: '001', name: 'englishMaritalStatusOne' },
-      { id: '002', name: 'englishMaritalStatusTwo' },
-      { id: '003', name: 'englishMaritalStatusThree' },
-    ]);
-  });
-
-  it('should return an array of marital status ids and french name', () => {
-    expect(localizeMaritalStatuses(mockMaritalStatuses, 'fr')).toEqual([
-      { id: '001', name: 'frenchMaritalStatusOne' },
-      { id: '002', name: 'frenchMaritalStatusTwo' },
-      { id: '003', name: 'frenchMaritalStatusThree' },
-    ]);
-  });
-});
-
-describe('localizeAndSortMaritalStatuses', () => {
-  it('should return an array of sorted marital status ids and english names', () => {
-    expect(localizeAndSortMaritalStatuses(mockMaritalStatuses, 'en')).toEqual([
-      { id: '001', name: 'englishMaritalStatusOne' },
-      { id: '003', name: 'englishMaritalStatusThree' },
-      { id: '002', name: 'englishMaritalStatusTwo' },
-    ]);
-  });
-
-  it('should return an array of sorted marital status ids and french names', () => {
-    expect(localizeAndSortMaritalStatuses(mockMaritalStatuses, 'fr')).toEqual([
-      { id: '001', name: 'frenchMaritalStatusOne' },
-      { id: '003', name: 'frenchMaritalStatusThree' },
-      { id: '002', name: 'frenchMaritalStatusTwo' },
-    ]);
-  });
-});
 
 describe('localizeProvinceTerritoryState', () => {
   it('should return the province territory state id and english name', () => {

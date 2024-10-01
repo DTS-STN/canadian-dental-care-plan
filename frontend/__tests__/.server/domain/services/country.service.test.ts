@@ -192,7 +192,7 @@ describe('CountryServiceImpl', () => {
 
       const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      expect(() => service.getCountryById(id)).toThrow(CountryNotFoundException);
+      expect(() => service.getLocalizedCountryById(id, 'en')).toThrow(CountryNotFoundException);
       expect(mockCountryRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).not.toHaveBeenCalled();
     });

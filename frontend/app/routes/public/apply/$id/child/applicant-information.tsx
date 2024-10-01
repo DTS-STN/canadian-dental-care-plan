@@ -27,7 +27,6 @@ import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateSt
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeMaritalStatuses } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -56,7 +55,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const maritalStatuses = localizeMaritalStatuses(serviceProvider.getMaritalStatusService().listMaritalStatuses(), locale);
+  const maritalStatuses = serviceProvider.getMaritalStatusService().listLocalizedMaritalStatuses(locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:applicant-information.page-title') }) };
