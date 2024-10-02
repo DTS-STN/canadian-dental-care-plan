@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
+import { PreferredLanguageNotFoundException } from '../exceptions/PreferredLanguageNotFoundException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos';
@@ -8,9 +9,23 @@ import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
+/**
+ * Service to manage preferred languages
+ */
 export interface PreferredLanguageService {
-  listPreferredLanguages(): PreferredLanguageDto[];
-  findPreferredLanguageById(id: string): PreferredLanguageDto | null;
+  /**
+   * Get all preferred languages
+   * @returns List of preferred languages
+   */
+  listPreferredLanguages(): ReadonlyArray<PreferredLanguageDto>;
+
+  /**
+   * Get preferred language by id
+   * @param id - Id of the preferred language
+   * @returns Preferred language
+   * @throws {PreferredLanguageNotFoundException} - If preferred language with id not found
+   */
+  getPreferredLanguageById(id: string): PreferredLanguageDto;
 }
 
 @injectable()
@@ -27,10 +42,19 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
 
     // set moize options
     this.listPreferredLanguages.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS;
-    this.findPreferredLanguageById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS;
+    this.getPreferredLanguageById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS;
   }
 
-  private listPreferredLanguagesImpl(): PreferredLanguageDto[] {
+  listPreferredLanguages = moize(this.listPreferredLanguagesImpl, {
+    onCacheAdd: () => this.log.info('Creating new listPreferredLanguages memo'),
+  });
+
+  getPreferredLanguageById = moize(this.getPreferredLanguageByIdImpl, {
+    maxSize: Infinity,
+    onCacheAdd: () => this.log.info('Creating new getPreferredLanguageById memo'),
+  });
+
+  private listPreferredLanguagesImpl(): ReadonlyArray<PreferredLanguageDto> {
     this.log.debug('Get all preferred languages');
     const preferredLanguageEntities = this.preferredLanguageRepository.findAll();
     const preferredLanguageDtos = this.preferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities);
@@ -38,20 +62,17 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
     return preferredLanguageDtos;
   }
 
-  listPreferredLanguages = moize(this.listPreferredLanguagesImpl, {
-    onCacheAdd: () => this.log.info('Creating new listPreferredLanguages memo'),
-  });
-
-  private findPreferredLanguageByIdImpl(id: string): PreferredLanguageDto | null {
+  private getPreferredLanguageByIdImpl(id: string): PreferredLanguageDto {
     this.log.debug('Get preferred language with id: [%s]', id);
     const preferredLanguageEntity = this.preferredLanguageRepository.findById(id);
-    const preferredLanguageDto = preferredLanguageEntity ? this.preferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto(preferredLanguageEntity) : null;
+
+    if (!preferredLanguageEntity) {
+      this.log.error('Preferred language with id: [%s] not found', id);
+      throw new PreferredLanguageNotFoundException(`Preferred language with id: [${id}] not found`);
+    }
+
+    const preferredLanguageDto = this.preferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto(preferredLanguageEntity);
     this.log.trace('Returning preferred language: [%j]', preferredLanguageDto);
     return preferredLanguageDto;
   }
-
-  findPreferredLanguageById = moize(this.findPreferredLanguageByIdImpl, {
-    maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new findPreferredLanguageById memo'),
-  });
 }

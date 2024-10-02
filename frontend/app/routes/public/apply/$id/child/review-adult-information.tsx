@@ -56,6 +56,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyChildStateForReview({ params, request, session });
 
+  invariant(state.contactInformation.homeCountry, `Unexpected home address country: ${state.contactInformation.homeCountry}`);
+
   // apply state is valid then edit mode can be set to true
   saveApplyState({ params, session, state: { editMode: true } });
 
@@ -63,24 +65,13 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  // Getting province by Id
   const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
   const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
-
-  // Getting Country by Id
   const countryMailing = serviceProvider.getCountryService().getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
-
-  invariant(state.contactInformation.homeCountry, `Unexpected home address country: ${state.contactInformation.homeCountry}`);
   const countryHome = serviceProvider.getCountryService().getLocalizedCountryById(state.contactInformation.homeCountry, locale);
-
-  // Getting CommunicationPreference by Id
   const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod);
-
-  invariant(state.applicantInformation.maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
   const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
-
-  const preferredLanguage = serviceProvider.getPreferredLanguageService().findPreferredLanguageById(state.communicationPreferences.preferredLanguage);
-  invariant(preferredLanguage, `Unexpected preferred language: ${state.communicationPreferences.preferredLanguage}`);
+  const preferredLanguage = serviceProvider.getPreferredLanguageService().getPreferredLanguageById(state.communicationPreferences.preferredLanguage);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,

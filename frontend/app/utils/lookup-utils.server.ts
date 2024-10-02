@@ -60,7 +60,7 @@ export function localizePreferredLanguage(language: PreferredLanguageDto, locale
  * @param firstLanguageId - The language ID that specifies the language object that should appear first in the sorted array.
  * @returns The localized and sorted array of language objects.
  */
-export function localizeAndSortPreferredLanguages(languages: PreferredLanguageDto[], locale: string, firstLanguageId?: number) {
+export function localizeAndSortPreferredLanguages(languages: ReadonlyArray<PreferredLanguageDto>, locale: string, firstLanguageId?: number) {
   const mappedLanguages = languages.map((language) => localizePreferredLanguage(language, locale));
   return mappedLanguages.toSorted((a, b) => {
     if (firstLanguageId && a.id === firstLanguageId.toString()) return -1;

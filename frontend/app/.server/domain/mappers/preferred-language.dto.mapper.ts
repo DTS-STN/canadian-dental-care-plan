@@ -7,7 +7,7 @@ import type { PreferredLanguageEntity } from '~/.server/domain/entities';
 
 export interface PreferredLanguageDtoMapper {
   mapPreferredLanguageEntityToPreferredLanguageDto(preferredLanguageEntity: PreferredLanguageEntity): PreferredLanguageDto;
-  mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities: PreferredLanguageEntity[]): PreferredLanguageDto[];
+  mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities: ReadonlyArray<PreferredLanguageEntity>): ReadonlyArray<PreferredLanguageDto>;
 }
 
 @injectable()
@@ -28,7 +28,7 @@ export class PreferredLanguageDtoMapperImpl implements PreferredLanguageDtoMappe
     return { id, nameEn, nameFr };
   }
 
-  mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities: PreferredLanguageEntity[]): PreferredLanguageDto[] {
+  mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities: ReadonlyArray<PreferredLanguageEntity>): ReadonlyArray<PreferredLanguageDto> {
     return preferredLanguageEntities.map((entity) => this.mapPreferredLanguageEntityToPreferredLanguageDto(entity));
   }
 }
