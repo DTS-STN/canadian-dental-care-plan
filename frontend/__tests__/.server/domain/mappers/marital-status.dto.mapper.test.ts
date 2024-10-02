@@ -1,22 +1,64 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import type { ServerConfig } from '~/.server/configs';
-import type { MaritalStatusDto } from '~/.server/domain/dtos';
+import type { MaritalStatusDto, MaritalStatusLocalizedDto } from '~/.server/domain/dtos';
 import type { MaritalStatusEntity } from '~/.server/domain/entities';
+import type { MaritalStatusDtoMapperImpl_ServerConfig } from '~/.server/domain/mappers';
 import { MaritalStatusDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('MaritalStatusDtoMapperImpl', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-    vi.clearAllMocks();
+  const mockServerConfig: MaritalStatusDtoMapperImpl_ServerConfig = { ENGLISH_LANGUAGE_CODE: 1033, FRENCH_LANGUAGE_CODE: 1036 };
+
+  describe('mapMaritalStatusDtoToMaritalStatusLocalizedDto', () => {
+    it.each([
+      ['en' as const, 'English'],
+      ['fr' as const, 'Anglais'],
+    ])('should map a single MaritalStatusDto objects to a MaritalStatusLocalizedDto object with the correct locale (%s)', (locale, expectedLocalizedName) => {
+      const mockDto: MaritalStatusDto = { id: '1', nameEn: 'English', nameFr: 'Anglais' };
+      const expectedDto: MaritalStatusLocalizedDto = { id: '1', name: expectedLocalizedName };
+
+      const mapper = new MaritalStatusDtoMapperImpl(mockServerConfig);
+      const dto = mapper.mapMaritalStatusDtoToMaritalStatusLocalizedDto(mockDto, locale);
+
+      expect(dto).toEqual(expectedDto);
+    });
   });
 
-  const mockServerConfig: Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'> = { ENGLISH_LANGUAGE_CODE: 1033, FRENCH_LANGUAGE_CODE: 1036 };
+  describe('mapMaritalStatusDtosToMaritalStatusLocalizedDtos', () => {
+    it.each([
+      ['en' as const, 'English', 'French'],
+      ['fr' as const, 'Anglais', 'Français'],
+    ])('should map an array of MaritalStatusDto objects to an array of MaritalStatusLocalizedDto objects with the correct locale (%s)', (locale, expectedFirstLocalizedName, expectedSecondLocalizedName) => {
+      const maritalStatusDtos: MaritalStatusDto[] = [
+        { id: '1', nameEn: 'English', nameFr: 'Anglais' },
+        { id: '2', nameEn: 'French', nameFr: 'Français' },
+      ];
+
+      const expectedDtos: MaritalStatusLocalizedDto[] = [
+        { id: '1', name: expectedFirstLocalizedName },
+        { id: '2', name: expectedSecondLocalizedName },
+      ];
+
+      const mapper = new MaritalStatusDtoMapperImpl(mockServerConfig);
+      const dtos = mapper.mapMaritalStatusDtosToMaritalStatusLocalizedDtos(maritalStatusDtos, locale);
+
+      expect(dtos).toEqual(expectedDtos);
+    });
+
+    it('should handle an empty array of MaritalStatusDto objects', () => {
+      const maritalStatusDtos: MaritalStatusDto[] = [];
+      const expectedDtos: MaritalStatusLocalizedDto[] = [];
+
+      const mapper = new MaritalStatusDtoMapperImpl(mockServerConfig);
+      const dtos = mapper.mapMaritalStatusDtosToMaritalStatusLocalizedDtos(maritalStatusDtos, 'en');
+
+      expect(dtos).toEqual(expectedDtos);
+    });
+  });
 
   describe('mapMaritalStatusEntityToMaritalStatusDto', () => {
     it('maps a MaritalStatusEntity with both English and French labels to a MaritalStatusDto', () => {
       const mockEntity: MaritalStatusEntity = {
-        Value: 1033,
+        Value: 1,
         Label: {
           LocalizedLabels: [
             { Label: 'English', LanguageCode: 1033 },
@@ -25,7 +67,7 @@ describe('MaritalStatusDtoMapperImpl', () => {
         },
       };
 
-      const expectedDto: MaritalStatusDto = { id: '1033', nameEn: 'English', nameFr: 'Anglais' };
+      const expectedDto: MaritalStatusDto = { id: '1', nameEn: 'English', nameFr: 'Anglais' };
 
       const mapper = new MaritalStatusDtoMapperImpl(mockServerConfig);
 
@@ -36,7 +78,7 @@ describe('MaritalStatusDtoMapperImpl', () => {
 
     it('throws an error if the MaritalStatusEntity is missing the English label', () => {
       const mockEntity: MaritalStatusEntity = {
-        Value: 1033,
+        Value: 1,
         Label: {
           LocalizedLabels: [{ Label: 'Anglais', LanguageCode: 1036 }],
         },
@@ -44,12 +86,12 @@ describe('MaritalStatusDtoMapperImpl', () => {
 
       const mapper = new MaritalStatusDtoMapperImpl(mockServerConfig);
 
-      expect(() => mapper.mapMaritalStatusEntityToMaritalStatusDto(mockEntity)).toThrowError(`Marital status missing English or French name; id: [1033]`);
+      expect(() => mapper.mapMaritalStatusEntityToMaritalStatusDto(mockEntity)).toThrowError(`Marital status missing English or French name; id: [1]`);
     });
 
     it('throws an error if the MaritalStatusEntity is missing the French label', () => {
       const mockEntity: MaritalStatusEntity = {
-        Value: 1033,
+        Value: 1,
         Label: {
           LocalizedLabels: [{ Label: 'English', LanguageCode: 1033 }],
         },
@@ -57,7 +99,7 @@ describe('MaritalStatusDtoMapperImpl', () => {
 
       const mapper = new MaritalStatusDtoMapperImpl(mockServerConfig);
 
-      expect(() => mapper.mapMaritalStatusEntityToMaritalStatusDto(mockEntity)).toThrowError(`Marital status missing English or French name; id: [1033]`);
+      expect(() => mapper.mapMaritalStatusEntityToMaritalStatusDto(mockEntity)).toThrowError(`Marital status missing English or French name; id: [1]`);
     });
   });
 
@@ -65,7 +107,7 @@ describe('MaritalStatusDtoMapperImpl', () => {
     it('maps an array of MaritalStatusEntities to an array of MaritalStatusDtos', () => {
       const mockEntities: MaritalStatusEntity[] = [
         {
-          Value: 1033,
+          Value: 1,
           Label: {
             LocalizedLabels: [
               { Label: 'English', LanguageCode: 1033 },
@@ -74,7 +116,7 @@ describe('MaritalStatusDtoMapperImpl', () => {
           },
         },
         {
-          Value: 1036,
+          Value: 2,
           Label: {
             LocalizedLabels: [
               { Label: 'French', LanguageCode: 1033 },
@@ -85,8 +127,8 @@ describe('MaritalStatusDtoMapperImpl', () => {
       ];
 
       const expectedDtos: MaritalStatusDto[] = [
-        { id: '1033', nameEn: 'English', nameFr: 'Anglais' },
-        { id: '1036', nameEn: 'French', nameFr: 'Français' },
+        { id: '1', nameEn: 'English', nameFr: 'Anglais' },
+        { id: '2', nameEn: 'French', nameFr: 'Français' },
       ];
 
       const mapper = new MaritalStatusDtoMapperImpl(mockServerConfig);

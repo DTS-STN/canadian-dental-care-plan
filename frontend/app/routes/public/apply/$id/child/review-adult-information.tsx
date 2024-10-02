@@ -31,7 +31,7 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeMaritalStatus, localizePreferredCommunicationMethod, localizePreferredLanguage } from '~/utils/lookup-utils.server';
+import { localizePreferredCommunicationMethod, localizePreferredLanguage } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -76,8 +76,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   // Getting CommunicationPreference by Id
   const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod);
 
-  const maritalStatus = serviceProvider.getMaritalStatusService().getMaritalStatusById(state.applicantInformation.maritalStatus);
-  invariant(maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
+  invariant(state.applicantInformation.maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
+  const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
 
   const preferredLanguage = serviceProvider.getPreferredLanguageService().findPreferredLanguageById(state.communicationPreferences.preferredLanguage);
   invariant(preferredLanguage, `Unexpected preferred language: ${state.communicationPreferences.preferredLanguage}`);
@@ -89,7 +89,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     altPhoneNumber: state.contactInformation.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    maritalStatus: localizeMaritalStatus(maritalStatus, locale).name,
+    maritalStatus: maritalStatus.name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: localizePreferredCommunicationMethod(communicationPreference, locale).name,

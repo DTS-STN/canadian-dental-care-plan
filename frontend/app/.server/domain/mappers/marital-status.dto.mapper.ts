@@ -2,17 +2,33 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { MaritalStatusDto } from '~/.server/domain/dtos';
+import type { MaritalStatusDto, MaritalStatusLocalizedDto } from '~/.server/domain/dtos';
 import type { MaritalStatusEntity } from '~/.server/domain/entities';
 
 export interface MaritalStatusDtoMapper {
+  mapMaritalStatusDtoToMaritalStatusLocalizedDto(maritalStatusDto: MaritalStatusDto, locale: AppLocale): MaritalStatusLocalizedDto;
+  mapMaritalStatusDtosToMaritalStatusLocalizedDtos(maritalStatusDtos: ReadonlyArray<MaritalStatusDto>, locale: AppLocale): ReadonlyArray<MaritalStatusLocalizedDto>;
   mapMaritalStatusEntityToMaritalStatusDto(maritalStatusEntity: MaritalStatusEntity): MaritalStatusDto;
   mapMaritalStatusEntitiesToMaritalStatusDtos(maritalStatusEntities: ReadonlyArray<MaritalStatusEntity>): ReadonlyArray<MaritalStatusDto>;
 }
 
+export type MaritalStatusDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>;
+
 @injectable()
 export class MaritalStatusDtoMapperImpl implements MaritalStatusDtoMapper {
-  constructor(@inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>) {}
+  constructor(@inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: MaritalStatusDtoMapperImpl_ServerConfig) {}
+
+  mapMaritalStatusDtoToMaritalStatusLocalizedDto(maritalStatusDto: MaritalStatusDto, locale: AppLocale): MaritalStatusLocalizedDto {
+    const { nameEn, nameFr, ...rest } = maritalStatusDto;
+    return {
+      ...rest,
+      name: locale === 'fr' ? nameFr : nameEn,
+    };
+  }
+
+  mapMaritalStatusDtosToMaritalStatusLocalizedDtos(maritalStatusDtos: ReadonlyArray<MaritalStatusDto>, locale: AppLocale): ReadonlyArray<MaritalStatusLocalizedDto> {
+    return maritalStatusDtos.map((dto) => this.mapMaritalStatusDtoToMaritalStatusLocalizedDto(dto, locale));
+  }
 
   mapMaritalStatusEntityToMaritalStatusDto(maritalStatusEntity: MaritalStatusEntity): MaritalStatusDto {
     const { ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = this.serverConfig;

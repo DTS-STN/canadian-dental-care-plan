@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { MaritalStatusDto } from '~/.server/domain/dtos';
+import type { MaritalStatusDto, MaritalStatusLocalizedDto } from '~/.server/domain/dtos';
 import { MaritalStatusNotFoundException } from '~/.server/domain/exceptions/MaritalStatusNotFoundException';
 import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
 import type { MaritalStatusRepository } from '~/.server/domain/repositories';
@@ -113,6 +113,102 @@ describe('MaritalStatusServiceImpl', () => {
       const service = new MaritalStatusServiceImpl(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       expect(() => service.getMaritalStatusById(id)).toThrow(MaritalStatusNotFoundException);
+      expect(mockMaritalStatusRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('listMaritalStatuses', () => {
+    it('fetches all marital statuses', () => {
+      const mockMaritalStatusRepository = mock<MaritalStatusRepository>();
+      mockMaritalStatusRepository.findAll.mockReturnValueOnce([
+        {
+          Value: 1,
+          Label: {
+            LocalizedLabels: [
+              { Label: 'Single', LanguageCode: 1033 },
+              { Label: 'Célibataire', LanguageCode: 1036 },
+            ],
+          },
+        },
+        {
+          Value: 2,
+          Label: {
+            LocalizedLabels: [
+              { Label: 'Married', LanguageCode: 1033 },
+              { Label: 'Marié(e)', LanguageCode: 1036 },
+            ],
+          },
+        },
+      ]);
+
+      const mockDtos: MaritalStatusDto[] = [
+        { id: '1', nameEn: 'Single', nameFr: 'Célibataire' },
+        { id: '2', nameEn: 'Married', nameFr: 'Marié(e)' },
+      ];
+
+      const mockLocalizedDtos: MaritalStatusLocalizedDto[] = [
+        { id: '1', name: 'Single' },
+        { id: '2', name: 'Married' },
+      ];
+
+      const mockMaritalStatusDtoMapper = mock<MaritalStatusDtoMapper>();
+      mockMaritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos.mockReturnValueOnce(mockDtos);
+      mockMaritalStatusDtoMapper.mapMaritalStatusDtosToMaritalStatusLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
+
+      const service = new MaritalStatusServiceImpl(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
+
+      const dtos = service.listLocalizedMaritalStatuses('en');
+
+      expect(dtos).toEqual(mockLocalizedDtos);
+      expect(mockMaritalStatusRepository.findAll).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusDtosToMaritalStatusLocalizedDtos).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getLocalizedMaritalStatusById', () => {
+    it('fetches localized marital status by id', () => {
+      const id = '1';
+      const mockMaritalStatusRepository = mock<MaritalStatusRepository>();
+      mockMaritalStatusRepository.findById.mockReturnValueOnce({
+        Value: 1,
+        Label: {
+          LocalizedLabels: [
+            { Label: 'Single', LanguageCode: 1033 },
+            { Label: 'Célibataire', LanguageCode: 1036 },
+          ],
+        },
+      });
+
+      const mockDto: MaritalStatusDto = { id: '1', nameEn: 'Single', nameFr: 'Célibataire' };
+
+      const mockLocalizedDto: MaritalStatusLocalizedDto = { id: '1', name: 'Single' };
+
+      const mockMaritalStatusDtoMapper = mock<MaritalStatusDtoMapper>();
+      mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto.mockReturnValueOnce(mockDto);
+      mockMaritalStatusDtoMapper.mapMaritalStatusDtoToMaritalStatusLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
+
+      const service = new MaritalStatusServiceImpl(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
+
+      const dto = service.getLocalizedMaritalStatusById(id, 'en');
+
+      expect(dto).toEqual(mockLocalizedDto);
+      expect(mockMaritalStatusRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusDtoToMaritalStatusLocalizedDto).toHaveBeenCalledTimes(1);
+    });
+
+    it('fetches localized marital status by id throws not found exception', () => {
+      const id = '1033';
+      const mockMaritalStatusRepository = mock<MaritalStatusRepository>();
+      mockMaritalStatusRepository.findById.mockReturnValueOnce(null);
+
+      const mockMaritalStatusDtoMapper = mock<MaritalStatusDtoMapper>();
+
+      const service = new MaritalStatusServiceImpl(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
+
+      expect(() => service.getLocalizedMaritalStatusById(id, 'en')).toThrow(MaritalStatusNotFoundException);
       expect(mockMaritalStatusRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).not.toHaveBeenCalled();
     });
