@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
-import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/exceptions/PreferredCommunicationMethodNotFoundException';
+import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
 import { PreferredCommunicationMethodServiceImpl } from '~/.server/domain/services';

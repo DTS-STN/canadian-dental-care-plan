@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
-import { PreferredCommunicationMethodNotFoundException } from '../exceptions/PreferredCommunicationMethodNotFoundException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
+import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';

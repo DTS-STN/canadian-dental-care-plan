@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { CountryDto, CountryLocalizedDto } from '~/.server/domain/dtos';
-import { CountryNotFoundException } from '~/.server/domain/exceptions/CountryNotFoundException';
+import { CountryNotFoundException } from '~/.server/domain/exceptions';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories';
 import type { CountryServiceImpl_ServiceConfig } from '~/.server/domain/services';

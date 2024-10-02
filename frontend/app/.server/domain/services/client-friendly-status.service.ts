@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
-import { ClientFriendlyStatusNotFoundException } from '../exceptions/ClientFriendlyStatusNotFoundException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { ClientFriendlyStatusDto, ClientFriendlyStatusLocalizedDto } from '~/.server/domain/dtos';
+import { ClientFriendlyStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';

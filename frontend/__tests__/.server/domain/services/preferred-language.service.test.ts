@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos';
-import { PreferredLanguageNotFoundException } from '~/.server/domain/exceptions/PreferredLanguageNotFoundException';
+import { PreferredLanguageNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories';
 import { PreferredLanguageServiceImpl } from '~/.server/domain/services';

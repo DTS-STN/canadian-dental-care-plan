@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
-import { ProvinceTerritoryStateNotFoundException } from '~/.server/domain/exceptions/ProvinceTerritoryStateNotFoundException';
+import { ProvinceTerritoryStateNotFoundException } from '~/.server/domain/exceptions';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
 import { ProvinceTerritoryStateServiceImpl } from '~/.server/domain/services';

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ClientFriendlyStatusDto, ClientFriendlyStatusLocalizedDto } from '~/.server/domain/dtos';
-import { ClientFriendlyStatusNotFoundException } from '~/.server/domain/exceptions/ClientFriendlyStatusNotFoundException';
+import { ClientFriendlyStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories';
 import type { ClientFriendlyStatusServiceImpl_ServerConfig } from '~/.server/domain/services';

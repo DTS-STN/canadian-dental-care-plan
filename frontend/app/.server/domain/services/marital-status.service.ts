@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
-import { MaritalStatusNotFoundException } from '../exceptions/MaritalStatusNotFoundException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { MaritalStatusDto, MaritalStatusLocalizedDto } from '~/.server/domain/dtos';
+import { MaritalStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
 import type { MaritalStatusRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
