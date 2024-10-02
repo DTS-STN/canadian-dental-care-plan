@@ -707,6 +707,14 @@
                   "en": "/:lang/renew/:id/type-renewal",
                   "fr": "/:lang/renew/:id/type-renewal"
                 }
+              },
+              {
+                "id": "public/renew/$id/renewal-delegate",
+                "file": "routes/public/renew/$id/renewal-delegate.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/renewal-delegate",
+                  "fr": "/:lang/renew/:id/renewal-delagate"
+                }
               }
             ]
           }

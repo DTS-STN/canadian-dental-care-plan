@@ -23,7 +23,7 @@ export default function Route() {
 
   useEffect(() => {
     // redirect to start if the flow has not yet been initialized
-    const flowState = sessionStorage.getItem('flow.state');
+    const flowState = sessionStorage.getItem('renew.state');
 
     if (flowState !== 'active') {
       navigate(path, { replace: true });

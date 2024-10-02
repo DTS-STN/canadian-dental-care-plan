@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { redirect, useFetcher, useLoaderData } from '@remix-run/react';
@@ -62,6 +64,10 @@ export default function RenewIndex() {
   const { csrfToken } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+
+  useEffect(() => {
+    sessionStorage.setItem('renew.state', 'active');
+  }, []);
 
   return (
     <>
