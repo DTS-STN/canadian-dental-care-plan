@@ -85,7 +85,8 @@
       "termsAndConditions": "CDCP-RENW-0002",
       "applicantInformation": "CDCP-RNEW-0003",
       "typeOfRenewal": "CDCP-RENW-0004",
-      "renewalDelegate": "CDCP-RENW-0005"
+      "renewalDelegate": "CDCP-RENW-0005",
+      "fileYourTaxes": "CDCP-RENW-0006"
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
     "notFound": "CDCP-ERR-0404"

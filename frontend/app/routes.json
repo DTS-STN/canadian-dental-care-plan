@@ -715,6 +715,14 @@
                   "en": "/:lang/renew/:id/renewal-delegate",
                   "fr": "/:lang/renew/:id/renewal-delagate"
                 }
+              },
+              {
+                "id": "public/renew/$id/file-taxes",
+                "file": "routes/public/renew/$id/file-taxes.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/file-taxes",
+                  "fr": "/:lang/renew/:id/produire-declaration-revenus"
+                }
               }
             ]
           }
