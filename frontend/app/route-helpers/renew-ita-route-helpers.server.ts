@@ -30,7 +30,7 @@ export function loadRenewItaState({ params, request, session }: LoadRenewItaStat
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('public/renew/$id/adult-child/confirmation', params);
+  const confirmationRouteUrl = getPathById('public/renew/$id/ita/confirmation', params);
   if (renewState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', renewState.id, confirmationRouteUrl);
     throw redirect(confirmationRouteUrl);
@@ -78,7 +78,7 @@ interface ValidateRenewItaStateForReviewArgs {
 }
 
 export function validateRenewItaStateForReview({ params, state }: ValidateRenewItaStateForReviewArgs) {
-  const { maritalStatus, communicationPreferences, dentalBenefits, dentalInsurance, editMode, id, partnerInformation, contactInformation, submissionInfo, typeOfRenewal } = state;
+  const { maritalStatus, editMode, id, submissionInfo, typeOfRenewal } = state;
 
   if (typeOfRenewal === undefined) {
     throw redirect(getPathById('public/renew/$id/type-application', params));
@@ -93,34 +93,15 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
   }
 
   if (maritalStatus === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult-child/marital-status', params));
+    throw redirect(getPathById('public/renew/$id/ita/marital-status', params));
   }
 
-  if (contactInformation === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult-child/contact-information', params));
-  }
-
-  if (communicationPreferences === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult-child/communication-preference', params));
-  }
-
-  if (dentalInsurance === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult-child/dental-insurance', params));
-  }
-
-  if (dentalBenefits === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult-child/federal-provincial-territorial-benefits', params));
-  }
+  // TODO add remaining states when screens are available
 
   return {
     maritalStatus,
-    communicationPreferences,
-    contactInformation,
-    dentalBenefits,
-    dentalInsurance,
     editMode,
     id,
-    partnerInformation,
     submissionInfo,
     typeOfRenewal,
   };
