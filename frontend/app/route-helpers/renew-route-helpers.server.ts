@@ -17,11 +17,75 @@ export interface RenewState {
     dateOfBirth: string;
     clientNumber: string;
   };
+  readonly maritalStatus?: {
+    firstName: string;
+    lastName: string;
+    maritalStatus: string;
+    socialInsuranceNumber: string;
+  };
+  readonly contactInformation?: {
+    copyMailingAddress: boolean;
+    homeAddress?: string;
+    homeApartment?: string;
+    homeCity?: string;
+    homeCountry?: string;
+    homePostalCode?: string;
+    homeProvince?: string;
+    mailingAddress: string;
+    mailingApartment?: string;
+    mailingCity: string;
+    mailingCountry: string;
+    mailingPostalCode?: string;
+    mailingProvince?: string;
+    phoneNumber?: string;
+    phoneNumberAlt?: string;
+    email?: string;
+  };
+  readonly communicationPreferences?: {
+    email?: string;
+    preferredLanguage: string;
+    preferredMethod: string;
+  };
+  readonly dentalBenefits?: {
+    hasFederalBenefits: boolean;
+    federalSocialProgram?: string;
+    hasProvincialTerritorialBenefits: boolean;
+    provincialTerritorialSocialProgram?: string;
+    province?: string;
+  };
+  readonly dentalInsurance?: boolean;
+  readonly partnerInformation?: {
+    confirm: boolean;
+    dateOfBirth: string;
+    firstName: string;
+    lastName: string;
+    socialInsuranceNumber: string;
+  };
+  readonly submissionInfo?: {
+    /**
+     * The confirmation code associated with the application submission.
+     */
+    confirmationCode: string;
+
+    /**
+     * The UTC date and time when the application was submitted.
+     * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
+     */
+    submittedOn: string;
+  };
   readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
 }
 
 export type ApplicantInformationState = NonNullable<RenewState['applicantInformation']>;
+export type MaritalStatusState = NonNullable<RenewState['maritalStatus']>;
 export type TypeOfApplicationState = NonNullable<RenewState['typeOfRenewal']>;
+export type CommunicationPreferencesState = NonNullable<RenewState['communicationPreferences']>;
+export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
+export type DentalInsuranceState = NonNullable<RenewState['dentalInsurance']>;
+export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type PartnerInformationState = NonNullable<RenewState['partnerInformation']>;
+export type ContactInformationState = NonNullable<RenewState['contactInformation']>;
+export type SubmissionInfoState = NonNullable<RenewState['submissionInfo']>;
 
 /**
  * Schema for validating UUID.
