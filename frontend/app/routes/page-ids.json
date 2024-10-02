@@ -86,7 +86,10 @@
       "applicantInformation": "CDCP-RNEW-0003",
       "typeOfRenewal": "CDCP-RENW-0004",
       "renewalDelegate": "CDCP-RENW-0005",
-      "fileYourTaxes": "CDCP-RENW-0006"
+      "fileYourTaxes": "CDCP-RENW-0006",
+      "ita": {
+        "maritalStatus": "CDCP-RENW-ITA-0001"
+      }
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
     "notFound": "CDCP-ERR-0404"

@@ -1,4 +1,9 @@
 {
+  "progress": {
+    "label": "Application progress"
+  },
+  "required-label": "Complete all fields.",
+  "optional-label": "Complete all fields unless marked as optional.",
   "index": {
     "page-title": "(FR) Renew",
     "eligibility": "(FR) To renew your Canadian Dental Care Plan, you'll need to provide the following information for each applicant:",
