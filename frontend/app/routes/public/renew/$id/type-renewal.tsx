@@ -58,7 +58,7 @@ export async function action({ context: { session }, params, request }: ActionFu
    */
   const typeOfRenewalSchema = z.object({
     typeOfRenewal: z.nativeEnum(RenewalType, {
-      errorMap: () => ({ message: t('renew:type-of-renewal.error-message.type-of-application-required') }),
+      errorMap: () => ({ message: t('renew:type-of-renewal.error-message.type-of-renewal-required') }),
     }),
   });
 
@@ -97,7 +97,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('public/renew/$id/child/children/index', params));
   }
 
-  return redirect(getPathById('public/renew/$id/application-delegate', params));
+  return redirect(getPathById('public/renew/$id/renewal-delegate', params));
 }
 
 export default function RenewTypeOfRenewal() {
