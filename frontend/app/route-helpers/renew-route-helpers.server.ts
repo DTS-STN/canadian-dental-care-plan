@@ -17,7 +17,16 @@ export interface RenewState {
     dateOfBirth: string;
     clientNumber: string;
   };
+  readonly maritalStatus?: string;
   readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
+  readonly submissionInfo?: {
+    /**
+     * The UTC date and time when the application was submitted.
+     * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
+     */
+    submittedOn: string;
+  };
+  // TODO Add remaining states
 }
 
 export type ApplicantInformationState = NonNullable<RenewState['applicantInformation']>;
