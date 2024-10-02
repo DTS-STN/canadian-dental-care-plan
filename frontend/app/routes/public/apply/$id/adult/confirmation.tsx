@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
@@ -50,7 +49,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     state.dateOfBirth === undefined ||
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
-    state.contactInformation === undefined ||
+    state.contactInformation?.homeCountry === undefined ||
     state.submissionInfo === undefined ||
     state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
@@ -61,23 +60,12 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram
     ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram)
     : undefined;
-
-  // Getting province by Id
   const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
   const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
-
-  // Getting Country by Id
   const countryMailing = serviceProvider.getCountryService().getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
-
-  invariant(state.contactInformation.homeCountry, `Unexpected home country: ${state.contactInformation.homeCountry}`);
   const countryHome = serviceProvider.getCountryService().getLocalizedCountryById(state.contactInformation.homeCountry, locale);
-
-  const preferredLanguage = serviceProvider.getPreferredLanguageService().findPreferredLanguageById(state.communicationPreferences.preferredLanguage);
-  invariant(preferredLanguage, `Unexpected preferred language: ${state.communicationPreferences.preferredLanguage}`);
-
-  invariant(state.applicantInformation.maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
+  const preferredLanguage = serviceProvider.getPreferredLanguageService().getPreferredLanguageById(state.communicationPreferences.preferredLanguage);
   const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
-
   const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod);
 
   const userInfo = {

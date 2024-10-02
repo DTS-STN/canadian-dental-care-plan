@@ -3,6 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos';
+import { PreferredLanguageNotFoundException } from '~/.server/domain/exceptions/PreferredLanguageNotFoundException';
 import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories';
 import { PreferredLanguageServiceImpl } from '~/.server/domain/services';
@@ -28,11 +29,11 @@ describe('PreferredLanguageServiceImpl', () => {
 
       // Act and Assert
       expect(service.listPreferredLanguages.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.findPreferredLanguageById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.getPreferredLanguageById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
-  describe('findAll', () => {
+  describe('listPreferredLanguages', () => {
     it('fetches all preferred languages', () => {
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
       mockPreferredLanguageRepository.findAll.mockReturnValueOnce([
@@ -74,7 +75,7 @@ describe('PreferredLanguageServiceImpl', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('getPreferredLanguageById', () => {
     it('fetches preferred language by id', () => {
       const id = '1033';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
@@ -95,14 +96,14 @@ describe('PreferredLanguageServiceImpl', () => {
 
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
-      const dto = service.findPreferredLanguageById(id);
+      const dto = service.getPreferredLanguageById(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).toHaveBeenCalledTimes(1);
     });
 
-    it('fetches preferred language by id returns null if not found', () => {
+    it('fetches preferred language by id by id throws not found exception', () => {
       const id = '1033';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
       mockPreferredLanguageRepository.findById.mockReturnValueOnce(null);
@@ -111,9 +112,7 @@ describe('PreferredLanguageServiceImpl', () => {
 
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
-      const dto = service.findPreferredLanguageById(id);
-
-      expect(dto).toEqual(null);
+      expect(() => service.getPreferredLanguageById(id)).toThrow(PreferredLanguageNotFoundException);
       expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).not.toHaveBeenCalled();
     });
