@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
-import { FederalGovernmentInsurancePlanNotFoundException } from '../exceptions/FederalGovernmentInsurancePlanNotFoundException';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
+import { FederalGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions';
 import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';

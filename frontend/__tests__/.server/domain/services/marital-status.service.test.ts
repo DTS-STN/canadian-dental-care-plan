@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { MaritalStatusDto, MaritalStatusLocalizedDto } from '~/.server/domain/dtos';
-import { MaritalStatusNotFoundException } from '~/.server/domain/exceptions/MaritalStatusNotFoundException';
+import { MaritalStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
 import type { MaritalStatusRepository } from '~/.server/domain/repositories';
 import { MaritalStatusServiceImpl } from '~/.server/domain/services';

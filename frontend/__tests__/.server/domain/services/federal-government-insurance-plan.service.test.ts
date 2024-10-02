@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
-import { FederalGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions/FederalGovernmentInsurancePlanNotFoundException';
+import { FederalGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions';
 import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { FederalGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services';
