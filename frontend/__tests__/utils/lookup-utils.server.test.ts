@@ -1,11 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  localizeAndSortFederalSocialPrograms,
   localizeAndSortPreferredLanguages,
   localizeAndSortProvinceTerritoryStates,
   localizeAndSortProvincialGovernmentInsurancePlans,
-  localizeFederalSocialProgram,
   localizePreferredLanguage,
   localizeProvinceTerritoryState,
   localizeProvinceTerritoryStates,
@@ -22,12 +20,6 @@ const mockLanguages = [
   { id: '001', nameEn: 'englishLanguageOne', nameFr: 'frenchLanguageOne' },
   { id: '002', nameEn: 'englishLanguageTwo', nameFr: 'frenchLanguageTwo' },
   { id: '003', nameEn: 'englishLanguageThree', nameFr: 'frenchLanguageThree' },
-];
-
-const mockFederalSocialPrograms = [
-  { id: '001', nameEn: 'englishProgramOne', nameFr: 'frenchProgramOne' },
-  { id: '002', nameEn: 'englishProgramTwo', nameFr: 'frenchProgramTwo' },
-  { id: '003', nameEn: 'englishProgramThree', nameFr: 'frenchProgramThree' },
 ];
 
 const mockProvincialTerritorialSocialPrograms = [
@@ -200,58 +192,6 @@ describe('localizeAndSortPreferredLanguages', () => {
       {
         id: '002',
         name: 'frenchLanguageTwo',
-      },
-    ]);
-  });
-});
-
-describe('localizeFederalSocialProgram', () => {
-  it('should return the federal social program id and english name', () => {
-    expect(localizeFederalSocialProgram(mockFederalSocialPrograms[0], 'en')).toEqual({
-      id: '001',
-      name: 'englishProgramOne',
-    });
-  });
-
-  it('should return the federal social program id and french name', () => {
-    expect(localizeFederalSocialProgram(mockFederalSocialPrograms[0], 'fr')).toEqual({
-      id: '001',
-      name: 'frenchProgramOne',
-    });
-  });
-});
-
-describe('localizeAndSortFederalSocialPrograms', () => {
-  it('should return an array of localized federal social program ids and english names', () => {
-    expect(localizeAndSortFederalSocialPrograms(mockFederalSocialPrograms, 'en')).toEqual([
-      {
-        id: '001',
-        name: 'englishProgramOne',
-      },
-      {
-        id: '003',
-        name: 'englishProgramThree',
-      },
-      {
-        id: '002',
-        name: 'englishProgramTwo',
-      },
-    ]);
-  });
-
-  it('should return an array of localized federal social program ids and french names', () => {
-    expect(localizeAndSortFederalSocialPrograms(mockFederalSocialPrograms, 'fr')).toEqual([
-      {
-        id: '001',
-        name: 'frenchProgramOne',
-      },
-      {
-        id: '003',
-        name: 'frenchProgramThree',
-      },
-      {
-        id: '002',
-        name: 'frenchProgramTwo',
       },
     ]);
   });

@@ -30,7 +30,7 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeFederalSocialProgram, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
+import { localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -71,7 +71,10 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const payload = viewPayloadEnabled && toBenefitApplicationRequestFromApplyAdultChildState(state);
 
   const children = state.children.map((child) => {
-    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram) : undefined;
+    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram
+      ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      : undefined;
+
     const selectedProvincialBenefit = child.dentalBenefits.provincialTerritorialSocialProgram
       ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram)
       : undefined;
@@ -87,7 +90,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
           access: child.dentalBenefits.hasFederalBenefits,
-          benefit: selectedFederalGovernmentInsurancePlan && localizeFederalSocialProgram(selectedFederalGovernmentInsurancePlan, locale).name,
+          benefit: selectedFederalGovernmentInsurancePlan?.name,
         },
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,

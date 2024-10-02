@@ -23,7 +23,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeFederalSocialProgram, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
+import { localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -57,7 +57,10 @@ export async function loader({ context: { serviceProvider, session }, params, re
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:children.index.page-title') }) };
 
   const children = getChildrenState(state).map((child) => {
-    const federalGovernmentInsurancePlanService = child.dentalBenefits?.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram) : undefined;
+    const federalGovernmentInsurancePlanService = child.dentalBenefits?.federalSocialProgram
+      ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      : undefined;
+
     const provincialTerritorialSocialProgram = child.dentalBenefits?.provincialTerritorialSocialProgram
       ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram)
       : undefined;
@@ -66,7 +69,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
       ...child,
       dentalBenefits: {
         ...child.dentalBenefits,
-        federalSocialProgram: federalGovernmentInsurancePlanService && localizeFederalSocialProgram(federalGovernmentInsurancePlanService, locale).name,
+        federalSocialProgram: federalGovernmentInsurancePlanService?.name,
         provincialTerritorialSocialProgram: provincialTerritorialSocialProgram && localizeProvincialGovernmentInsurancePlan(provincialTerritorialSocialProgram, locale).name,
       },
     };
