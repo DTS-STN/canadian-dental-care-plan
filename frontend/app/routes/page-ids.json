@@ -89,7 +89,8 @@
       "fileYourTaxes": "CDCP-RENW-0006",
       "ita": {
         "maritalStatus": "CDCP-RENW-ITA-0001",
-        "confirmAddress": "CDCP-RENW-ITA-0004"
+        "confirmAddress": "CDCP-RENW-ITA-0004",
+        "updateAddress": "CDCP-RENW-ITA-0005"
       }
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",

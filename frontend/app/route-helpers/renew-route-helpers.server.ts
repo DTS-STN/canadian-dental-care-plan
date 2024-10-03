@@ -25,6 +25,21 @@ export interface RenewState {
   };
   readonly maritalStatus?: string;
   readonly hasAddressChanged?: boolean;
+  readonly addressInformation?: {
+    copyMailingAddress: boolean;
+    homeAddress?: string;
+    homeApartment?: string;
+    homeCity?: string;
+    homeCountry?: string;
+    homePostalCode?: string;
+    homeProvince?: string;
+    mailingAddress: string;
+    mailingApartment?: string;
+    mailingCity: string;
+    mailingCountry: string;
+    mailingPostalCode?: string;
+    mailingProvince?: string;
+  };
   readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
   readonly submissionInfo?: {
     /**
@@ -39,6 +54,7 @@ export interface RenewState {
 export type ApplicantInformationState = NonNullable<RenewState['applicantInformation']>;
 export type TypeOfApplicationState = NonNullable<RenewState['typeOfRenewal']>;
 export type PartnerInformationState = NonNullable<RenewState['partnerInformation']>;
+export type AddressInformationState = NonNullable<RenewState['addressInformation']>;
 
 /**
  * Schema for validating UUID.
