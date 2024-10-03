@@ -27,7 +27,7 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeFederalSocialProgram, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
+import { localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -111,7 +111,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram) : undefined;
+  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
   const selectedProvincialBenefit = state.dentalBenefits.provincialTerritorialSocialProgram
     ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram)
     : undefined;
@@ -119,7 +119,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const dentalBenefit = {
     federalBenefit: {
       access: state.dentalBenefits.hasFederalBenefits,
-      benefit: selectedFederalBenefit && localizeFederalSocialProgram(selectedFederalBenefit, locale).name,
+      benefit: selectedFederalBenefit?.name,
     },
     provTerrBenefit: {
       access: state.dentalBenefits.hasProvincialTerritorialBenefits,

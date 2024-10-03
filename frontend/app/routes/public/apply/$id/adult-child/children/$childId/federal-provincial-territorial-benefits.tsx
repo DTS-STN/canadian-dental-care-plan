@@ -22,7 +22,7 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortFederalSocialPrograms, localizeAndSortProvinceTerritoryStates, localizeAndSortProvincialGovernmentInsurancePlans } from '~/utils/lookup-utils.server';
+import { localizeAndSortProvinceTerritoryStates, localizeAndSortProvincialGovernmentInsurancePlans } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -57,7 +57,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
 
   const { CANADA_COUNTRY_ID } = getEnv();
 
-  const federalSocialPrograms = localizeAndSortFederalSocialPrograms(serviceProvider.getFederalGovernmentInsurancePlanService().listFederalGovernmentInsurancePlans(), locale);
+  const federalSocialPrograms = serviceProvider.getFederalGovernmentInsurancePlanService().listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
   const provinceTerritoryStates = localizeAndSortProvinceTerritoryStates(serviceProvider.getProvinceTerritoryStateService().listProvinceTerritoryStates(), locale).filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
   const provincialTerritorialSocialPrograms = localizeAndSortProvincialGovernmentInsurancePlans(serviceProvider.getProvincialGovernmentInsurancePlanService().listProvincialGovernmentInsurancePlans(), locale);
 

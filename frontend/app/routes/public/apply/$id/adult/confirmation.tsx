@@ -20,7 +20,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeFederalSocialProgram, localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
+import { localizePreferredCommunicationMethod, localizePreferredLanguage, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -56,10 +56,14 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram) : undefined;
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram
+    ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
+    : undefined;
+
   const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram
     ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram)
     : undefined;
+
   const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
   const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
   const countryMailing = serviceProvider.getCountryService().getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
@@ -109,7 +113,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const dentalInsurance = {
     acessToDentalInsurance: state.dentalInsurance,
-    selectedFederalBenefits: selectedFederalGovernmentInsurancePlan && localizeFederalSocialProgram(selectedFederalGovernmentInsurancePlan, locale).name,
+    selectedFederalBenefits: selectedFederalGovernmentInsurancePlan?.name,
     selectedProvincialBenefits: selectedProvincialBenefits && localizeProvincialGovernmentInsurancePlan(selectedProvincialBenefits, locale).name,
   };
 
