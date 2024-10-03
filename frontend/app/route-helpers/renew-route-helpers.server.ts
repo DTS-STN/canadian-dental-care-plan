@@ -24,6 +24,7 @@ export interface RenewState {
     socialInsuranceNumber: string;
   };
   readonly maritalStatus?: string;
+  readonly hasAddressChanged?: boolean;
   readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
   readonly submissionInfo?: {
     /**

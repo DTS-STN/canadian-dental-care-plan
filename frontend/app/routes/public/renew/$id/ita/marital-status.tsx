@@ -63,7 +63,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('renew/marital-status');
+  const log = getLogger('renew/ita/marital-status');
 
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
