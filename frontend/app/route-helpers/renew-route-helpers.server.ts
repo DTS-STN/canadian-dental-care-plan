@@ -4,6 +4,7 @@ import type { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
+import { getEnv } from '~/utils/env-utils.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
@@ -16,6 +17,11 @@ export interface RenewState {
     lastName: string;
     dateOfBirth: string;
     clientNumber: string;
+  };
+  readonly partnerInformation?: {
+    confirm: boolean;
+    dateOfBirth: string;
+    socialInsuranceNumber: string;
   };
   readonly maritalStatus?: string;
   readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
@@ -31,6 +37,7 @@ export interface RenewState {
 
 export type ApplicantInformationState = NonNullable<RenewState['applicantInformation']>;
 export type TypeOfApplicationState = NonNullable<RenewState['typeOfRenewal']>;
+export type PartnerInformationState = NonNullable<RenewState['partnerInformation']>;
 
 /**
  * Schema for validating UUID.
@@ -151,4 +158,9 @@ export function startRenewState({ id, session }: StartArgs) {
   session.set(sessionName, initialState);
   log.info('Renew session state started; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
   return initialState;
+}
+
+export function renewStateHasPartner(maritalStatus: string) {
+  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
+  return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
 }

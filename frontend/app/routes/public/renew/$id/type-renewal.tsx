@@ -90,7 +90,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   });
 
   if (parsedDataResult.data.typeOfRenewal === RenewalType.AdultChild) {
-    return redirect(getPathById('public/renew/$id/adult-child/marital-status', params));
+    return redirect(getPathById('public/renew/$id/ita/marital-status', params));
   }
 
   if (parsedDataResult.data.typeOfRenewal === RenewalType.Child) {

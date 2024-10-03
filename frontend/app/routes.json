@@ -723,6 +723,14 @@
                   "en": "/:lang/renew/:id/file-taxes",
                   "fr": "/:lang/renew/:id/produire-declaration-revenus"
                 }
+              },
+              {
+                "id": "public/renew/$id/ita/marital-status",
+                "file": "routes/public/renew/$id/ita/marital-status.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/ita/marital-status",
+                  "fr": "/:lang/renew/:id/ita/marital-status"
+                }
               }
             ]
           }
