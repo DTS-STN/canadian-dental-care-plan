@@ -7,6 +7,7 @@ const validFeatureNames = [
   'view-personal-info',
   'view-applications',
   'view-letters',
+  'view-letters-online-application',
   'view-messages',
   'edit-personal-info',
   'status',

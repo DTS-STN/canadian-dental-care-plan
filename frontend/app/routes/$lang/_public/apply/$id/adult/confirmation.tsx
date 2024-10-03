@@ -173,7 +173,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowConfirm() {
-  const viewLettersEnabled = useFeature('view-letters');
+  const viewLettersEnabled = useFeature('view-letters-online-application');
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
