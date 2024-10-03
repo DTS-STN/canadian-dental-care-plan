@@ -739,6 +739,14 @@
                   "en": "/:lang/renew/:id/ita/confirm-address",
                   "fr": "/:lang/renew/:id/ita/confirm-address"
                 }
+              },
+              {
+                "id": "public/renew/$id/ita/update-address",
+                "file": "routes/public/renew/$id/ita/update-address.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/ita/update-address",
+                  "fr": "/:lang/renew/:id/ita/update-address"
+                }
               }
             ]
           }

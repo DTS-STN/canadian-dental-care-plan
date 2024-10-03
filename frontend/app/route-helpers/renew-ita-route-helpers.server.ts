@@ -25,7 +25,7 @@ export function loadRenewItaState({ params, request, session }: LoadRenewItaStat
   const renewState = loadRenewState({ params, session });
 
   if (renewState.typeOfRenewal !== 'adult-child') {
-    throw redirect(getPathById('public/renew/$id/type-application', params));
+    throw redirect(getPathById('public/renew/$id/type-renewal', params));
   }
 
   // Redirect to the confirmation page if the application has been submitted and
