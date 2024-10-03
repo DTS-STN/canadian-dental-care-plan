@@ -731,6 +731,14 @@
                   "en": "/:lang/renew/:id/ita/marital-status",
                   "fr": "/:lang/renew/:id/ita/marital-status"
                 }
+              },
+              {
+                "id": "public/renew/$id/ita/confirm-address",
+                "file": "routes/public/renew/$id/ita/confirm-address.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/ita/confirm-address",
+                  "fr": "/:lang/renew/:id/ita/confirm-address"
+                }
               }
             ]
           }
