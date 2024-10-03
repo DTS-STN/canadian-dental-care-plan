@@ -78,7 +78,7 @@ interface ValidateRenewItaStateForReviewArgs {
 }
 
 export function validateRenewItaStateForReview({ params, state }: ValidateRenewItaStateForReviewArgs) {
-  const { maritalStatus, editMode, id, submissionInfo, typeOfRenewal } = state;
+  const { maritalStatus, contactInformation, editMode, id, submissionInfo, typeOfRenewal } = state;
 
   if (typeOfRenewal === undefined) {
     throw redirect(getPathById('public/renew/$id/type-application', params));
@@ -96,6 +96,10 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     throw redirect(getPathById('public/renew/$id/ita/marital-status', params));
   }
 
+  if (contactInformation === undefined) {
+    throw redirect(getPathById('public/renew/$id/ita/contact-information', params));
+  }
+
   // TODO add remaining states when screens are available
 
   return {
@@ -104,5 +108,6 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     id,
     submissionInfo,
     typeOfRenewal,
+    contactInformation,
   };
 }
