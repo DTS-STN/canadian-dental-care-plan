@@ -2,6 +2,7 @@ import { ContainerModule } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type {
+  AddressValidationRepository,
   ClientApplicationRepository,
   ClientFriendlyStatusRepository,
   CountryRepository,
@@ -13,6 +14,7 @@ import type {
   ProvincialGovernmentInsurancePlanRepository,
 } from '~/.server/domain/repositories';
 import {
+  AddressValidationRepositoryImpl,
   ClientApplicationRepositoryImpl,
   ClientFriendlyStatusRepositoryImpl,
   CountryRepositoryImpl,
@@ -28,6 +30,7 @@ import {
  * Container module for repositories.
  */
 export const repositoriesContainerModule = new ContainerModule((bind) => {
+  bind<AddressValidationRepository>(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_REPOSITORY).to(AddressValidationRepositoryImpl);
   bind<ClientApplicationRepository>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_REPOSITORY).to(ClientApplicationRepositoryImpl);
   bind<ClientFriendlyStatusRepository>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_REPOSITORY).to(ClientFriendlyStatusRepositoryImpl);
   bind<CountryRepository>(SERVICE_IDENTIFIER.COUNTRY_REPOSITORY).to(CountryRepositoryImpl);

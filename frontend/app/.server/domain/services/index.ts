@@ -1,3 +1,4 @@
+export * from './address-validation.service';
 export * from './client-application.service';
 export * from './client-friendly-status.service';
 export * from './country.service';
