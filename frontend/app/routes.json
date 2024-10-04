@@ -749,6 +749,14 @@
                 }
               },
               {
+                "id": "public/renew/$id/ita/communication-preference",
+                "file": "routes/public/renew/$id/ita/communication-preference.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/ita/communication-preference",
+                  "fr": "/:lang/renew/:id/ita/communication-preference"
+                }
+              },
+              {
                 "id": "public/renew/$id/ita/dental-insurance",
                 "file": "routes/public/renew/$id/ita/dental-insurance.tsx",
                 "paths": {

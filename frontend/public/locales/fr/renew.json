@@ -172,5 +172,23 @@
     "back-btn": "Back",
     "return-btn": "Return to main page",
     "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
+  "communication-preference": {
+    "page-title": "(FR) Communication Preference",
+    "required-label": "Complete all fields unless marked as optinal.",
+    "preferred-method": "(FR) What is your prefered method of communication for Sun Life?",
+    "email": "(FR) Email address",
+    "confirm-email": "(FR) Confirm email address",
+    "error-message": {
+      "communication-preference-required": "(FR) Select a prefered method of communication.",
+      "email-match": "(FR) The email addresses entered do not match",
+      "confirm-email-required": "(FR) Confirm email address",
+      "email-required": "(FR) Enter email address",
+      "email-valid": "(FR) Enter an email address in the correct format, such as name@example.com",
+      "confirm-email-valid": "(FR) Enter confirmation of email address in the correct format, such as name@example.com",
+      "preferred-method-required": "(FR) Select preferred method of communication"
+    },
+    "back-btn": "(FR) Back",
+    "continue-btn": "(FR) Continue"
   }
 }
