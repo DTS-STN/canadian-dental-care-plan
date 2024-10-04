@@ -1,3 +1,4 @@
+export type * from './address-validation.dto';
 export type * from './client-application.dto';
 export type * from './client-friendly-status.dto';
 export type * from './country.dto';

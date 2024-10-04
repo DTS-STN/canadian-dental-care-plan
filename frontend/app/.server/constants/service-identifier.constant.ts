@@ -1,7 +1,10 @@
 export const SERVICE_IDENTIFIER = {
   CLIENT_CONFIG: Symbol.for('ClientConfig'),
+  ADDRESS_VALIDATION_DTO_MAPPER: Symbol.for('AddressValidationDtoMapper'),
+  ADDRESS_VALIDATION_REPOSITORY: Symbol.for('AddressValidationRepository'),
+  ADDRESS_VALIDATION_SERVICE: Symbol.for('AddressValidationService'),
   CLIENT_APPLICATION_DTO_MAPPER: Symbol.for('ClientApplicationDtoMapper'),
-  CLIENT_APPLICATION_REPOSITORY: Symbol.for('ClientApplicationDtoRepository'),
+  CLIENT_APPLICATION_REPOSITORY: Symbol.for('ClientApplicationRepository'),
   CLIENT_APPLICATION_SERVICE: Symbol.for('ClientApplicationService'),
   CLIENT_FRIENDLY_STATUS_DTO_MAPPER: Symbol.for('ClientFriendlyStatusDtoMapper'),
   CLIENT_FRIENDLY_STATUS_REPOSITORY: Symbol.for('ClientFriendlyStatusRepository'),

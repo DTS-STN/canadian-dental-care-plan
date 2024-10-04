@@ -1,3 +1,4 @@
+export type * from './address-validation.entity';
 export type * from './client-application.entity';
 export type * from './client-friendly-status.entity';
 export type * from './country.entity';

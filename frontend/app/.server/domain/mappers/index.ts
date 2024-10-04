@@ -1,3 +1,4 @@
+export * from './address-validation.dto.mapper';
 export * from './client-application.dto.mapper';
 export * from './client-friendly-status.dto.mapper';
 export * from './country.dto.mapper';

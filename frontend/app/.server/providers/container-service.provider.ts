@@ -3,6 +3,7 @@ import { injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type {
+  AddressValidationService,
   ClientApplicationService,
   ClientFriendlyStatusService,
   CountryService,
@@ -15,6 +16,7 @@ import type {
 } from '~/.server/domain/services';
 
 export interface ContainerServiceProvider {
+  getAddressValidationService(): AddressValidationService;
   getClientApplicationService(): ClientApplicationService;
   getClientFriendlyStatusService(): ClientFriendlyStatusService;
   getCountryService(): CountryService;
@@ -29,6 +31,10 @@ export interface ContainerServiceProvider {
 @injectable()
 export class ContainerServiceProviderImpl implements ContainerServiceProvider {
   constructor(private readonly container: Container) {}
+
+  getAddressValidationService(): AddressValidationService {
+    return this.container.get<AddressValidationService>(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE);
+  }
 
   getClientApplicationService(): ClientApplicationService {
     return this.container.get<ClientApplicationService>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE);

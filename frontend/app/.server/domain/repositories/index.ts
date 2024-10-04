@@ -1,3 +1,4 @@
+export * from './address-validation.repository';
 export * from './client-application.repository';
 export * from './client-friendly-status.repository';
 export * from './country.repository';
