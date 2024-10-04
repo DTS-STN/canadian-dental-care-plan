@@ -3,7 +3,7 @@
  */
 export type AddressCorrectionResultDto = Readonly<{
   /** The status of the address correction. */
-  status: 'Corrected' | 'NotCorrect' | 'Valid';
+  status: AddressCorrectionStatus;
 
   /** The full or partial address. */
   address: string;
@@ -17,3 +17,8 @@ export type AddressCorrectionResultDto = Readonly<{
   /** The 2-character Canadian province or territorial code. */
   provinceCode: string;
 }>;
+
+/**
+ * Represents the possible statuses for an address correction result.
+ */
+export type AddressCorrectionStatus = 'Corrected' | 'NotCorrect' | 'Valid';
