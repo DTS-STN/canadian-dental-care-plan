@@ -40,6 +40,7 @@ export interface RenewState {
     mailingPostalCode?: string;
     mailingProvince?: string;
   };
+  readonly dentalInsurance?: boolean;
   readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
   readonly submissionInfo?: {
     /**
