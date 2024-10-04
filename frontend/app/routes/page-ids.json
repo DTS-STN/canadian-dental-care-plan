@@ -91,7 +91,8 @@
         "maritalStatus": "CDCP-RENW-ITA-0001",
         "confirmAddress": "CDCP-RENW-ITA-0004",
         "updateAddress": "CDCP-RENW-ITA-0005",
-        "dentalInsurance": "CDCP-RENW-ITA-0006"
+        "dentalInsurance": "CDCP-RENW-ITA-0006",
+        "federalProvincialTerritorialBenefits": "CDCP-RENW-ITA-0007"
       }
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
