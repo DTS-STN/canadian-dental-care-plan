@@ -74,10 +74,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveRenewState({ params, session, state: { dentalInsurance: parsedDataResult.data.dentalInsurance } });
 
   if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/ita/review-information', params));
+    return redirect(getPathById('public/renew/$id/ita/review-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/ita/federal-provincial-territorial-benefits', params));
+  return redirect(getPathById('public/renew/$id/ita/federal-provincial-territorial-benefits', params));
 }
 
 export default function RenewItaAccessToDentalInsurance() {

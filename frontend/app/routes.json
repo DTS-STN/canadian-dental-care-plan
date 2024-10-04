@@ -755,6 +755,14 @@
                   "en": "/:lang/renew/:id/ita/dental-insurance",
                   "fr": "/:lang/renew/:id/ita/dental-insurance"
                 }
+              },
+              {
+                "id": "public/renew/$id/ita/federal-provincial-territorial-benefits",
+                "file": "routes/public/renew/$id/ita/federal-provincial-territorial-benefits.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/ita/federal-provincial-territorial-benefits",
+                  "fr": "/:lang/renew/:id/ita/federal-provincial-territorial-benefits"
+                }
               }
             ]
           }

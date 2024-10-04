@@ -41,6 +41,13 @@ export interface RenewState {
     mailingProvince?: string;
   };
   readonly dentalInsurance?: boolean;
+  readonly dentalBenefits?: {
+    hasFederalBenefits: boolean;
+    federalSocialProgram?: string;
+    hasProvincialTerritorialBenefits: boolean;
+    provincialTerritorialSocialProgram?: string;
+    province?: string;
+  };
   readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
   readonly submissionInfo?: {
     /**
@@ -56,6 +63,7 @@ export type ApplicantInformationState = NonNullable<RenewState['applicantInforma
 export type TypeOfApplicationState = NonNullable<RenewState['typeOfRenewal']>;
 export type PartnerInformationState = NonNullable<RenewState['partnerInformation']>;
 export type AddressInformationState = NonNullable<RenewState['addressInformation']>;
+export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 
 /**
  * Schema for validating UUID.
