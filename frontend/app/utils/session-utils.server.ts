@@ -25,7 +25,7 @@ export function createFileSessionStorage({ cookie, dir }: FileSessionStorageOpti
     // eslint-disable-next-line @typescript-eslint/require-await
     async createData(data, expires) {
       const content = JSON.stringify({ data, expires });
-      // eslint-disable-next-line no-constant-condition, @typescript-eslint/no-unnecessary-condition
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       while (true) {
         const id = crypto.randomUUID({ disableEntropyCache: true });
         try {
