@@ -164,7 +164,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  return redirect(getPathById('public/apply/$id/ita/review-information', params));
+  return redirect(getPathById('public/renew/$id/ita/review-information', params));
 }
 
 export default function RenewItaFederalProvincialTerritorialBenefits() {

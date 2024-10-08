@@ -127,7 +127,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) });
   }
 
-  saveRenewState({ params, session, state });
+  saveRenewState({ params, session, state: { contactInformation: parsedDataResult.data } });
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/ita/review-information', params));
