@@ -1,17 +1,59 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
+import type { PreferredCommunicationMethodDto, PreferredCommunicationMethodLocalizedDto } from '~/.server/domain/dtos';
 import type { PreferredCommunicationMethodEntity } from '~/.server/domain/entities';
 import { PreferredCommunicationMethodDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('PreferredCommunicationMethodDtoMapperImpl', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-    vi.clearAllMocks();
+  const mockServerConfig: Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'> = { ENGLISH_LANGUAGE_CODE: 1033, FRENCH_LANGUAGE_CODE: 1036 };
+
+  describe('mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto', () => {
+    it.each([
+      ['en' as const, 'English'],
+      ['fr' as const, 'Anglais'],
+    ])('should map a single PreferredCommunicationMethodDto objects to a PreferredCommunicationMethodLocalizedDto object with the correct locale (%s)', (locale, expectedLocalizedName) => {
+      const mockDto: PreferredCommunicationMethodDto = { id: '1', nameEn: 'English', nameFr: 'Anglais' };
+      const expectedDto: PreferredCommunicationMethodLocalizedDto = { id: '1', name: expectedLocalizedName };
+
+      const mapper = new PreferredCommunicationMethodDtoMapperImpl(mockServerConfig);
+      const dto = mapper.mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto(mockDto, locale);
+
+      expect(dto).toEqual(expectedDto);
+    });
   });
 
-  const mockServerConfig: Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'> = { ENGLISH_LANGUAGE_CODE: 1033, FRENCH_LANGUAGE_CODE: 1036 };
+  describe('mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos', () => {
+    it.each([
+      ['en' as const, 'English', 'French'],
+      ['fr' as const, 'Anglais', 'Français'],
+    ])('should map an array of PreferredCommunicationMethodDto objects to an array of PreferredCommunicationMethodLocalizedDto objects with the correct locale (%s)', (locale, expectedFirstLocalizedName, expectedSecondLocalizedName) => {
+      const preferredCommunicationMethodDtos: PreferredCommunicationMethodDto[] = [
+        { id: '1', nameEn: 'English', nameFr: 'Anglais' },
+        { id: '2', nameEn: 'French', nameFr: 'Français' },
+      ];
+
+      const expectedDtos: PreferredCommunicationMethodLocalizedDto[] = [
+        { id: '1', name: expectedFirstLocalizedName },
+        { id: '2', name: expectedSecondLocalizedName },
+      ];
+
+      const mapper = new PreferredCommunicationMethodDtoMapperImpl(mockServerConfig);
+      const dtos = mapper.mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos(preferredCommunicationMethodDtos, locale);
+
+      expect(dtos).toEqual(expectedDtos);
+    });
+
+    it('should handle an empty array of PreferredCommunicationMethodDto objects', () => {
+      const preferredCommunicationMethodDtos: PreferredCommunicationMethodDto[] = [];
+      const expectedDtos: PreferredCommunicationMethodLocalizedDto[] = [];
+
+      const mapper = new PreferredCommunicationMethodDtoMapperImpl(mockServerConfig);
+      const dtos = mapper.mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos(preferredCommunicationMethodDtos, 'en');
+
+      expect(dtos).toEqual(expectedDtos);
+    });
+  });
 
   describe('mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto', () => {
     it('maps a PreferredCommunicationMethodEntity with both English and French labels to a PreferredCommunicationMethodDto', () => {

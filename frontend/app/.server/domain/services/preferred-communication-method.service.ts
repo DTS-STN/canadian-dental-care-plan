@@ -3,15 +3,17 @@ import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
+import type { PreferredCommunicationMethodDto, PreferredCommunicationMethodLocalizedDto } from '~/.server/domain/dtos';
 import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface PreferredCommunicationMethodService {
-  listPreferredCommunicationMethods(): PreferredCommunicationMethodDto[];
+  getLocalizedPreferredCommunicationMethodById(id: string, locale: AppLocale): PreferredCommunicationMethodLocalizedDto;
   getPreferredCommunicationMethodById(id: string): PreferredCommunicationMethodDto;
+  listAndSortLocalizedPreferredCommunicationMethods(locale: AppLocale): ReadonlyArray<PreferredCommunicationMethodLocalizedDto>;
+  listPreferredCommunicationMethods(): ReadonlyArray<PreferredCommunicationMethodDto>;
 }
 
 @injectable()
@@ -31,6 +33,32 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
     this.getPreferredCommunicationMethodById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS;
   }
 
+  listPreferredCommunicationMethods = moize(this.listPreferredCommunicationMethodsImpl, {
+    onCacheAdd: () => this.log.info('Creating new listPreferredCommunicationMethods memo'),
+  });
+
+  getPreferredCommunicationMethodById = moize(this.getPreferredCommunicationMethodByIdImpl, {
+    maxSize: Infinity,
+    onCacheAdd: () => this.log.info('Creating new getPreferredCommunicationMethodById memo'),
+  });
+
+  listAndSortLocalizedPreferredCommunicationMethods(locale: AppLocale): ReadonlyArray<PreferredCommunicationMethodLocalizedDto> {
+    this.log.debug('Get and sort all localized preferred communication methods with locale: [%s]', locale);
+    const preferredCommunicationMethodDtos = this.listPreferredCommunicationMethods();
+    const localizedPreferredCommunicationMethodDtos = this.preferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos(preferredCommunicationMethodDtos, locale);
+    const sortedLocalizedPreferredCommunicationMethodDtos = this.sortLocalizedPreferredCommunicationMethodDtos(localizedPreferredCommunicationMethodDtos, locale);
+    this.log.trace('Returning localized and sorted preferred communication methods: [%j]', sortedLocalizedPreferredCommunicationMethodDtos);
+    return sortedLocalizedPreferredCommunicationMethodDtos;
+  }
+
+  getLocalizedPreferredCommunicationMethodById(id: string, locale: AppLocale): PreferredCommunicationMethodLocalizedDto {
+    this.log.debug('Get localized preferred communication method with id: [%s] and locale: [%s]', id, locale);
+    const preferredCommunicationMethodDto = this.getPreferredCommunicationMethodById(id);
+    const localizedPreferredCommunicationMethodDto = this.preferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto(preferredCommunicationMethodDto, locale);
+    this.log.trace('Returning localized preferred communication method: [%j]', localizedPreferredCommunicationMethodDto);
+    return localizedPreferredCommunicationMethodDto;
+  }
+
   private listPreferredCommunicationMethodsImpl(): PreferredCommunicationMethodDto[] {
     this.log.debug('Get all preferred communication methods');
     const preferredCommunicationMethodEntities = this.preferredCommunicationMethodRepository.findAll();
@@ -38,10 +66,6 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
     this.log.trace('Returning preferred communication methods: [%j]', preferredCommunicationMethodDtos);
     return preferredCommunicationMethodDtos;
   }
-
-  listPreferredCommunicationMethods = moize(this.listPreferredCommunicationMethodsImpl, {
-    onCacheAdd: () => this.log.info('Creating new listPreferredCommunicationMethods memo'),
-  });
 
   private getPreferredCommunicationMethodByIdImpl(id: string): PreferredCommunicationMethodDto {
     this.log.debug('Get preferred communication method with id: [%s]', id);
@@ -55,8 +79,11 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
     return preferredCommunicationMethodDto;
   }
 
-  getPreferredCommunicationMethodById = moize(this.getPreferredCommunicationMethodByIdImpl, {
-    maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new getPreferredCommunicationMethodById memo'),
-  });
+  /**
+   * Sort the localized preferred communication methods by name.
+   */
+  private sortLocalizedPreferredCommunicationMethodDtos(dtos: ReadonlyArray<PreferredCommunicationMethodLocalizedDto>, locale: AppLocale) {
+    const sortByNamePredicate = (a: PreferredCommunicationMethodLocalizedDto, b: PreferredCommunicationMethodLocalizedDto) => a.name.localeCompare(b.name, locale);
+    return dtos.toSorted(sortByNamePredicate);
+  }
 }
