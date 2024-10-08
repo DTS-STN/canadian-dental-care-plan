@@ -18,7 +18,8 @@ import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
-import { loadRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { loadRenewItaState } from '~/route-helpers/renew-ita-route-helpers.server';
+import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import type { CommunicationPreferenceState } from '~/route-helpers/renew-route-helpers.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -44,7 +45,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const { COMMUNICATION_METHOD_EMAIL_ID, ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = getEnv();
 
-  const state = loadRenewState({ params, session });
+  const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const preferredLanguages = localizeAndSortPreferredLanguages(serviceProvider.getPreferredLanguageService().listPreferredLanguages(), locale, locale === 'en' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE);
@@ -78,7 +79,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
 
-  const state = loadRenewState({ params, session });
+  const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema = z

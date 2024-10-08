@@ -19,8 +19,9 @@ import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { loadRenewItaState } from '~/route-helpers/renew-ita-route-helpers.server';
 import type { PartnerInformationState } from '~/route-helpers/renew-route-helpers.server';
-import { loadRenewState, renewStateHasPartner, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { renewStateHasPartner, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -50,7 +51,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
-  const state = loadRenewState({ params, session });
+  const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const maritalStatuses = serviceProvider.getMaritalStatusService().listLocalizedMaritalStatuses(locale);
@@ -65,7 +66,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/ita/marital-status');
 
-  const state = loadRenewState({ params, session });
+  const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();

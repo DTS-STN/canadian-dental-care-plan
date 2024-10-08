@@ -18,8 +18,9 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { loadRenewItaState } from '~/route-helpers/renew-ita-route-helpers.server';
 import type { AddressInformationState } from '~/route-helpers/renew-route-helpers.server';
-import { loadRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -44,7 +45,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
-  const state = loadRenewState({ params, session });
+  const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
@@ -71,7 +72,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/ita/update-address');
 
-  const state = loadRenewState({ params, session });
+  const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
