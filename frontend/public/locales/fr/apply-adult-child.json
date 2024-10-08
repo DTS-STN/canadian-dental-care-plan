@@ -24,7 +24,8 @@
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
-      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
+      "no-digits": "Le nom de famille doit contenir uniquement des lettres"
     }
   },
   "children": {
@@ -92,7 +93,8 @@
         "date-of-birth-year-required": "La date de naissance doit inclure une année",
         "has-social-insurance-number": "Sélectionnez cet enfant a un NAS",
         "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
-        "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
+        "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
+        "no-digits": "Le nom de famille doit contenir uniquement des lettres"
       }
     },
     "dental-insurance": {
@@ -602,7 +604,8 @@
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
-      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
+      "no-digits": "Le nom de famille doit contenir uniquement des lettres"
     }
   },
   "review-adult-information": {
