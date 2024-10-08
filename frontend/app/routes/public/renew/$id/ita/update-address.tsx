@@ -199,7 +199,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('public/renew/$id/ita/review-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/ita/dental-insurance', params));
+  return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
 }
 
 export default function RenewItaUpdateAddress() {

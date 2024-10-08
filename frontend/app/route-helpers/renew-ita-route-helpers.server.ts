@@ -78,18 +78,22 @@ interface ValidateRenewItaStateForReviewArgs {
 }
 
 export function validateRenewItaStateForReview({ params, state }: ValidateRenewItaStateForReviewArgs) {
-  const { maritalStatus, contactInformation, editMode, id, submissionInfo, typeOfRenewal, communicationPreference } = state;
+  const { maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, communicationPreference, addressInformation, applicantInformation, dentalBenefits, dentalInsurance } = state;
 
   if (typeOfRenewal === undefined) {
-    throw redirect(getPathById('public/renew/$id/type-application', params));
+    throw redirect(getPathById('public/renew/$id/type-renewal', params));
   }
 
   if (typeOfRenewal === 'delegate') {
-    throw redirect(getPathById('public/renew/$id/application-delegate', params));
+    throw redirect(getPathById('public/renew/$id/renewal-delegate', params));
   }
 
   if (typeOfRenewal !== 'adult-child') {
-    throw redirect(getPathById('public/renew/$id/type-application', params));
+    throw redirect(getPathById('public/renew/$id/type-renewal', params));
+  }
+
+  if (applicantInformation === undefined) {
+    throw redirect(getPathById('public/renew/$id/applicant-information', params));
   }
 
   if (maritalStatus === undefined) {
@@ -104,7 +108,17 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     throw redirect(getPathById('public/renew/$id/ita/communication-preference', params));
   }
 
-  // TODO add remaining states when screens are available
+  if (addressInformation === undefined) {
+    throw redirect(getPathById('public/renew/$id/ita/confirm-address', params));
+  }
+
+  if (dentalInsurance === undefined) {
+    throw redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
+  }
+
+  if (dentalBenefits === undefined) {
+    throw redirect(getPathById('public/renew/$id/ita/federal-provincial-territorial-benefits', params));
+  }
 
   return {
     maritalStatus,
@@ -114,5 +128,10 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     typeOfRenewal,
     contactInformation,
     communicationPreference,
+    applicantInformation,
+    dentalBenefits,
+    dentalInsurance,
+    addressInformation,
+    partnerInformation,
   };
 }

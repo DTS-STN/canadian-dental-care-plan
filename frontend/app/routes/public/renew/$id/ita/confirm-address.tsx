@@ -79,10 +79,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveRenewState({ params, session, state: { hasAddressChanged: parsedDataResult.data.hasAddressChanged === HasAddressChangedOption.Yes } });
 
   if (parsedDataResult.data.hasAddressChanged === HasAddressChangedOption.No) {
-    return redirect(getPathById('public/apply/$id/ita/dental-insurance', params));
+    return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
   }
 
-  return redirect(getPathById('public/apply/$id/ita/update-address', params));
+  return redirect(getPathById('public/renew/$id/ita/update-address', params));
 }
 
 export default function RenewItaConfirmAddress() {
