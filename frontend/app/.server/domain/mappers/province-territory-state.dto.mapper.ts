@@ -1,15 +1,29 @@
 import { injectable } from 'inversify';
 
-import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
+import type { ProvinceTerritoryStateDto, ProvinceTerritoryStateLocalizedDto } from '~/.server/domain/dtos';
 import type { ProvinceTerritoryStateEntity } from '~/.server/domain/entities';
 
 export interface ProvinceTerritoryStateDtoMapper {
+  mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto(provinceTerritoryStateDto: ProvinceTerritoryStateDto, locale: AppLocale): ProvinceTerritoryStateLocalizedDto;
+  mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos(provinceTerritoryStateDtos: ReadonlyArray<ProvinceTerritoryStateDto>, locale: AppLocale): ReadonlyArray<ProvinceTerritoryStateLocalizedDto>;
   mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity: ProvinceTerritoryStateEntity): ProvinceTerritoryStateDto;
-  mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(provinceTerritoryStateEntities: ProvinceTerritoryStateEntity[]): ProvinceTerritoryStateDto[];
+  mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(provinceTerritoryStateEntities: ReadonlyArray<ProvinceTerritoryStateEntity>): ReadonlyArray<ProvinceTerritoryStateDto>;
 }
 
 @injectable()
 export class ProvinceTerritoryStateDtoMapperImpl implements ProvinceTerritoryStateDtoMapper {
+  mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto(provinceTerritoryStateDto: ProvinceTerritoryStateDto, locale: AppLocale): ProvinceTerritoryStateLocalizedDto {
+    const { nameEn, nameFr, ...rest } = provinceTerritoryStateDto;
+    return {
+      ...rest,
+      name: locale === 'fr' ? nameFr : nameEn,
+    };
+  }
+
+  mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos(provinceTerritoryStateDtos: ReadonlyArray<ProvinceTerritoryStateDto>, locale: AppLocale): ReadonlyArray<ProvinceTerritoryStateLocalizedDto> {
+    return provinceTerritoryStateDtos.map((dto) => this.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto(dto, locale));
+  }
+
   mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity: ProvinceTerritoryStateEntity): ProvinceTerritoryStateDto {
     const id = provinceTerritoryStateEntity.esdc_provinceterritorystateid;
     const countryId = provinceTerritoryStateEntity._esdc_countryid_value;
