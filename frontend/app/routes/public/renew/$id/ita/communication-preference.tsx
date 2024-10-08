@@ -24,7 +24,6 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortPreferredLanguages } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -42,12 +41,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
-  const { COMMUNICATION_METHOD_EMAIL_ID, ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = getEnv();
+  const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
 
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const preferredLanguages = localizeAndSortPreferredLanguages(serviceProvider.getPreferredLanguageService().listPreferredLanguages(), locale, locale === 'en' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE);
+
+  const preferredLanguages = serviceProvider.getPreferredLanguageService().listAndSortLocalizedPreferredLanguages(locale);
   const preferredCommunicationMethods = serviceProvider.getPreferredCommunicationMethodService().listAndSortLocalizedPreferredCommunicationMethods(locale);
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);

@@ -50,11 +50,17 @@ describe('_public.apply.id.communication-preference', () => {
               { id: 'mail', name: 'Mail' },
             ],
           }),
-          getPreferredLanguageService: vi.fn().mockReturnValue({
-            listPreferredLanguages: vi.fn().mockReturnValue([
-              { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
+          getPreferredLanguageService: () => ({
+            getLocalizedPreferredLanguageById: vi.fn(),
+            getPreferredLanguageById: vi.fn(),
+            listPreferredLanguages: () => [
               { id: 'fr', nameEn: 'French', nameFr: 'Français' },
-            ]),
+              { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
+            ],
+            listAndSortLocalizedPreferredLanguages: () => [
+              { id: 'en', name: 'English' },
+              { id: 'fr', name: 'French' },
+            ],
           }),
         },
       });
@@ -76,12 +82,10 @@ describe('_public.apply.id.communication-preference', () => {
           { id: 'mail', name: 'Mail' },
         ],
         preferredLanguages: [
-          { id: 'fr', name: 'French' },
           { id: 'en', name: 'English' },
+          { id: 'fr', name: 'French' },
         ],
       });
-
-      expect(mockAppLoadContext.serviceProvider.getPreferredLanguageService().listPreferredLanguages).toHaveBeenCalledTimes(1);
     });
   });
 

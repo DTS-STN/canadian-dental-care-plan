@@ -1,4 +1,4 @@
-import type { PreferredLanguageDto, ProvinceTerritoryStateDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
+import type { ProvinceTerritoryStateDto, ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 
 /**
  * Localizes a single province territory state object by adding a localized name.
@@ -35,38 +35,6 @@ export function localizeProvinceTerritoryStates(provinceTerritoryStates: Readonl
  */
 export function localizeAndSortProvinceTerritoryStates(provinceTerritoryStates: ReadonlyArray<ProvinceTerritoryStateDto>, locale: AppLocale) {
   return localizeProvinceTerritoryStates(provinceTerritoryStates, locale).toSorted((a, b) => a.name.localeCompare(b.name, locale));
-}
-
-/**
- * Localizes a single language object by adding a localized name.
- *
- * @param language - The language object to localize.
- * @param locale - The locale code for localization.
- * @returns The localized language object with a localized name.
- */
-export function localizePreferredLanguage(language: PreferredLanguageDto, locale: string) {
-  const { nameEn, nameFr, ...rest } = language;
-  return {
-    ...rest,
-    name: locale === 'fr' ? nameFr : nameEn,
-  };
-}
-
-/**
- * Localizes an array of language objects by adding localized names and sorting them.
- *
- * @param language - The array of language objects to localize.
- * @param locale - The locale code for localization.
- * @param firstLanguageId - The language ID that specifies the language object that should appear first in the sorted array.
- * @returns The localized and sorted array of language objects.
- */
-export function localizeAndSortPreferredLanguages(languages: ReadonlyArray<PreferredLanguageDto>, locale: string, firstLanguageId?: number) {
-  const mappedLanguages = languages.map((language) => localizePreferredLanguage(language, locale));
-  return mappedLanguages.toSorted((a, b) => {
-    if (firstLanguageId && a.id === firstLanguageId.toString()) return -1;
-    if (firstLanguageId && b.id === firstLanguageId.toString()) return 1;
-    return a.name.localeCompare(b.name, locale);
-  });
 }
 
 /**
