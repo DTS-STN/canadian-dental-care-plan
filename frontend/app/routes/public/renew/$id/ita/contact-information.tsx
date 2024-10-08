@@ -15,7 +15,8 @@ import { InputField } from '~/components/input-field';
 import { InputPhoneField } from '~/components/input-phone-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
-import { loadRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { loadRenewItaState } from '~/route-helpers/renew-ita-route-helpers.server';
+import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import type { ContactInformationState } from '~/route-helpers/renew-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -43,7 +44,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
-  const state = loadRenewState({ params, session });
+  const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
@@ -62,7 +63,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/ita/contact-information');
 
-  const state = loadRenewState({ params, session });
+  const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const personalInformationSchema = z
