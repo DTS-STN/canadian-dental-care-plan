@@ -60,6 +60,15 @@ export function removeInvalidInputCharacters(value: string) {
 }
 
 /**
+ *
+ * @param value - The input string to be checked.
+ * @returns - Returns true if the input contains digits, otherwise false.
+ */
+export function hasDigits(value: string) {
+  return /\d/.test(value);
+}
+
+/**
  * Normalizes hyphens in the input string by replacing sequences of two or more hyphens with a single hyphen.
  *
  * @param str - The input string to normalize.
