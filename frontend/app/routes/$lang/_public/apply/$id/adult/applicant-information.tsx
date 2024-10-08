@@ -32,7 +32,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
-import { isAllValidInputCharacters } from '~/utils/string-utils';
+import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum FormAction {
@@ -111,7 +111,13 @@ export async function action({ context: { session }, params, request }: ActionFu
         }
       }),
     firstName: z.string().trim().min(1, t('apply-adult:applicant-information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult:applicant-information.error-message.characters-valid')),
-    lastName: z.string().trim().min(1, t('apply-adult:applicant-information.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult:applicant-information.error-message.characters-valid')),
+    lastName: z
+      .string()
+      .trim()
+      .min(1, t('apply-adult:applicant-information.error-message.last-name-required'))
+      .max(100)
+      .refine(isAllValidInputCharacters, t('apply-adult:applicant-information.error-message.characters-valid'))
+      .refine((lastName) => !hasDigits(lastName), t('apply-adult:applicant-information.error-message.no-digits')),
     maritalStatus: z
       .string({ errorMap: () => ({ message: t('apply-adult:applicant-information.error-message.marital-status-required') }) })
       .trim()

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { expandTemplate, formatPercent, isAllValidInputCharacters, normalizeHyphens, padWithZero, randomHexString, randomString, removeInvalidInputCharacters } from '~/utils/string-utils';
+import { expandTemplate, formatPercent, hasDigits, isAllValidInputCharacters, normalizeHyphens, padWithZero, randomHexString, randomString, removeInvalidInputCharacters } from '~/utils/string-utils';
 
 describe('expandTemplate', () => {
   it('should expand a template', () => {
@@ -80,6 +80,19 @@ describe('removeInvalidInputCharacters', () => {
     ['a1b!c2@d#e3f', 'a1bc2de3f'],
   ])('should remove invalid characters from "%s" to "%s"', (input, expectedOutput) => {
     expect(removeInvalidInputCharacters(input)).toBe(expectedOutput);
+  });
+});
+
+describe('hasDigits', () => {
+  it.each([
+    ['', false],
+    ['abc', false],
+    ['abcABC', false],
+    ['1', true],
+    ['abc1', true],
+    ['a1b2c3', true],
+  ])('%s should return %s', (input, expected) => {
+    expect(hasDigits(input)).toEqual(expected);
   });
 });
 

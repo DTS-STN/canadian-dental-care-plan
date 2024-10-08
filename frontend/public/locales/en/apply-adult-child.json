@@ -24,7 +24,8 @@
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "The Social Insurance Number (SIN) must be unique",
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
+      "no-digits": "Last name must contain letters only"
     }
   },
   "children": {
@@ -92,7 +93,8 @@
         "date-of-birth-year-required": "Date of birth must include a year",
         "has-social-insurance-number": "Select whether the child has a SIN",
         "is-parent": "Select whether you are the parent or legal guardian of the child",
-        "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+        "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
+        "no-digits": "Last name must contain letters only"
       }
     },
     "dental-insurance": {
@@ -602,7 +604,8 @@
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "The Social Insurance Number (SIN) must be unique",
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
+      "no-digits": "Last name must contain letters only"
     }
   },
   "review-adult-information": {
