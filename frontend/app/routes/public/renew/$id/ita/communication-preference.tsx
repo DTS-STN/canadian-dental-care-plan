@@ -24,7 +24,7 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortPreferredCommunicationMethods, localizeAndSortPreferredLanguages } from '~/utils/lookup-utils.server';
+import { localizeAndSortPreferredLanguages } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -48,7 +48,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const preferredLanguages = localizeAndSortPreferredLanguages(serviceProvider.getPreferredLanguageService().listPreferredLanguages(), locale, locale === 'en' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE);
-  const preferredCommunicationMethods = localizeAndSortPreferredCommunicationMethods(serviceProvider.getPreferredCommunicationMethodService().listPreferredCommunicationMethods(), locale);
+  const preferredCommunicationMethods = serviceProvider.getPreferredCommunicationMethodService().listAndSortLocalizedPreferredCommunicationMethods(locale);
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
   if (!communicationMethodEmail) {

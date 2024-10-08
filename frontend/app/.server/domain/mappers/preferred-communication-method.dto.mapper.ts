@@ -2,17 +2,31 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
+import type { PreferredCommunicationMethodDto, PreferredCommunicationMethodLocalizedDto } from '~/.server/domain/dtos';
 import type { PreferredCommunicationMethodEntity } from '~/.server/domain/entities';
 
 export interface PreferredCommunicationMethodDtoMapper {
-  mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto(preferredCommunicationMethodEntity: PreferredCommunicationMethodEntity): PreferredCommunicationMethodDto;
+  mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto(preferredCommunicationMethodDto: PreferredCommunicationMethodDto, locale: AppLocale): PreferredCommunicationMethodLocalizedDto;
+  mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos(preferredCommunicationMethodDtos: ReadonlyArray<PreferredCommunicationMethodDto>, locale: AppLocale): ReadonlyArray<PreferredCommunicationMethodLocalizedDto>;
   mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos(preferredCommunicationMethodEntities: PreferredCommunicationMethodEntity[]): PreferredCommunicationMethodDto[];
+  mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto(preferredCommunicationMethodEntity: PreferredCommunicationMethodEntity): PreferredCommunicationMethodDto;
 }
 
 @injectable()
 export class PreferredCommunicationMethodDtoMapperImpl implements PreferredCommunicationMethodDtoMapper {
   constructor(@inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>) {}
+
+  mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto(preferredCommunicationMethodDto: PreferredCommunicationMethodDto, locale: AppLocale): PreferredCommunicationMethodLocalizedDto {
+    const { nameEn, nameFr, ...rest } = preferredCommunicationMethodDto;
+    return {
+      ...rest,
+      name: locale === 'fr' ? nameFr : nameEn,
+    };
+  }
+
+  mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos(preferredCommunicationMethodDtos: ReadonlyArray<PreferredCommunicationMethodDto>, locale: AppLocale): ReadonlyArray<PreferredCommunicationMethodLocalizedDto> {
+    return preferredCommunicationMethodDtos.map((dto) => this.mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto(dto, locale));
+  }
 
   mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto(preferredCommunicationMethodEntity: PreferredCommunicationMethodEntity): PreferredCommunicationMethodDto {
     const { ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = this.serverConfig;

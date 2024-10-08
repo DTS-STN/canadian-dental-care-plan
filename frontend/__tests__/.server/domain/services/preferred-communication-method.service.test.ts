@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
+import type { PreferredCommunicationMethodDto, PreferredCommunicationMethodLocalizedDto } from '~/.server/domain/dtos';
 import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
@@ -114,6 +114,89 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       expect(() => service.getPreferredCommunicationMethodById(id)).toThrow(PreferredCommunicationMethodNotFoundException);
       expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('listAndSortLocalizedPreferredCommunicationMethods', () => {
+    it('fetches and sorts all localized preferred communication methods', () => {
+      const locale = 'en';
+      const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
+      mockPreferredCommunicationMethodRepository.findAll.mockReturnValueOnce([
+        {
+          Value: 1,
+          Label: {
+            LocalizedLabels: [
+              { Label: 'Email', LanguageCode: 1033 },
+              { Label: 'Courriel', LanguageCode: 1036 },
+            ],
+          },
+        },
+        {
+          Value: 2,
+          Label: {
+            LocalizedLabels: [
+              { Label: 'Mail', LanguageCode: 1033 },
+              { Label: 'Courrier', LanguageCode: 1036 },
+            ],
+          },
+        },
+      ]);
+
+      const mockDtos: PreferredCommunicationMethodDto[] = [
+        { id: '1', nameEn: 'Email', nameFr: 'Courriel' },
+        { id: '2', nameEn: 'Mail', nameFr: 'Courrier' },
+      ];
+
+      const mockLocalizedDtos: PreferredCommunicationMethodLocalizedDto[] = [
+        { id: '1', name: 'Email' },
+        { id: '2', name: 'Mail' },
+      ];
+
+      const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
+      mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos.mockReturnValueOnce(mockDtos);
+      mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
+
+      const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+
+      const dtos = service.listAndSortLocalizedPreferredCommunicationMethods(locale);
+
+      expect(dtos).toEqual(mockLocalizedDtos);
+      expect(mockPreferredCommunicationMethodRepository.findAll).toHaveBeenCalledTimes(1);
+      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos).toHaveBeenCalledTimes(1);
+      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getLocalizedPreferredCommunicationMethodById', () => {
+    it('fetches localized preferred communication method by id', () => {
+      const id = '1';
+      const locale = 'en';
+      const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
+      mockPreferredCommunicationMethodRepository.findById.mockReturnValueOnce({
+        Value: 1,
+        Label: {
+          LocalizedLabels: [
+            { Label: 'Email', LanguageCode: 1033 },
+            { Label: 'Courriel', LanguageCode: 1036 },
+          ],
+        },
+      });
+
+      const mockDto: PreferredCommunicationMethodDto = { id: '1', nameEn: 'Email', nameFr: 'Courriel' };
+      const mockLocalizedDto: PreferredCommunicationMethodLocalizedDto = { id: '1', name: 'Email' };
+
+      const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
+      mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto.mockReturnValueOnce(mockDto);
+      mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
+
+      const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+
+      const dto = service.getLocalizedPreferredCommunicationMethodById(id, locale);
+
+      expect(dto).toEqual(mockLocalizedDto);
+      expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).toHaveBeenCalledTimes(1);
+      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto).toHaveBeenCalledTimes(1);
     });
   });
 });
