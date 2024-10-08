@@ -2,10 +2,12 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { PreferredLanguageDto } from '~/.server/domain/dtos';
+import type { PreferredLanguageDto, PreferredLanguageLocalizedDto } from '~/.server/domain/dtos';
 import type { PreferredLanguageEntity } from '~/.server/domain/entities';
 
 export interface PreferredLanguageDtoMapper {
+  mapPreferredLanguageDtoToPreferredLanguageLocalizedDto(preferredLanguageDto: PreferredLanguageDto, locale: AppLocale): PreferredLanguageLocalizedDto;
+  mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos(preferredLanguageDtos: ReadonlyArray<PreferredLanguageDto>, locale: AppLocale): ReadonlyArray<PreferredLanguageLocalizedDto>;
   mapPreferredLanguageEntityToPreferredLanguageDto(preferredLanguageEntity: PreferredLanguageEntity): PreferredLanguageDto;
   mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities: ReadonlyArray<PreferredLanguageEntity>): ReadonlyArray<PreferredLanguageDto>;
 }
@@ -13,6 +15,18 @@ export interface PreferredLanguageDtoMapper {
 @injectable()
 export class PreferredLanguageDtoMapperImpl implements PreferredLanguageDtoMapper {
   constructor(@inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>) {}
+
+  mapPreferredLanguageDtoToPreferredLanguageLocalizedDto(preferredLanguageDto: PreferredLanguageDto, locale: AppLocale): PreferredLanguageLocalizedDto {
+    const { nameEn, nameFr, ...rest } = preferredLanguageDto;
+    return {
+      ...rest,
+      name: locale === 'fr' ? nameFr : nameEn,
+    };
+  }
+
+  mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos(preferredLanguageDtos: ReadonlyArray<PreferredLanguageDto>, locale: AppLocale): ReadonlyArray<PreferredLanguageLocalizedDto> {
+    return preferredLanguageDtos.map((dto) => this.mapPreferredLanguageDtoToPreferredLanguageLocalizedDto(dto, locale));
+  }
 
   mapPreferredLanguageEntityToPreferredLanguageDto(preferredLanguageEntity: PreferredLanguageEntity): PreferredLanguageDto {
     const { ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = this.serverConfig;

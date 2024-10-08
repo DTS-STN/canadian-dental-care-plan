@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { PreferredLanguageDto } from '~/.server/domain/dtos';
+import type { PreferredLanguageDto, PreferredLanguageLocalizedDto } from '~/.server/domain/dtos';
 import type { PreferredLanguageEntity } from '~/.server/domain/entities';
 import { PreferredLanguageDtoMapperImpl } from '~/.server/domain/mappers';
 
@@ -92,6 +92,53 @@ describe('PreferredLanguageDtoMapperImpl', () => {
       const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
 
       const dtos = mapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos(mockEntities);
+
+      expect(dtos).toEqual(expectedDtos);
+    });
+  });
+
+  describe('mapPreferredLanguageDtoToPreferredLanguageLocalizedDto', () => {
+    it.each([
+      ['en' as const, 'English'],
+      ['fr' as const, 'Français'],
+    ])('should map a single PreferredLanguageDto objects to a PreferredLanguageLocalizedDto object with the correct locale (%s)', (locale, expectedLocalizedName) => {
+      const mockDto: PreferredLanguageDto = { id: '1', nameEn: 'English', nameFr: 'Français' };
+      const expectedDto: PreferredLanguageLocalizedDto = { id: '1', name: expectedLocalizedName };
+
+      const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
+      const dto = mapper.mapPreferredLanguageDtoToPreferredLanguageLocalizedDto(mockDto, locale);
+
+      expect(dto).toEqual(expectedDto);
+    });
+  });
+
+  describe('mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos', () => {
+    it.each([
+      ['en' as const, 'English', 'French'],
+      ['fr' as const, 'Anglais', 'Français'],
+    ])('should map an array of PreferredLanguageDto objects to an array of PreferredLanguageLocalizedDto objects with the correct locale (%s)', (locale, expectedFirstLocalizedName, expectedSecondLocalizedName) => {
+      const preferredLanguageDtos: PreferredLanguageDto[] = [
+        { id: '1', nameEn: 'English', nameFr: 'Anglais' },
+        { id: '2', nameEn: 'French', nameFr: 'Français' },
+      ];
+
+      const expectedDtos: PreferredLanguageLocalizedDto[] = [
+        { id: '1', name: expectedFirstLocalizedName },
+        { id: '2', name: expectedSecondLocalizedName },
+      ];
+
+      const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
+      const dtos = mapper.mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos(preferredLanguageDtos, locale);
+
+      expect(dtos).toEqual(expectedDtos);
+    });
+
+    it('should handle an empty array of PreferredLanguageDto objects', () => {
+      const preferredLanguageDtos: PreferredLanguageDto[] = [];
+      const expectedDtos: PreferredLanguageLocalizedDto[] = [];
+
+      const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
+      const dtos = mapper.mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos(preferredLanguageDtos, 'en');
 
       expect(dtos).toEqual(expectedDtos);
     });

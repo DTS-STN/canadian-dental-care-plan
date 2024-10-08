@@ -1,25 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  localizeAndSortPreferredLanguages,
-  localizeAndSortProvinceTerritoryStates,
-  localizeAndSortProvincialGovernmentInsurancePlans,
-  localizePreferredLanguage,
-  localizeProvinceTerritoryState,
-  localizeProvinceTerritoryStates,
-  localizeProvincialGovernmentInsurancePlan,
-} from '~/utils/lookup-utils.server';
+import { localizeAndSortProvinceTerritoryStates, localizeAndSortProvincialGovernmentInsurancePlans, localizeProvinceTerritoryState, localizeProvinceTerritoryStates, localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 
 const mockProvinceTerritoryStates = [
   { id: '001', countryId: '001', nameEn: 'englishCountryOne', nameFr: 'frenchCountryOne', abbr: 'one' },
   { id: '002', countryId: '002', nameEn: 'englishCountryTwo', nameFr: 'frenchCountryTwo', abbr: 'two' },
   { id: '003', countryId: '003', nameEn: 'englishCountryThree', nameFr: 'frenchCountryThree', abbr: 'three' },
-];
-
-const mockLanguages = [
-  { id: '001', nameEn: 'englishLanguageOne', nameFr: 'frenchLanguageOne' },
-  { id: '002', nameEn: 'englishLanguageTwo', nameFr: 'frenchLanguageTwo' },
-  { id: '003', nameEn: 'englishLanguageThree', nameFr: 'frenchLanguageThree' },
 ];
 
 const mockProvincialTerritorialSocialPrograms = [
@@ -140,58 +126,6 @@ describe('localizeAndSortProvinceTerritoryStates', () => {
 
         abbr: 'two',
         name: 'frenchCountryTwo',
-      },
-    ]);
-  });
-});
-
-describe('localizePreferredLanguage', () => {
-  it('should return the preferred language id and english name', () => {
-    expect(localizePreferredLanguage(mockLanguages[0], 'en')).toEqual({
-      id: '001',
-      name: 'englishLanguageOne',
-    });
-  });
-
-  it('should return the preferred language id and french name', () => {
-    expect(localizePreferredLanguage(mockLanguages[0], 'fr')).toEqual({
-      id: '001',
-      name: 'frenchLanguageOne',
-    });
-  });
-});
-
-describe('localizeAndSortPreferredLanguages', () => {
-  it('should return a sorted array of preferred language ids and english names', () => {
-    expect(localizeAndSortPreferredLanguages(mockLanguages, 'en')).toEqual([
-      {
-        id: '001',
-        name: 'englishLanguageOne',
-      },
-      {
-        id: '003',
-        name: 'englishLanguageThree',
-      },
-      {
-        id: '002',
-        name: 'englishLanguageTwo',
-      },
-    ]);
-  });
-
-  it('should return a sorted array of preferred language ids and french name', () => {
-    expect(localizeAndSortPreferredLanguages(mockLanguages, 'fr')).toEqual([
-      {
-        id: '001',
-        name: 'frenchLanguageOne',
-      },
-      {
-        id: '003',
-        name: 'frenchLanguageThree',
-      },
-      {
-        id: '002',
-        name: 'frenchLanguageTwo',
       },
     ]);
   });

@@ -31,7 +31,6 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizePreferredLanguage } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -71,7 +70,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const countryHome = serviceProvider.getCountryService().getLocalizedCountryById(state.contactInformation.homeCountry, locale);
   const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
   const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
-  const preferredLanguage = serviceProvider.getPreferredLanguageService().getPreferredLanguageById(state.communicationPreferences.preferredLanguage);
+  const preferredLanguage = serviceProvider.getPreferredLanguageService().getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -123,7 +122,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     id: state.id,
     userInfo,
     spouseInfo,
-    preferredLanguage: localizePreferredLanguage(preferredLanguage, locale).name,
+    preferredLanguage: preferredLanguage.name,
     homeAddressInfo,
     mailingAddressInfo,
     csrfToken,
