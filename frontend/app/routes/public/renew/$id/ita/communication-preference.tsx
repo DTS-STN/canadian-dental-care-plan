@@ -225,7 +225,7 @@ export default function RenewFlowCommunicationPreferencePage() {
             </LoadingButton>
             <ButtonLink
               id="back-button"
-              routeId="public/renew/$id/ita/confirm-address" // Change to 'contact-information' when it is created.
+              routeId="public/renew/$id/ita/contact-information"
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
