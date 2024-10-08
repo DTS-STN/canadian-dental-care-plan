@@ -123,7 +123,7 @@ export default function RenewItaConfirmAddress() {
             </LoadingButton>
             <ButtonLink
               id="back-button"
-              routeId="public/renew/$id/ita/marital-status"
+              routeId="public/renew/$id/ita/communication-preference"
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}

@@ -174,7 +174,7 @@ export default function RenewItaAccessToDentalInsurance() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/communication-preference"
+                routeId="public/renew/$id/ita/confirm-address"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
