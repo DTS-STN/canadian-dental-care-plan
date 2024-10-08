@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
+import type { ProvinceTerritoryStateDto, ProvinceTerritoryStateLocalizedDto } from '~/.server/domain/dtos';
 import { ProvinceTerritoryStateNotFoundException } from '~/.server/domain/exceptions';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
@@ -32,29 +32,29 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
     });
   });
 
-  describe('findAll', () => {
+  describe('listProvinceTerritoryStates', () => {
     it('fetches all province territory states', () => {
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
       mockProvinceTerritoryStateRepository.findAll.mockReturnValueOnce([
         {
           esdc_provinceterritorystateid: '1',
-          _esdc_countryid_value: '10',
-          esdc_nameenglish: 'Alabama',
-          esdc_namefrench: 'Alabama',
-          esdc_internationalalphacode: 'AL',
+          _esdc_countryid_value: '1',
+          esdc_nameenglish: 'English',
+          esdc_namefrench: 'Français',
+          esdc_internationalalphacode: 'EN',
         },
         {
           esdc_provinceterritorystateid: '2',
-          _esdc_countryid_value: '10',
-          esdc_nameenglish: 'Alaska',
-          esdc_namefrench: 'Alaska',
-          esdc_internationalalphacode: 'AK',
+          _esdc_countryid_value: '2',
+          esdc_nameenglish: 'French',
+          esdc_namefrench: 'Français',
+          esdc_internationalalphacode: 'FR',
         },
       ]);
 
       const mockDtos: ProvinceTerritoryStateDto[] = [
-        { id: '1', countryId: '10', nameEn: 'Alabama EN', nameFr: 'Alabama FR', abbr: 'AL' },
-        { id: '2', countryId: '10', nameEn: 'Alaska EN', nameFr: 'Alaska FR', abbr: 'AK' },
+        { id: '1', countryId: '1', nameEn: 'English', nameFr: 'Français', abbr: 'EN' },
+        { id: '2', countryId: '2', nameEn: 'French', nameFr: 'Français', abbr: 'FR' },
       ];
 
       const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
@@ -70,19 +70,19 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('getProvinceTerritoryStateById', () => {
     it('fetches province territory state by id', () => {
       const id = '1';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
       mockProvinceTerritoryStateRepository.findById.mockReturnValueOnce({
         esdc_provinceterritorystateid: '1',
-        _esdc_countryid_value: '10',
-        esdc_nameenglish: 'Alabama',
-        esdc_namefrench: 'Alabama',
-        esdc_internationalalphacode: 'AL',
+        _esdc_countryid_value: '1',
+        esdc_nameenglish: 'English',
+        esdc_namefrench: 'Français',
+        esdc_internationalalphacode: 'EN',
       });
 
-      const mockDto: ProvinceTerritoryStateDto = { id: '1', countryId: '10', nameEn: 'Alabama EN', nameFr: 'Alabama FR', abbr: 'AL' };
+      const mockDto: ProvinceTerritoryStateDto = { id: '1', countryId: '1', nameEn: 'English', nameFr: 'Français', abbr: 'EN' };
 
       const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
       mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto.mockReturnValueOnce(mockDto);
@@ -96,7 +96,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).toHaveBeenCalledTimes(1);
     });
 
-    it('fetches province territory state by id throws not found exception', () => {
+    it('fetches province territory state by id and throws exception if not found', () => {
       const id = '1033';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
       mockProvinceTerritoryStateRepository.findById.mockReturnValueOnce(null);
@@ -108,6 +108,138 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       expect(() => service.getProvinceTerritoryStateById(id)).toThrow(ProvinceTerritoryStateNotFoundException);
       expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('listAndSortLocalizedProvinceTerritoryStates', () => {
+    it('fetches and sorts all localized province territory states', () => {
+      const locale = 'en';
+      const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
+      mockProvinceTerritoryStateRepository.findAll.mockReturnValueOnce([
+        {
+          esdc_provinceterritorystateid: '1',
+          _esdc_countryid_value: '1',
+          esdc_nameenglish: 'English',
+          esdc_namefrench: 'Français',
+          esdc_internationalalphacode: 'EN',
+        },
+        {
+          esdc_provinceterritorystateid: '2',
+          _esdc_countryid_value: '2',
+          esdc_nameenglish: 'French',
+          esdc_namefrench: 'Français',
+          esdc_internationalalphacode: 'FR',
+        },
+      ]);
+
+      const mockDtos: ProvinceTerritoryStateDto[] = [
+        { id: '1', countryId: '1', nameEn: 'English', nameFr: 'Français', abbr: 'EN' },
+        { id: '2', countryId: '2', nameEn: 'French', nameFr: 'Français', abbr: 'FR' },
+      ];
+
+      const mockLocalizedDtos: ProvinceTerritoryStateLocalizedDto[] = [
+        { id: '1', countryId: '1', name: 'English', abbr: 'EN' },
+        { id: '2', countryId: '2', name: 'French', abbr: 'FR' },
+      ];
+
+      const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
+      mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos.mockReturnValueOnce(mockDtos);
+      mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
+
+      const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
+
+      const dtos = service.listAndSortLocalizedProvinceTerritoryStates(locale);
+
+      expect(dtos).toEqual(mockLocalizedDtos);
+      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('listAndSortLocalizedProvinceTerritoryStatesByCountryId', () => {
+    it('fetches, filters by countryId, localizes, and sorts all province territory states', () => {
+      const countryId = '1';
+      const locale = 'en';
+      const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
+      mockProvinceTerritoryStateRepository.findAll.mockReturnValueOnce([
+        {
+          esdc_provinceterritorystateid: '1',
+          _esdc_countryid_value: '1',
+          esdc_nameenglish: 'English1',
+          esdc_namefrench: 'Français1',
+          esdc_internationalalphacode: 'EN',
+        },
+        {
+          esdc_provinceterritorystateid: '2',
+          _esdc_countryid_value: '2',
+          esdc_nameenglish: 'English2',
+          esdc_namefrench: 'Français2',
+          esdc_internationalalphacode: 'FR',
+        },
+        {
+          esdc_provinceterritorystateid: '3',
+          _esdc_countryid_value: '1',
+          esdc_nameenglish: 'English3',
+          esdc_namefrench: 'Français3',
+          esdc_internationalalphacode: 'CA',
+        },
+      ]);
+
+      const mockDtos: ProvinceTerritoryStateDto[] = [
+        { id: '1', countryId: '1', nameEn: 'English1', nameFr: 'Français1', abbr: 'EN' },
+        { id: '2', countryId: '2', nameEn: 'English2', nameFr: 'Français2', abbr: 'FR' },
+        { id: '3', countryId: '1', nameEn: 'English3', nameFr: 'Français3', abbr: 'CA' },
+      ];
+
+      const mockLocalizedDtos: ProvinceTerritoryStateLocalizedDto[] = [
+        { id: '1', countryId: '1', name: 'English1', abbr: 'EN' },
+        { id: '3', countryId: '1', name: 'English3', abbr: 'CA' },
+      ];
+
+      const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
+      mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos.mockReturnValueOnce(mockDtos);
+      mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
+
+      const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
+
+      const dtos = service.listAndSortLocalizedProvinceTerritoryStatesByCountryId(countryId, locale);
+
+      expect(dtos).toEqual(mockLocalizedDtos);
+      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getLocalizedProvinceTerritoryStateById', () => {
+    it('fetches localized province territory state by id', () => {
+      const id = '1';
+      const locale = 'en';
+      const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
+      mockProvinceTerritoryStateRepository.findById.mockReturnValueOnce({
+        esdc_provinceterritorystateid: '1',
+        _esdc_countryid_value: '1',
+        esdc_nameenglish: 'English',
+        esdc_namefrench: 'Français',
+        esdc_internationalalphacode: 'EN',
+      });
+
+      const mockDto: ProvinceTerritoryStateDto = { id: '1', countryId: '1', nameEn: 'English', nameFr: 'Français', abbr: 'EN' };
+      const mockLocalizedDto: ProvinceTerritoryStateLocalizedDto = { id: '1', countryId: '1', name: 'English', abbr: 'EN' };
+
+      const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
+      mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto.mockReturnValueOnce(mockDto);
+      mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
+
+      const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
+
+      const dto = service.getLocalizedProvinceTerritoryStateById(id, locale);
+
+      expect(dto).toEqual(mockLocalizedDto);
+      expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto).toHaveBeenCalledTimes(1);
     });
   });
 });
