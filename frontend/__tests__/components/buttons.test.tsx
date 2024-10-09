@@ -43,7 +43,7 @@ describe('Button Component', () => {
     const { getByText } = render(<Button onClick={handleClick}>Click me</Button>);
     const button = getByText('Click me');
     fireEvent.click(button);
-    expect(handleClick).toHaveBeenCalledTimes(1);
+    expect(handleClick).toHaveBeenCalledOnce();
   });
 });
 

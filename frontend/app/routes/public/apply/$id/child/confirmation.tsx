@@ -20,7 +20,6 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -113,7 +112,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     const federalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale) : undefined;
 
     const provincialGovernmentInsurancePlan = child.dentalBenefits.provincialTerritorialSocialProgram
-      ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram)
+      ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
     return {
@@ -132,7 +131,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,
           province: child.dentalBenefits.province,
-          benefit: provincialGovernmentInsurancePlan && localizeProvincialGovernmentInsurancePlan(provincialGovernmentInsurancePlan, locale).name,
+          benefit: provincialGovernmentInsurancePlan?.name,
         },
       },
     };

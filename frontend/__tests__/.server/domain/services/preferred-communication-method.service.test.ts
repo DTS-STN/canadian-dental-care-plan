@@ -69,8 +69,8 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const dtos = service.listPreferredCommunicationMethods();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockPreferredCommunicationMethodRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos).toHaveBeenCalledTimes(1);
+      expect(mockPreferredCommunicationMethodRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -98,8 +98,8 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const dto = service.getPreferredCommunicationMethodById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).toHaveBeenCalledTimes(1);
+      expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).toHaveBeenCalledOnce();
     });
 
     it('fetches preferred communication method by id and throws exception if not found', () => {
@@ -112,7 +112,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       expect(() => service.getPreferredCommunicationMethodById(id)).toThrow(PreferredCommunicationMethodNotFoundException);
-      expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledOnce();
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).not.toHaveBeenCalled();
     });
   });
@@ -161,9 +161,9 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const dtos = service.listAndSortLocalizedPreferredCommunicationMethods(locale);
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockPreferredCommunicationMethodRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos).toHaveBeenCalledTimes(1);
-      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos).toHaveBeenCalledTimes(1);
+      expect(mockPreferredCommunicationMethodRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -194,9 +194,9 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const dto = service.getLocalizedPreferredCommunicationMethodById(id, locale);
 
       expect(dto).toEqual(mockLocalizedDto);
-      expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).toHaveBeenCalledTimes(1);
-      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto).toHaveBeenCalledTimes(1);
+      expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto).toHaveBeenCalledOnce();
     });
   });
 });

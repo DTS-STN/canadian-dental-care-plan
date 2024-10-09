@@ -14,7 +14,7 @@ describe('ConfigFactoryImpl', () => {
     const clientConfig = configFactory.createClientConfig();
 
     expect(clientConfig).not.toBeNull();
-    expect(getClientEnv).toHaveBeenCalledTimes(1);
+    expect(getClientEnv).toHaveBeenCalledOnce();
   });
 
   it('should create a server config', () => {
@@ -22,6 +22,6 @@ describe('ConfigFactoryImpl', () => {
     const serverConfig = configFactory.createServerConfig();
 
     expect(serverConfig).not.toBeNull();
-    expect(getEnv).toHaveBeenCalledTimes(1);
+    expect(getEnv).toHaveBeenCalledOnce();
   });
 });

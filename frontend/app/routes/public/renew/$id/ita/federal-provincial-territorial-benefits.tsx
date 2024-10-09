@@ -23,7 +23,6 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortProvincialGovernmentInsurancePlans } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -58,7 +57,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
 
   const federalSocialPrograms = serviceProvider.getFederalGovernmentInsurancePlanService().listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
   const provinceTerritoryStates = serviceProvider.getProvinceTerritoryStateService().listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
-  const provincialTerritorialSocialPrograms = localizeAndSortProvincialGovernmentInsurancePlans(serviceProvider.getProvincialGovernmentInsurancePlanService().listProvincialGovernmentInsurancePlans(), locale);
+  const provincialTerritorialSocialPrograms = serviceProvider.getProvincialGovernmentInsurancePlanService().listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:dental-benefits.title') }) };

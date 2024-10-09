@@ -20,7 +20,6 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -61,7 +60,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     : undefined;
 
   const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram
-    ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram)
+    ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
@@ -114,7 +113,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const dentalInsurance = {
     acessToDentalInsurance: state.dentalInsurance,
     selectedFederalBenefits: selectedFederalGovernmentInsurancePlan?.name,
-    selectedProvincialBenefits: selectedProvincialBenefits && localizeProvincialGovernmentInsurancePlan(selectedProvincialBenefits, locale).name,
+    selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
 
   const csrfToken = String(session.get('csrfToken'));

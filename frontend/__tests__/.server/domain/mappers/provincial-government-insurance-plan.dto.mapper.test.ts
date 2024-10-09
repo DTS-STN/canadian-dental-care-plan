@@ -1,13 +1,45 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import type { ProvincialGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
+import type { ProvincialGovernmentInsurancePlanDto, ProvincialGovernmentInsurancePlanLocalizedDto } from '~/.server/domain/dtos';
 import type { ProvincialGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
 import { ProvincialGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers';
 
 describe('ProvincialGovernmentInsurancePlanDtoMapperImpl', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-    vi.clearAllMocks();
+  describe('mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto', () => {
+    it('should map a DTO to a localized DTO with the correct name based on the locale', () => {
+      const dto: ProvincialGovernmentInsurancePlanDto = { id: '1', nameEn: 'English Name', nameFr: 'French Name', provinceTerritoryStateId: '2' };
+
+      const mapper = new ProvincialGovernmentInsurancePlanDtoMapperImpl();
+
+      const localizedDtoEn = mapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto(dto, 'en');
+      expect(localizedDtoEn).toEqual<ProvincialGovernmentInsurancePlanLocalizedDto>({ id: '1', name: 'English Name', provinceTerritoryStateId: '2' });
+
+      const localizedDtoFr = mapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto(dto, 'fr');
+      expect(localizedDtoFr).toEqual<ProvincialGovernmentInsurancePlanLocalizedDto>({ id: '1', name: 'French Name', provinceTerritoryStateId: '2' });
+    });
+  });
+
+  describe('mapProvincialGovernmentInsurancePlanDtosToProvincialGovernmentInsurancePlanLocalizedDtos', () => {
+    it('should map an array of DTOs to an array of localized DTOs with the correct names based on the locale', () => {
+      const dtos: ProvincialGovernmentInsurancePlanDto[] = [
+        { id: '1', nameEn: 'English Name 1', nameFr: 'French Name 1', provinceTerritoryStateId: '2' },
+        { id: '2', nameEn: 'English Name 2', nameFr: 'French Name 2', provinceTerritoryStateId: '3' },
+      ];
+
+      const mapper = new ProvincialGovernmentInsurancePlanDtoMapperImpl();
+
+      const localizedDtosEn = mapper.mapProvincialGovernmentInsurancePlanDtosToProvincialGovernmentInsurancePlanLocalizedDtos(dtos, 'en');
+      expect(localizedDtosEn).toEqual<ProvincialGovernmentInsurancePlanLocalizedDto[]>([
+        { id: '1', name: 'English Name 1', provinceTerritoryStateId: '2' },
+        { id: '2', name: 'English Name 2', provinceTerritoryStateId: '3' },
+      ]);
+
+      const localizedDtosFr = mapper.mapProvincialGovernmentInsurancePlanDtosToProvincialGovernmentInsurancePlanLocalizedDtos(dtos, 'fr');
+      expect(localizedDtosFr).toEqual<ProvincialGovernmentInsurancePlanLocalizedDto[]>([
+        { id: '1', name: 'French Name 1', provinceTerritoryStateId: '2' },
+        { id: '2', name: 'French Name 2', provinceTerritoryStateId: '3' },
+      ]);
+    });
   });
 
   describe('mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto', () => {
@@ -19,18 +51,16 @@ describe('ProvincialGovernmentInsurancePlanDtoMapperImpl', () => {
         _esdc_provinceterritorystateid_value: '10',
       };
 
-      const expectedDto: ProvincialGovernmentInsurancePlanDto = {
-        id: '1',
-        nameEn: 'First Insurance Plan',
-        nameFr: "Premier plan d'assurance",
-        provinceTerritoryStateId: '10',
-      };
-
       const mapper = new ProvincialGovernmentInsurancePlanDtoMapperImpl();
 
       const dto = mapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(mockEntity);
 
-      expect(dto).toEqual(expectedDto);
+      expect(dto).toEqual<ProvincialGovernmentInsurancePlanDto>({
+        id: '1',
+        nameEn: 'First Insurance Plan',
+        nameFr: "Premier plan d'assurance",
+        provinceTerritoryStateId: '10',
+      });
     });
   });
 
@@ -51,26 +81,14 @@ describe('ProvincialGovernmentInsurancePlanDtoMapperImpl', () => {
         },
       ];
 
-      const expectedDtos: ProvincialGovernmentInsurancePlanDto[] = [
-        {
-          id: '1',
-          nameEn: 'First Insurance Plan',
-          nameFr: "Premier plan d'assurance",
-          provinceTerritoryStateId: '10',
-        },
-        {
-          id: '2',
-          nameEn: 'Second Insurance Plan',
-          nameFr: "Deuxième plan d'assurance",
-          provinceTerritoryStateId: '20',
-        },
-      ];
-
       const mapper = new ProvincialGovernmentInsurancePlanDtoMapperImpl();
 
       const dtos = mapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(mockEntities);
 
-      expect(dtos).toEqual(expectedDtos);
+      expect(dtos).toEqual<ProvincialGovernmentInsurancePlanDto[]>([
+        { id: '1', nameEn: 'First Insurance Plan', nameFr: "Premier plan d'assurance", provinceTerritoryStateId: '10' },
+        { id: '2', nameEn: 'Second Insurance Plan', nameFr: "Deuxième plan d'assurance", provinceTerritoryStateId: '20' },
+      ]);
     });
   });
 });

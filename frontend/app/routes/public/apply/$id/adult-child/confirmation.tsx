@@ -20,7 +20,6 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -59,7 +58,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
   const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram
-    ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram)
+    ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
   const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
   const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
@@ -111,7 +110,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const dentalInsurance = {
     acessToDentalInsurance: state.dentalInsurance,
     selectedFederalBenefit: selectedFederalBenefit?.name,
-    selectedProvincialBenefits: selectedProvincialBenefits && localizeProvincialGovernmentInsurancePlan(selectedProvincialBenefits, locale).name,
+    selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
 
   const children = getChildrenState(state).map((child) => {
@@ -124,7 +123,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
     const federalBenefit = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale) : undefined;
     const provincialTerritorialSocialProgram = child.dentalBenefits.provincialTerritorialSocialProgram
-      ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram)
+      ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
     return {
@@ -143,7 +142,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,
           province: child.dentalBenefits.province,
-          benefit: provincialTerritorialSocialProgram && localizeProvincialGovernmentInsurancePlan(provincialTerritorialSocialProgram, locale).name,
+          benefit: provincialTerritorialSocialProgram?.name,
         },
       },
     };

@@ -29,7 +29,6 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeProvincialGovernmentInsurancePlan } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -114,7 +113,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     : undefined;
 
   const selectedProvincialBenefit = state.dentalBenefits.provincialTerritorialSocialProgram
-    ? serviceProvider.getProvincialGovernmentInsurancePlanService().getProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram)
+    ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const dentalBenefit = {
@@ -125,7 +124,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     provTerrBenefit: {
       access: state.dentalBenefits.hasProvincialTerritorialBenefits,
       province: state.dentalBenefits.province,
-      benefit: selectedProvincialBenefit && localizeProvincialGovernmentInsurancePlan(selectedProvincialBenefit, locale).name,
+      benefit: selectedProvincialBenefit?.name,
     },
   };
 
