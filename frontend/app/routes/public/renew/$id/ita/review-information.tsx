@@ -404,12 +404,11 @@ export default function RenewItaReviewInformation() {
             {t('renew-ita:review-information.back-button')}
           </Button>
         </fetcher.Form>
-        {/* todo add exit application route (not currently in Figma) like the apply flow? */}
-        {/* <div className="mt-8">
+        <div className="mt-8">
           <InlineLink routeId="public/renew/$id/ita/exit-application" params={params}>
             {t('renew-ita:review-information.exit-button')}
           </InlineLink>
-        </div> */}
+        </div>
       </div>
       {/* {payload && (
         <div className="mt-8">

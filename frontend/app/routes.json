@@ -795,6 +795,14 @@
                   "en": "/:lang/renew/:id/ita/confirmation",
                   "fr": "/:lang/renew/:id/ita/confirmation"
                 }
+              },
+              {
+                "id": "public/renew/$id/ita/exit-application",
+                "file": "routes/public/renew/$id/ita/exit-application.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/ita/exit-application",
+                  "fr": "/:lang/renew/:id/ita/exit-application"
+                }
               }
             ]
           }
