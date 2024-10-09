@@ -1,4 +1,16 @@
 {
-  "page-title": "Validation de l'adresse",
-  "description": "Veuillez entrer votre adresse pour la valider."
+  "address-field": {
+    "address": "Adresse",
+    "address-note": "Inclure le numéro et le nom de la rue",
+    "apartment": "Appartement, suite, etc. (facultatif)",
+    "city": "Ville ou village",
+    "country": "Pays",
+    "postal-code": "Code postal",
+    "postal-code-optional": "Code postal (facultatif)",
+    "province": "Province, territoire, état ou région"
+  },
+  "address-header": "Adresse postale",
+  "optional-label": "Veuillez remplir tous les champs, sauf ceux indiqués comme facultatifs.",
+  "page-title": "Validation d'adresse",
+  "submit-button": "Valider l'adresse"
 }

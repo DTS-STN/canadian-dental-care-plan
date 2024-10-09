@@ -1,4 +1,16 @@
 {
+  "address-field": {
+    "address": "Address",
+    "address-note": "Include street number and name",
+    "apartment": "Apartment, suite, etc. (optional)",
+    "city": "City or town",
+    "country": "Country",
+    "postal-code": "Postal code or ZIP code",
+    "postal-code-optional": "Postal code or ZIP code (optional)",
+    "province": "Province, territory, state, or region"
+  },
+  "address-header": "Mailing address",
+  "optional-label": "Complete all fields unless marked as optional.",
   "page-title": "Address validation",
-  "description": "Please enter your address to validate it."
+  "submit-button": "Validate address"
 }
