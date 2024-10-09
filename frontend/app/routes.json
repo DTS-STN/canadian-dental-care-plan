@@ -82,6 +82,14 @@
         }
       },
       {
+        "id": "public/address-validation",
+        "file": "routes/public/address-validation.tsx",
+        "paths": {
+          "en": "/:lang/address-validation",
+          "fr": "/:lang/validation-adresse"
+        }
+      },
+      {
         "id": "public/apply/_route",
         "file": "routes/public/apply/_route.tsx",
         "children": [

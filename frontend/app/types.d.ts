@@ -1,5 +1,6 @@
 import type { Session } from '@remix-run/node';
 
+import type addressValidation from '../public/locales/en/address-validation.json';
 import type applyAdultChild from '../public/locales/en/apply-adult-child.json';
 import type applyAdult from '../public/locales/en/apply-adult.json';
 import type applyChild from '../public/locales/en/apply-child.json';
@@ -59,6 +60,7 @@ declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: false;
     resources: {
+      'address-validation': typeof addressValidation;
       'apply-adult-child': typeof applyAdultChild;
       'apply-adult': typeof applyAdult;
       'apply-child': typeof applyChild;
