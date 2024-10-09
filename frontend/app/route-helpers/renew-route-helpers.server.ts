@@ -69,9 +69,10 @@ export interface RenewState {
 }
 
 export type ApplicantInformationState = NonNullable<RenewState['applicantInformation']>;
-export type TypeOfApplicationState = NonNullable<RenewState['typeOfRenewal']>;
+export type TypeOfRenewalState = NonNullable<RenewState['typeOfRenewal']>;
 export type PartnerInformationState = NonNullable<RenewState['partnerInformation']>;
 export type AddressInformationState = NonNullable<RenewState['addressInformation']>;
+export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ContactInformationState = NonNullable<RenewState['contactInformation']>;
 export type CommunicationPreferenceState = NonNullable<RenewState['communicationPreference']>;

@@ -14,10 +14,12 @@ import { z } from 'zod';
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
+import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { toBenefitRenewalRequestFromRenewItaState } from '~/mappers/benefit-renewal-service-mappers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { loadRenewItaStateForReview } from '~/route-helpers/renew-ita-route-helpers.server';
 import { clearRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
@@ -128,13 +130,12 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   };
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
-  // const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
+  const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:review-information.page-title') }) };
 
-  // todo create and call payload mapper
-  // const payload = viewPayloadEnabled && toBenefitApplicationRequestFromApplyAdultState(state);
+  const payload = viewPayloadEnabled && toBenefitRenewalRequestFromRenewItaState(state);
 
   return json({
     id: state.id,
@@ -148,7 +149,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
-    // payload,
+    payload,
   });
 }
 
@@ -198,7 +199,7 @@ export async function action({ context: { serviceProvider, session }, params, re
 export default function RenewItaReviewInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -410,11 +411,11 @@ export default function RenewItaReviewInformation() {
           </InlineLink>
         </div>
       </div>
-      {/* {payload && (
+      {payload && (
         <div className="mt-8">
           <DebugPayload data={payload} enableCopy></DebugPayload>
         </div>
-      )} */}
+      )}
     </>
   );
 }
