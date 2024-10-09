@@ -72,8 +72,8 @@ describe('PreferredLanguageServiceImpl', () => {
       const dtos = service.listPreferredLanguages();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockPreferredLanguageRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos).toHaveBeenCalledTimes(1);
+      expect(mockPreferredLanguageRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -101,8 +101,8 @@ describe('PreferredLanguageServiceImpl', () => {
       const dto = service.getPreferredLanguageById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).toHaveBeenCalledTimes(1);
+      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).toHaveBeenCalledOnce();
     });
 
     it('fetches preferred language by id by id throws not found exception', () => {
@@ -115,7 +115,7 @@ describe('PreferredLanguageServiceImpl', () => {
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       expect(() => service.getPreferredLanguageById(id)).toThrow(PreferredLanguageNotFoundException);
-      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).not.toHaveBeenCalled();
     });
   });
@@ -164,9 +164,9 @@ describe('PreferredLanguageServiceImpl', () => {
       const dtos = service.listAndSortLocalizedPreferredLanguages(locale);
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockPreferredLanguageRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos).toHaveBeenCalledTimes(1);
-      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos).toHaveBeenCalledTimes(1);
+      expect(mockPreferredLanguageRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -197,9 +197,9 @@ describe('PreferredLanguageServiceImpl', () => {
       const dto = service.getLocalizedPreferredLanguageById(id, locale);
 
       expect(dto).toEqual(mockLocalizedDto);
-      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).toHaveBeenCalledTimes(1);
-      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageDtoToPreferredLanguageLocalizedDto).toHaveBeenCalledTimes(1);
+      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageDtoToPreferredLanguageLocalizedDto).toHaveBeenCalledOnce();
     });
   });
 });

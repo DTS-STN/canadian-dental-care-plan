@@ -70,8 +70,8 @@ describe('MaritalStatusServiceImpl', () => {
       const dtos = service.listMaritalStatuses();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockMaritalStatusRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -99,8 +99,8 @@ describe('MaritalStatusServiceImpl', () => {
       const dto = service.getMaritalStatusById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockMaritalStatusRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusRepository.findById).toHaveBeenCalledOnce();
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).toHaveBeenCalledOnce();
     });
 
     it('fetches marital status by id throws not found exception', () => {
@@ -113,7 +113,7 @@ describe('MaritalStatusServiceImpl', () => {
       const service = new MaritalStatusServiceImpl(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       expect(() => service.getMaritalStatusById(id)).toThrow(MaritalStatusNotFoundException);
-      expect(mockMaritalStatusRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusRepository.findById).toHaveBeenCalledOnce();
       expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).not.toHaveBeenCalled();
     });
   });
@@ -161,9 +161,9 @@ describe('MaritalStatusServiceImpl', () => {
       const dtos = service.listLocalizedMaritalStatuses('en');
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockMaritalStatusRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos).toHaveBeenCalledTimes(1);
-      expect(mockMaritalStatusDtoMapper.mapMaritalStatusDtosToMaritalStatusLocalizedDtos).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos).toHaveBeenCalledOnce();
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusDtosToMaritalStatusLocalizedDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -194,9 +194,9 @@ describe('MaritalStatusServiceImpl', () => {
       const dto = service.getLocalizedMaritalStatusById(id, 'en');
 
       expect(dto).toEqual(mockLocalizedDto);
-      expect(mockMaritalStatusRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).toHaveBeenCalledTimes(1);
-      expect(mockMaritalStatusDtoMapper.mapMaritalStatusDtoToMaritalStatusLocalizedDto).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusRepository.findById).toHaveBeenCalledOnce();
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).toHaveBeenCalledOnce();
+      expect(mockMaritalStatusDtoMapper.mapMaritalStatusDtoToMaritalStatusLocalizedDto).toHaveBeenCalledOnce();
     });
 
     it('fetches localized marital status by id throws not found exception', () => {
@@ -209,7 +209,7 @@ describe('MaritalStatusServiceImpl', () => {
       const service = new MaritalStatusServiceImpl(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       expect(() => service.getLocalizedMaritalStatusById(id, 'en')).toThrow(MaritalStatusNotFoundException);
-      expect(mockMaritalStatusRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockMaritalStatusRepository.findById).toHaveBeenCalledOnce();
       expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto).not.toHaveBeenCalled();
     });
   });

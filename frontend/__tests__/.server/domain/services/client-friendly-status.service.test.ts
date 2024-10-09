@@ -54,8 +54,8 @@ describe('ClientFriendlyStatusServiceImpl', () => {
       const dto = service.getClientFriendlyStatusById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).toHaveBeenCalledTimes(1);
+      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledOnce();
+      expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).toHaveBeenCalledOnce();
     });
 
     it('fetches client friendly status by id throws not found exception', () => {
@@ -68,7 +68,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
       expect(() => service.getClientFriendlyStatusById(id)).toThrow(ClientFriendlyStatusNotFoundException);
-      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).not.toHaveBeenCalled();
     });
   });
@@ -93,8 +93,8 @@ describe('ClientFriendlyStatusServiceImpl', () => {
       const dto = service.getLocalizedClientFriendlyStatusById(id, 'en');
 
       expect(dto).toEqual(mockDto);
-      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto).toHaveBeenCalledTimes(1);
+      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledOnce();
+      expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto).toHaveBeenCalledOnce();
     });
 
     it('fetches localized client friendly status by id throws not found exception', () => {
@@ -107,7 +107,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
       expect(() => service.getClientFriendlyStatusById(id)).toThrow(ClientFriendlyStatusNotFoundException);
-      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto).not.toHaveBeenCalled();
     });
   });

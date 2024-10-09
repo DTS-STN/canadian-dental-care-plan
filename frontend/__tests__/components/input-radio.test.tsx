@@ -40,7 +40,7 @@ describe('InputRadio', () => {
 
     const radioButton = getByTestId('input-radio');
     fireEvent.click(radioButton);
-    expect(onChangeMock).toHaveBeenCalledTimes(1);
+    expect(onChangeMock).toHaveBeenCalledOnce();
   });
 
   it('disables radio button when disabled prop is provided', () => {

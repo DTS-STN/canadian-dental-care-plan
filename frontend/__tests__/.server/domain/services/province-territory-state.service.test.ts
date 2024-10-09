@@ -65,8 +65,8 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const dtos = service.listProvinceTerritoryStates();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -92,8 +92,8 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const dto = service.getProvinceTerritoryStateById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).toHaveBeenCalledOnce();
     });
 
     it('fetches province territory state by id and throws exception if not found', () => {
@@ -106,7 +106,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
       expect(() => service.getProvinceTerritoryStateById(id)).toThrow(ProvinceTerritoryStateNotFoundException);
-      expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).not.toHaveBeenCalled();
     });
   });
@@ -151,9 +151,9 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const dtos = service.listAndSortLocalizedProvinceTerritoryStates(locale);
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledTimes(1);
-      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -206,9 +206,9 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const dtos = service.listAndSortLocalizedProvinceTerritoryStatesByCountryId(countryId, locale);
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledTimes(1);
-      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -237,9 +237,9 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const dto = service.getLocalizedProvinceTerritoryStateById(id, locale);
 
       expect(dto).toEqual(mockLocalizedDto);
-      expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).toHaveBeenCalledTimes(1);
-      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto).toHaveBeenCalledTimes(1);
+      expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto).toHaveBeenCalledOnce();
     });
   });
 });

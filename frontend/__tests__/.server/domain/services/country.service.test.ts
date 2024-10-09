@@ -64,8 +64,8 @@ describe('CountryServiceImpl', () => {
       const dtos = service.listCountries();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockCountryRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockCountryDtoMapper.mapCountryEntitiesToCountryDtos).toHaveBeenCalledTimes(1);
+      expect(mockCountryRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockCountryDtoMapper.mapCountryEntitiesToCountryDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -90,8 +90,8 @@ describe('CountryServiceImpl', () => {
       const dto = service.getCountryById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockCountryRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).toHaveBeenCalledTimes(1);
+      expect(mockCountryRepository.findById).toHaveBeenCalledOnce();
+      expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).toHaveBeenCalledOnce();
     });
 
     it('fetches country by id throws not found exception', () => {
@@ -104,7 +104,7 @@ describe('CountryServiceImpl', () => {
       const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
       expect(() => service.getCountryById(id)).toThrow(CountryNotFoundException);
-      expect(mockCountryRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockCountryRepository.findById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).not.toHaveBeenCalled();
     });
   });
@@ -153,8 +153,8 @@ describe('CountryServiceImpl', () => {
       const dtos = service.listAndSortLocalizedCountries('en');
 
       expect(dtos).toStrictEqual(expectedCountryLocalizedDtos);
-      expect(mockCountryRepository.findAll).toHaveBeenCalledTimes(1);
-      expect(mockCountryDtoMapper.mapCountryDtosToCountryLocalizedDtos).toHaveBeenCalledTimes(1);
+      expect(mockCountryRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockCountryDtoMapper.mapCountryDtosToCountryLocalizedDtos).toHaveBeenCalledOnce();
     });
   });
 
@@ -179,8 +179,8 @@ describe('CountryServiceImpl', () => {
       const dto = service.getLocalizedCountryById(id, 'en');
 
       expect(dto).toEqual(mockDto);
-      expect(mockCountryRepository.findById).toHaveBeenCalledTimes(1);
-      expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).toHaveBeenCalledTimes(1);
+      expect(mockCountryRepository.findById).toHaveBeenCalledOnce();
+      expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).toHaveBeenCalledOnce();
     });
 
     it('fetches localized country by id throws not found exception', () => {
@@ -193,7 +193,7 @@ describe('CountryServiceImpl', () => {
       const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
       expect(() => service.getLocalizedCountryById(id, 'en')).toThrow(CountryNotFoundException);
-      expect(mockCountryRepository.findById).toHaveBeenCalledTimes(1);
+      expect(mockCountryRepository.findById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).not.toHaveBeenCalled();
     });
   });

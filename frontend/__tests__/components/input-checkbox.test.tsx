@@ -40,7 +40,7 @@ describe('InputCheckbox', () => {
 
     const checkbox = getByTestId('input-checkbox');
     fireEvent.click(checkbox);
-    expect(onChangeMock).toHaveBeenCalledTimes(1);
+    expect(onChangeMock).toHaveBeenCalledOnce();
   });
 
   it('disables checkbox when disabled prop is provided', () => {
