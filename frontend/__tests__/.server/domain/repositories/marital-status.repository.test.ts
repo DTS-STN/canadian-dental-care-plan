@@ -61,7 +61,7 @@ describe('MaritalStatusRepositoryImpl', () => {
 
     const repository = new MaritalStatusRepositoryImpl(mockLogFactory);
 
-    const maritalStatuses = repository.findAll();
+    const maritalStatuses = repository.findAllMaritalStatuses();
 
     expect(maritalStatuses).toEqual([
       {
@@ -105,7 +105,7 @@ describe('MaritalStatusRepositoryImpl', () => {
 
     const repository = new MaritalStatusRepositoryImpl(mockLogFactory);
 
-    const maritalStatuses = repository.findAll();
+    const maritalStatuses = repository.findAllMaritalStatuses();
 
     expect(maritalStatuses).toEqual([]);
   });
@@ -116,7 +116,7 @@ describe('MaritalStatusRepositoryImpl', () => {
 
     const repository = new MaritalStatusRepositoryImpl(mockLogFactory);
 
-    const maritalStatus = repository.findById('1');
+    const maritalStatus = repository.findMaritalStatusById('1');
 
     expect(maritalStatus).toEqual({
       Value: 1,
@@ -141,7 +141,7 @@ describe('MaritalStatusRepositoryImpl', () => {
 
     const repository = new MaritalStatusRepositoryImpl(mockLogFactory);
 
-    const maritalStatus = repository.findById('non-existent-id');
+    const maritalStatus = repository.findMaritalStatusById('non-existent-id');
 
     expect(maritalStatus).toBeNull();
   });

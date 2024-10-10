@@ -10,14 +10,14 @@ export interface MaritalStatusRepository {
    * Fetch all marital status entities.
    * @returns All marital status entities.
    */
-  findAll(): MaritalStatusEntity[];
+  findAllMaritalStatuses(): MaritalStatusEntity[];
 
   /**
    * Fetch a marital status entity by its id.
    * @param id The id of the marital status entity.
    * @returns The marital status entity or null if not found.
    */
-  findById(id: string): MaritalStatusEntity | null;
+  findMaritalStatusById(id: string): MaritalStatusEntity | null;
 }
 
 @injectable()
@@ -28,7 +28,7 @@ export class MaritalStatusRepositoryImpl implements MaritalStatusRepository {
     this.log = logFactory.createLogger('MaritalStatusRepositoryImpl');
   }
 
-  findAll(): MaritalStatusEntity[] {
+  findAllMaritalStatuses(): MaritalStatusEntity[] {
     this.log.debug('Fetching all marital statuses');
     const maritalStatusEntities = maritalStatusJsonDataSource.value.at(0)?.OptionSet.Options;
 
@@ -41,7 +41,7 @@ export class MaritalStatusRepositoryImpl implements MaritalStatusRepository {
     return maritalStatusEntities;
   }
 
-  findById(id: string): MaritalStatusEntity | null {
+  findMaritalStatusById(id: string): MaritalStatusEntity | null {
     this.log.debug('Fetching marital status with id: [%s]', id);
 
     const maritalStatusEntities = maritalStatusJsonDataSource.value.at(0)?.OptionSet.Options;
