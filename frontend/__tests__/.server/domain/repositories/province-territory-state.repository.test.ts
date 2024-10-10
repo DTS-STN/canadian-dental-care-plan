@@ -39,7 +39,7 @@ describe('ProvinceTerritoryStateRepositoryImpl', () => {
 
     const repository = new ProvinceTerritoryStateRepositoryImpl(mockLogFactory);
 
-    const provinceTerritoryStates = repository.findAllProvinceTerritoryStates();
+    const provinceTerritoryStates = repository.listAllProvinceTerritoryStates();
 
     expect(provinceTerritoryStates).toEqual([
       {
@@ -67,7 +67,7 @@ describe('ProvinceTerritoryStateRepositoryImpl', () => {
 
     const repository = new ProvinceTerritoryStateRepositoryImpl(mockLogFactory);
 
-    const provinceTerritoryStates = repository.findAllProvinceTerritoryStates();
+    const provinceTerritoryStates = repository.listAllProvinceTerritoryStates();
 
     expect(provinceTerritoryStates).toEqual([]);
   });

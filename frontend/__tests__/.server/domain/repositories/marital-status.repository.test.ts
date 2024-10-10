@@ -61,7 +61,7 @@ describe('MaritalStatusRepositoryImpl', () => {
 
     const repository = new MaritalStatusRepositoryImpl(mockLogFactory);
 
-    const maritalStatuses = repository.findAllMaritalStatuses();
+    const maritalStatuses = repository.listAllMaritalStatuses();
 
     expect(maritalStatuses).toEqual([
       {
@@ -105,7 +105,7 @@ describe('MaritalStatusRepositoryImpl', () => {
 
     const repository = new MaritalStatusRepositoryImpl(mockLogFactory);
 
-    const maritalStatuses = repository.findAllMaritalStatuses();
+    const maritalStatuses = repository.listAllMaritalStatuses();
 
     expect(maritalStatuses).toEqual([]);
   });

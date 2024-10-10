@@ -61,7 +61,7 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
 
   private listProvincialGovernmentInsurancePlansImpl(): ReadonlyArray<ProvincialGovernmentInsurancePlanDto> {
     this.log.debug('Get all provincial government insurance plans');
-    const provincialGovernmentInsurancePlanEntities = this.provincialGovernmentInsurancePlanRepository.findAllProvincialGovernmentInsurancePlans();
+    const provincialGovernmentInsurancePlanEntities = this.provincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans();
     const provincialGovernmentInsurancePlanDtos = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities);
     this.log.trace('Returning provincial government insurance plans: [%j]', provincialGovernmentInsurancePlanDtos);
     return provincialGovernmentInsurancePlanDtos;

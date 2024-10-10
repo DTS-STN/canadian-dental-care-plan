@@ -10,7 +10,7 @@ export interface FederalGovernmentInsurancePlanRepository {
    * Fetch all federal government insurance plan entities.
    * @returns All federal government insurance plan entities.
    */
-  findAllFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanEntity[];
+  listAllFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanEntity[];
 
   /**
    * Fetch a federal government insurance plan entity by its id.
@@ -28,7 +28,7 @@ export class FederalGovernmentInsurancePlanRepositoryImpl implements FederalGove
     this.log = logFactory.createLogger('FederalGovernmentInsurancePlanRepositoryImpl');
   }
 
-  findAllFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanEntity[] {
+  listAllFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanEntity[] {
     this.log.debug('Fetching all federal government insurance plans');
     const federalGovernmentInsurancePlanEntities = federalGovernmentInsurancePlanJsonDataSource.value;
 

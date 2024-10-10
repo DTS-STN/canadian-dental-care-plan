@@ -138,7 +138,7 @@ export class CountryServiceImpl implements CountryService {
 
   private listCountriesImpl(): ReadonlyArray<CountryDto> {
     this.log.debug('Get all countries');
-    const countryEntities = this.countryRepository.findAllCountries();
+    const countryEntities = this.countryRepository.listAllCountries();
     const countryDtos = this.countryDtoMapper.mapCountryEntitiesToCountryDtos(countryEntities);
     this.log.trace('Returning countries: [%j]', countryDtos);
     return countryDtos;

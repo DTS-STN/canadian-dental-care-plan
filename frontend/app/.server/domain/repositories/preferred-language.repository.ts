@@ -10,7 +10,7 @@ export interface PreferredLanguageRepository {
    * Fetch all preferred language entities.
    * @returns All preferred languages entities.
    */
-  findAllPreferredLanguages(): PreferredLanguageEntity[];
+  listAllPreferredLanguages(): PreferredLanguageEntity[];
 
   /**
    * Fetch a preferred language entity by its id.
@@ -28,7 +28,7 @@ export class PreferredLanguageRepositoryImpl implements PreferredLanguageReposit
     this.log = logFactory.createLogger('PreferredLanguageRepositoryImpl');
   }
 
-  findAllPreferredLanguages(): PreferredLanguageEntity[] {
+  listAllPreferredLanguages(): PreferredLanguageEntity[] {
     this.log.debug('Fetching all preferred languages');
     const preferredLanguageEntities = preferredLanguageJsonDataSource.value.at(0)?.OptionSet.Options;
 

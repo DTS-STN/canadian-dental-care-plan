@@ -101,7 +101,7 @@ export class MaritalStatusServiceImpl implements MaritalStatusService {
 
   private listMaritalStatusesImpl(): ReadonlyArray<MaritalStatusDto> {
     this.log.debug('Get all marital statuses');
-    const maritalStatusEntities = this.maritalStatusRepository.findAllMaritalStatuses();
+    const maritalStatusEntities = this.maritalStatusRepository.listAllMaritalStatuses();
     const maritalStatusDtos = this.maritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos(maritalStatusEntities);
     this.log.trace('Returning marital statuses: [%j]', maritalStatusDtos);
     return maritalStatusDtos;

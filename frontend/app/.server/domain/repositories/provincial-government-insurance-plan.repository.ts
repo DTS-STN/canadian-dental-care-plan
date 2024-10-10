@@ -10,7 +10,7 @@ export interface ProvincialGovernmentInsurancePlanRepository {
    * Fetch all provincial government insurance plan entities.
    * @returns All provincial government insurance plan entities.
    */
-  findAllProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanEntity[];
+  listAllProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanEntity[];
 
   /**
    * Fetch a provincial government insurance plan entity by its id.
@@ -28,7 +28,7 @@ export class ProvincialGovernmentInsurancePlanRepositoryImpl implements Provinci
     this.log = logFactory.createLogger('ProvincialGovernmentInsurancePlanRepositoryImpl');
   }
 
-  findAllProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanEntity[] {
+  listAllProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanEntity[] {
     this.log.debug('Fetching all provincial government insurance plans');
     const provincialGovernmentInsurancePlanEntities = provincialGovernmentInsurancePlanJsonDataSource.value;
 

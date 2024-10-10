@@ -35,7 +35,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
   describe('listProvincialGovernmentInsurancePlans', () => {
     it('fetches all provincial government insurance plans', () => {
       const mockProvincialGovernmentInsurancePlanRepository = mock<ProvincialGovernmentInsurancePlanRepository>();
-      mockProvincialGovernmentInsurancePlanRepository.findAllProvincialGovernmentInsurancePlans.mockReturnValueOnce([
+      mockProvincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans.mockReturnValueOnce([
         {
           esdc_governmentinsuranceplanid: '1',
           esdc_nameenglish: 'First Insurance Plan',
@@ -73,7 +73,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
       const dtos = service.listProvincialGovernmentInsurancePlans();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockProvincialGovernmentInsurancePlanRepository.findAllProvincialGovernmentInsurancePlans).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans).toHaveBeenCalledOnce();
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
     });
   });
@@ -126,7 +126,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
   describe('listAndSortLocalizedProvincialGovernmentInsurancePlans', () => {
     it('should return a list of localized provincial government insurance plans', () => {
       const mockProvincialGovernmentInsurancePlanRepository = mock<ProvincialGovernmentInsurancePlanRepository>();
-      mockProvincialGovernmentInsurancePlanRepository.findAllProvincialGovernmentInsurancePlans.mockReturnValueOnce([
+      mockProvincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans.mockReturnValueOnce([
         {
           esdc_governmentinsuranceplanid: '1',
           esdc_nameenglish: 'First Insurance Plan',
@@ -160,7 +160,7 @@ describe('ProvincialGovernmentInsurancePlanServiceImpl', () => {
       const dtos = service.listAndSortLocalizedProvincialGovernmentInsurancePlans('en');
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockProvincialGovernmentInsurancePlanRepository.findAllProvincialGovernmentInsurancePlans).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans).toHaveBeenCalledOnce();
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtosToProvincialGovernmentInsurancePlanLocalizedDtos).toHaveBeenCalledOnce();
     });

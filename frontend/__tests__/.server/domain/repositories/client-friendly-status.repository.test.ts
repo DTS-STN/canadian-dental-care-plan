@@ -35,7 +35,7 @@ describe('ClientFriendlyStatusRepositoryImpl', () => {
 
     const repository = new ClientFriendlyStatusRepositoryImpl(mockLogFactory);
 
-    const clientFriendlyStatuses = repository.findAllClientFriendlyStatuses();
+    const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
 
     expect(clientFriendlyStatuses).toEqual([
       {
@@ -59,7 +59,7 @@ describe('ClientFriendlyStatusRepositoryImpl', () => {
 
     const repository = new ClientFriendlyStatusRepositoryImpl(mockLogFactory);
 
-    const clientFriendlyStatuses = repository.findAllClientFriendlyStatuses();
+    const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
 
     expect(clientFriendlyStatuses).toEqual([]);
   });

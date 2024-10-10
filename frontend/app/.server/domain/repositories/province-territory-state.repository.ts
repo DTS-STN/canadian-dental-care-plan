@@ -10,7 +10,7 @@ export interface ProvinceTerritoryStateRepository {
    * Fetch all province territory state entities.
    * @returns All province territory state entities.
    */
-  findAllProvinceTerritoryStates(): ProvinceTerritoryStateEntity[];
+  listAllProvinceTerritoryStates(): ProvinceTerritoryStateEntity[];
 
   /**
    * Fetch a province territory state entity by its id.
@@ -28,7 +28,7 @@ export class ProvinceTerritoryStateRepositoryImpl implements ProvinceTerritorySt
     this.log = logFactory.createLogger('ProvinceTerritoryStateRepositoryImpl');
   }
 
-  findAllProvinceTerritoryStates(): ProvinceTerritoryStateEntity[] {
+  listAllProvinceTerritoryStates(): ProvinceTerritoryStateEntity[] {
     this.log.debug('Fetching all province territory states');
     const provinceTerritoryStateEntities = provinceTerritoryStateJsonDataSource.value;
 

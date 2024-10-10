@@ -61,7 +61,7 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
 
   private listPreferredCommunicationMethodsImpl(): PreferredCommunicationMethodDto[] {
     this.log.debug('Get all preferred communication methods');
-    const preferredCommunicationMethodEntities = this.preferredCommunicationMethodRepository.findAllPreferredCommunicationMethods();
+    const preferredCommunicationMethodEntities = this.preferredCommunicationMethodRepository.listAllPreferredCommunicationMethods();
     const preferredCommunicationMethodDtos = this.preferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos(preferredCommunicationMethodEntities);
     this.log.trace('Returning preferred communication methods: [%j]', preferredCommunicationMethodDtos);
     return preferredCommunicationMethodDtos;

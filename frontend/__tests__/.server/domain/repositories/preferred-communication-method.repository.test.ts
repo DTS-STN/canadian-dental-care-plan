@@ -61,7 +61,7 @@ describe('PreferredCommunicationMethodRepositoryImpl', () => {
 
     const repository = new PreferredCommunicationMethodRepositoryImpl(mockLogFactory);
 
-    const preferredCommunicationMethods = repository.findAllPreferredCommunicationMethods();
+    const preferredCommunicationMethods = repository.listAllPreferredCommunicationMethods();
 
     expect(preferredCommunicationMethods).toEqual([
       {
@@ -105,7 +105,7 @@ describe('PreferredCommunicationMethodRepositoryImpl', () => {
 
     const repository = new PreferredCommunicationMethodRepositoryImpl(mockLogFactory);
 
-    const preferredCommunicationMethods = repository.findAllPreferredCommunicationMethods();
+    const preferredCommunicationMethods = repository.listAllPreferredCommunicationMethods();
 
     expect(preferredCommunicationMethods).toEqual([]);
   });

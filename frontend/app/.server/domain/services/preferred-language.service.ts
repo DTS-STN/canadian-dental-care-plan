@@ -80,7 +80,7 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
 
   private listPreferredLanguagesImpl(): ReadonlyArray<PreferredLanguageDto> {
     this.log.debug('Get all preferred languages');
-    const preferredLanguageEntities = this.preferredLanguageRepository.findAllPreferredLanguages();
+    const preferredLanguageEntities = this.preferredLanguageRepository.listAllPreferredLanguages();
     const preferredLanguageDtos = this.preferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities);
     this.log.trace('Returning preferred languages: [%j]', preferredLanguageDtos);
     return preferredLanguageDtos;

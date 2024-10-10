@@ -35,7 +35,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
   describe('listFederalGovernmentInsurancePlans', () => {
     it('fetches all federal government insurance plans', () => {
       const mockFederalGovernmentInsurancePlanRepository = mock<FederalGovernmentInsurancePlanRepository>();
-      mockFederalGovernmentInsurancePlanRepository.findAllFederalGovernmentInsurancePlans.mockReturnValueOnce([
+      mockFederalGovernmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans.mockReturnValueOnce([
         {
           esdc_governmentinsuranceplanid: '1',
           esdc_nameenglish: 'First Insurance Plan',
@@ -69,7 +69,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
       const dtos = service.listFederalGovernmentInsurancePlans();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockFederalGovernmentInsurancePlanRepository.findAllFederalGovernmentInsurancePlans).toHaveBeenCalledOnce();
+      expect(mockFederalGovernmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans).toHaveBeenCalledOnce();
       expect(mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
     });
   });
@@ -120,7 +120,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
   describe('listAndSortLocalizedFederalGovernmentInsurancePlans', () => {
     it('fetches and sorts localized countries with Canada first', () => {
       const mockFederalGovernmentInsurancePlanRepository = mock<FederalGovernmentInsurancePlanRepository>();
-      mockFederalGovernmentInsurancePlanRepository.findAllFederalGovernmentInsurancePlans.mockReturnValueOnce([
+      mockFederalGovernmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans.mockReturnValueOnce([
         {
           esdc_governmentinsuranceplanid: '1',
           esdc_nameenglish: 'First Insurance Plan',
@@ -152,7 +152,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
       const dtos = service.listAndSortLocalizedFederalGovernmentInsurancePlans('en');
 
       expect(dtos).toStrictEqual(expectedFederalGovernmentInsurancePlanLocalizedDtos);
-      expect(mockFederalGovernmentInsurancePlanRepository.findAllFederalGovernmentInsurancePlans).toHaveBeenCalledOnce();
+      expect(mockFederalGovernmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans).toHaveBeenCalledOnce();
       expect(mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
       expect(mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanDtosToFederalGovernmentInsurancePlanLocalizedDtos).toHaveBeenCalledOnce();
     });

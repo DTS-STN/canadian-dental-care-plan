@@ -76,7 +76,7 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
 
   private listFederalGovernmentInsurancePlansImpl(): ReadonlyArray<FederalGovernmentInsurancePlanDto> {
     this.log.debug('Get all federal government insurance plans');
-    const federalGovernmentInsurancePlanEntities = this.federalGovernmentInsurancePlanRepository.findAllFederalGovernmentInsurancePlans();
+    const federalGovernmentInsurancePlanEntities = this.federalGovernmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans();
     const federalGovernmentInsurancePlanDtos = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(federalGovernmentInsurancePlanEntities);
     this.log.trace('Returning federal government insurance plans: [%j]', federalGovernmentInsurancePlanDtos);
     return federalGovernmentInsurancePlanDtos;

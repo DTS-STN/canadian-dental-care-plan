@@ -37,7 +37,7 @@ describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
 
     const repository = new ProvincialGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
 
-    const provincialGovernmentInsurancePlans = repository.findAllProvincialGovernmentInsurancePlans();
+    const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
 
     expect(provincialGovernmentInsurancePlans).toEqual([
       {
@@ -63,7 +63,7 @@ describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
 
     const repository = new ProvincialGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
 
-    const provincialGovernmentInsurancePlans = repository.findAllProvincialGovernmentInsurancePlans();
+    const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
 
     expect(provincialGovernmentInsurancePlans).toEqual([]);
   });

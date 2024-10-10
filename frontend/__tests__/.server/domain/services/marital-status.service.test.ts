@@ -36,7 +36,7 @@ describe('MaritalStatusServiceImpl', () => {
   describe('listMaritalStatuses', () => {
     it('fetches all marital statuses', () => {
       const mockMaritalStatusRepository = mock<MaritalStatusRepository>();
-      mockMaritalStatusRepository.findAllMaritalStatuses.mockReturnValueOnce([
+      mockMaritalStatusRepository.listAllMaritalStatuses.mockReturnValueOnce([
         {
           Value: 1,
           Label: {
@@ -70,7 +70,7 @@ describe('MaritalStatusServiceImpl', () => {
       const dtos = service.listMaritalStatuses();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockMaritalStatusRepository.findAllMaritalStatuses).toHaveBeenCalledOnce();
+      expect(mockMaritalStatusRepository.listAllMaritalStatuses).toHaveBeenCalledOnce();
       expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos).toHaveBeenCalledOnce();
     });
   });
@@ -121,7 +121,7 @@ describe('MaritalStatusServiceImpl', () => {
   describe('listMaritalStatuses', () => {
     it('fetches all marital statuses', () => {
       const mockMaritalStatusRepository = mock<MaritalStatusRepository>();
-      mockMaritalStatusRepository.findAllMaritalStatuses.mockReturnValueOnce([
+      mockMaritalStatusRepository.listAllMaritalStatuses.mockReturnValueOnce([
         {
           Value: 1,
           Label: {
@@ -161,7 +161,7 @@ describe('MaritalStatusServiceImpl', () => {
       const dtos = service.listLocalizedMaritalStatuses('en');
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockMaritalStatusRepository.findAllMaritalStatuses).toHaveBeenCalledOnce();
+      expect(mockMaritalStatusRepository.listAllMaritalStatuses).toHaveBeenCalledOnce();
       expect(mockMaritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos).toHaveBeenCalledOnce();
       expect(mockMaritalStatusDtoMapper.mapMaritalStatusDtosToMaritalStatusLocalizedDtos).toHaveBeenCalledOnce();
     });

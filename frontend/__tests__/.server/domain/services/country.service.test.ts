@@ -36,7 +36,7 @@ describe('CountryServiceImpl', () => {
   describe('listCountries', () => {
     it('fetches all countries', () => {
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findAllCountries.mockReturnValueOnce([
+      mockCountryRepository.listAllCountries.mockReturnValueOnce([
         {
           esdc_countryid: '1',
           esdc_nameenglish: 'Canada English',
@@ -64,7 +64,7 @@ describe('CountryServiceImpl', () => {
       const dtos = service.listCountries();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockCountryRepository.findAllCountries).toHaveBeenCalledOnce();
+      expect(mockCountryRepository.listAllCountries).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryEntitiesToCountryDtos).toHaveBeenCalledOnce();
     });
   });
@@ -112,7 +112,7 @@ describe('CountryServiceImpl', () => {
   describe('listAndSortLocalizedCountries', () => {
     it('fetches and sorts localized countries with Canada first', () => {
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findAllCountries.mockReturnValueOnce([
+      mockCountryRepository.listAllCountries.mockReturnValueOnce([
         {
           esdc_countryid: '1',
           esdc_nameenglish: 'Canada English',
@@ -153,7 +153,7 @@ describe('CountryServiceImpl', () => {
       const dtos = service.listAndSortLocalizedCountries('en');
 
       expect(dtos).toStrictEqual(expectedCountryLocalizedDtos);
-      expect(mockCountryRepository.findAllCountries).toHaveBeenCalledOnce();
+      expect(mockCountryRepository.listAllCountries).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryDtosToCountryLocalizedDtos).toHaveBeenCalledOnce();
     });
   });

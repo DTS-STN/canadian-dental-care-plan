@@ -10,7 +10,7 @@ export interface ClientFriendlyStatusRepository {
    * Fetch all client-friendly status entities.
    * @returns All client-friendly status entities.
    */
-  findAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[];
+  listAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[];
 
   /**
    * Fetch a client-friendly status entity by its id.
@@ -28,7 +28,7 @@ export class ClientFriendlyStatusRepositoryImpl implements ClientFriendlyStatusR
     this.log = logFactory.createLogger('ClientFriendlyStatusRepositoryImpl');
   }
 
-  findAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[] {
+  listAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[] {
     this.log.debug('Fetching all client-friendly statuses');
     const clientFriendlyStatusEntities = clientFriendlyStatusJsonDataSource.value;
 

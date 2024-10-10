@@ -10,7 +10,7 @@ export interface MaritalStatusRepository {
    * Fetch all marital status entities.
    * @returns All marital status entities.
    */
-  findAllMaritalStatuses(): MaritalStatusEntity[];
+  listAllMaritalStatuses(): MaritalStatusEntity[];
 
   /**
    * Fetch a marital status entity by its id.
@@ -28,7 +28,7 @@ export class MaritalStatusRepositoryImpl implements MaritalStatusRepository {
     this.log = logFactory.createLogger('MaritalStatusRepositoryImpl');
   }
 
-  findAllMaritalStatuses(): MaritalStatusEntity[] {
+  listAllMaritalStatuses(): MaritalStatusEntity[] {
     this.log.debug('Fetching all marital statuses');
     const maritalStatusEntities = maritalStatusJsonDataSource.value.at(0)?.OptionSet.Options;
 

@@ -37,7 +37,7 @@ describe('CountryRepositoryImpl', () => {
 
     const repository = new CountryRepositoryImpl(mockLogFactory);
 
-    const countries = repository.findAllCountries();
+    const countries = repository.listAllCountries();
 
     expect(countries).toEqual([
       {
@@ -63,7 +63,7 @@ describe('CountryRepositoryImpl', () => {
 
     const repository = new CountryRepositoryImpl(mockLogFactory);
 
-    const countries = repository.findAllCountries();
+    const countries = repository.listAllCountries();
 
     expect(countries).toEqual([]);
   });

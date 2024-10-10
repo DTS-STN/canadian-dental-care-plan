@@ -112,7 +112,7 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
 
   private listProvinceTerritoryStatesImpl(): ReadonlyArray<ProvinceTerritoryStateDto> {
     this.log.debug('Get all province territory states');
-    const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.findAllProvinceTerritoryStates();
+    const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.listAllProvinceTerritoryStates();
     const provinceTerritoryStateDtos = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(provinceTerritoryStateEntities);
     this.log.trace('Returning province territory states: [%j]', provinceTerritoryStateDtos);
     return provinceTerritoryStateDtos;

@@ -49,7 +49,7 @@ describe('PreferredLanguageRepositoryImpl', () => {
 
     const repository = new PreferredLanguageRepositoryImpl(mockLogFactory);
 
-    const preferredLanguages = repository.findAllPreferredLanguages();
+    const preferredLanguages = repository.listAllPreferredLanguages();
 
     expect(preferredLanguages).toEqual([
       {
@@ -83,7 +83,7 @@ describe('PreferredLanguageRepositoryImpl', () => {
 
     const repository = new PreferredLanguageRepositoryImpl(mockLogFactory);
 
-    const preferredLanguages = repository.findAllPreferredLanguages();
+    const preferredLanguages = repository.listAllPreferredLanguages();
 
     expect(preferredLanguages).toEqual([]);
   });

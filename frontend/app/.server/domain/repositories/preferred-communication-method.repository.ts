@@ -10,7 +10,7 @@ export interface PreferredCommunicationMethodRepository {
    * Fetch all preferred communication method entities.
    * @returns All preferred communication method entities.
    */
-  findAllPreferredCommunicationMethods(): PreferredCommunicationMethodEntity[];
+  listAllPreferredCommunicationMethods(): PreferredCommunicationMethodEntity[];
 
   /**
    * Fetch a preferred communication method entity by its id.
@@ -28,7 +28,7 @@ export class PreferredCommunicationMethodRepositoryImpl implements PreferredComm
     this.log = logFactory.createLogger('PreferredCommunicationMethodRepositoryImpl');
   }
 
-  findAllPreferredCommunicationMethods(): PreferredCommunicationMethodEntity[] {
+  listAllPreferredCommunicationMethods(): PreferredCommunicationMethodEntity[] {
     this.log.debug('Fetching all preferred communication methods');
     const preferredCommunicationMethodEntities = preferredCommunicationMethodJsonDataSource.value.at(0)?.OptionSet.Options;
 

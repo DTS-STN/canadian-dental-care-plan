@@ -38,7 +38,7 @@ describe('PreferredLanguageServiceImpl', () => {
   describe('listPreferredLanguages', () => {
     it('fetches all preferred languages', () => {
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
-      mockPreferredLanguageRepository.findAllPreferredLanguages.mockReturnValueOnce([
+      mockPreferredLanguageRepository.listAllPreferredLanguages.mockReturnValueOnce([
         {
           Value: 1033,
           Label: {
@@ -72,7 +72,7 @@ describe('PreferredLanguageServiceImpl', () => {
       const dtos = service.listPreferredLanguages();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockPreferredLanguageRepository.findAllPreferredLanguages).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageRepository.listAllPreferredLanguages).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos).toHaveBeenCalledOnce();
     });
   });
@@ -124,7 +124,7 @@ describe('PreferredLanguageServiceImpl', () => {
     it('fetches and sorts all localized preferred languages', () => {
       const locale = 'en';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
-      mockPreferredLanguageRepository.findAllPreferredLanguages.mockReturnValueOnce([
+      mockPreferredLanguageRepository.listAllPreferredLanguages.mockReturnValueOnce([
         {
           Value: 1036,
           Label: {
@@ -164,7 +164,7 @@ describe('PreferredLanguageServiceImpl', () => {
       const dtos = service.listAndSortLocalizedPreferredLanguages(locale);
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockPreferredLanguageRepository.findAllPreferredLanguages).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageRepository.listAllPreferredLanguages).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos).toHaveBeenCalledOnce();
     });
