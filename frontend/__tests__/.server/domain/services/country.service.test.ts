@@ -36,7 +36,7 @@ describe('CountryServiceImpl', () => {
   describe('listCountries', () => {
     it('fetches all countries', () => {
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findAll.mockReturnValueOnce([
+      mockCountryRepository.findAllCountries.mockReturnValueOnce([
         {
           esdc_countryid: '1',
           esdc_nameenglish: 'Canada English',
@@ -64,7 +64,7 @@ describe('CountryServiceImpl', () => {
       const dtos = service.listCountries();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockCountryRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockCountryRepository.findAllCountries).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryEntitiesToCountryDtos).toHaveBeenCalledOnce();
     });
   });
@@ -73,7 +73,7 @@ describe('CountryServiceImpl', () => {
     it('fetches country by id', () => {
       const id = '1';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findById.mockReturnValueOnce({
+      mockCountryRepository.findCountryById.mockReturnValueOnce({
         esdc_countryid: '1',
         esdc_nameenglish: 'Canada English',
         esdc_namefrench: 'Canada Français',
@@ -90,21 +90,21 @@ describe('CountryServiceImpl', () => {
       const dto = service.getCountryById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockCountryRepository.findById).toHaveBeenCalledOnce();
+      expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).toHaveBeenCalledOnce();
     });
 
     it('fetches country by id throws not found exception', () => {
       const id = '1033';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findById.mockReturnValueOnce(null);
+      mockCountryRepository.findCountryById.mockReturnValueOnce(null);
 
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
 
       const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
       expect(() => service.getCountryById(id)).toThrow(CountryNotFoundException);
-      expect(mockCountryRepository.findById).toHaveBeenCalledOnce();
+      expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).not.toHaveBeenCalled();
     });
   });
@@ -112,7 +112,7 @@ describe('CountryServiceImpl', () => {
   describe('listAndSortLocalizedCountries', () => {
     it('fetches and sorts localized countries with Canada first', () => {
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findAll.mockReturnValueOnce([
+      mockCountryRepository.findAllCountries.mockReturnValueOnce([
         {
           esdc_countryid: '1',
           esdc_nameenglish: 'Canada English',
@@ -153,7 +153,7 @@ describe('CountryServiceImpl', () => {
       const dtos = service.listAndSortLocalizedCountries('en');
 
       expect(dtos).toStrictEqual(expectedCountryLocalizedDtos);
-      expect(mockCountryRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockCountryRepository.findAllCountries).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryDtosToCountryLocalizedDtos).toHaveBeenCalledOnce();
     });
   });
@@ -162,7 +162,7 @@ describe('CountryServiceImpl', () => {
     it('fetches localized country by id', () => {
       const id = '1';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findById.mockReturnValueOnce({
+      mockCountryRepository.findCountryById.mockReturnValueOnce({
         esdc_countryid: '1',
         esdc_nameenglish: 'Canada English',
         esdc_namefrench: 'Canada Français',
@@ -179,21 +179,21 @@ describe('CountryServiceImpl', () => {
       const dto = service.getLocalizedCountryById(id, 'en');
 
       expect(dto).toEqual(mockDto);
-      expect(mockCountryRepository.findById).toHaveBeenCalledOnce();
+      expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).toHaveBeenCalledOnce();
     });
 
     it('fetches localized country by id throws not found exception', () => {
       const id = '1033';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findById.mockReturnValueOnce(null);
+      mockCountryRepository.findCountryById.mockReturnValueOnce(null);
 
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
 
       const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
       expect(() => service.getLocalizedCountryById(id, 'en')).toThrow(CountryNotFoundException);
-      expect(mockCountryRepository.findById).toHaveBeenCalledOnce();
+      expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).not.toHaveBeenCalled();
     });
   });
