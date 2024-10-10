@@ -112,7 +112,7 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
 
   private listProvinceTerritoryStatesImpl(): ReadonlyArray<ProvinceTerritoryStateDto> {
     this.log.debug('Get all province territory states');
-    const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.findAll();
+    const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.findAllProvinceTerritoryStates();
     const provinceTerritoryStateDtos = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(provinceTerritoryStateEntities);
     this.log.trace('Returning province territory states: [%j]', provinceTerritoryStateDtos);
     return provinceTerritoryStateDtos;
@@ -120,7 +120,7 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
 
   private getProvinceTerritoryStateByIdImpl(id: string): ProvinceTerritoryStateDto {
     this.log.debug('Get province territory state with id: [%s]', id);
-    const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findById(id);
+    const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateById(id);
 
     if (!provinceTerritoryStateEntity) {
       throw new ProvinceTerritoryStateNotFoundException(`Province territory state: [${id}] not found`);

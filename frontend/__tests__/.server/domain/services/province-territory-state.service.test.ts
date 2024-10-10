@@ -35,7 +35,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
   describe('listProvinceTerritoryStates', () => {
     it('fetches all province territory states', () => {
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
-      mockProvinceTerritoryStateRepository.findAll.mockReturnValueOnce([
+      mockProvinceTerritoryStateRepository.findAllProvinceTerritoryStates.mockReturnValueOnce([
         {
           esdc_provinceterritorystateid: '1',
           _esdc_countryid_value: '1',
@@ -65,7 +65,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const dtos = service.listProvinceTerritoryStates();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateRepository.findAllProvinceTerritoryStates).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledOnce();
     });
   });
@@ -74,7 +74,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
     it('fetches province territory state by id', () => {
       const id = '1';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
-      mockProvinceTerritoryStateRepository.findById.mockReturnValueOnce({
+      mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById.mockReturnValueOnce({
         esdc_provinceterritorystateid: '1',
         _esdc_countryid_value: '1',
         esdc_nameenglish: 'English',
@@ -92,21 +92,21 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const dto = service.getProvinceTerritoryStateById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).toHaveBeenCalledOnce();
     });
 
     it('fetches province territory state by id and throws exception if not found', () => {
       const id = '1033';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
-      mockProvinceTerritoryStateRepository.findById.mockReturnValueOnce(null);
+      mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById.mockReturnValueOnce(null);
 
       const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
 
       const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
       expect(() => service.getProvinceTerritoryStateById(id)).toThrow(ProvinceTerritoryStateNotFoundException);
-      expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).not.toHaveBeenCalled();
     });
   });
@@ -115,7 +115,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
     it('fetches and sorts all localized province territory states', () => {
       const locale = 'en';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
-      mockProvinceTerritoryStateRepository.findAll.mockReturnValueOnce([
+      mockProvinceTerritoryStateRepository.findAllProvinceTerritoryStates.mockReturnValueOnce([
         {
           esdc_provinceterritorystateid: '1',
           _esdc_countryid_value: '1',
@@ -151,7 +151,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const dtos = service.listAndSortLocalizedProvinceTerritoryStates(locale);
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateRepository.findAllProvinceTerritoryStates).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos).toHaveBeenCalledOnce();
     });
@@ -162,7 +162,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const countryId = '1';
       const locale = 'en';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
-      mockProvinceTerritoryStateRepository.findAll.mockReturnValueOnce([
+      mockProvinceTerritoryStateRepository.findAllProvinceTerritoryStates.mockReturnValueOnce([
         {
           esdc_provinceterritorystateid: '1',
           _esdc_countryid_value: '1',
@@ -206,7 +206,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const dtos = service.listAndSortLocalizedProvinceTerritoryStatesByCountryId(countryId, locale);
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockProvinceTerritoryStateRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateRepository.findAllProvinceTerritoryStates).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos).toHaveBeenCalledOnce();
     });
@@ -217,7 +217,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const id = '1';
       const locale = 'en';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
-      mockProvinceTerritoryStateRepository.findById.mockReturnValueOnce({
+      mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById.mockReturnValueOnce({
         esdc_provinceterritorystateid: '1',
         _esdc_countryid_value: '1',
         esdc_nameenglish: 'English',
@@ -237,7 +237,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const dto = service.getLocalizedProvinceTerritoryStateById(id, locale);
 
       expect(dto).toEqual(mockLocalizedDto);
-      expect(mockProvinceTerritoryStateRepository.findById).toHaveBeenCalledOnce();
+      expect(mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto).toHaveBeenCalledOnce();
     });
