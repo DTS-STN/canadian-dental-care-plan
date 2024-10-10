@@ -61,7 +61,7 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
 
   private listPreferredCommunicationMethodsImpl(): PreferredCommunicationMethodDto[] {
     this.log.debug('Get all preferred communication methods');
-    const preferredCommunicationMethodEntities = this.preferredCommunicationMethodRepository.findAll();
+    const preferredCommunicationMethodEntities = this.preferredCommunicationMethodRepository.findAllPreferredCommunicationMethods();
     const preferredCommunicationMethodDtos = this.preferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos(preferredCommunicationMethodEntities);
     this.log.trace('Returning preferred communication methods: [%j]', preferredCommunicationMethodDtos);
     return preferredCommunicationMethodDtos;
@@ -69,7 +69,7 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
 
   private getPreferredCommunicationMethodByIdImpl(id: string): PreferredCommunicationMethodDto {
     this.log.debug('Get preferred communication method with id: [%s]', id);
-    const preferredCommunicationMethodEntity = this.preferredCommunicationMethodRepository.findById(id);
+    const preferredCommunicationMethodEntity = this.preferredCommunicationMethodRepository.findPreferredCommunicationMethodById(id);
 
     if (!preferredCommunicationMethodEntity) throw new PreferredCommunicationMethodNotFoundException(`Perferred communication method with id: [${id}] not found`);
 
