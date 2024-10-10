@@ -10,14 +10,14 @@ export interface FederalGovernmentInsurancePlanRepository {
    * Fetch all federal government insurance plan entities.
    * @returns All federal government insurance plan entities.
    */
-  findAll(): FederalGovernmentInsurancePlanEntity[];
+  findAllFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanEntity[];
 
   /**
    * Fetch a federal government insurance plan entity by its id.
    * @param id The id of the federal government insurance plan entity.
    * @returns The federal government insurance plan entity or null if not found.
    */
-  findById(id: string): FederalGovernmentInsurancePlanEntity | null;
+  findFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanEntity | null;
 }
 
 @injectable()
@@ -28,7 +28,7 @@ export class FederalGovernmentInsurancePlanRepositoryImpl implements FederalGove
     this.log = logFactory.createLogger('FederalGovernmentInsurancePlanRepositoryImpl');
   }
 
-  findAll(): FederalGovernmentInsurancePlanEntity[] {
+  findAllFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanEntity[] {
     this.log.debug('Fetching all federal government insurance plans');
     const federalGovernmentInsurancePlanEntities = federalGovernmentInsurancePlanJsonDataSource.value;
 
@@ -41,7 +41,7 @@ export class FederalGovernmentInsurancePlanRepositoryImpl implements FederalGove
     return federalGovernmentInsurancePlanEntities;
   }
 
-  findById(id: string): FederalGovernmentInsurancePlanEntity | null {
+  findFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanEntity | null {
     this.log.debug('Fetching federal government insurance plan with id: [%s]', id);
 
     const federalGovernmentInsurancePlanEntities = federalGovernmentInsurancePlanJsonDataSource.value;
