@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
@@ -23,11 +22,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-export const applyIdParamSchema = z.string().uuid();
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adult.confirmation,
+  pageIdentifier: pageIds.public.renew.ita.confirmation,
   pageTitleI18nKey: 'renew-ita:confirm.page-title',
 } as const satisfies RouteHandleData;
 
@@ -129,7 +126,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/adult/confirmation');
+  const log = getLogger('renew/ita/confirmation');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -147,7 +144,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   return redirect(t('confirm.exit-link'));
 }
 
-export default function ApplyFlowConfirm() {
+export default function RenewFlowConfirm() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, csrfToken } = useLoaderData<typeof loader>();
