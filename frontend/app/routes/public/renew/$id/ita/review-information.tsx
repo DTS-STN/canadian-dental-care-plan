@@ -5,6 +5,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
@@ -155,7 +156,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 export async function action({ context: { serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/ita/review-information');
 
-  loadRenewItaStateForReview({ params, request, session });
+  const state = loadRenewItaStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
@@ -184,15 +185,13 @@ export async function action({ context: { serviceProvider, session }, params, re
     }
   }
 
-  // todo create and call renewal application service and redirect to /ita/confirmation on success
-  // const benefitApplicationService = getBenefitApplicationService();
-  // const benefitApplicationRequest = toBenefitApplicationRequestFromApplyAdultState(state);
-  // const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
-  // const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
+  const benefitRenewalResponse = await serviceProvider.getBenefitRenewalService().submitRenewalRequest(state);
+  const confirmationCode = benefitRenewalResponse?.BenefitRenewal.BenefitRenewalIdentification[0].IdentificationID;
+  const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
-  // saveRenewState({ params, session, state: { submissionInfo } });
+  saveRenewState({ params, session, state: { submissionInfo } });
 
-  // return redirect(getPathById('public/renew/$id/ita/confirmation', params));
+  return redirect(getPathById('public/renew/$id/ita/confirmation', params));
 }
 
 export default function RenewItaReviewInformation() {

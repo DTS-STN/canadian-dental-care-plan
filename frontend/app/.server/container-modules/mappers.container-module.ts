@@ -3,6 +3,7 @@ import { ContainerModule } from 'inversify';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import {
   AddressValidationDtoMapperImpl,
+  BenefitRenewalDtoMapperImpl,
   ClientApplicationDtoMapperImpl,
   ClientFriendlyStatusDtoMapperImpl,
   CountryDtoMapperImpl,
@@ -15,6 +16,7 @@ import {
 } from '~/.server/domain/mappers';
 import type {
   AddressValidationDtoMapper,
+  BenefitRenewalDtoMapper,
   ClientApplicationDtoMapper,
   ClientFriendlyStatusDtoMapper,
   CountryDtoMapper,
@@ -31,6 +33,7 @@ import type {
  */
 export const mappersContainerModule = new ContainerModule((bind) => {
   bind<AddressValidationDtoMapper>(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_DTO_MAPPER).to(AddressValidationDtoMapperImpl);
+  bind<BenefitRenewalDtoMapper>(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_DTO_MAPPER).to(BenefitRenewalDtoMapperImpl);
   bind<ClientApplicationDtoMapper>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_DTO_MAPPER).to(ClientApplicationDtoMapperImpl);
   bind<ClientFriendlyStatusDtoMapper>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_DTO_MAPPER).to(ClientFriendlyStatusDtoMapperImpl);
   bind<CountryDtoMapper>(SERVICE_IDENTIFIER.COUNTRY_DTO_MAPPER).to(CountryDtoMapperImpl);
