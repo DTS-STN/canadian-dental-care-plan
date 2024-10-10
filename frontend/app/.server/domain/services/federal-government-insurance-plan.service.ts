@@ -76,7 +76,7 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
 
   private listFederalGovernmentInsurancePlansImpl(): ReadonlyArray<FederalGovernmentInsurancePlanDto> {
     this.log.debug('Get all federal government insurance plans');
-    const federalGovernmentInsurancePlanEntities = this.federalGovernmentInsurancePlanRepository.findAll();
+    const federalGovernmentInsurancePlanEntities = this.federalGovernmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans();
     const federalGovernmentInsurancePlanDtos = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(federalGovernmentInsurancePlanEntities);
     this.log.trace('Returning federal government insurance plans: [%j]', federalGovernmentInsurancePlanDtos);
     return federalGovernmentInsurancePlanDtos;
@@ -84,7 +84,7 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
 
   private getFederalGovernmentInsurancePlanByIdImpl(id: string): FederalGovernmentInsurancePlanDto {
     this.log.debug('Get federal government insurance plan with id: [%s]', id);
-    const federalGovernmentInsurancePlanEntity = this.federalGovernmentInsurancePlanRepository.findById(id);
+    const federalGovernmentInsurancePlanEntity = this.federalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById(id);
 
     if (!federalGovernmentInsurancePlanEntity) {
       this.log.error('Federal government insurance plan with id: [%s] not found', id);

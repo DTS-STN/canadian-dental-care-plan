@@ -37,7 +37,7 @@ describe('CountryRepositoryImpl', () => {
 
     const repository = new CountryRepositoryImpl(mockLogFactory);
 
-    const countries = repository.findAll();
+    const countries = repository.listAllCountries();
 
     expect(countries).toEqual([
       {
@@ -63,7 +63,7 @@ describe('CountryRepositoryImpl', () => {
 
     const repository = new CountryRepositoryImpl(mockLogFactory);
 
-    const countries = repository.findAll();
+    const countries = repository.listAllCountries();
 
     expect(countries).toEqual([]);
   });
@@ -74,7 +74,7 @@ describe('CountryRepositoryImpl', () => {
 
     const repository = new CountryRepositoryImpl(mockLogFactory);
 
-    const country = repository.findById('1');
+    const country = repository.findCountryById('1');
 
     expect(country).toEqual({
       esdc_countryid: '1',
@@ -90,7 +90,7 @@ describe('CountryRepositoryImpl', () => {
 
     const repository = new CountryRepositoryImpl(mockLogFactory);
 
-    const country = repository.findById('non-existent-id');
+    const country = repository.findCountryById('non-existent-id');
 
     expect(country).toBeNull();
   });

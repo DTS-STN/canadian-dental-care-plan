@@ -39,7 +39,7 @@ describe('ProvinceTerritoryStateRepositoryImpl', () => {
 
     const repository = new ProvinceTerritoryStateRepositoryImpl(mockLogFactory);
 
-    const provinceTerritoryStates = repository.findAll();
+    const provinceTerritoryStates = repository.listAllProvinceTerritoryStates();
 
     expect(provinceTerritoryStates).toEqual([
       {
@@ -67,7 +67,7 @@ describe('ProvinceTerritoryStateRepositoryImpl', () => {
 
     const repository = new ProvinceTerritoryStateRepositoryImpl(mockLogFactory);
 
-    const provinceTerritoryStates = repository.findAll();
+    const provinceTerritoryStates = repository.listAllProvinceTerritoryStates();
 
     expect(provinceTerritoryStates).toEqual([]);
   });
@@ -78,7 +78,7 @@ describe('ProvinceTerritoryStateRepositoryImpl', () => {
 
     const repository = new ProvinceTerritoryStateRepositoryImpl(mockLogFactory);
 
-    const provinceTerritoryState = repository.findById('1');
+    const provinceTerritoryState = repository.findProvinceTerritoryStateById('1');
 
     expect(provinceTerritoryState).toEqual({
       esdc_provinceterritorystateid: '1',
@@ -95,7 +95,7 @@ describe('ProvinceTerritoryStateRepositoryImpl', () => {
 
     const repository = new ProvinceTerritoryStateRepositoryImpl(mockLogFactory);
 
-    const provinceTerritoryState = repository.findById('non-existent-id');
+    const provinceTerritoryState = repository.findProvinceTerritoryStateById('non-existent-id');
 
     expect(provinceTerritoryState).toBeNull();
   });

@@ -35,7 +35,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
   describe('listPreferredCommunicationMethods', () => {
     it('fetches all preferred communication methods', () => {
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
-      mockPreferredCommunicationMethodRepository.findAll.mockReturnValueOnce([
+      mockPreferredCommunicationMethodRepository.listAllPreferredCommunicationMethods.mockReturnValueOnce([
         {
           Value: 1,
           Label: {
@@ -69,7 +69,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const dtos = service.listPreferredCommunicationMethods();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockPreferredCommunicationMethodRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodRepository.listAllPreferredCommunicationMethods).toHaveBeenCalledOnce();
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos).toHaveBeenCalledOnce();
     });
   });
@@ -78,7 +78,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
     it('fetches preferred communication method by id', () => {
       const id = '1';
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
-      mockPreferredCommunicationMethodRepository.findById.mockReturnValueOnce({
+      mockPreferredCommunicationMethodRepository.findPreferredCommunicationMethodById.mockReturnValueOnce({
         Value: 1,
         Label: {
           LocalizedLabels: [
@@ -98,21 +98,21 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const dto = service.getPreferredCommunicationMethodById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodRepository.findPreferredCommunicationMethodById).toHaveBeenCalledOnce();
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).toHaveBeenCalledOnce();
     });
 
     it('fetches preferred communication method by id and throws exception if not found', () => {
       const id = '1033';
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
-      mockPreferredCommunicationMethodRepository.findById.mockReturnValueOnce(null);
+      mockPreferredCommunicationMethodRepository.findPreferredCommunicationMethodById.mockReturnValueOnce(null);
 
       const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
 
       const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       expect(() => service.getPreferredCommunicationMethodById(id)).toThrow(PreferredCommunicationMethodNotFoundException);
-      expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodRepository.findPreferredCommunicationMethodById).toHaveBeenCalledOnce();
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).not.toHaveBeenCalled();
     });
   });
@@ -121,7 +121,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
     it('fetches and sorts all localized preferred communication methods', () => {
       const locale = 'en';
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
-      mockPreferredCommunicationMethodRepository.findAll.mockReturnValueOnce([
+      mockPreferredCommunicationMethodRepository.listAllPreferredCommunicationMethods.mockReturnValueOnce([
         {
           Value: 1,
           Label: {
@@ -161,7 +161,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const dtos = service.listAndSortLocalizedPreferredCommunicationMethods(locale);
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockPreferredCommunicationMethodRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodRepository.listAllPreferredCommunicationMethods).toHaveBeenCalledOnce();
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos).toHaveBeenCalledOnce();
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos).toHaveBeenCalledOnce();
     });
@@ -172,7 +172,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const id = '1';
       const locale = 'en';
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
-      mockPreferredCommunicationMethodRepository.findById.mockReturnValueOnce({
+      mockPreferredCommunicationMethodRepository.findPreferredCommunicationMethodById.mockReturnValueOnce({
         Value: 1,
         Label: {
           LocalizedLabels: [
@@ -194,7 +194,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const dto = service.getLocalizedPreferredCommunicationMethodById(id, locale);
 
       expect(dto).toEqual(mockLocalizedDto);
-      expect(mockPreferredCommunicationMethodRepository.findById).toHaveBeenCalledOnce();
+      expect(mockPreferredCommunicationMethodRepository.findPreferredCommunicationMethodById).toHaveBeenCalledOnce();
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto).toHaveBeenCalledOnce();
       expect(mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto).toHaveBeenCalledOnce();
     });

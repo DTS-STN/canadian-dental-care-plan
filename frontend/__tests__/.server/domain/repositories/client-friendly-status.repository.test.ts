@@ -35,7 +35,7 @@ describe('ClientFriendlyStatusRepositoryImpl', () => {
 
     const repository = new ClientFriendlyStatusRepositoryImpl(mockLogFactory);
 
-    const clientFriendlyStatuses = repository.findAll();
+    const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
 
     expect(clientFriendlyStatuses).toEqual([
       {
@@ -59,7 +59,7 @@ describe('ClientFriendlyStatusRepositoryImpl', () => {
 
     const repository = new ClientFriendlyStatusRepositoryImpl(mockLogFactory);
 
-    const clientFriendlyStatuses = repository.findAll();
+    const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
 
     expect(clientFriendlyStatuses).toEqual([]);
   });
@@ -70,7 +70,7 @@ describe('ClientFriendlyStatusRepositoryImpl', () => {
 
     const repository = new ClientFriendlyStatusRepositoryImpl(mockLogFactory);
 
-    const clientFriendlyStatus = repository.findById('1');
+    const clientFriendlyStatus = repository.findClientFriendlyStatusById('1');
 
     expect(clientFriendlyStatus).toEqual({
       esdc_clientfriendlystatusid: '1',
@@ -85,7 +85,7 @@ describe('ClientFriendlyStatusRepositoryImpl', () => {
 
     const repository = new ClientFriendlyStatusRepositoryImpl(mockLogFactory);
 
-    const clientFriendlyStatus = repository.findById('non-existent-id');
+    const clientFriendlyStatus = repository.findClientFriendlyStatusById('non-existent-id');
 
     expect(clientFriendlyStatus).toBeNull();
   });

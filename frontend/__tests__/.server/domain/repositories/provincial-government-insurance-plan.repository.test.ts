@@ -37,7 +37,7 @@ describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
 
     const repository = new ProvincialGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
 
-    const provincialGovernmentInsurancePlans = repository.findAll();
+    const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
 
     expect(provincialGovernmentInsurancePlans).toEqual([
       {
@@ -63,7 +63,7 @@ describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
 
     const repository = new ProvincialGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
 
-    const provincialGovernmentInsurancePlans = repository.findAll();
+    const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
 
     expect(provincialGovernmentInsurancePlans).toEqual([]);
   });
@@ -74,7 +74,7 @@ describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
 
     const repository = new ProvincialGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
 
-    const provincialGovernmentInsurancePlans = repository.findById('1');
+    const provincialGovernmentInsurancePlans = repository.findProvincialGovernmentInsurancePlanById('1');
 
     expect(provincialGovernmentInsurancePlans).toEqual({
       esdc_governmentinsuranceplanid: '1',
@@ -90,7 +90,7 @@ describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
 
     const repository = new ProvincialGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
 
-    const provincialGovernmentInsurancePlans = repository.findById('non-existent-id');
+    const provincialGovernmentInsurancePlans = repository.findProvincialGovernmentInsurancePlanById('non-existent-id');
 
     expect(provincialGovernmentInsurancePlans).toBeNull();
   });

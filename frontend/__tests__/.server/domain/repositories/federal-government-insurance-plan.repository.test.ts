@@ -35,7 +35,7 @@ describe('FederalGovernmentInsurancePlanRepositoryImpl', () => {
 
     const repository = new FederalGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
 
-    const federalGovernmentInsurancePlans = repository.findAll();
+    const federalGovernmentInsurancePlans = repository.listAllFederalGovernmentInsurancePlans();
 
     expect(federalGovernmentInsurancePlans).toEqual([
       {
@@ -59,7 +59,7 @@ describe('FederalGovernmentInsurancePlanRepositoryImpl', () => {
 
     const repository = new FederalGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
 
-    const federalGovernmentInsurancePlans = repository.findAll();
+    const federalGovernmentInsurancePlans = repository.listAllFederalGovernmentInsurancePlans();
 
     expect(federalGovernmentInsurancePlans).toEqual([]);
   });
@@ -70,9 +70,9 @@ describe('FederalGovernmentInsurancePlanRepositoryImpl', () => {
 
     const repository = new FederalGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
 
-    const federalGovernmentInsurancePlans = repository.findById('1');
+    const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('1');
 
-    expect(federalGovernmentInsurancePlans).toEqual({
+    expect(federalGovernmentInsurancePlan).toEqual({
       esdc_governmentinsuranceplanid: '1',
       esdc_nameenglish: 'First Insurance Plan',
       esdc_namefrench: "Premier plan d'assurance",
@@ -85,8 +85,8 @@ describe('FederalGovernmentInsurancePlanRepositoryImpl', () => {
 
     const repository = new FederalGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
 
-    const federalGovernmentInsurancePlans = repository.findById('non-existent-id');
+    const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('non-existent-id');
 
-    expect(federalGovernmentInsurancePlans).toBeNull();
+    expect(federalGovernmentInsurancePlan).toBeNull();
   });
 });

@@ -61,7 +61,7 @@ describe('PreferredCommunicationMethodRepositoryImpl', () => {
 
     const repository = new PreferredCommunicationMethodRepositoryImpl(mockLogFactory);
 
-    const preferredCommunicationMethods = repository.findAll();
+    const preferredCommunicationMethods = repository.listAllPreferredCommunicationMethods();
 
     expect(preferredCommunicationMethods).toEqual([
       {
@@ -105,7 +105,7 @@ describe('PreferredCommunicationMethodRepositoryImpl', () => {
 
     const repository = new PreferredCommunicationMethodRepositoryImpl(mockLogFactory);
 
-    const preferredCommunicationMethods = repository.findAll();
+    const preferredCommunicationMethods = repository.listAllPreferredCommunicationMethods();
 
     expect(preferredCommunicationMethods).toEqual([]);
   });
@@ -116,7 +116,7 @@ describe('PreferredCommunicationMethodRepositoryImpl', () => {
 
     const repository = new PreferredCommunicationMethodRepositoryImpl(mockLogFactory);
 
-    const preferredCommunicationMethod = repository.findById('1');
+    const preferredCommunicationMethod = repository.findPreferredCommunicationMethodById('1');
 
     expect(preferredCommunicationMethod).toEqual({
       Value: 1,
@@ -141,7 +141,7 @@ describe('PreferredCommunicationMethodRepositoryImpl', () => {
 
     const repository = new PreferredCommunicationMethodRepositoryImpl(mockLogFactory);
 
-    const preferredCommunicationMethod = repository.findById('non-existent-id');
+    const preferredCommunicationMethod = repository.findPreferredCommunicationMethodById('non-existent-id');
 
     expect(preferredCommunicationMethod).toBeNull();
   });

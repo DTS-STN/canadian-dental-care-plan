@@ -50,7 +50,7 @@ export class ClientApplicationServiceImpl implements ClientApplicationService {
   async findClientApplicationBySin(sin: string): Promise<ClientApplicationDto | null> {
     this.log.debug('Get client application by sin');
     this.log.trace('Get client application with sin: [%s]', sin);
-    const clientApplicationEntity = await this.ClientApplicationRepository.findBySin(sin);
+    const clientApplicationEntity = await this.ClientApplicationRepository.findClientApplicationBySin(sin);
     const clientApplicationDto = clientApplicationEntity ? this.ClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity) : null;
     this.log.trace('Returning client application: [%j]', clientApplicationDto);
     return clientApplicationDto;
@@ -58,7 +58,7 @@ export class ClientApplicationServiceImpl implements ClientApplicationService {
 
   async findClientApplicationByPersonalInfo({ firstName, lastName, dateOfBirth, clientNumber }: FindByPersonalInfoSearchCriteria): Promise<ClientApplicationDto | null> {
     this.log.debug('Get client application with first name: [%s], last name: [%s], date of birth: [%s], client number: [%s]', firstName, lastName, dateOfBirth, clientNumber);
-    const clientApplicationEntity = await this.ClientApplicationRepository.findByFirstNameLastNameDobClientNumber({ firstName, lastName, dateOfBirth, clientNumber });
+    const clientApplicationEntity = await this.ClientApplicationRepository.findClientApplicationByCriteria({ firstName, lastName, dateOfBirth, clientNumber });
     const clientApplicationDto = clientApplicationEntity ? this.ClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity) : null;
     this.log.trace('Returning client application: [%j]', clientApplicationDto);
     return clientApplicationDto;

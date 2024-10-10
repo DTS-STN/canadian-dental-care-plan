@@ -10,14 +10,14 @@ export interface ProvinceTerritoryStateRepository {
    * Fetch all province territory state entities.
    * @returns All province territory state entities.
    */
-  findAll(): ProvinceTerritoryStateEntity[];
+  listAllProvinceTerritoryStates(): ProvinceTerritoryStateEntity[];
 
   /**
    * Fetch a province territory state entity by its id.
    * @param id The id of the province territory state entity.
    * @returns The province territory state entity or null if not found.
    */
-  findById(id: string): ProvinceTerritoryStateEntity | null;
+  findProvinceTerritoryStateById(id: string): ProvinceTerritoryStateEntity | null;
 }
 
 @injectable()
@@ -28,7 +28,7 @@ export class ProvinceTerritoryStateRepositoryImpl implements ProvinceTerritorySt
     this.log = logFactory.createLogger('ProvinceTerritoryStateRepositoryImpl');
   }
 
-  findAll(): ProvinceTerritoryStateEntity[] {
+  listAllProvinceTerritoryStates(): ProvinceTerritoryStateEntity[] {
     this.log.debug('Fetching all province territory states');
     const provinceTerritoryStateEntities = provinceTerritoryStateJsonDataSource.value;
 
@@ -41,7 +41,7 @@ export class ProvinceTerritoryStateRepositoryImpl implements ProvinceTerritorySt
     return provinceTerritoryStateEntities;
   }
 
-  findById(id: string): ProvinceTerritoryStateEntity | null {
+  findProvinceTerritoryStateById(id: string): ProvinceTerritoryStateEntity | null {
     this.log.debug('Fetching province territory state with id: [%s]', id);
 
     const provinceTerritoryStateEntities = provinceTerritoryStateJsonDataSource.value;

@@ -10,14 +10,14 @@ export interface PreferredCommunicationMethodRepository {
    * Fetch all preferred communication method entities.
    * @returns All preferred communication method entities.
    */
-  findAll(): PreferredCommunicationMethodEntity[];
+  listAllPreferredCommunicationMethods(): PreferredCommunicationMethodEntity[];
 
   /**
    * Fetch a preferred communication method entity by its id.
    * @param id The id of the preferred communication method entity.
    * @returns The preferred communication method entity or null if not found.
    */
-  findById(id: string): PreferredCommunicationMethodEntity | null;
+  findPreferredCommunicationMethodById(id: string): PreferredCommunicationMethodEntity | null;
 }
 
 @injectable()
@@ -28,7 +28,7 @@ export class PreferredCommunicationMethodRepositoryImpl implements PreferredComm
     this.log = logFactory.createLogger('PreferredCommunicationMethodRepositoryImpl');
   }
 
-  findAll(): PreferredCommunicationMethodEntity[] {
+  listAllPreferredCommunicationMethods(): PreferredCommunicationMethodEntity[] {
     this.log.debug('Fetching all preferred communication methods');
     const preferredCommunicationMethodEntities = preferredCommunicationMethodJsonDataSource.value.at(0)?.OptionSet.Options;
 
@@ -41,7 +41,7 @@ export class PreferredCommunicationMethodRepositoryImpl implements PreferredComm
     return preferredCommunicationMethodEntities;
   }
 
-  findById(id: string): PreferredCommunicationMethodEntity | null {
+  findPreferredCommunicationMethodById(id: string): PreferredCommunicationMethodEntity | null {
     this.log.debug('Fetching preferred communication method with id: [%s]', id);
 
     const preferredCommunicationMethodEntities = preferredCommunicationMethodJsonDataSource.value.at(0)?.OptionSet.Options;

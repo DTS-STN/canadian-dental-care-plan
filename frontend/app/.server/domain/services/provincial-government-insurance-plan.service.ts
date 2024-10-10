@@ -61,7 +61,7 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
 
   private listProvincialGovernmentInsurancePlansImpl(): ReadonlyArray<ProvincialGovernmentInsurancePlanDto> {
     this.log.debug('Get all provincial government insurance plans');
-    const provincialGovernmentInsurancePlanEntities = this.provincialGovernmentInsurancePlanRepository.findAll();
+    const provincialGovernmentInsurancePlanEntities = this.provincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans();
     const provincialGovernmentInsurancePlanDtos = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities);
     this.log.trace('Returning provincial government insurance plans: [%j]', provincialGovernmentInsurancePlanDtos);
     return provincialGovernmentInsurancePlanDtos;
@@ -69,7 +69,7 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
 
   private getProvincialGovernmentInsurancePlanByIdImpl(id: string): ProvincialGovernmentInsurancePlanDto {
     this.log.debug('Get provincial government insurance plan with id: [%s]', id);
-    const provincialGovernmentInsurancePlanEntity = this.provincialGovernmentInsurancePlanRepository.findById(id);
+    const provincialGovernmentInsurancePlanEntity = this.provincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById(id);
 
     if (!provincialGovernmentInsurancePlanEntity) throw new ProvincialGovernmentInsurancePlanNotFoundException(`Provincial government insurance plan with id: [${id}] not found`);
 

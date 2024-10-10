@@ -275,7 +275,7 @@ describe('ClientApplicationServiceImpl', () => {
     it('should find client application by SIN', async () => {
       // Arrange
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
-      mockClientApplicationRepository.findBySin.mockResolvedValue(mockClientApplicationEntity);
+      mockClientApplicationRepository.findClientApplicationBySin.mockResolvedValue(mockClientApplicationEntity);
 
       const mockClientApplicationDtoMapper = mock<ClientApplicationDtoMapper>();
       mockClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto.mockReturnValue(mockClientApplicationDto);
@@ -288,13 +288,13 @@ describe('ClientApplicationServiceImpl', () => {
 
       // Assert
       expect(result).toEqual(mockClientApplicationDto);
-      expect(mockClientApplicationRepository.findBySin).toHaveBeenCalledWith(sin);
+      expect(mockClientApplicationRepository.findClientApplicationBySin).toHaveBeenCalledWith(sin);
       expect(mockClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto).toHaveBeenCalledWith(mockClientApplicationEntity);
     });
 
     it('should return null if client application is not found by SIN', async () => {
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
-      mockClientApplicationRepository.findBySin.mockResolvedValue(null);
+      mockClientApplicationRepository.findClientApplicationBySin.mockResolvedValue(null);
 
       const mockClientApplicationDtoMapper = mock<ClientApplicationDtoMapper>();
 
@@ -306,16 +306,16 @@ describe('ClientApplicationServiceImpl', () => {
 
       // Assert
       expect(result).toBeNull();
-      expect(mockClientApplicationRepository.findBySin).toHaveBeenCalledWith(sin);
+      expect(mockClientApplicationRepository.findClientApplicationBySin).toHaveBeenCalledWith(sin);
       expect(mockClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto).not.toBeCalled();
     });
   });
 
-  describe('findClientApplicationByPersonalInfo', () => {
-    it('should find client application by personal info', async () => {
+  describe('findClientApplicationByCriteria', () => {
+    it('should find client application by criteria', async () => {
       // Arrange
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
-      mockClientApplicationRepository.findByFirstNameLastNameDobClientNumber.mockResolvedValue(mockClientApplicationEntity);
+      mockClientApplicationRepository.findClientApplicationByCriteria.mockResolvedValue(mockClientApplicationEntity);
 
       const mockClientApplicationDtoMapper = mock<ClientApplicationDtoMapper>();
       mockClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto.mockReturnValue(mockClientApplicationDto);
@@ -334,14 +334,14 @@ describe('ClientApplicationServiceImpl', () => {
 
       // Assert
       expect(result).toEqual(mockClientApplicationDto);
-      expect(mockClientApplicationRepository.findByFirstNameLastNameDobClientNumber).toHaveBeenCalledWith(searchCriteria);
+      expect(mockClientApplicationRepository.findClientApplicationByCriteria).toHaveBeenCalledWith(searchCriteria);
       expect(mockClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto).toHaveBeenCalledWith(mockClientApplicationEntity);
     });
 
-    it('should return null if client application is not found by personal info', async () => {
+    it('should return null if client application is not found by criteria', async () => {
       // Arrange
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
-      mockClientApplicationRepository.findByFirstNameLastNameDobClientNumber.mockResolvedValue(null);
+      mockClientApplicationRepository.findClientApplicationByCriteria.mockResolvedValue(null);
 
       const mockClientApplicationDtoMapper = mock<ClientApplicationDtoMapper>();
 
@@ -359,7 +359,7 @@ describe('ClientApplicationServiceImpl', () => {
 
       // Assert
       expect(result).toBeNull();
-      expect(mockClientApplicationRepository.findByFirstNameLastNameDobClientNumber).toHaveBeenCalledWith(searchCriteria);
+      expect(mockClientApplicationRepository.findClientApplicationByCriteria).toHaveBeenCalledWith(searchCriteria);
       expect(mockClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto).not.toBeCalled();
     });
   });
