@@ -80,7 +80,7 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
 
   private listPreferredLanguagesImpl(): ReadonlyArray<PreferredLanguageDto> {
     this.log.debug('Get all preferred languages');
-    const preferredLanguageEntities = this.preferredLanguageRepository.findAll();
+    const preferredLanguageEntities = this.preferredLanguageRepository.findAllPreferredLanguages();
     const preferredLanguageDtos = this.preferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities);
     this.log.trace('Returning preferred languages: [%j]', preferredLanguageDtos);
     return preferredLanguageDtos;
@@ -88,7 +88,7 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
 
   private getPreferredLanguageByIdImpl(id: string): PreferredLanguageDto {
     this.log.debug('Get preferred language with id: [%s]', id);
-    const preferredLanguageEntity = this.preferredLanguageRepository.findById(id);
+    const preferredLanguageEntity = this.preferredLanguageRepository.findPreferredLanguageById(id);
 
     if (!preferredLanguageEntity) {
       this.log.error('Preferred language with id: [%s] not found', id);

@@ -10,14 +10,14 @@ export interface PreferredLanguageRepository {
    * Fetch all preferred language entities.
    * @returns All preferred languages entities.
    */
-  findAll(): PreferredLanguageEntity[];
+  findAllPreferredLanguages(): PreferredLanguageEntity[];
 
   /**
    * Fetch a preferred language entity by its id.
    * @param id The id of the preferred language entity.
    * @returns The preferred language entity or null if not found.
    */
-  findById(id: string): PreferredLanguageEntity | null;
+  findPreferredLanguageById(id: string): PreferredLanguageEntity | null;
 }
 
 @injectable()
@@ -28,7 +28,7 @@ export class PreferredLanguageRepositoryImpl implements PreferredLanguageReposit
     this.log = logFactory.createLogger('PreferredLanguageRepositoryImpl');
   }
 
-  findAll(): PreferredLanguageEntity[] {
+  findAllPreferredLanguages(): PreferredLanguageEntity[] {
     this.log.debug('Fetching all preferred languages');
     const preferredLanguageEntities = preferredLanguageJsonDataSource.value.at(0)?.OptionSet.Options;
 
@@ -41,7 +41,7 @@ export class PreferredLanguageRepositoryImpl implements PreferredLanguageReposit
     return preferredLanguageEntities;
   }
 
-  findById(id: string): PreferredLanguageEntity | null {
+  findPreferredLanguageById(id: string): PreferredLanguageEntity | null {
     this.log.debug('Fetching preferred language with id: [%s]', id);
 
     const preferredLanguageEntities = preferredLanguageJsonDataSource.value.at(0)?.OptionSet.Options;

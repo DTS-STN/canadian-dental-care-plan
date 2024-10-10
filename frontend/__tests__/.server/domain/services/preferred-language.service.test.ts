@@ -38,7 +38,7 @@ describe('PreferredLanguageServiceImpl', () => {
   describe('listPreferredLanguages', () => {
     it('fetches all preferred languages', () => {
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
-      mockPreferredLanguageRepository.findAll.mockReturnValueOnce([
+      mockPreferredLanguageRepository.findAllPreferredLanguages.mockReturnValueOnce([
         {
           Value: 1033,
           Label: {
@@ -72,7 +72,7 @@ describe('PreferredLanguageServiceImpl', () => {
       const dtos = service.listPreferredLanguages();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockPreferredLanguageRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageRepository.findAllPreferredLanguages).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos).toHaveBeenCalledOnce();
     });
   });
@@ -81,7 +81,7 @@ describe('PreferredLanguageServiceImpl', () => {
     it('fetches preferred language by id', () => {
       const id = '1033';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
-      mockPreferredLanguageRepository.findById.mockReturnValueOnce({
+      mockPreferredLanguageRepository.findPreferredLanguageById.mockReturnValueOnce({
         Value: 1033,
         Label: {
           LocalizedLabels: [
@@ -101,21 +101,21 @@ describe('PreferredLanguageServiceImpl', () => {
       const dto = service.getPreferredLanguageById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageRepository.findPreferredLanguageById).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).toHaveBeenCalledOnce();
     });
 
     it('fetches preferred language by id by id throws not found exception', () => {
       const id = '1033';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
-      mockPreferredLanguageRepository.findById.mockReturnValueOnce(null);
+      mockPreferredLanguageRepository.findPreferredLanguageById.mockReturnValueOnce(null);
 
       const mockPreferredLanguageDtoMapper = mock<PreferredLanguageDtoMapper>();
 
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       expect(() => service.getPreferredLanguageById(id)).toThrow(PreferredLanguageNotFoundException);
-      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageRepository.findPreferredLanguageById).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).not.toHaveBeenCalled();
     });
   });
@@ -124,7 +124,7 @@ describe('PreferredLanguageServiceImpl', () => {
     it('fetches and sorts all localized preferred languages', () => {
       const locale = 'en';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
-      mockPreferredLanguageRepository.findAll.mockReturnValueOnce([
+      mockPreferredLanguageRepository.findAllPreferredLanguages.mockReturnValueOnce([
         {
           Value: 1036,
           Label: {
@@ -164,7 +164,7 @@ describe('PreferredLanguageServiceImpl', () => {
       const dtos = service.listAndSortLocalizedPreferredLanguages(locale);
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockPreferredLanguageRepository.findAll).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageRepository.findAllPreferredLanguages).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos).toHaveBeenCalledOnce();
     });
@@ -175,7 +175,7 @@ describe('PreferredLanguageServiceImpl', () => {
       const id = '1033';
       const locale = 'en';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
-      mockPreferredLanguageRepository.findById.mockReturnValueOnce({
+      mockPreferredLanguageRepository.findPreferredLanguageById.mockReturnValueOnce({
         Value: 1033,
         Label: {
           LocalizedLabels: [
@@ -197,7 +197,7 @@ describe('PreferredLanguageServiceImpl', () => {
       const dto = service.getLocalizedPreferredLanguageById(id, locale);
 
       expect(dto).toEqual(mockLocalizedDto);
-      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledOnce();
+      expect(mockPreferredLanguageRepository.findPreferredLanguageById).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).toHaveBeenCalledOnce();
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageDtoToPreferredLanguageLocalizedDto).toHaveBeenCalledOnce();
     });
