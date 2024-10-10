@@ -8,3 +8,4 @@ export * from './preferred-communication-method.repository';
 export * from './preferred-language.repository';
 export * from './province-territory-state.repository';
 export * from './provincial-government-insurance-plan.repository';
+export * from './benefit-renewal.repository';

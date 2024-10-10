@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { db } from '~/mocks/db';
 import type { BenefitApplicationResponse } from '~/schemas/benefit-application-service-schemas.server';
 import { benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
+import { benefitRenewalRequestSchema } from '~/schemas/benefit-renewal-service-schemas.server';
+import type { BenefitRenewalResponse } from '~/schemas/benefit-renewal-service-schemas.server';
 import { getLogger } from '~/utils/logging.server';
 
 const sinIdSchema = z.object({
@@ -198,6 +200,39 @@ export function getPowerPlatformApiMockHandlers() {
       };
 
       return HttpResponse.json(mockBenefitApplicationResponse);
+    }),
+
+    /**
+     * Handler for POST request to submit renewal to Power Platform
+     */
+    http.post('https://api.example.com/dental-care/applicant-information/dts/v1/benefit-renewal', async ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+
+      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
+      if (!subscriptionKey) {
+        return new HttpResponse('Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.', { status: 401 });
+      }
+
+      const requestBody = await request.json();
+      const parsedBenefitRenewalRequest = await benefitRenewalRequestSchema.safeParseAsync(requestBody);
+
+      if (!parsedBenefitRenewalRequest.success) {
+        log.debug('Invalid request body [%j]', requestBody);
+        return new HttpResponse('Invalid request body!', { status: 400 });
+      }
+
+      const mockBenefitRenewalResponse: BenefitRenewalResponse = {
+        BenefitRenewal: {
+          BenefitRenewalIdentification: [
+            {
+              IdentificationID: '2476124092174',
+              IdentificationCategoryText: 'Confirmation Number',
+            },
+          ],
+        },
+      };
+
+      return HttpResponse.json(mockBenefitRenewalResponse);
     }),
   ];
 }
