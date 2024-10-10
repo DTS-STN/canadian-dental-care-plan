@@ -86,7 +86,7 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
 
   private getClientFriendlyStatusByIdImpl(id: string): ClientFriendlyStatusDto {
     this.log.debug('Get client friendly status with id: [%s]', id);
-    const clientFriendlyStatusEntity = this.clientFriendlyStatusRepository.findById(id);
+    const clientFriendlyStatusEntity = this.clientFriendlyStatusRepository.findClientFriendlyStatusById(id);
 
     if (!clientFriendlyStatusEntity) {
       this.log.error('Client friendly status with id: [%s] not found', id);

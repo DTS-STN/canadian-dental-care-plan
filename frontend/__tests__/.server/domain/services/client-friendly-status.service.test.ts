@@ -34,7 +34,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
     it('fetches client friendly status by id', () => {
       const id = '1';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
-      mockClientFriendlyStatusRepository.findById.mockReturnValueOnce({
+      mockClientFriendlyStatusRepository.findClientFriendlyStatusById.mockReturnValueOnce({
         esdc_clientfriendlystatusid: '1',
         esdc_descriptionenglish: 'You have qualified for the Canadian Dental Care Plan.',
         esdc_descriptionfrench: 'Vous êtes admissible au Régime canadien de soins dentaires.',
@@ -54,21 +54,21 @@ describe('ClientFriendlyStatusServiceImpl', () => {
       const dto = service.getClientFriendlyStatusById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledOnce();
+      expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).toHaveBeenCalledOnce();
     });
 
     it('fetches client friendly status by id throws not found exception', () => {
       const id = '1033';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
-      mockClientFriendlyStatusRepository.findById.mockReturnValueOnce(null);
+      mockClientFriendlyStatusRepository.findClientFriendlyStatusById.mockReturnValueOnce(null);
 
       const mockClientFriendlyStatusDtoMapper = mock<ClientFriendlyStatusDtoMapper>();
 
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
       expect(() => service.getClientFriendlyStatusById(id)).toThrow(ClientFriendlyStatusNotFoundException);
-      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledOnce();
+      expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).not.toHaveBeenCalled();
     });
   });
@@ -77,7 +77,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
     it('fetches localized client friendly status by id', () => {
       const id = '1';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
-      mockClientFriendlyStatusRepository.findById.mockReturnValueOnce({
+      mockClientFriendlyStatusRepository.findClientFriendlyStatusById.mockReturnValueOnce({
         esdc_clientfriendlystatusid: '1',
         esdc_descriptionenglish: 'You have qualified for the Canadian Dental Care Plan.',
         esdc_descriptionfrench: 'Vous êtes admissible au Régime canadien de soins dentaires.',
@@ -93,21 +93,21 @@ describe('ClientFriendlyStatusServiceImpl', () => {
       const dto = service.getLocalizedClientFriendlyStatusById(id, 'en');
 
       expect(dto).toEqual(mockDto);
-      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledOnce();
+      expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto).toHaveBeenCalledOnce();
     });
 
     it('fetches localized client friendly status by id throws not found exception', () => {
       const id = '1033';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
-      mockClientFriendlyStatusRepository.findById.mockReturnValueOnce(null);
+      mockClientFriendlyStatusRepository.findClientFriendlyStatusById.mockReturnValueOnce(null);
 
       const mockClientFriendlyStatusDtoMapper = mock<ClientFriendlyStatusDtoMapper>();
 
       const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
       expect(() => service.getClientFriendlyStatusById(id)).toThrow(ClientFriendlyStatusNotFoundException);
-      expect(mockClientFriendlyStatusRepository.findById).toHaveBeenCalledOnce();
+      expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto).not.toHaveBeenCalled();
     });
   });

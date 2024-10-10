@@ -10,14 +10,14 @@ export interface ClientFriendlyStatusRepository {
    * Fetch all client-friendly status entities.
    * @returns All client-friendly status entities.
    */
-  findAll(): ClientFriendlyStatusEntity[];
+  findAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[];
 
   /**
    * Fetch a client-friendly status entity by its id.
    * @param id The id of the client-friendly status entity.
    * @returns The client-friendly status entity or null if not found.
    */
-  findById(id: string): ClientFriendlyStatusEntity | null;
+  findClientFriendlyStatusById(id: string): ClientFriendlyStatusEntity | null;
 }
 
 @injectable()
@@ -28,7 +28,7 @@ export class ClientFriendlyStatusRepositoryImpl implements ClientFriendlyStatusR
     this.log = logFactory.createLogger('ClientFriendlyStatusRepositoryImpl');
   }
 
-  findAll(): ClientFriendlyStatusEntity[] {
+  findAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[] {
     this.log.debug('Fetching all client-friendly statuses');
     const clientFriendlyStatusEntities = clientFriendlyStatusJsonDataSource.value;
 
@@ -41,7 +41,7 @@ export class ClientFriendlyStatusRepositoryImpl implements ClientFriendlyStatusR
     return clientFriendlyStatusEntities;
   }
 
-  findById(id: string): ClientFriendlyStatusEntity | null {
+  findClientFriendlyStatusById(id: string): ClientFriendlyStatusEntity | null {
     this.log.debug('Fetching client-friendly status with id: [%s]', id);
 
     const clientFriendlyStatusEntities = clientFriendlyStatusJsonDataSource.value;
