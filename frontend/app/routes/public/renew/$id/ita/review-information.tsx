@@ -155,7 +155,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 export async function action({ context: { serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/ita/review-information');
 
-  loadRenewItaStateForReview({ params, request, session });
+  const state = loadRenewItaStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
@@ -184,15 +184,11 @@ export async function action({ context: { serviceProvider, session }, params, re
     }
   }
 
-  // todo create and call renewal application service and redirect to /ita/confirmation on success
-  // const benefitApplicationService = getBenefitApplicationService();
-  // const benefitApplicationRequest = toBenefitApplicationRequestFromApplyAdultState(state);
-  // const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
-  // const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
+  const submissionInfo = await serviceProvider.getBenefitRenewalService().createBenefitRenewal(state);
 
-  // saveRenewState({ params, session, state: { submissionInfo } });
+  saveRenewState({ params, session, state: { submissionInfo } });
 
-  // return redirect(getPathById('public/renew/$id/ita/confirmation', params));
+  return redirect(getPathById('public/renew/$id/ita/confirmation', params));
 }
 
 export default function RenewItaReviewInformation() {

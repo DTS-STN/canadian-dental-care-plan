@@ -4,6 +4,7 @@ import { injectable } from 'inversify';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type {
   AddressValidationService,
+  BenefitRenewalService,
   ClientApplicationService,
   ClientFriendlyStatusService,
   CountryService,
@@ -17,6 +18,7 @@ import type {
 
 export interface ContainerServiceProvider {
   getAddressValidationService(): AddressValidationService;
+  getBenefitRenewalService(): BenefitRenewalService;
   getClientApplicationService(): ClientApplicationService;
   getClientFriendlyStatusService(): ClientFriendlyStatusService;
   getCountryService(): CountryService;
@@ -34,6 +36,10 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
 
   getAddressValidationService(): AddressValidationService {
     return this.container.get<AddressValidationService>(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE);
+  }
+
+  getBenefitRenewalService(): BenefitRenewalService {
+    return this.container.get<BenefitRenewalService>(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_SERVICE);
   }
 
   getClientApplicationService(): ClientApplicationService {
