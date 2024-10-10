@@ -1,4 +1,4 @@
-# Welcome to Remix!
+# Welcome to Remix
 
 - [Remix Docs](https://remix.run/docs)
 
@@ -39,44 +39,96 @@ Make sure to deploy the output of `remix build`
 
 ## Development Guideline
 
-### Service Method Naming Conventions: `find` vs `get` vs `list`
+### Method Naming Conventions (Repository and Service)
 
-When implementing service methods, it is important to use consistent and descriptive names. Below are the guidelines for choosing between `find`, `get`, and `list` in method names:
+This document provides guidelines for naming repository methods in TypeScript Node.js applications, focusing on consistency, clarity, immutability, and domain-specific terminology.
 
-#### 1. **`find`**
+#### General Principles
 
-- **Purpose:** Use `find` when searching or querying for one or more items based on specific criteria. This method may return `null`, `undefined`, or an empty result if no match is found.
-- **Usage:** When the existence of the result is **not guaranteed**.
-- **Examples:**
-  - `findUserByEmail()`: Searches for a user by email and may return `null` if not found.
-  - `findOrdersByStatus()`: Queries for orders with a particular status.
+- **Clarity:** Method names should clearly convey their intent and be easily understandable to developers unfamiliar with the code.
+- **Consistency:** Adhere to a consistent pattern for method names across the repository layer.
+- **Domain Language:** Use domain-specific terminology to improve readability and relevance to the business logic.
+- **CRUD Operations:** Follow standard CRUD method prefixes where applicable (e.g., `get`, `create`, `update`, `delete`).
+- **Immutability:** Consider using immutable objects and arrays to avoid unintended side effects. Utilize TypeScript's readonly properties where appropriate.
+- **Error Handling:** Consider whether methods should throw an error or return `null` when no result is found.
 
-#### 2. **`get`**
+#### Method Naming Guidelines
 
-- **Purpose:** Use `get` when retrieving data that is expected to exist. This method typically retrieves a resource by a known identifier or key. If the resource is not found, it could result in an error or an exception.
-- **Usage:** When the result is **guaranteed to exist** (or should exist).
-- **Examples:**
-  - `getUserById()`: Retrieves a user by their ID and expects that user to exist.
-  - `getConfigValue()`: Fetches a configuration value that should be defined.
+##### Retrieval (Read) Operations
 
-#### 3. **`list`**
+1. **`get`:** Used to retrieve a single entity or value that is expected to exist. If not found, it may throw an error or handle it based on use-case.
 
-- **Purpose:** Use `list` when returning a collection or list of items. The result will always be a collection (which may be empty), and the method is generally used for retrieving multiple records or all records.
-- **Usage:** When returning a **set of items**, typically without any strict filtering.
-- **Examples:**
-  - `listAllUsers()`: Retrieves a list of all users in the system.
-  - `listProductsByCategory()`: Returns products within a given category.
+   - Repository Example: `getUserById(id: number): Promise<UserEntity>`
 
-### Summary of Naming Conventions
+2. **`find`:** Used when searching for one or more entities where results might not be found. These methods typically return `null` or `undefined` for single items, or an empty list for collections.
 
-| Method | Use Case                                                 | Expected Result                                     |
-| ------ | -------------------------------------------------------- | --------------------------------------------------- |
-| `find` | Searching or querying for an item that **may not exist** | Single item or collection, possibly `null` or empty |
-| `get`  | Retrieving an item that is **expected to exist**         | Single item or throws an error if not found         |
-| `list` | Retrieving a **collection of items**                     | A collection (empty if no items match)              |
+   - Repository Example: `findUserByEmail(email: string): Promise<UserEntity | null>`
 
-#### Additional Notes
+3. **`list`:** Used to retrieve collections without specific filtering criteria, typically returning a full list of entities.
+   - Repository Example: `listAllUsers(): Promise<UserEntity[]>`
 
-- Methods using `find` should handle the possibility of no results and return `null`, `undefined`, or an empty collection as appropriate.
-- Methods using `get` may throw an exception if the resource is not found. Ensure that error handling is in place.
-- Methods using `list` should always return a collection (e.g., an array), even if no records match the query.
+##### Creation (Create) Operations
+
+- **`create`:** Used for creating a new entity. Methods should clearly indicate if any side effects occur, such as persisting to a database.
+  - Repository Example: `createUser(user: UserEntity): Promise<UserEntity>`
+
+##### Update Operations
+
+- **`update`:** Used for updating an existing entity. It’s important to ensure proper type safety, especially if partial updates are allowed.
+  - Repository Example: `updateUserDetails(id: number, userDetails: Partial<UserEntity>): Promise<UserEntity>`
+
+##### Deletion Operations
+
+- **`delete`:** Used to remove an entity, usually returning `void` or a boolean indicating success.
+  - Repository Example: `deleteUser(id: number): Promise<void>`
+
+#### Additional Considerations
+
+- **Asynchronous Operations:** Most repository methods in a Node.js context will be asynchronous. Use `async/await` or promises, ensuring all returned data is properly handled in an async context.
+
+- **Immutability:** To ensure that objects and arrays remain immutable, consider returning readonly objects or using libraries such as Immutable.js for deeper immutability. This prevents unintended mutations that may cause bugs and ensures data integrity.
+
+- **Custom Methods:** Incorporate domain-specific custom methods where needed, ensuring the method names still adhere to the `get`, `find`, `list`, `create`, `update`, and `delete` convention.
+
+#### Example
+
+##### Repository Interface
+
+```typescript
+import { UserEntity } from '../entities/user.entity';
+
+export interface UserRepository {
+  // Read Operations
+  getUserById(id: number): Promise<UserEntity>;
+  findUserByEmail(email: string): Promise<UserEntity | null>;
+  findUsersByRole(role: string): Promise<UserEntity[]>;
+  listAllUsers(): Promise<UserEntity[]>;
+
+  // Create Operation
+  createUser(user: UserEntity): Promise<UserEntity>;
+
+  // Update Operation
+  updateUserDetails(id: number, userDetails: Partial<UserEntity>): Promise<UserEntity>;
+
+  // Delete Operation
+  deleteUser(id: number): Promise<void>;
+
+  // Domain-Specific Methods
+  findActiveUsersByDepartment(department: string): Promise<UserEntity[]>;
+  findUsersByAgeRange(minAge: number, maxAge: number): Promise<UserEntity[]>;
+}
+```
+
+### Key Points to Remember
+
+1. **Use** `get` for retrieving entities that are expected to exist, often throwing an error if not found.
+
+2. **Use** `find` when there is uncertainty about whether the entity exists, allowing for `null` results or empty collections.
+
+3. **Use** `list` for retrieving broad, unfiltered collections of entities.
+
+4. **Immutability:** Where appropriate, return immutable objects and arrays or use tools to enforce immutability.
+
+5. **TypeScript's Types:** Utilize TypeScript’s type system fully to express precise types for arguments and return values.
+
+6. **Error Handling:** Consider whether the method should throw exceptions (for `get`) or return `null` (for `find`).
