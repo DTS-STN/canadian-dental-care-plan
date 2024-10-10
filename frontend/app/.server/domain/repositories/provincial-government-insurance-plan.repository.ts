@@ -10,14 +10,14 @@ export interface ProvincialGovernmentInsurancePlanRepository {
    * Fetch all provincial government insurance plan entities.
    * @returns All provincial government insurance plan entities.
    */
-  findAll(): ProvincialGovernmentInsurancePlanEntity[];
+  findAllProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanEntity[];
 
   /**
    * Fetch a provincial government insurance plan entity by its id.
    * @param id The id of the provincial government insurance plan entity.
    * @returns The provincial government insurance plan entity or null if not found.
    */
-  findById(id: string): ProvincialGovernmentInsurancePlanEntity | null;
+  findProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanEntity | null;
 }
 
 @injectable()
@@ -28,7 +28,7 @@ export class ProvincialGovernmentInsurancePlanRepositoryImpl implements Provinci
     this.log = logFactory.createLogger('ProvincialGovernmentInsurancePlanRepositoryImpl');
   }
 
-  findAll(): ProvincialGovernmentInsurancePlanEntity[] {
+  findAllProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanEntity[] {
     this.log.debug('Fetching all provincial government insurance plans');
     const provincialGovernmentInsurancePlanEntities = provincialGovernmentInsurancePlanJsonDataSource.value;
 
@@ -41,7 +41,7 @@ export class ProvincialGovernmentInsurancePlanRepositoryImpl implements Provinci
     return provincialGovernmentInsurancePlanEntities;
   }
 
-  findById(id: string): ProvincialGovernmentInsurancePlanEntity | null {
+  findProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanEntity | null {
     this.log.debug('Fetching provincial government insurance plan with id: [%s]', id);
 
     const provincialGovernmentInsurancePlanEntities = provincialGovernmentInsurancePlanJsonDataSource.value;
