@@ -6,7 +6,7 @@ import type { ClientApplicationEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 
-export interface FindByFirstNameLastNameDobClientNumberSearchCriteria {
+export interface FindClientApplicationCriteria {
   /** The first name of the client. */
   firstName: string;
   /** The last name of the client. */
@@ -17,6 +17,9 @@ export interface FindByFirstNameLastNameDobClientNumberSearchCriteria {
   clientNumber: string;
 }
 
+/**
+ * A repository that provides access to client application data.
+ */
 export interface ClientApplicationRepository {
   /**
    * Finds client application data by Social Insurance Number (SIN).
@@ -24,14 +27,15 @@ export interface ClientApplicationRepository {
    * @param sin The Social Insurance Number of the client.
    * @returns A Promise that resolves to the client application data if found, or `null` if not found.
    */
-  findBySin(sin: string): Promise<ClientApplicationEntity | null>;
+  findClientApplicationBySin(sin: string): Promise<ClientApplicationEntity | null>;
+
   /**
    * Finds client application data by first name, last name, date of birth, and client number.
    *
-   * @param searchCriteria An object containing the search criteria.
+   * @param criteria An object containing the search criteria.
    * @returns A Promise that resolves to the client application data if found, or `null` if not found.
    */
-  findByFirstNameLastNameDobClientNumber(searchCriteria: FindByFirstNameLastNameDobClientNumberSearchCriteria): Promise<ClientApplicationEntity | null>;
+  findClientApplicationByCriteria(criteria: FindClientApplicationCriteria): Promise<ClientApplicationEntity | null>;
 }
 
 @injectable()
@@ -45,7 +49,7 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
     this.log = logFactory.createLogger('ClientApplicationRepositoryImpl');
   }
 
-  async findBySin(sin: string): Promise<ClientApplicationEntity | null> {
+  async findClientApplicationBySin(sin: string): Promise<ClientApplicationEntity | null> {
     this.log.trace('Fetching client application for sin [%s]', sin);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/v1/client-application`);
@@ -86,9 +90,9 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
     return data;
   }
 
-  async findByFirstNameLastNameDobClientNumber(searchCriteria: FindByFirstNameLastNameDobClientNumberSearchCriteria): Promise<ClientApplicationEntity | null> {
-    this.log.trace('Fetching client application for searchCriteria [%j]', searchCriteria);
-    const { firstName, lastName, dateOfBirth, clientNumber } = searchCriteria;
+  async findClientApplicationByCriteria(criteria: FindClientApplicationCriteria): Promise<ClientApplicationEntity | null> {
+    this.log.trace('Fetching client application for criteria [%j]', criteria);
+    const { firstName, lastName, dateOfBirth, clientNumber } = criteria;
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/v1/client-application_fnlndob`);
     const clientApplicationRequest = {
