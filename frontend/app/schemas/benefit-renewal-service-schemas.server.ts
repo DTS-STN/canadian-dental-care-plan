@@ -122,8 +122,8 @@ export const benefitRenewalRequestSchema = z.object({
 export type BenefitRenewalRequest = z.infer<typeof benefitRenewalRequestSchema>;
 
 export const benefitRenewalResponseSchema = z.object({
-  BenefitApplication: z.object({
-    BenefitApplicationIdentification: z.array(
+  BenefitRenewal: z.object({
+    BenefitRenewalIdentification: z.array(
       z.object({
         IdentificationID: z.string(),
         IdentificationCategoryText: z.string(),
