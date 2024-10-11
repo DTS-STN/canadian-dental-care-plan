@@ -1,15 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
-import { DebugPayload } from '~/components/debug-payload';
+import { Address } from '~/components/address';
+import { Button } from '~/components/buttons';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
@@ -23,7 +25,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { isAllValidInputCharacters } from '~/utils/string-utils';
+import { isAllValidInputCharacters, randomString } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
@@ -58,7 +60,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   };
 }
 
-export async function action({ context: { configProvider, session }, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, request }: ActionFunctionArgs) {
   featureEnabled('address-validation');
 
   if (request.method !== 'POST') {
@@ -67,38 +69,39 @@ export async function action({ context: { configProvider, session }, request }: 
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = configProvider.getServerConfig();
+  const locale = getLocale(request);
 
   const addressSchema = z
     .object({
       address: z.string().trim().min(1, t('address-validation:error-message.address-required')).max(30).refine(isAllValidInputCharacters, t('address-validation:error-message.characters-valid')),
       apartment: z.string().trim().max(30).refine(isAllValidInputCharacters, t('address-validation:error-message.characters-valid')).optional(),
       country: z.string().trim().min(1, t('address-validation:error-message.country-required')),
-      province: z.string().trim().min(1, t('address-validation:error-message.province-required')).optional(),
+      provinceState: z.string().trim().min(1, t('address-validation:error-message.province-state-required')).optional(),
       city: z.string().trim().min(1, t('address-validation:error-message.city-required')).max(100).refine(isAllValidInputCharacters, t('address-validation:error-message.characters-valid')),
-      postalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('address-validation:error-message.characters-valid')).optional(),
+      postalZipCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('address-validation:error-message.characters-valid')).optional(),
     })
     .superRefine((val, ctx) => {
       if (val.country === CANADA_COUNTRY_ID || val.country === USA_COUNTRY_ID) {
-        if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.province-required'), path: ['province'] });
+        if (!val.provinceState || validator.isEmpty(val.provinceState)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.province-state-required'), path: ['province'] });
         }
-        if (!val.postalCode || validator.isEmpty(val.postalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.postal-code-required'), path: ['postalCode'] });
-        } else if (!isValidPostalCode(val.country, val.postalCode)) {
-          const message = val.country === CANADA_COUNTRY_ID ? t('address-validation:error-message.postal-code-valid') : t('address-validation:error-message.zip-code-valid');
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['postalCode'] });
-        } else if (val.country === CANADA_COUNTRY_ID && val.province && !isValidCanadianPostalCode(val.province, val.postalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.invalid-postal-code-for-province'), path: ['postalCode'] });
+        if (!val.postalZipCode || validator.isEmpty(val.postalZipCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.postal-zip-code-required'), path: ['postalZipCode'] });
+        } else if (!isValidPostalCode(val.country, val.postalZipCode)) {
+          const message = val.country === CANADA_COUNTRY_ID ? t('address-validation:error-message.postal-zip-code-valid') : t('address-validation:error-message.zip-code-valid');
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['postalZipCode'] });
+        } else if (val.country === CANADA_COUNTRY_ID && val.provinceState && !isValidCanadianPostalCode(val.provinceState, val.postalZipCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.invalid-postal-zip-code-for-province'), path: ['postalZipCode'] });
         }
       }
 
-      if (val.country && val.country !== CANADA_COUNTRY_ID && val.postalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.postalCode)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.invalid-postal-code-for-country'), path: ['country'] });
+      if (val.country && val.country !== CANADA_COUNTRY_ID && val.postalZipCode && isValidPostalCode(CANADA_COUNTRY_ID, val.postalZipCode)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.invalid-postal-zip-code-for-country'), path: ['country'] });
       }
     })
     .transform((val) => ({
       ...val,
-      postalCode: val.country && val.postalCode ? formatPostalCode(val.country, val.postalCode) : val.postalCode,
+      postalZipCode: val.country && val.postalZipCode ? formatPostalCode(val.country, val.postalZipCode) : val.postalZipCode,
     }));
 
   const formData = await request.formData();
@@ -113,10 +116,10 @@ export async function action({ context: { configProvider, session }, request }: 
   const data = {
     address: String(formData.get('address') ?? ''),
     apartment: formData.get('apartment') ? String(formData.get('apartment')) : undefined,
-    country: String(formData.get('country') ?? ''),
-    province: formData.get('province') ? String(formData.get('province')) : undefined,
     city: String(formData.get('city') ?? ''),
-    postalCode: formData.get('postalCode') ? String(formData.get('postalCode')) : undefined,
+    country: String(formData.get('country') ?? ''),
+    postalZipCode: formData.get('postalZipCode') ? String(formData.get('postalZipCode')) : undefined,
+    provinceState: formData.get('province') ? String(formData.get('province')) : undefined,
   };
 
   const parsedDataResult = addressSchema.safeParse(data);
@@ -128,44 +131,81 @@ export async function action({ context: { configProvider, session }, request }: 
     } as const);
   }
 
+  // Get country and provinceState from services
+  const parsedAddress = {
+    address: parsedDataResult.data.address,
+    apartment: parsedDataResult.data.apartment,
+    city: parsedDataResult.data.city,
+    country: serviceProvider.getCountryService().getLocalizedCountryById(parsedDataResult.data.country, locale).name,
+    postalZipCode: parsedDataResult.data.postalZipCode,
+    provinceState: parsedDataResult.data.provinceState && serviceProvider.getProvinceTerritoryStateService().getLocalizedProvinceTerritoryStateById(parsedDataResult.data.provinceState, locale).abbr,
+  };
+
   return {
-    status: 'valid-input',
-    address: parsedDataResult.data,
+    status: 'valid-address',
+    parsedAddress,
   } as const;
 }
 
 export default function AddressValidationRoute() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, countries, csrfToken, provinceTerritoryStates, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
-  const fetcher = useFetcher<typeof action>();
+  const formElementRef = useRef<HTMLFormElement>(null);
+  const [formKey, setFormKey] = useState(randomString(16));
+  const fetcher = useFetcher<typeof action>({ key: formKey });
   const isSubmitting = fetcher.state !== 'idle';
   const [selectedCountry, setSelectedCountry] = useState(CANADA_COUNTRY_ID);
-  const [countryProvinceTerritoryStates, setCountryProvinceTerritoryStates] = useState<typeof provinceTerritoryStates>(
-    provinceTerritoryStates.filter(({ countryId }) => {
-      return countryId === selectedCountry;
-    }),
-  );
+  const [countryProvinceTerritoryStates, setCountryProvinceTerritoryStates] = useState(() => {
+    return provinceTerritoryStates.filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
+  });
+  const [validAddressDialogOpen, setValidAddressDialogOpen] = useState(false);
 
   const errors = fetcher.data?.status === 'error' ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'address',
     apartment: 'apartment',
-    province: 'province',
-    country: 'country',
     city: 'city',
-    postalCode: 'postal-code',
+    country: 'country',
+    postalZipCode: 'postal-zip-code',
+    provinceState: 'province-state',
   });
 
   useEffect(() => {
-    const filteredProvinceTerritoryStates = countryProvinceTerritoryStates.filter(({ countryId }) => {
-      return countryId === selectedCountry;
-    });
-    setCountryProvinceTerritoryStates(filteredProvinceTerritoryStates);
-  }, [selectedCountry, countryProvinceTerritoryStates]);
+    setValidAddressDialogOpen(fetcher.data?.status === 'valid-address');
+  }, [fetcher.data]);
 
-  const countryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
-    setSelectedCountry(event.currentTarget.value);
-  };
+  function onCountryChangeHandler(event: React.SyntheticEvent<HTMLSelectElement>) {
+    const country = event.currentTarget.value;
+    setSelectedCountry(country);
+    setCountryProvinceTerritoryStates(countryProvinceTerritoryStates.filter(({ countryId }) => countryId === country));
+  }
+
+  function onDialogOpenChangeHandler(open: boolean) {
+    if (open) {
+      submitForm();
+    } else {
+      closeDialog();
+    }
+  }
+
+  function closeDialog() {
+    setValidAddressDialogOpen(false);
+  }
+
+  function submitForm() {
+    if (formElementRef.current) {
+      fetcher.submit(formElementRef.current, { method: 'post' });
+    }
+  }
+
+  function onResetClickHandler(event: React.SyntheticEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    setFormKey(randomString(16));
+    document.getElementById('h1#wb-cont')?.focus();
+    const headingElement = document.querySelector<HTMLElement>('h1#wb-cont');
+    headingElement?.scrollIntoView({ behavior: 'smooth' });
+    headingElement?.focus();
+  }
 
   const countryInputOptions = useMemo<InputOptionProps[]>(() => {
     return countries.map(({ id, name }) => ({ children: name, value: id }));
@@ -175,15 +215,15 @@ export default function AddressValidationRoute() {
     return countryProvinceTerritoryStates.map(({ id, name }) => ({ children: name, value: id }));
   }, [countryProvinceTerritoryStates]);
 
-  const postalCodeRequiredContries = [CANADA_COUNTRY_ID, USA_COUNTRY_ID];
-  const postalCodeRequired = postalCodeRequiredContries.includes(selectedCountry);
+  const postalZipCodeRequiredCountries = [CANADA_COUNTRY_ID, USA_COUNTRY_ID];
+  const isPostalCodeRequired = postalZipCodeRequiredCountries.includes(selectedCountry);
 
   return (
     <PublicLayout>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('address-validation:optional-label')}</p>
         <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
+        <fetcher.Form ref={formElementRef} method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('address-validation:address-header')}</legend>
@@ -211,40 +251,83 @@ export default function AddressValidationRoute() {
                 defaultValue=""
                 errorMessage={errors?.country}
                 options={countryInputOptions}
-                onChange={countryChangeHandler}
+                onChange={onCountryChangeHandler}
                 required
               />
               {countryProvinceTerritoryStateInputOptions.length > 0 && (
-                <InputSelect id="province" name="province" className="w-full sm:w-1/2" label={t('address-validation:address-field.province')} defaultValue="" errorMessage={errors?.province} options={countryProvinceTerritoryStateInputOptions} required />
+                <InputSelect
+                  id="province"
+                  name="province"
+                  className="w-full sm:w-1/2"
+                  label={t('address-validation:address-field.province-state')}
+                  defaultValue=""
+                  errorMessage={errors?.provinceState}
+                  options={countryProvinceTerritoryStateInputOptions}
+                  required
+                />
               )}
               <div className="grid items-end gap-6 md:grid-cols-2">
                 <InputSanitizeField id="city" name="city" className="w-full" label={t('address-validation:address-field.city')} maxLength={100} autoComplete="address-level2" defaultValue="" errorMessage={errors?.city} required />
                 <InputSanitizeField
-                  id="postal-code"
-                  name="postalCode"
+                  id="postal-zip-code"
+                  name="postalZipCode"
                   className="w-full"
-                  label={postalCodeRequired ? t('address-validation:address-field.postal-code') : t('address-validation:address-field.postal-code-optional')}
+                  label={isPostalCodeRequired ? t('address-validation:address-field.postal-zip-code') : t('address-validation:address-field.postal-zip-code-optional')}
                   maxLength={100}
-                  autoComplete="postal-code"
+                  autoComplete="postal-zip-code"
                   defaultValue=""
-                  errorMessage={errors?.postalCode}
-                  required={postalCodeRequired}
+                  errorMessage={errors?.postalZipCode}
+                  required={isPostalCodeRequired}
                 />
               </div>
             </div>
           </fieldset>
-          {fetcher.data?.status === 'valid-input' && (
-            <div className="my-6">
-              <DebugPayload data={fetcher.data.address} />
-            </div>
-          )}
           <div className="flex flex-wrap items-center gap-3">
-            <LoadingButton variant="primary" id="submit-button" loading={isSubmitting} endIcon={faCheck}>
-              {t('address-validation:submit-button')}
-            </LoadingButton>
+            <Dialog open={validAddressDialogOpen} onOpenChange={onDialogOpenChangeHandler}>
+              <DialogTrigger asChild>
+                <LoadingButton variant="primary" id="submit-button" loading={isSubmitting} endIcon={faCheck}>
+                  {t('address-validation:submit-button')}
+                </LoadingButton>
+              </DialogTrigger>
+              {validAddressDialogOpen && fetcher.data?.status === 'valid-address' && <ValidAddressDialogContent address={fetcher.data.parsedAddress} />}
+            </Dialog>
+            <Button id="reset-button" endIcon={faRefresh} onClick={onResetClickHandler}>
+              {t('address-validation:reset-button')}
+            </Button>
           </div>
         </fetcher.Form>
       </div>
     </PublicLayout>
+  );
+}
+
+interface ValidAddressDialogProps {
+  address: {
+    postalZipCode?: string;
+    address: string;
+    city: string;
+    country: string;
+    apartment?: string;
+    provinceState?: string;
+  };
+}
+
+function ValidAddressDialogContent({ address }: ValidAddressDialogProps) {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return (
+    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
+      <DialogHeader>
+        <DialogTitle>{t('address-validation:valid-address-dialog.header')}</DialogTitle>
+        <DialogDescription>{t('address-validation:valid-address-dialog.description')}</DialogDescription>
+      </DialogHeader>
+      <Address postalZipCode={address.postalZipCode} address={address.address} city={address.city} country={address.country} apartment={address.apartment} provinceState={address.provinceState} />
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button id="valid-address-dialog-close-button" variant="default" size="sm">
+            {t('address-validation:valid-address-dialog.close-button')}
+          </Button>
+        </DialogClose>
+      </DialogFooter>
+    </DialogContent>
   );
 }

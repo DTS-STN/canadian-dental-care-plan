@@ -5,9 +5,9 @@
     "apartment": "Apartment, suite, etc. (optional)",
     "city": "City or town",
     "country": "Country",
-    "postal-code": "Postal code or ZIP code",
-    "postal-code-optional": "Postal code or ZIP code (optional)",
-    "province": "Province, territory, state, or region"
+    "postal-zip-code": "Postal code or ZIP code",
+    "postal-zip-code-optional": "Postal code or ZIP code (optional)",
+    "province-state": "Province, territory, state, or region"
   },
   "address-header": "Mailing address",
   "error-message": {
@@ -15,14 +15,20 @@
     "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
     "city-required": "Enter a city or town for your mailing address",
     "country-required": "Select a country for your mailing address",
-    "invalid-postal-code-for-country": "A Canadian postal code in the mailing address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
-    "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected",
-    "postal-code-required": "Enter postal code or zip code for your mailing address",
-    "postal-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
-    "province-required": "Select a province, territory, state or region for your mailing address",
+    "invalid-postal-zip-code-for-country": "A Canadian postal code in the mailing address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
+    "invalid-postal-zip-code-for-province": "The postal code does not match the province or territory you selected",
+    "postal-zip-code-required": "Enter postal code or zip code for your mailing address",
+    "postal-zip-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
+    "province-state-required": "Select a province, territory, state or region for your mailing address",
     "zip-code-valid": "Enter mailing address zip code in the correct format, such as 12345 or 12345-6789"
   },
   "optional-label": "Complete all fields unless marked as optional.",
   "page-title": "Address validation",
-  "submit-button": "Validate address"
+  "reset-button": "Reset",
+  "submit-button": "Validate address",
+  "valid-address-dialog": {
+    "close-button": "Close",
+    "description": "The provided mailing address has been successfully validated and is valid. Please review the formatted address below:",
+    "header": "Mailing address validated"
+  }
 }

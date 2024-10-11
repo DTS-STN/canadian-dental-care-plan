@@ -5,9 +5,9 @@
     "apartment": "Appartement, suite, etc. (facultatif)",
     "city": "Ville ou village",
     "country": "Pays",
-    "postal-code": "Code postal",
-    "postal-code-optional": "Code postal (facultatif)",
-    "province": "Province, territoire, état ou région"
+    "postal-zip-code": "Code postal",
+    "postal-zip-code-optional": "Code postal (facultatif)",
+    "province-state": "Province, territoire, état ou région"
   },
   "address-header": "Adresse postale",
   "error-message": {
@@ -15,14 +15,20 @@
     "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
     "city-required": "Entrez une ville ou une municipalité pour votre adresse postale",
     "country-required": "Sélectionnez un pays pour votre adresse postale",
-    "invalid-postal-code-for-country": "Un code postal canadien a été entré dans l'adresse postale mais le Canada n'a pas été choisi comme pays. Veuillez choisir Canada, et la bonne province, ou changer le code postal",
-    "invalid-postal-code-for-province": "Le code postal ne correspond pas à la province ou au territoire que vous avez sélectionné",
-    "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse postale",
-    "postal-code-valid": "Entrez un code postal pour l'adresse postale dans le bon format, par exemple A1A 1A1",
-    "province-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse postale",
+    "invalid-postal-zip-code-for-country": "Un code postal canadien a été entré dans l'adresse postale mais le Canada n'a pas été choisi comme pays. Veuillez choisir Canada, et la bonne province, ou changer le code postal",
+    "invalid-postal-zip-code-for-province": "Le code postal ne correspond pas à la province ou au territoire que vous avez sélectionné",
+    "postal-zip-code-required": "Entrez un code postal ou un code postal américain pour votre adresse postale",
+    "postal-zip-code-valid": "Entrez un code postal pour l'adresse postale dans le bon format, par exemple A1A 1A1",
+    "province-state-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse postale",
     "zip-code-valid": "Entrez un code postal américain pour l'adresse postale dans le bon format, par exemple 12345 ou 12345-6789"
   },
   "optional-label": "Veuillez remplir tous les champs, sauf ceux indiqués comme facultatifs.",
   "page-title": "Validation d'adresse",
-  "submit-button": "Valider l'adresse"
+  "reset-button": "Réinitialiser",
+  "submit-button": "Valider l'adresse",
+  "valid-address-dialog": {
+    "close-button": "Fermer",
+    "description": "L'adresse postale fournie a été validée avec succès et est valide. Veuillez vérifier l'adresse formatée ci-dessous\u00a0:",
+    "header": "Adresse postale validée"
+  }
 }
