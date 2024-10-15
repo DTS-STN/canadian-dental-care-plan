@@ -4,11 +4,14 @@ import { redirect, useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
+import { InputCheckbox } from '~/components/input-checkbox';
 import { LoadingButton } from '~/components/loading-button';
 import { loadRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -18,6 +21,11 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
+
+enum CheckboxValue {
+  Yes = 'yes',
+}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew', 'gcweb'),
@@ -41,6 +49,7 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 
 export async function action({ context: { session }, request, params }: ActionFunctionArgs) {
   const log = getLogger('renew/terms-and-conditions');
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -49,6 +58,32 @@ export async function action({ context: { session }, request, params }: ActionFu
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
+  const consentSchema = z.object({
+    acknowledgeTerms: z.nativeEnum(CheckboxValue, {
+      errorMap: () => ({ message: t('renew:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required') }),
+    }),
+    acknowledgePrivacy: z.nativeEnum(CheckboxValue, {
+      errorMap: () => ({ message: t('renew:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required') }),
+    }),
+    shareData: z.nativeEnum(CheckboxValue, {
+      errorMap: () => ({ message: t('renew:terms-and-conditions.checkboxes.error-message.share-data-required') }),
+    }),
+  });
+
+  const data = {
+    acknowledgeTerms: formData.get('acknowledgeTerms'),
+    acknowledgePrivacy: formData.get('acknowledgePrivacy'),
+    shareData: formData.get('shareData'),
+  };
+
+  const parsedDataResult = consentSchema.safeParse(data);
+
+  if (!parsedDataResult.success) {
+    return json({
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+    });
   }
 
   saveRenewState({ params, session, state: {} });
@@ -62,6 +97,13 @@ export default function RenewTermsAndConditions() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    acknowledgeTerms: 'input-checkbox-acknowledge-terms',
+    acknowledgePrivacy: 'input-checkbox-acknowledge-privacy',
+    shareData: 'input-checkbox-share-data',
+  });
+
   const canadaTermsConditions = <InlineLink to={t('renew:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link" newTabIndicator target="_blank" />;
   const fileacomplaint = <InlineLink to={t('renew:terms-and-conditions.links.file-complaint')} className="external-link" newTabIndicator target="_blank" />;
   const hcaptchaTermsOfService = <InlineLink to={t('renew:terms-and-conditions.links.hcaptcha')} className="external-link" newTabIndicator target="_blank" />;
@@ -73,6 +115,7 @@ export default function RenewTermsAndConditions() {
     <div className="max-w-prose">
       <div className="space-y-6">
         <p>{t('renew:terms-and-conditions.intro-text')}</p>
+        <errorSummary.ErrorSummary />
         <Collapsible summary={t('renew:terms-and-conditions.terms-and-conditions-of-use.summary')}>
           <div className="space-y-6">
             <div className="space-y-4">
@@ -159,6 +202,15 @@ export default function RenewTermsAndConditions() {
         {t('renew:terms-and-conditions.apply.application-consent')}
       </p>
       <fetcher.Form method="post" noValidate>
+        <InputCheckbox id="acknowledgeTerms" name="acknowledgeTerms" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgeTerms} required>
+          {t('renew:terms-and-conditions.checkboxes.acknowledge-terms')}
+        </InputCheckbox>
+        <InputCheckbox id="acknowledgePrivacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgePrivacy} required>
+          {t('renew:terms-and-conditions.checkboxes.acknowledge-privacy')}
+        </InputCheckbox>
+        <InputCheckbox id="shareData" name="shareData" value={CheckboxValue.Yes} errorMessage={errors?.shareData} required>
+          {t('renew:terms-and-conditions.checkboxes.share-data')}
+        </InputCheckbox>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
