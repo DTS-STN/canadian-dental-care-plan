@@ -291,13 +291,13 @@ function toRelatedPersons({ partnerInformation }: ToRelatedPersonArgs) {
 
 interface ToRelatedPersonSpouseArgs {
   confirm: boolean;
-  dateOfBirth: string;
+  yearOfBirth: string;
   socialInsuranceNumber: string;
 }
 
-function toRelatedPersonSpouse({ confirm, dateOfBirth, socialInsuranceNumber }: ToRelatedPersonSpouseArgs) {
+function toRelatedPersonSpouse({ confirm, yearOfBirth, socialInsuranceNumber }: ToRelatedPersonSpouseArgs) {
   return {
-    PersonBirthDate: toDate(dateOfBirth),
+    PersonBirthDate: { date: yearOfBirth },
     PersonRelationshipCode: {
       ReferenceDataName: 'Spouse' as const,
     },

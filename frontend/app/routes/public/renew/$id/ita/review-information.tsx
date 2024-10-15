@@ -83,7 +83,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   };
 
   const spouseInfo = state.partnerInformation && {
-    birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
+    yearOfBirth: state.partnerInformation.yearOfBirth,
     sin: state.partnerInformation.socialInsuranceNumber,
     consent: state.partnerInformation.confirm,
   };
@@ -272,8 +272,8 @@ export default function RenewItaReviewInformation() {
                     </InlineLink>
                   </div>
                 </DescriptionListItem>
-                <DescriptionListItem term={t('renew-ita:review-information.dob-title')}>
-                  <p>{spouseInfo.birthday}</p>
+                <DescriptionListItem term={t('renew-ita:review-information.year-of-birth')}>
+                  <p>{spouseInfo.yearOfBirth}</p>
                   <div className="mt-4">
                     <InlineLink id="change-spouse-date-of-birth" routeId="public/renew/$id/ita/marital-status" params={params}>
                       {t('renew-ita:review-information.dob-change')}

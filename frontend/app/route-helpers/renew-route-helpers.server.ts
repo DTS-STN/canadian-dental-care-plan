@@ -20,7 +20,7 @@ export interface RenewState {
   };
   readonly partnerInformation?: {
     confirm: boolean;
-    dateOfBirth: string;
+    yearOfBirth: string;
     socialInsuranceNumber: string;
   };
   readonly maritalStatus?: string;
