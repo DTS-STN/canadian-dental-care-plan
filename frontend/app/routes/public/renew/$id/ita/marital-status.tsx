@@ -11,7 +11,6 @@ import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputPatternField } from '~/components/input-pattern-field';
@@ -22,7 +21,6 @@ import { Progress } from '~/components/progress';
 import { loadRenewItaState } from '~/route-helpers/renew-ita-route-helpers.server';
 import type { PartnerInformationState } from '~/route-helpers/renew-route-helpers.server';
 import { renewStateHasPartner, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
-import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -86,59 +84,23 @@ export async function action({ context: { session }, params, request }: ActionFu
       .min(1, t('renew-ita:marital-status.error-message.marital-status-required')),
   });
 
-  const partnerInformationSchema = z
-    .object({
-      confirm: z.boolean().refine((val) => val === true, t('renew-ita:marital-status.error-message.confirm-required')),
-      dateOfBirthYear: z.number({
-        required_error: t('renew-ita:marital-status.error-message.date-of-birth-year-required'),
-        invalid_type_error: t('renew-ita:marital-status.error-message.date-of-birth-year-number'),
-      }),
-      dateOfBirthMonth: z.number({
-        required_error: t('renew-ita:marital-status.error-message.date-of-birth-month-required'),
-      }),
-      dateOfBirthDay: z.number({
-        required_error: t('renew-ita:marital-status.error-message.date-of-birth-day-required'),
-        invalid_type_error: t('renew-ita:marital-status.error-message.date-of-birth-day-number'),
-      }),
-      dateOfBirth: z.string(),
-      socialInsuranceNumber: z
-        .string()
-        .trim()
-        .min(1, t('renew-ita:marital-status.error-message.sin-required'))
-        .refine(isValidSin, t('renew-ita:marital-status.error-message.sin-valid'))
-        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.partnerInformation?.socialInsuranceNumber, t('renew-ita:marital-status.error-message.sin-unique')),
-    })
-    .superRefine((val, ctx) => {
-      // At this point the year, month and day should have been validated as positive integer
-      const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
-      const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
-
-      if (!isValidDateString(dateOfBirth)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:marital-status.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
-      } else if (!isPastDateString(dateOfBirth)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:marital-status.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
-      } else if (getAgeFromDateString(dateOfBirth) > 150) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:marital-status.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
-      }
-    })
-    .transform((val) => {
-      // At this point the year, month and day should have been validated as positive integer
-      const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
-      return {
-        ...val,
-        dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`,
-      };
-    }) satisfies z.ZodType<PartnerInformationState>;
+  const partnerInformationSchema = z.object({
+    confirm: z.boolean().refine((val) => val === true, t('renew-ita:marital-status.error-message.confirm-required')),
+    yearOfBirth: z.string().trim().min(1, t('renew-ita:marital-status.error-message.date-of-birth-year-required')),
+    socialInsuranceNumber: z
+      .string()
+      .trim()
+      .min(1, t('renew-ita:marital-status.error-message.sin-required'))
+      .refine(isValidSin, t('renew-ita:marital-status.error-message.sin-valid'))
+      .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.partnerInformation?.socialInsuranceNumber, t('renew-ita:marital-status.error-message.sin-unique')),
+  }) satisfies z.ZodType<PartnerInformationState>;
 
   const maritalStatusData = {
     maritalStatus: formData.get('maritalStatus') ? String(formData.get('maritalStatus')) : undefined,
   };
   const partnerInformationData = {
     confirm: formData.get('confirm') === 'yes',
-    dateOfBirthYear: formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined,
-    dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
-    dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
-    dateOfBirth: '',
+    yearOfBirth: String(formData.get('yearOfBirth') ?? ''),
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
   };
 
@@ -149,7 +111,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({
       errors: {
         ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
-        ...(parsedPartnerInformation.error ? transformFlattenedError(parsedPartnerInformation.error.flatten()) : {}),
+        ...(parsedMaritalStatus.success && renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(parsedPartnerInformation.error.flatten()) : {}),
       },
     });
   }
@@ -164,7 +126,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function RenewItaMaritalStatus() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, defaultState, editMode, maritalStatuses, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -175,10 +137,7 @@ export default function RenewItaMaritalStatus() {
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     maritalStatus: 'input-radio-marital-status-option-0',
-    ...(i18n.language === 'fr'
-      ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
-      : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
-    dateOfBirthYear: 'date-picker-date-of-birth-year',
+    yearOfBirth: 'year-of-birth',
     socialInsuranceNumber: 'social-insurance-number',
     confirm: 'input-checkbox-confirm',
   });
@@ -209,23 +168,7 @@ export default function RenewItaMaritalStatus() {
                 <h2 className="mb-6 font-lato text-2xl font-bold">{t('renew-ita:marital-status.spouse-or-commonlaw')}</h2>
                 <p className="mb-4">{t('renew-ita:marital-status.provide-sin')}</p>
                 <p className="mb-6">{t('renew-ita:marital-status.required-information')}</p>
-                <DatePickerField
-                  id="date-of-birth"
-                  names={{
-                    day: 'dateOfBirthDay',
-                    month: 'dateOfBirthMonth',
-                    year: 'dateOfBirthYear',
-                  }}
-                  defaultValue={defaultState.dateOfBirth ?? ''}
-                  legend={t('renew-ita:marital-status.date-of-birth')}
-                  errorMessages={{
-                    all: errors?.dateOfBirth,
-                    year: errors?.dateOfBirthYear,
-                    month: errors?.dateOfBirthMonth,
-                    day: errors?.dateOfBirthDay,
-                  }}
-                  required
-                />
+                <InputPatternField id="year-of-birth" name="yearOfBirth" inputMode="numeric" format="####" defaultValue={defaultState.yearOfBirth ?? ''} label={t('renew-ita:marital-status.year-of-birth')} errorMessage={errors?.yearOfBirth} required />
                 <InputPatternField
                   id="social-insurance-number"
                   name="socialInsuranceNumber"

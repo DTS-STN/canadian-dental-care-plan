@@ -7,7 +7,7 @@ export type BenefitRenewalRequestDto = Readonly<{
   }>;
   partnerInformation?: Readonly<{
     confirm: boolean;
-    dateOfBirth: string;
+    yearOfBirth: string;
     socialInsuranceNumber: string;
   }>;
   maritalStatus: string;

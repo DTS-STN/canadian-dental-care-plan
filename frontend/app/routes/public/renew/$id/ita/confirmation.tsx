@@ -82,7 +82,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const spouseInfo = {
     confirm: state.partnerInformation.confirm,
-    birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
+    yearOfBirth: state.partnerInformation.yearOfBirth,
     sin: state.partnerInformation.socialInsuranceNumber,
   };
 
@@ -209,7 +209,7 @@ export default function RenewFlowConfirm() {
             <DescriptionListItem term={t('confirm.sin')}>
               <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
             </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.dob')}>{spouseInfo.birthday}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.year-of-birth')}>{spouseInfo.yearOfBirth}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DescriptionListItem>
           </dl>
         </section>
