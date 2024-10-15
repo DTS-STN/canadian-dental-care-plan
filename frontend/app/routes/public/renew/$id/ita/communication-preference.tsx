@@ -34,7 +34,7 @@ import { transformFlattenedError } from '~/utils/zod-utils.server';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.ita.communicationPreference,
-  pageTitleI18nKey: 'renew:communication-preference.page-title',
+  pageTitleI18nKey: 'renew-ita:communication-preference.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -57,7 +57,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   }
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew:communication-preference.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:communication-preference.page-title') }) };
 
   return json({
     communicationMethodEmail,
@@ -84,25 +84,25 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const formSchema = z
     .object({
-      preferredMethod: z.string().trim().min(1, t('renew:communication-preference.error-message.communication-preference-required')),
+      preferredMethod: z.string().trim().min(1, t('renew-ita:communication-preference.error-message.communication-preference-required')),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
     })
     .superRefine((val, ctx) => {
       if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
         if (typeof val.email !== 'string' || validator.isEmpty(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew:communication-preference.error-message.email-required'), path: ['email'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:communication-preference.error-message.email-required'), path: ['email'] });
         } else if (!validator.isEmail(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew:communication-preference.error-message.email-valid'), path: ['email'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:communication-preference.error-message.email-valid'), path: ['email'] });
         }
 
         if (!state.contactInformation?.email) {
           if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
           } else if (!validator.isEmail(val.confirmEmail)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew:communication-preference.error-message.confirm-email-valid'), path: ['confirmEmail'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:communication-preference.error-message.confirm-email-valid'), path: ['confirmEmail'] });
           } else if (val.email !== val.confirmEmail) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
           }
         }
       }
@@ -175,7 +175,7 @@ export default function RenewFlowCommunicationPreferencePage() {
             type="email"
             inputMode="email"
             className="w-full"
-            label={t('renew:communication-preference.email')}
+            label={t('renew-ita:communication-preference.email')}
             maxLength={64}
             name="email"
             errorMessage={errors?.email}
@@ -190,7 +190,7 @@ export default function RenewFlowCommunicationPreferencePage() {
               type="email"
               inputMode="email"
               className="w-full"
-              label={t('renew:communication-preference.confirm-email')}
+              label={t('renew-ita:communication-preference.confirm-email')}
               maxLength={64}
               name="confirmEmail"
               errorMessage={errors?.confirmEmail}
@@ -212,16 +212,18 @@ export default function RenewFlowCommunicationPreferencePage() {
         <Progress value={66} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
+        <p className="mb-4">{t('renew-ita:communication-preference.update-info')}</p>
         <p className="mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
+
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
-            {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('renew:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errors?.preferredMethod} required />}
+            {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('renew-ita:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errors?.preferredMethod} required />}
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Communication click">
-              {t('renew:communication-preference.continue-btn')}
+              {t('renew-ita:communication-preference.continue-btn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -231,7 +233,7 @@ export default function RenewFlowCommunicationPreferencePage() {
               startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Communication click"
             >
-              {t('renew:communication-preference.back-btn')}
+              {t('renew-ita:communication-preference.back-btn')}
             </ButtonLink>
           </div>
         </fetcher.Form>
