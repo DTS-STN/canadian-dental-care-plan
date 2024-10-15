@@ -238,11 +238,6 @@ export default function RenewItaReviewInformation() {
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('renew-ita:review-information.full-name-title')}>
                 <p>{`${userInfo.firstName} ${userInfo.lastName}`}</p>
-                <div className="mt-4">
-                  <InlineLink id="change-full-name" routeId="public/renew/$id/applicant-information" params={params}>
-                    {t('renew-ita:review-information.full-name-change')}
-                  </InlineLink>
-                </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-ita:review-information.dob-title')}>
                 <p>{userInfo.birthday}</p>
@@ -298,7 +293,7 @@ export default function RenewItaReviewInformation() {
               <DescriptionListItem term={t('renew-ita:review-information.alt-phone-title')}>
                 <p>{userInfo.altPhoneNumber}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-alternate-phone-number" routeId="public/apply/$id/adult/contact-information" params={params}>
+                  <InlineLink id="change-alternate-phone-number" routeId="public/renew/$id/ita/contact-information" params={params}>
                     {t('renew-ita:review-information.alt-phone-change')}
                   </InlineLink>
                 </div>
@@ -321,7 +316,7 @@ export default function RenewItaReviewInformation() {
                   apartment={mailingAddressInfo.apartment}
                 />
                 <div className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="public/renew/$id/ita/contact-information" params={params}>
+                  <InlineLink id="change-mailing-address" routeId="public/renew/$id/ita/update-address" params={params}>
                     {t('renew-ita:review-information.mailing-change')}
                   </InlineLink>
                 </div>
@@ -336,7 +331,7 @@ export default function RenewItaReviewInformation() {
                   apartment={homeAddressInfo.apartment}
                 />
                 <div className="mt-4">
-                  <InlineLink id="change-home-address" routeId="public/renew/$id/ita/contact-information" params={params}>
+                  <InlineLink id="change-home-address" routeId="public/renew/$id/ita/update-address" params={params}>
                     {t('renew-ita:review-information.home-change')}
                   </InlineLink>
                 </div>
