@@ -255,10 +255,10 @@ export default function ApplyFlowPersonalInformation() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry);
+  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry ?? CANADA_COUNTRY_ID);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState?.copyMailingAddress === true);
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState?.homeCountry);
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState?.homeCountry ?? CANADA_COUNTRY_ID);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
 
   const errors = fetcher.data?.errors;
@@ -323,8 +323,8 @@ export default function ApplyFlowPersonalInformation() {
   const dummyOption: InputOptionProps = { children: t('apply-adult-child:contact-information.address-field.select-one'), value: '' };
 
   const postalCodeRequiredContries = [CANADA_COUNTRY_ID, USA_COUNTRY_ID];
-  const mailingPostalCodeRequired = selectedMailingCountry !== undefined && postalCodeRequiredContries.includes(selectedMailingCountry);
-  const homePostalCodeRequired = selectedHomeCountry !== undefined && postalCodeRequiredContries.includes(selectedHomeCountry);
+  const mailingPostalCodeRequired = postalCodeRequiredContries.includes(selectedMailingCountry);
+  const homePostalCodeRequired = postalCodeRequiredContries.includes(selectedHomeCountry);
 
   return (
     <>
@@ -438,7 +438,7 @@ export default function ApplyFlowPersonalInformation() {
                 autoComplete="country"
                 defaultValue={defaultState?.mailingCountry ?? ''}
                 errorMessage={errors?.mailingCountry}
-                options={[dummyOption, ...countries]}
+                options={countries}
                 onChange={mailingCountryChangeHandler}
                 required
               />
@@ -519,7 +519,7 @@ export default function ApplyFlowPersonalInformation() {
                     autoComplete="country"
                     defaultValue={defaultState?.homeCountry ?? ''}
                     errorMessage={errors?.homeCountry}
-                    options={[dummyOption, ...countries]}
+                    options={countries}
                     onChange={homeCountryChangeHandler}
                     required
                   />
