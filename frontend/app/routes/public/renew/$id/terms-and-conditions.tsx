@@ -60,12 +60,6 @@ export async function action({ context: { session }, request, params }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  // const consentSchema = z.object({
-  //   acknowledgeTerms: z.boolean().refine((val) => val === true, t('renew:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required')),
-  //   acknowledgePrivacy: z.boolean().refine((val) => val === true, t('renew:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required')),
-  //   shareData: z.boolean().refine((val) => val === true, t('renew:terms-and-conditions.checkboxes.error-message.share-data-required')),
-  // });
-
   const consentSchema = z.object({
     acknowledgeTerms: z.nativeEnum(CheckboxValue, {
       errorMap: () => ({ message: t('renew:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required') }),
