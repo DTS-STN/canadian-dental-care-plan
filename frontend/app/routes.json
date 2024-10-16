@@ -725,6 +725,14 @@
                 }
               },
               {
+                "id": "public/renew/$id/tax-filing",
+                "file": "routes/public/renew/$id/tax-filing.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/tax-filing",
+                  "fr": "/:lang/renew/:id/declaration-impot"
+                }
+              },
+              {
                 "id": "public/renew/$id/file-taxes",
                 "file": "routes/public/renew/$id/file-taxes.tsx",
                 "paths": {
