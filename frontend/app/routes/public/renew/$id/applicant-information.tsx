@@ -123,7 +123,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
-  // todo: make request for client application => if not found return back to page to display the <StausNotFound /> otherwise continue with next page
+  // todo: make request for client application => if not found return back to page to display the <StausNotFound /> otherwise continue with next page. The response should include 'isCraAssessed' flag. If the value is true, the 'tax filing' route will be skipped, and the user will be directed to the 'type of renewal' route.
 
   saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data } });
 
@@ -131,7 +131,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('public/renew/$id/review-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/type-renewal', params));
+  return redirect(getPathById('public/renew/$id/tax-filing', params));
 }
 
 export default function RenewApplicationInformation() {

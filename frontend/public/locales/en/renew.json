@@ -171,6 +171,19 @@
     "return-btn": "Return to main page",
     "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   },
+  "tax-filing": {
+    "page-title": "Tax filing",
+    "form-instructions": "Have you and your spouse or common-law partner (if applicable) filed your tax return for 2023 and received your Notice of Assessment?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "error-message": {
+      "tax-filing-required": "Select whether or not you have filed your taxes"
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
+  },
   "file-your-taxes": {
     "page-title": "File your taxes",
     "ineligible-to-renew": "You are not eligible to renew for the Canadian Dental Care Plan at this time.",

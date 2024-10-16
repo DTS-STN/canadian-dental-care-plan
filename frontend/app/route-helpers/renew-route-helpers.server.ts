@@ -65,6 +65,7 @@ export interface RenewState {
      */
     submittedOn: string;
   };
+  readonly taxFiling?: boolean;
   // TODO Add remaining states
 }
 
