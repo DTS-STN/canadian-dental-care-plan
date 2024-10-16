@@ -6,19 +6,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { cn } from '~/utils/tw-utils';
 
-export type AlertType = 'warning' | 'success' | 'danger' | 'info' | 'comment' | 'default';
+export type AlertType = 'warning' | 'success' | 'danger' | 'info' | 'comment';
 
 export interface ContextualAlertProps {
   children: ReactNode;
   type: AlertType;
 }
 
-const alertBackgroundColors: Partial<Record<AlertType, string>> = {
+const alertBackgroundColors: Partial<Record<AlertType, string>> & { default: string } = {
   comment: 'bg-sky-50',
   default: 'bg-white',
 };
 
-const alertBorderColors: Partial<Record<AlertType, string>> = {
+const alertBorderColors: Partial<Record<AlertType, string>> & { default: string } = {
   comment: 'border-l-sky-800',
   danger: 'border-l-red-700',
   default: 'border-l-gray-700',
@@ -54,7 +54,7 @@ function Icon({ type }: { type: string }) {
     case 'info':
       return <FontAwesomeIcon icon={faCircleInfo} className="h-6 w-6 text-cyan-700" data-testid="info" />;
     case 'comment':
-      return <FontAwesomeIcon icon={faCommentDots} className="h-6 w-6 text-[#1C578A]" data-testid="comment" />;
+      return <FontAwesomeIcon icon={faCommentDots} className="h-6 w-6 text-sky-800" data-testid="comment" />;
     default:
       break;
   }
