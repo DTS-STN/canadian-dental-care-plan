@@ -125,7 +125,7 @@
     "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
     "federal-benefits": {
       "title": "Federal benefits",
-      "legend": "Do you have dental benefits through a social program offered by a federal program?",
+      "legend": "(FR) Do you have dental benefits through a federal social program?",
       "option-yes": "<strong>Yes</strong>, I have <strong>federal</strong> dental benefits",
       "option-no": "<strong>No</strong>, I do not have <strong>federal</strong> dental benefits",
       "social-programs": {
@@ -134,7 +134,7 @@
     },
     "provincial-territorial-benefits": {
       "title": "Provincial or territorial benefits",
-      "legend": "Do you have dental benefits through a social program offered by your province or territory?",
+      "legend": "(FR) Do you have dental benefits through a provincial or territorial social program?",
       "option-yes": "<strong>Yes</strong>, I have <strong>provincial or territorial</strong> dental benefits",
       "option-no": "<strong>No</strong>, I do not have <strong>provincial or territorial</strong> dental benefits",
       "social-programs": {
