@@ -182,8 +182,8 @@ const serverEnv = clientEnvSchema.extend({
   // CDCP Website URLs
   CDCP_WEBSITE_APPLY_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html'),
   CDCP_WEBSITE_APPLY_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html'),
-  CDCP_WEBSITE_STATUS_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#status'),
-  CDCP_WEBSITE_STATUS_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#etat'),
+  CDCP_WEBSITE_STATUS_URL_EN: z.string().default('/en/status'),
+  CDCP_WEBSITE_STATUS_URL_FR: z.string().default('/fr/etat'),
   CDCP_WEBSITE_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html'),
   CDCP_WEBSITE_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html'),
 });
