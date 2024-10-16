@@ -10,6 +10,30 @@
     "province-state": "Province, territoire, état ou région"
   },
   "address-header": "Adresse postale",
+  "dialog": {
+    "corrected-address": {
+      "close-button": "Fermer",
+      "description": "Nous avons apporté des corrections à votre adresse postale. Veuillez vérifier les informations mises à jour ci-dessous\u00a0:",
+      "header": "Adresse postale corrigée",
+      "initial-address": "Votre adresse postale initiale",
+      "corrected-address": "Notre adresse postale corrigée"
+    },
+    "international-address": {
+      "close-button": "Fermer",
+      "description": "Veuillez vérifier les détails de l'adresse postale internationale ci-dessous\u00a0:",
+      "header": "Adresse postale internationale"
+    },
+    "not-correct-address": {
+      "close-button": "Fermer",
+      "description": "Il semble y avoir un problème avec l'adresse postale que vous avez saisie. Veuillez vérifier les informations ci-dessous\u00a0:",
+      "header": "Erreur d'adresse postale"
+    },
+    "valid-address": {
+      "close-button": "Fermer",
+      "description": "Votre adresse postale est valide! Veuillez vérifier les détails confirmés ci-dessous\u00a0:",
+      "header": "Adresse postale confirmée"
+    }
+  },
   "error-message": {
     "address-required": "Entrez l'adresse postale, normalement le numéro et le nom de la rue",
     "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
