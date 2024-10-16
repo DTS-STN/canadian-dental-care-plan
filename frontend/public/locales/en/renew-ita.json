@@ -134,7 +134,7 @@
     },
     "provincial-territorial-benefits": {
       "title": "Provincial or territorial benefits",
-      "legend": "Do you have dental benefits through a provincial or federal social program?",
+      "legend": "Do you have dental benefits through a provincial or territorial social program?",
       "option-yes": "<strong>Yes</strong>, I have <strong>provincial or territorial</strong> dental benefits",
       "option-no": "<strong>No</strong>, I do not have <strong>provincial or territorial</strong> dental benefits",
       "social-programs": {
