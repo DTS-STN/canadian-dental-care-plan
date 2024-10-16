@@ -138,7 +138,7 @@
       "option-yes": "<strong>Yes</strong>, I have <strong>provincial or territorial</strong> dental benefits",
       "option-no": "<strong>No</strong>, I do not have <strong>provincial or territorial</strong> dental benefits",
       "social-programs": {
-        "input-legend": "If yes, through which province or territory?",
+        "input-legend": "(FR) Through which province or territory?",
         "radio-legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
       }
     },
