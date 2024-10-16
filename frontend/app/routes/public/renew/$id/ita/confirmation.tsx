@@ -6,7 +6,8 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
-import { Button } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
@@ -42,7 +43,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   if (state.applicantInformation === undefined ||
     state.communicationPreference === undefined ||
     state.contactInformation === undefined ||
-    state.partnerInformation === undefined ||
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
     state.addressInformation?.homeCountry === undefined ||
@@ -80,11 +80,13 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     clientNumber: state.applicantInformation.clientNumber,
   };
 
-  const spouseInfo = {
-    confirm: state.partnerInformation.confirm,
-    yearOfBirth: state.partnerInformation.yearOfBirth,
-    sin: state.partnerInformation.socialInsuranceNumber,
-  };
+  const spouseInfo = state.partnerInformation
+    ? {
+        confirm: state.partnerInformation.confirm,
+        yearOfBirth: state.partnerInformation.yearOfBirth,
+        sin: state.partnerInformation.socialInsuranceNumber,
+      }
+    : null;
 
   const mailingAddressInfo = {
     address: state.addressInformation.mailingAddress,
@@ -164,7 +166,7 @@ export default function RenewFlowConfirm() {
         <Button
           variant="primary"
           size="lg"
-          className="mt-8 print:hidden"
+          className="mt-8 px-12 print:hidden"
           onClick={(event) => {
             event.preventDefault();
             window.print();
@@ -174,6 +176,17 @@ export default function RenewFlowConfirm() {
           {t('confirm.print-btn')}
         </Button>
       </section>
+
+      <ContextualAlert type="comment">
+        <div className="space-y-5">
+          <h3 className="font-lato text-2xl font-bold">{t('renew-ita:confirm.alert.title')}</h3>
+          <p>{t('renew-ita:confirm.alert.survey')}</p>
+          <p>{t('renew-ita:confirm.alert.answers')}</p>
+          <ButtonLink variant="primary" to="/">
+            {t('renew-ita:confirm.alert.btn')}
+          </ButtonLink>
+        </div>
+      </ContextualAlert>
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
@@ -203,16 +216,18 @@ export default function RenewFlowConfirm() {
           </dl>
         </section>
 
-        <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
-          <dl className="divide-y border-y">
-            <DescriptionListItem term={t('confirm.sin')}>
-              <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
-            </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.year-of-birth')}>{spouseInfo.yearOfBirth}</DescriptionListItem>
-            <DescriptionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DescriptionListItem>
-          </dl>
-        </section>
+        {spouseInfo && (
+          <section className="space-y-6">
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
+            <dl className="divide-y border-y">
+              <DescriptionListItem term={t('confirm.sin')}>
+                <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('confirm.year-of-birth')}>{spouseInfo.yearOfBirth}</DescriptionListItem>
+              <DescriptionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DescriptionListItem>
+            </dl>
+          </section>
+        )}
 
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
