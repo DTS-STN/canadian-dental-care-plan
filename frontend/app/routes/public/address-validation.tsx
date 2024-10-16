@@ -13,6 +13,7 @@ import { z } from 'zod';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
+import { DiffViewer } from '~/components/diff-viewer';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
@@ -26,7 +27,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { isAllValidInputCharacters, randomString } from '~/utils/string-utils';
+import { formatAddress, isAllValidInputCharacters, randomString } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 interface CanadianAddress {
@@ -216,7 +217,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
         apartment: canadianAddress.apartment,
         city: addressCorrectionResult.city,
         country: canadianAddress.country,
-        postalZipCode: addressCorrectionResult.postalCode,
+        postalZipCode: formatPostalCode(CANADA_COUNTRY_ID, addressCorrectionResult.postalCode),
         provinceState: addressCorrectionResult.provinceCode,
       },
     } as const satisfies CorrectedAddressResponse;
@@ -391,6 +392,8 @@ interface CorrectedAddressDialogContentProps {
 
 function CorrectedAddressDialogContent({ address, correctedAddress }: CorrectedAddressDialogContentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
+  const formattedAddress = formatAddress(address.address, address.city, address.country, address.provinceState, address.postalZipCode, address.apartment);
+  const formattedCorrectedAddress = formatAddress(correctedAddress.address, correctedAddress.city, correctedAddress.country, correctedAddress.provinceState, correctedAddress.postalZipCode, correctedAddress.apartment);
   return (
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
@@ -401,7 +404,9 @@ function CorrectedAddressDialogContent({ address, correctedAddress }: CorrectedA
         <p className="font-semibold">{t('address-validation:dialog.corrected-address.initial-address')}</p>
         <Address postalZipCode={address.postalZipCode} address={address.address} city={address.city} country={address.country} apartment={address.apartment} provinceState={address.provinceState} />
         <p className="font-semibold">{t('address-validation:dialog.corrected-address.corrected-address')}</p>
-        <Address postalZipCode={correctedAddress.postalZipCode} address={correctedAddress.address} city={correctedAddress.city} country={correctedAddress.country} apartment={correctedAddress.apartment} provinceState={correctedAddress.provinceState} />
+        <address className="whitespace-pre-wrap not-italic">
+          <DiffViewer oldStr={formattedAddress} newStr={formattedCorrectedAddress} />
+        </address>
       </div>
       <DialogFooter>
         <DialogClose asChild>
