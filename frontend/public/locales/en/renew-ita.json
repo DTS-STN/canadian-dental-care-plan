@@ -251,7 +251,7 @@
   "confirm": {
     "page-title": "Your renewal for the Canadian Dental Care Plan is complete!",
     "keep-copy": "Keep a copy of your application",
-    "print-copy-text": "You will <strong>not</strong> receive a <strong>confirmation email</strong>. It is important to keep a copy of your application. <noPrint>You can use this button to print.<noPrint>",
+    "print-copy-text": "You will <strong>not</strong> receive a confirmation email. It is important to keep a copy of your application. <noPrint>You can use this button to print.<noPrint>",
     "print-btn": "Print",
     "whats-next": "What happens next",
     "begin-process": "We will begin processing your renewal application immediately. You can continue to use your Canadian Dental Care Plan benefits.",
@@ -285,6 +285,12 @@
     "close-application": "Close application",
     "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
     "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
+    "alert": {
+      "title": "Help us improve the Canadian Dental Care Plan",
+      "survey": "This short survey has 5 demographic questions and will take 3 minutes of your time. It will open in a new window.",
+      "answers": "Your answers will help Health Canada improve the Canadian Dental Care Plan and make sure our services are accessible to everyone.",
+      "btn": "Take the survey"
+    },
     "modal": {
       "header": "Close application",
       "info": "By closing the application, you will end your session and any information entered will be cleared from your browser. Make sure you printed or save a copy of your application code.",
