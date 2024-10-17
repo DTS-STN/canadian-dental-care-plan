@@ -320,22 +320,26 @@ export default function ApplyFlowConfirm() {
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.mailing')}>
               <Address
-                address={mailingAddressInfo.address}
-                city={mailingAddressInfo.city}
-                provinceState={mailingAddressInfo.province}
-                postalZipCode={mailingAddressInfo.postalCode}
-                country={mailingAddressInfo.country.name}
-                apartment={mailingAddressInfo.apartment}
+                address={{
+                  address: mailingAddressInfo.address,
+                  city: mailingAddressInfo.city,
+                  provinceState: mailingAddressInfo.province,
+                  postalZipCode: mailingAddressInfo.postalCode,
+                  country: mailingAddressInfo.country.name,
+                  apartment: mailingAddressInfo.apartment,
+                }}
               />
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.home')}>
               <Address
-                address={homeAddressInfo.address ?? ''}
-                city={homeAddressInfo.city ?? ''}
-                provinceState={homeAddressInfo.province}
-                postalZipCode={homeAddressInfo.postalCode}
-                country={homeAddressInfo.country.name}
-                apartment={homeAddressInfo.apartment}
+                address={{
+                  address: homeAddressInfo.address ?? '',
+                  city: homeAddressInfo.city ?? '',
+                  provinceState: homeAddressInfo.province,
+                  postalZipCode: homeAddressInfo.postalCode,
+                  country: homeAddressInfo.country.name,
+                  apartment: homeAddressInfo.apartment,
+                }}
               />
             </DescriptionListItem>
           </dl>

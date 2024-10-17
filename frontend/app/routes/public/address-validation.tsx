@@ -11,9 +11,9 @@ import validator from 'validator';
 import { z } from 'zod';
 
 import { Address } from '~/components/address';
+import { AddressDiff } from '~/components/address-diff';
 import { Button } from '~/components/buttons';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
-import { DiffViewer } from '~/components/diff-viewer';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
@@ -27,7 +27,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatAddress, isAllValidInputCharacters, randomString } from '~/utils/string-utils';
+import { isAllValidInputCharacters, randomString } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 interface CanadianAddress {
@@ -392,8 +392,6 @@ interface CorrectedAddressDialogContentProps {
 
 function CorrectedAddressDialogContent({ address, correctedAddress }: CorrectedAddressDialogContentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const formattedAddress = formatAddress(address.address, address.city, address.country, address.provinceState, address.postalZipCode, address.apartment);
-  const formattedCorrectedAddress = formatAddress(correctedAddress.address, correctedAddress.city, correctedAddress.country, correctedAddress.provinceState, correctedAddress.postalZipCode, correctedAddress.apartment);
   return (
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
@@ -402,11 +400,9 @@ function CorrectedAddressDialogContent({ address, correctedAddress }: CorrectedA
       </DialogHeader>
       <div className="space-y-4">
         <p className="font-semibold">{t('address-validation:dialog.corrected-address.initial-address')}</p>
-        <Address postalZipCode={address.postalZipCode} address={address.address} city={address.city} country={address.country} apartment={address.apartment} provinceState={address.provinceState} />
+        <Address address={address} />
         <p className="font-semibold">{t('address-validation:dialog.corrected-address.corrected-address')}</p>
-        <address className="whitespace-pre-wrap not-italic">
-          <DiffViewer oldStr={formattedAddress} newStr={formattedCorrectedAddress} />
-        </address>
+        <AddressDiff oldAddress={address} newAddress={correctedAddress} />
       </div>
       <DialogFooter>
         <DialogClose asChild>
@@ -431,7 +427,7 @@ function InternationalAddressDialogContent({ address }: InternationalAddressDial
         <DialogTitle>{t('address-validation:dialog.international-address.header')}</DialogTitle>
         <DialogDescription>{t('address-validation:dialog.international-address.description')}</DialogDescription>
       </DialogHeader>
-      <Address postalZipCode={address.postalZipCode} address={address.address} city={address.city} country={address.country} apartment={address.apartment} provinceState={address.provinceState} />
+      <Address address={address} />
       <DialogFooter>
         <DialogClose asChild>
           <Button id="dialog.international-address-close-button" variant="default" size="sm">
@@ -455,7 +451,7 @@ function NotCorrectAddressDialogContent({ address }: NotCorrectAddressDialogCont
         <DialogTitle>{t('address-validation:dialog.not-correct-address.header')}</DialogTitle>
         <DialogDescription>{t('address-validation:dialog.not-correct-address.description')}</DialogDescription>
       </DialogHeader>
-      <Address postalZipCode={address.postalZipCode} address={address.address} city={address.city} country={address.country} apartment={address.apartment} provinceState={address.provinceState} />
+      <Address address={address} />
       <DialogFooter>
         <DialogClose asChild>
           <Button id="dialog.not-correct-address-close-button" variant="default" size="sm">
@@ -479,7 +475,7 @@ function ValidAddressDialogContent({ address }: ValidAddressDialogContentProps) 
         <DialogTitle>{t('address-validation:dialog.valid-address.header')}</DialogTitle>
         <DialogDescription>{t('address-validation:dialog.valid-address.description')}</DialogDescription>
       </DialogHeader>
-      <Address postalZipCode={address.postalZipCode} address={address.address} city={address.city} country={address.country} apartment={address.apartment} provinceState={address.provinceState} />
+      <Address address={address} />
       <DialogFooter>
         <DialogClose asChild>
           <Button id="dialog.valid-address-close-button" variant="default" size="sm">
