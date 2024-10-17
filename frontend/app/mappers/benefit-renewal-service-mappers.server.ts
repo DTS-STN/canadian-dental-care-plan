@@ -24,7 +24,7 @@ export interface ToBenefitRenewalRequestFromApplyAdultStateArgs {
   contactInformation: ContactInformationState;
   typeOfRenewal: Extract<TypeOfRenewalState, 'adult-child'>;
   maritalStatus: string;
-  addressInformation: AddressInformationState;
+  addressInformation?: AddressInformationState;
 }
 
 export function toBenefitRenewalRequestFromRenewItaState({
@@ -60,7 +60,7 @@ interface ToBenefitRenewalRequestArgs {
   contactInformation: ContactInformationState;
   typeOfRenewal: TypeOfRenewalState;
   maritalStatus: string;
-  addressInformation: AddressInformationState;
+  addressInformation?: AddressInformationState;
 }
 
 function toBenefitRenewalRequest({
@@ -84,7 +84,7 @@ function toBenefitRenewalRequest({
         PersonBirthDate: toDate(applicantInformation.dateOfBirth),
         PersonContactInformation: [
           {
-            Address: [toMailingAddress(addressInformation), toHomeAddress(addressInformation)],
+            Address: addressInformation ? [toMailingAddress(addressInformation), toHomeAddress(addressInformation)] : [],
             EmailAddress: toEmailAddress({ contactEmail: contactInformation.email, communicationEmail: communicationPreferences?.email }),
             TelephoneNumber: toTelephoneNumber(contactInformation),
           },
@@ -104,7 +104,7 @@ function toBenefitRenewalRequest({
           IdentificationID: applicantInformation.clientNumber,
         },
         RelatedPerson: toRelatedPersons({ partnerInformation }),
-        MailingSameAsHomeIndicator: addressInformation.copyMailingAddress,
+        MailingSameAsHomeIndicator: addressInformation?.copyMailingAddress ?? false,
         PreferredMethodCommunicationCode: {
           ReferenceDataID: communicationPreferences?.preferredMethod,
         },

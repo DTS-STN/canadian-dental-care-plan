@@ -45,7 +45,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     state.contactInformation === undefined ||
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
-    state.addressInformation?.homeCountry === undefined ||
+    (state.hasAddressChanged && state.addressInformation===undefined) ||
     state.submissionInfo === undefined ||
     state.maritalStatus === undefined ||
     state.typeOfRenewal === undefined) {
@@ -60,10 +60,10 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const mailingProvinceTerritoryStateAbbr = state.addressInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.addressInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
-  const countryMailing = serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.mailingCountry, locale);
-  const countryHome = serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.homeCountry, locale);
+  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
+  const countryMailing = state.addressInformation?.mailingCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
+  const countryHome = state.addressInformation?.homeCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
   const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.maritalStatus, locale);
   const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getLocalizedPreferredCommunicationMethodById(state.communicationPreference.preferredMethod, locale);
 
@@ -88,23 +88,27 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
       }
     : null;
 
-  const mailingAddressInfo = {
-    address: state.addressInformation.mailingAddress,
-    city: state.addressInformation.mailingCity,
-    province: mailingProvinceTerritoryStateAbbr,
-    postalCode: state.addressInformation.mailingPostalCode,
-    country: countryMailing.name,
-    apartment: state.addressInformation.mailingApartment,
-  };
+  const mailingAddressInfo = state.addressInformation
+    ? {
+        address: state.addressInformation.mailingAddress,
+        city: state.addressInformation.mailingCity,
+        province: mailingProvinceTerritoryStateAbbr,
+        postalCode: state.addressInformation.mailingPostalCode,
+        country: countryMailing?.name ?? '',
+        apartment: state.addressInformation.mailingApartment,
+      }
+    : null;
 
-  const homeAddressInfo = {
-    address: state.addressInformation.homeAddress,
-    city: state.addressInformation.homeCity,
-    province: homeProvinceTerritoryStateAbbr,
-    postalCode: state.addressInformation.homePostalCode,
-    country: countryHome.name,
-    apartment: state.addressInformation.homeApartment,
-  };
+  const homeAddressInfo = state.addressInformation
+    ? {
+        address: state.addressInformation.homeAddress,
+        city: state.addressInformation.homeCity,
+        province: homeProvinceTerritoryStateAbbr,
+        postalCode: state.addressInformation.homePostalCode,
+        country: countryHome?.name ?? '',
+        apartment: state.addressInformation.homeApartment,
+      }
+    : null;
 
   const dentalInsurance = {
     acessToDentalInsurance: state.dentalInsurance,
@@ -242,28 +246,36 @@ export default function RenewFlowConfirm() {
               <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.mailing')}>
-              <Address
-                address={{
-                  address: mailingAddressInfo.address,
-                  city: mailingAddressInfo.city,
-                  provinceState: mailingAddressInfo.province,
-                  postalZipCode: mailingAddressInfo.postalCode,
-                  country: mailingAddressInfo.country,
-                  apartment: mailingAddressInfo.apartment,
-                }}
-              />
+              {mailingAddressInfo ? (
+                <Address
+                  address={{
+                    address: mailingAddressInfo.address,
+                    city: mailingAddressInfo.city,
+                    provinceState: mailingAddressInfo.province,
+                    postalZipCode: mailingAddressInfo.postalCode,
+                    country: mailingAddressInfo.country,
+                    apartment: mailingAddressInfo.apartment,
+                  }}
+                />
+              ) : (
+                t('renew-ita:confirm.no-change')
+              )}
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.home')}>
-              <Address
-                address={{
-                  address: homeAddressInfo.address ?? '',
-                  city: homeAddressInfo.city ?? '',
-                  provinceState: homeAddressInfo.province,
-                  postalZipCode: homeAddressInfo.postalCode,
-                  country: homeAddressInfo.country,
-                  apartment: homeAddressInfo.apartment,
-                }}
-              />
+              {homeAddressInfo ? (
+                <Address
+                  address={{
+                    address: homeAddressInfo.address ?? '',
+                    city: homeAddressInfo.city ?? '',
+                    provinceState: homeAddressInfo.province,
+                    postalZipCode: homeAddressInfo.postalCode,
+                    country: homeAddressInfo.country,
+                    apartment: homeAddressInfo.apartment,
+                  }}
+                />
+              ) : (
+                t('renew-ita:confirm.no-change')
+              )}
             </DescriptionListItem>
           </dl>
         </section>
