@@ -19,7 +19,7 @@ export function DiffViewer({ ignoreCase = true, oldStr, newStr }: DiffViewerProp
       const key = diff.added || diff.removed ? diff.value : `${diff.value}-${index}`;
       if (diff.added) {
         return (
-          <ins key={key} className="bg-green-100 text-green-500">
+          <ins key={key} className="bg-green-100">
             {diff.value}
           </ins>
         );
@@ -27,7 +27,7 @@ export function DiffViewer({ ignoreCase = true, oldStr, newStr }: DiffViewerProp
 
       if (diff.removed) {
         return (
-          <del key={key} className="bg-red-100 text-red-500">
+          <del key={key} className="bg-red-100">
             {diff.value}
           </del>
         );
