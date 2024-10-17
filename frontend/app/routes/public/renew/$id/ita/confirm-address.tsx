@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -23,7 +25,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
-enum HasAddressChangedOption {
+enum AddressRadioOptions {
   No = 'no',
   Yes = 'yes',
 }
@@ -45,7 +47,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:confirm-address.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.hasAddressChanged });
+  return json({ id: state.id, csrfToken, meta, defaultState: { hasAddressChanged: state.hasAddressChanged, areMailingAndHomeAddressSame: state.areMailingAndHomeAddressSame } });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -54,8 +56,14 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const hasAddressChangedSchema = z.object({
-    hasAddressChanged: z.nativeEnum(HasAddressChangedOption, {
+    hasAddressChanged: z.nativeEnum(AddressRadioOptions, {
       errorMap: () => ({ message: t('renew-ita:confirm-address.error-message.has-address-changed-required') }),
+    }),
+  });
+
+  const areMailingAndHomeAddressSameSchema = z.object({
+    areMailingAndHomeAddressSame: z.nativeEnum(AddressRadioOptions, {
+      errorMap: () => ({ message: t('renew-ita:confirm-address.error-message.are-mailing-and-home-address-same-required') }),
     }),
   });
 
@@ -68,18 +76,30 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const data = { hasAddressChanged: formData.get('hasAddressChanged') };
-  const parsedDataResult = hasAddressChangedSchema.safeParse(data);
+  const hasAddressChangedData = { hasAddressChanged: formData.get('hasAddressChanged') };
+  const areMailingAndHomeAddressSameSchemaData = { areMailingAndHomeAddressSame: formData.get('areMailingAndHomeAddressSame') };
+  const parsedHasAddressChangedDataResult = hasAddressChangedSchema.safeParse(hasAddressChangedData);
+  const parsedAreMailingAndHomeAddressSameDataResult = areMailingAndHomeAddressSameSchema.safeParse(areMailingAndHomeAddressSameSchemaData);
 
-  if (!parsedDataResult.success) {
+  if (!parsedHasAddressChangedDataResult.success || (parsedHasAddressChangedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes && !parsedAreMailingAndHomeAddressSameDataResult.success)) {
     return json({
-      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+      errors: {
+        ...(!parsedHasAddressChangedDataResult.success ? transformFlattenedError(parsedHasAddressChangedDataResult.error.flatten()) : {}),
+        ...(parsedHasAddressChangedDataResult.data?.hasAddressChanged === AddressRadioOptions.Yes && !parsedAreMailingAndHomeAddressSameDataResult.success ? transformFlattenedError(parsedAreMailingAndHomeAddressSameDataResult.error.flatten()) : {}),
+      },
     });
   }
 
-  saveRenewState({ params, session, state: { hasAddressChanged: parsedDataResult.data.hasAddressChanged === HasAddressChangedOption.Yes } });
+  saveRenewState({
+    params,
+    session,
+    state: {
+      hasAddressChanged: parsedHasAddressChangedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes,
+      areMailingAndHomeAddressSame: parsedAreMailingAndHomeAddressSameDataResult.data ? parsedAreMailingAndHomeAddressSameDataResult.data.areMailingAndHomeAddressSame === AddressRadioOptions.Yes : undefined,
+    },
+  });
 
-  if (parsedDataResult.data.hasAddressChanged === HasAddressChangedOption.No) {
+  if (parsedHasAddressChangedDataResult.data.hasAddressChanged === AddressRadioOptions.No) {
     return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
   }
 
@@ -93,7 +113,16 @@ export default function RenewItaConfirmAddress() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { hasAddressChanged: 'input-radio-has-address-changed-option-0' });
+  const errorSummary = useErrorSummary(errors, {
+    hasAddressChanged: 'input-radio-has-address-changed-option-0',
+    areMailingAndHomeAddressSame: 'input-radio-are-mailing-and-home-address-same-option-0',
+  });
+
+  const [hasAddressChangedRadioValue, setHasAddressChangeRadioValue] = useState(defaultState.hasAddressChanged);
+
+  function handleHasAddressChanged(e: React.ChangeEvent<HTMLInputElement>) {
+    setHasAddressChangeRadioValue(e.target.value === AddressRadioOptions.Yes);
+  }
 
   return (
     <>
@@ -105,18 +134,34 @@ export default function RenewItaConfirmAddress() {
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <InputRadios
-            id="has-address-changed"
-            name="hasAddressChanged"
-            legend={t('renew-ita:confirm-address.form-instructions')}
-            options={[
-              { value: HasAddressChangedOption.Yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState === true },
-              { value: HasAddressChangedOption.No, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState === false },
-            ]}
-            helpMessagePrimary={t('renew-ita:confirm-address.help-message')}
-            errorMessage={errors?.hasAddressChanged}
-            required
-          />
+          <div className="space-y-6">
+            <InputRadios
+              id="has-address-changed"
+              name="hasAddressChanged"
+              legend={t('renew-ita:confirm-address.have-you-moved')}
+              options={[
+                { value: AddressRadioOptions.Yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState.hasAddressChanged === true, onChange: handleHasAddressChanged },
+                { value: AddressRadioOptions.No, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState.hasAddressChanged === false, onChange: handleHasAddressChanged },
+              ]}
+              helpMessagePrimary={t('renew-ita:confirm-address.help-message')}
+              errorMessage={errors?.hasAddressChanged}
+              required
+            />
+            {hasAddressChangedRadioValue && (
+              <InputRadios
+                id="are-mailing-and-home-address-same"
+                name="areMailingAndHomeAddressSame"
+                legend={t('renew-ita:confirm-address.are-mailing-and-home-address-same')}
+                options={[
+                  { value: AddressRadioOptions.Yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState.areMailingAndHomeAddressSame === true },
+                  { value: AddressRadioOptions.No, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState.areMailingAndHomeAddressSame === false },
+                ]}
+                errorMessage={errors?.areMailingAndHomeAddressSame}
+                required
+              />
+            )}
+          </div>
+
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Confirm address click">
               {t('renew-ita:confirm-address.continue-btn')}
