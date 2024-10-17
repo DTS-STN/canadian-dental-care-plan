@@ -31,17 +31,17 @@ export interface RenewState {
   };
   readonly hasAddressChanged?: boolean;
   readonly addressInformation?: {
-    copyMailingAddress: boolean;
+    copyMailingAddress?: boolean;
     homeAddress?: string;
     homeApartment?: string;
     homeCity?: string;
     homeCountry?: string;
     homePostalCode?: string;
     homeProvince?: string;
-    mailingAddress: string;
+    mailingAddress?: string;
     mailingApartment?: string;
-    mailingCity: string;
-    mailingCountry: string;
+    mailingCity?: string;
+    mailingCountry?: string;
     mailingPostalCode?: string;
     mailingProvince?: string;
   };

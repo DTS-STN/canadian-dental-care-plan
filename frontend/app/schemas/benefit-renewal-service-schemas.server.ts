@@ -24,29 +24,31 @@ export const benefitRenewalRequestSchema = z.object({
       }),
       PersonContactInformation: z.array(
         z.object({
-          Address: z.array(
-            z.object({
-              AddressCategoryCode: z.object({
-                ReferenceDataName: z.string(),
-              }),
-              AddressCityName: z.string(),
-              AddressCountry: z.object({
-                CountryCode: z.object({
-                  ReferenceDataID: z.string(),
+          Address: z
+            .array(
+              z.object({
+                AddressCategoryCode: z.object({
+                  ReferenceDataName: z.string(),
+                }),
+                AddressCityName: z.string(),
+                AddressCountry: z.object({
+                  CountryCode: z.object({
+                    ReferenceDataID: z.string(),
+                  }),
+                }),
+                AddressPostalCode: z.string(),
+                AddressProvince: z.object({
+                  ProvinceCode: z.object({
+                    ReferenceDataID: z.string(),
+                  }),
+                }),
+                AddressSecondaryUnitText: z.string(),
+                AddressStreet: z.object({
+                  StreetName: z.string(),
                 }),
               }),
-              AddressPostalCode: z.string(),
-              AddressProvince: z.object({
-                ProvinceCode: z.object({
-                  ReferenceDataID: z.string(),
-                }),
-              }),
-              AddressSecondaryUnitText: z.string(),
-              AddressStreet: z.object({
-                StreetName: z.string(),
-              }),
-            }),
-          ),
+            )
+            .optional(),
           EmailAddress: z.array(
             z.object({
               EmailAddressID: z.string(),
@@ -105,7 +107,7 @@ export const benefitRenewalRequestSchema = z.object({
           }),
         }),
       ),
-      MailingSameAsHomeIndicator: z.boolean(),
+      MailingSameAsHomeIndicator: z.boolean().optional(),
       PreferredMethodCommunicationCode: z.object({
         ReferenceDataID: z.string().optional(),
       }),
