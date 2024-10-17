@@ -2,6 +2,7 @@ import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
 import clientFriendlyStatusDataSource from '~/.server/resources/power-platform/client-friendly-status.json';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 /**
@@ -23,9 +24,10 @@ const MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP: Record<string, string> = clien
 export function getStatusCheckApiMockHandlers() {
   const log = getLogger('status-check-api.server');
   log.info('Initializing Status Check mock handlers');
+  const { INTEROP_API_BASE_URI } = getEnv();
 
   return [
-    http.post('https://api.example.com/dental-care/status-check/v1/status', async ({ request }) => {
+    http.post(`${INTEROP_API_BASE_URI}/dental-care/status-check/v1/status`, async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const statusRequestSchema = z.object({
         BenefitApplication: z.object({
@@ -65,7 +67,7 @@ export function getStatusCheckApiMockHandlers() {
         },
       });
     }),
-    http.post('https://api.example.com/dental-care/status-check/v1/status_fnlndob', async ({ request }) => {
+    http.post(`${INTEROP_API_BASE_URI}/dental-care/status-check/v1/status_fnlndob`, async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const statusRequestSchema = z.object({
         BenefitApplication: z.object({

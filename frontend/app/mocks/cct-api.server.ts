@@ -1,6 +1,7 @@
 import { HttpResponse, http } from 'msw';
 
 import getPdfByLetterIdJson from './cct-data/get-pdf-by-letter-id.json';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 /**
@@ -9,12 +10,13 @@ import { getLogger } from '~/utils/logging.server';
 export function getCCTApiMockHandlers() {
   const log = getLogger('cct-api.server');
   log.info('Initializing CCT API mock handlers');
+  const { INTEROP_API_BASE_URI } = getEnv();
 
   return [
     //
     // Handler for GET requests to retrieve pdf
     //
-    http.get('https://api.example.com/dental-care/client-letters/cct/v1/GetPdfByLetterId', ({ request }) => {
+    http.get(`${INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`, ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
 
       const url = new URL(request.url);
@@ -36,7 +38,7 @@ export function getCCTApiMockHandlers() {
     /**
      * Handler for GET requests to retrieve letter details.
      */
-    http.get('https://api.example.com/dental-care/client-letters/cct/v1/GetDocInfoByClientId', ({ request }) => {
+    http.get(`${INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`, ({ request }) => {
       const url = new URL(request.url);
       const clientId = url.searchParams.get('clientid');
       const community = request.headers.get('cct-community');

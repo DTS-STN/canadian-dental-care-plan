@@ -1,5 +1,6 @@
 import { HttpResponse, http } from 'msw';
 
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 /**
@@ -8,12 +9,13 @@ import { getLogger } from '~/utils/logging.server';
 export function getWSAddressApiMockHandlers() {
   const log = getLogger('wsaddress-api.server');
   log.info('Initializing WSAddress API mock handlers');
+  const { INTEROP_API_BASE_URI } = getEnv();
 
   return [
     //
     // Handler for GET requests to WSAddress correct service
     //
-    http.get('https://api.example.com/address/validation/v1/CAN/correct', ({ request }) => {
+    http.get(`${INTEROP_API_BASE_URI}/address/validation/v1/CAN/correct`, ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       return HttpResponse.json({
         '@context': {
