@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { expandTemplate, formatPercent, isAllValidInputCharacters, normalizeHyphens, padWithZero, randomHexString, randomString, removeInvalidInputCharacters } from '~/utils/string-utils';
+import { expandTemplate, formatAddress, formatPercent, isAllValidInputCharacters, normalizeHyphens, padWithZero, randomHexString, randomString, removeInvalidInputCharacters } from '~/utils/string-utils';
 
 describe('expandTemplate', () => {
   it('should expand a template', () => {
@@ -114,5 +114,51 @@ describe('formatPercent', () => {
 
   it('should throw an error for invalid Canadian locale', () => {
     expect(() => formatPercent(0, 'xy')).toThrowError();
+  });
+});
+
+describe('formatAddress', () => {
+  it('should format an address with all components', () => {
+    const address = formatAddress({
+      address: '123 Main St',
+      city: 'Anytown',
+      provinceState: 'ON',
+      postalZipCode: 'K1A 0B1',
+      country: 'Canada',
+      apartment: 'Apt 4',
+    });
+    expect(address).toBe(`123 Main St Apt 4\nAnytown ON  K1A 0B1\nCanada`);
+  });
+
+  it('should format an address with missing components', () => {
+    const address = formatAddress({
+      address: '123 Main St',
+      city: 'Anytown',
+      country: 'Canada',
+    });
+    expect(address).toBe(`123 Main St\nAnytown\nCanada`);
+  });
+
+  it('should format an address with an apartment number that is not all alphanumeric', () => {
+    const address = formatAddress({
+      address: '123 Main St',
+      city: 'Anytown',
+      country: 'Canada',
+      apartment: 'Unit 4B',
+    });
+    expect(address).toBe(`123 Main St Unit 4B\nAnytown\nCanada`);
+  });
+
+  it('should format an address with an alternate format', () => {
+    const address = formatAddress({
+      address: '123 Main St',
+      city: 'Anytown',
+      provinceState: 'ON',
+      postalZipCode: 'K1A 0B1',
+      country: 'Canada',
+      apartment: 'Apt 4',
+      altFormat: true,
+    });
+    expect(address).toBe(`123 Main St Apt 4\nAnytown, ON\nK1A 0B1\nCanada`);
   });
 });
