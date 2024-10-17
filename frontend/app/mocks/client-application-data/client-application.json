@@ -1,0 +1,267 @@
+{
+  "BenefitApplication": {
+    "Applicant": {
+      "PersonBirthDate": {
+        "date": "1983-07-17",
+        "dateTime": "",
+        "DayDate": "",
+        "MonthDate": "",
+        "YearDate": ""
+      },
+      "PersonContactInformation": [
+        {
+          "Address": [
+            {
+              "AddressCategoryCode": {
+                "ReferenceDataName": "Mailing"
+              },
+              "AddressCityName": "Hamilton",
+              "AddressCountry": {
+                "CountryCode": {
+                  "ReferenceDataID": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+                }
+              },
+              "AddressPostalCode": "L9B 1A2",
+              "AddressProvince": {
+                "ProvinceCode": {
+                  "ReferenceDataID": "6d861c55-36b3-eb11-8236-0022486d8d5f"
+                }
+              },
+              "AddressSecondaryUnitText": "Apt. No. 50",
+              "AddressStreet": {
+                "StreetName": "50 My Street"
+              }
+            },
+            {
+              "AddressCategoryCode": {
+                "ReferenceDataName": "Home"
+              },
+              "AddressCityName": "Hamilton",
+              "AddressCountry": {
+                "CountryCode": {
+                  "ReferenceDataID": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+                }
+              },
+              "AddressPostalCode": "L9B 1A2",
+              "AddressProvince": {
+                "ProvinceCode": {
+                  "ReferenceDataID": "6d861c55-36b3-eb11-8236-0022486d8d5f"
+                }
+              },
+              "AddressSecondaryUnitText": "Apt. No. 50",
+              "AddressStreet": {
+                "StreetName": "50 My Street"
+              }
+            }
+          ],
+          "EmailAddress": [
+            {
+              "EmailAddressID": "myEmail50@domain.ca"
+            }
+          ],
+          "TelephoneNumber": [
+            {
+              "FullTelephoneNumber": {
+                "TelephoneNumberFullID": "555-555-5555"
+              },
+              "TelephoneNumberCategoryCode": {
+                "ReferenceDataName": "Primary"
+              }
+            },
+            {
+              "FullTelephoneNumber": {
+                "TelephoneNumberFullID": "555-555-5555"
+              },
+              "TelephoneNumberCategoryCode": {
+                "ReferenceDataName": "Alternate"
+              }
+            }
+          ]
+        }
+      ],
+      "PersonLanguage": [
+        {
+          "CommunicationCategoryCode": {
+            "ReferenceDataID": ""
+          },
+          "PreferredIndicator": ""
+        }
+      ],
+      "PersonMaritalStatus": {
+        "StatusCode": {
+          "ReferenceDataID": "775170001"
+        }
+      },
+      "PersonName": [
+        {
+          "PersonGivenName": ["MyFirstName50"],
+          "PersonSurName": "MyLastName50"
+        }
+      ],
+      "PersonSINIdentification": {
+        "IdentificationID": "999999999",
+        "IdentificationCategoryText": "some text"
+      },
+      "MailingSameAsHomeIndicator": true,
+      "PreferredMethodCommunicationCode": {
+        "ReferenceDataID": "775170002"
+      },
+      "ApplicantDetail": {
+        "AttestParentOrGuardianIndicator": true,
+        "ConsentToSharePersonalInformationIndicator": true,
+        "DisabilityTaxCreditIndicator": true,
+        "FederalDentalCoverageIndicator": true,
+        "InsurancePlan": [
+          {
+            "InsurancePlanIdentification": [
+              {
+                "IdentificationID": "",
+                "IdentificationCategoryText": ""
+              },
+              {
+                "IdentificationID": "",
+                "IdentificationCategoryText": ""
+              }
+            ]
+          },
+          {
+            "InsurancePlanIdentification": [
+              {
+                "IdentificationID": "",
+                "IdentificationCategoryText": ""
+              },
+              {
+                "IdentificationID": "",
+                "IdentificationCategoryText": ""
+              }
+            ]
+          }
+        ],
+        "LivingIndependentlyIndicator": true,
+        "PrivateDentalInsuranceIndicator": true,
+        "ProvincialDentalCoverageIndicator": true
+      },
+      "ApplicantCategoryCode": {
+        "ReferenceDataID": "775170000",
+        "ReferenceDataName": ""
+      },
+      "ClientIdentification": [
+        {
+          "IdentificationID": "4f35f70b-2f83-ee11-8179-000d3a09d000",
+          "IdentificationCategoryText": "Applicant ID"
+        },
+        {
+          "IdentificationID": "1e97fe42-0263-ee11-8df0-000d3a09df08",
+          "IdentificationCategoryText": "Client ID"
+        }
+      ],
+      "Flags": [
+        {
+          "Flag": true,
+          "FlagCategoryText": "isCraAssessed"
+        },
+        {
+          "Flag": false,
+          "FlagCategoryText": ""
+        }
+      ],
+      "RelatedPerson": [
+        {
+          "PersonBirthDate": {
+            "date": "",
+            "dateTime": "",
+            "DayDate": "",
+            "MonthDate": "",
+            "YearDate": ""
+          },
+          "PersonName": [
+            {
+              "PersonGivenName": [],
+              "PersonSurName": ""
+            }
+          ],
+          "PersonRelationshipCode": {
+            "ReferenceDataName": ""
+          },
+          "ApplicantDetail": {
+            "AttestParentOrGuardianIndicator": "",
+            "ConsentToSharePersonalInformationIndicator": "",
+            "DisabilityTaxCreditIndicator": "",
+            "FederalDentalCoverageIndicator": "",
+            "InsurancePlan": [
+              {
+                "InsurancePlanIdentification": [
+                  {
+                    "IdentificationID": "",
+                    "IdentificationCategoryText": ""
+                  },
+                  {
+                    "IdentificationID": "",
+                    "IdentificationCategoryText": ""
+                  }
+                ]
+              },
+              {
+                "InsurancePlanIdentification": [
+                  {
+                    "IdentificationID": "",
+                    "IdentificationCategoryText": ""
+                  },
+                  {
+                    "IdentificationID": "",
+                    "IdentificationCategoryText": ""
+                  }
+                ]
+              }
+            ],
+            "LivingIndependentlyIndicator": "",
+            "PrivateDentalInsuranceIndicator": "",
+            "ProvincialDentalCoverageIndicator": ""
+          },
+          "PersonSINIdentification": {
+            "IdentificationID": "",
+            "IdentificationCategoryText": ""
+          },
+          "ClientIdentification": [
+            {
+              "IdentificationID": "",
+              "IdentificationCategoryText": ""
+            },
+            {
+              "IdentificationID": "",
+              "IdentificationCategoryText": ""
+            },
+            {
+              "IdentificationID": "",
+              "IdentificationCategoryText": ""
+            }
+          ]
+        }
+      ]
+    },
+    "BenefitApplicationChannelCode": {
+      "ReferenceDataID": "775170001"
+    },
+    "BenefitApplicationCategoryCode": {
+      "ReferenceDataID": "775170000"
+    },
+    "BenefitApplicationIdentification": [
+      {
+        "IdentificationID": "41d42b4e-0263-ee11-8df0-000d3a09dca9",
+        "IdentificationCategoryText": "Dental Application ID"
+      }
+    ],
+    "BenefitApplicationYear": {
+      "BenefitApplicationYearIdentification": [
+        {
+          "IdentificationID": "",
+          "IdentificationCategoryText": ""
+        },
+        {
+          "IdentificationID": "",
+          "IdentificationCategoryText": ""
+        }
+      ]
+    }
+  }
+}
