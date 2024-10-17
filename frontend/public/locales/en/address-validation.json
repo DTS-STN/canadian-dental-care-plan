@@ -10,6 +10,30 @@
     "province-state": "Province, territory, state, or region"
   },
   "address-header": "Mailing address",
+  "dialog": {
+    "corrected-address": {
+      "close-button": "Close",
+      "description": "We've made some corrections to your mailing address. Please review the updated information below:",
+      "header": "Corrected mailing address",
+      "initial-address": "Your initial mailing address",
+      "corrected-address": "Our corrected mailing address"
+    },
+    "international-address": {
+      "close-button": "Close",
+      "description": "Please double-check the international mailing address details below:",
+      "header": "International mailing address"
+    },
+    "not-correct-address": {
+      "close-button": "Close",
+      "description": "There seems to be an issue with the mailing address you entered. Please verify the information below:",
+      "header": "Mailing address error"
+    },
+    "valid-address": {
+      "close-button": "Close",
+      "description": "Your mailing address is valid! Please review the confirmed details below:",
+      "header": "Mailing address confirmed"
+    }
+  },
   "error-message": {
     "address-required": "Enter mailing address, typically number and street",
     "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
@@ -25,10 +49,5 @@
   "optional-label": "Complete all fields unless marked as optional.",
   "page-title": "Address validation",
   "reset-button": "Reset",
-  "submit-button": "Validate address",
-  "valid-address-dialog": {
-    "close-button": "Close",
-    "description": "The provided mailing address has been successfully validated and is valid. Please review the formatted address below:",
-    "header": "Mailing address validated"
-  }
+  "submit-button": "Validate address"
 }

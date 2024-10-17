@@ -98,3 +98,39 @@ export function extractDigits(input: string) {
 export function normalizeSpaces(str: string) {
   return str.replace(/[\s\u00a0]/g, ' ');
 }
+
+/**
+ * Formats an address string based on the provided address components.
+ *
+ * @param address - The street address.
+ * @param city - The city name.
+ * @param country - The country name.
+ * @param provinceState - The province or state name (optional).
+ * @param postalZipCode - The postal or zip code (optional).
+ * @param apartment - The apartment number (optional).
+ * @param altFormat - Whether to use an alternate formatting style (optional).
+ * @returns The formatted address string.
+ */
+export function formatAddress(address: string, city: string, country: string, provinceState?: string, postalZipCode?: string, apartment?: string, altFormat?: boolean) {
+  const formattedAddress = apartment ? (/^[a-z\d]+$/i.test(apartment) ? `${apartment}-${address}` : `${address} ${apartment}`) : address;
+
+  // prettier-ignore
+  const lines = [
+    formattedAddress,
+    `${city}${provinceState ? ` ${provinceState}` : ''}${postalZipCode ? `  ${postalZipCode}` : ''}`,
+    `${country}`
+  ];
+
+  // prettier-ignore
+  const linesAlt = [
+    formattedAddress,
+    `${city}${provinceState ? `, ${provinceState}` : ''}`,
+    `${postalZipCode ? `${postalZipCode}` : ''}`,
+    `${country}`
+  ];
+
+  return (altFormat ? linesAlt : lines)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join('\n');
+}
