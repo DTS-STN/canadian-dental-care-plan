@@ -6,6 +6,7 @@ import type { BenefitApplicationResponse } from '~/schemas/benefit-application-s
 import { benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { benefitRenewalRequestSchema } from '~/schemas/benefit-renewal-service-schemas.server';
 import type { BenefitRenewalResponse } from '~/schemas/benefit-renewal-service-schemas.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const sinIdSchema = z.object({
@@ -22,12 +23,13 @@ const sinIdSchema = z.object({
 export function getPowerPlatformApiMockHandlers() {
   const log = getLogger('power-platform-api.server');
   log.info('Initializing Power Platform mock handlers');
+  const { INTEROP_API_BASE_URI } = getEnv();
 
   return [
     //
     // Retrieve personal details information (using POST instead of GET due the sin params logging with GET)
     //
-    http.post('https://api.example.com/dental-care/applicant-information/dts/v1/applicant', async ({ request }) => {
+    http.post(`${INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant`, async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
       if (!subscriptionKey) {
@@ -172,7 +174,7 @@ export function getPowerPlatformApiMockHandlers() {
     /**
      * Handler for POST request to submit application to Power Platform
      */
-    http.post('https://api.example.com/dental-care/applicant-information/dts/v1/benefit-application', async ({ request }) => {
+    http.post(`${INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`, async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
 
       const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
@@ -205,7 +207,7 @@ export function getPowerPlatformApiMockHandlers() {
     /**
      * Handler for POST request to submit renewal to Power Platform
      */
-    http.post('https://api.example.com/dental-care/applicant-information/dts/v1/benefit-renewal', async ({ request }) => {
+    http.post(`${INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-renewal`, async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
 
       const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
