@@ -17,18 +17,18 @@ export type BenefitRenewalRequestDto = Readonly<{
     email?: string;
   }>;
   hasAddressChanged?: boolean;
-  addressInformation: Readonly<{
-    copyMailingAddress: boolean;
+  addressInformation?: Readonly<{
+    copyMailingAddress?: boolean;
     homeAddress?: string;
     homeApartment?: string;
     homeCity?: string;
     homeCountry?: string;
     homePostalCode?: string;
     homeProvince?: string;
-    mailingAddress: string;
+    mailingAddress?: string;
     mailingApartment?: string;
-    mailingCity: string;
-    mailingCountry: string;
+    mailingCity?: string;
+    mailingCountry?: string;
     mailingPostalCode?: string;
     mailingProvince?: string;
   }>;

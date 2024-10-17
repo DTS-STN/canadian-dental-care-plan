@@ -20,26 +20,26 @@ export type BenefitRenewalRequestEntity = Readonly<{
       }>;
       PersonContactInformation: ReadonlyArray<
         Readonly<{
-          Address: ReadonlyArray<
+          Address?: ReadonlyArray<
             Readonly<{
-              AddressCategoryCode: Readonly<{
-                ReferenceDataName: string;
+              AddressCategoryCode?: Readonly<{
+                ReferenceDataName?: string;
               }>;
-              AddressCityName: string;
-              AddressCountry: Readonly<{
-                CountryCode: Readonly<{
-                  ReferenceDataID: string;
+              AddressCityName?: string;
+              AddressCountry?: Readonly<{
+                CountryCode?: Readonly<{
+                  ReferenceDataID?: string;
                 }>;
               }>;
-              AddressPostalCode: string;
-              AddressProvince: Readonly<{
-                ProvinceCode: Readonly<{
-                  ReferenceDataID: string;
+              AddressPostalCode?: string;
+              AddressProvince?: Readonly<{
+                ProvinceCode?: Readonly<{
+                  ReferenceDataID?: string;
                 }>;
               }>;
-              AddressSecondaryUnitText: string;
-              AddressStreet: Readonly<{
-                StreetName: string;
+              AddressSecondaryUnitText?: string;
+              AddressStreet?: Readonly<{
+                StreetName?: string;
               }>;
             }>
           >;
@@ -99,7 +99,7 @@ export type BenefitRenewalRequestEntity = Readonly<{
           }>;
         }>
       >;
-      MailingSameAsHomeIndicator: boolean;
+      MailingSameAsHomeIndicator?: boolean;
       PreferredMethodCommunicationCode?: Readonly<{
         ReferenceDataID?: string;
       }>;
