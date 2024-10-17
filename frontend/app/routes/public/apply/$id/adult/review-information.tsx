@@ -340,12 +340,14 @@ export default function ReviewInformation() {
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.mailing-title')}>
                 <Address
-                  address={mailingAddressInfo.address}
-                  city={mailingAddressInfo.city}
-                  provinceState={mailingAddressInfo.province}
-                  postalZipCode={mailingAddressInfo.postalCode}
-                  country={mailingAddressInfo.country.name}
-                  apartment={mailingAddressInfo.apartment}
+                  address={{
+                    address: mailingAddressInfo.address,
+                    city: mailingAddressInfo.city,
+                    provinceState: mailingAddressInfo.province,
+                    postalZipCode: mailingAddressInfo.postalCode,
+                    country: mailingAddressInfo.country.name,
+                    apartment: mailingAddressInfo.apartment,
+                  }}
                 />
                 <div className="mt-4">
                   <InlineLink id="change-mailing-address" routeId="public/apply/$id/adult/contact-information" params={params}>
@@ -355,12 +357,14 @@ export default function ReviewInformation() {
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.home-title')}>
                 <Address
-                  address={homeAddressInfo.address ?? ''}
-                  city={homeAddressInfo.city ?? ''}
-                  provinceState={homeAddressInfo.province}
-                  postalZipCode={homeAddressInfo.postalCode}
-                  country={homeAddressInfo.country.name}
-                  apartment={homeAddressInfo.apartment}
+                  address={{
+                    address: homeAddressInfo.address ?? '',
+                    city: homeAddressInfo.city ?? '',
+                    provinceState: homeAddressInfo.province,
+                    postalZipCode: homeAddressInfo.postalCode,
+                    country: homeAddressInfo.country.name,
+                    apartment: homeAddressInfo.apartment,
+                  }}
                 />
                 <div className="mt-4">
                   <InlineLink id="change-home-address" routeId="public/apply/$id/adult/contact-information" params={params}>

@@ -3,18 +3,22 @@ import type { ComponentProps } from 'react';
 import { formatAddress } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
-export interface AddressProps extends ComponentProps<'address'> {
+interface Address {
   address: string;
+  apartment?: string;
   city: string;
   country: string;
-  provinceState?: string;
   postalZipCode?: string;
-  apartment?: string;
+  provinceState?: string;
+}
+
+export interface AddressProps extends ComponentProps<'address'> {
+  address: Address;
   altFormat?: boolean;
 }
 
-export function Address({ address, city, provinceState, postalZipCode, country, className, altFormat, apartment, ...restProps }: AddressProps) {
-  const formattedAddress = formatAddress(address, city, country, provinceState, postalZipCode, apartment, altFormat);
+export function Address({ address, altFormat = false, className, ...restProps }: AddressProps) {
+  const formattedAddress = formatAddress({ ...address, altFormat });
   return (
     <address className={cn('whitespace-pre-wrap not-italic', className)} data-testid="address-id" {...restProps}>
       {formattedAddress}

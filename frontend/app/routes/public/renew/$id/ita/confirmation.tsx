@@ -243,16 +243,27 @@ export default function RenewFlowConfirm() {
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.mailing')}>
               <Address
-                address={mailingAddressInfo.address}
-                city={mailingAddressInfo.city}
-                provinceState={mailingAddressInfo.province}
-                postalZipCode={mailingAddressInfo.postalCode}
-                country={mailingAddressInfo.country}
-                apartment={mailingAddressInfo.apartment}
+                address={{
+                  address: mailingAddressInfo.address,
+                  city: mailingAddressInfo.city,
+                  provinceState: mailingAddressInfo.province,
+                  postalZipCode: mailingAddressInfo.postalCode,
+                  country: mailingAddressInfo.country,
+                  apartment: mailingAddressInfo.apartment,
+                }}
               />
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.home')}>
-              <Address address={homeAddressInfo.address ?? ''} city={homeAddressInfo.city ?? ''} provinceState={homeAddressInfo.province} postalZipCode={homeAddressInfo.postalCode} country={homeAddressInfo.country} apartment={homeAddressInfo.apartment} />
+              <Address
+                address={{
+                  address: homeAddressInfo.address ?? '',
+                  city: homeAddressInfo.city ?? '',
+                  provinceState: homeAddressInfo.province,
+                  postalZipCode: homeAddressInfo.postalCode,
+                  country: homeAddressInfo.country,
+                  apartment: homeAddressInfo.apartment,
+                }}
+              />
             </DescriptionListItem>
           </dl>
         </section>

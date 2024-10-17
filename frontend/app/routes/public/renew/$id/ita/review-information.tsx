@@ -308,12 +308,14 @@ export default function RenewItaReviewInformation() {
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-ita:review-information.mailing-title')}>
                 <Address
-                  address={mailingAddressInfo.address}
-                  city={mailingAddressInfo.city}
-                  provinceState={mailingAddressInfo.province}
-                  postalZipCode={mailingAddressInfo.postalCode}
-                  country={mailingAddressInfo.country.name}
-                  apartment={mailingAddressInfo.apartment}
+                  address={{
+                    address: mailingAddressInfo.address,
+                    city: mailingAddressInfo.city,
+                    provinceState: mailingAddressInfo.province,
+                    postalZipCode: mailingAddressInfo.postalCode,
+                    country: mailingAddressInfo.country.name,
+                    apartment: mailingAddressInfo.apartment,
+                  }}
                 />
                 <div className="mt-4">
                   <InlineLink id="change-mailing-address" routeId="public/renew/$id/ita/update-address" params={params}>
@@ -323,12 +325,14 @@ export default function RenewItaReviewInformation() {
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-ita:review-information.home-title')}>
                 <Address
-                  address={homeAddressInfo.address ?? ''}
-                  city={homeAddressInfo.city ?? ''}
-                  provinceState={homeAddressInfo.province}
-                  postalZipCode={homeAddressInfo.postalCode}
-                  country={homeAddressInfo.country.name}
-                  apartment={homeAddressInfo.apartment}
+                  address={{
+                    address: homeAddressInfo.address ?? '',
+                    city: homeAddressInfo.city ?? '',
+                    provinceState: homeAddressInfo.province,
+                    postalZipCode: homeAddressInfo.postalCode,
+                    country: homeAddressInfo.country.name,
+                    apartment: homeAddressInfo.apartment,
+                  }}
                 />
                 <div className="mt-4">
                   <InlineLink id="change-home-address" routeId="public/renew/$id/ita/update-address" params={params}>
