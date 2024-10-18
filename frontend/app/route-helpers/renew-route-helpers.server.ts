@@ -30,6 +30,7 @@ export interface RenewState {
     email?: string;
   };
   readonly hasAddressChanged?: boolean;
+  readonly isHomeAddressSameAsMailingAddress?: boolean;
   readonly addressInformation?: {
     copyMailingAddress: boolean;
     homeAddress?: string;
