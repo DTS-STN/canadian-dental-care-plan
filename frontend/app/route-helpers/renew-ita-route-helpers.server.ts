@@ -78,7 +78,7 @@ interface ValidateRenewItaStateForReviewArgs {
 }
 
 export function validateRenewItaStateForReview({ params, state }: ValidateRenewItaStateForReviewArgs) {
-  const { maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, communicationPreference, addressInformation, applicantInformation, dentalBenefits, dentalInsurance } = state;
+  const { maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, communicationPreference, addressInformation, applicantInformation, dentalBenefits, dentalInsurance, hasAddressChanged } = state;
 
   if (typeOfRenewal === undefined) {
     throw redirect(getPathById('public/renew/$id/type-renewal', params));
@@ -108,8 +108,8 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     throw redirect(getPathById('public/renew/$id/ita/communication-preference', params));
   }
 
-  if (addressInformation === undefined) {
-    throw redirect(getPathById('public/renew/$id/ita/confirm-address', params));
+  if (hasAddressChanged && addressInformation === undefined) {
+    throw redirect(getPathById('public/renew/$id/ita/update-address', params));
   }
 
   if (dentalInsurance === undefined) {
@@ -133,5 +133,6 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     dentalInsurance,
     addressInformation,
     partnerInformation,
+    hasAddressChanged,
   };
 }

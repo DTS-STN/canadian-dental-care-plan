@@ -240,7 +240,8 @@
     "exit-button": "Exit application",
     "back-button": "Back",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "no-change": "No change"
   },
   "exit-application": {
     "page-title": "Exiting the application",
@@ -284,6 +285,7 @@
     "dental-public": "Access to government dental benefits",
     "yes": "Yes",
     "no": "No",
+    "no-change": "No change",
     "close-application": "Close application",
     "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
     "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",

@@ -53,7 +53,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewItaStateForReview({ params, request, session });
 
-  invariant(state.addressInformation.homeCountry, `Unexpected home address country: ${state.addressInformation.homeCountry}`);
+  // invariant(!state.hasAddressChanged || (state.addressInformation && state.addressInformation.homeCountry), `Unexpected home address country: ${state.addressInformation?.homeCountry}`);
 
   // renew state is valid then edit mode can be set to true
   saveRenewState({ params, session, state: { editMode: true } });
@@ -62,10 +62,10 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.addressInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.addressInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
-  const countryMailing = serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.mailingCountry, locale);
-  const countryHome = serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.homeCountry, locale);
+  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
+  const countryMailing = state.addressInformation?.mailingCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
+  const countryHome = state.addressInformation?.homeCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
   const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getLocalizedPreferredCommunicationMethodById(state.communicationPreference.preferredMethod, locale);
   const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.maritalStatus, locale);
 
@@ -88,23 +88,27 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     consent: state.partnerInformation.confirm,
   };
 
-  const mailingAddressInfo = {
-    address: state.addressInformation.mailingAddress,
-    city: state.addressInformation.mailingCity,
-    province: mailingProvinceTerritoryStateAbbr,
-    postalCode: state.addressInformation.mailingPostalCode,
-    country: countryMailing,
-    apartment: state.addressInformation.mailingApartment,
-  };
+  const mailingAddressInfo = state.addressInformation
+    ? {
+        address: state.addressInformation.mailingAddress,
+        city: state.addressInformation.mailingCity,
+        province: mailingProvinceTerritoryStateAbbr,
+        postalCode: state.addressInformation.mailingPostalCode,
+        country: countryMailing,
+        apartment: state.addressInformation.mailingApartment,
+      }
+    : null;
 
-  const homeAddressInfo = {
-    address: state.addressInformation.homeAddress,
-    city: state.addressInformation.homeCity,
-    province: homeProvinceTerritoryStateAbbr,
-    postalCode: state.addressInformation.homePostalCode,
-    country: countryHome,
-    apartment: state.addressInformation.homeApartment,
-  };
+  const homeAddressInfo = state.addressInformation
+    ? {
+        address: state.addressInformation.homeAddress,
+        city: state.addressInformation.homeCity,
+        province: homeProvinceTerritoryStateAbbr,
+        postalCode: state.addressInformation.homePostalCode,
+        country: countryHome,
+        apartment: state.addressInformation.homeApartment,
+      }
+    : null;
 
   const dentalInsurance = state.dentalInsurance;
 
@@ -307,16 +311,20 @@ export default function RenewItaReviewInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-ita:review-information.mailing-title')}>
-                <Address
-                  address={{
-                    address: mailingAddressInfo.address,
-                    city: mailingAddressInfo.city,
-                    provinceState: mailingAddressInfo.province,
-                    postalZipCode: mailingAddressInfo.postalCode,
-                    country: mailingAddressInfo.country.name,
-                    apartment: mailingAddressInfo.apartment,
-                  }}
-                />
+                {mailingAddressInfo ? (
+                  <Address
+                    address={{
+                      address: mailingAddressInfo.address,
+                      city: mailingAddressInfo.city,
+                      provinceState: mailingAddressInfo.province,
+                      postalZipCode: mailingAddressInfo.postalCode,
+                      country: mailingAddressInfo.country?.name ?? '',
+                      apartment: mailingAddressInfo.apartment,
+                    }}
+                  />
+                ) : (
+                  t('renew-ita:review-information.no-change')
+                )}
                 <div className="mt-4">
                   <InlineLink id="change-mailing-address" routeId="public/renew/$id/ita/update-address" params={params}>
                     {t('renew-ita:review-information.mailing-change')}
@@ -324,16 +332,20 @@ export default function RenewItaReviewInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-ita:review-information.home-title')}>
-                <Address
-                  address={{
-                    address: homeAddressInfo.address ?? '',
-                    city: homeAddressInfo.city ?? '',
-                    provinceState: homeAddressInfo.province,
-                    postalZipCode: homeAddressInfo.postalCode,
-                    country: homeAddressInfo.country.name,
-                    apartment: homeAddressInfo.apartment,
-                  }}
-                />
+                {homeAddressInfo ? (
+                  <Address
+                    address={{
+                      address: homeAddressInfo.address ?? '',
+                      city: homeAddressInfo.city ?? '',
+                      provinceState: homeAddressInfo.province,
+                      postalZipCode: homeAddressInfo.postalCode,
+                      country: homeAddressInfo.country?.name ?? '',
+                      apartment: homeAddressInfo.apartment,
+                    }}
+                  />
+                ) : (
+                  t('renew-ita:review-information.no-change')
+                )}
                 <div className="mt-4">
                   <InlineLink id="change-home-address" routeId="public/renew/$id/ita/update-address" params={params}>
                     {t('renew-ita:review-information.home-change')}

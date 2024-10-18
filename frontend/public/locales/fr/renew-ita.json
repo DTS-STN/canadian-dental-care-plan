@@ -240,7 +240,8 @@
     "exit-button": "Exit application",
     "back-button": "Back",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "no-change": "No change"
   },
   "exit-application": {
     "page-title": "Quitter la demande",
@@ -284,6 +285,7 @@
     "dental-public": "(FR) Access to government dental benefits",
     "yes": "(FR) Yes",
     "no": "(FR) No",
+    "no-change": "(FR) No change",
     "close-application": "(FR) Close application",
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
     "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",

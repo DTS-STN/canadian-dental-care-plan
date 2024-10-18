@@ -17,7 +17,7 @@ export type BenefitRenewalRequestDto = Readonly<{
     email?: string;
   }>;
   hasAddressChanged?: boolean;
-  addressInformation: Readonly<{
+  addressInformation?: Readonly<{
     copyMailingAddress: boolean;
     homeAddress?: string;
     homeApartment?: string;
