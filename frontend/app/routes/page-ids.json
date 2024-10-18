@@ -99,6 +99,9 @@
         "reviewInformation": "CDCP-RENW-ITA-0008",
         "confirmation": "CDCP-RENW-ITA-0009",
         "exitApplication": "CDCP-RENw-ITA-0010"
+      },
+      "adultChild": {
+        "maritalStatus": "CDCP-RENW-ADCH-0001"
       }
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
