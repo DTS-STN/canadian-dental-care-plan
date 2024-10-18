@@ -54,11 +54,9 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET&scenario=RENEWAL`);
     const clientApplicationRequest = {
-      BenefitApplication: {
-        Applicant: {
-          PersonSINIdentification: {
-            IdentificationID: sin,
-          },
+      Applicant: {
+        PersonSINIdentification: {
+          IdentificationID: sin,
         },
       },
     };
@@ -94,25 +92,23 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
     this.log.trace('Fetching client application for criteria [%j]', criteria);
     const { firstName, lastName, dateOfBirth, clientNumber } = criteria;
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET&scenario=RENEWAL`);
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-applicaton?action=GET&scenario=RENEWAL`);
     const clientApplicationRequest = {
-      BenefitApplication: {
-        Applicant: {
-          PersonName: [
-            {
-              PersonGivenName: [firstName],
-              PersonSurName: lastName,
-            },
-          ],
-          PersonBirthDate: {
-            date: dateOfBirth,
+      Applicant: {
+        PersonName: [
+          {
+            PersonGivenName: [firstName],
+            PersonSurName: lastName,
           },
-          ClientIdentification: [
-            {
-              IdentificationID: clientNumber,
-            },
-          ],
+        ],
+        PersonBirthDate: {
+          date: dateOfBirth,
         },
+        ClientIdentification: [
+          {
+            IdentificationID: clientNumber,
+          },
+        ],
       },
     };
 

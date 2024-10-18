@@ -1,22 +1,12 @@
 export type ClientApplicationDto = Readonly<{
   BenefitApplication: Readonly<{
     Applicant: Readonly<{
-      ApplicantDetail: Readonly<{
-        PrivateDentalInsuranceIndicator: boolean;
-        InsurancePlan?: ReadonlyArray<
-          Readonly<{
-            InsurancePlanIdentification: ReadonlyArray<
-              Readonly<{
-                IdentificationID: string;
-              }>
-            >;
-          }>
-        >;
-        ConsentToSharePersonalInformationIndicator?: boolean;
-        AttestParentOrGuardianIndicator?: boolean;
-      }>;
       PersonBirthDate: Readonly<{
         date: string;
+        dateTime?: string;
+        DayDate?: string;
+        MonthDate?: string;
+        YearDate?: string;
       }>;
       PersonContactInformation: ReadonlyArray<
         Readonly<{
@@ -52,9 +42,11 @@ export type ClientApplicationDto = Readonly<{
           >;
           TelephoneNumber: ReadonlyArray<
             Readonly<{
+              FullTelephoneNumber: Readonly<{
+                TelephoneNumberFullID: string;
+              }>;
               TelephoneNumberCategoryCode: Readonly<{
-                ReferenceDataID: string;
-                ReferenceDataName?: string;
+                ReferenceDataName: string;
               }>;
             }>
           >;
@@ -64,15 +56,13 @@ export type ClientApplicationDto = Readonly<{
         Readonly<{
           CommunicationCategoryCode: Readonly<{
             ReferenceDataID: string;
-            ReferenceDataName?: string;
           }>;
-          PreferredIndicator: boolean;
+          PreferredIndicator: string; // It appears as a string in the mock
         }>
       >;
       PersonMaritalStatus: Readonly<{
         StatusCode: Readonly<{
           ReferenceDataID: string;
-          ReferenceDataName?: string;
         }>;
       }>;
       PersonName: ReadonlyArray<
@@ -83,11 +73,51 @@ export type ClientApplicationDto = Readonly<{
       >;
       PersonSINIdentification: Readonly<{
         IdentificationID: string;
+        IdentificationCategoryText?: string;
       }>;
+      MailingSameAsHomeIndicator: boolean;
+      PreferredMethodCommunicationCode: Readonly<{
+        ReferenceDataID: string;
+      }>;
+      ApplicantDetail: Readonly<{
+        AttestParentOrGuardianIndicator: boolean;
+        ConsentToSharePersonalInformationIndicator: boolean;
+        DisabilityTaxCreditIndicator: boolean;
+        FederalDentalCoverageIndicator: boolean;
+        InsurancePlan?: ReadonlyArray<
+          Readonly<{
+            InsurancePlanIdentification: ReadonlyArray<
+              Readonly<{
+                IdentificationID: string;
+                IdentificationCategoryText?: string;
+              }>
+            >;
+          }>
+        >;
+        LivingIndependentlyIndicator: boolean;
+        PrivateDentalInsuranceIndicator: boolean;
+        ProvincialDentalCoverageIndicator: boolean;
+      }>;
+      ClientIdentification: ReadonlyArray<
+        Readonly<{
+          IdentificationID: string;
+          IdentificationCategoryText?: string;
+        }>
+      >;
+      Flags: ReadonlyArray<
+        Readonly<{
+          Flag: boolean;
+          FlagCategoryText: string;
+        }>
+      >;
       RelatedPerson: ReadonlyArray<
         Readonly<{
           PersonBirthDate: Readonly<{
             date: string;
+            dateTime?: string;
+            DayDate?: string;
+            MonthDate?: string;
+            YearDate?: string;
           }>;
           PersonName: ReadonlyArray<
             Readonly<{
@@ -100,6 +130,7 @@ export type ClientApplicationDto = Readonly<{
           }>;
           PersonSINIdentification: Readonly<{
             IdentificationID: string;
+            IdentificationCategoryText?: string;
           }>;
           ApplicantDetail: Readonly<{
             PrivateDentalInsuranceIndicator: boolean;
@@ -108,6 +139,7 @@ export type ClientApplicationDto = Readonly<{
                 InsurancePlanIdentification: ReadonlyArray<
                   Readonly<{
                     IdentificationID: string;
+                    IdentificationCategoryText?: string;
                   }>
                 >;
               }>
@@ -117,19 +149,26 @@ export type ClientApplicationDto = Readonly<{
           }>;
         }>
       >;
-      MailingSameAsHomeIndicator: boolean;
-      PreferredMethodCommunicationCode: Readonly<{
-        ReferenceDataID: string;
-        ReferenceDataName?: string;
-      }>;
-    }>;
-    BenefitApplicationCategoryCode: Readonly<{
-      ReferenceDataID: string;
-      ReferenceDataName?: string;
     }>;
     BenefitApplicationChannelCode: Readonly<{
       ReferenceDataID: string;
-      ReferenceDataName?: string;
+    }>;
+    BenefitApplicationCategoryCode: Readonly<{
+      ReferenceDataID: string;
+    }>;
+    BenefitApplicationIdentification: ReadonlyArray<
+      Readonly<{
+        IdentificationID: string;
+        IdentificationCategoryText?: string;
+      }>
+    >;
+    BenefitApplicationYear: Readonly<{
+      BenefitApplicationYearIdentification: ReadonlyArray<
+        Readonly<{
+          IdentificationID: string;
+          IdentificationCategoryText?: string;
+        }>
+      >;
     }>;
   }>;
 }>;
