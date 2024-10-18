@@ -835,6 +835,14 @@
                   "en": "/:lang/renew/:id/adult-child/confirmation",
                   "fr": "/:lang/renew/:id/adult-child/confirmation"
                 }
+              },
+              {
+                "id": "public/renew/$id/adult-child/confirm-phone",
+                "file": "routes/public/renew/$id/adult-child/confirm-phone.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/adult-child/confirm-phone",
+                  "fr": "/:lang/renew/:id/adult-child/confirm-phone"
+                }
               }
             ]
           }

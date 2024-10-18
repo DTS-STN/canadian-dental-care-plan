@@ -122,7 +122,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('public/renew/$id/adult-family/review-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/adult-family/contact-information', params));
+  return redirect(getPathById('public/renew/$id/adult-family/confirm-phone', params));
 }
 
 export default function RenewAdultChildMaritalStatus() {
