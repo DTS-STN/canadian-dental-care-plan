@@ -57,7 +57,7 @@ export type ClientApplicationEntity = Readonly<{
           CommunicationCategoryCode: Readonly<{
             ReferenceDataID: string;
           }>;
-          PreferredIndicator: string; // It appears as a string in the mock
+          PreferredIndicator: string;
         }>
       >;
       PersonMaritalStatus: Readonly<{
