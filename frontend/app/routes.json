@@ -819,6 +819,22 @@
                   "en": "/:lang/renew/:id/ita/exit-application",
                   "fr": "/:lang/renew/:id/ita/exit-application"
                 }
+              },
+              {
+                "id": "public/renew/$id/adult-child/marital-status",
+                "file": "routes/public/renew/$id/adult-child/marital-status.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/adult-child/marital-status",
+                  "fr": "/:lang/renew/:id/adult-child/marital-status"
+                }
+              },
+              {
+                "id": "public/renew/$id/adult-child/confirmation",
+                "file": "routes/public/renew/$id/adult-child/confirmation.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/adult-child/confirmation",
+                  "fr": "/:lang/renew/:id/adult-child/confirmation"
+                }
               }
             ]
           }

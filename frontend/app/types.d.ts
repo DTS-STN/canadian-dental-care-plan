@@ -9,6 +9,7 @@ import type dataUnavailable from '../public/locales/en/data-unavailable.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type letters from '../public/locales/en/letters.json';
+import type renewAdultChild from '../public/locales/en/renew-adult-child.json';
 import type renewIta from '../public/locales/en/renew-ita.json';
 import type renew from '../public/locales/en/renew.json';
 import type status from '../public/locales/en/status.json';
@@ -72,6 +73,7 @@ declare module 'i18next' {
       status: typeof status;
       renew: typeof renew;
       'renew-ita': typeof renewIta;
+      'renew-adult-child': typeof renewAdultChild;
       'stub-login': typeof stubLogin;
       'unable-to-process-request': typeof unableToProcessRequest;
     };
