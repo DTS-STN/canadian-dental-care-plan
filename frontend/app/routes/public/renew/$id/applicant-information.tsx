@@ -49,11 +49,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   return json({ id: state.id, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { session, serviceProvider }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/applicant-information');
 
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const clientApplicationService = serviceProvider.getClientApplicationService();
 
   // state validation schema
   const applicantInformationSchema = z
@@ -125,10 +127,26 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   // todo: make request for client application => if not found return back to page to display the <StausNotFound /> otherwise continue with next page. The response should include 'isCraAssessed' flag. If the value is true, the 'tax filing' route will be skipped, and the user will be directed to the 'type of renewal' route.
 
+  // Fetch client application data using ClientApplicationService
+  const clientApplicationData = await clientApplicationService.findClientApplicationByPersonalInfo({
+    firstName: parsedDataResult.data.firstName,
+    lastName: parsedDataResult.data.lastName,
+    dateOfBirth: parsedDataResult.data.dateOfBirth,
+    clientNumber: parsedDataResult.data.clientNumber,
+  });
+
+  // Check the 'isCraAssessed' flag in the client application data
+  const isCraAssessed = clientApplicationData.BenefitApplication.Applicant.Flags.find((flag) => flag.FlagCategoryText === 'isCraAssessed')?.Flag ?? false;
+
   saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data } });
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/review-information', params));
+  }
+
+  // If isCraAssessed flag is true, skip tax-filing and go to type-renewal
+  if (isCraAssessed) {
+    return redirect(getPathById('public/renew/$id/type-renewal', params));
   }
 
   return redirect(getPathById('public/renew/$id/tax-filing', params));
