@@ -851,6 +851,14 @@
                   "en": "/:lang/renew/:id/adult-child/confirm-email",
                   "fr": "/:lang/renew/:id/adult-child/confirm-email"
                 }
+              },
+              {
+                "id": "public/renew/$id/adult-child/confirm-address",
+                "file": "routes/public/renew/$id/adult-child/confirm-address.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/adult-child/confirm-address",
+                  "fr": "/:lang/renew/:id/adult-child/confirm-address"
+                }
               }
             ]
           }

@@ -103,7 +103,8 @@
       "adultChild": {
         "maritalStatus": "CDCP-RENW-ADCH-0001",
         "confirmPhone": "CDCP-RENW-ADCH-0002",
-        "confirmEmail": "CDCP-RENW-ADCH-0003"
+        "confirmEmail": "CDCP-RENW-ADCH-0003",
+        "confirmAddress": "CDCP-RENW-ADCH-0004"
       }
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
