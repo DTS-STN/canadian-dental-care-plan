@@ -172,6 +172,7 @@ export default function RenewApplicationInformation() {
 
   return (
     <>
+      {/* Todo: add conditional check to show <StatusNotFound> if clientApplication returned null */}
       <StatusNotFound />
       <div className="my-6 sm:my-8">
         <Progress value={25} size="lg" label={t('apply:progress.label')} />
