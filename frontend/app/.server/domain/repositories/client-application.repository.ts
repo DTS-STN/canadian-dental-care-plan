@@ -111,7 +111,7 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
         ],
       },
     };
-    console.log('request: ', JSON.stringify(clientApplicationRequest, null, 2));
+
     const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.client-application_fnlndob.posts', url, {
       method: 'POST',
       headers: {
