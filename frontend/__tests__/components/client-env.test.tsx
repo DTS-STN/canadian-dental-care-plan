@@ -12,7 +12,7 @@ describe('<ClientEnv>', () => {
     const env: ClientEnv = {
       ENABLED_FEATURES: ['feature1', 'feature2'],
       I18NEXT_DEBUG: true,
-      ECAS_BASE_URI: 'https://srv136.services.gc.ca/ecas-seca',
+      ECAS_BASE_URI: 'https://srv136.services.gc.ca/ecas-seca/rascl/SCL',
       SCCH_BASE_URI: 'https://service.canada.ca',
       MSCA_BASE_URI: 'https://srv136.services.gc.ca',
       SESSION_TIMEOUT_SECONDS: 120,

@@ -43,7 +43,7 @@ export const clientEnvSchema = z.object({
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
 
   // base URIs for My Service Canada Account variations
-  ECAS_BASE_URI: z.string().url().default('https://srv136.services.gc.ca/ecas-seca'),
+  ECAS_BASE_URI: z.string().url().default('https://srv136.services.gc.ca/ecas-seca/rascl/SCL'),
   SCCH_BASE_URI: z.string().url().default('https://service.canada.ca'),
   MSCA_BASE_URI: z.string().url().default('https://srv136.services.gc.ca'),
 
