@@ -26,6 +26,7 @@ export interface RenewState {
   readonly maritalStatus?: string;
   readonly contactInformation?: {
     isNewOrUpdatedPhoneNumber?: boolean;
+    isNewOrUpdatedEmail?: boolean;
     phoneNumber?: string;
     phoneNumberAlt?: string;
     email?: string;

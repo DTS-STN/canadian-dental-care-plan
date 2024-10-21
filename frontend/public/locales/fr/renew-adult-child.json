@@ -51,5 +51,31 @@
       "phone-required": "Enter a phone number",
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
     }
+  },
+  "confirm-email": {
+    "page-title": "Email",
+    "email-header": "Email",
+    "add-email": "Having an up-to-date email on file helps the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan membership.",
+    "add-or-update": {
+      "legend": "Would you like to update or add your email address?",
+      "help-message": "The email address we have on file can also be found on the renewal letter you received from Service Canada."
+    },
+    "email": "Email address",
+    "confirm-email": "Confirm email address",
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "option-yes": "Yes",
+    "option-no": "No",
+    "error-message": {
+      "add-or-update-required": "Select whether you would like to add or update your email",
+      "email-match": "The email addresses entered do not match",
+      "confirm-email-required": "Confirm email address",
+      "email-required": "Enter email address",
+      "email-valid": "Enter an email address in the correct format, such as name@example.com",
+      "confirm-email-valid": "Enter confirmation of email address in the correct format, such as name@example.com",
+      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+    }
   }
 }
