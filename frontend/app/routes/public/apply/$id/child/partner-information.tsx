@@ -28,7 +28,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
-import { isAllValidInputCharacters } from '~/utils/string-utils';
+import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
@@ -78,7 +78,13 @@ export async function action({ context: { session }, params, request }: ActionFu
       }),
       dateOfBirth: z.string(),
       firstName: z.string().trim().min(1, t('apply-child:partner-information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-child:partner-information.error-message.characters-valid')),
-      lastName: z.string().trim().min(1, t('apply-child:partner-information.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-child:partner-information.error-message.characters-valid')),
+      lastName: z
+        .string()
+        .trim()
+        .min(1, t('apply-child:partner-information.error-message.last-name-required'))
+        .max(100)
+        .refine(isAllValidInputCharacters, t('apply-child:partner-information.error-message.characters-valid'))
+        .refine((lastName) => !hasDigits(lastName), t('apply-child:partner-information.error-message.no-digits')),
       socialInsuranceNumber: z
         .string()
         .trim()

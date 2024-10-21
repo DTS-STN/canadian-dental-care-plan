@@ -4,10 +4,8 @@ import type { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
-import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
-import { getCdcpWebsiteStatusUrl } from '~/utils/url-utils.server';
 
 export interface StatusState {
   readonly id: string;
@@ -48,21 +46,20 @@ interface LoadStateArgs {
  */
 export function loadStatusState({ id, params, session }: LoadStateArgs) {
   const log = getLogger('status-route-helpers.server/loadStatusState');
-  const locale = getLocaleFromParams(params);
-  const cdcpWebsiteStatusUrl = getCdcpWebsiteStatusUrl(locale);
+  const statusIndexUrl = getPathById('$lang/_public/status/index', params);
 
   const parsedId = idSchema.safeParse(id);
 
   if (!parsedId.success) {
-    log.warn('Invalid "id" query string format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteStatusUrl, id, session.id);
-    throw redirectDocument(cdcpWebsiteStatusUrl);
+    log.warn('Invalid "id" query string format; redirecting to [%s]; id: [%s], sessionId: [%s]', statusIndexUrl, id, session.id);
+    throw redirectDocument(statusIndexUrl);
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
-    log.warn('Status session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteStatusUrl, sessionName, session.id);
-    throw redirectDocument(cdcpWebsiteStatusUrl);
+    log.warn('Status session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', statusIndexUrl, sessionName, session.id);
+    throw redirectDocument(statusIndexUrl);
   }
 
   const state: StatusState = session.get(sessionName);

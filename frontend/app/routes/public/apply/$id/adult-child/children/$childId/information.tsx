@@ -32,7 +32,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
-import { isAllValidInputCharacters } from '~/utils/string-utils';
+import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum YesNoOption {
@@ -87,7 +87,13 @@ export async function action({ context: { session }, params, request }: ActionFu
   const childInformationSchema = z
     .object({
       firstName: z.string().trim().min(1, t('apply-adult-child:children.information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult-child:children.information.error-message.characters-valid')),
-      lastName: z.string().trim().min(1, t('apply-adult-child:children.information.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult-child:children.information.error-message.characters-valid')),
+      lastName: z
+        .string()
+        .trim()
+        .min(1, t('apply-adult-child:children.information.error-message.last-name-required'))
+        .max(100)
+        .refine(isAllValidInputCharacters, t('apply-adult-child:children.information.error-message.characters-valid'))
+        .refine((lastName) => !hasDigits(lastName), t('apply-adult-child:children.information.error-message.no-digits')),
       dateOfBirthYear: z.number({
         required_error: t('apply-adult-child:children.information.error-message.date-of-birth-year-required'),
         invalid_type_error: t('apply-adult-child:children.information.error-message.date-of-birth-year-number'),
