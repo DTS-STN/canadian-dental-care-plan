@@ -198,7 +198,6 @@ export default function ApplyFlowApplicationInformation() {
                 label={t('applicant-information.first-name')}
                 className="w-full"
                 maxLength={100}
-                // eslint-disable-next-line jsx-a11y/aria-props
                 aria-description={t('applicant-information.name-instructions')}
                 autoComplete="given-name"
                 errorMessage={errors?.firstName}
@@ -211,7 +210,6 @@ export default function ApplyFlowApplicationInformation() {
                 label={t('applicant-information.last-name')}
                 className="w-full"
                 maxLength={100}
-                // eslint-disable-next-line jsx-a11y/aria-props
                 aria-description={t('applicant-information.name-instructions')}
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}

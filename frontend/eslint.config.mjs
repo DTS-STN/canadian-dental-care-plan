@@ -84,7 +84,6 @@ export default tseslint.config(
       ...fixupConfigRules(compat.config(reactHooksPlugin.configs.recommended)),
     ],
     rules: {
-      'jsx-a11y/aria-props': 'warn',
       'react/no-unknown-property': ['error', { ignore: ['property', 'resource', 'typeof', 'vocab'] }],
       'react/prop-types': 'off',
     },
