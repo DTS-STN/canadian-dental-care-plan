@@ -46,7 +46,7 @@ interface LoadStateArgs {
  */
 export function loadStatusState({ id, params, session }: LoadStateArgs) {
   const log = getLogger('status-route-helpers.server/loadStatusState');
-  const statusIndexUrl = getPathById('$lang/_public/status/index', params);
+  const statusIndexUrl = getPathById('public/status/index', params);
 
   const parsedId = idSchema.safeParse(id);
 
