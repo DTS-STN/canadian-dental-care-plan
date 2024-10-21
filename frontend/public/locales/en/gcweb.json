@@ -41,12 +41,12 @@
     "terms-conditions": {
       "text": "Terms and conditions",
       "public-href": "https://www.canada.ca/en/transparency/terms.html",
-      "protected-href": "{{baseUri}}/rascl/SCL/TC.aspx?mode=ReadOnly&lang=eng#terms"
+      "protected-href": "{{baseUri}}/TC.aspx?mode=ReadOnly&lang=eng#terms"
     },
     "privacy": {
       "text": "Privacy",
       "public-href": "https://www.canada.ca/en/transparency/privacy.html",
-      "protected-href": "{{baseUri}}/rascl/SCL/TC.aspx?mode=ReadOnly&lang=eng#privacy"
+      "protected-href": "{{baseUri}}/TC.aspx?mode=ReadOnly&lang=eng#privacy"
     },
     "gc-symbol": "Symbol of the Government of Canada",
     "main-band": {
@@ -54,7 +54,8 @@
       "links": {
         "contact-us": {
           "content": "Contact us",
-          "href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html"
+          "public-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
+          "protected-href": "{{baseUri}}/en/contact-us"
         }
       }
     }

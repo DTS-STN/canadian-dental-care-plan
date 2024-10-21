@@ -89,7 +89,7 @@ function PageFooter() {
         <section className="container py-6">
           <h2 className="mb-4">{t('gcweb:footer.main-band.header')}</h2>
           <div className="grid gap-x-4 gap-y-2 text-sm sm:grid-cols-3">
-            <Link className="hover:underline" to={t('gcweb:footer.main-band.links.contact-us.href')} data-gc-analytics-navigation={`Footer:Footer:${t('gcweb:footer.main-band.links.contact-us.content')}`}>
+            <Link className="hover:underline" to={t('gcweb:footer.main-band.links.contact-us.public-href')} data-gc-analytics-navigation={`Footer:Footer:${t('gcweb:footer.main-band.links.contact-us.content')}`}>
               {t('gcweb:footer.main-band.links.contact-us.content')}
             </Link>
           </div>
