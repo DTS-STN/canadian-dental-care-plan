@@ -17,20 +17,6 @@ describe('ClientApplicationServiceImpl', () => {
   const mockClientApplicationEntity: ClientApplicationEntity = {
     BenefitApplication: {
       Applicant: {
-        ApplicantDetail: {
-          PrivateDentalInsuranceIndicator: true,
-          InsurancePlan: [
-            {
-              InsurancePlanIdentification: [
-                {
-                  IdentificationID: 'ID-123456',
-                },
-              ],
-            },
-          ],
-          ConsentToSharePersonalInformationIndicator: true,
-          AttestParentOrGuardianIndicator: false,
-        },
         PersonBirthDate: {
           date: '2000-01-01',
         },
@@ -68,8 +54,10 @@ describe('ClientApplicationServiceImpl', () => {
             ],
             TelephoneNumber: [
               {
+                FullTelephoneNumber: {
+                  TelephoneNumberFullID: '555-555-5555',
+                },
                 TelephoneNumberCategoryCode: {
-                  ReferenceDataID: 'MOBILE',
                   ReferenceDataName: 'Mobile',
                 },
               },
@@ -80,15 +68,13 @@ describe('ClientApplicationServiceImpl', () => {
           {
             CommunicationCategoryCode: {
               ReferenceDataID: 'ENG',
-              ReferenceDataName: 'English',
             },
-            PreferredIndicator: true,
+            PreferredIndicator: 'true',
           },
         ],
         PersonMaritalStatus: {
           StatusCode: {
             ReferenceDataID: 'MARRIED',
-            ReferenceDataName: 'Married',
           },
         },
         PersonName: [
@@ -100,6 +86,42 @@ describe('ClientApplicationServiceImpl', () => {
         PersonSINIdentification: {
           IdentificationID: 'SIN-987654321',
         },
+        MailingSameAsHomeIndicator: true,
+        PreferredMethodCommunicationCode: {
+          ReferenceDataID: 'EMAIL',
+        },
+        ApplicantDetail: {
+          AttestParentOrGuardianIndicator: false,
+          ConsentToSharePersonalInformationIndicator: true,
+          DisabilityTaxCreditIndicator: true,
+          FederalDentalCoverageIndicator: true,
+          InsurancePlan: [
+            {
+              InsurancePlanIdentification: [
+                {
+                  IdentificationID: 'ID-123456',
+                },
+              ],
+            },
+          ],
+          LivingIndependentlyIndicator: true,
+          PrivateDentalInsuranceIndicator: true,
+          ProvincialDentalCoverageIndicator: true,
+        },
+        ClientIdentification: [
+          {
+            IdentificationID: '4f35f70b-2f83-ee11-8179-000d3a09d000',
+            IdentificationCategoryText: 'Applicant ID',
+          },
+          {
+            IdentificationID: '1e97fe42-0263-ee11-8df0-000d3a09df08',
+            IdentificationCategoryText: 'Client ID',
+          },
+        ],
+        Flags: [
+          { Flag: true, FlagCategoryText: 'isCraAssessed' },
+          { Flag: false, FlagCategoryText: '' },
+        ],
         RelatedPerson: [
           {
             PersonBirthDate: {
@@ -125,19 +147,26 @@ describe('ClientApplicationServiceImpl', () => {
             },
           },
         ],
-        MailingSameAsHomeIndicator: true,
-        PreferredMethodCommunicationCode: {
-          ReferenceDataID: 'EMAIL',
-          ReferenceDataName: 'Email',
-        },
-      },
-      BenefitApplicationCategoryCode: {
-        ReferenceDataID: 'DENTAL',
-        ReferenceDataName: 'Dental',
       },
       BenefitApplicationChannelCode: {
         ReferenceDataID: 'ONLINE',
-        ReferenceDataName: 'Online',
+      },
+      BenefitApplicationCategoryCode: {
+        ReferenceDataID: 'DENTAL',
+      },
+      BenefitApplicationIdentification: [
+        {
+          IdentificationID: '41d42b4e-0263-ee11-8df0-000d3a09dca9',
+          IdentificationCategoryText: 'Dental Application ID',
+        },
+      ],
+      BenefitApplicationYear: {
+        BenefitApplicationYearIdentification: [
+          {
+            IdentificationID: '1',
+            IdentificationCategoryText: '2024',
+          },
+        ],
       },
     },
   };
@@ -146,20 +175,6 @@ describe('ClientApplicationServiceImpl', () => {
   const mockClientApplicationDto: ClientApplicationDto = {
     BenefitApplication: {
       Applicant: {
-        ApplicantDetail: {
-          PrivateDentalInsuranceIndicator: true,
-          InsurancePlan: [
-            {
-              InsurancePlanIdentification: [
-                {
-                  IdentificationID: 'ID-123456',
-                },
-              ],
-            },
-          ],
-          ConsentToSharePersonalInformationIndicator: true,
-          AttestParentOrGuardianIndicator: false,
-        },
         PersonBirthDate: {
           date: '2000-01-01',
         },
@@ -197,8 +212,10 @@ describe('ClientApplicationServiceImpl', () => {
             ],
             TelephoneNumber: [
               {
+                FullTelephoneNumber: {
+                  TelephoneNumberFullID: '555-555-5555',
+                },
                 TelephoneNumberCategoryCode: {
-                  ReferenceDataID: 'MOBILE',
                   ReferenceDataName: 'Mobile',
                 },
               },
@@ -209,15 +226,13 @@ describe('ClientApplicationServiceImpl', () => {
           {
             CommunicationCategoryCode: {
               ReferenceDataID: 'ENG',
-              ReferenceDataName: 'English',
             },
-            PreferredIndicator: true,
+            PreferredIndicator: 'true',
           },
         ],
         PersonMaritalStatus: {
           StatusCode: {
             ReferenceDataID: 'MARRIED',
-            ReferenceDataName: 'Married',
           },
         },
         PersonName: [
@@ -229,6 +244,42 @@ describe('ClientApplicationServiceImpl', () => {
         PersonSINIdentification: {
           IdentificationID: 'SIN-987654321',
         },
+        MailingSameAsHomeIndicator: true,
+        PreferredMethodCommunicationCode: {
+          ReferenceDataID: 'EMAIL',
+        },
+        ApplicantDetail: {
+          AttestParentOrGuardianIndicator: false,
+          ConsentToSharePersonalInformationIndicator: true,
+          DisabilityTaxCreditIndicator: true,
+          FederalDentalCoverageIndicator: true,
+          InsurancePlan: [
+            {
+              InsurancePlanIdentification: [
+                {
+                  IdentificationID: 'ID-123456',
+                },
+              ],
+            },
+          ],
+          LivingIndependentlyIndicator: true,
+          PrivateDentalInsuranceIndicator: true,
+          ProvincialDentalCoverageIndicator: true,
+        },
+        ClientIdentification: [
+          {
+            IdentificationID: '4f35f70b-2f83-ee11-8179-000d3a09d000',
+            IdentificationCategoryText: 'Applicant ID',
+          },
+          {
+            IdentificationID: '1e97fe42-0263-ee11-8df0-000d3a09df08',
+            IdentificationCategoryText: 'Client ID',
+          },
+        ],
+        Flags: [
+          { Flag: true, FlagCategoryText: 'isCraAssessed' },
+          { Flag: false, FlagCategoryText: '' },
+        ],
         RelatedPerson: [
           {
             PersonBirthDate: {
@@ -254,19 +305,26 @@ describe('ClientApplicationServiceImpl', () => {
             },
           },
         ],
-        MailingSameAsHomeIndicator: true,
-        PreferredMethodCommunicationCode: {
-          ReferenceDataID: 'EMAIL',
-          ReferenceDataName: 'Email',
-        },
       },
       BenefitApplicationCategoryCode: {
         ReferenceDataID: 'DENTAL',
-        ReferenceDataName: 'Dental',
       },
       BenefitApplicationChannelCode: {
         ReferenceDataID: 'ONLINE',
-        ReferenceDataName: 'Online',
+      },
+      BenefitApplicationIdentification: [
+        {
+          IdentificationID: '41d42b4e-0263-ee11-8df0-000d3a09dca9',
+          IdentificationCategoryText: 'Dental Application ID',
+        },
+      ],
+      BenefitApplicationYear: {
+        BenefitApplicationYearIdentification: [
+          {
+            IdentificationID: '1',
+            IdentificationCategoryText: '2024',
+          },
+        ],
       },
     },
   };

@@ -125,8 +125,6 @@ export async function action({ context: { session, serviceProvider }, params, re
     });
   }
 
-  // todo: make request for client application => if not found return back to page to display the <StausNotFound /> otherwise continue with next page. The response should include 'isCraAssessed' flag. If the value is true, the 'tax filing' route will be skipped, and the user will be directed to the 'type of renewal' route.
-
   // Fetch client application data using ClientApplicationService
   const clientApplication = await clientApplicationService.findClientApplicationByPersonalInfo({
     firstName: parsedDataResult.data.firstName,
