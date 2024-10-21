@@ -843,6 +843,14 @@
                   "en": "/:lang/renew/:id/adult-child/confirm-phone",
                   "fr": "/:lang/renew/:id/adult-child/confirm-phone"
                 }
+              },
+              {
+                "id": "public/renew/$id/adult-child/confirm-email",
+                "file": "routes/public/renew/$id/adult-child/confirm-email.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/adult-child/confirm-email",
+                  "fr": "/:lang/renew/:id/adult-child/confirm-email"
+                }
               }
             ]
           }
