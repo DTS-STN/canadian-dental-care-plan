@@ -119,10 +119,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveRenewState({ params, session, state: { maritalStatus: parsedMaritalStatus.data.maritalStatus, partnerInformation: parsedPartnerInformation.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/adult-family/review-information', params));
+    return redirect(getPathById('public/renew/$id/adult-child/review-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/adult-family/contact-information', params));
+  return redirect(getPathById('public/renew/$id/adult-child/confirm-phone', params));
 }
 
 export default function RenewAdultChildMaritalStatus() {

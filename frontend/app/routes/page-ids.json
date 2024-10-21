@@ -101,7 +101,8 @@
         "exitApplication": "CDCP-RENw-ITA-0010"
       },
       "adultChild": {
-        "maritalStatus": "CDCP-RENW-ADCH-0001"
+        "maritalStatus": "CDCP-RENW-ADCH-0001",
+        "confirmPhone": "CDCP-RENW-ADCH-0002"
       }
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
