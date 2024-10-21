@@ -128,7 +128,7 @@ export async function action({ context: { session, serviceProvider }, params, re
   // todo: make request for client application => if not found return back to page to display the <StausNotFound /> otherwise continue with next page. The response should include 'isCraAssessed' flag. If the value is true, the 'tax filing' route will be skipped, and the user will be directed to the 'type of renewal' route.
 
   // Fetch client application data using ClientApplicationService
-  const clientApplicationData = await clientApplicationService.findClientApplicationByPersonalInfo({
+  const clientApplication = await clientApplicationService.findClientApplicationByPersonalInfo({
     firstName: parsedDataResult.data.firstName,
     lastName: parsedDataResult.data.lastName,
     dateOfBirth: parsedDataResult.data.dateOfBirth,
@@ -136,7 +136,7 @@ export async function action({ context: { session, serviceProvider }, params, re
   });
 
   // Check the 'isCraAssessed' flag in the client application data
-  const isCraAssessed = clientApplicationData.BenefitApplication.Applicant.Flags.find((flag) => flag.FlagCategoryText === 'isCraAssessed')?.Flag ?? false;
+  const isCraAssessed = clientApplication?.BenefitApplication.Applicant.Flags.find((flag) => flag.FlagCategoryText === 'isCraAssessed')?.Flag ?? false;
 
   saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data } });
 

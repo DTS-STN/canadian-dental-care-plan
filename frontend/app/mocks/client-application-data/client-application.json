@@ -157,7 +157,7 @@
       ],
       "Flags": [
         {
-          "Flag": true,
+          "Flag": false,
           "FlagCategoryText": "isCraAssessed"
         },
         {

@@ -52,7 +52,7 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
   async findClientApplicationBySin(sin: string): Promise<ClientApplicationEntity | null> {
     this.log.trace('Fetching client application for sin [%s]', sin);
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET&scenario=RENEWAL`);
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET`);
     const clientApplicationRequest = {
       Applicant: {
         PersonSINIdentification: {
@@ -92,7 +92,7 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
     this.log.trace('Fetching client application for criteria [%j]', criteria);
     const { firstName, lastName, dateOfBirth, clientNumber } = criteria;
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-applicaton?action=GET&scenario=RENEWAL`);
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET`);
     const clientApplicationRequest = {
       Applicant: {
         PersonName: [
@@ -111,7 +111,7 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
         ],
       },
     };
-
+    console.log('request: ', JSON.stringify(clientApplicationRequest, null, 2));
     const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.client-application_fnlndob.posts', url, {
       method: 'POST',
       headers: {

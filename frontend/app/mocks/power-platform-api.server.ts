@@ -2,8 +2,6 @@ import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
 import { db } from '~/mocks/db';
-import type { BenefitApplicationResponse } from '~/schemas/benefit-application-service-schemas.server';
-import { benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { benefitRenewalRequestSchema } from '~/schemas/benefit-renewal-service-schemas.server';
 import type { BenefitRenewalResponse } from '~/schemas/benefit-renewal-service-schemas.server';
 import { getEnv } from '~/utils/env-utils.server';
@@ -169,39 +167,6 @@ export function getPowerPlatformApiMockHandlers() {
           ],
         },
       });
-    }),
-
-    /**
-     * Handler for POST request to submit application to Power Platform
-     */
-    http.post(`${INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`, async ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-
-      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
-      if (!subscriptionKey) {
-        return new HttpResponse('Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.', { status: 401 });
-      }
-
-      const requestBody = await request.json();
-      const parsedBenefitApplicationRequest = await benefitApplicationRequestSchema.safeParseAsync(requestBody);
-
-      if (!parsedBenefitApplicationRequest.success) {
-        log.debug('Invalid request body [%j]', requestBody);
-        return new HttpResponse('Invalid request body!', { status: 400 });
-      }
-
-      const mockBenefitApplicationResponse: BenefitApplicationResponse = {
-        BenefitApplication: {
-          BenefitApplicationIdentification: [
-            {
-              IdentificationID: '2476124092174',
-              IdentificationCategoryText: 'Confirmation Number',
-            },
-          ],
-        },
-      };
-
-      return HttpResponse.json(mockBenefitApplicationResponse);
     }),
 
     /**
