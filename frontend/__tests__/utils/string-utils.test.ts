@@ -170,7 +170,7 @@ describe('formatAddress', () => {
       postalZipCode: 'K1A 0B1',
       country: 'Canada',
       apartment: 'Apt 4',
-      altFormat: true,
+      format: 'alternative',
     });
     expect(address).toBe(`123 Main St Apt 4\nAnytown, ON\nK1A 0B1\nCanada`);
   });

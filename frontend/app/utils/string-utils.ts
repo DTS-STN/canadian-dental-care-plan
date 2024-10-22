@@ -108,47 +108,87 @@ export function normalizeSpaces(str: string) {
   return str.replace(/[\s\u00a0]/g, ' ');
 }
 
-interface FormatAddressArguments {
-  /*The street address. */
+/**
+ * Arguments for formatting just the address line
+ */
+interface FormatAddressLineArguments {
+  /** Street address */
   address: string;
-  /*The city name. */
-  city: string;
-  /*The country name. */
-  country: string;
-  /*The province or state name (optional). */
-  provinceState?: string;
-  /*The postal or zip code (optional). */
-  postalZipCode?: string;
-  /*The apartment number (optional). */
+  /** Apartment, suite, or unit number */
   apartment?: string;
-  /*Whether to use an alternate formatting style (optional). */
-  altFormat?: boolean;
 }
 
 /**
- * Formats an address string based on the provided address components.
- * @returns The formatted address string.
+ * Formats an apartment/suite number with the address
+ * @param params Address line formatting parameters
+ * @returns Formatted address line
  */
-export function formatAddress({ address, city, country, provinceState, postalZipCode, apartment, altFormat = false }: FormatAddressArguments) {
-  const formattedAddress = apartment ? (/^[a-z\d]+$/i.test(apartment) ? `${apartment}-${address}` : `${address} ${apartment}`) : address;
+function formatAddressLine({ address, apartment }: FormatAddressLineArguments): string {
+  if (!apartment?.trim()) {
+    return address;
+  }
+
+  // Check if apartment is a simple alphanumeric suite number
+  const isSuiteNumber = /^[a-z\d]+$/i.test(apartment.trim());
+
+  return isSuiteNumber ? `${apartment.trim()}-${address}` : `${address} ${apartment.trim()}`;
+}
+
+/**
+ * Arguments for formatting a complete address
+ */
+export interface FormatAddressArguments {
+  /** Street address */
+  address: string;
+
+  /** City name */
+  city: string;
+
+  /** Country name */
+  country: string;
+
+  /** Province or state code (optional) */
+  provinceState?: string;
+
+  /** Postal or ZIP code (optional) */
+  postalZipCode?: string;
+
+  /** Apartment, suite, or unit number (optional) */
+  apartment?: string;
+
+  /**
+   * The format of the address
+   *
+   * - `standard`: The standard address format, with the address line, city, province/state, postal/zip code, and country.
+   * - `alternative`: An alternative address format, with the address line, city, province/state, postal/zip code, and country on separate lines.
+   */
+  format?: 'standard' | 'alternative';
+}
+
+/**
+ * Formats an address string based on the provided arguments.
+ *
+ * @param params Address formatting parameters
+ * @returns Formatted address string
+ */
+export function formatAddress({ address, city, country, provinceState, postalZipCode, apartment, format = 'standard' }: FormatAddressArguments): string {
+  const formattedAddressLine = formatAddressLine({ address, apartment });
 
   // prettier-ignore
-  const lines = [
-    formattedAddress,
-    `${city}${provinceState ? ` ${provinceState}` : ''}${postalZipCode ? `  ${postalZipCode}` : ''}`,
-    `${country}`
-  ];
+  const lines = format === 'alternative'
+    ? [
+      formattedAddressLine,
+      [city, provinceState && `, ${provinceState}`].filter(Boolean).join(''),
+      postalZipCode,
+      country
+    ] : [
+      formattedAddressLine,
+      [city, provinceState && ` ${provinceState}`, postalZipCode && `  ${postalZipCode}`].filter(Boolean).join(''),
+      country
+    ];
 
-  // prettier-ignore
-  const linesAlt = [
-    formattedAddress,
-    `${city}${provinceState ? `, ${provinceState}` : ''}`,
-    `${postalZipCode ? `${postalZipCode}` : ''}`,
-    `${country}`
-  ];
-
-  return (altFormat ? linesAlt : lines)
-    .map((line) => line.trim())
+  return lines
+    .map((line) => line?.trim())
     .filter(Boolean)
     .join('\n');
 }

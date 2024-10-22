@@ -47,7 +47,7 @@ describe('AddressDiff', () => {
       apartment: 'Unit 5',
     };
 
-    const { container } = render(<AddressDiff oldAddress={oldAddress} newAddress={newAddress} altFormat />);
+    const { container } = render(<AddressDiff oldAddress={oldAddress} newAddress={newAddress} format="alternative" />);
     expect(container).toMatchSnapshot();
   });
 });
