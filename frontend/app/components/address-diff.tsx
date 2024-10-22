@@ -14,14 +14,20 @@ interface Address {
 }
 
 export interface AddressDiffProps extends ComponentProps<'address'> {
-  altFormat?: boolean;
+  /**
+   * The format of the address
+   *
+   * - `standard`: The standard address format, with the address line, city, province/state, postal/zip code, and country.
+   * - `alternative`: An alternative address format, with the address line, city, province/state, postal/zip code, and country on separate lines.
+   */
+  format?: 'standard' | 'alternative';
   newAddress: Address;
   oldAddress: Address;
 }
 
-export function AddressDiff({ altFormat, oldAddress, newAddress, className, ...restProps }: AddressDiffProps) {
-  const formattedOldAddress = formatAddress({ ...oldAddress, altFormat });
-  const formattedNewAddress = formatAddress({ ...newAddress, altFormat });
+export function AddressDiff({ format = 'standard', oldAddress, newAddress, className, ...restProps }: AddressDiffProps) {
+  const formattedOldAddress = formatAddress({ ...oldAddress, format });
+  const formattedNewAddress = formatAddress({ ...newAddress, format });
   return (
     <address className={cn('whitespace-pre-wrap not-italic', className)} data-testid="address-diff" {...restProps}>
       <DiffViewer oldStr={formattedOldAddress} newStr={formattedNewAddress} />
