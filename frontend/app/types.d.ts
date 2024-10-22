@@ -86,4 +86,9 @@ declare module '@remix-run/server-runtime' {
     serviceProvider: ContainerServiceProvider;
     session: Session;
   }
+
+  interface Future {
+    // see: https://remix.run/docs/en/main/guides/single-fetch#type-inference
+    v3_singleFetch: true;
+  }
 }
