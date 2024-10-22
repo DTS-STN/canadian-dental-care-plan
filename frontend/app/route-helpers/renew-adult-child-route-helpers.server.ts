@@ -3,7 +3,9 @@ import { redirect } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/responses';
 
-import { loadRenewState, saveRenewState } from './renew-route-helpers.server';
+import { z } from 'zod';
+
+import { isNewChildState, loadRenewState, saveRenewState } from './renew-route-helpers.server';
 import type { RenewState } from './renew-route-helpers.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
@@ -45,6 +47,48 @@ export function loadRenewAdultChildState({ params, request, session }: LoadRenew
   }
 
   return renewState;
+}
+
+interface LoadRenewAdultSingleChildStateArgs {
+  params: Params;
+  request: Request;
+  session: Session;
+}
+
+/**
+ * Loads single child state from renew adult child state.
+ * @param args - The arguments.
+ * @returns The loaded child state.
+ */
+export function loadRenewAdultSingleChildState({ params, request, session }: LoadRenewAdultSingleChildStateArgs) {
+  const log = getLogger('renew-adult-child-route-helpers.server/loadRenewAdultSingleChildState');
+  const applyState = loadRenewAdultChildState({ params, request, session });
+
+  const parsedChildId = z.string().uuid().safeParse(params.childId);
+
+  if (!parsedChildId.success) {
+    log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
+    throw redirect(getPathById('public/renew/$id/adult-child/children/index', params));
+  }
+
+  const childId = parsedChildId.data;
+  const childStateIndex = applyState.children.findIndex(({ id }) => id === childId);
+
+  if (childStateIndex === -1) {
+    log.warn('Apply single child has not been found; childId: [%s]', childId);
+    throw redirect(getPathById('public/renew/$id/adult-child/children/index', params));
+  }
+
+  const childState = applyState.children[childStateIndex];
+  const isNew = isNewChildState(childState);
+  const editMode = !isNew && applyState.editMode;
+
+  return {
+    ...childState,
+    childNumber: childStateIndex + 1,
+    editMode,
+    isNew,
+  };
 }
 
 interface LoadRenewAdultChildStateForReviewArgs {
