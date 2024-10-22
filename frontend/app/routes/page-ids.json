@@ -107,7 +107,8 @@
         "confirmAddress": "CDCP-RENW-ADCH-0004",
         "updateAddress": "CDCP-RENW-ADCH-0005",
         "dentalInsurance": "CDCP-RENW-ITA-0006",
-        "federalProvincialTerritorialBenefits": "CDCP-RENW-ADCH-0007"
+        "federalProvincialTerritorialBenefits": "CDCP-RENW-ADCH-0007",
+        "childInformation": "CDCP-APPL-ADCH-0008"
       }
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",

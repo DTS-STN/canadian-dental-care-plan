@@ -182,5 +182,35 @@
       "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
       "provincial-territorial-required": "Select a province or territory"
     }
+  },
+  "children": {
+    "child-number": "Child {{childNumber}}",
+    "index": {
+      "page-title": "Child(ren)'s renewal",
+      "you-have-completed": "You have completed the renewal process for yourself.",
+      "in-this-section": "If you would like to renew for your child, select \"Renew a child\". Otherwise, continue with the application.",
+      "each-child": "Each child must have a client number to renew their membership. If the child does not have a client number, you will need to apply for the Canadian Dental Care Plan.",
+      "dob-title": "Date of birth",
+      "sin-title": "Client number",
+      "edit-child": "Edit child's information",
+      "add-child": "Renew a child",
+      "add-another-child": "Renew another child",
+      "remove-child": "Remove child",
+      "back-btn": "Back",
+      "continue-btn": "Continue with application",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save",
+      "dental-insurance-title": "Access to other dental insurance or coverage",
+      "dental-benefit-title": "Access to government dental benefits",
+      "dental-benefit-has-access": "Has access to the following benefits:",
+      "yes": "Yes",
+      "no": "No",
+      "modal": {
+        "header": "Remove {{childName}}",
+        "info": "Do you want to remove {{childName}} from this application?",
+        "back-btn": "Return to summary page",
+        "remove-btn": "Remove child"
+      }
+    }
   }
 }

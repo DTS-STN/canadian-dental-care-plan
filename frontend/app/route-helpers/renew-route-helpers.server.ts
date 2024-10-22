@@ -18,6 +18,24 @@ export interface RenewState {
     dateOfBirth: string;
     clientNumber: string;
   };
+  readonly children: {
+    readonly id: string;
+    readonly dentalBenefits?: {
+      hasFederalBenefits: boolean;
+      federalSocialProgram?: string;
+      hasProvincialTerritorialBenefits: boolean;
+      provincialTerritorialSocialProgram?: string;
+      province?: string;
+    };
+    readonly dentalInsurance?: boolean;
+    readonly information?: {
+      firstName: string;
+      lastName: string;
+      dateOfBirth: string;
+      isParent: boolean;
+      clientNumber?: string;
+    };
+  }[];
   readonly partnerInformation?: {
     confirm: boolean;
     yearOfBirth: string;
@@ -72,6 +90,7 @@ export interface RenewState {
   // TODO Add remaining states
 }
 
+export type ChildState = RenewState['children'][number];
 export type ApplicantInformationState = NonNullable<RenewState['applicantInformation']>;
 export type TypeOfRenewalState = NonNullable<RenewState['typeOfRenewal']>;
 export type PartnerInformationState = NonNullable<RenewState['partnerInformation']>;
@@ -194,6 +213,7 @@ export function startRenewState({ id, session }: StartArgs) {
   const initialState: RenewState = {
     id: parsedId,
     editMode: false,
+    children: [],
   };
 
   const sessionName = getSessionName(parsedId);
@@ -205,4 +225,15 @@ export function startRenewState({ id, session }: StartArgs) {
 export function renewStateHasPartner(maritalStatus: string) {
   const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
   return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
+}
+
+export function isNewChildState(child: ChildState) {
+  return child.dentalBenefits === undefined || child.dentalInsurance === undefined || child.information === undefined;
+}
+
+export function getChildrenState<TState extends Pick<RenewState, 'children'>>(state: TState, includesNewChildState: boolean = false) {
+  // prettier-ignore
+  return includesNewChildState
+    ? state.children
+    : state.children.filter((child) => isNewChildState(child) === false);
 }
