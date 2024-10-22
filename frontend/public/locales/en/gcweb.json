@@ -40,11 +40,13 @@
     "gc-corporate": "Government of Canada Corporate",
     "terms-conditions": {
       "text": "Terms and conditions",
-      "href": "https://www.canada.ca/en/transparency/terms.html"
+      "public-href": "https://www.canada.ca/en/transparency/terms.html",
+      "protected-href": "{{baseUri}}/TC.aspx?mode=ReadOnly&lang=eng#terms"
     },
     "privacy": {
       "text": "Privacy",
-      "href": "https://www.canada.ca/en/transparency/privacy.html"
+      "public-href": "https://www.canada.ca/en/transparency/privacy.html",
+      "protected-href": "{{baseUri}}/TC.aspx?mode=ReadOnly&lang=eng#privacy"
     },
     "gc-symbol": "Symbol of the Government of Canada",
     "main-band": {
@@ -52,7 +54,8 @@
       "links": {
         "contact-us": {
           "content": "Contact us",
-          "href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html"
+          "public-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
+          "protected-href": "{{baseUri}}/en/contact-us"
         }
       }
     }

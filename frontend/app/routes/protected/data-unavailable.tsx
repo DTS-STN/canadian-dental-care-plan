@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -41,11 +41,12 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 export default function DataUnavailable() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { SCCH_BASE_URI } = useLoaderData<typeof loader>();
+  const params = useParams();
 
   const doyouqualify = <InlineLink to={t('data-unavailable:do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
   const howtoapply = <InlineLink to={t('data-unavailable:how-to-apply.href')} className="external-link" newTabIndicator target="_blank" />;
   const contactus = <InlineLink to={t('data-unavailable:contact-us.href')} className="external-link" newTabIndicator target="_blank" />;
-  const statuschecker = <InlineLink to={t('data-unavailable:status-checker.href')} className="external-link" newTabIndicator target="_blank" />;
+  const statuschecker = <InlineLink routeId="$lang/_public/status/index" className="external-link" newTabIndicator target="_blank" params={params} />;
 
   return (
     <>

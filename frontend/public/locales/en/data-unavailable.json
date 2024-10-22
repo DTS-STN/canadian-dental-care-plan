@@ -6,9 +6,8 @@
   "service-eligible": "<strong>You are currently not a participant in the Canadian Dental Care Plan.</strong> To find out if you are eligible please visit <doyouqualify>Do you qualify</doyouqualify> on Canada.ca. For more information on how to apply, please visit <howtoapply>How to apply</howtoapply>.",
   "do-you-qualify.href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
   "how-to-apply.href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
-  "other-enquiry": "For other enquiries, please visit the <contactus>Contact us</contactus> page to find out how to reach us.",
+  "other-enquiry": "For other Canadian Dental Care Plan enquiries, please visit the <contactus>CDCP Contact us</contactus> page.",
   "contact-us.href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
   "service-delay": "If you have recently applied, please note that there could be a delay in your application appearing within the My Service Canada Account.  For any enquiries on the status of your application please visit <statuschecker>Verify the Status of your application</statuschecker>.",
-  "status-checker.href": "https://canadadental-uat.powerappsportals.com/en/status-etat/",
   "back-button": "Return to Dashboard"
 }
