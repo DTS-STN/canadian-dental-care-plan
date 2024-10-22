@@ -1,7 +1,7 @@
 import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
-import ClientApplication from './client-application-data/client-application.json';
+import clientApplicationJsonDataSource from './client-application-data/client-application.json';
 import { db } from '~/mocks/db';
 import type { BenefitApplicationResponse } from '~/schemas/benefit-application-service-schemas.server';
 import { benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
@@ -212,7 +212,7 @@ export function getPowerPlatformApiMockHandlers() {
           return new HttpResponse(null, { status: 400 });
         }
 
-        return HttpResponse.json(ClientApplication);
+        return HttpResponse.json(clientApplicationJsonDataSource);
       }
 
       const requestBody = await request.json();
