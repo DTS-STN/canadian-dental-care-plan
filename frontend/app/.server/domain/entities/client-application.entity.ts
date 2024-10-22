@@ -172,3 +172,34 @@ export type ClientApplicationEntity = Readonly<{
     }>;
   }>;
 }>;
+
+export type ClientApplicationBasicInfoRequestEntity = Readonly<{
+  BenefitApplication: Readonly<{
+    Applicant: Readonly<{
+      PersonName: ReadonlyArray<
+        Readonly<{
+          PersonGivenName: ReadonlyArray<string>;
+          PersonSurName: string;
+        }>
+      >;
+      PersonBirthDate: Readonly<{
+        date: string;
+      }>;
+      ClientIdentification: ReadonlyArray<
+        Readonly<{
+          IdentificationID: string;
+        }>
+      >;
+    }>;
+  }>;
+}>;
+
+export type ClientApplicationSinRequestEntity = Readonly<{
+  BenefitApplication: Readonly<{
+    Applicant: Readonly<{
+      PersonSINIdentification: Readonly<{
+        IdentificationID: string;
+      }>;
+    }>;
+  }>;
+}>;

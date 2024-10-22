@@ -1,38 +1,30 @@
 import { inject, injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { ClientApplicationDto } from '~/.server/domain/dtos';
+import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { ClientApplicationRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
-export interface FindByPersonalInfoSearchCriteria {
-  /** The first name of the client. */
-  firstName: string;
-  /** The last name of the client. */
-  lastName: string;
-  /** The date of birth of the client in YYYY-MM-DD format. */
-  dateOfBirth: string;
-  /** The client number assigned to the client. */
-  clientNumber: string;
-}
-
+/**
+ * A service that provides access to client application data.
+ */
 export interface ClientApplicationService {
   /**
-   * Finds client application data by Social Insurance Number (SIN).
+   * Finds a client application by basic info.
    *
-   * @param sin The Social Insurance Number of the client.
-   * @returns A Promise that resolves to the client application data if found, or `null` if not found.
+   * @param clientApplicationBasicInfoRequestDto The basic info request dto.
+   * @returns A Promise that resolves to the client application dto if found, or `null` otherwise.
    */
-  findClientApplicationBySin(sin: string): Promise<ClientApplicationDto | null>;
+  findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): Promise<ClientApplicationDto | null>;
 
   /**
-   * Finds client application data by first name, last name, date of birth, and client number.
+   * Finds a client application by SIN.
    *
-   * @param searchCriteria An object containing the search criteria.
-   * @returns A Promise that resolves to the client application data if found, or `null` if not found.
+   * @param clientApplicationSinRequestDto The SIN request dto.
+   * @returns A Promise that resolves to the client application dto if found, or `null` otherwise.
    */
-  findClientApplicationByPersonalInfo(searchCriteria: FindByPersonalInfoSearchCriteria): Promise<ClientApplicationDto | null>;
+  findClientApplicationBySin(clientApplicationSinRequestDto: ClientApplicationSinRequestDto): Promise<ClientApplicationDto | null>;
 }
 
 @injectable()
@@ -41,25 +33,28 @@ export class ClientApplicationServiceImpl implements ClientApplicationService {
 
   constructor(
     @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.CLIENT_APPLICATION_DTO_MAPPER) private readonly ClientApplicationDtoMapper: ClientApplicationDtoMapper,
-    @inject(SERVICE_IDENTIFIER.CLIENT_APPLICATION_REPOSITORY) private readonly ClientApplicationRepository: ClientApplicationRepository,
+    @inject(SERVICE_IDENTIFIER.CLIENT_APPLICATION_DTO_MAPPER) private readonly clientApplicationDtoMapper: ClientApplicationDtoMapper,
+    @inject(SERVICE_IDENTIFIER.CLIENT_APPLICATION_REPOSITORY) private readonly clientApplicationRepository: ClientApplicationRepository,
   ) {
     this.log = logFactory.createLogger('ClientApplicationServiceImpl');
   }
 
-  async findClientApplicationBySin(sin: string): Promise<ClientApplicationDto | null> {
-    this.log.debug('Get client application by sin');
-    this.log.trace('Get client application with sin: [%s]', sin);
-    const clientApplicationEntity = await this.ClientApplicationRepository.findClientApplicationBySin(sin);
-    const clientApplicationDto = clientApplicationEntity ? this.ClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity) : null;
+  async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): Promise<ClientApplicationDto | null> {
+    this.log.debug('Get client application by basic info');
+    this.log.trace('Get client application by basic info: [%j]', clientApplicationBasicInfoRequestDto);
+    const clientApplicationBasicInfoRequestEntity = this.clientApplicationDtoMapper.mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto);
+    const clientApplicationEntity = await this.clientApplicationRepository.findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity);
+    const clientApplicationDto = clientApplicationEntity ? this.clientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity) : null;
     this.log.trace('Returning client application: [%j]', clientApplicationDto);
     return clientApplicationDto;
   }
 
-  async findClientApplicationByPersonalInfo({ firstName, lastName, dateOfBirth, clientNumber }: FindByPersonalInfoSearchCriteria): Promise<ClientApplicationDto | null> {
-    this.log.debug('Get client application with first name: [%s], last name: [%s], date of birth: [%s], client number: [%s]', firstName, lastName, dateOfBirth, clientNumber);
-    const clientApplicationEntity = await this.ClientApplicationRepository.findClientApplicationByCriteria({ firstName, lastName, dateOfBirth, clientNumber });
-    const clientApplicationDto = clientApplicationEntity ? this.ClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity) : null;
+  async findClientApplicationBySin(clientApplicationSinRequestDto: ClientApplicationSinRequestDto): Promise<ClientApplicationDto | null> {
+    this.log.debug('Get client application by sin');
+    this.log.trace('Get client application with sin: [%j]', clientApplicationSinRequestDto);
+    const clientApplicationSinRequestEntity = this.clientApplicationDtoMapper.mapClientApplicationSinRequestDtoToClientApplicationSinRequestEntity(clientApplicationSinRequestDto);
+    const clientApplicationEntity = await this.clientApplicationRepository.findClientApplicationBySin(clientApplicationSinRequestEntity);
+    const clientApplicationDto = clientApplicationEntity ? this.clientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity) : null;
     this.log.trace('Returning client application: [%j]', clientApplicationDto);
     return clientApplicationDto;
   }

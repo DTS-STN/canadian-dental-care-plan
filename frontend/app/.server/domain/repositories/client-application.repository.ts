@@ -2,40 +2,29 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { ClientApplicationEntity } from '~/.server/domain/entities';
+import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
-
-export interface FindClientApplicationCriteria {
-  /** The first name of the client. */
-  firstName: string;
-  /** The last name of the client. */
-  lastName: string;
-  /** The date of birth of the client in YYYY-MM-DD format. */
-  dateOfBirth: string;
-  /** The client number assigned to the client. */
-  clientNumber: string;
-}
 
 /**
  * A repository that provides access to client application data.
  */
 export interface ClientApplicationRepository {
   /**
-   * Finds client application data by Social Insurance Number (SIN).
+   * Finds a client application by basic info.
    *
-   * @param sin The Social Insurance Number of the client.
-   * @returns A Promise that resolves to the client application data if found, or `null` if not found.
+   * @param clientApplicationBasicInfoRequestEntity The basic info request entity.
+   * @returns A Promise that resolves to the client application entity if found, or `null` otherwise.
    */
-  findClientApplicationBySin(sin: string): Promise<ClientApplicationEntity | null>;
+  findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null>;
 
   /**
-   * Finds client application data by first name, last name, date of birth, and client number.
+   * Finds a client application by SIN.
    *
-   * @param criteria An object containing the search criteria.
-   * @returns A Promise that resolves to the client application data if found, or `null` if not found.
+   * @param clientApplicationSinRequestEntity The SIN request entity.
+   * @returns A Promise that resolves to the client application entity if found, or `null` otherwise.
    */
-  findClientApplicationByCriteria(criteria: FindClientApplicationCriteria): Promise<ClientApplicationEntity | null>;
+  findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<ClientApplicationEntity | null>;
 }
 
 @injectable()
@@ -49,25 +38,17 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
     this.log = logFactory.createLogger('ClientApplicationRepositoryImpl');
   }
 
-  async findClientApplicationBySin(sin: string): Promise<ClientApplicationEntity | null> {
-    this.log.trace('Fetching client application for sin [%s]', sin);
+  async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null> {
+    this.log.trace('Fetching client application for basic info [%j]', clientApplicationBasicInfoRequestEntity);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET`);
-    const clientApplicationRequest = {
-      Applicant: {
-        PersonSINIdentification: {
-          IdentificationID: sin,
-        },
-      },
-    };
-
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.client-application.posts', url, {
+    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.client-application_by-basic-info.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
-      body: JSON.stringify(clientApplicationRequest),
+      body: JSON.stringify(clientApplicationBasicInfoRequestEntity),
     });
 
     if (!response.ok) {
@@ -78,47 +59,26 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
         url: url,
         responseBody: await response.text(),
       });
-
       throw new Error(`Failed to 'POST' for client application data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
     const data = await response.json();
-    this.log.trace('Client application: [%j]', data);
+    this.log.trace('Client application [%j]', data);
 
     return data;
   }
 
-  async findClientApplicationByCriteria(criteria: FindClientApplicationCriteria): Promise<ClientApplicationEntity | null> {
-    this.log.trace('Fetching client application for criteria [%j]', criteria);
-    const { firstName, lastName, dateOfBirth, clientNumber } = criteria;
+  async findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<ClientApplicationEntity | null> {
+    this.log.trace('Fetching client application for sin [%j]', clientApplicationSinRequestEntity);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET`);
-    const clientApplicationRequest = {
-      Applicant: {
-        PersonName: [
-          {
-            PersonGivenName: [firstName],
-            PersonSurName: lastName,
-          },
-        ],
-        PersonBirthDate: {
-          date: dateOfBirth,
-        },
-        ClientIdentification: [
-          {
-            IdentificationID: clientNumber,
-          },
-        ],
-      },
-    };
-
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.client-application_fnlndob.posts', url, {
+    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.client-application_by-sin.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
-      body: JSON.stringify(clientApplicationRequest),
+      body: JSON.stringify(clientApplicationSinRequestEntity),
     });
 
     if (!response.ok) {
@@ -129,6 +89,7 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
         url: url,
         responseBody: await response.text(),
       });
+
       throw new Error(`Failed to 'POST' for client application data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
