@@ -172,9 +172,14 @@ export function getPowerPlatformApiMockHandlers() {
       });
     }),
 
-    // Mock handler for retrieving client application by name, DOB, and client number
+    // Mock handler for submitting online application and to retrieve client application
     http.post(`${INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`, async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
+
+      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
+      if (!subscriptionKey) {
+        return new HttpResponse('Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.', { status: 401 });
+      }
 
       const url = new URL(request.url);
       const action = url.searchParams.get('action');
@@ -208,11 +213,6 @@ export function getPowerPlatformApiMockHandlers() {
         }
 
         return HttpResponse.json(ClientApplication);
-      }
-
-      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
-      if (!subscriptionKey) {
-        return new HttpResponse('Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.', { status: 401 });
       }
 
       const requestBody = await request.json();

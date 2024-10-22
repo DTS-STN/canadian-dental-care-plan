@@ -77,7 +77,7 @@ describe('ClientApplicationDtoMapperImpl', () => {
             },
           ],
           PersonSINIdentification: {
-            IdentificationID: 'SIN-987654321',
+            IdentificationID: '800123456',
           },
           MailingSameAsHomeIndicator: true,
           PreferredMethodCommunicationCode: {
@@ -130,7 +130,7 @@ describe('ClientApplicationDtoMapperImpl', () => {
                 ReferenceDataName: 'Sibling',
               },
               PersonSINIdentification: {
-                IdentificationID: 'SIN-123456789',
+                IdentificationID: '800123456',
               },
               ApplicantDetail: {
                 PrivateDentalInsuranceIndicator: false,
