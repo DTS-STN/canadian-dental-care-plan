@@ -904,6 +904,14 @@
                       "en": "/:lang/renew/:id/adult-child/children/:childId/information",
                       "fr": "/:lang/renew/:id/adult-child/children/:childId/information"
                     }
+                  },
+                  {
+                    "id": "public/renew/$id/adult-child/children/$childId/dental-insurance",
+                    "file": "routes/public/renew/$id/adult-child/children/$childId/dental-insurance.tsx",
+                    "paths": {
+                      "en": "/:lang/renew/:id/adult-child/children/:childId/dental-insurance",
+                      "fr": "/:lang/renew/:id/adult-child/children/:childId/dental-insurance"
+                    }
                   }
                 ]
               }
