@@ -883,6 +883,29 @@
                   "en": "/:lang/renew/:id/adult-child/federal-provincial-territorial-benefits",
                   "fr": "/:lang/renew/:id/adult-child/federal-provincial-territorial-benefits"
                 }
+              },
+              {
+                "id": "public/renew/$id/adult-child/children/index",
+                "file": "routes/public/renew/$id/adult-child/children/index.tsx",
+                "index": true,
+                "paths": {
+                  "en": "/:lang/renew/:id/adult-child/children",
+                  "fr": "/:lang/renew/:id/adult-child/children"
+                }
+              },
+              {
+                "id": "public/renew/$id/adult-child/children/$childId/_route",
+                "file": "routes/public/renew/$id/adult-child/children/$childId/_route.tsx",
+                "children": [
+                  {
+                    "id": "public/renew/$id/adult-child/children/$childId/information",
+                    "file": "routes/public/renew/$id/adult-child/children/$childId/information.tsx",
+                    "paths": {
+                      "en": "/:lang/renew/:id/adult-child/children/:childId/information",
+                      "fr": "/:lang/renew/:id/adult-child/children/:childId/information"
+                    }
+                  }
+                ]
               }
             ]
           }
