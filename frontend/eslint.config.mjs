@@ -48,6 +48,7 @@ export default tseslint.config(
     files: ['**/*.{ts,tsx}'],
     extends: [eslint.configs.recommended, ...tseslint.configs.strict, ...fixupConfigRules(compat.config(importPlugin.configs.recommended))],
     rules: {
+      'no-param-reassign': 'error',
       '@typescript-eslint/await-thenable': 'error',
       '@typescript-eslint/consistent-type-exports': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',

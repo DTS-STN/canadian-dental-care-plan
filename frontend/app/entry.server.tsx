@@ -111,6 +111,7 @@ export default async function handleRequest(request: Request, responseStatusCode
           reject(error);
         },
         onError(error: unknown) {
+          // eslint-disable-next-line no-param-reassign
           responseStatusCode = 500;
           // Log streaming rendering errors from inside the shell.  Don't log
           // errors encountered during initial shell rendering since they'll
