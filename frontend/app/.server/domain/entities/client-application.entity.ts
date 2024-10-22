@@ -57,7 +57,7 @@ export type ClientApplicationEntity = Readonly<{
           CommunicationCategoryCode: Readonly<{
             ReferenceDataID: string;
           }>;
-          PreferredIndicator: string;
+          PreferredIndicator: boolean;
         }>
       >;
       PersonMaritalStatus: Readonly<{

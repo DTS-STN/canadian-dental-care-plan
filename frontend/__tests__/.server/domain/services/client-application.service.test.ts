@@ -69,7 +69,7 @@ describe('ClientApplicationServiceImpl', () => {
             CommunicationCategoryCode: {
               ReferenceDataID: 'ENG',
             },
-            PreferredIndicator: 'true',
+            PreferredIndicator: true,
           },
         ],
         PersonMaritalStatus: {
@@ -227,7 +227,7 @@ describe('ClientApplicationServiceImpl', () => {
             CommunicationCategoryCode: {
               ReferenceDataID: 'ENG',
             },
-            PreferredIndicator: 'true',
+            PreferredIndicator: true,
           },
         ],
         PersonMaritalStatus: {

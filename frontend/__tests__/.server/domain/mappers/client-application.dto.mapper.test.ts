@@ -62,7 +62,7 @@ describe('ClientApplicationDtoMapperImpl', () => {
               CommunicationCategoryCode: {
                 ReferenceDataID: 'ENG',
               },
-              PreferredIndicator: 'true',
+              PreferredIndicator: true,
             },
           ],
           PersonMaritalStatus: {
