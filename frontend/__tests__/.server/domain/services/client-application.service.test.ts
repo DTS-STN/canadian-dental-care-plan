@@ -120,7 +120,7 @@ describe('ClientApplicationServiceImpl', () => {
         ],
         Flags: [
           { Flag: true, FlagCategoryText: 'isCraAssessed' },
-          { Flag: false, FlagCategoryText: '' },
+          { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
         ],
         RelatedPerson: [
           {
@@ -278,7 +278,7 @@ describe('ClientApplicationServiceImpl', () => {
         ],
         Flags: [
           { Flag: true, FlagCategoryText: 'isCraAssessed' },
-          { Flag: false, FlagCategoryText: '' },
+          { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
         ],
         RelatedPerson: [
           {
