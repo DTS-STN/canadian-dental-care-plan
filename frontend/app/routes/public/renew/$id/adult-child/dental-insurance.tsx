@@ -174,7 +174,7 @@ export default function RenewAdultChildAccessToDentalInsuranceQuestion() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/communication-preference"
+                routeId="public/renew/$id/adult-child/confirm-address"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
