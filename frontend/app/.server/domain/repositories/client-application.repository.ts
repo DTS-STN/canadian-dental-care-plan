@@ -52,13 +52,11 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
   async findClientApplicationBySin(sin: string): Promise<ClientApplicationEntity | null> {
     this.log.trace('Fetching client application for sin [%s]', sin);
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/v1/client-application`);
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET`);
     const clientApplicationRequest = {
-      BenefitApplication: {
-        Applicant: {
-          PersonSINIdentification: {
-            IdentificationID: sin,
-          },
+      Applicant: {
+        PersonSINIdentification: {
+          IdentificationID: sin,
         },
       },
     };
@@ -94,25 +92,23 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
     this.log.trace('Fetching client application for criteria [%j]', criteria);
     const { firstName, lastName, dateOfBirth, clientNumber } = criteria;
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/v1/client-application_fnlndob`);
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET`);
     const clientApplicationRequest = {
-      BenefitApplication: {
-        Applicant: {
-          PersonName: [
-            {
-              PersonGivenName: [firstName],
-              PersonSurName: lastName,
-            },
-          ],
-          PersonBirthDate: {
-            date: dateOfBirth,
+      Applicant: {
+        PersonName: [
+          {
+            PersonGivenName: [firstName],
+            PersonSurName: lastName,
           },
-          ClientIdentification: [
-            {
-              IdentificationID: clientNumber,
-            },
-          ],
+        ],
+        PersonBirthDate: {
+          date: dateOfBirth,
         },
+        ClientIdentification: [
+          {
+            IdentificationID: clientNumber,
+          },
+        ],
       },
     };
 

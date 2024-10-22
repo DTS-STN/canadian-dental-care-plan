@@ -190,7 +190,7 @@ function toBenefitApplicationRequest({
             CommunicationCategoryCode: {
               ReferenceDataID: communicationPreferences.preferredLanguage,
             },
-            PreferredIndicator: true, // Static value
+            PreferredIndicator: true,
           },
         ],
         PersonMaritalStatus: {
