@@ -4,6 +4,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -126,15 +127,10 @@ export async function action({ context: { session, serviceProvider }, params, re
   }
 
   // Fetch client application data using ClientApplicationService
-  const clientApplication = await clientApplicationService.findClientApplicationByPersonalInfo({
-    firstName: parsedDataResult.data.firstName,
-    lastName: parsedDataResult.data.lastName,
-    dateOfBirth: parsedDataResult.data.dateOfBirth,
-    clientNumber: parsedDataResult.data.clientNumber,
-  });
+  const clientApplication = await clientApplicationService.findClientApplicationByBasicInfo(parsedDataResult.data);
 
-  // Check the 'isCraAssessed' flag in the client application data
-  const isCraAssessed = clientApplication?.BenefitApplication.Applicant.Flags.find((flag) => flag.FlagCategoryText === 'isCraAssessed')?.Flag ?? false;
+  // TODO: handle when clientApplication is not found (null)
+  invariant(clientApplication, 'Expected clientApplication to be found (not null).');
 
   saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data } });
 
@@ -143,7 +139,7 @@ export async function action({ context: { session, serviceProvider }, params, re
   }
 
   // If isCraAssessed flag is true, skip tax-filing and go to type-renewal
-  if (isCraAssessed) {
+  if (clientApplication.hasBeenAssessedByCRA) {
     return redirect(getPathById('public/renew/$id/type-renewal', params));
   }
 
