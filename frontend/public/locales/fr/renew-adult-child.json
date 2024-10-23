@@ -461,5 +461,48 @@
       "back-btn": "Back",
       "close-btn": "Close application"
     }
+  },
+  "review-information": {
+    "read-carefully": "(FR) Review this information carefully. The information provided will be used to update your Canadian Dental Care Plan member account.",
+    "page-title": "Vérifiez vos renseignements",
+    "page-sub-title": "(FR) Member information",
+    "dob-title": "Date de naissance",
+    "dob-change": "Modifier la date de naissance",
+    "client-number-title": "(FR) Client number",
+    "sin-title": "Numéro d'assurance sociale (NAS)",
+    "sin-change": "Modifier le NAS",
+    "full-name-title": "Nom complet",
+    "full-name-change": "Modifier le nom complet",
+    "marital-title": "État civil",
+    "marital-change": "Modifier l'état civil",
+    "year-of-birth": "(FR) Year of birth",
+    "spouse-title": "Renseignements sur l'époux/épouse ou le conjoint(e) de fait",
+    "spouse-consent": {
+      "label": "Consentement",
+      "yes": "Mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et il/elle y consent.",
+      "no": "Mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et il/elle n'y consent pas."
+    },
+    "contact-info-title": "Coordonnées",
+    "phone-title": "Téléphone",
+    "phone-change": "Modifier le numéro de téléphone",
+    "alt-phone-title": "Autre numéro de téléphone",
+    "alt-phone-change": "Modifier l'autre numéro de téléphone",
+    "email": "Courriel",
+    "email-change": "Modifier l'adresse courriel",
+    "mailing-title": "Adresse postale",
+    "mailing-change": "Modifier l'adresse postale",
+    "home-title": "Adresse à domicile",
+    "home-change": "Modifier l'adresse domiciliaire",
+    "dental-title": "Accès à l'assurance dentaire",
+    "dental-insurance-title": "Accès à d'autres assurances ou couvertures de soins dentaires",
+    "dental-insurance-change": "Modifier la réponse à «\u00a0accès à l'assurance dentaire\u00a0»",
+    "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
+    "dental-benefit-change": "Modifier la réponse à «\u00a0soins dentaires gouvernementaux\u00a0»",
+    "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
+    "submit-button": "Soumettre la demande",
+    "exit-button": "Quitter la demande",
+    "back-button": "Retour",
+    "yes": "Oui",
+    "no": "Non"
   }
 }

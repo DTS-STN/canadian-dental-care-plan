@@ -463,5 +463,48 @@
       "back-btn": "Back",
       "close-btn": "Close application"
     }
+  },
+  "review-information": {
+    "read-carefully": "Review this information carefully. The information provided will be used to update your Canadian Dental Care Plan member account.",
+    "page-title": "Review your information",
+    "page-sub-title": "Member information",
+    "dob-title": "Date of birth",
+    "dob-change": "Change date of birth",
+    "client-number-title": "Client number",
+    "sin-title": "Social Insurance Number (SIN)",
+    "sin-change": "Change SIN",
+    "full-name-title": "Full name",
+    "full-name-change": "Change full name",
+    "marital-title": "Marital status",
+    "marital-change": "Change marital status",
+    "year-of-birth": "Year of birth",
+    "spouse-title": "Spouse or common-law partner information",
+    "spouse-consent": {
+      "label": "Consent",
+      "yes": "My spouse or common-law partner is aware and has consented to sharing of their personal information.",
+      "no": "My spouse or common-law partner is aware and has not consented to sharing of their personal information."
+    },
+    "contact-info-title": "Contact Information",
+    "phone-title": "Phone number",
+    "phone-change": "Change phone number",
+    "alt-phone-title": "Alternate phone number",
+    "alt-phone-change": "Change alternate phone number",
+    "email": "Email",
+    "email-change": "Change email address",
+    "mailing-title": "Mailing address",
+    "mailing-change": "Change mailing address",
+    "home-title": "Home address",
+    "home-change": "Change home address",
+    "dental-title": "Access to dental insurance",
+    "dental-insurance-title": "Access to other dental insurance or coverage",
+    "dental-insurance-change": "Change answer to dental insurance",
+    "dental-benefit-title": "Access to government dental benefits",
+    "dental-benefit-change": "Change answer to government dental benefits",
+    "dental-benefit-has-access": "Has access to the following benefits:",
+    "submit-button": "Submit Application",
+    "exit-button": "Exit application",
+    "back-button": "Back",
+    "yes": "Yes",
+    "no": "No"
   }
 }
