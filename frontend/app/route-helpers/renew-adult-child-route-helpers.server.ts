@@ -5,8 +5,8 @@ import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/r
 
 import { z } from 'zod';
 
-import { isNewChildState, loadRenewState, saveRenewState } from './renew-route-helpers.server';
-import type { RenewState } from './renew-route-helpers.server';
+import { getChildrenState, isNewChildState, loadRenewState, saveRenewState } from './renew-route-helpers.server';
+import type { ChildState, RenewState } from './renew-route-helpers.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
@@ -164,6 +164,8 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/renew/$id/adult-child/federal-provincial-territorial-benefits', params));
   }
 
+  const children = validateChildrenStateForReview({ childrenState: state.children, params });
+
   return {
     maritalStatus,
     editMode,
@@ -177,5 +179,46 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     dentalInsurance,
     addressInformation,
     partnerInformation,
+    children,
   };
+}
+
+interface ValidateChildrenStateForReviewArgs {
+  childrenState: ChildState[];
+  params: Params;
+}
+
+function validateChildrenStateForReview({ childrenState, params }: ValidateChildrenStateForReviewArgs) {
+  const children = getChildrenState({ children: childrenState });
+
+  if (children.length === 0) {
+    throw redirect(getPathById('public/renew/$id/adult-child/children/index', params));
+  }
+
+  return children.map(({ id, dentalBenefits, dentalInsurance, information }) => {
+    const childId = id;
+
+    if (information === undefined) {
+      throw redirect(getPathById('public/renew/$id/adult-child/children/$childId/information', { ...params, childId }));
+    }
+
+    if (!information.isParent) {
+      throw redirect(getPathById('public/renew/$id/adult-child/children/$childId/parent-or-guardian', { ...params, childId }));
+    }
+
+    if (dentalInsurance === undefined) {
+      throw redirect(getPathById('public/renew/$id/adult-child/children/$childId/dental-insurance', { ...params, childId }));
+    }
+
+    if (dentalBenefits === undefined) {
+      throw redirect(getPathById('public/renew/$id/adult-child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
+    }
+
+    return {
+      id,
+      dentalBenefits,
+      dentalInsurance,
+      information,
+    };
+  });
 }

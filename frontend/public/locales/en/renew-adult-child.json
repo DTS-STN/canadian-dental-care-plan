@@ -290,5 +290,33 @@
         "dental-insurance-required": "Select whether the child has access to dental insurance"
       }
     }
+  },
+  "review-child-information": {
+    "read-carefully": "Review this information carefully. The information provided will be used to update your child(ren)'s Canadian Dental Care Plan member account.",
+    "page-title": "Review child(ren) information",
+    "page-sub-title": "{{child}} information",
+    "dob-title": "Date of birth",
+    "dob-change": "Change date of birth",
+    "is-parent": "Parent or legal guardian of child",
+    "client-number-title": "Client number",
+    "client-number-change": "Change client number",
+    "full-name-title": "Full name",
+    "full-name-change": "Change full name",
+    "dental-title": "{{child}} access to dental insurance",
+    "dental-insurance-title": "Access to other dental insurance or coverage",
+    "dental-insurance-change": "Change answer to dental insurance",
+    "dental-benefit-title": "Access to government dental benefits",
+    "dental-benefit-change": "Change answer to government dental benefits",
+    "dental-benefit-has-access": "Has access to the following benefits:",
+    "submit-app-title": "Submit your renewal application",
+    "submit-p-proceed": "By proceeding with this renewal, you are agreeing to attest truthfully to the information provided.",
+    "submit-p-false-info": "If you provide false information on your renewal, you and others you applied for may be removed from the plan.",
+    "submit-p-repayment": "If you or your family members were not eligible to renew, you or your family member may have to repay the full cost of care received through the Canadian Dental Care Plan.",
+    "continue-button": "Continue",
+    "back-button": "Back",
+    "submit-button": "Submit renewal application",
+    "exit-button": "Exit application",
+    "yes": "Yes",
+    "no": "No"
   }
 }
