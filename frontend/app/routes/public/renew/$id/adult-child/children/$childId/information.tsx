@@ -16,7 +16,7 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { loadRenewAdultChildState, loadRenewAdultSingleChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
-import { getAgeCategoryFromDateString, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -134,7 +134,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         ...val,
         dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`,
       };
-    }); //satisfies z.ZodType<OmitStrict<ChildInformationState, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>>;
+    });
 
   const data = {
     firstName: String(formData.get('firstName') ?? ''),
@@ -154,7 +154,11 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  // TODO: Implement logic to check if the form data matches any existing children
+  // for the applicant. Retrieve the applicant's list of children (possibily 'RelatedPerson') and compare the
+  // provided child data (first name, last name, date of birth, and client number)
+  // with the stored data. If a match is found, proceed with the next screen;
+  // otherwise, return an error indicating no matching child was found.
 
   saveRenewState({
     params,
@@ -163,9 +167,6 @@ export async function action({ context: { session }, params, request }: ActionFu
       children: renewState.children.map((child) => {
         if (child.id !== state.id) return child;
         const information = { ...parsedDataResult.data };
-        if (ageCategory !== 'youth' && ageCategory !== 'children') {
-          information['dateOfBirth'] = child.information?.dateOfBirth ?? '';
-        }
         return { ...child, information };
       }),
     },
@@ -177,10 +178,6 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   if (!parsedDataResult.data.isParent) {
     return redirect(getPathById('public/renew/$id/adult-child/children/$childId/parent-or-guardian', params));
-  }
-
-  if (ageCategory === 'adults' || ageCategory === 'seniors') {
-    return redirect(getPathById('public/renew/$id/adult-child/children/$childId/cannot-apply-child', params));
   }
 
   return redirect(getPathById('public/renew/$id/adult-child/children/$childId/dental-insurance', params));

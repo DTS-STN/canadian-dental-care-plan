@@ -4,7 +4,6 @@ import type { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
-import { getAgeFromDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -237,19 +236,4 @@ export function getChildrenState<TState extends Pick<RenewState, 'children'>>(st
   return includesNewChildState
     ? state.children
     : state.children.filter((child) => isNewChildState(child) === false);
-}
-
-export type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
-
-export function getAgeCategoryFromDateString(date: string) {
-  const age = getAgeFromDateString(date);
-  return getAgeCategoryFromAge(age);
-}
-
-export function getAgeCategoryFromAge(age: number): AgeCategory {
-  if (age >= 65) return 'seniors';
-  if (age >= 18 && age < 65) return 'adults';
-  if (age >= 16 && age < 18) return 'youth';
-  if (age >= 0 && age < 16) return 'children';
-  throw new Error(`Invalid age [${age}]`);
 }
