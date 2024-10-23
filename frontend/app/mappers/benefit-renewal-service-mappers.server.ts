@@ -4,6 +4,7 @@ import validator from 'validator';
 import type {
   AddressInformationState,
   ApplicantInformationState,
+  ChildState,
   CommunicationPreferenceState,
   ContactInformationState,
   DentalFederalBenefitsState,
@@ -51,6 +52,42 @@ export function toBenefitRenewalRequestFromRenewItaState({
   });
 }
 
+export interface ToBenefitRenewRequestFromRenewAdultChildStateArgs {
+  applicantInformation: ApplicantInformationState;
+  children: Required<ChildState>[];
+  communicationPreferences?: CommunicationPreferenceState;
+  dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalInsurance: boolean;
+  partnerInformation: PartnerInformationState | undefined;
+  contactInformation: ContactInformationState;
+  typeOfRenewal: Extract<TypeOfRenewalState, 'adult-child'>;
+  maritalStatus: string;
+}
+
+export function toBenefitRenewRequestFromRenewAdultChildState({
+  applicantInformation,
+  children,
+  communicationPreferences,
+  dentalBenefits,
+  dentalInsurance,
+  partnerInformation,
+  contactInformation,
+  typeOfRenewal,
+  maritalStatus,
+}: ToBenefitRenewRequestFromRenewAdultChildStateArgs) {
+  return toBenefitRenewalRequest({
+    applicantInformation,
+    children,
+    communicationPreferences,
+    dentalBenefits,
+    dentalInsurance,
+    partnerInformation,
+    contactInformation,
+    typeOfRenewal,
+    maritalStatus,
+  });
+}
+
 interface ToBenefitRenewalRequestArgs {
   applicantInformation: ApplicantInformationState;
   communicationPreferences?: CommunicationPreferenceState;
@@ -61,6 +98,7 @@ interface ToBenefitRenewalRequestArgs {
   typeOfRenewal: TypeOfRenewalState;
   maritalStatus: string;
   addressInformation?: AddressInformationState;
+  children?: Required<ChildState>[];
 }
 
 function toBenefitRenewalRequest({
@@ -73,6 +111,7 @@ function toBenefitRenewalRequest({
   typeOfRenewal,
   maritalStatus,
   addressInformation,
+  children,
 }: ToBenefitRenewalRequestArgs): BenefitRenewalRequest {
   return {
     BenefitRenewal: {
@@ -103,7 +142,7 @@ function toBenefitRenewalRequest({
         PersonClientIdentification: {
           IdentificationID: applicantInformation.clientNumber,
         },
-        RelatedPerson: toRelatedPersons({ partnerInformation }),
+        RelatedPerson: toRelatedPersons({ partnerInformation, children }),
         MailingSameAsHomeIndicator: addressInformation?.copyMailingAddress ?? false,
         PreferredMethodCommunicationCode: {
           ReferenceDataID: communicationPreferences?.preferredMethod,
@@ -254,13 +293,17 @@ function toInsurancePlan({ hasFederalBenefits, federalSocialProgram, hasProvinci
 
 interface ToRelatedPersonArgs {
   partnerInformation: PartnerInformationState | undefined;
+  children?: ChildState[];
 }
 
-function toRelatedPersons({ partnerInformation }: ToRelatedPersonArgs) {
+function toRelatedPersons({ partnerInformation, children }: ToRelatedPersonArgs) {
   const relatedPersons = [];
 
   if (partnerInformation) {
     relatedPersons.push(toRelatedPersonSpouse(partnerInformation));
+  }
+  if (children) {
+    relatedPersons.push(...toRelatedPersonDependent({ children }));
   }
 
   return relatedPersons;
@@ -285,6 +328,35 @@ function toRelatedPersonSpouse({ confirm, yearOfBirth, socialInsuranceNumber }: 
       ConsentToSharePersonalInformationIndicator: confirm,
     },
   };
+}
+
+interface ToRelatedPersonDependentArgs {
+  children: ChildState[];
+}
+
+function toRelatedPersonDependent({ children }: ToRelatedPersonDependentArgs) {
+  return children
+    .filter((child): child is Required<ChildState> => child.dentalBenefits !== undefined && child.dentalInsurance !== undefined && child.information !== undefined)
+    .map((child) => ({
+      PersonBirthDate: toDate(child.information.dateOfBirth),
+      PersonName: [
+        {
+          PersonGivenName: [child.information.firstName],
+          PersonSurName: child.information.lastName,
+        },
+      ],
+      PersonRelationshipCode: {
+        ReferenceDataName: 'Dependant' as const,
+      },
+      PersonSINIdentification: {
+        IdentificationID: child.information.clientNumber ?? '',
+      },
+      ApplicantDetail: {
+        AttestParentOrGuardianIndicator: child.information.isParent,
+        PrivateDentalInsuranceIndicator: child.dentalInsurance,
+        InsurancePlan: toInsurancePlan(child.dentalBenefits),
+      },
+    }));
 }
 
 interface ToEmailAddressArgs {
