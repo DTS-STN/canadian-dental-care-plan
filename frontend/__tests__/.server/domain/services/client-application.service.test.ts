@@ -185,7 +185,7 @@ describe('ClientApplicationServiceImpl', () => {
     it('should find client application by SIN', async () => {
       // Arrange
       const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = { sin: '80000002' };
-      const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = { BenefitApplication: { Applicant: { PersonSINIdentification: { IdentificationID: mockClientApplicationSinRequestDto.sin } } } };
+      const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = { Applicant: { PersonSINIdentification: { IdentificationID: mockClientApplicationSinRequestDto.sin } } };
 
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
       mockClientApplicationRepository.findClientApplicationBySin.mockResolvedValue(mockClientApplicationEntity);
@@ -208,7 +208,7 @@ describe('ClientApplicationServiceImpl', () => {
 
     it('should return null if client application is not found by SIN', async () => {
       const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = { sin: '80000002' };
-      const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = { BenefitApplication: { Applicant: { PersonSINIdentification: { IdentificationID: mockClientApplicationSinRequestDto.sin } } } };
+      const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = { Applicant: { PersonSINIdentification: { IdentificationID: mockClientApplicationSinRequestDto.sin } } };
 
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
       mockClientApplicationRepository.findClientApplicationBySin.mockResolvedValue(null);
@@ -234,12 +234,10 @@ describe('ClientApplicationServiceImpl', () => {
       // Arrange
       const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = { firstName: 'John', lastName: 'Doe', dateOfBirth: '2000-01-01', clientNumber: 'ABC123' };
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
-        BenefitApplication: {
-          Applicant: {
-            PersonName: [{ PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName }],
-            PersonBirthDate: { date: mockClientApplicationBasicInfoRequestDto.dateOfBirth },
-            ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber }],
-          },
+        Applicant: {
+          PersonName: [{ PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName }],
+          PersonBirthDate: { date: mockClientApplicationBasicInfoRequestDto.dateOfBirth },
+          ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber }],
         },
       };
 
@@ -266,12 +264,10 @@ describe('ClientApplicationServiceImpl', () => {
       // Arrange
       const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = { firstName: 'John', lastName: 'Doe', dateOfBirth: '2000-01-01', clientNumber: 'ABC123' };
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
-        BenefitApplication: {
-          Applicant: {
-            PersonName: [{ PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName }],
-            PersonBirthDate: { date: mockClientApplicationBasicInfoRequestDto.dateOfBirth },
-            ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber }],
-          },
+        Applicant: {
+          PersonName: [{ PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName }],
+          PersonBirthDate: { date: mockClientApplicationBasicInfoRequestDto.dateOfBirth },
+          ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber }],
         },
       };
 

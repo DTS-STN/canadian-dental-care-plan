@@ -26,34 +26,30 @@ export class ClientApplicationDtoMapperImpl implements ClientApplicationDtoMappe
 
   mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto) {
     return {
-      BenefitApplication: {
-        Applicant: {
-          PersonName: [
-            {
-              PersonGivenName: [clientApplicationBasicInfoRequestDto.firstName],
-              PersonSurName: clientApplicationBasicInfoRequestDto.lastName,
-            },
-          ],
-          PersonBirthDate: {
-            date: clientApplicationBasicInfoRequestDto.dateOfBirth,
+      Applicant: {
+        PersonName: [
+          {
+            PersonGivenName: [clientApplicationBasicInfoRequestDto.firstName],
+            PersonSurName: clientApplicationBasicInfoRequestDto.lastName,
           },
-          ClientIdentification: [
-            {
-              IdentificationID: clientApplicationBasicInfoRequestDto.clientNumber,
-            },
-          ],
+        ],
+        PersonBirthDate: {
+          date: clientApplicationBasicInfoRequestDto.dateOfBirth,
         },
+        ClientIdentification: [
+          {
+            IdentificationID: clientApplicationBasicInfoRequestDto.clientNumber,
+          },
+        ],
       },
     };
   }
 
   mapClientApplicationSinRequestDtoToClientApplicationSinRequestEntity(clientApplicationSinRequestDto: ClientApplicationSinRequestDto): ClientApplicationSinRequestEntity {
     return {
-      BenefitApplication: {
-        Applicant: {
-          PersonSINIdentification: {
-            IdentificationID: clientApplicationSinRequestDto.sin,
-          },
+      Applicant: {
+        PersonSINIdentification: {
+          IdentificationID: clientApplicationSinRequestDto.sin,
         },
       },
     };

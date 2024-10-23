@@ -196,12 +196,10 @@ describe('ClientApplicationDtoMapperImpl', () => {
       };
 
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
-        BenefitApplication: {
-          Applicant: {
-            PersonName: [{ PersonGivenName: ['John'], PersonSurName: 'Doe' }],
-            PersonBirthDate: { date: '2000-01-01' },
-            ClientIdentification: [{ IdentificationID: 'ABC123' }],
-          },
+        Applicant: {
+          PersonName: [{ PersonGivenName: ['John'], PersonSurName: 'Doe' }],
+          PersonBirthDate: { date: '2000-01-01' },
+          ClientIdentification: [{ IdentificationID: 'ABC123' }],
         },
       };
 
@@ -221,7 +219,7 @@ describe('ClientApplicationDtoMapperImpl', () => {
       };
 
       const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = {
-        BenefitApplication: { Applicant: { PersonSINIdentification: { IdentificationID: '123456789' } } },
+        Applicant: { PersonSINIdentification: { IdentificationID: '123456789' } },
       };
 
       // Act
