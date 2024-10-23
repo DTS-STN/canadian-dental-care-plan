@@ -16,7 +16,6 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { loadRenewAdultChildState, loadRenewAdultSingleChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
-import type { ChildInformationState } from '~/route-helpers/renew-route-helpers.server';
 import { getAgeCategoryFromDateString, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -36,7 +35,7 @@ enum YesNoOption {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew', 'renew-adult-child', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adultChild.childInformation,
+  pageIdentifier: pageIds.public.renew.adultChild.childInformation,
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -144,7 +143,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
     dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
     dateOfBirth: '',
-    clientNumber: String(formData.get('clientNumber') ?? ''),
+    childClientNumber: String(formData.get('childClientNumber') ?? ''),
     isParent: formData.get('isParent') ? formData.get('isParent') === YesNoOption.Yes : undefined,
   };
 
@@ -187,7 +186,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   return redirect(getPathById('public/renew/$id/adult-child/children/$childId/dental-insurance', params));
 }
 
-export default function ApplyFlowChildInformation() {
+export default function RenewFlowChildInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, defaultState, childName, editMode, isNew } = useLoaderData<typeof loader>();
   const params = useParams();
@@ -202,7 +201,7 @@ export default function ApplyFlowChildInformation() {
       ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
       : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
     dateOfBirthYear: 'date-picker-date-of-birth-year',
-    childClientNumber: 'client-number',
+    childClientNumber: 'child-client-number',
     isParent: 'input-radio-is-parent-radios-option-0',
   });
 
@@ -263,13 +262,13 @@ export default function ApplyFlowChildInformation() {
               required
             />
             <InputSanitizeField
-              id="client-number"
-              name="clientNumber"
-              label={t('renew:applicant-information.client-number')}
+              id="child-client-number"
+              name="childClientNumber"
+              label={t('renew-adult-child:children.information.child-client-number')}
               inputMode="numeric"
-              helpMessagePrimary={t('renew:applicant-information.help-message.client-number')}
+              helpMessagePrimary={t('renew-adult-child:children.information.child-client-number-detail')}
               helpMessagePrimaryClassName="text-black"
-              defaultValue={defaultState?.clientNumber ?? ''}
+              defaultValue={defaultState?.childClientNumber ?? ''}
               errorMessage={errors?.childClientNumber}
               required
             />
@@ -291,7 +290,7 @@ export default function ApplyFlowChildInformation() {
               </Button>
               <ButtonLink
                 id="cancel-button"
-                routeId="public/apply/$id/adult-child/review-child-information"
+                routeId="public/renew/$id/adult-child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Child information click"
@@ -306,7 +305,7 @@ export default function ApplyFlowChildInformation() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult-child/children/index"
+                routeId="public/renew/$id/adult-child/children/index"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
