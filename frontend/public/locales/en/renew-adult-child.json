@@ -251,6 +251,42 @@
         "remove-btn": "Remove child"
       }
     },
+    "information": {
+      "page-title": "{{childName}}: information",
+      "form-instructions-sin": "Provide the child's legal name as indicated on their Social Insurance Number (SIN) card or letter (if available) or other government documentation.",
+      "single-legal-name": "If the child has a single legal name",
+      "name-instructions": "If the child uses a single legal name, please enter that name in BOTH the first name and last name fields.",
+      "last-name": "Last name",
+      "first-name": "First name",
+      "date-of-birth": "Date of birth",
+      "client-number": "Child's client number",
+      "client-number-detail": "You can find the child's client number in the upper right corner of the renewal letter from Service Canada or on the child's Sun Life member card.",
+      "parent-legend": "Are you the parent or legal guardian of this child?",
+      "radio-options": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "back-btn": "Back",
+      "continue-btn": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save",
+      "error-message": {
+        "first-name-required": "Enter child's first name",
+        "last-name-required": "Enter child's last name",
+        "date-of-birth-day-number": "Day must be a number",
+        "date-of-birth-day-required": "Date of birth must include a day",
+        "date-of-birth-is-past": "Date of birth must be in the past",
+        "date-of-birth-is-past-valid": "Date of birth too far in the past",
+        "date-of-birth-month-required": "Date of birth must include a month",
+        "date-of-birth-valid": "Day must be valid for the given month and year",
+        "date-of-birth-year-number": "Year must be a number, for example 1950",
+        "date-of-birth-year-required": "Date of birth must include a year",
+        "client-number-required": "Enter child's client number",
+        "is-parent": "Select whether you are the parent or legal guardian of the child",
+        "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
+        "no-digits": "Last name must contain letters only"
+      }
+    },
     "dental-insurance": {
       "title": "{{childName}}: access to other dental insurance",
       "legend": "Does {{childName}} have access to dental insurance or coverage:",

@@ -249,6 +249,42 @@
         "remove-btn": "Remove child"
       }
     },
+    "information": {
+      "page-title": "{{childName}}\u00a0: Renseignements",
+      "form-instructions-sin": "Indiquer le nom légal de l'enfant tel qu'indiqué sur sa carte ou sa lettre de numéro d'assurance sociale (le cas échéant) ou tout autre document gouvernemental.",
+      "single-legal-name": "Si l'enfant a un seul nom légal",
+      "name-instructions": "Si l'enfant utilise un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
+      "last-name": "Nom de famille",
+      "first-name": "Prénom",
+      "date-of-birth": "Date de naissance",
+      "client-number": "(FR) Child's client number",
+      "client-number-detail": "(FR) You can find the child's client number in the upper right corner of the renewal letter from Service Canada or on the child's Sun Life member card.",
+      "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
+      "radio-options": {
+        "yes": "Oui",
+        "no": "Non"
+      },
+      "back-btn": "Retour",
+      "continue-btn": "Continuer",
+      "cancel-btn": "Annuler",
+      "save-btn": "Enregistrer",
+      "error-message": {
+        "first-name-required": "Entrez le prénom de l'enfant",
+        "last-name-required": "Entrez le nom de famille de l'enfant",
+        "date-of-birth-day-number": "Le jour doit être un nombre",
+        "date-of-birth-day-required": "La date de naissance doit inclure un jour",
+        "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+        "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
+        "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+        "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
+        "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+        "date-of-birth-year-required": "La date de naissance doit inclure une année",
+        "client-number-required": "(FR) Enter child's client number",
+        "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
+        "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
+        "no-digits": "Le nom de famille doit contenir uniquement des lettres"
+      }
+    },
     "dental-insurance": {
       "title": "{{childName}}: access to other dental insurance",
       "legend": "Does {{childName}} have access to dental insurance or coverage:",
