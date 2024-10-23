@@ -257,8 +257,8 @@
       "last-name": "Nom de famille",
       "first-name": "Prénom",
       "date-of-birth": "Date de naissance",
-      "child-client-number": "(FR) Child's client number",
-      "child-client-number-detail": "(FR) You can find the child's client number in the upper right corner of the renewal letter from Service Canada or on the child's Sun Life member card.",
+      "client-number": "(FR) Child's client number",
+      "client-number-detail": "(FR) You can find the child's client number in the upper right corner of the renewal letter from Service Canada or on the child's Sun Life member card.",
       "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
       "radio-options": {
         "yes": "Oui",
@@ -279,7 +279,7 @@
         "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
         "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
         "date-of-birth-year-required": "La date de naissance doit inclure une année",
-        "child-client-number-required": "(FR) Enter child's client number",
+        "client-number-required": "(FR) Enter child's client number",
         "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
         "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
         "no-digits": "Le nom de famille doit contenir uniquement des lettres"

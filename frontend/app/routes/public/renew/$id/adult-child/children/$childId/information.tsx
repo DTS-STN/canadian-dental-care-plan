@@ -99,7 +99,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         invalid_type_error: t('renew-adult-child:children.information.error-message.date-of-birth-day-number'),
       }),
       dateOfBirth: z.string(),
-      childClientNumber: z.string().trim().min(1, t('renew-adult-child:children.information.error-message.child-client-number-required')),
+      clientNumber: z.string().trim().min(1, t('renew-adult-child:children.information.error-message.client-number-required')),
       isParent: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:children.information.error-message.is-parent') }) }),
     })
     .superRefine((val, ctx) => {
@@ -143,7 +143,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
     dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
     dateOfBirth: '',
-    childClientNumber: String(formData.get('childClientNumber') ?? ''),
+    clientNumber: String(formData.get('clientNumber') ?? ''),
     isParent: formData.get('isParent') ? formData.get('isParent') === YesNoOption.Yes : undefined,
   };
 
@@ -201,7 +201,7 @@ export default function RenewFlowChildInformation() {
       ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
       : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
     dateOfBirthYear: 'date-picker-date-of-birth-year',
-    childClientNumber: 'child-client-number',
+    clientNumber: 'client-number',
     isParent: 'input-radio-is-parent-radios-option-0',
   });
 
@@ -262,14 +262,14 @@ export default function RenewFlowChildInformation() {
               required
             />
             <InputSanitizeField
-              id="child-client-number"
-              name="childClientNumber"
-              label={t('renew-adult-child:children.information.child-client-number')}
+              id="client-number"
+              name="clientNumber"
+              label={t('renew-adult-child:children.information.client-number')}
               inputMode="numeric"
-              helpMessagePrimary={t('renew-adult-child:children.information.child-client-number-detail')}
+              helpMessagePrimary={t('renew-adult-child:children.information.client-number-detail')}
               helpMessagePrimaryClassName="text-black"
-              defaultValue={defaultState?.childClientNumber ?? ''}
-              errorMessage={errors?.childClientNumber}
+              defaultValue={defaultState?.clientNumber ?? ''}
+              errorMessage={errors?.clientNumber}
               required
             />
             <InputRadios

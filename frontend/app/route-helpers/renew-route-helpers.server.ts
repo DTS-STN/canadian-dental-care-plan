@@ -35,7 +35,7 @@ export interface RenewState {
       lastName: string;
       dateOfBirth: string;
       isParent: boolean;
-      childClientNumber?: string;
+      clientNumber?: string;
     };
   }[];
   readonly partnerInformation?: {
