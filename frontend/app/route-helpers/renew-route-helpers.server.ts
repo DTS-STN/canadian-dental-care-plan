@@ -101,7 +101,6 @@ export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBene
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ContactInformationState = NonNullable<RenewState['contactInformation']>;
 export type CommunicationPreferenceState = NonNullable<RenewState['communicationPreference']>;
-export type ChildInformationState = NonNullable<ChildState['information']>;
 
 /**
  * Schema for validating UUID.
