@@ -4,6 +4,8 @@ import type { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
+import { getAgeCategoryFromAge } from './apply-route-helpers.server';
+import { getAgeFromDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -99,6 +101,7 @@ export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBene
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ContactInformationState = NonNullable<RenewState['contactInformation']>;
 export type CommunicationPreferenceState = NonNullable<RenewState['communicationPreference']>;
+export type ChildInformationState = NonNullable<ChildState['information']>;
 
 /**
  * Schema for validating UUID.
@@ -236,4 +239,9 @@ export function getChildrenState<TState extends Pick<RenewState, 'children'>>(st
   return includesNewChildState
     ? state.children
     : state.children.filter((child) => isNewChildState(child) === false);
+}
+
+export function getAgeCategoryFromDateString(date: string) {
+  const age = getAgeFromDateString(date);
+  return getAgeCategoryFromAge(age);
 }
