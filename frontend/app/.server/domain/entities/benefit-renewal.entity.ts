@@ -1,5 +1,5 @@
 export type BenefitRenewalRequestEntity = Readonly<{
-  BenefitRenewal: Readonly<{
+  BenefitApplication: Readonly<{
     Applicant: Readonly<{
       ApplicantDetail: Readonly<{
         PrivateDentalInsuranceIndicator?: boolean;
@@ -114,7 +114,7 @@ export type BenefitRenewalRequestEntity = Readonly<{
 }>;
 
 export type BenefitRenewalResponseEntity = Readonly<{
-  BenefitRenewal: Readonly<{
+  BenefitApplication: Readonly<{
     BenefitRenewalIdentification: ReadonlyArray<
       Readonly<{
         IdentificationID: string;

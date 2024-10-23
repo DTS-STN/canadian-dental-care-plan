@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const benefitRenewalRequestSchema = z.object({
-  BenefitRenewal: z.object({
+  BenefitApplication: z.object({
     Applicant: z.object({
       ApplicantDetail: z.object({
         PrivateDentalInsuranceIndicator: z.boolean().optional(),
@@ -122,7 +122,7 @@ export const benefitRenewalRequestSchema = z.object({
 export type BenefitRenewalRequest = z.infer<typeof benefitRenewalRequestSchema>;
 
 export const benefitRenewalResponseSchema = z.object({
-  BenefitRenewal: z.object({
+  BenefitApplication: z.object({
     BenefitRenewalIdentification: z.array(
       z.object({
         IdentificationID: z.string(),

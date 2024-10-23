@@ -30,9 +30,10 @@ export class BenefitRenewalRepositoryImpl implements BenefitRenewalRepository {
   async createBenefitRenewal(benefitRenewalRequest: BenefitRenewalRequestEntity): Promise<BenefitRenewalResponseEntity> {
     this.log.trace('Submiting benefit renewal for request [%j]', benefitRenewalRequest);
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-renewal`);
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`);
+    url.searchParams.set('scenario', 'RENEWAL');
 
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.client-application.posts', url, {
+    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.benefit-application_renewal.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -32,7 +32,7 @@ export class BenefitRenewalDtoMapperImpl implements BenefitRenewalDtoMapper {
 
   mapBenefitRenewalResponseEntityToBenefitRenewalResponseDto(benefitRenewalResponseEntity: BenefitRenewalResponseEntity): BenefitRenewalResponseDto {
     return {
-      confirmationCode: benefitRenewalResponseEntity.BenefitRenewal.BenefitRenewalIdentification[0].IdentificationID,
+      confirmationCode: benefitRenewalResponseEntity.BenefitApplication.BenefitRenewalIdentification[0].IdentificationID,
       submittedOn: new UTCDate().toISOString(),
     };
   }
@@ -98,7 +98,7 @@ function toBenefitRenewalRequest({
   addressInformation,
 }: ToBenefitRenewalRequestArgs): BenefitRenewalRequestEntity {
   return {
-    BenefitRenewal: {
+    BenefitApplication: {
       Applicant: {
         ApplicantDetail: {
           PrivateDentalInsuranceIndicator: dentalInsurance,

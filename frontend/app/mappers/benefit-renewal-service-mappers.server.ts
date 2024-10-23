@@ -114,7 +114,7 @@ function toBenefitRenewalRequest({
   children,
 }: ToBenefitRenewalRequestArgs): BenefitRenewalRequest {
   return {
-    BenefitRenewal: {
+    BenefitApplication: {
       Applicant: {
         ApplicantDetail: {
           PrivateDentalInsuranceIndicator: dentalInsurance,
