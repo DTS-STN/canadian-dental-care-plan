@@ -287,6 +287,13 @@
         "no-digits": "Last name must contain letters only"
       }
     },
+    "parent-or-guardian": {
+      "page-title": "You must be a parent or legal guardian",
+      "must-be": "You must be a parent or legal guardian.",
+      "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
+      "back-btn": "Back",
+      "continue-btn": "Proceed to apply for yourself"
+    },
     "dental-insurance": {
       "title": "{{childName}}: access to other dental insurance",
       "legend": "Does {{childName}} have access to dental insurance or coverage:",

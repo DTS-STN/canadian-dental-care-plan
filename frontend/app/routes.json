@@ -914,6 +914,14 @@
                     }
                   },
                   {
+                    "id": "public/renew/$id/adult-child/children/$childId/parent-or-guardian",
+                    "file": "routes/public/renew/$id/adult-child/children/$childId/parent-or-guardian.tsx",
+                    "paths": {
+                      "en": "/:lang/renew/:id/adult-child/children/:childId/parent-or-guardian",
+                      "fr": "/:lang/renew/:id/adult-child/children/:childId/parent-ou-tuteur"
+                    }
+                  },
+                  {
                     "id": "public/renew/$id/adult-child/children/$childId/dental-insurance",
                     "file": "routes/public/renew/$id/adult-child/children/$childId/dental-insurance.tsx",
                     "paths": {
