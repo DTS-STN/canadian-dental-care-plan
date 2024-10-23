@@ -183,6 +183,9 @@ export function getPowerPlatformApiMockHandlers() {
 
       const url = new URL(request.url);
       const action = url.searchParams.get('action');
+      const scenario = url.searchParams.get('scenario');
+
+      const requestBody = await request.json();
 
       if (action === 'GET') {
         const clientApplicationRequestSchema = z.object({
@@ -204,7 +207,6 @@ export function getPowerPlatformApiMockHandlers() {
           }),
         });
 
-        const requestBody = await request.json();
         const parsedClientApplicationRequest = await clientApplicationRequestSchema.safeParseAsync(requestBody);
 
         if (!parsedClientApplicationRequest.success) {
@@ -214,8 +216,28 @@ export function getPowerPlatformApiMockHandlers() {
 
         return HttpResponse.json(clientApplicationJsonDataSource);
       }
+      if (scenario === 'RENEWAL') {
+        const parsedBenefitRenewalRequest = await benefitRenewalRequestSchema.safeParseAsync(requestBody);
 
-      const requestBody = await request.json();
+        if (!parsedBenefitRenewalRequest.success) {
+          log.debug('Invalid request body [%j]', requestBody);
+          return new HttpResponse('Invalid request body!', { status: 400 });
+        }
+
+        const mockBenefitRenewalResponse: BenefitRenewalResponse = {
+          BenefitApplication: {
+            BenefitRenewalIdentification: [
+              {
+                IdentificationID: '2476124092174',
+                IdentificationCategoryText: 'Confirmation Number',
+              },
+            ],
+          },
+        };
+
+        return HttpResponse.json(mockBenefitRenewalResponse);
+      }
+
       const parsedBenefitApplicationRequest = await benefitApplicationRequestSchema.safeParseAsync(requestBody);
 
       if (!parsedBenefitApplicationRequest.success) {
@@ -235,39 +257,6 @@ export function getPowerPlatformApiMockHandlers() {
       };
 
       return HttpResponse.json(mockBenefitApplicationResponse);
-    }),
-
-    /**
-     * Handler for POST request to submit renewal to Power Platform
-     */
-    http.post(`${INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-renewal`, async ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-
-      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
-      if (!subscriptionKey) {
-        return new HttpResponse('Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.', { status: 401 });
-      }
-
-      const requestBody = await request.json();
-      const parsedBenefitRenewalRequest = await benefitRenewalRequestSchema.safeParseAsync(requestBody);
-
-      if (!parsedBenefitRenewalRequest.success) {
-        log.debug('Invalid request body [%j]', requestBody);
-        return new HttpResponse('Invalid request body!', { status: 400 });
-      }
-
-      const mockBenefitRenewalResponse: BenefitRenewalResponse = {
-        BenefitRenewal: {
-          BenefitRenewalIdentification: [
-            {
-              IdentificationID: '2476124092174',
-              IdentificationCategoryText: 'Confirmation Number',
-            },
-          ],
-        },
-      };
-
-      return HttpResponse.json(mockBenefitRenewalResponse);
     }),
   ];
 }
