@@ -33,6 +33,14 @@
     }
   },
   {
+    "id": "api/health",
+    "file": "routes/api/health.ts",
+    "paths": {
+      "en": "/api/health",
+      "fr": "/api/health"
+    }
+  },
+  {
     "id": "api/readyz",
     "file": "routes/api/readyz.ts",
     "paths": {
