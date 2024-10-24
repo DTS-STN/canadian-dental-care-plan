@@ -17,7 +17,7 @@ export type ApiSessionAction = (typeof API_SESSION_ACTIONS)[number];
 const API_SESSION_REDIRECT_TO_OPTIONS = ['cdcp-website', 'cdcp-website-apply', 'cdcp-website-status'] as const;
 export type ApiSessionRedirectTo = (typeof API_SESSION_REDIRECT_TO_OPTIONS)[number];
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, request }: ActionFunctionArgs) {
   const log = getLogger('routes/api/session');
   const sessionId = session.id;
   log.debug("Action with user's server-side session; sessionId: [%s]", sessionId);

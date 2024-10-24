@@ -17,14 +17,6 @@ vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env-utils.server', () => ({
-  getEnv: vi.fn().mockReturnValue({
-    COMMUNICATION_METHOD_EMAIL_ID: 'email',
-    ENGLISH_LANGUAGE_CODE: 'en',
-    FRENCH_LANGUAGE_CODE: 'fr',
-  }),
-}));
-
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
   getLocale: vi.fn().mockResolvedValue('en'),
@@ -40,6 +32,11 @@ describe('_public.apply.id.communication-preference', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const mockAppLoadContext = mock<AppLoadContext>({
+        configProvider: {
+          getServerConfig: vi.fn().mockReturnValue({
+            COMMUNICATION_METHOD_EMAIL_ID: 'email',
+          }),
+        },
         serviceProvider: {
           getPreferredCommunicationMethodService: () => ({
             listPreferredCommunicationMethods: vi.fn(),
@@ -102,9 +99,17 @@ describe('_public.apply.id.communication-preference', () => {
       formData.append('_csrf', 'csrfToken');
       formData.append('preferredLanguage', 'fr');
 
+      const mockAppLoadContext = mock<AppLoadContext>({
+        configProvider: {
+          getServerConfig: vi.fn().mockReturnValue({
+            COMMUNICATION_METHOD_EMAIL_ID: 'email',
+          }),
+        },
+      });
+
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -123,9 +128,17 @@ describe('_public.apply.id.communication-preference', () => {
       formData.append('email', '');
       formData.append('preferredLanguage', 'fr');
 
+      const mockAppLoadContext = mock<AppLoadContext>({
+        configProvider: {
+          getServerConfig: vi.fn().mockReturnValue({
+            COMMUNICATION_METHOD_EMAIL_ID: 'email',
+          }),
+        },
+      });
+
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -145,9 +158,17 @@ describe('_public.apply.id.communication-preference', () => {
       formData.append('confirmEmail', 'johndoe@example.com');
       formData.append('preferredLanguage', 'fr');
 
+      const mockAppLoadContext = mock<AppLoadContext>({
+        configProvider: {
+          getServerConfig: vi.fn().mockReturnValue({
+            COMMUNICATION_METHOD_EMAIL_ID: 'email',
+          }),
+        },
+      });
+
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 

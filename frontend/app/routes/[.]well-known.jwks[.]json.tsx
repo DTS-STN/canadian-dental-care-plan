@@ -1,9 +1,10 @@
+import type { LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 
 import { subtle } from 'node:crypto';
 
+import type { ServerConfig } from '~/.server/configs';
 import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
-import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 /**
@@ -17,9 +18,9 @@ interface JWK extends JsonWebKey {
  * Return a promise that resolves to an array of public JWKs. If no public
  * keys have been configured, this function returns an empty array.
  */
-async function getJwks() {
+async function getJwks(serverConfig: Pick<ServerConfig, 'AUTH_JWT_PUBLIC_KEY'>) {
   const log = getLogger('[.]well-known.jwks[.]json');
-  const { AUTH_JWT_PUBLIC_KEY } = getEnv();
+  const { AUTH_JWT_PUBLIC_KEY } = serverConfig;
 
   if (!AUTH_JWT_PUBLIC_KEY) {
     log.warn('AUTH_JWT_PUBLIC_KEY is not set, returning empty JWKS');
@@ -36,8 +37,9 @@ async function getJwks() {
  * A JSON endpoint that contains a list of the application's public keys that
  * can be used by an auth provider to verify private key JWTs.
  */
-export async function loader() {
-  const keys = await getJwks();
+export async function loader({ context: { configProvider } }: LoaderFunctionArgs) {
+  const serverConfig = configProvider.getServerConfig();
+  const keys = await getJwks(serverConfig);
   const headers = { 'Content-Type': 'application/json' };
 
   return json({ keys }, { headers: headers });

@@ -21,7 +21,6 @@ import { loadApplyChildStateForReview } from '~/route-helpers/apply-child-route-
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { getEnv } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -47,13 +46,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
   saveApplyState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = configProvider.getServerConfig();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -103,12 +102,12 @@ export async function loader({ context: { serviceProvider, session }, params, re
   });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/child/review-child-information');
 
   loadApplyChildStateForReview({ params, request, session });
 
-  const { ENABLED_FEATURES } = getEnv();
+  const { ENABLED_FEATURES } = configProvider.getServerConfig();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();

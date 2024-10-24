@@ -12,7 +12,7 @@ import { getNameByLanguage } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
 
   const auditService = getAuditService();

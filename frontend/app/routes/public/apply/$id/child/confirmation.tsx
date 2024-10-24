@@ -152,7 +152,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/child/confirmation');
 
   const t = await getFixedT(request, handle.i18nNamespaces);

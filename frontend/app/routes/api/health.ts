@@ -29,7 +29,7 @@ const dummyHealthCheck: HealthCheck = {
   check: () => new Promise((resolve) => setTimeout(resolve, 2 * 1000)),
 };
 
-export async function loader({ context: { serviceProvider, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
   const { buildRevision: buildId, buildVersion: version } = getBuildInfoService().getBuildInfo();
 

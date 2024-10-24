@@ -30,7 +30,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -41,7 +41,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return json({ locale, meta, csrfToken });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/index');
 
   const formData = await request.formData();
