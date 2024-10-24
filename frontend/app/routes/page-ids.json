@@ -112,7 +112,8 @@
         "parentOrGuardian": "CDCP-RENW-ADCH-0009",
         "reviewChildInformation": "CDCP-RENW-ADCH-0010",
         "exitApplication": "CDCP-RENW-ADCH-0011",
-        "confirmation": "CDCP-RENW-ADCH-0012"
+        "confirmation": "CDCP-RENW-ADCH-0012",
+        "reviewAdultInformation": "CDCP-APPL-ADCH-0013"
       }
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
