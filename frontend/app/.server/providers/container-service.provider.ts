@@ -1,5 +1,4 @@
-import type { Container } from 'inversify';
-import { injectable } from 'inversify';
+import type { interfaces } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type {
@@ -30,9 +29,8 @@ export interface ContainerServiceProvider {
   getProvincialGovernmentInsurancePlanService(): ProvincialGovernmentInsurancePlanService;
 }
 
-@injectable()
 export class ContainerServiceProviderImpl implements ContainerServiceProvider {
-  constructor(private readonly container: Container) {}
+  constructor(private readonly container: interfaces.Container) {}
 
   getAddressValidationService(): AddressValidationService {
     return this.container.get<AddressValidationService>(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE);

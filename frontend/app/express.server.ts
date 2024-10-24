@@ -12,21 +12,16 @@ import { createExpressApp } from 'remix-create-express-app';
 import { createRemixRequest, sendRemixResponse } from 'remix-create-express-app/remix';
 import invariant from 'tiny-invariant';
 
-import { ContainerConfigProviderImpl } from './.server/providers/container-config.provider';
-import { ContainerServiceProviderImpl } from './.server/providers/container-service.provider';
 import { getSessionService } from './services/session-service.server';
 import { getEnv } from './utils/env-utils.server';
 import { randomString } from './utils/string-utils';
-import { initContainer } from '~/.server/container.init';
+import { getContainerConfigProvider, getContainerServiceProvider } from '~/.server/container';
 import { getLogger } from '~/utils/logging.server';
 
 const { NODE_ENV } = getEnv();
 
 const logFormat = NODE_ENV === 'development' ? 'dev' : 'tiny';
 const sessionService = await getSessionService();
-
-// global IoC container singleton
-const container = initContainer();
 
 const loggingRequestHandler = (() => {
   const log = getLogger('express.server/loggingRequestHandler');
@@ -133,11 +128,9 @@ export const expressApp = await createExpressApp({
     log.debug('Setting session.lastAccessTime to [%s]', lastAccessTime);
     session.set('lastAccessTime', lastAccessTime);
 
-    log.debug('Adding container config provider, container service provider and session to AppLoadContext;');
-
     return {
-      configProvider: new ContainerConfigProviderImpl(container),
-      serviceProvider: new ContainerServiceProviderImpl(container),
+      configProvider: getContainerConfigProvider(),
+      serviceProvider: getContainerServiceProvider(),
       session,
     };
   },

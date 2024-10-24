@@ -1,4 +1,4 @@
-import type { Container } from 'inversify';
+import type { interfaces } from 'inversify';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -7,7 +7,7 @@ import { ContainerServiceProviderImpl } from '~/.server/providers';
 
 describe('ContainerServiceProviderImpl', () => {
   it("should call the container's get function with the correct identifier", () => {
-    const mockContainer = mock<Container>({ get: vi.fn().mockImplementation((serviceIdentifier) => serviceIdentifier) });
+    const mockContainer = mock<interfaces.Container>({ get: vi.fn().mockImplementation((serviceIdentifier) => serviceIdentifier) });
 
     const serviceProvider = new ContainerServiceProviderImpl(mockContainer);
 
