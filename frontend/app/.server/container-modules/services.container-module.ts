@@ -52,11 +52,13 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE)
     .to(FileSessionService)
     .when((request) => {
-      return request.parentContext.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG).SESSION_STORAGE_TYPE === 'file';
+      const { SESSION_STORAGE_TYPE } = request.parentContext.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
+      return SESSION_STORAGE_TYPE === 'file';
     });
   bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE)
     .to(RedisSessionService)
     .when((request) => {
-      return request.parentContext.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG).SESSION_STORAGE_TYPE === 'redis';
+      const { SESSION_STORAGE_TYPE } = request.parentContext.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
+      return SESSION_STORAGE_TYPE === 'redis';
     });
 });
