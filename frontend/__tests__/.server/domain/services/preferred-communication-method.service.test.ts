@@ -50,7 +50,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
           Label: {
             LocalizedLabels: [
               { Label: 'Mail', LanguageCode: 1033 },
-              { Label: 'Courrier', LanguageCode: 1036 },
+              { Label: 'Par la poste', LanguageCode: 1036 },
             ],
           },
         },
@@ -58,7 +58,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
 
       const mockDtos: PreferredCommunicationMethodDto[] = [
         { id: '1', nameEn: 'Email', nameFr: 'Courriel' },
-        { id: '2', nameEn: 'Mail', nameFr: 'Courrier' },
+        { id: '2', nameEn: 'Mail', nameFr: 'Par la poste' },
       ];
 
       const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
@@ -136,7 +136,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
           Label: {
             LocalizedLabels: [
               { Label: 'Mail', LanguageCode: 1033 },
-              { Label: 'Courrier', LanguageCode: 1036 },
+              { Label: 'Par la poste', LanguageCode: 1036 },
             ],
           },
         },
@@ -144,7 +144,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
 
       const mockDtos: PreferredCommunicationMethodDto[] = [
         { id: '1', nameEn: 'Email', nameFr: 'Courriel' },
-        { id: '2', nameEn: 'Mail', nameFr: 'Courrier' },
+        { id: '2', nameEn: 'Mail', nameFr: 'Par la poste' },
       ];
 
       const mockLocalizedDtos: PreferredCommunicationMethodLocalizedDto[] = [
