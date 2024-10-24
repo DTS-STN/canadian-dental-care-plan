@@ -49,23 +49,14 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind<ProvincialGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(ProvincialGovernmentInsurancePlanServiceImpl);
 
   // Register session service implementations
-  bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE_FILE).to(FileSessionService);
-  bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE_REDIS).to(RedisSessionService);
-
-  // Resolve session service implementation based on server configuration
-  bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE).toDynamicValue((context) => {
-    const serverConfig = context.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
-
-    switch (serverConfig.SESSION_STORAGE_TYPE) {
-      case 'file': {
-        return context.container.get<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE_FILE);
-      }
-      case 'redis': {
-        return context.container.get<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE_REDIS);
-      }
-      default: {
-        throw new Error(`Unknown session storage type: [${serverConfig.SESSION_STORAGE_TYPE}]`);
-      }
-    }
-  });
+  bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE)
+    .to(FileSessionService)
+    .when((request) => {
+      return request.parentContext.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG).SESSION_STORAGE_TYPE === 'file';
+    });
+  bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE)
+    .to(RedisSessionService)
+    .when((request) => {
+      return request.parentContext.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG).SESSION_STORAGE_TYPE === 'redis';
+    });
 });
