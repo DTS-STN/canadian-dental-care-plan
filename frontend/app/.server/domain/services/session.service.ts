@@ -1,4 +1,4 @@
-import { Cookie, CookieOptions, CookieParseOptions, CookieSerializeOptions, Session, SessionStorage, createCookie, createSessionStorage } from '@remix-run/node';
+import { Cookie, CookieParseOptions, CookieSerializeOptions, Session, SessionStorage, createCookie, createSessionStorage } from '@remix-run/node';
 
 import { inject, injectable } from 'inversify';
 import { randomUUID } from 'node:crypto';
@@ -38,32 +38,24 @@ export interface SessionService {
   getSession: (cookieHeader?: string | null, options?: CookieParseOptions) => Promise<Session>;
 }
 
-export interface SessionCookieOptions extends CookieOptions {
-  name: string;
-}
-
 @injectable()
 export class FileSessionService implements SessionService {
   private readonly log: Logger;
-  private readonly sessionCookie: Cookie;
   private readonly sessionStorage: SessionStorage;
-  private readonly cookieOptions: SessionCookieOptions;
 
   constructor(@inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory, @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) serverConfig: ServerConfig) {
     this.log = logFactory.createLogger('FileSessionService');
 
-    this.cookieOptions = {
-      name: serverConfig.SESSION_COOKIE_NAME,
+    const cookie = createCookie(serverConfig.SESSION_COOKIE_NAME, {
       domain: serverConfig.SESSION_COOKIE_DOMAIN,
       path: serverConfig.SESSION_COOKIE_PATH,
       sameSite: serverConfig.SESSION_COOKIE_SAME_SITE,
       secrets: [serverConfig.SESSION_COOKIE_SECRET],
       httpOnly: serverConfig.SESSION_COOKIE_HTTP_ONLY,
       secure: serverConfig.SESSION_COOKIE_SECURE,
-    };
+    });
 
-    this.sessionCookie = createCookie(this.cookieOptions.name, this.cookieOptions);
-    this.sessionStorage = createFileSessionStorage({ cookie: this.sessionCookie, dir: serverConfig.SESSION_FILE_DIR });
+    this.sessionStorage = createFileSessionStorage({ cookie, dir: serverConfig.SESSION_FILE_DIR });
   }
 
   async commitSession(session: Session, options?: CookieSerializeOptions): Promise<string> {
@@ -100,27 +92,23 @@ export class FileSessionService implements SessionService {
 @injectable()
 export class RedisSessionService implements SessionService {
   private readonly log: Logger;
-  private readonly sessionCookie: Cookie;
+
+  private readonly cookie: Cookie;
+  private readonly ttlSecs: number;
+
   private sessionStorage: SessionStorage | undefined;
-  private readonly cookieOptions: SessionCookieOptions;
-  private readonly expirySeconds: number;
 
   constructor(@inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory, @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) serverConfig: ServerConfig) {
     this.log = logFactory.createLogger('RedisSessionService');
-
-    this.cookieOptions = {
-      name: serverConfig.SESSION_COOKIE_NAME,
+    this.ttlSecs = serverConfig.SESSION_EXPIRES_SECONDS;
+    this.cookie = createCookie(serverConfig.SESSION_COOKIE_NAME, {
       domain: serverConfig.SESSION_COOKIE_DOMAIN,
       path: serverConfig.SESSION_COOKIE_PATH,
       sameSite: serverConfig.SESSION_COOKIE_SAME_SITE,
       secrets: [serverConfig.SESSION_COOKIE_SECRET],
       httpOnly: serverConfig.SESSION_COOKIE_HTTP_ONLY,
       secure: serverConfig.SESSION_COOKIE_SECURE,
-    };
-
-    this.expirySeconds = serverConfig.SESSION_EXPIRES_SECONDS;
-
-    this.sessionCookie = createCookie(this.cookieOptions.name, this.cookieOptions);
+    });
   }
 
   async commitSession(session: Session, options?: CookieSerializeOptions): Promise<string> {
@@ -152,11 +140,11 @@ export class RedisSessionService implements SessionService {
     const redisService = await getRedisService();
 
     return createSessionStorage({
-      cookie: this.sessionCookie,
+      cookie: this.cookie,
       createData: async (data) => {
         const sessionId = randomUUID();
         this.log.debug(`Creating new session storage slot with id=[${sessionId}]`);
-        await redisService.set(sessionId, data, this.expirySeconds);
+        await redisService.set(sessionId, data, this.ttlSecs);
         return sessionId;
       },
       readData: async (id) => {
@@ -165,7 +153,7 @@ export class RedisSessionService implements SessionService {
       },
       updateData: async (id, data) => {
         this.log.debug(`Updating session data for session id=[${id}]`);
-        await redisService.set(id, data, this.expirySeconds);
+        await redisService.set(id, data, this.ttlSecs);
       },
       deleteData: async (id) => {
         this.log.debug(`Deleting all session data for session id=[${id}]`);
