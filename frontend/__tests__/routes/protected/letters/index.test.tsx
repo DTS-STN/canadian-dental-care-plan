@@ -6,12 +6,6 @@ import { mock } from 'vitest-mock-extended';
 
 import { loader } from '~/routes/protected/letters/index';
 
-vi.mock('~/services/audit-service.server', () => ({
-  getAuditService: vi.fn().mockReturnValue({
-    audit: vi.fn(),
-  }),
-}));
-
 vi.mock('~/services/instrumentation-service.server', () => ({
   getInstrumentationService: () => ({
     countHttpStatus: vi.fn(),
@@ -73,7 +67,10 @@ describe('Letters Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
-      const mockAppLoadContext = mock<AppLoadContext>({ configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) } });
+      const mockAppLoadContext = mock<AppLoadContext>({
+        configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) },
+        serviceProvider: { getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }) },
+      });
 
       const response = await loader({
         request: new Request('http://localhost/letters?sort=desc'),
@@ -96,7 +93,10 @@ describe('Letters Page', () => {
     session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
     session.set('userInfoToken', { sin: '999999999' });
 
-    const mockAppLoadContext = mock<AppLoadContext>({ configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) } });
+    const mockAppLoadContext = mock<AppLoadContext>({
+      configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) },
+      serviceProvider: { getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }) },
+    });
 
     const response = await loader({
       request: new Request('http://localhost/letters'),

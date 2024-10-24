@@ -10,7 +10,6 @@ import pageIds from '../page-ids.json';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
 import { useFeature } from '~/root';
-import { getAuditService } from '~/services/audit-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -36,7 +35,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   await raoidcService.handleSessionValidation(request, session);
 
   const idToken: IdToken = session.get('idToken');
-  getAuditService().audit('page-view.home', { userId: idToken.sub });
+  serviceProvider.getAuditService().createAudit('page-view.home', { userId: idToken.sub });
 
   const userOrigin = getUserOrigin(request, session);
   session.set('userOrigin', userOrigin);

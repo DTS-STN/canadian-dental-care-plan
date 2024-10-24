@@ -3,6 +3,7 @@ export const SERVICE_IDENTIFIER = {
   ADDRESS_VALIDATION_DTO_MAPPER: Symbol.for('AddressValidationDtoMapper'),
   ADDRESS_VALIDATION_REPOSITORY: Symbol.for('AddressValidationRepository'),
   ADDRESS_VALIDATION_SERVICE: Symbol.for('AddressValidationService'),
+  AUDIT_SERVICE: Symbol.for('AuditService'),
   BENEFIT_RENEWAL_DTO_MAPPER: Symbol.for('BenefitRenewalDtoMapper'),
   BENEFIT_RENEWAL_REPOSITORY: Symbol.for('BenefitRenewalRepository'),
   BENEFIT_RENEWAL_SERVICE: Symbol.for('BenefitRenewalService'),
