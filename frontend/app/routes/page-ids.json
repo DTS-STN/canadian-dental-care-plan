@@ -111,7 +111,8 @@
         "childInformation": "CDCP-RENW-ADCH-0008",
         "parentOrGuardian": "CDCP-RENW-ADCH-0009",
         "childFederalProvincialTerritorialBenefits": "CDCP-RENW-ADCH-00010",
-        "reviewChildInformation": "CDCP-APPL-ADCH-0011"
+        "reviewChildInformation": "CDCP-APPL-ADCH-0011",
+        "exitApplication": "CDCP-RENw-ITA-0012"
       }
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
