@@ -106,13 +106,13 @@
         "confirmEmail": "CDCP-RENW-ADCH-0003",
         "confirmAddress": "CDCP-RENW-ADCH-0004",
         "updateAddress": "CDCP-RENW-ADCH-0005",
-        "dentalInsurance": "CDCP-RENW-ITA-0006",
+        "dentalInsurance": "CDCP-RENW-ADCH-0006",
         "federalProvincialTerritorialBenefits": "CDCP-RENW-ADCH-0007",
         "childInformation": "CDCP-RENW-ADCH-0008",
         "parentOrGuardian": "CDCP-RENW-ADCH-0009",
-        "childFederalProvincialTerritorialBenefits": "CDCP-RENW-ADCH-00010",
-        "reviewChildInformation": "CDCP-APPL-ADCH-0011",
-        "exitApplication": "CDCP-RENw-ITA-0012"
+        "reviewChildInformation": "CDCP-RENW-ADCH-0010",
+        "exitApplication": "CDCP-RENW-ADCH-0011",
+        "confirmation": "CDCP-RENW-ADCH-0012"
       }
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",

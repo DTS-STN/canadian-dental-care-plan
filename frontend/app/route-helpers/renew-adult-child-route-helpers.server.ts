@@ -122,7 +122,7 @@ interface ValidateRenewAdultChildStateForReviewArgs {
 }
 
 export function validateRenewAdultChildStateForReview({ params, state }: ValidateRenewAdultChildStateForReviewArgs) {
-  const { maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, communicationPreference, addressInformation, applicantInformation, dentalBenefits, dentalInsurance } = state;
+  const { hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, communicationPreference, addressInformation, applicantInformation, dentalBenefits, dentalInsurance } = state;
 
   if (typeOfRenewal === undefined) {
     throw redirect(getPathById('public/renew/$id/type-renewal', params));
@@ -144,16 +144,16 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/renew/$id/adult-child/marital-status', params));
   }
 
-  if (contactInformation === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult-child/contact-information', params));
+  if (hasAddressChanged && addressInformation === undefined) {
+    throw redirect(getPathById('public/renew/$id/adult-child/update-address', params));
   }
 
-  if (communicationPreference === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult-child/communication-preference', params));
+  if (contactInformation?.isNewOrUpdatedPhoneNumber === undefined) {
+    throw redirect(getPathById('public/renew/$id/confirm-phone', params));
   }
 
-  if (addressInformation === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult-child/confirm-address', params));
+  if (contactInformation.isNewOrUpdatedEmail === undefined) {
+    throw redirect(getPathById('public/renew/$id/confirm-email', params));
   }
 
   if (dentalInsurance === undefined) {
