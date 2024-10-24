@@ -5,7 +5,7 @@ import { loadApplyState, saveApplyState } from '~/route-helpers/apply-route-help
 import { getPathById } from '~/utils/route-utils';
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   loadApplyState({ params, session });
   saveApplyState({ params, session, state: {} });
   return redirect(getPathById('public/apply/$id/type-application', params));

@@ -21,7 +21,6 @@ import { Progress } from '~/components/progress';
 import { loadRenewItaState } from '~/route-helpers/renew-ita-route-helpers.server';
 import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import type { CommunicationPreferenceState } from '~/route-helpers/renew-route-helpers.server';
-import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -42,7 +41,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
-  const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
+  const { COMMUNICATION_METHOD_EMAIL_ID } = configProvider.getServerConfig();
 
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -74,10 +73,10 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/ita/communication-preference');
 
-  const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
+  const { COMMUNICATION_METHOD_EMAIL_ID } = configProvider.getServerConfig();
 
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);

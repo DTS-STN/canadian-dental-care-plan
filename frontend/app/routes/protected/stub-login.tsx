@@ -32,7 +32,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
   featureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -50,7 +50,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return { meta, defaultValues };
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   featureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);

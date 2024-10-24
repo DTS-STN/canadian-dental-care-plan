@@ -39,7 +39,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
 
   const statusStateId = getStatusStateIdFromUrl(request.url);
@@ -63,7 +63,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
   });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
 
   const statusStateId = getStatusStateIdFromUrl(request.url);

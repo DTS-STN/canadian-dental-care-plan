@@ -24,7 +24,6 @@ import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers
 import { loadRenewItaStateForReview } from '~/route-helpers/renew-ita-route-helpers.server';
 import { clearRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { getEnv } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -58,7 +57,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   // renew state is valid then edit mode can be set to true
   saveRenewState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = configProvider.getServerConfig();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -156,12 +155,12 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   });
 }
 
-export async function action({ context: { serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/ita/review-information');
 
   const state = loadRenewItaStateForReview({ params, request, session });
 
-  const { ENABLED_FEATURES } = getEnv();
+  const { ENABLED_FEATURES } = configProvider.getServerConfig();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();

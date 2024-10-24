@@ -7,7 +7,7 @@ import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
-import { getEnv, mockEnabled } from '~/utils/env-utils.server';
+import { mockEnabled } from '~/utils/env-utils.server';
 import { getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import type { IdToken } from '~/utils/raoidc-utils.server';
@@ -72,12 +72,12 @@ function handleLoginRequest({ request }: LoaderFunctionArgs) {
 /**
  * Handler for /auth/logout requests
  */
-async function handleLogoutRequest({ context: { session }, request }: LoaderFunctionArgs) {
+async function handleLogoutRequest({ context: { configProvider, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleLogoutRequest');
   log.debug('Handling RAOIDC logout request');
   getInstrumentationService().createCounter('auth.logout.requests').add(1);
 
-  const { AUTH_RASCL_LOGOUT_URL } = getEnv();
+  const { AUTH_RASCL_LOGOUT_URL } = configProvider.getServerConfig();
 
   const sessionService = await getSessionService();
 
@@ -104,7 +104,7 @@ async function handleLogoutRequest({ context: { session }, request }: LoaderFunc
 /**
  * Handler for /auth/login/raoidc requests
  */
-async function handleRaoidcLoginRequest({ context: { session }, request }: LoaderFunctionArgs) {
+async function handleRaoidcLoginRequest({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleRaoidcLoginRequest');
   log.debug('Handling RAOIDC login request');
   getInstrumentationService().createCounter('auth.login.raoidc.requests').add(1);
@@ -139,7 +139,7 @@ async function handleRaoidcLoginRequest({ context: { session }, request }: Loade
 /**
  * Handler for /auth/callback/raoidc requests
  */
-async function handleRaoidcCallbackRequest({ context: { session }, request }: LoaderFunctionArgs) {
+async function handleRaoidcCallbackRequest({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleRaoidcCallbackRequest');
   log.debug('Handling RAOIDC callback request');
   getInstrumentationService().createCounter('auth.callback.raoidc.requests').add(1);
@@ -165,12 +165,12 @@ async function handleRaoidcCallbackRequest({ context: { session }, request }: Lo
 /**
  * @see https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint
  */
-function handleMockAuthorizeRequest({ request }: LoaderFunctionArgs) {
+function handleMockAuthorizeRequest({ context: { configProvider }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleMockAuthorizeRequest');
   log.debug('Handling (mock) RAOIDC authorize request');
   getInstrumentationService().createCounter('auth.authorize.requests').add(1);
 
-  const { MOCK_AUTH_ALLOWED_REDIRECTS } = getEnv();
+  const { MOCK_AUTH_ALLOWED_REDIRECTS } = configProvider.getServerConfig();
   const isValidRedirectUri = (val: string): boolean => MOCK_AUTH_ALLOWED_REDIRECTS.includes(val);
 
   const searchParamsSchema = z.object({

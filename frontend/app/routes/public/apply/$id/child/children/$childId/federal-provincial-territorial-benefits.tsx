@@ -18,7 +18,6 @@ import { LoadingButton } from '~/components/loading-button';
 import { loadApplyChildState, loadApplySingleChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/route-helpers/apply-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -48,10 +47,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title, data.meta.dcTermsTitle);
 });
 
-export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplySingleChildState({ params, request, session });
 
-  const { CANADA_COUNTRY_ID } = getEnv();
+  const { CANADA_COUNTRY_ID } = configProvider.getServerConfig();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -83,7 +82,7 @@ export async function loader({ context: { serviceProvider, session }, params, re
   });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/child/children/federal-provincial-territorial-benefits');
 
   const state = loadApplySingleChildState({ params, request, session });

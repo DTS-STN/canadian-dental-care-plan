@@ -12,7 +12,7 @@ import { getLogger } from '~/utils/logging.server';
 const API_APPLY_STATE_ACTIONS = ['extend'] as const;
 export type ApiApplyStateAction = (typeof API_APPLY_STATE_ACTIONS)[number];
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, request }: ActionFunctionArgs) {
   const log = getLogger('routes/api/apply-state');
   const sessionId = session.id;
   log.debug("Action with with user's apply state; sessionId: [%s]", sessionId);

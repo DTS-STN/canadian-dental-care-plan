@@ -17,11 +17,9 @@ vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env-utils.server', () => ({
-  getEnv: vi.fn().mockReturnValue({
-    CANADA_COUNTRY_ID: 'CAN',
-    USA_COUNTRY_ID: 'USA',
-  }),
+vi.mock('~/utils/locale-utils.server', () => ({
+  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+  getLocale: vi.fn().mockReturnValue('en'),
 }));
 
 describe('_public.apply.id.contact-information', () => {
@@ -34,6 +32,14 @@ describe('_public.apply.id.contact-information', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const mockAppLoadContext = mock<AppLoadContext>({
+        configProvider: {
+          getServerConfig: vi.fn().mockReturnValue({
+            MARITAL_STATUS_CODE_COMMONLAW: 'COMMONLAW',
+            MARITAL_STATUS_CODE_MARRIED: 'MARRIED',
+            CANADA_COUNTRY_ID: 'CAN',
+            USA_COUNTRY_ID: 'USA',
+          }),
+        },
         serviceProvider: {
           getCountryService: () => ({
             getCountryById: vi.fn(),

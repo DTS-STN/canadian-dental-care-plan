@@ -34,7 +34,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -45,7 +45,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth }, editMode: state.editMode });
 }
 
-export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult/date-of-birth');
 
   const state = loadApplyAdultState({ params, request, session });
