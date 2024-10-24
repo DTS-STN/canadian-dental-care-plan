@@ -5,7 +5,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
@@ -64,7 +64,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
   const countryMailing = state.addressInformation?.mailingCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
   const countryHome = state.addressInformation?.homeCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
-  const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getLocalizedPreferredCommunicationMethodById(state.communicationPreference?.preferredMethod ?? '', locale);
   const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.maritalStatus, locale);
 
   const userInfo = {
@@ -77,7 +76,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     maritalStatus: maritalStatus.name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreference?.email,
-    communicationPreference: communicationPreference.name,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -153,7 +151,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 export async function action({ context: { serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/adult-child/review-adult-information');
 
-  const state = loadRenewAdultChildStateForReview({ params, request, session });
+  loadRenewAdultChildStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
@@ -182,9 +180,7 @@ export async function action({ context: { serviceProvider, session }, params, re
     }
   }
 
-  const submissionInfo = await serviceProvider.getBenefitRenewalService().createBenefitRenewal(state);
-
-  saveRenewState({ params, session, state: { submissionInfo } });
+  saveRenewState({ params, session, state: {} });
 
   return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
 }
@@ -379,15 +375,16 @@ export default function RenewAdultChildReviewAdultInformation() {
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <LoadingButton
-            id="confirm-button"
+            variant="primary"
+            id="continue-button"
             name="_action"
             value={FormAction.Submit}
-            variant="green"
             disabled={isSubmitting}
             loading={isSubmitting && submitAction === FormAction.Submit}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Submit - Review your information click"
+            endIcon={faChevronRight}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Review adult information click"
           >
-            {t('renew-adult-child:review-adult-information.submit-button')}
+            {t('renew-adult-child:review-adult-information.continue-button')}
           </LoadingButton>
           <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Exit - Review your information click">
             {t('renew-adult-child:review-adult-information.back-button')}
