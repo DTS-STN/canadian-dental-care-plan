@@ -2,7 +2,7 @@
   "progress": {
     "label": "Application progress"
   },
-  "required-label": "Complete all fields.",
+  "required-label": "Remplir tous les champs.",
   "optional-label": "Complete all fields unless marked as optional.",
   "index": {
     "page-title": "(FR) Renew",
@@ -148,18 +148,18 @@
     }
   },
   "type-of-renewal": {
-    "page-title": "Type of renewal",
-    "form-instructions": "Who are you renewing for?",
+    "page-title": "Type de renouvellement",
+    "form-instructions": "Pour qui renouvelez-vous l'adhésion?",
     "radio-options": {
-      "personal-and-child": "I am renewing for <strong>myself and my child(ren)</strong>",
-      "child": "I am renewing for <strong>my child(ren)</strong>",
-      "delegate": "I am renewing on behalf of someone else as a <strong>legal delegate or Power of Attorney</strong>"
+      "personal-and-child": "Je présente une demande de renouvellement pour <strong>moi-même</strong> ou pour <strong>moi-même et mon ou mes enfants</strong>",
+      "child": "Je présente une demande de renouvellement pour <strong>mon ou mes enfants</strong>",
+      "delegate": "Je présente une demande de renouvellement <strong>au nom d'une autre personne à titre de représentant légal ou mandataire</strong>"
     },
     "error-message": {
       "type-of-renewal-required": "Select who this renewal is for"
     },
-    "back-btn": "Back",
-    "continue-btn": "Continue"
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
   },
   "renewal-delegate": {
     "page-title": "Renewing on behalf of someone as a legal delegate or Power of Attorney",
