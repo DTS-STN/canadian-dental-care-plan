@@ -940,11 +940,11 @@
                 ]
               },
               {
-                "id": "public/renew/$id/adult-child/review-information",
-                "file": "routes/public/renew/$id/adult-child/review-information.tsx",
+                "id": "public/renew/$id/adult-child/review-adult-information",
+                "file": "routes/public/renew/$id/adult-child/review-adult-information.tsx",
                 "paths": {
-                  "en": "/:lang/renew/:id/adult-child/review-information",
-                  "fr": "/:lang/renew/:id/adult-child/review-information"
+                  "en": "/:lang/renew/:id/adult-child/review-adult-information",
+                  "fr": "/:lang/renew/:id/adult-child/review-adult-information"
                 }
               },
               {

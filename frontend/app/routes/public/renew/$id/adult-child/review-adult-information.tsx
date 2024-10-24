@@ -42,8 +42,8 @@ enum FormAction {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adultChild.reviewInformation,
-  pageTitleI18nKey: 'renew-adult-child:review-information.page-title',
+  pageIdentifier: pageIds.public.renew.adultChild.reviewAdultInformation,
+  pageTitleI18nKey: 'renew-adult-child:review-adult-information.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -53,8 +53,6 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewAdultChildStateForReview({ params, request, session });
 
-  // invariant(!state.hasAddressChanged || (state.addressInformation && state.addressInformation.homeCountry), `Unexpected home address country: ${state.addressInformation?.homeCountry}`);
-
   // renew state is valid then edit mode can be set to true
   saveRenewState({ params, session, state: { editMode: true } });
 
@@ -62,11 +60,11 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.addressInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.addressInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
-  const countryMailing = state.addressInformation.mailingCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
-  const countryHome = state.addressInformation.homeCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
-  const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getLocalizedPreferredCommunicationMethodById(state.communicationPreference.preferredMethod, locale);
+  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
+  const countryMailing = state.addressInformation?.mailingCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
+  const countryHome = state.addressInformation?.homeCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
+  const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getLocalizedPreferredCommunicationMethodById(state.communicationPreference?.preferredMethod ?? '', locale);
   const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.maritalStatus, locale);
 
   const userInfo = {
@@ -78,7 +76,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     clientNumber: state.applicantInformation.clientNumber,
     maritalStatus: maritalStatus.name,
     contactInformationEmail: state.contactInformation.email,
-    communicationPreferenceEmail: state.communicationPreference.email,
+    communicationPreferenceEmail: state.communicationPreference?.email,
     communicationPreference: communicationPreference.name,
   };
 
@@ -89,21 +87,21 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   };
 
   const mailingAddressInfo = {
-    address: state.addressInformation.mailingAddress,
-    city: state.addressInformation.mailingCity,
+    address: state.addressInformation?.mailingAddress,
+    city: state.addressInformation?.mailingCity,
     province: mailingProvinceTerritoryStateAbbr,
-    postalCode: state.addressInformation.mailingPostalCode,
+    postalCode: state.addressInformation?.mailingPostalCode,
     country: countryMailing,
-    apartment: state.addressInformation.mailingApartment,
+    apartment: state.addressInformation?.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.addressInformation.homeAddress,
-    city: state.addressInformation.homeCity,
+    address: state.addressInformation?.homeAddress,
+    city: state.addressInformation?.homeCity,
     province: homeProvinceTerritoryStateAbbr,
-    postalCode: state.addressInformation.homePostalCode,
+    postalCode: state.addressInformation?.homePostalCode,
     country: countryHome,
-    apartment: state.addressInformation.homeApartment,
+    apartment: state.addressInformation?.homeApartment,
   };
 
   const dentalInsurance = state.dentalInsurance;
@@ -132,7 +130,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:review-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:review-adult-information.page-title') }) };
 
   const payload = viewPayloadEnabled && toBenefitRenewRequestFromRenewAdultChildState(state);
 
@@ -153,7 +151,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 }
 
 export async function action({ context: { serviceProvider, session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('renew/adult-child/review-information');
+  const log = getLogger('renew/adult-child/review-adult-information');
 
   const state = loadRenewAdultChildStateForReview({ params, request, session });
 
@@ -191,7 +189,7 @@ export async function action({ context: { serviceProvider, session }, params, re
   return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
 }
 
-export default function RenewAdultChildReviewInformation() {
+export default function RenewAdultChildReviewAdultInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
@@ -231,25 +229,25 @@ export default function RenewAdultChildReviewInformation() {
         <Progress value={99} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-8 text-lg">{t('renew-adult-child:review-information.read-carefully')}</p>
+        <p className="mb-8 text-lg">{t('renew-adult-child:review-adult-information.read-carefully')}</p>
         <div className="space-y-10">
           <section className="space-y-6">
-            <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-information.page-sub-title')}</h2>
+            <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-adult-information.page-sub-title')}</h2>
             <dl className="divide-y border-y">
-              <DescriptionListItem term={t('renew-adult-child:review-information.full-name-title')}>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.full-name-title')}>
                 <p>{`${userInfo.firstName} ${userInfo.lastName}`}</p>
               </DescriptionListItem>
-              <DescriptionListItem term={t('renew-adult-child:review-information.dob-title')}>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.dob-title')}>
                 <p>{userInfo.birthday}</p>
               </DescriptionListItem>
-              <DescriptionListItem term={t('renew-adult-child:review-information.client-number-title')}>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.client-number-title')}>
                 <p>{userInfo.clientNumber}</p>
               </DescriptionListItem>
-              <DescriptionListItem term={t('renew-adult-child:review-information.marital-title')}>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.marital-title')}>
                 <p>{userInfo.maritalStatus}</p>
                 <div className="mt-4">
                   <InlineLink id="change-martial-status" routeId="public/renew/$id/adult-child/marital-status" params={params}>
-                    {t('renew-adult-child:review-information.marital-change')}
+                    {t('renew-adult-child:review-adult-information.marital-change')}
                   </InlineLink>
                 </div>
               </DescriptionListItem>
@@ -257,62 +255,62 @@ export default function RenewAdultChildReviewInformation() {
           </section>
           {spouseInfo && (
             <section className="space-y-6">
-              <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-information.spouse-title')}</h2>
+              <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-adult-information.spouse-title')}</h2>
               <dl className="divide-y border-y">
-                <DescriptionListItem term={t('renew-adult-child:review-information.sin-title')}>
+                <DescriptionListItem term={t('renew-adult-child:review-adult-information.sin-title')}>
                   <p>{formatSin(spouseInfo.sin)}</p>
                   <div className="mt-4">
                     <InlineLink id="change-spouse-sin" routeId="public/renew/$id/adult-child/marital-status" params={params}>
-                      {t('renew-adult-child:review-information.sin-change')}
+                      {t('renew-adult-child:review-adult-information.sin-change')}
                     </InlineLink>
                   </div>
                 </DescriptionListItem>
-                <DescriptionListItem term={t('renew-adult-child:review-information.year-of-birth')}>
+                <DescriptionListItem term={t('renew-adult-child:review-adult-information.year-of-birth')}>
                   <p>{spouseInfo.yearOfBirth}</p>
                   <div className="mt-4">
                     <InlineLink id="change-spouse-date-of-birth" routeId="public/renew/$id/adult-child/marital-status" params={params}>
-                      {t('renew-adult-child:review-information.dob-change')}
+                      {t('renew-adult-child:review-adult-information.dob-change')}
                     </InlineLink>
                   </div>
                 </DescriptionListItem>
-                <DescriptionListItem term={t('renew-adult-child:review-information.spouse-consent.label')}>
-                  {spouseInfo.consent ? t('renew-adult-child:review-information.spouse-consent.yes') : t('renew-adult-child:review-information.spouse-consent.no')}
+                <DescriptionListItem term={t('renew-adult-child:review-adult-information.spouse-consent.label')}>
+                  {spouseInfo.consent ? t('renew-adult-child:review-adult-information.spouse-consent.yes') : t('renew-adult-child:review-adult-information.spouse-consent.no')}
                 </DescriptionListItem>
               </dl>
             </section>
           )}
           <section className="space-y-6">
-            <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-information.contact-info-title')}</h2>
+            <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-adult-information.contact-info-title')}</h2>
             <dl className="divide-y border-y">
-              <DescriptionListItem term={t('renew-adult-child:review-information.phone-title')}>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.phone-title')}>
                 <p>{userInfo.phoneNumber}</p>
                 <div className="mt-4">
                   <InlineLink id="change-phone-number" routeId="public/renew/$id/adult-child/confirm-phone" params={params}>
-                    {t('renew-adult-child:review-information.phone-change')}
+                    {t('renew-adult-child:review-adult-information.phone-change')}
                   </InlineLink>
                 </div>
               </DescriptionListItem>
-              <DescriptionListItem term={t('renew-adult-child:review-information.alt-phone-title')}>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.alt-phone-title')}>
                 <p>{userInfo.altPhoneNumber}</p>
                 <div className="mt-4">
                   <InlineLink id="change-alternate-phone-number" routeId="public/renew/$id/adult-child/confirm-phone" params={params}>
-                    {t('renew-adult-child:review-information.alt-phone-change')}
+                    {t('renew-adult-child:review-adult-information.alt-phone-change')}
                   </InlineLink>
                 </div>
               </DescriptionListItem>
-              <DescriptionListItem term={t('renew-adult-child:review-information.email')}>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.email')}>
                 <p>{userInfo.contactInformationEmail}</p>
                 <div className="mt-4">
                   <InlineLink id="change-email" routeId="public/renew/$id/adult-child/confirm-email" params={params}>
-                    {t('renew-adult-child:review-information.email-change')}
+                    {t('renew-adult-child:review-adult-information.email-change')}
                   </InlineLink>
                 </div>
               </DescriptionListItem>
-              <DescriptionListItem term={t('renew-adult-child:review-information.mailing-title')}>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.mailing-title')}>
                 <Address
                   address={{
-                    address: mailingAddressInfo.address,
-                    city: mailingAddressInfo.city,
+                    address: mailingAddressInfo.address ?? '',
+                    city: mailingAddressInfo.city ?? '',
                     provinceState: mailingAddressInfo.province,
                     postalZipCode: mailingAddressInfo.postalCode,
                     country: mailingAddressInfo.country?.name ?? '',
@@ -321,11 +319,11 @@ export default function RenewAdultChildReviewInformation() {
                 />
                 <div className="mt-4">
                   <InlineLink id="change-mailing-address" routeId="public/renew/$id/adult-child/confirm-address" params={params}>
-                    {t('renew-adult-child:review-information.mailing-change')}
+                    {t('renew-adult-child:review-adult-information.mailing-change')}
                   </InlineLink>
                 </div>
               </DescriptionListItem>
-              <DescriptionListItem term={t('renew-adult-child:review-information.home-title')}>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.home-title')}>
                 <Address
                   address={{
                     address: homeAddressInfo.address ?? '',
@@ -338,39 +336,39 @@ export default function RenewAdultChildReviewInformation() {
                 />
                 <div className="mt-4">
                   <InlineLink id="change-home-address" routeId="public/renew/$id/adult-child/confirm-address" params={params}>
-                    {t('renew-adult-child:review-information.home-change')}
+                    {t('renew-adult-child:review-adult-information.home-change')}
                   </InlineLink>
                 </div>
               </DescriptionListItem>
             </dl>
           </section>
           <section className="space-y-6">
-            <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-information.dental-title')}</h2>
+            <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-adult-information.dental-title')}</h2>
             <dl className="divide-y border-y">
-              <DescriptionListItem term={t('renew-adult-child:review-information.dental-insurance-title')}>
-                <p>{dentalInsurance ? t('renew-adult-child:review-information.yes') : t('renew-adult-child:review-information.no')}</p>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.dental-insurance-title')}>
+                <p>{dentalInsurance ? t('renew-adult-child:review-adult-information.yes') : t('renew-adult-child:review-adult-information.no')}</p>
                 <div className="mt-4">
                   <InlineLink id="change-access-dental" routeId="public/renew/$id/adult-child/dental-insurance" params={params}>
-                    {t('renew-adult-child:review-information.dental-insurance-change')}
+                    {t('renew-adult-child:review-adult-information.dental-insurance-change')}
                   </InlineLink>
                 </div>
               </DescriptionListItem>
-              <DescriptionListItem term={t('renew-adult-child:review-information.dental-benefit-title')}>
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.dental-benefit-title')}>
                 {dentalBenefit.federalBenefit.access || dentalBenefit.provTerrBenefit.access ? (
                   <>
-                    <p>{t('renew-adult-child:review-information.yes')}</p>
-                    <p>{t('renew-adult-child:review-information.dental-benefit-has-access')}</p>
+                    <p>{t('renew-adult-child:review-adult-information.yes')}</p>
+                    <p>{t('renew-adult-child:review-adult-information.dental-benefit-has-access')}</p>
                     <ul className="ml-6 list-disc">
                       {dentalBenefit.federalBenefit.access && <li>{dentalBenefit.federalBenefit.benefit}</li>}
                       {dentalBenefit.provTerrBenefit.access && <li>{dentalBenefit.provTerrBenefit.benefit}</li>}
                     </ul>
                   </>
                 ) : (
-                  <p>{t('renew-adult-child:review-information.no')}</p>
+                  <p>{t('renew-adult-child:review-adult-information.no')}</p>
                 )}
                 <div className="mt-4">
                   <InlineLink id="change-dental-benefits" routeId="public/renew/$id/adult-child/federal-provincial-territorial-benefits" params={params}>
-                    {t('renew-adult-child:review-information.dental-benefit-change')}
+                    {t('renew-adult-child:review-adult-information.dental-benefit-change')}
                   </InlineLink>
                 </div>
               </DescriptionListItem>
@@ -389,15 +387,15 @@ export default function RenewAdultChildReviewInformation() {
             loading={isSubmitting && submitAction === FormAction.Submit}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Submit - Review your information click"
           >
-            {t('renew-adult-child:review-information.submit-button')}
+            {t('renew-adult-child:review-adult-information.submit-button')}
           </LoadingButton>
           <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Exit - Review your information click">
-            {t('renew-adult-child:review-information.back-button')}
+            {t('renew-adult-child:review-adult-information.back-button')}
           </Button>
         </fetcher.Form>
         <div className="mt-8">
           <InlineLink routeId="public/renew/$id/adult-child/exit-application" params={params}>
-            {t('renew-adult-child:review-information.exit-button')}
+            {t('renew-adult-child:review-adult-information.exit-button')}
           </InlineLink>
         </div>
       </div>
