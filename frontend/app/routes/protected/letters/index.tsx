@@ -13,7 +13,6 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
-import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -42,7 +41,6 @@ const orderEnumSchema = z.enum(['asc', 'desc']);
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
 
-  const auditService = getAuditService();
   const instrumentationService = getInstrumentationService();
   const lettersService = getLettersService();
   const raoidcService = await getRaoidcService();
@@ -66,7 +64,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const { SCCH_BASE_URI } = configProvider.getClientConfig();
 
   const idToken: IdToken = session.get('idToken');
-  auditService.audit('page-view.letters', { userId: idToken.sub });
+  serviceProvider.getAuditService().createAudit('page-view.letters', { userId: idToken.sub });
   instrumentationService.countHttpStatus('letters.view', 200);
 
   return json({ letters, letterTypes, meta, sortOrder, SCCH_BASE_URI });

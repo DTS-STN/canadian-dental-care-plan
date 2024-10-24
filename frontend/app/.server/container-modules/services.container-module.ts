@@ -3,6 +3,7 @@ import { ContainerModule } from 'inversify';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type {
   AddressValidationService,
+  AuditService,
   BenefitRenewalService,
   ClientApplicationService,
   ClientFriendlyStatusService,
@@ -16,6 +17,7 @@ import type {
 } from '~/.server/domain/services';
 import {
   AddressValidationServiceImpl,
+  AuditServiceImpl,
   BenefitRenewalServiceImpl,
   ClientApplicationServiceImpl,
   ClientFriendlyStatusServiceImpl,
@@ -33,6 +35,7 @@ import {
  */
 export const servicesContainerModule = new ContainerModule((bind) => {
   bind<AddressValidationService>(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE).to(AddressValidationServiceImpl);
+  bind<AuditService>(SERVICE_IDENTIFIER.AUDIT_SERVICE).to(AuditServiceImpl);
   bind<BenefitRenewalService>(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_SERVICE).to(BenefitRenewalServiceImpl);
   bind<ClientApplicationService>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE).to(ClientApplicationServiceImpl);
   bind<ClientFriendlyStatusService>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE).to(ClientFriendlyStatusServiceImpl);

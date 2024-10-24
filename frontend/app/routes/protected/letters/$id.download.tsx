@@ -3,7 +3,6 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 import { Buffer } from 'node:buffer';
 import { sanitize } from 'sanitize-filename-ts';
 
-import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -15,7 +14,6 @@ import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
 
-  const auditService = getAuditService();
   const instrumentationService = getInstrumentationService();
 
   if (!params.id) {
@@ -47,7 +45,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   instrumentationService.countHttpStatus('letters.download', 200);
 
   const idToken: IdToken = session.get('idToken');
-  auditService.audit('download.letter', { userId: idToken.sub });
+  serviceProvider.getAuditService().createAudit('download.letter', { userId: idToken.sub });
 
   const decodedPdfBytes = Buffer.from(pdfBytes, 'base64');
   return new Response(decodedPdfBytes, {
