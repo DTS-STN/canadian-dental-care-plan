@@ -2,11 +2,11 @@
   "contact-information": {
     "page-title": "Coordonnées",
     "phone-header": "Numéro de téléphone",
-    "add-phone": "(FR) Adding a phone number helps Government of Canada contact you if there is an issue with your renewal. Otherwise, we'll contact you by mail.",
+    "add-phone": "L'ajout d'un numéro de téléphone à jour au dossier aidera le gouvernement du Canada à communiquer avec vous en cas de problème lié à votre demande de renouvellement. Sinon, nous communiquerons avec vous par la poste.",
     "phone-number": "Numéro de téléphone (facultatif)",
     "phone-number-alt": "Autre numéro de téléphone (facultatif)",
-    "email-header": "Courriel",
-    "add-email": "L'ajout d'un courriel aidera le gouvernement du Canada et la Sun Life à vous contacter au sujet de votre adhésion au Régime canadien de soins dentaires.",
+    "email-header": "Adresse courriel",
+    "add-email": "L'ajout d'une adresse courriel à jour au dossier aidera le gouvernement du Canada et la Sun Life à communiquer avec vous au sujet de votre adhésion au Régime canadien de soins dentaires.",
     "email": "Adresse courriel (facultatif)",
     "confirm-email": "Confirmer l'adresse courriel (facultatif)",
     "back-btn": "Retour",
@@ -19,10 +19,8 @@
       "email-match": "Les adresses courriel entrées ne concordent pas",
       "confirm-email-required": "Confirmez l'adresse courriel",
       "email-required": "Entrez l'adresse courriel",
-      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
-      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@exemple.com",
-      "preferred-language-required": "Sélectionnez la langue de communication préférée",
-      "charactrs-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@example.com",
+      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com"
     }
   },
   "marital-status": {
