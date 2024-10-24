@@ -31,7 +31,6 @@ import {
   ProvincialGovernmentInsurancePlanServiceImpl,
   RedisSessionService,
 } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
 
 /**
  * Container module for services.
@@ -49,16 +48,23 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind<ProvinceTerritoryStateService>(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).to(ProvinceTerritoryStateServiceImpl);
   bind<ProvincialGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(ProvincialGovernmentInsurancePlanServiceImpl);
 
+  // Register session service implementations
+  bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE_FILE).to(FileSessionService);
+  bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE_REDIS).to(RedisSessionService);
+
+  // Resolve session service implementation based on server configuration
   bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE).toDynamicValue((context) => {
-    const logFactory = context.container.get<LogFactory>(SERVICE_IDENTIFIER.LOG_FACTORY);
     const serverConfig = context.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
     switch (serverConfig.SESSION_STORAGE_TYPE) {
       case 'file': {
-        return new FileSessionService(logFactory, serverConfig);
+        return context.container.get<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE_FILE);
       }
       case 'redis': {
-        return new RedisSessionService(logFactory, serverConfig);
+        return context.container.get<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE_REDIS);
+      }
+      default: {
+        throw new Error(`Unknown session storage type: [${serverConfig.SESSION_STORAGE_TYPE}]`);
       }
     }
   });

@@ -1,12 +1,13 @@
-import { Cookie, CookieOptions, CookieParseOptions, CookieSerializeOptions, Session, SessionStorage, createCookie, createFileSessionStorage, createSessionStorage } from '@remix-run/node';
+import { Cookie, CookieOptions, CookieParseOptions, CookieSerializeOptions, Session, SessionStorage, createCookie, createSessionStorage } from '@remix-run/node';
 
-import { inject } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { randomUUID } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { getRedisService } from '~/services/redis-service.server';
+import { createFileSessionStorage } from '~/utils/session-utils.server';
 
 /**
  * SessionService is a service module responsible for managing user sessions.
@@ -41,6 +42,7 @@ export interface SessionCookieOptions extends CookieOptions {
   name: string;
 }
 
+@injectable()
 export class FileSessionService implements SessionService {
   private readonly log: Logger;
   private readonly sessionCookie: Cookie;
@@ -95,6 +97,7 @@ export class FileSessionService implements SessionService {
   }
 }
 
+@injectable()
 export class RedisSessionService implements SessionService {
   private readonly log: Logger;
   private readonly sessionCookie: Cookie;

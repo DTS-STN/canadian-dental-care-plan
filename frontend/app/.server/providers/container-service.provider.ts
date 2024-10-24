@@ -1,5 +1,4 @@
 import type { Container } from 'inversify';
-import { injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type {
@@ -32,7 +31,6 @@ export interface ContainerServiceProvider {
   getSessionService(): SessionService;
 }
 
-@injectable()
 export class ContainerServiceProviderImpl implements ContainerServiceProvider {
   constructor(private readonly container: Container) {}
 
