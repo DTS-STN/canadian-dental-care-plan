@@ -272,7 +272,6 @@ export default function RenewFlowChildSummary() {
                 name="_action"
                 value={FormAction.Continue}
                 variant="primary"
-                disabled={!hasChildren || isSubmitting}
                 loading={isSubmitting && submitAction === FormAction.Continue}
                 endIcon={faChevronRight}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Child(ren) application click"

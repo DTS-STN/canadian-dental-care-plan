@@ -45,8 +45,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     (state.hasAddressChanged && state.addressInformation === undefined) ||
     state.submissionInfo === undefined ||
     state.typeOfRenewal === undefined ||
-    state.maritalStatus === undefined ||
-    getChildrenState(state).length === 0) {
+    state.maritalStatus === undefined
+    ) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 

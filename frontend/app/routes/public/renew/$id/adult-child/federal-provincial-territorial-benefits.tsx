@@ -160,7 +160,6 @@ export async function action({ context: { session }, params, request }: ActionFu
         ...parsedFederalBenefitsResult.data,
         ...parsedProvincialTerritorialBenefitsResult.data,
       },
-      editMode: true, // last step in the flow
     },
   });
 

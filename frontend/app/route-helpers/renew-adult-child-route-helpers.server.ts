@@ -164,7 +164,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/renew/$id/adult-child/federal-provincial-territorial-benefits', params));
   }
 
-  const children = validateChildrenStateForReview({ childrenState: state.children, params });
+  const children = getChildrenState(state).length > 0 ? validateChildrenStateForReview({ childrenState: state.children, params }) : [];
 
   return {
     maritalStatus,

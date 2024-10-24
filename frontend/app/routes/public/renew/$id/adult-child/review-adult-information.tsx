@@ -5,7 +5,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
@@ -22,7 +22,7 @@ import { Progress } from '~/components/progress';
 import { toBenefitRenewRequestFromRenewAdultChildState } from '~/mappers/benefit-renewal-service-mappers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { loadRenewAdultChildStateForReview } from '~/route-helpers/renew-adult-child-route-helpers.server';
-import { clearRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { clearRenewState, getChildrenState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -64,7 +64,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
   const countryMailing = state.addressInformation?.mailingCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
   const countryHome = state.addressInformation?.homeCountry ? serviceProvider.getCountryService().getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
-  const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getLocalizedPreferredCommunicationMethodById(state.communicationPreference?.preferredMethod ?? '', locale);
   const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.maritalStatus, locale);
 
   const userInfo = {
@@ -77,7 +76,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     maritalStatus: maritalStatus.name,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreference?.email,
-    communicationPreference: communicationPreference.name,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -147,6 +145,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
     payload,
+    hasChildren: state.children.length > 0,
   });
 }
 
@@ -182,9 +181,11 @@ export async function action({ context: { serviceProvider, session }, params, re
     }
   }
 
-  const submissionInfo = await serviceProvider.getBenefitRenewalService().createBenefitRenewal(state);
-
-  saveRenewState({ params, session, state: { submissionInfo } });
+  if (getChildrenState(state).length === 0) {
+    const submissionInfo = await serviceProvider.getBenefitRenewalService().createBenefitRenewal(state);
+    saveRenewState({ params, session, state: { submissionInfo } });
+    return redirect(getPathById('public/renew/$id/adult-child/confirmation', params));
+  }
 
   return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
 }
@@ -192,7 +193,7 @@ export async function action({ context: { serviceProvider, session }, params, re
 export default function RenewAdultChildReviewAdultInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, hasChildren, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -374,21 +375,48 @@ export default function RenewAdultChildReviewAdultInformation() {
               </DescriptionListItem>
             </dl>
           </section>
+          {!hasChildren && (
+            <section className="space-y-4">
+              <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-adult-information.submit-app-title')}</h2>
+              <p className="mb-4">{t('renew-adult-child:review-adult-information.submit-p-proceed')}</p>
+              <p className="mb-4">{t('renew-adult-child:review-adult-information.submit-p-false-info')}</p>
+              <p className="mb-4">{t('renew-adult-child:review-adult-information.submit-p-repayment')}</p>
+            </section>
+          )}
         </div>
         <fetcher.Form onSubmit={handleSubmit} method="post" className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
-          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-          <LoadingButton
-            id="confirm-button"
-            name="_action"
-            value={FormAction.Submit}
-            variant="green"
-            disabled={isSubmitting}
-            loading={isSubmitting && submitAction === FormAction.Submit}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Submit - Review your information click"
-          >
-            {t('renew-adult-child:review-adult-information.submit-button')}
-          </LoadingButton>
+          {hasChildren && (
+            <LoadingButton
+              variant="primary"
+              id="continue-button"
+              name="_action"
+              value={FormAction.Submit}
+              disabled={isSubmitting}
+              loading={isSubmitting && submitAction === FormAction.Submit}
+              endIcon={faChevronRight}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Review adult information click"
+            >
+              {t('renew-adult-child:review-adult-information.continue-button')}
+            </LoadingButton>
+          )}
+          {!hasChildren && (
+            <>
+              {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
+              <LoadingButton
+                id="confirm-button"
+                name="_action"
+                value={FormAction.Submit}
+                variant="green"
+                disabled={isSubmitting}
+                loading={isSubmitting && submitAction === FormAction.Submit}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Submit - Review child(ren) information click"
+              >
+                {t('renew-adult-child:review-adult-information.submit-button')}
+              </LoadingButton>
+            </>
+          )}
+
           <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Exit - Review your information click">
             {t('renew-adult-child:review-adult-information.back-button')}
           </Button>
