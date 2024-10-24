@@ -3,6 +3,7 @@ import { Cookie, CookieOptions, CookieParseOptions, CookieSerializeOptions, Sess
 import { inject } from 'inversify';
 import { randomUUID } from 'node:crypto';
 
+import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { getRedisService } from '~/services/redis-service.server';
@@ -44,15 +45,23 @@ export class FileSessionService implements SessionService {
   private readonly log: Logger;
   private readonly sessionCookie: Cookie;
   private readonly sessionStorage: SessionStorage;
+  private readonly cookieOptions: SessionCookieOptions;
 
-  constructor(
-    private readonly cookieOptions: SessionCookieOptions,
-    private readonly directory: string,
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-  ) {
+  constructor(@inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory, @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) serverConfig: ServerConfig) {
     this.log = logFactory.createLogger('FileSessionService');
+
+    this.cookieOptions = {
+      name: serverConfig.SESSION_COOKIE_NAME,
+      domain: serverConfig.SESSION_COOKIE_DOMAIN,
+      path: serverConfig.SESSION_COOKIE_PATH,
+      sameSite: serverConfig.SESSION_COOKIE_SAME_SITE,
+      secrets: [serverConfig.SESSION_COOKIE_SECRET],
+      httpOnly: serverConfig.SESSION_COOKIE_HTTP_ONLY,
+      secure: serverConfig.SESSION_COOKIE_SECURE,
+    };
+
     this.sessionCookie = createCookie(this.cookieOptions.name, this.cookieOptions);
-    this.sessionStorage = createFileSessionStorage({ cookie: this.sessionCookie, dir: this.directory });
+    this.sessionStorage = createFileSessionStorage({ cookie: this.sessionCookie, dir: serverConfig.SESSION_FILE_DIR });
   }
 
   async commitSession(session: Session, options?: CookieSerializeOptions): Promise<string> {
@@ -90,13 +99,24 @@ export class RedisSessionService implements SessionService {
   private readonly log: Logger;
   private readonly sessionCookie: Cookie;
   private sessionStorage: SessionStorage | undefined;
+  private readonly cookieOptions: SessionCookieOptions;
+  private readonly expirySeconds: number;
 
-  constructor(
-    private readonly expirySeconds: number,
-    private readonly cookieOptions: SessionCookieOptions,
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-  ) {
+  constructor(@inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory, @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) serverConfig: ServerConfig) {
     this.log = logFactory.createLogger('RedisSessionService');
+
+    this.cookieOptions = {
+      name: serverConfig.SESSION_COOKIE_NAME,
+      domain: serverConfig.SESSION_COOKIE_DOMAIN,
+      path: serverConfig.SESSION_COOKIE_PATH,
+      sameSite: serverConfig.SESSION_COOKIE_SAME_SITE,
+      secrets: [serverConfig.SESSION_COOKIE_SECRET],
+      httpOnly: serverConfig.SESSION_COOKIE_HTTP_ONLY,
+      secure: serverConfig.SESSION_COOKIE_SECURE,
+    };
+
+    this.expirySeconds = serverConfig.SESSION_EXPIRES_SECONDS;
+
     this.sessionCookie = createCookie(this.cookieOptions.name, this.cookieOptions);
   }
 

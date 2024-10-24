@@ -31,7 +31,6 @@ import {
   ProvincialGovernmentInsurancePlanServiceImpl,
   RedisSessionService,
 } from '~/.server/domain/services';
-import type { SessionCookieOptions } from '~/.server/domain/services/session.service';
 import type { LogFactory } from '~/.server/factories';
 
 /**
@@ -54,22 +53,12 @@ export const servicesContainerModule = new ContainerModule((bind) => {
     const logFactory = context.container.get<LogFactory>(SERVICE_IDENTIFIER.LOG_FACTORY);
     const serverConfig = context.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
-    const cookieOptions: SessionCookieOptions = {
-      name: serverConfig.SESSION_COOKIE_NAME,
-      domain: serverConfig.SESSION_COOKIE_DOMAIN,
-      path: serverConfig.SESSION_COOKIE_PATH,
-      sameSite: serverConfig.SESSION_COOKIE_SAME_SITE,
-      secrets: [serverConfig.SESSION_COOKIE_SECRET],
-      httpOnly: serverConfig.SESSION_COOKIE_HTTP_ONLY,
-      secure: serverConfig.SESSION_COOKIE_SECURE,
-    };
-
     switch (serverConfig.SESSION_STORAGE_TYPE) {
       case 'file': {
-        return new FileSessionService(cookieOptions, serverConfig.SESSION_FILE_DIR, logFactory);
+        return new FileSessionService(logFactory, serverConfig);
       }
       case 'redis': {
-        return new RedisSessionService(serverConfig.SESSION_EXPIRES_SECONDS, cookieOptions, logFactory);
+        return new RedisSessionService(logFactory, serverConfig);
       }
     }
   });
