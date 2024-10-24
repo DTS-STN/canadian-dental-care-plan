@@ -300,21 +300,20 @@
     }
   },
   "communication-preference": {
-    "page-title": "(FR) Communication",
-    "update-info": "(FR) We will update your information with Sun Life Assurance Company of Canada (Sun Life). Sun Life is responsible for administering claims processing and benefits for the Canadian Dental Care Plan.",
-    "preferred-method": "(FR) What is your prefered method of communication for Sun Life?",
-    "email": "(FR) Email address",
-    "confirm-email": "(FR) Confirm email address",
+    "page-title": "Communication",
+    "update-info": "Nous mettrons à jour vos renseignements auprès de la Sun Life du Canada, compagnie d'assurance-vie (Sun Life). La Sun Life est responsable de l'administration du traitement des demandes de règlement et des prestations du Régime de soins dentaires du Canada.",
+    "preferred-method": "Quel est votre mode de communication préféré pour la Sun Life?",
+    "email": "Adresse courriel",
+    "confirm-email": "Confirmer l'adresse courriel",
     "error-message": {
-      "communication-preference-required": "(FR) Select a prefered method of communication.",
-      "email-match": "(FR) The email addresses entered do not match",
-      "confirm-email-required": "(FR) Confirm email address",
-      "email-required": "(FR) Enter email address",
-      "email-valid": "(FR) Enter an email address in the correct format, such as name@example.com",
-      "confirm-email-valid": "(FR) Enter confirmation of email address in the correct format, such as name@example.com",
-      "preferred-method-required": "(FR) Select preferred method of communication"
+      "communication-preference-required": "Sélectionnez une méthode de communication préférée",
+      "email-match": "Les adresses courriels entrées ne concordent pas",
+      "confirm-email-required": "Confirmer l'adresse courriel",
+      "email-required": "Saisir l'adresse courriel",
+      "email-valid": "Saisissez une adresse courriel au format correct, par exemple nom@example.com",
+      "confirm-email-valid": "Saisissez la confirmation de l'adresse courriel dans le format correct, par exemple nom@example.com"
     },
-    "back-btn": "(FR) Back",
-    "continue-btn": "(FR) Continue"
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
   }
 }
