@@ -6,7 +6,6 @@ import { json, redirectDocument } from '@remix-run/node';
 
 import { z } from 'zod';
 
-import { getSessionService } from '~/services/session-service.server';
 import { getApiSessionRedirectToUrl } from '~/utils/api-session-utils.server';
 import { APP_LOCALES } from '~/utils/locale-utils';
 import { getLogger } from '~/utils/logging.server';
@@ -17,7 +16,7 @@ export type ApiSessionAction = (typeof API_SESSION_ACTIONS)[number];
 const API_SESSION_REDIRECT_TO_OPTIONS = ['cdcp-website', 'cdcp-website-apply', 'cdcp-website-status'] as const;
 export type ApiSessionRedirectTo = (typeof API_SESSION_REDIRECT_TO_OPTIONS)[number];
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { serviceProvider, session }, request }: ActionFunctionArgs) {
   const log = getLogger('routes/api/session');
   const sessionId = session.id;
   log.debug("Action with user's server-side session; sessionId: [%s]", sessionId);
@@ -46,7 +45,7 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   switch (action) {
     case 'end': {
       log.debug("Ending user's server-side session; sessionId: [%s], locale: [%s], redirectTo: [%s]", sessionId, locale, redirectTo);
-      const sessionService = await getSessionService();
+      const sessionService = serviceProvider.getSessionService();
       const headers = { 'Set-Cookie': await sessionService.destroySession(session) };
 
       if (redirectTo) {

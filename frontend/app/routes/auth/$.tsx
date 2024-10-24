@@ -6,7 +6,6 @@ import { z } from 'zod';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getEnv, mockEnabled } from '~/utils/env-utils.server';
 import { getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -72,14 +71,14 @@ function handleLoginRequest({ request }: LoaderFunctionArgs) {
 /**
  * Handler for /auth/logout requests
  */
-async function handleLogoutRequest({ context: { session }, request }: LoaderFunctionArgs) {
+async function handleLogoutRequest({ context: { serviceProvider, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleLogoutRequest');
   log.debug('Handling RAOIDC logout request');
   getInstrumentationService().createCounter('auth.logout.requests').add(1);
 
   const { AUTH_RASCL_LOGOUT_URL } = getEnv();
 
-  const sessionService = await getSessionService();
+  const sessionService = serviceProvider.getSessionService();
 
   if (!session.has('idToken')) {
     log.debug(`User has not authenticated; bypassing RAOIDC logout and redirecting to RASCL logout`);
@@ -104,12 +103,12 @@ async function handleLogoutRequest({ context: { session }, request }: LoaderFunc
 /**
  * Handler for /auth/login/raoidc requests
  */
-async function handleRaoidcLoginRequest({ context: { session }, request }: LoaderFunctionArgs) {
+async function handleRaoidcLoginRequest({ context: { serviceProvider, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleRaoidcLoginRequest');
   log.debug('Handling RAOIDC login request');
   getInstrumentationService().createCounter('auth.login.raoidc.requests').add(1);
 
-  const sessionService = await getSessionService();
+  const sessionService = serviceProvider.getSessionService();
   await sessionService.destroySession(session);
 
   const { origin, searchParams } = new URL(request.url);

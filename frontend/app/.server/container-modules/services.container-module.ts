@@ -1,5 +1,6 @@
 import { ContainerModule } from 'inversify';
 
+import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type {
   AddressValidationService,
@@ -13,6 +14,7 @@ import type {
   PreferredLanguageService,
   ProvinceTerritoryStateService,
   ProvincialGovernmentInsurancePlanService,
+  SessionService,
 } from '~/.server/domain/services';
 import {
   AddressValidationServiceImpl,
@@ -21,12 +23,16 @@ import {
   ClientFriendlyStatusServiceImpl,
   CountryServiceImpl,
   FederalGovernmentInsurancePlanServiceImpl,
+  FileSessionService,
   MaritalStatusServiceImpl,
   PreferredCommunicationMethodServiceImpl,
   PreferredLanguageServiceImpl,
   ProvinceTerritoryStateServiceImpl,
   ProvincialGovernmentInsurancePlanServiceImpl,
+  RedisSessionService,
 } from '~/.server/domain/services';
+import type { SessionCookieOptions } from '~/.server/domain/services/session.service';
+import type { LogFactory } from '~/.server/factories';
 
 /**
  * Container module for services.
@@ -43,4 +49,28 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind<PreferredLanguageService>(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).to(PreferredLanguageServiceImpl);
   bind<ProvinceTerritoryStateService>(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).to(ProvinceTerritoryStateServiceImpl);
   bind<ProvincialGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(ProvincialGovernmentInsurancePlanServiceImpl);
+
+  bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE).toDynamicValue((context) => {
+    const logFactory = context.container.get<LogFactory>(SERVICE_IDENTIFIER.LOG_FACTORY);
+    const serverConfig = context.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
+
+    const cookieOptions: SessionCookieOptions = {
+      name: serverConfig.SESSION_COOKIE_NAME,
+      domain: serverConfig.SESSION_COOKIE_DOMAIN,
+      path: serverConfig.SESSION_COOKIE_PATH,
+      sameSite: serverConfig.SESSION_COOKIE_SAME_SITE,
+      secrets: [serverConfig.SESSION_COOKIE_SECRET],
+      httpOnly: serverConfig.SESSION_COOKIE_HTTP_ONLY,
+      secure: serverConfig.SESSION_COOKIE_SECURE,
+    };
+
+    switch (serverConfig.SESSION_STORAGE_TYPE) {
+      case 'file': {
+        return new FileSessionService(cookieOptions, serverConfig.SESSION_FILE_DIR, logFactory);
+      }
+      case 'redis': {
+        return new RedisSessionService(serverConfig.SESSION_EXPIRES_SECONDS, cookieOptions, logFactory);
+      }
+    }
+  });
 });

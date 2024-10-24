@@ -39,4 +39,5 @@ export const SERVICE_IDENTIFIER = {
   PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY: Symbol.for('ProvincialGovernmentInsurancePlanRepository'),
   PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE: Symbol.for('ProvincialGovernmentInsurancePlanService'),
   SERVER_CONFIG: Symbol.for('ServerConfig'),
+  SESSION_SERVICE: Symbol.for('SessionService'),
 };
