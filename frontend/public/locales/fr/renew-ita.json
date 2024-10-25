@@ -172,12 +172,12 @@
     "detail": {
       "additional-info": {
         "title": "Renseignements supplémentaires",
-        "eligible": "Exception: Vous pourriez toujours être admissible si vous avez pris votre retraite et:",
+        "eligible": "Exception: Vous pourriez toujours être admissible si vous avez pris votre retraite et\u00a0:",
         "list": {
           "opted": "vous avez renoncé aux prestations de retraite avant le 11 décembre 2023, et",
           "cannot-opt": "vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite"
         },
-        "not-eligible": "Vous êtes toujours considéré comme ayant accès à l'assurance ou à la couverture dentaire si vous choisissez de ne pas bénéficier des prestations fournies par votre assurance ou celle d'un membre de votre famille:",
+        "not-eligible": "Vous êtes toujours considéré comme ayant accès à l'assurance ou à la couverture dentaire si vous choisissez de ne pas bénéficier des prestations fournies par votre assurance ou celle d'un membre de votre famille\u00a0:",
         "not-eligible-employer": "par le biais d'un employeur;",
         "not-eligible-pension": "par le biais d'un régime de retraite (voir exception);",
         "not-eligible-organization": "par le biais d'une organisation professionnelle ou étudiante.",
