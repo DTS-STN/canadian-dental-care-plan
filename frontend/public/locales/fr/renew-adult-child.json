@@ -502,7 +502,12 @@
     "submit-button": "Soumettre la demande",
     "exit-button": "Quitter la demande",
     "back-button": "Retour",
+    "continue-button": "Continuer",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "submit-app-title": "Submit your renewal application",
+    "submit-p-proceed": "By proceeding with this renewal, you are agreeing to attest truthfully to the information provided.",
+    "submit-p-false-info": "If you provide false information on your renewal, you and others you applied for may be removed from the plan.",
+    "submit-p-repayment": "If you or your family members were not eligible to renew, you or your family member may have to repay the full cost of care received through the Canadian Dental Care Plan."
   }
 }

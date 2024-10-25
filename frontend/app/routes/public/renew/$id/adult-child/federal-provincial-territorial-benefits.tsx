@@ -159,7 +159,6 @@ export async function action({ context: { configProvider, serviceProvider, sessi
         ...parsedFederalBenefitsResult.data,
         ...parsedProvincialTerritorialBenefitsResult.data,
       },
-      editMode: true, // last step in the flow
     },
   });
 
