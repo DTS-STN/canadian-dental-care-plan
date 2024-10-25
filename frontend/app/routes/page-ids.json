@@ -116,6 +116,9 @@
         "reviewAdultInformation": "CDCP-APPL-ADCH-0013"
       }
     },
+    "demographicSurvey": {
+      "termsAndConditions": "CDCP-DMSV-0001"
+    },
     "unableToProcessRequest": "CDCP-UNAB-0001",
     "notFound": "CDCP-ERR-0404"
   }

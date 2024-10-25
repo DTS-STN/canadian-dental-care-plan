@@ -968,6 +968,24 @@
         ]
       },
       {
+        "id": "public/demographic-survey/_route",
+        "file": "routes/public/demographic-survey/_route.tsx",
+        "paths": {
+          "en": "/:lang/demographic-survey",
+          "fr": "/:lang/demographic-survey"
+        },
+        "children": [
+          {
+            "id": "public/demographic-survey/terms-and-conditions",
+            "file": "routes/public/demographic-survey/terms-and-conditions.tsx",
+            "paths": {
+              "en": "/:lang/demographic-survey/terms-and-conditions",
+              "fr": "/:lang/demographic-survey/terms-and-conditions"
+            }
+          }
+        ]
+      },
+      {
         "id": "public/unable-to-process-request",
         "file": "routes/public/unable-to-process-request.tsx",
         "paths": {
