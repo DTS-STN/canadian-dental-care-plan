@@ -154,7 +154,7 @@
   },
   "dental-insurance": {
     "title": "Accès à d'autres assurances dentaires",
-    "legend": "Avoir accès à une assurance dentaire signifie que vous avez accès à une assurance ou à une couverture dentaire :",
+    "legend": "Avoir accès à une assurance dentaire signifie que vous avez accès à une assurance ou à une couverture dentaire\u00a0:",
     "list": {
       "employment": "dans le cadre des avantages sociaux de votre employeur ou de l'employeur d'un membre de votre famille, y compris les comptes de santé et de mieux-être",
       "pension": "par le biais de votre pension ou des prestations de retraite d'un membre de votre famille",
