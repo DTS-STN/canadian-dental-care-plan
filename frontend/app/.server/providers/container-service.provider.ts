@@ -3,6 +3,7 @@ import type { interfaces } from 'inversify';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type {
   AddressValidationService,
+  ApplicantService,
   AuditService,
   BenefitRenewalService,
   ClientApplicationService,
@@ -18,6 +19,7 @@ import type {
 
 export interface ContainerServiceProvider {
   getAddressValidationService(): AddressValidationService;
+  getApplicantService(): ApplicantService;
   getAuditService(): AuditService;
   getBenefitRenewalService(): BenefitRenewalService;
   getClientApplicationService(): ClientApplicationService;
@@ -36,6 +38,10 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
 
   getAddressValidationService(): AddressValidationService {
     return this.container.get<AddressValidationService>(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE);
+  }
+
+  getApplicantService(): ApplicantService {
+    return this.container.get<ApplicantService>(SERVICE_IDENTIFIER.APPLICANT_SERVICE);
   }
 
   getAuditService(): AuditService {
