@@ -40,7 +40,7 @@
       "sin": "Entrez le NAS à 9 chiffres"
     },
     "error-message": {
-      "marital-status-required": "Sélectionner l'état civil",
+      "marital-status-required": "Sélectionnez l'état civil",
       "confirm-required": "La case à cocher doit être sélectionnée",
       "date-of-birth-year-required": "L'année de naissance est requise",
       "sin-required": "Saisir le NAS à 9 chiffres, par exemple 123 456 789",
@@ -58,8 +58,8 @@
     },
     "help-message": "L'adresse que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
     "error-message": {
-      "has-address-changed-required": "Sélectionner si votre adresse a changé ou non",
-      "is-home-address-same-as-mailing-address-required": "Sélectionner si votre adresse postale et votre adresse domicile sont identiques ou non"
+      "has-address-changed-required": "Sélectionnez si votre adresse a changé ou non",
+      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
     },
     "back-btn": "Retour",
     "continue-btn": "Continuer"
@@ -153,40 +153,40 @@
     }
   },
   "dental-insurance": {
-    "title": "Access to other dental insurance",
-    "legend": "Do you have access to dental insurance or coverage:",
+    "title": "Accès à d'autres assurances dentaires",
+    "legend": "Avoir accès à une assurance dentaire signifie que vous avez accès à une assurance ou à une couverture dentaire\u00a0:",
     "list": {
-      "employment": "Through your employment benefits or a family member's employment benefits, including health and wellness accounts",
-      "pension": "Through your pension benefits or a family member's pension benefits",
-      "purchased": "Purchased by you or a family member or through a group plan from an insurance or benefits company",
-      "professional": "Through a professional or student organization"
+      "employment": "dans le cadre des avantages sociaux de votre employeur ou de l'employeur d'un membre de votre famille, y compris les comptes de santé et de mieux-être",
+      "pension": "par le biais de votre pension ou des prestations de retraite d'un membre de votre famille",
+      "purchased": "achetée individuellement par vous, par un membre de votre famille ou par le biais d'un plan de groupe d'une compagnie d'assurance ou de prestations",
+      "professional": "par l'intermédiaire d'une organisation professionnelle ou étudiante"
     },
-    "option-yes": "<strong>Yes</strong>, I have access to dental insurance or coverage",
-    "option-no": "<strong>No</strong>, I do not have access to dental insurance or coverage",
+    "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance ou une couverture dentaire",
+    "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance ou une couverture dentaire",
     "button": {
-      "back": "Back",
-      "continue": "Continue",
-      "cancel-btn": "Cancel",
-      "save-btn": "Save"
+      "back": "Retour",
+      "continue": "Continuer",
+      "cancel-btn": "Annuler",
+      "save-btn": "sauvegarder"
     },
     "detail": {
       "additional-info": {
-        "title": "Additional information",
-        "eligible": "Exception: You may still be eligible if you are retired and:",
+        "title": "Renseignements supplémentaires",
+        "eligible": "Exception: Vous pourriez toujours être admissible si vous avez pris votre retraite et\u00a0:",
         "list": {
-          "opted": "you opted out of pension benefits before December 11, 2023, and",
-          "cannot-opt": "you can't opt back in under the pension rules"
+          "opted": "vous avez renoncé aux prestations de retraite avant le 11 décembre 2023, et",
+          "cannot-opt": "vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite"
         },
-        "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your or a family member's:",
-        "not-eligible-employer": "employer",
-        "not-eligible-pension": "pension (see exception)",
-        "not-eligible-organization": "professional or student organization.",
-        "not-eligible-note": "As such, you are not eligible for the Canadian Dental Care Plan.",
-        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own, you are not eligible for the Canadian Dental Care Plan while that coverage is in effect."
+        "not-eligible": "Vous êtes toujours considéré comme ayant accès à l'assurance ou à la couverture dentaire si vous choisissez de ne pas bénéficier des prestations fournies par votre assurance ou celle d'un membre de votre famille\u00a0:",
+        "not-eligible-employer": "par le biais d'un employeur;",
+        "not-eligible-pension": "par le biais d'un régime de retraite (voir exception);",
+        "not-eligible-organization": "par le biais d'une organisation professionnelle ou étudiante.",
+        "not-eligible-note": "À ce titre, vous n'êtes pas admissible au Régime canadien de soins dentaires.",
+        "not-eligible-purchased": "Si vous avez souscrit vous-même à votre police d'assurance dentaire actuelle, vous n'êtes pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur."
       }
     },
     "error-message": {
-      "dental-insurance-required": "Select whether you have access to dental insurance"
+      "dental-insurance-required": "Sélectionnez si vous avez accès à une assurance dentaire"
     }
   },
   "review-information": {
