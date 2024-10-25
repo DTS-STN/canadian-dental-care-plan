@@ -1,33 +1,19 @@
 import { inject, injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { AddressCorrectionResultDto } from '~/.server/domain/dtos';
+import type { AddressCorrectionRequestDto, AddressCorrectionResultDto } from '~/.server/domain/dtos';
 import type { AddressValidationDtoMapper } from '~/.server/domain/mappers';
 import type { AddressValidationRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
-
-export interface AddressCorrectionRequest {
-  /** The full or partial address. */
-  address: string;
-
-  /** The name of the city. */
-  city: string;
-
-  /** The 6-character postal code. */
-  postalCode: string;
-
-  /** The 2-character Canadian province or territorial code. */
-  provinceCode: string;
-}
 
 export interface AddressValidationService {
   /**
    * Corrects the provided address using the data passed in the `AddressCorrectionRequest` object.
    *
-   * @param addressCorrectionRequest The request object containing the address details that need to be corrected
+   * @param addressCorrectionRequestDto The request DTO object containing the address details that need to be corrected
    * @returns A promise that resolves to a `AddressCorrectionResultDto` object containing corrected address results
    */
-  getAddressCorrectionResult(addressCorrectionRequest: AddressCorrectionRequest): Promise<AddressCorrectionResultDto>;
+  getAddressCorrectionResult(addressCorrectionRequestDto: AddressCorrectionRequestDto): Promise<AddressCorrectionResultDto>;
 }
 
 @injectable()
@@ -42,9 +28,9 @@ export class AddressValidationServiceImpl implements AddressValidationService {
     this.log = logFactory.createLogger('AddressValidationServiceImpl');
   }
 
-  async getAddressCorrectionResult(addressCorrectionRequest: AddressCorrectionRequest): Promise<AddressCorrectionResultDto> {
-    this.log.trace('Getting address correction results with addressCorrectionRequest: [%j]', addressCorrectionRequest);
-    const addressCorrectionResultEntity = await this.addressValidationRepository.getAddressCorrectionResult(addressCorrectionRequest);
+  async getAddressCorrectionResult(addressCorrectionRequestDto: AddressCorrectionRequestDto): Promise<AddressCorrectionResultDto> {
+    this.log.trace('Getting address correction results with addressCorrectionRequest: [%j]', addressCorrectionRequestDto);
+    const addressCorrectionResultEntity = await this.addressValidationRepository.getAddressCorrectionResult(addressCorrectionRequestDto);
     const addressCorrectionResultDto = this.addressValidationDtoMapper.mapAddressCorrectionResultEntityToAddressCorrectionResultDto(addressCorrectionResultEntity);
     this.log.trace('Returning address correction result: [%j]', addressCorrectionResultDto);
     return addressCorrectionResultDto;

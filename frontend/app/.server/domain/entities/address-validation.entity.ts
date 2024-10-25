@@ -1,3 +1,10 @@
+export type AddressCorrectionRequestEntity = Readonly<{
+  address: string;
+  city: string;
+  postalCode: string;
+  provinceCode: string;
+}>;
+
 export type AddressCorrectionResultEntity = Readonly<{
   'wsaddr:CorrectionResults': Readonly<{
     'nc:AddressFullText': string;
