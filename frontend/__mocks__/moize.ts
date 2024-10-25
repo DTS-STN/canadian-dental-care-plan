@@ -1,49 +1,37 @@
-import type { AnyFn, Moizeable, Options } from 'moize';
+import type { Moizeable, Options } from 'moize';
 
-/**
- * @private
- *
- * @constant DEFAULT_OPTIONS
- * @see https://github.com/planttheidea/moize/blob/master/src/constants.ts
- */
-const DEFAULT_OPTIONS: Options<AnyFn> = {
-  isDeepEqual: false,
-  isPromise: false,
-  isReact: false,
-  isSerialized: false,
-  isShallowEqual: false,
-  matchesArg: undefined,
-  matchesKey: undefined,
-  maxAge: undefined,
-  maxArgs: undefined,
-  maxSize: 1,
-  onExpire: undefined,
-  profileName: undefined,
-  serializer: undefined,
-  updateCacheForKey: undefined,
-  transformArgs: undefined,
-  updateExpire: false,
-};
-
-const mockMoize = function <MoizeableFn extends Moizeable, PassedOptions extends Options<MoizeableFn>>(fn: MoizeableFn | PassedOptions, passedOptions?: PassedOptions) {
-  const options = passedOptions ?? DEFAULT_OPTIONS;
-  const coalescedOptions = {
-    ...DEFAULT_OPTIONS,
+function moizeFn(fn: Moizeable, options?: Options) {
+  const opts: Options = {
+    isDeepEqual: false,
+    isPromise: false,
+    isReact: false,
+    isSerialized: false,
+    isShallowEqual: false,
+    matchesArg: undefined,
+    matchesKey: undefined,
+    maxAge: undefined,
+    maxArgs: undefined,
+    maxSize: 1,
+    onExpire: undefined,
+    profileName: undefined,
+    serializer: undefined,
+    updateCacheForKey: undefined,
+    transformArgs: undefined,
+    updateExpire: false,
     ...options,
   };
 
-  const memoized = fn;
-
-  Object.defineProperties(memoized, {
+  Object.defineProperties(fn, {
     options: {
       configurable: true,
-      get() {
-        return coalescedOptions;
-      },
+      get: () => opts,
     },
   });
 
-  return memoized;
-};
+  return fn;
+}
 
-export default mockMoize;
+const moize = (fn: Moizeable, options?: Options) => moizeFn(fn, options);
+moize.promise = (fn: Moizeable, options?: Options) => moizeFn(fn, options);
+
+export default moize;
