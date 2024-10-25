@@ -15,6 +15,7 @@ import type {
   PreferredLanguageService,
   ProvinceTerritoryStateService,
   ProvincialGovernmentInsurancePlanService,
+  SessionService,
 } from '~/.server/domain/services';
 
 export interface ContainerServiceProvider {
@@ -31,6 +32,7 @@ export interface ContainerServiceProvider {
   getPreferredLanguageService(): PreferredLanguageService;
   getProvinceTerritoryStateService(): ProvinceTerritoryStateService;
   getProvincialGovernmentInsurancePlanService(): ProvincialGovernmentInsurancePlanService;
+  getSessionService(): SessionService;
 }
 
 export class ContainerServiceProviderImpl implements ContainerServiceProvider {
@@ -86,5 +88,9 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
 
   getProvincialGovernmentInsurancePlanService(): ProvincialGovernmentInsurancePlanService {
     return this.container.get<ProvincialGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE);
+  }
+
+  getSessionService(): SessionService {
+    return this.container.get<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE);
   }
 }

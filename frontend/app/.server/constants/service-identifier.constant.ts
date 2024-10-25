@@ -1,5 +1,4 @@
 export const SERVICE_IDENTIFIER = {
-  CLIENT_CONFIG: Symbol.for('ClientConfig'),
   ADDRESS_VALIDATION_DTO_MAPPER: Symbol.for('AddressValidationDtoMapper'),
   ADDRESS_VALIDATION_REPOSITORY: Symbol.for('AddressValidationRepository'),
   ADDRESS_VALIDATION_SERVICE: Symbol.for('AddressValidationService'),
@@ -13,6 +12,7 @@ export const SERVICE_IDENTIFIER = {
   CLIENT_APPLICATION_DTO_MAPPER: Symbol.for('ClientApplicationDtoMapper'),
   CLIENT_APPLICATION_REPOSITORY: Symbol.for('ClientApplicationRepository'),
   CLIENT_APPLICATION_SERVICE: Symbol.for('ClientApplicationService'),
+  CLIENT_CONFIG: Symbol.for('ClientConfig'),
   CLIENT_FRIENDLY_STATUS_DTO_MAPPER: Symbol.for('ClientFriendlyStatusDtoMapper'),
   CLIENT_FRIENDLY_STATUS_REPOSITORY: Symbol.for('ClientFriendlyStatusRepository'),
   CLIENT_FRIENDLY_STATUS_SERVICE: Symbol.for('ClientFriendlyStatusService'),
@@ -43,4 +43,5 @@ export const SERVICE_IDENTIFIER = {
   PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY: Symbol.for('ProvincialGovernmentInsurancePlanRepository'),
   PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE: Symbol.for('ProvincialGovernmentInsurancePlanService'),
   SERVER_CONFIG: Symbol.for('ServerConfig'),
+  SESSION_SERVICE: Symbol.for('SessionService'),
 };
