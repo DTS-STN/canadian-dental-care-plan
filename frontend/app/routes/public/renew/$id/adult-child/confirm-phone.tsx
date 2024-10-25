@@ -166,8 +166,7 @@ export default function RenewAdultChildConfirmPhone() {
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-adult-child:confirm-phone.phone-header')}</legend>
+          <div className="mb-6">
             <p className="mb-4" id="adding-phone">
               {t('renew-adult-child:confirm-phone.add-phone')}
             </p>
@@ -223,7 +222,7 @@ export default function RenewAdultChildConfirmPhone() {
               errorMessage={errors?.isNewOrUpdatedPhoneNumber}
               required
             />
-          </fieldset>
+          </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Contact information click">
@@ -248,7 +247,7 @@ export default function RenewAdultChildConfirmPhone() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/ita/marital-status"
+                routeId="public/renew/$id/adult-child/marital-status"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
