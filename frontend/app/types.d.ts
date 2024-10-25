@@ -6,6 +6,7 @@ import type applyAdult from '../public/locales/en/apply-adult.json';
 import type applyChild from '../public/locales/en/apply-child.json';
 import type apply from '../public/locales/en/apply.json';
 import type dataUnavailable from '../public/locales/en/data-unavailable.json';
+import type demographicSurvey from '../public/locales/en/demographic-survey.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type letters from '../public/locales/en/letters.json';
@@ -74,6 +75,7 @@ declare module 'i18next' {
       renew: typeof renew;
       'renew-ita': typeof renewIta;
       'renew-adult-child': typeof renewAdultChild;
+      'demographic-survey': typeof demographicSurvey;
       'stub-login': typeof stubLogin;
       'unable-to-process-request': typeof unableToProcessRequest;
     };
