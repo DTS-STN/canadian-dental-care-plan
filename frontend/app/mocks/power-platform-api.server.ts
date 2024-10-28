@@ -41,7 +41,7 @@ export function getPowerPlatformApiMockHandlers() {
       const peronalInformationEntity = getPersonalInformation(parsedSinId);
 
       if (!peronalInformationEntity) {
-        throw new HttpResponse('Client Not found', { status: 204, headers: { 'Content-Type': 'text/plain' } });
+        throw new HttpResponse(null, { status: 204 });
       }
       const listOfClientId = [];
       if (peronalInformationEntity.applicantId) {

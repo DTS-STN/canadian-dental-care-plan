@@ -69,7 +69,10 @@ describe('Letters Page', () => {
 
       const mockAppLoadContext = mock<AppLoadContext>({
         configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) },
-        serviceProvider: { getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }) },
+        serviceProvider: {
+          getApplicantService: vi.fn().mockReturnValue({ findClientNumberBySin: vi.fn().mockReturnValue('some-client-number') }),
+          getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }),
+        },
       });
 
       const response = await loader({
@@ -95,7 +98,10 @@ describe('Letters Page', () => {
 
     const mockAppLoadContext = mock<AppLoadContext>({
       configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) },
-      serviceProvider: { getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }) },
+      serviceProvider: {
+        getApplicantService: vi.fn().mockReturnValue({ findClientNumberBySin: vi.fn().mockReturnValue('some-client-number') }),
+        getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }),
+      },
     });
 
     const response = await loader({
