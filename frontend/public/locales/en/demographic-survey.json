@@ -1,6 +1,32 @@
 {
   "terms-and-conditions": {
     "page-title": "Terms and conditions",
-    "page-heading": "Terms and conditions of use and privacy notice statement"
+    "page-heading": "Voluntary demographic questions",
+    "intro-text": "Thank you for taking the time to complete these voluntary demographic questions. Your answers will help Health Canada improve the Canadian Dental Care Plan and make sure our services are accessible to everyone.",
+    "answering-questions": "Answering these questions is optional. The information collected will only be used for statistical purposes and all responses will be kept confidential.",
+    "completion-of-survey": "Your completion of the demographic questions will not impact your enrolment in the Canadian Dental Care Plan.",
+    "feedback-time": "This feedback takes 3 minutes to complete.",
+    "privacy-notice-statement": {
+      "summary": "Privacy Notice Statement",
+      "your-privacy": "Your privacy is important to us. You have the right to the protection of, access to, and correction of your personal information.",
+      "privacy-act": "The collection, use, and disclosure of your personal information is authorized by, among other laws, the Department of Health Act, the Dental Care Measures Act, the Department of Employment and Social Development Act, and is protected by the provisions of the Privacy Act.",
+      "information-you-provide": "The information you provide may be used and/or disclosed for policy analysis, research and/or evaluation purposes. However, these additional uses and/or disclosures of your personal information will never result in an administrative decision being made about you.",
+      "third-party": "Employment and Social Development Canada carries out this survey using services from a third-party provider, Microsoft Corporation, which may be subject to foreign laws. For more information, see Microsoft Data Privacy Policy & Privacy Principles.",
+      "how-we-protect-your-privacy": {
+        "heading": "How we protect your privacy",
+        "personal-information-rights-and-access": "You have the right to the protection of, access to, and where applicable, the correction of your personal information. It is kept in the following personal information banks (PIBS):",
+        "personal-information-banks": {
+          "esdc-ppu-712": "Canadian Dental Care Plan (ESDC PPU 712)",
+          "hc-ppu-440": "Canadian Dental Care Plan (HC PPU 440)"
+        }
+      },
+      "info-source-access": "You can learn how to access this information in the government publication called Info Source. You can also access Info Source online at any Service Canada Centre.",
+      "personal-information-handling-complaint-process": "If you do not agree with the way your personal information was handled by ESDC, you can contact the Office of the Privacy Commissioner of Canada (OPC) to file a complaint."
+    },
+    "take-survey": {
+      "application-participation": "By continuing with the survey you agree to the above Privacy Notice Statement.",
+      "application-consent": "By continuing with this application you agree that you have read and accept the above terms and conditions and privacy notice statement. In addition, you also consent to the sharing of your personal information for the purposes listed above.",
+      "start-button": "Agree and continue"
+    }
   }
 }
