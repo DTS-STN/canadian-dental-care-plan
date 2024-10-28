@@ -21,7 +21,6 @@ import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { useI18nNamespaces, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
-import { getUserOrigin } from '~/utils/user-origin-utils.server';
 
 // see: https://docs.fontawesome.com/web/dig-deeper/security#content-security-policy
 fontAwesomeConfig.autoAddCss = false;
@@ -80,10 +79,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   };
   const origin = requestUrl.origin;
 
-  const userOrigin = getUserOrigin(request, session);
-  session.set('userOrigin', userOrigin);
-
-  return json({ buildInfo, dynatraceRumScript, env, meta, origin, userOrigin });
+  return json({ buildInfo, dynatraceRumScript, env, meta, origin });
 }
 
 export default function App() {
@@ -136,25 +132,29 @@ export default function App() {
 }
 
 /**
+ * A custom hook to retrieve the loader data for the 'root' route.
+ *
+ * @returns The loader data for the 'root' route, or `undefined` if not available.
+ */
+function useRootLoaderData() {
+  return useRouteLoaderData<typeof loader>('root');
+}
+
+/**
  * A custom hook to retrieve client-side environment variables from the route loader data.
  *
- * This hook uses `useRouteLoaderData` to access the `env` object from the loader data of the 'root' route.
- *
  * @returns The `env` object containing client-side environment variables, or `undefined` if not available.
- *
- * @example
- * const env = useClientEnv();
- * if (env) {
- *   console.log(env.CDCP_WEBSITE_URL_EN);
- * }
  */
 export function useClientEnv() {
-  const loaderData = useRouteLoaderData<typeof loader>('root');
+  const loaderData = useRootLoaderData();
   return loaderData?.env;
 }
 
 /**
- * Return true if a given feature is enabled.
+ * A custom hook to check if a feature is enabled.
+ *
+ * @param feature The name of the feature to check.
+ * @returns `true` if the feature is enabled, `false` otherwise.
  */
 export function useFeature(feature: FeatureName) {
   // since this hook can be called from any route,

@@ -17,7 +17,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { getUserOrigin } from '~/utils/user-origin-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('index', 'gcweb'),
@@ -36,9 +35,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const idToken: IdToken = session.get('idToken');
   serviceProvider.getAuditService().createAudit('page-view.home', { userId: idToken.sub });
-
-  const userOrigin = getUserOrigin(request, session);
-  session.set('userOrigin', userOrigin);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('index:page-title') }) };
