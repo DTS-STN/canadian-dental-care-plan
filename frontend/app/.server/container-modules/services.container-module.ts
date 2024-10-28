@@ -12,6 +12,7 @@ import type {
   ClientFriendlyStatusService,
   CountryService,
   FederalGovernmentInsurancePlanService,
+  LetterTypeService,
   MaritalStatusService,
   PreferredCommunicationMethodService,
   PreferredLanguageService,
@@ -29,6 +30,7 @@ import {
   CountryServiceImpl,
   FederalGovernmentInsurancePlanServiceImpl,
   FileSessionService,
+  LetterTypeServiceImpl,
   MaritalStatusServiceImpl,
   PreferredCommunicationMethodServiceImpl,
   PreferredLanguageServiceImpl,
@@ -56,6 +58,7 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind<ClientFriendlyStatusService>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE).to(ClientFriendlyStatusServiceImpl);
   bind<CountryService>(SERVICE_IDENTIFIER.COUNTRY_SERVICE).to(CountryServiceImpl);
   bind<FederalGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(FederalGovernmentInsurancePlanServiceImpl);
+  bind<LetterTypeService>(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE).to(LetterTypeServiceImpl);
   bind<MaritalStatusService>(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE).to(MaritalStatusServiceImpl);
   bind<PreferredCommunicationMethodService>(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE).to(PreferredCommunicationMethodServiceImpl);
   bind<PreferredLanguageService>(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).to(PreferredLanguageServiceImpl);

@@ -66,7 +66,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   }
 
   const allLetters = await lettersService.getLetters(clientNumber, userInfoToken.sub, sortOrder);
-  const letterTypes = lettersService.getAllLetterTypes();
+  const letterTypes = serviceProvider.getLetterTypeService().listLetterTypes();
   const letters = allLetters.filter(({ name }) => letterTypes.some(({ id }) => name === id));
 
   session.set('clientNumber', clientNumber);

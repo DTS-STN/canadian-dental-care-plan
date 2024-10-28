@@ -132,7 +132,6 @@ const serverEnv = clientEnvSchema.extend({
   MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default('http://localhost:3000/auth/callback/raoidc'),
 
   // cache duration settings
-  GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
@@ -143,6 +142,7 @@ const serverEnv = clientEnvSchema.extend({
   LOOKUP_SVC_ALL_INDIGENOUS_GROUP_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_INDIGENOUS_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_LAST_TIME_DENTIST_VISIT_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
+  LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
@@ -153,6 +153,7 @@ const serverEnv = clientEnvSchema.extend({
   LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
+  LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),

@@ -2,6 +2,7 @@ export * from './base-domain.exception';
 export * from './client-friendly-status-not-found.exception';
 export * from './country-not-found.exception';
 export * from './federal-government-insurance-plan-not-found.exception';
+export * from './letter-type-not-found.exception';
 export * from './marital-status-not-found.exception';
 export * from './preferred-communication-method-not-found.exception';
 export * from './preferred-language-not-found.exception';

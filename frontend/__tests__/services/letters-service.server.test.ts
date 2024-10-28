@@ -71,45 +71,6 @@ describe('letters-service.server tests', () => {
     });
   });
 
-  describe('getAllLetterTypes()', () => {
-    it('should return all the letter types', () => {
-      vi.mock('~/resources/power-platform/letter-types.json', () => ({
-        default: {
-          value: [
-            {
-              OptionSet: {
-                Options: [
-                  {
-                    Value: 'Letter 1',
-                    Label: {
-                      LocalizedLabels: [
-                        { Label: 'English Letter 1', LanguageCode: 1033 },
-                        { Label: 'French Letter 1', LanguageCode: 1036 },
-                      ],
-                    },
-                  },
-                  {
-                    Value: 'Letter 2',
-                    Label: {
-                      LocalizedLabels: [
-                        { Label: 'English Letter 2', LanguageCode: 1033 },
-                        { Label: 'French Letter 2', LanguageCode: 1036 },
-                      ],
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        },
-      }));
-
-      const lettersService = getLettersService();
-      const letterTypes = lettersService.getAllLetterTypes();
-      expect(letterTypes.length).toBe(2);
-    });
-  });
-
   describe('getPdf()', () => {
     it('should return PDF contents for a user and letter id', async () => {
       vi.mocked(instrumentedFetch).mockResolvedValue(

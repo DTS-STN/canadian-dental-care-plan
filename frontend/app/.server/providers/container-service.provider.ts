@@ -10,6 +10,7 @@ import type {
   ClientFriendlyStatusService,
   CountryService,
   FederalGovernmentInsurancePlanService,
+  LetterTypeService,
   MaritalStatusService,
   PreferredCommunicationMethodService,
   PreferredLanguageService,
@@ -27,6 +28,7 @@ export interface ContainerServiceProvider {
   getClientFriendlyStatusService(): ClientFriendlyStatusService;
   getCountryService(): CountryService;
   getFederalGovernmentInsurancePlanService(): FederalGovernmentInsurancePlanService;
+  getLetterTypeService(): LetterTypeService;
   getMaritalStatusService(): MaritalStatusService;
   getPreferredCommunicationMethodService(): PreferredCommunicationMethodService;
   getPreferredLanguageService(): PreferredLanguageService;
@@ -68,6 +70,10 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
 
   getFederalGovernmentInsurancePlanService(): FederalGovernmentInsurancePlanService {
     return this.container.get<FederalGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE);
+  }
+
+  getLetterTypeService(): LetterTypeService {
+    return this.container.get<LetterTypeService>(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE);
   }
 
   getMaritalStatusService(): MaritalStatusService {
