@@ -6,7 +6,6 @@ import { json, redirectDocument } from '@remix-run/node';
 
 import { z } from 'zod';
 
-import { getSessionService } from '~/services/session-service.server';
 import { getApiSessionRedirectToUrl } from '~/utils/api-session-utils.server';
 import { APP_LOCALES } from '~/utils/locale-utils';
 import { getLogger } from '~/utils/logging.server';
@@ -46,7 +45,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
   switch (action) {
     case 'end': {
       log.debug("Ending user's server-side session; sessionId: [%s], locale: [%s], redirectTo: [%s]", sessionId, locale, redirectTo);
-      const sessionService = await getSessionService();
+      const sessionService = serviceProvider.getSessionService();
       const headers = { 'Set-Cookie': await sessionService.destroySession(session) };
 
       if (redirectTo) {

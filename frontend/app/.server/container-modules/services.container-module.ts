@@ -1,5 +1,7 @@
+import type { interfaces } from 'inversify';
 import { ContainerModule } from 'inversify';
 
+import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type {
   AddressValidationService,
@@ -15,6 +17,7 @@ import type {
   PreferredLanguageService,
   ProvinceTerritoryStateService,
   ProvincialGovernmentInsurancePlanService,
+  SessionService,
 } from '~/.server/domain/services';
 import {
   AddressValidationServiceImpl,
@@ -25,12 +28,21 @@ import {
   ClientFriendlyStatusServiceImpl,
   CountryServiceImpl,
   FederalGovernmentInsurancePlanServiceImpl,
+  FileSessionService,
   MaritalStatusServiceImpl,
   PreferredCommunicationMethodServiceImpl,
   PreferredLanguageServiceImpl,
   ProvinceTerritoryStateServiceImpl,
   ProvincialGovernmentInsurancePlanServiceImpl,
+  RedisSessionService,
 } from '~/.server/domain/services';
+
+function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
+  return ({ parentContext }: interfaces.Request) => {
+    const serverConfig = parentContext.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
+    return serverConfig.SESSION_STORAGE_TYPE === sessionType;
+  };
+}
 
 /**
  * Container module for services.
@@ -49,4 +61,8 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind<PreferredLanguageService>(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).to(PreferredLanguageServiceImpl);
   bind<ProvinceTerritoryStateService>(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).to(ProvinceTerritoryStateServiceImpl);
   bind<ProvincialGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(ProvincialGovernmentInsurancePlanServiceImpl);
+
+  // SessionService bindings depend on the SESSION_STORAGE_TYPE configuration string
+  bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE).to(FileSessionService).when(sessionTypeIs('file'));
+  bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE).to(RedisSessionService).when(sessionTypeIs('redis'));
 });

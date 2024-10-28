@@ -12,7 +12,6 @@ import { createExpressApp } from 'remix-create-express-app';
 import { createRemixRequest, sendRemixResponse } from 'remix-create-express-app/remix';
 import invariant from 'tiny-invariant';
 
-import { getSessionService } from './services/session-service.server';
 import { getEnv } from './utils/env-utils.server';
 import { randomString } from './utils/string-utils';
 import { getContainerConfigProvider, getContainerServiceProvider } from '~/.server/container';
@@ -21,7 +20,6 @@ import { getLogger } from '~/utils/logging.server';
 const { NODE_ENV } = getEnv();
 
 const logFormat = NODE_ENV === 'development' ? 'dev' : 'tiny';
-const sessionService = await getSessionService();
 
 const loggingRequestHandler = (() => {
   const log = getLogger('express.server/loggingRequestHandler');
@@ -89,11 +87,11 @@ export const expressApp = await createExpressApp({
           const remixResponse = await remixRequestHandler(remixRequest, loadContext);
 
           if (!shouldSkipSessionHandling(request)) {
-            const session = loadContext.session;
-            invariant(session, 'Expected session to be defined');
+            invariant(loadContext.session, 'Expected loadContext.session to be defined');
 
             log.debug('Auto-committing session and creating session cookie');
-            const sessionCookie = await sessionService.commitSession(session);
+            const sessionService = getContainerServiceProvider().getSessionService();
+            const sessionCookie = await sessionService.commitSession(loadContext.session);
             remixResponse.headers.append('Set-Cookie', sessionCookie);
           }
 
@@ -108,12 +106,14 @@ export const expressApp = await createExpressApp({
   },
   getLoadContext: async (request: Request, response: Response) => {
     const log = getLogger('express.server/getLoadContext');
+
     if (shouldSkipSessionHandling(request)) {
       log.debug('Stateless request to [%s] detected; bypassing session init', request.url);
       return {} as AppLoadContext;
     }
 
     log.debug('Initializing server session...');
+    const sessionService = getContainerServiceProvider().getSessionService();
     const session = await sessionService.getSession(request.headers.cookie);
 
     // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
