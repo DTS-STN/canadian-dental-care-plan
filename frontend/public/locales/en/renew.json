@@ -140,7 +140,7 @@
       "last-name-required": "Enter last name",
       "client-number-required": "Enter client number",
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
-      "client-number-valid": "Must be a valid Client Number. Your input must be 11 or 13 digits long."
+      "client-number-valid": "Must be a valid client number. Your input must be 11 or 13 digits long."
     },
     "status-not-found": {
       "heading": "We could not find your application with the information you gave us.",
