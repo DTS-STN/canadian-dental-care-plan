@@ -26,10 +26,10 @@ export const SERVICE_IDENTIFIER = {
   FEDERAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER: Symbol.for('FederalGovernmentInsurancePlanDtoMapper'),
   FEDERAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY: Symbol.for('FederalGovernmentInsurancePlanRepository'),
   FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE: Symbol.for('FederalGovernmentInsurancePlanService'),
-  LOG_FACTORY: Symbol.for('LogFactory'),
   LETTER_TYPE_DTO_MAPPER: Symbol.for('LetterTypeDtoMapper'),
   LETTER_TYPE_REPOSITORY: Symbol.for('LetterTypeRepository'),
   LETTER_TYPE_SERVICE: Symbol.for('LetterTypeService'),
+  LOG_FACTORY: Symbol.for('LogFactory'),
   MARITAL_STATUS_DTO_MAPPER: Symbol.for('MaritalStatusDtoMapper'),
   MARITAL_STATUS_REPOSITORY: Symbol.for('MaritalStatusRepository'),
   MARITAL_STATUS_SERVICE: Symbol.for('MaritalStatusService'),
@@ -47,4 +47,5 @@ export const SERVICE_IDENTIFIER = {
   PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE: Symbol.for('ProvincialGovernmentInsurancePlanService'),
   SERVER_CONFIG: Symbol.for('ServerConfig'),
   SESSION_SERVICE: Symbol.for('SessionService'),
+  WEB_CSRF_TOKEN_VALIDATOR: Symbol.for('WebCsrfTokenValidator'),
 };
