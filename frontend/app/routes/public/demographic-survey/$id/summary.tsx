@@ -5,10 +5,11 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../../page-ids.json';
+import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
+import { loadDemographicSurveyState } from '~/route-helpers/demographic-survey-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -37,13 +38,9 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('demographic-survey:summary.page-title') }) };
 
-  // TODO fetch real data
-  const members = [
-    { id: 1, firstName: 'John', lastName: 'Doe' },
-    { id: 2, firstName: 'Jane', lastName: 'Doe' },
-  ];
+  const state = loadDemographicSurveyState({ params, session });
 
-  return json({ csrfToken, meta, members });
+  return json({ csrfToken, meta, members: state.memberInformation });
 }
 
 export async function action({ context: { configProvider, serviceProvider, session }, request, params }: ActionFunctionArgs) {
@@ -58,7 +55,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  return redirect(getPathById('public/demographich-survey/summary', params));
+  return redirect(getPathById('public/demographic-survey/$id/submitted', params));
 }
 
 export default function DemographicSurveySummary() {
@@ -78,7 +75,7 @@ export default function DemographicSurveySummary() {
           </dt>
           {members.map((member) => (
             <dd key={member.id}>
-              <InlineLink routeId="public/demographic-survey/questions/$memberId" params={{ ...params, memberId: member.id.toString() }}>
+              <InlineLink routeId="public/demographic-survey/$id/questions/$memberId" params={{ ...params, memberId: member.id }}>
                 {`${member.firstName} ${member.lastName}`}
               </InlineLink>
             </dd>
@@ -89,18 +86,17 @@ export default function DemographicSurveySummary() {
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton
-            id="continue-button"
-            name="_action"
-            value={FormAction.Continue}
-            variant="primary"
-            loading={isSubmitting}
-            endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Marital status click"
-          >
+          <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Continue - Summary click">
             {t('demographic-survey:summary.continue-btn')}
           </LoadingButton>
-          <ButtonLink id="back-button" routeId="public/demographic-survey/submitted" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Marital status click">
+          <ButtonLink
+            id="back-button"
+            routeId="public/demographic-survey/$id/terms-and-conditions"
+            params={params}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Marital status click"
+          >
             {t('demographic-survey:summary.back-btn')}
           </ButtonLink>
         </div>
