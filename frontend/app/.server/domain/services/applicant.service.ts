@@ -41,7 +41,7 @@ export class ApplicantServiceImpl implements ApplicantService {
     const applicantRequestEntity = this.applicantDtoMapper.mapSinToApplicantRequestEntity(sin);
     const applicantResponseEntity = await this.applicantRepository.findApplicantBySin(applicantRequestEntity);
     if (applicantResponseEntity === null) {
-      this.log.trace('No applicant found for [%s]; Returning null');
+      this.log.trace('No applicant found for sin [%s]; Returning null', sin);
       return null;
     }
 

@@ -2,9 +2,10 @@ import type { ChangeEvent } from 'react';
 
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, useParams, useSearchParams } from '@remix-run/react';
+import { redirect, useLoaderData, useParams, useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
@@ -12,7 +13,6 @@ import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
-import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -22,6 +22,7 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -51,12 +52,24 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
-  const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const allLetters = personalInformation.clientNumber ? await lettersService.getLetters(personalInformation.clientNumber, userInfoToken.sub, sortOrder) : [];
+  const clientNumber =
+    session.get('clientNumber') ??
+    (await serviceProvider.getApplicantService().findClientNumberBySin({
+      sin: userInfoToken.sin,
+      userId: userInfoToken.sub,
+    }));
+
+  if (!clientNumber) {
+    throw redirect(getPathById('protected/data-unavailable', params));
+  }
+
+  const allLetters = await lettersService.getLetters(clientNumber, userInfoToken.sub, sortOrder);
   const letterTypes = lettersService.getAllLetterTypes();
   const letters = allLetters.filter(({ name }) => letterTypes.some(({ id }) => name === id));
+
+  session.set('clientNumber', clientNumber);
   session.set('letters', letters);
 
   const t = await getFixedT(request, handle.i18nNamespaces);

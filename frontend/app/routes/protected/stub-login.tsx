@@ -9,7 +9,6 @@ import { z } from 'zod';
 import { Button } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
-import { InputPatternField } from '~/components/input-pattern-field';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -18,7 +17,6 @@ import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { sinInputPatternFormat } from '~/utils/sin-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
@@ -114,6 +112,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
     session.set('userInfoToken', userInfoToken);
   }
   session.set('idToken', idToken);
+  session.unset('clientNumber');
 
   return redirect(getPathById('protected/home', params));
 }
@@ -134,7 +133,7 @@ export default function StubLogin() {
     <div className="max-w-prose">
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate className="space-y-6">
-        <InputPatternField id="sin" name="sin" label={t('stub-login:index.sin')} required inputMode="numeric" format={sinInputPatternFormat} defaultValue={defaultValues.sin} />
+        <InputField id="sin" name="sin" label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} />
         <fieldset>
           <legend className="mb-2 text-xl font-semibold">{t('stub-login:index.raoidc')}</legend>
           <div className="space-y-6">
