@@ -1,31 +1,27 @@
 {
   "marital-status": {
-    "page-title": "Marital status",
-    "marital-status": "What is your current marital status?",
-    "spouse-or-commonlaw": "Spouse or common-law partner information",
-    "provide-sin": "Provide the SIN of your current spouse or common-law partner. The information is required to calculate your adjusted family net income.",
-    "required-information": "Your spouse or common-law partner must submit their own application or renewal for the Canadian Dental Care Plan.",
-    "back-btn": "Back",
-    "continue-btn": "Continue",
+    "page-title": "État civil",
+    "marital-status": "Quel est votre état civil actuel?",
+    "spouse-or-commonlaw": "Renseignements sur l'époux/épouse ou le conjoint/la conjointe de fait",
+    "provide-sin": "Fournissez le numéro d'assurance sociale de votre époux/épouse ou conjoint/conjointe de fait actuel(le). Ces renseignements sont nécessaires pour calculer votre revenu familial net rajusté.",
+    "required-information": "Votre époux/épouse ou conjoint/conjointe de fait doit présenter sa propre demande initiale ou demande de renouvellement au Régime canadien de soins dentaires.",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
     "cancel-btn": "Cancel",
     "save-btn": "Save",
-    "sin": "Social Insurance Number (SIN)",
-    "year-of-birth": "Year of birth",
-    "single-legal-name": "If your spouse or common-law partner has a single legal name",
-    "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
-    "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.",
+    "sin": "Numéro d'assurance sociale (NAS)",
+    "year-of-birth": "Année de naissance",
+    "confirm-checkbox": "Je confirme que mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et y a consenti.",
     "help-message": {
-      "sin": "Enter the 9-digit SIN"
+      "sin": "Entrez le NAS à 9 chiffres"
     },
     "error-message": {
-      "marital-status-required": "Select marital status",
-      "marital-status-no-partner-information": "If you are married or in a common-law relationship you must enter their information on the next page. Select your marital status and press 'Save'.",
-      "confirm-required": "Checkbox must be selected",
-      "date-of-birth-year-required": "Year of birth is required",
-      "sin-required": "Enter 9-digit SIN, for example 123 456 789",
-      "sin-valid": "Must be a valid SIN",
-      "sin-unique": "The Social Insurance Number (SIN) must be unique",
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+      "marital-status-required": "Sélectionnez l'état civil",
+      "confirm-required": "La case à cocher doit être sélectionnée",
+      "date-of-birth-year-required": "L'année de naissance doit être fournie",
+      "sin-required": "Entrez un NAS de 9 chiffres",
+      "sin-valid": "Doit être un NAS valide",
+      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
   },
   "confirm-phone": {
