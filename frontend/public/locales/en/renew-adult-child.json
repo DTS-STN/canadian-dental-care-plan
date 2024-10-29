@@ -11,21 +11,17 @@
     "save-btn": "Save",
     "sin": "Social Insurance Number (SIN)",
     "year-of-birth": "Year of birth",
-    "single-legal-name": "If your spouse or common-law partner has a single legal name",
-    "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
     "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.",
     "help-message": {
       "sin": "Enter the 9-digit SIN"
     },
     "error-message": {
       "marital-status-required": "Select marital status",
-      "marital-status-no-partner-information": "If you are married or in a common-law relationship you must enter their information on the next page. Select your marital status and press 'Save'.",
       "confirm-required": "Checkbox must be selected",
       "date-of-birth-year-required": "Year of birth is required",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "The Social Insurance Number (SIN) must be unique",
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
     }
   },
   "confirm-phone": {
