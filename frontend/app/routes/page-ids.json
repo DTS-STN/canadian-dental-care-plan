@@ -107,13 +107,14 @@
         "confirmAddress": "CDCP-RENW-ADCH-0004",
         "updateAddress": "CDCP-RENW-ADCH-0005",
         "dentalInsurance": "CDCP-RENW-ADCH-0006",
-        "federalProvincialTerritorialBenefits": "CDCP-RENW-ADCH-0007",
-        "childInformation": "CDCP-RENW-ADCH-0008",
-        "parentOrGuardian": "CDCP-RENW-ADCH-0009",
-        "reviewChildInformation": "CDCP-RENW-ADCH-0010",
-        "exitApplication": "CDCP-RENW-ADCH-0011",
-        "confirmation": "CDCP-RENW-ADCH-0012",
-        "reviewAdultInformation": "CDCP-APPL-ADCH-0013"
+        "confirmFederalProvincialTerritorialBenefits": "CDCP-RENW-ADCH-0007",
+        "updateFederalProvincialTerritorialBenefits": "CDCP-RENW-ADCH-0008",
+        "childInformation": "CDCP-RENW-ADCH-0009",
+        "parentOrGuardian": "CDCP-RENW-ADCH-0010",
+        "reviewChildInformation": "CDCP-RENW-ADCH-0011",
+        "exitApplication": "CDCP-RENW-ADCH-0012",
+        "confirmation": "CDCP-RENW-ADCH-0013",
+        "reviewAdultInformation": "CDCP-APPL-ADCH-0014"
       }
     },
     "demographicSurvey": {
