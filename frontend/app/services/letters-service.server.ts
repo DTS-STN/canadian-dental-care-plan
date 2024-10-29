@@ -2,7 +2,6 @@ import { sort } from 'moderndash';
 import moize from 'moize';
 import { z } from 'zod';
 
-import letterTypesJson from '~/resources/power-platform/letter-types.json';
 import { getAuditService } from '~/services/audit-service.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
@@ -21,9 +20,6 @@ export const getLettersService = moize(createLettersService, {
 function createLettersService() {
   // prettier-ignore
   const {
-    GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS,
-    ENGLISH_LANGUAGE_CODE,
-    FRENCH_LANGUAGE_CODE,
     HTTP_PROXY_URL,
     INTEROP_API_BASE_URI,
     INTEROP_API_SUBSCRIPTION_KEY,
@@ -33,29 +29,6 @@ function createLettersService() {
   } = getEnv();
 
   const fetchFn = getFetchFn(HTTP_PROXY_URL);
-
-  /**
-   * @returns returns all the letter types
-   */
-  function getAllLetterTypes() {
-    const log = getLogger('letters-service.server/getAllLetterTypes');
-    log.debug('Fetching letter types');
-
-    const letterTypes = letterTypesJson.value[0].OptionSet.Options.map((option) => {
-      const { LocalizedLabels } = option.Label;
-      const nameEn = LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label;
-      const nameFr = LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label;
-
-      return {
-        id: option.Value.toString(),
-        nameEn,
-        nameFr,
-      };
-    });
-
-    log.trace('Returning letter types: [%j]', letterTypes);
-    return letterTypes;
-  }
 
   /**
    * @returns array of letters given the clientId with optional sort parameter
@@ -153,13 +126,6 @@ function createLettersService() {
   }
 
   return {
-    getAllLetterTypes: moize(getAllLetterTypes, {
-      maxAge: 1000 * GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS,
-      onCacheAdd: () => {
-        const log = getLogger('letters-service.server/getAllLetterTypes');
-        log.info('Creating new getAllLetterTypes memo');
-      },
-    }),
     getLetters,
     getPdf,
   };

@@ -19,10 +19,6 @@ vi.mock('~/services/letters-service.server', () => ({
       { id: '2', issuedOn: '2004-02-29', name: 'DEN' },
       { id: '3', issuedOn: undefined, name: 'DEN' },
     ]),
-    getAllLetterTypes: vi.fn().mockReturnValue([
-      { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
-      { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
-    ]),
   }),
 }));
 
@@ -72,6 +68,12 @@ describe('Letters Page', () => {
         serviceProvider: {
           getApplicantService: vi.fn().mockReturnValue({ findClientNumberBySin: vi.fn().mockReturnValue('some-client-number') }),
           getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }),
+          getLetterTypeService: vi.fn().mockReturnValue({
+            listLetterTypes: vi.fn().mockReturnValue([
+              { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
+              { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
+            ]),
+          }),
         },
       });
 
@@ -101,6 +103,12 @@ describe('Letters Page', () => {
       serviceProvider: {
         getApplicantService: vi.fn().mockReturnValue({ findClientNumberBySin: vi.fn().mockReturnValue('some-client-number') }),
         getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }),
+        getLetterTypeService: vi.fn().mockReturnValue({
+          listLetterTypes: vi.fn().mockReturnValue([
+            { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
+            { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
+          ]),
+        }),
       },
     });
 
