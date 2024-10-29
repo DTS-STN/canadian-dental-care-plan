@@ -47,29 +47,27 @@
     }
   },
   "confirm-email": {
-    "page-title": "Email",
-    "email-header": "Email",
-    "add-email": "Having an up-to-date email on file helps the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan membership.",
+    "page-title": "Adresse courriel",
+    "add-email": "Adresse courriel",
     "add-or-update": {
-      "legend": "Would you like to update or add your email address?",
-      "help-message": "The email address we have on file can also be found on the renewal letter you received from Service Canada."
+      "legend": "Souhaitez-vous mettre à jour ou ajouter votre adresse courriel?",
+      "help-message": "L'adresse courriel que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada."
     },
-    "email": "Email address",
-    "confirm-email": "Confirm email address",
-    "back-btn": "Back",
-    "continue-btn": "Continue",
-    "cancel-btn": "Cancel",
-    "save-btn": "Save",
-    "option-yes": "Yes",
-    "option-no": "No",
+    "email": "Adresse courriel",
+    "confirm-email": "Confirmer l'adresse courriel",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Sauvegarder",
+    "option-yes": "Oui",
+    "option-no": "Non",
     "error-message": {
-      "add-or-update-required": "Select whether you would like to add or update your email",
-      "email-match": "The email addresses entered do not match",
-      "confirm-email-required": "Confirm email address",
-      "email-required": "Enter email address",
-      "email-valid": "Enter an email address in the correct format, such as name@example.com",
-      "confirm-email-valid": "Enter confirmation of email address in the correct format, such as name@example.com",
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+      "add-or-update-required": "Indiquez si vous souhaitez ajouter ou mettre à jour votre adresse électroniqueFormat de numéro de téléphone invalide",
+      "email-match": "Les adresses courriel entrées ne concordent pas",
+      "confirm-email-required": "Confirmez l'adresse courriel",
+      "email-required": "Entrez l'adresse courriel",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@example.com",
+      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com"
     }
   },
   "confirm-address": {
