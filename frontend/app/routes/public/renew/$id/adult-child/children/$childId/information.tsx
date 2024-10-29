@@ -17,6 +17,7 @@ import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { loadRenewAdultChildState, loadRenewAdultSingleChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
 import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { isValidClientNumberRenewal } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -99,7 +100,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
         invalid_type_error: t('renew-adult-child:children.information.error-message.date-of-birth-day-number'),
       }),
       dateOfBirth: z.string(),
-      clientNumber: z.string().trim().min(1, t('renew-adult-child:children.information.error-message.client-number-required')),
+      clientNumber: z.string().trim().min(1, t('renew-adult-child:children.information.error-message.client-number-required')).refine(isValidClientNumberRenewal, t('renew-adult-child:children.information.error-message.client-number-valid')),
       isParent: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:children.information.error-message.is-parent') }) }),
     })
     .superRefine((val, ctx) => {

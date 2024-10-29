@@ -282,6 +282,7 @@
         "date-of-birth-year-number": "Year must be a number, for example 1950",
         "date-of-birth-year-required": "Date of birth must include a year",
         "client-number-required": "Enter child's client number",
+        "client-number-valid": "Must be a valid Client Number. Your input must be 11 or 13 digits long.",
         "is-parent": "Select whether you are the parent or legal guardian of the child",
         "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
         "no-digits": "Last name must contain letters only"
