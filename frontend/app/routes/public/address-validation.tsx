@@ -10,9 +10,11 @@ import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
+import { validateCsrfToken } from '~/.server/remix/security';
 import { Address } from '~/components/address';
 import { AddressDiff } from '~/components/address-diff';
 import { Button } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputOptionProps } from '~/components/input-option';
@@ -86,23 +88,21 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const countries = serviceProvider.getCountryService().listAndSortLocalizedCountries(locale);
   const provinceTerritoryStates = serviceProvider.getProvinceTerritoryStateService().listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const csrfToken = String(session.get('csrfToken'));
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('address-validation:page-title') }) };
 
   return {
     CANADA_COUNTRY_ID,
     countries,
-    csrfToken,
     meta,
     provinceTerritoryStates,
     USA_COUNTRY_ID,
   };
 }
 
-export async function action({ context: { configProvider, serviceProvider, session }, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session, webValidatorProvider }, request }: ActionFunctionArgs) {
   featureEnabled('address-validation');
+  await validateCsrfToken({ context: { webValidatorProvider }, request });
 
   if (request.method !== 'POST') {
     throw json({ message: 'Method not allowed' }, { status: 405 });
@@ -146,14 +146,6 @@ export async function action({ context: { configProvider, serviceProvider, sessi
     }));
 
   const formData = await request.formData();
-
-  const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData.get('_csrf'));
-
-  if (expectedCsrfToken !== submittedCsrfToken) {
-    throw new Response('Invalid CSRF token', { status: 400 });
-  }
-
   const data = {
     address: String(formData.get('address') ?? ''),
     apartment: formData.get('apartment') ? String(formData.get('apartment')) : undefined,
@@ -228,7 +220,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
 
 export default function AddressValidationRoute() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, countries, csrfToken, provinceTerritoryStates, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
+  const { CANADA_COUNTRY_ID, countries, provinceTerritoryStates, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const formElementRef = useRef<HTMLFormElement>(null);
   const [formKey, setFormKey] = useState(randomString(16));
   const fetcher = useFetcher<typeof action>({ key: formKey });
@@ -305,7 +297,7 @@ export default function AddressValidationRoute() {
         <p className="mb-4 italic">{t('address-validation:optional-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form ref={formElementRef} method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('address-validation:address-header')}</legend>
             <div className="space-y-6">
