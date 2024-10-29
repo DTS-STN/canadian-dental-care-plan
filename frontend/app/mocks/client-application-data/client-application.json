@@ -161,7 +161,7 @@
           "FlagCategoryText": "isCraAssessed"
         },
         {
-          "Flag": true,
+          "Flag": false,
           "FlagCategoryText": "appliedBeforeApril302024"
         }
       ],

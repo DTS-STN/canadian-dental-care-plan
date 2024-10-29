@@ -18,6 +18,15 @@ export interface RenewState {
     dateOfBirth: string;
     clientNumber: string;
   };
+  readonly clientApplication?: {
+    clientNumber: string;
+    dateOfBirth: string;
+    firstName: string;
+    hasAppliedBeforeApril302024: boolean;
+    hasBeenAssessedByCRA: boolean;
+    lastName: string;
+    sin: string;
+  };
   readonly children: {
     readonly id: string;
     readonly dentalBenefits?: {

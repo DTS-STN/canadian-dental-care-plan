@@ -50,7 +50,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
 export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/type-of-renewal');
-  loadRenewState({ params, session });
+  const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
@@ -90,7 +90,10 @@ export async function action({ context: { configProvider, serviceProvider, sessi
   });
 
   if (parsedDataResult.data.typeOfRenewal === RenewalType.AdultChild) {
-    return redirect(getPathById('public/renew/$id/ita/marital-status', params));
+    if (state.clientApplication?.hasAppliedBeforeApril302024) {
+      return redirect(getPathById('public/renew/$id/ita/marital-status', params));
+    }
+    return redirect(getPathById('public/renew/$id/adult-child/marital-status', params));
   }
 
   if (parsedDataResult.data.typeOfRenewal === RenewalType.Child) {
