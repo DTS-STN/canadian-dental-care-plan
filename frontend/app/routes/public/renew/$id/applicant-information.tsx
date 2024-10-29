@@ -132,7 +132,7 @@ export async function action({ context: { session, serviceProvider }, params, re
   // TODO: handle when clientApplication is not found (null)
   invariant(clientApplication, 'Expected clientApplication to be found (not null).');
 
-  saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data } });
+  saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data, clientApplication: clientApplication } });
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/review-information', params));
