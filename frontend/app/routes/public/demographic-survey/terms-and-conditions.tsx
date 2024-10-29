@@ -47,7 +47,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  return redirect(getPathById('public/demographich-survey/summary', params));
+  return redirect(getPathById('public/demographic-survey/summary', params));
 }
 
 export default function DemographicSurveyTermsAndConditions() {
