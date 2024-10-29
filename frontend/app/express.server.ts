@@ -14,7 +14,7 @@ import invariant from 'tiny-invariant';
 
 import { getEnv } from './utils/env-utils.server';
 import { randomString } from './utils/string-utils';
-import { getContainerConfigProvider, getContainerServiceProvider } from '~/.server/container';
+import { getContainerConfigProvider, getContainerServiceProvider, getContainerWebValidatorProvider } from '~/.server/container';
 import { getLogger } from '~/utils/logging.server';
 
 const { NODE_ENV } = getEnv();
@@ -132,6 +132,7 @@ export const expressApp = await createExpressApp({
       configProvider: getContainerConfigProvider(),
       serviceProvider: getContainerServiceProvider(),
       session,
+      webValidatorProvider: getContainerWebValidatorProvider(),
     };
   },
 });
