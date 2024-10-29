@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { LetterTypeEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
-import letterTypeJsonDataSource from '~/resources/power-platform/letter-types.json';
+import letterTypeJsonDataSource from '~/.server/resources/power-platform/letter-type.json';
 
 export interface LetterTypeRepository {
   /**
