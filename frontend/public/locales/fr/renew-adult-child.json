@@ -184,8 +184,8 @@
       "purchased": "achetée individuellement par vous, par un membre de votre famille ou par le biais d'un plan de groupe d'une compagnie d'assurance ou de prestations",
       "professional": "par l'intermédiaire d'une organisation professionnelle ou étudiante"
     },
-    "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance dentaire",
-    "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance dentaire",
+    "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance ou une couverture dentaire",
+    "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance ou une couverture dentaire",
     "button": {
       "back": "Retour",
       "continue": "Continuer",

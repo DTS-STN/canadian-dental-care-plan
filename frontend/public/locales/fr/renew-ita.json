@@ -131,7 +131,7 @@
     "provincial-territorial-benefits": {
       "title": "Prestations provinciales ou territoriales",
       "legend": "Bénéficiez-vous d'une assurance dentaire par le biais d'un programme social provincial ou territorial?",
-      "option-yes": "<strong>Oui</strong>, j'ai des prestations <strong>provinciales ou territoriales</strong> pour soins dentaires ",
+      "option-yes": "<strong>Oui</strong>, j'ai des prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
       "option-no": "<strong>Non</strong>, je n'ai pas des prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
       "social-programs": {
         "input-legend": "Par l'entremise de quelle province ou de quel territoire?",
