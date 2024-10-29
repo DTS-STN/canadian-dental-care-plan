@@ -26,7 +26,6 @@
   },
   "confirm-phone": {
     "page-title": "Phone Number",
-    "phone-header": "Phone number",
     "add-phone": "Having an up-to-date phone number on file helps the Government of Canada contact you if there is an issue with your renewal. Otherwise, we'll contact you by mail.",
     "add-or-update": {
       "legend": "Would you like to update or add your phone number?",
@@ -42,10 +41,9 @@
     "option-no": "No",
     "error-message": {
       "add-or-update-required": "Select whether you would like to add or update your phone number",
-      "phone-number-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
-      "phone-number-alt-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
-      "phone-required": "Enter a phone number",
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+      "phone-number-valid": "Invalid phone number format",
+      "phone-number-alt-valid": "Invalid phone number format",
+      "phone-required": "Enter a phone number"
     }
   },
   "confirm-email": {
