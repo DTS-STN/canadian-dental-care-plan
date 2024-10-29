@@ -71,20 +71,20 @@
     }
   },
   "confirm-address": {
-    "page-title": "Address",
-    "have-you-moved": "Have you moved or changed your mailing address since you applied for the Canadian Dental Care Plan?",
-    "is-home-address-same-as-mailing-address": "Is your home address the same as your mailing address?",
+    "page-title": "Adresse",
+    "have-you-moved": "Avez-vous déménagé ou changé d'adresse postale depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
+    "is-home-address-same-as-mailing-address": "L'adresse de votre domicile est-elle la même que votre adresse postale?",
     "radio-options": {
-      "yes": "Yes",
-      "no": "No"
+      "yes": "Oui",
+      "no": "Non"
     },
-    "help-message": "The address we have on file can also be found on the renewal letter you received from Service Canada.",
+    "help-message": "L'adresse que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
     "error-message": {
-      "has-address-changed-required": "Select whether or not your address has changed",
-      "is-home-address-same-as-mailing-address-required": "Select whether or not your mailing address and home address are the same"
+      "has-address-changed-required": "Sélectionnez si votre adresse a changé ou non",
+      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
     },
-    "back-btn": "Back",
-    "continue-btn": "Continue"
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
   },
   "update-address": {
     "page-title": "Update address",
