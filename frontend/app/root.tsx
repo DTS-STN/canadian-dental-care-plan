@@ -8,6 +8,7 @@ import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
 import fontawesomeStyleSheet from '@fortawesome/fontawesome-svg-core/styles.css?url';
 import { useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css?url';
+import invariant from 'tiny-invariant';
 
 import { getDynatraceService } from './services/dynatrace-service.server';
 import type { FeatureName } from './utils/env-utils';
@@ -78,8 +79,16 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     title: t('gcweb:meta.title.default'),
   };
   const origin = requestUrl.origin;
+  const csrfToken = String(session.get('csrfToken'));
 
-  return json({ buildInfo, dynatraceRumScript, env, meta, origin });
+  return json({
+    buildInfo,
+    csrfToken,
+    dynatraceRumScript,
+    env,
+    meta,
+    origin,
+  });
 }
 
 export default function App() {
@@ -137,7 +146,9 @@ export default function App() {
  * @returns The loader data for the 'root' route, or `undefined` if not available.
  */
 function useRootLoaderData() {
-  return useRouteLoaderData<typeof loader>('root');
+  const rootLoaderData = useRouteLoaderData<typeof loader>('root');
+  invariant(rootLoaderData, 'Expected rootLoaderData to be defined');
+  return rootLoaderData;
 }
 
 /**
@@ -146,8 +157,18 @@ function useRootLoaderData() {
  * @returns The `env` object containing client-side environment variables, or `undefined` if not available.
  */
 export function useClientEnv() {
-  const loaderData = useRootLoaderData();
-  return loaderData?.env;
+  const rootLoaderData = useRootLoaderData();
+  return rootLoaderData.env;
+}
+
+/**
+ * A custom hook to retrieve the CSRF token from the route loader data.
+ *
+ * @returns
+ */
+export function useCsrfToken() {
+  const rootLoaderData = useRootLoaderData();
+  return rootLoaderData.csrfToken;
 }
 
 /**
@@ -157,8 +178,6 @@ export function useClientEnv() {
  * @returns `true` if the feature is enabled, `false` otherwise.
  */
 export function useFeature(feature: FeatureName) {
-  // since this hook can be called from any route,
-  // we must explicitly specify which loader to use
-  const env = useClientEnv();
-  return env?.ENABLED_FEATURES.includes(feature);
+  const clientEnv = useClientEnv();
+  return clientEnv.ENABLED_FEATURES.includes(feature);
 }
