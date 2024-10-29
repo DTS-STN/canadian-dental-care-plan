@@ -47,6 +47,16 @@ export function isValidCodeOrNumber(applicationCode: string) {
 }
 
 /**
+ * @param clientNumber - the client number for renewal
+ * @returns - a boolean value indicating if the client number has the correct format
+ *
+ * client number: 11 or 13 digits
+ */
+export function isValidClientNumberRenewal(clientNumber: string) {
+  return isValidClientNumber(clientNumber) || isValidConfirmationNumberCode(clientNumber);
+}
+
+/**
  * @param applicationCode the 13 digit application code returned from PP after an applicant submits their application
  * @returns submission code in the format of XXX XXX XXX XXXX if it is valid otherwise the input
  */

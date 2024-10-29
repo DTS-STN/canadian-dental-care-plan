@@ -276,6 +276,7 @@
         "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
         "date-of-birth-year-required": "La date de naissance doit inclure une année",
         "client-number-required": "(FR) Enter child's client number",
+        "client-number-valid": "Doit être un numéro de client valide. Votre saisie doit comporter 11, 13 chiffres",
         "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
         "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
         "no-digits": "Le nom de famille doit contenir uniquement des lettres"

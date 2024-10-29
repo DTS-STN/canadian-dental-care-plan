@@ -19,6 +19,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import type { ApplicantInformationState } from '~/route-helpers/renew-route-helpers.server';
 import { loadRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { isValidClientNumberRenewal } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -75,7 +76,7 @@ export async function action({ context: { session, serviceProvider }, params, re
       dateOfBirth: z.string(),
       firstName: z.string().trim().min(1, t('renew:applicant-information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('renew:applicant-information.error-message.characters-valid')),
       lastName: z.string().trim().min(1, t('renew:applicant-information.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('renew:applicant-information.error-message.characters-valid')),
-      clientNumber: z.string().trim().min(1, t('renew:applicant-information.error-message.client-number-required')),
+      clientNumber: z.string().trim().min(1, t('renew:applicant-information.error-message.client-number-required')).refine(isValidClientNumberRenewal, t('renew:applicant-information.error-message.client-number-valid')),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
