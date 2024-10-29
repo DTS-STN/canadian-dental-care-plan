@@ -28,5 +28,17 @@
       "application-consent": "By continuing with this application you agree that you have read and accept the above terms and conditions and privacy notice statement. In addition, you also consent to the sharing of your personal information for the purposes listed above.",
       "start-button": "Agree and continue"
     }
+  },
+  "summary": {
+    "page-title": "Demographic questions summary",
+    "page-heading": "Voluntary demographic questions",
+    "provide-a-response": "You can provide a response for each Canada Dental Care Plan member.",
+    "please-select": "Please select the Canadian Dental Care Plan member.",
+    "when-you-have-finished": "When you have finished, please select 'Submit'.",
+    "back-btn": "Back",
+    "continue-btn": "Submit"
+  },
+  "questions": {
+    "page-title": "Voluntary demographic questions for {{memberName}}"
   }
 }

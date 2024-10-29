@@ -117,7 +117,10 @@
       }
     },
     "demographicSurvey": {
-      "termsAndConditions": "CDCP-DMSV-0001"
+      "termsAndConditions": "CDCP-DMSV-0001",
+      "summary": "CDCP-DMSV-0002",
+      "questions": "CDCP-DMSV-0003",
+      "submitted": "CDCP-DMSV-0004"
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
     "notFound": "CDCP-ERR-0404"

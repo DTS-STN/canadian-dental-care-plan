@@ -982,6 +982,30 @@
               "en": "/:lang/demographic-survey/terms-and-conditions",
               "fr": "/:lang/demographic-survey/terms-and-conditions"
             }
+          },
+          {
+            "id": "public/demographic-survey/summary",
+            "file": "routes/public/demographic-survey/summary.tsx",
+            "paths": {
+              "en": "/:lang/demographic-survey/summary",
+              "fr": "/:lang/demographic-survey/summary"
+            }
+          },
+          {
+            "id": "public/demographic-survey/questions/$memberId",
+            "file": "routes/public/demographic-survey/questions/$memberId.tsx",
+            "paths": {
+              "en": "/:lang/demographic-survey/questions/:memberId",
+              "fr": "/:lang/demographic-survey/questions/:memberId"
+            }
+          },
+          {
+            "id": "public/demographic-survey/submitted",
+            "file": "routes/public/demographic-survey/submitted.tsx",
+            "paths": {
+              "en": "/:lang/demographic-survey/submitted",
+              "fr": "/:lang/demographic-survey/submitted"
+            }
           }
         ]
       },
