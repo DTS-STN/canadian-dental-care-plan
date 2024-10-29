@@ -221,7 +221,7 @@
       "in-this-section": "If you would like to renew for your child, select \"Renew a child\". Otherwise, continue with the application.",
       "each-child": "Each child must have a client number to renew their membership. If the child does not have a client number, you will need to apply for the Canadian Dental Care Plan.",
       "dob-title": "Date of birth",
-      "sin-title": "Client number",
+      "client-number-title": "Client number",
       "edit-child": "Edit child's information",
       "add-child": "Renew a child",
       "add-another-child": "Renew another child",
