@@ -20,8 +20,8 @@ resources:
   #   1. comment ./ingresses.yaml
   #   2. uncomment ./ingresses-maintenance.yaml
   #
-  - ./ingresses.yaml
-  # - ./ingresses-maintenance.yaml
+  # - ./ingresses.yaml
+  - ./ingresses-maintenance.yaml
 patches:
   - path: ./patches/deployments-frontend.yaml
   - path: ./patches/deployments-maintenance.yaml
