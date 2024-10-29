@@ -133,7 +133,7 @@
         "invalid-postal-code-for-country": "Un code postal canadien a été saisi dans l'adresse du domicile, mais le Canada n'a pas été sélectionné comme pays. Veuillez sélectionner le Canada et la province appropriée, ou modifier le code postal",
         "invalid-postal-code-for-province": "Le code postal ne correspond pas à la province ou au territoire que vous avez sélectionné"
       },
-      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et crochet ()"
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et crochet ()"
     }
   },
   "dental-benefits": {
