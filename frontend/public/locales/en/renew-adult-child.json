@@ -312,7 +312,7 @@
       "must-be": "You must be a parent or legal guardian.",
       "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
       "back-btn": "Back",
-      "continue-btn": "Proceed to apply for yourself"
+      "continue-btn": "Return to application"
     },
     "dental-insurance": {
       "title": "{{childName}}: access to other dental insurance",

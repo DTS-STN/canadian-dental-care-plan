@@ -312,7 +312,7 @@
       "must-be": "Vous devez être le parent ou le tuteur légal",
       "unable-to-apply": "Vous ne pouvez pas présenter de demande pour cet enfant. Vous devez être le parent ou le tuteur légal d'un enfant pour présenter une demande en son nom.",
       "back-btn": "Retour",
-      "continue-btn": "Procédez à faire la demande vous-même"
+      "continue-btn": "Retour à l'application"
     },
     "dental-insurance": {
       "title": "{{childName}}: access to other dental insurance",
