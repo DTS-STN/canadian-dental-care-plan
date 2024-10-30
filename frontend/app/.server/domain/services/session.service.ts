@@ -1,12 +1,12 @@
-import { Cookie, CookieParseOptions, CookieSerializeOptions, Session, SessionStorage, createCookie, createSessionStorage } from '@remix-run/node';
+import { CookieParseOptions, CookieSerializeOptions, Session, SessionData, SessionStorage, createCookie, createSessionStorage } from '@remix-run/node';
 
 import { inject, injectable } from 'inversify';
 import { randomUUID } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type { RedisService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { getRedisService } from '~/services/redis-service.server';
 import { createFileSessionStorage } from '~/utils/session-utils.server';
 
 /**
@@ -93,12 +93,17 @@ export class FileSessionService implements SessionService {
 @injectable()
 export class RedisSessionService implements SessionService {
   private readonly log: Logger;
-  private readonly sessionStorage: Promise<SessionStorage>;
+  private readonly sessionStorage: SessionStorage;
 
-  constructor(@inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory, @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) serverConfig: ServerConfig) {
+  constructor(
+    @inject(SERVICE_IDENTIFIER.REDIS_SERVICE) private readonly redisService: RedisService,
+    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
+    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) serverConfig: ServerConfig,
+  ) {
     this.log = logFactory.createLogger('RedisSessionService');
-    this.sessionStorage = this.createRedisSessionStorage(
-      createCookie(serverConfig.SESSION_COOKIE_NAME, {
+
+    this.sessionStorage = createSessionStorage({
+      cookie: createCookie(serverConfig.SESSION_COOKIE_NAME, {
         domain: serverConfig.SESSION_COOKIE_DOMAIN,
         path: serverConfig.SESSION_COOKIE_PATH,
         sameSite: serverConfig.SESSION_COOKIE_SAME_SITE,
@@ -106,47 +111,37 @@ export class RedisSessionService implements SessionService {
         httpOnly: serverConfig.SESSION_COOKIE_HTTP_ONLY,
         secure: serverConfig.SESSION_COOKIE_SECURE,
       }),
-      serverConfig.SESSION_EXPIRES_SECONDS,
-    );
+      createData: async (data): Promise<string> => {
+        const sessionId = randomUUID();
+        this.log.debug(`Creating new session storage slot with id=[${sessionId}]`);
+        await this.redisService.set(sessionId, data, serverConfig.SESSION_EXPIRES_SECONDS);
+        return sessionId;
+      },
+      readData: async (id): Promise<SessionData | null> => {
+        this.log.debug(`Reading session data for session id=[${id}]`);
+        return await this.redisService.get(id);
+      },
+      updateData: async (id, data): Promise<void> => {
+        this.log.debug(`Updating session data for session id=[${id}]`);
+        await this.redisService.set(id, data, serverConfig.SESSION_EXPIRES_SECONDS);
+      },
+      deleteData: async (id): Promise<void> => {
+        this.log.debug(`Deleting all session data for session id=[${id}]`);
+        await this.redisService.del(id);
+      },
+    });
   }
 
   async commitSession(session: Session, options?: CookieSerializeOptions): Promise<string> {
-    const sessionStorage = await this.sessionStorage;
-    return await sessionStorage.commitSession(session, options);
+    return await this.sessionStorage.commitSession(session, options);
   }
 
   async destroySession(session: Session, options?: CookieSerializeOptions): Promise<string> {
     Object.keys(session.data).forEach((key) => session.unset(key));
-    return await (await this.sessionStorage).destroySession(session, options);
+    return await this.sessionStorage.destroySession(session, options);
   }
 
   async getSession(cookieHeader?: string | null, options?: CookieParseOptions): Promise<Session> {
-    return await (await this.sessionStorage).getSession(cookieHeader, options);
-  }
-
-  private async createRedisSessionStorage(cookie: Cookie, ttlSecs: number) {
-    const redisService = await getRedisService();
-
-    return createSessionStorage({
-      cookie,
-      createData: async (data) => {
-        const sessionId = randomUUID();
-        this.log.debug(`Creating new session storage slot with id=[${sessionId}]`);
-        await redisService.set(sessionId, data, ttlSecs);
-        return sessionId;
-      },
-      readData: async (id) => {
-        this.log.debug(`Reading session data for session id=[${id}]`);
-        return await redisService.get(id);
-      },
-      updateData: async (id, data) => {
-        this.log.debug(`Updating session data for session id=[${id}]`);
-        await redisService.set(id, data, ttlSecs);
-      },
-      deleteData: async (id) => {
-        this.log.debug(`Deleting all session data for session id=[${id}]`);
-        await redisService.del(id);
-      },
-    });
+    return await this.sessionStorage.getSession(cookieHeader, options);
   }
 }

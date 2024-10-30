@@ -12,4 +12,5 @@ export * from './preferred-communication-method.service';
 export * from './preferred-language.service';
 export * from './province-territory-state.service';
 export * from './provincial-government-insurance-plan.service';
+export * from './redis.service';
 export * from './session.service';

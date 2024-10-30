@@ -5,9 +5,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
+import type { RedisService } from '~/.server/domain/services';
 import { FileSessionService, RedisSessionService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { getRedisService } from '~/services/redis-service.server';
 
 describe('FileSessionService', () => {
   beforeEach(() => {
@@ -65,15 +65,10 @@ describe('RedisSessionService', () => {
     vi.clearAllMocks();
   });
 
-  vi.mock('~/services/redis-service.server', () => ({
-    getRedisService: vi.fn().mockResolvedValue({
-      del: vi.fn(),
-      get: vi.fn(),
-      set: vi.fn(),
-    }),
-  }));
+  const mockRedisService = mock<RedisService>();
 
   const redisSessionService = new RedisSessionService(
+    mockRedisService,
     mock<LogFactory>({
       createLogger: vi.fn().mockReturnValue(mock<Logger>()),
     }),
@@ -91,24 +86,20 @@ describe('RedisSessionService', () => {
 
   describe('commitSession', () => {
     it('should call redisService.set()', async () => {
-      const redisService = await getRedisService();
       await redisSessionService.commitSession(mock<Session>());
-      expect(redisService.set).toHaveBeenCalled();
+      expect(mockRedisService.set).toHaveBeenCalled();
     });
   });
 
   describe('destroySession', () => {
     it('should call redisService.del()', async () => {
-      const redisService = await getRedisService();
       await redisSessionService.destroySession(mock<Session>());
-      expect(redisService.del).toHaveBeenCalled();
+      expect(mockRedisService.del).toHaveBeenCalled();
     });
   });
 
   describe('getSession', () => {
     it('should call redisService.get()', async () => {
-      const redisService = await getRedisService();
-
       //
       // the following encoded session data was acquired by debugging
       // node_modules/@remix-run/server-runtime/dist/cookies.js
@@ -118,7 +109,7 @@ describe('RedisSessionService', () => {
       const signedSessionData = await sign(encodedSessionData, 'secret');
 
       await redisSessionService.getSession(`session=${signedSessionData}`);
-      expect(redisService.get).toHaveBeenCalled();
+      expect(mockRedisService.get).toHaveBeenCalled();
     });
   });
 });

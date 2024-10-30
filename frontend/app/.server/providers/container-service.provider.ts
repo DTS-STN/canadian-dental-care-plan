@@ -16,6 +16,7 @@ import type {
   PreferredLanguageService,
   ProvinceTerritoryStateService,
   ProvincialGovernmentInsurancePlanService,
+  RedisService,
   SessionService,
 } from '~/.server/domain/services';
 
@@ -34,6 +35,7 @@ export interface ContainerServiceProvider {
   getPreferredLanguageService(): PreferredLanguageService;
   getProvinceTerritoryStateService(): ProvinceTerritoryStateService;
   getProvincialGovernmentInsurancePlanService(): ProvincialGovernmentInsurancePlanService;
+  getRedisService(): RedisService;
   getSessionService(): SessionService;
 }
 
@@ -94,6 +96,10 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
 
   getProvincialGovernmentInsurancePlanService(): ProvincialGovernmentInsurancePlanService {
     return this.container.get<ProvincialGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE);
+  }
+
+  getRedisService(): RedisService {
+    return this.container.get<RedisService>(SERVICE_IDENTIFIER.REDIS_SERVICE);
   }
 
   getSessionService(): SessionService {
