@@ -28,7 +28,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { isAllValidInputCharacters } from '~/utils/string-utils';
+import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
@@ -75,7 +75,13 @@ export async function action({ context: { session, serviceProvider }, params, re
       }),
       dateOfBirth: z.string(),
       firstName: z.string().trim().min(1, t('renew:applicant-information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('renew:applicant-information.error-message.characters-valid')),
-      lastName: z.string().trim().min(1, t('renew:applicant-information.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('renew:applicant-information.error-message.characters-valid')),
+      lastName: z
+        .string()
+        .trim()
+        .min(1, t('renew:applicant-information.error-message.last-name-required'))
+        .max(100)
+        .refine(isAllValidInputCharacters, t('renew:applicant-information.error-message.characters-valid'))
+        .refine((lastName) => !hasDigits(lastName), t('renew:applicant-information.error-message.no-digits')),
       clientNumber: z.string().trim().min(1, t('renew:applicant-information.error-message.client-number-required')).refine(isValidClientNumberRenewal, t('renew:applicant-information.error-message.client-number-valid')),
     })
     .superRefine((val, ctx) => {
