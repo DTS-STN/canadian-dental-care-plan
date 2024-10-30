@@ -31,15 +31,11 @@ export function ErrorBoundary() {
   const params = useParams();
   const lang = params.lang;
 
-  if (isRouteErrorResponse(error)) {
-    switch (error.status) {
-      case 404: {
-        // prettier-ignore
-        return isAppLocale(lang)
-          ? <NotFoundError error={error} />
-          : <BilingualNotFoundError error={error}/>;
-      }
-    }
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    // prettier-ignore
+    return isAppLocale(lang)
+      ? <NotFoundError error={error} />
+      : <BilingualNotFoundError error={error}/>;
   }
 
   //prettier-ignore

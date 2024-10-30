@@ -67,6 +67,7 @@ export default tseslint.config(
       // https://typescript-eslint.io/rules/return-await#how-to-use
       'no-return-await': 'off',
       '@typescript-eslint/return-await': ['error', 'always'],
+      '@typescript-eslint/switch-exhaustiveness-check': ['error', { considerDefaultExhaustiveForUnions: true, requireDefaultForNonUnion: true }],
       'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
     },
     settings: {

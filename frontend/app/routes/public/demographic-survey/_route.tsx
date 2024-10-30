@@ -22,12 +22,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 export function ErrorBoundary() {
   const error = useRouteError();
 
-  if (isRouteErrorResponse(error)) {
-    switch (error.status) {
-      case 404: {
-        return <NotFoundError error={error} />;
-      }
-    }
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    return <NotFoundError error={error} />;
   }
 
   return <ServerError error={error} />;

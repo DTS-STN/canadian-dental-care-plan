@@ -45,12 +45,12 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 
       return handleMockAuthorizeRequest({ context, params, request });
     }
+    default: {
+      log.warn('Invalid authentication route requested: [%s]', slug);
+      getInstrumentationService().createCounter('auth.unknown.requests').add(1);
+      return new Response(null, { status: 404 });
+    }
   }
-
-  log.warn('Invalid authentication route requested: [%s]', slug);
-  getInstrumentationService().createCounter('auth.unknown.requests').add(1);
-
-  return new Response(null, { status: 404 });
 }
 
 /**
