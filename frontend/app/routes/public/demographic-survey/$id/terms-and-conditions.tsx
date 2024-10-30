@@ -5,7 +5,7 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../../page-ids.json';
+import pageIds from '../../../page-ids.json';
 import { Collapsible } from '~/components/collapsible';
 import { LoadingButton } from '~/components/loading-button';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -47,7 +47,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  return redirect(getPathById('public/demographic-survey/summary', params));
+  return redirect(getPathById('public/demographic-survey/$id/summary', params));
 }
 
 export default function DemographicSurveyTermsAndConditions() {
@@ -95,7 +95,7 @@ export default function DemographicSurveyTermsAndConditions() {
           id="continue-button"
           loading={isSubmitting}
           endIcon={faChevronRight}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Agree and Continue - Terms and Conditions click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic survey:Agree and Continue - Terms and Conditions click"
         >
           {t('demographic-survey:terms-and-conditions.take-survey.start-button')}
         </LoadingButton>

@@ -2,15 +2,19 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
+import { randomUUID } from 'crypto';
 import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
-import { Button, ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
+import { LoadingButton } from '~/components/loading-button';
+import { getMemberInformationFromRenewState, startDemographicSurveyState } from '~/route-helpers/demographic-survey-route-helpers.server';
 import { loadRenewAdultChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
 import { clearRenewState, getChildrenState } from '~/route-helpers/renew-route-helpers.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
@@ -20,8 +24,14 @@ import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
+
+enum FormAction {
+  Submit = 'submit',
+  Close = 'close',
+}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
@@ -157,6 +167,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/adult-child/confirmation');
+  const state = loadRenewAdultChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -169,7 +180,15 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  loadRenewAdultChildState({ params, request, session });
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  if (formAction === FormAction.Submit) {
+    const id = randomUUID().toString();
+    const memberInformation = getMemberInformationFromRenewState(state);
+    const demographicSurveyState = startDemographicSurveyState({ id, session, memberInformation });
+    clearRenewState({ params, session });
+    return redirect(getPathById('public/demographic-survey/$id/terms-and-conditions', { ...params, id: demographicSurveyState.id }));
+  }
+
   clearRenewState({ params, session });
   return redirect(t('confirm.exit-link'));
 }
@@ -177,6 +196,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function RenewAdultChildConfirm() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
   const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, csrfToken } = useLoaderData<typeof loader>();
 
   const cdcpLink = <InlineLink to={t('renew-adult-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -210,9 +230,20 @@ export default function RenewAdultChildConfirm() {
           <h3 className="font-lato text-2xl font-bold">{t('renew-adult-child:confirm.alert.title')}</h3>
           <p>{t('renew-adult-child:confirm.alert.survey')}</p>
           <p>{t('renew-adult-child:confirm.alert.answers')}</p>
-          <ButtonLink variant="primary" to="/">
-            {t('renew-adult-child:confirm.alert.btn')}
-          </ButtonLink>
+          <fetcher.Form method="post" noValidate>
+            <input type="hidden" name="_csrf" value={csrfToken} />
+            <LoadingButton
+              id="start-survey-button"
+              name="_action"
+              value={FormAction.Submit}
+              variant="primary"
+              disabled={isSubmitting}
+              loading={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult Child:Start survey - Confirmation click"
+            >
+              {t('renew-adult-child:confirm.alert.btn')}
+            </LoadingButton>
+          </fetcher.Form>
         </div>
       </ContextualAlert>
 
@@ -385,6 +416,8 @@ export default function RenewAdultChildConfirm() {
                 id="confirm-modal-close"
                 variant="primary"
                 size="sm"
+                name="_action"
+                value={FormAction.Close}
                 onClick={() => sessionStorage.removeItem('flow.state')}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Confirmation exit modal - Application successfully submitted click"
               >
