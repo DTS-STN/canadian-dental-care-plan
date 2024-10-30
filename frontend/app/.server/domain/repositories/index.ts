@@ -5,6 +5,7 @@ export * from './client-friendly-status.repository';
 export * from './country.repository';
 export * from './federal-government-insurance-plan.repository';
 export * from './letter-type.repository';
+export * from './letter.repository';
 export * from './marital-status.repository';
 export * from './preferred-communication-method.repository';
 export * from './preferred-language.repository';

@@ -14,7 +14,6 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -43,7 +42,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   featureEnabled('view-letters');
 
   const instrumentationService = getInstrumentationService();
-  const lettersService = getLettersService();
   const raoidcService = await getRaoidcService();
 
   await raoidcService.handleSessionValidation(request, session);
@@ -65,9 +63,9 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     throw redirect(getPathById('protected/data-unavailable', params));
   }
 
-  const allLetters = await lettersService.getLetters(clientNumber, userInfoToken.sub, sortOrder);
+  const allLetters = await serviceProvider.getLetterService().findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
   const letterTypes = serviceProvider.getLetterTypeService().listLetterTypes();
-  const letters = allLetters.filter(({ name }) => letterTypes.some(({ id }) => name === id));
+  const letters = allLetters.filter(({ letterTypeId }) => letterTypes.some(({ id }) => letterTypeId === id));
 
   session.set('clientNumber', clientNumber);
   session.set('letters', letters);
@@ -121,16 +119,16 @@ export default function LettersIndex() {
 
           <ul className="divide-y border-y">
             {letters.map((letter) => {
-              const letterType = letterTypes.find(({ id }) => id === letter.name);
-              const gcAnalyticsCustomClickValue = `ESDC-EDSC:CDCP Letters Click:${letterType?.nameEn ?? letter.name}`;
-              const letterName = letterType ? getNameByLanguage(i18n.language, letterType) : letter.name;
+              const letterType = letterTypes.find(({ id }) => id === letter.letterTypeId);
+              const gcAnalyticsCustomClickValue = `ESDC-EDSC:CDCP Letters Click:${letterType?.nameEn ?? letter.letterTypeId}`;
+              const letterName = letterType ? getNameByLanguage(i18n.language, letterType) : letter.letterTypeId;
 
               return (
                 <li key={letter.id} className="py-4 sm:py-6">
                   <InlineLink reloadDocument routeId="protected/letters/$id.download" params={{ ...params, id: letter.id }} className="external-link" newTabIndicator target="_blank" data-gc-analytics-customclick={gcAnalyticsCustomClickValue}>
                     {letterName}
                   </InlineLink>
-                  <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
+                  <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.date })}</p>
                 </li>
               );
             })}

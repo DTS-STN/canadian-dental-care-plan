@@ -7,6 +7,7 @@ export * from './client-friendly-status.service';
 export * from './country.service';
 export * from './federal-government-insurance-plan.service';
 export * from './letter-type.service';
+export * from './letter.service';
 export * from './marital-status.service';
 export * from './preferred-communication-method.service';
 export * from './preferred-language.service';

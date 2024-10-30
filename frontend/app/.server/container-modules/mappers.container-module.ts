@@ -9,6 +9,7 @@ import {
   ClientFriendlyStatusDtoMapperImpl,
   CountryDtoMapperImpl,
   FederalGovernmentInsurancePlanDtoMapperImpl,
+  LetterDtoMapperImpl,
   LetterTypeDtoMapperImpl,
   MaritalStatusDtoMapperImpl,
   PreferredCommunicationMethodDtoMapperImpl,
@@ -24,6 +25,7 @@ import type {
   ClientFriendlyStatusDtoMapper,
   CountryDtoMapper,
   FederalGovernmentInsurancePlanDtoMapper,
+  LetterDtoMapper,
   LetterTypeDtoMapper,
   MaritalStatusDtoMapper,
   PreferredCommunicationMethodDtoMapper,
@@ -43,6 +45,7 @@ export const mappersContainerModule = new ContainerModule((bind) => {
   bind<ClientFriendlyStatusDtoMapper>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_DTO_MAPPER).to(ClientFriendlyStatusDtoMapperImpl);
   bind<CountryDtoMapper>(SERVICE_IDENTIFIER.COUNTRY_DTO_MAPPER).to(CountryDtoMapperImpl);
   bind<FederalGovernmentInsurancePlanDtoMapper>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER).to(FederalGovernmentInsurancePlanDtoMapperImpl);
+  bind<LetterDtoMapper>(SERVICE_IDENTIFIER.LETTER_DTO_MAPPER).to(LetterDtoMapperImpl);
   bind<LetterTypeDtoMapper>(SERVICE_IDENTIFIER.LETTER_TYPE_DTO_MAPPER).to(LetterTypeDtoMapperImpl);
   bind<MaritalStatusDtoMapper>(SERVICE_IDENTIFIER.MARITAL_STATUS_DTO_MAPPER).to(MaritalStatusDtoMapperImpl);
   bind<PreferredCommunicationMethodDtoMapper>(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_DTO_MAPPER).to(PreferredCommunicationMethodDtoMapperImpl);
