@@ -12,16 +12,6 @@ vi.mock('~/services/instrumentation-service.server', () => ({
   }),
 }));
 
-vi.mock('~/services/letters-service.server', () => ({
-  getLettersService: vi.fn().mockReturnValue({
-    getLetters: vi.fn().mockResolvedValue([
-      { id: '1', issuedOn: '2024-12-25', name: 'ACC' },
-      { id: '2', issuedOn: '2004-02-29', name: 'DEN' },
-      { id: '3', issuedOn: undefined, name: 'DEN' },
-    ]),
-  }),
-}));
-
 vi.mock('~/services/raoidc-service.server', () => ({
   getRaoidcService: vi.fn().mockResolvedValue({
     handleSessionValidation: vi.fn().mockResolvedValue(true),
@@ -68,6 +58,13 @@ describe('Letters Page', () => {
         serviceProvider: {
           getApplicantService: vi.fn().mockReturnValue({ findClientNumberBySin: vi.fn().mockReturnValue('some-client-number') }),
           getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }),
+          getLetterService: vi.fn().mockReturnValue({
+            findLettersByClientId: vi.fn().mockResolvedValue([
+              { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
+              { id: '2', date: '2004-02-29', letterTypeId: 'DEN' },
+              { id: '3', date: undefined, letterTypeId: 'DEN' },
+            ]),
+          }),
           getLetterTypeService: vi.fn().mockReturnValue({
             listLetterTypes: vi.fn().mockReturnValue([
               { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
@@ -87,9 +84,9 @@ describe('Letters Page', () => {
 
       expect(data.letters).toHaveLength(3);
       expect(data.letters[2].id).toEqual('3');
-      expect(data.letters[2].name).toEqual('DEN');
-      expect(data.letters[1].issuedOn).toBeDefined();
-      expect(data.letters[2].issuedOn).toBeUndefined();
+      expect(data.letters[2].letterTypeId).toEqual('DEN');
+      expect(data.letters[1].date).toBeDefined();
+      expect(data.letters[2].date).toBeUndefined();
     });
   });
 
@@ -103,6 +100,13 @@ describe('Letters Page', () => {
       serviceProvider: {
         getApplicantService: vi.fn().mockReturnValue({ findClientNumberBySin: vi.fn().mockReturnValue('some-client-number') }),
         getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }),
+        getLetterService: vi.fn().mockReturnValue({
+          findLettersByClientId: vi.fn().mockResolvedValue([
+            { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
+            { id: '2', date: '2004-02-29', letterTypeId: 'DEN' },
+            { id: '3', date: undefined, letterTypeId: 'DEN' },
+          ]),
+        }),
         getLetterTypeService: vi.fn().mockReturnValue({
           listLetterTypes: vi.fn().mockReturnValue([
             { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },

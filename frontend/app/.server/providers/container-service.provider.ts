@@ -10,6 +10,7 @@ import type {
   ClientFriendlyStatusService,
   CountryService,
   FederalGovernmentInsurancePlanService,
+  LetterService,
   LetterTypeService,
   MaritalStatusService,
   PreferredCommunicationMethodService,
@@ -29,6 +30,7 @@ export interface ContainerServiceProvider {
   getClientFriendlyStatusService(): ClientFriendlyStatusService;
   getCountryService(): CountryService;
   getFederalGovernmentInsurancePlanService(): FederalGovernmentInsurancePlanService;
+  getLetterService(): LetterService;
   getLetterTypeService(): LetterTypeService;
   getMaritalStatusService(): MaritalStatusService;
   getPreferredCommunicationMethodService(): PreferredCommunicationMethodService;
@@ -50,6 +52,7 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
     @inject(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE) private readonly clientFriendlyStatusService: ClientFriendlyStatusService,
     @inject(SERVICE_IDENTIFIER.COUNTRY_SERVICE) private readonly countryService: CountryService,
     @inject(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE) private readonly federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,
+    @inject(SERVICE_IDENTIFIER.LETTER_SERVICE) private readonly letterService: LetterService,
     @inject(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE) private readonly letterTypeService: LetterTypeService,
     @inject(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE) private readonly maritalStatusService: MaritalStatusService,
     @inject(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE) private readonly preferredCommunicationMethodService: PreferredCommunicationMethodService,
@@ -90,6 +93,10 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
 
   getFederalGovernmentInsurancePlanService(): FederalGovernmentInsurancePlanService {
     return this.federalGovernmentInsurancePlanService;
+  }
+
+  getLetterService(): LetterService {
+    return this.letterService;
   }
 
   getLetterTypeService(): LetterTypeService {

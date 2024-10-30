@@ -5,6 +5,7 @@ export type * from './client-friendly-status.entity';
 export type * from './country.entity';
 export type * from './federal-government-insurance-plan.entity';
 export type * from './letter-type.entity';
+export type * from './letter.entity';
 export type * from './marital-status.entity';
 export type * from './preferred-communication-method.entity';
 export type * from './preferred-language.entity';

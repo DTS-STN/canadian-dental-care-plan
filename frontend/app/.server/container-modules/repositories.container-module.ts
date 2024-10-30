@@ -9,6 +9,7 @@ import type {
   ClientFriendlyStatusRepository,
   CountryRepository,
   FederalGovernmentInsurancePlanRepository,
+  LetterRepository,
   LetterTypeRepository,
   MaritalStatusRepository,
   PreferredCommunicationMethodRepository,
@@ -24,6 +25,7 @@ import {
   ClientFriendlyStatusRepositoryImpl,
   CountryRepositoryImpl,
   FederalGovernmentInsurancePlanRepositoryImpl,
+  LetterRepositoryImpl,
   LetterTypeRepositoryImpl,
   MaritalStatusRepositoryImpl,
   PreferredCommunicationMethodRepositoryImpl,
@@ -43,6 +45,7 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind<ClientFriendlyStatusRepository>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_REPOSITORY).to(ClientFriendlyStatusRepositoryImpl);
   bind<CountryRepository>(SERVICE_IDENTIFIER.COUNTRY_REPOSITORY).to(CountryRepositoryImpl);
   bind<FederalGovernmentInsurancePlanRepository>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY).to(FederalGovernmentInsurancePlanRepositoryImpl);
+  bind<LetterRepository>(SERVICE_IDENTIFIER.LETTER_REPOSITORY).to(LetterRepositoryImpl);
   bind<LetterTypeRepository>(SERVICE_IDENTIFIER.LETTER_TYPE_REPOSITORY).to(LetterTypeRepositoryImpl);
   bind<MaritalStatusRepository>(SERVICE_IDENTIFIER.MARITAL_STATUS_REPOSITORY).to(MaritalStatusRepositoryImpl);
   bind<PreferredCommunicationMethodRepository>(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_REPOSITORY).to(PreferredCommunicationMethodRepositoryImpl);
