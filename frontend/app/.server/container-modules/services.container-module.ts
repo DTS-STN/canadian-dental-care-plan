@@ -18,6 +18,7 @@ import type {
   PreferredLanguageService,
   ProvinceTerritoryStateService,
   ProvincialGovernmentInsurancePlanService,
+  RedisService,
   SessionService,
 } from '~/.server/domain/services';
 import {
@@ -36,6 +37,7 @@ import {
   PreferredLanguageServiceImpl,
   ProvinceTerritoryStateServiceImpl,
   ProvincialGovernmentInsurancePlanServiceImpl,
+  RedisServiceImpl,
   RedisSessionService,
 } from '~/.server/domain/services';
 
@@ -64,6 +66,7 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind<PreferredLanguageService>(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).to(PreferredLanguageServiceImpl);
   bind<ProvinceTerritoryStateService>(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).to(ProvinceTerritoryStateServiceImpl);
   bind<ProvincialGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(ProvincialGovernmentInsurancePlanServiceImpl);
+  bind<RedisService>(SERVICE_IDENTIFIER.REDIS_SERVICE).to(RedisServiceImpl);
 
   // SessionService bindings depend on the SESSION_STORAGE_TYPE configuration string
   bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE).to(FileSessionService).when(sessionTypeIs('file'));

@@ -45,6 +45,7 @@ export const SERVICE_IDENTIFIER = {
   PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER: Symbol.for('ProvincialGovernmentInsurancePlanDtoMapper'),
   PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY: Symbol.for('ProvincialGovernmentInsurancePlanRepository'),
   PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE: Symbol.for('ProvincialGovernmentInsurancePlanService'),
+  REDIS_SERVICE: Symbol.for('RedisService'),
   SERVER_CONFIG: Symbol.for('ServerConfig'),
   SESSION_SERVICE: Symbol.for('SessionService'),
   WEB_CSRF_TOKEN_VALIDATOR: Symbol.for('WebCsrfTokenValidator'),
