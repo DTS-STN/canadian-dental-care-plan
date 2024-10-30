@@ -247,7 +247,7 @@
       "page-title": "Renouvellement pour enfant(s)",
       "you-have-completed": "Vous avez terminé le processus de renouvellement pour vous-même.",
       "in-this-section": "Si vous souhaitez renouveler pour votre enfant, sélectionnez le bouton «\u00a0Renouveler pour un enfant\u00a0». Sinon, poursuivez la demande. Si vous ne souhaitez pas ajouter d'enfants, sélectionnez «\u00a0Continuer avec la demande\u00a0».",
-      "each-child": "Chaque enfant doit avoir un numéro de client pour renouveler son adhésion. Si l’enfant n’a pas de numéro de client, vous devrez présenter une demande au Régime canadien de soins dentaires.",
+      "each-child": "Chaque enfant doit avoir un numéro de client pour renouveler son adhésion. Si l'enfant n'a pas de numéro de client, vous devrez présenter une demande au Régime canadien de soins dentaires.",
       "dob-title": "Date de naissance",
       "client-number-title": "Numéro de client",
       "edit-child": "Modifier les données de l'enfant",
@@ -315,16 +315,16 @@
       "continue-btn": "Retour à l'application"
     },
     "dental-insurance": {
-      "title": "{{childName}}\u00a0: accès à d’autres assurances dentaires",
+      "title": "{{childName}}\u00a0: accès à d'autres assurances dentaires",
       "legend": "Est-ce que {{childName}} a accès à une assurance ou à une couverture dentaire\u00a0:",
       "list": {
-        "employment": "dans le cadre des avantages sociaux de l’employeur d’un parent ou d’un tuteur légal, y compris les comptes de santé et de bien-être",
+        "employment": "dans le cadre des avantages sociaux de l'employeur d'un parent ou d'un tuteur légal, y compris les comptes de santé et de bien-être",
         "pension": "par le biais de prestations de retraite d'un parent ou d'un tuteur légal",
-        "purchased": "achetée individuellement par un parent ou un tuteur légal auprès d’une compagnie d’assurance ou de prestations",
+        "purchased": "achetée individuellement par un parent ou un tuteur légal auprès d'une compagnie d'assurance ou de prestations",
         "professional": "par l'intermédiaire d'une organisation professionnelle ou étudiante"
       },
-      "option-yes": "<strong>Oui</strong>, l’enfant a accès à une assurance ou une couverture dentaire",
-      "option-no": "<strong>Non</strong>, l’enfant n’a pas accès à une assurance ou une couverture dentaire",
+      "option-yes": "<strong>Oui</strong>, l'enfant a accès à une assurance ou une couverture dentaire",
+      "option-no": "<strong>Non</strong>, l'enfant n'a pas accès à une assurance ou une couverture dentaire",
       "button": {
         "back": "Retour",
         "continue": "Continuer",
@@ -340,8 +340,8 @@
             "pension": "un régime de retraite (voir exception)",
             "professional": "une organisation professionnelle ou étudiante"
           },
-          "not-eligible": "Par conséquent, l’enfant n’est pas admissible au Régime canadien de soins dentaires.",
-          "not-eligible-purchased": "Si un parent ou un tuteur légal a acheté la police d’assurance dentaire actuelle au privé, un enfant n’est pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur.",
+          "not-eligible": "Par conséquent, l'enfant n'est pas admissible au Régime canadien de soins dentaires.",
+          "not-eligible-purchased": "Si un parent ou un tuteur légal a acheté la police d'assurance dentaire actuelle au privé, un enfant n'est pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur.",
           "excepton": "Exception\u00a0: Un enfant peut tout de même être admissible si un parent ou un tuteur légal a pris sa retraite et\u00a0:",
           "exception-list": {
             "opted-out": "a renoncé aux prestations de retraite avant le 11 décembre 2023, et",
