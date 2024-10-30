@@ -26,13 +26,13 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
       return handleLoginRequest({ context, params, request });
     }
     case 'logout': {
-      return handleLogoutRequest({ context, params, request });
+      return await handleLogoutRequest({ context, params, request });
     }
     case 'login/raoidc': {
-      return handleRaoidcLoginRequest({ context, params, request });
+      return await handleRaoidcLoginRequest({ context, params, request });
     }
     case 'callback/raoidc': {
-      return handleRaoidcCallbackRequest({ context, params, request });
+      return await handleRaoidcCallbackRequest({ context, params, request });
     }
     //
     // A mock authorize route for testing purposes

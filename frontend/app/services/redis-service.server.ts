@@ -82,13 +82,13 @@ async function createRedisService() {
      * @see https://redis.io/commands/set/
      */
     set: async (key: string, value: unknown, ttlSecs: number | string) => {
-      return redisClient.set(key, JSON.stringify(value), 'EX', ttlSecs);
+      return await redisClient.set(key, JSON.stringify(value), 'EX', ttlSecs);
     },
     /**
      * @see https://redis.io/commands/del/
      */
     del: async (key: string) => {
-      return redisClient.del(key);
+      return await redisClient.del(key);
     },
   };
 }

@@ -90,7 +90,7 @@ export default async function handleRequest(request: Request, responseStatusCode
   responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
   responseHeaders.set('Content-Security-Policy', generateContentSecurityPolicy(nonce));
 
-  return new Promise((resolve, reject) => {
+  return await new Promise((resolve, reject) => {
     let shellRendered = false;
 
     const { pipe, abort } = renderToPipeableStream(

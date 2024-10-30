@@ -62,7 +62,11 @@ export default tseslint.config(
       // https://typescript-eslint.io/rules/require-await/#how-to-use
       'require-await': 'off',
       '@typescript-eslint/require-await': 'error',
-
+      // Rule: @typescript-eslint/return-await
+      // Note: you must disable the base rule as it can report incorrect errors
+      // https://typescript-eslint.io/rules/return-await#how-to-use
+      'no-return-await': 'off',
+      '@typescript-eslint/return-await': ['error', 'always'],
       'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
     },
     settings: {
