@@ -39,7 +39,7 @@ enum HasProvincialTerritorialBenefitsOption {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adultChild.federalProvincialTerritorialBenefits,
+  pageIdentifier: pageIds.public.renew.adultChild.confirmFederalProvincialTerritorialBenefits,
   pageTitleI18nKey: 'renew-adult-child:children.dental-benefits.title',
 };
 

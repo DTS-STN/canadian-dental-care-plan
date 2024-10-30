@@ -885,11 +885,19 @@
                 }
               },
               {
-                "id": "public/renew/$id/adult-child/federal-provincial-territorial-benefits",
-                "file": "routes/public/renew/$id/adult-child/federal-provincial-territorial-benefits.tsx",
+                "id": "public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits",
+                "file": "routes/public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits.tsx",
                 "paths": {
-                  "en": "/:lang/renew/:id/adult-child/federal-provincial-territorial-benefits",
-                  "fr": "/:lang/renew/:id/adult-child/federal-provincial-territorial-benefits"
+                  "en": "/:lang/renew/:id/adult-child/confirm-federal-provincial-territorial-benefits",
+                  "fr": "/:lang/renew/:id/adult-child/confirm-federal-provincial-territorial-benefits"
+                }
+              },
+              {
+                "id": "public/renew/$id/adult-child/update-federal-provincial-territorial-benefits",
+                "file": "routes/public/renew/$id/adult-child/update-federal-provincial-territorial-benefits.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/adult-child/update-federal-provincial-territorial-benefits",
+                  "fr": "/:lang/renew/:id/adult-child/update-federal-provincial-territorial-benefits"
                 }
               },
               {

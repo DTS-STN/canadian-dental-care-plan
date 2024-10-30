@@ -78,7 +78,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
     return redirect(getPathById('public/renew/$id/adult-child/review-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/adult-child/federal-provincial-territorial-benefits', params));
+  return redirect(getPathById('public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
 }
 
 export default function RenewAdultChildAccessToDentalInsuranceQuestion() {

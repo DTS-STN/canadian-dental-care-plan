@@ -136,7 +136,7 @@
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
     }
   },
-  "dental-benefits": {
+  "confirm-dental-benefits": {
     "title": "Access to other federal, provincial or territorial dental benefits",
     "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
     "select-one": "Select one",
@@ -146,17 +146,45 @@
       "legend": "Has your access to federal benefits changed since you applied for the Canadian Dental Care Plan?",
       "help-message": "The government benefits we have on file can also be found on the renewal letter you received from Service Canada.",
       "option-yes": "<strong>Yes</strong>, my <strong>federal</strong> benefits have changed.",
-      "option-no": "<strong>No</strong>, my <strong>federal</strong> benefits have not changed.",
-      "social-programs": {
-        "legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
-      }
+      "option-no": "<strong>No</strong>, my <strong>federal</strong> benefits have not changed."
     },
     "provincial-territorial-benefits": {
       "title": "Provincial or territorial benefits",
       "legend": "Has your access to provincial or territorial benefits changed since you applied for the Canadian Dental Care Plan?",
       "help-message": "The government benefits we have on file can also be found on the renewal letter you received from Service Canada.",
       "option-yes": "<strong>Yes</strong>, my <strong>provincial or territorial</strong> benefits have changed.",
-      "option-no": "<strong>No</strong>, my <strong>provincial or territorial</strong> benefits have not changed.",
+      "option-no": "<strong>No</strong>, my <strong>provincial or territorial</strong> benefits have not changed."
+    },
+    "button": {
+      "back": "Back",
+      "continue": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save"
+    },
+    "error-message": {
+      "federal-benefit-required": "Select whether you have federal dental benefits",
+      "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits"
+    }
+  },
+  "update-dental-benefits": {
+    "title": "Access to other federal, provincial or territorial dental benefits",
+    "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
+    "select-one": "Select one",
+    "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
+    "federal-benefits": {
+      "title": "Federal benefits",
+      "legend": "Do you have dental benefits through a federal social program?",
+      "option-yes": "<strong>Yes</strong>, I have <strong>federal</strong> dental benefits",
+      "option-no": "<strong>No</strong>, I do not have <strong>federal</strong> dental benefits",
+      "social-programs": {
+        "legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
+      }
+    },
+    "provincial-territorial-benefits": {
+      "title": "Provincial or territorial benefits",
+      "legend": "Do you have dental benefits through a provincial or territorial social program?",
+      "option-yes": "<strong>Yes</strong>, I have <strong>provincial or territorial</strong> dental benefits",
+      "option-no": "<strong>No</strong>, I do not have <strong>provincial or territorial</strong> dental benefits",
       "social-programs": {
         "input-legend": "Through which province or territory?",
         "radio-legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
