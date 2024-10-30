@@ -1,0 +1,130 @@
+{
+  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#EntityDefinitions('esdc_dentalapplicant')/Attributes/Microsoft.Dynamics.CRM.PicklistAttributeMetadata(LogicalName,OptionSet(Options))",
+  "value": [
+    {
+      "LogicalName": "esdc_maritalstatus",
+      "MetadataId": "4e8d46c4-0806-ee11-8f6e-000d3a09d1b8",
+      "OptionSet": {
+        "MetadataId": "544306b8-6901-ee11-8f6d-000d3a09d640",
+        "Options": [
+          {
+            "Value": 775170000,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Male",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "57f30299-4881-4b9d-a1c0-0813a07f1818",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Male",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "89078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            }
+          },
+          {
+            "Value": 775170001,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Female",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "57f30299-4881-4b9d-a1c0-0813a07f1818",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Female",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "89078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            }
+          },
+          {
+            "Value": 775170003,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Other",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "57f30299-4881-4b9d-a1c0-0813a07f1818",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Other",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "89078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            }
+          },
+          {
+            "Value": 775170004,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Prefer not to answer",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "57f30299-4881-4b9d-a1c0-0813a07f1818",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Prefer not to answer",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "89078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
