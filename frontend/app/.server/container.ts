@@ -3,11 +3,11 @@ import type { interfaces } from 'inversify';
 import { Container } from 'inversify';
 import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
 
-import { ContainerConfigProviderImpl, ContainerServiceProviderImpl } from './providers';
-import type { ContainerConfigProvider, ContainerServiceProvider } from './providers';
+import { ContainerConfigProviderImpl, ContainerServiceProviderImpl, ContainerWebValidatorProviderImpl } from './providers';
+import type { ContainerConfigProvider, ContainerServiceProvider, ContainerWebValidatorProvider } from './providers';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import { configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule } from '~/.server/container-modules';
+import { configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule } from '~/.server/container-modules';
 import { getLogger } from '~/utils/logging.server';
 
 /**
@@ -26,6 +26,7 @@ import { getLogger } from '~/utils/logging.server';
 
 let containerInstance: interfaces.Container | undefined;
 let containerConfigProviderInstance: ContainerConfigProvider | undefined;
+let containerWebValidatorProviderInstance: ContainerWebValidatorProvider | undefined;
 let containerServiceProviderInstance: ContainerServiceProvider | undefined;
 
 /**
@@ -44,6 +45,15 @@ function getContainer(): interfaces.Container {
  */
 export function getContainerConfigProvider(): ContainerConfigProvider {
   return (containerConfigProviderInstance ??= new ContainerConfigProviderImpl(getContainer()));
+}
+
+/**
+ * Returns the ContainerWebValidatorProvider singleton instance.
+ *
+ * @returns The ContainerWebValidatorProvider singleton instance.
+ */
+export function getContainerWebValidatorProvider(): ContainerWebValidatorProvider {
+  return (containerWebValidatorProviderInstance ??= new ContainerWebValidatorProviderImpl(getContainer()));
 }
 
 /**
@@ -67,7 +77,7 @@ function createContainer(): interfaces.Container {
   log.info('Creating IoC container; id: [%s], options: [%j]', container.id, container.options);
 
   // load container modules
-  container.load(factoriesContainerModule, configsContainerModule, repositoriesContainerModule, mappersContainerModule, servicesContainerModule);
+  container.load(configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule);
 
   // configure container logger middleware
   const serverConfig = container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
