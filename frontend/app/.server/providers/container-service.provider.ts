@@ -1,4 +1,4 @@
-import type { interfaces } from 'inversify';
+import { inject, injectable, optional } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type {
@@ -35,74 +35,92 @@ export interface ContainerServiceProvider {
   getPreferredLanguageService(): PreferredLanguageService;
   getProvinceTerritoryStateService(): ProvinceTerritoryStateService;
   getProvincialGovernmentInsurancePlanService(): ProvincialGovernmentInsurancePlanService;
-  getRedisService(): RedisService;
+  getRedisService(): RedisService | undefined;
   getSessionService(): SessionService;
 }
 
+@injectable()
 export class ContainerServiceProviderImpl implements ContainerServiceProvider {
-  constructor(private readonly container: interfaces.Container) {}
+  constructor(
+    @inject(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE) private readonly addressValidationService: AddressValidationService,
+    @inject(SERVICE_IDENTIFIER.APPLICANT_SERVICE) private readonly applicantService: ApplicantService,
+    @inject(SERVICE_IDENTIFIER.AUDIT_SERVICE) private readonly auditService: AuditService,
+    @inject(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_SERVICE) private readonly benefitRenewalService: BenefitRenewalService,
+    @inject(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE) private readonly clientApplicationService: ClientApplicationService,
+    @inject(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE) private readonly clientFriendlyStatusService: ClientFriendlyStatusService,
+    @inject(SERVICE_IDENTIFIER.COUNTRY_SERVICE) private readonly countryService: CountryService,
+    @inject(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE) private readonly federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,
+    @inject(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE) private readonly letterTypeService: LetterTypeService,
+    @inject(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE) private readonly maritalStatusService: MaritalStatusService,
+    @inject(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE) private readonly preferredCommunicationMethodService: PreferredCommunicationMethodService,
+    @inject(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE) private readonly preferredLanguageService: PreferredLanguageService,
+    @inject(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE) private readonly provinceTerritoryStateService: ProvinceTerritoryStateService,
+    @inject(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE) private readonly provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService,
+    @inject(SERVICE_IDENTIFIER.REDIS_SERVICE) @optional() private readonly redisService: RedisService | undefined,
+    @inject(SERVICE_IDENTIFIER.SESSION_SERVICE) private readonly sessionService: SessionService,
+  ) {}
 
   getAddressValidationService(): AddressValidationService {
-    return this.container.get<AddressValidationService>(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE);
+    return this.addressValidationService;
   }
 
   getApplicantService(): ApplicantService {
-    return this.container.get<ApplicantService>(SERVICE_IDENTIFIER.APPLICANT_SERVICE);
+    return this.applicantService;
   }
 
   getAuditService(): AuditService {
-    return this.container.get<AuditService>(SERVICE_IDENTIFIER.AUDIT_SERVICE);
+    return this.auditService;
   }
 
   getBenefitRenewalService(): BenefitRenewalService {
-    return this.container.get<BenefitRenewalService>(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_SERVICE);
+    return this.benefitRenewalService;
   }
 
   getClientApplicationService(): ClientApplicationService {
-    return this.container.get<ClientApplicationService>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE);
+    return this.clientApplicationService;
   }
 
   getClientFriendlyStatusService(): ClientFriendlyStatusService {
-    return this.container.get<ClientFriendlyStatusService>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE);
+    return this.clientFriendlyStatusService;
   }
 
   getCountryService(): CountryService {
-    return this.container.get<CountryService>(SERVICE_IDENTIFIER.COUNTRY_SERVICE);
+    return this.countryService;
   }
 
   getFederalGovernmentInsurancePlanService(): FederalGovernmentInsurancePlanService {
-    return this.container.get<FederalGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE);
+    return this.federalGovernmentInsurancePlanService;
   }
 
   getLetterTypeService(): LetterTypeService {
-    return this.container.get<LetterTypeService>(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE);
+    return this.letterTypeService;
   }
 
   getMaritalStatusService(): MaritalStatusService {
-    return this.container.get<MaritalStatusService>(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE);
+    return this.maritalStatusService;
   }
 
   getPreferredCommunicationMethodService(): PreferredCommunicationMethodService {
-    return this.container.get<PreferredCommunicationMethodService>(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE);
+    return this.preferredCommunicationMethodService;
   }
 
   getPreferredLanguageService(): PreferredLanguageService {
-    return this.container.get<PreferredLanguageService>(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE);
+    return this.preferredLanguageService;
   }
 
   getProvinceTerritoryStateService(): ProvinceTerritoryStateService {
-    return this.container.get<ProvinceTerritoryStateService>(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE);
+    return this.provinceTerritoryStateService;
   }
 
   getProvincialGovernmentInsurancePlanService(): ProvincialGovernmentInsurancePlanService {
-    return this.container.get<ProvincialGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE);
+    return this.provincialGovernmentInsurancePlanService;
   }
 
-  getRedisService(): RedisService {
-    return this.container.get<RedisService>(SERVICE_IDENTIFIER.REDIS_SERVICE);
+  getRedisService(): RedisService | undefined {
+    return this.redisService;
   }
 
   getSessionService(): SessionService {
-    return this.container.get<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE);
+    return this.sessionService;
   }
 }

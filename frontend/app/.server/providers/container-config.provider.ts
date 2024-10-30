@@ -1,4 +1,4 @@
-import type { interfaces } from 'inversify';
+import { inject, injectable } from 'inversify';
 
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
@@ -8,14 +8,18 @@ export interface ContainerConfigProvider {
   getServerConfig(): ServerConfig;
 }
 
+@injectable()
 export class ContainerConfigProviderImpl implements ContainerConfigProvider {
-  constructor(private readonly container: interfaces.Container) {}
+  constructor(
+    @inject(SERVICE_IDENTIFIER.CLIENT_CONFIG) public readonly clientConfig: ClientConfig,
+    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) public readonly serverConfig: ServerConfig,
+  ) {}
 
   public getClientConfig(): ClientConfig {
-    return this.container.get<ClientConfig>(SERVICE_IDENTIFIER.CLIENT_CONFIG);
+    return this.clientConfig;
   }
 
   public getServerConfig(): ServerConfig {
-    return this.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
+    return this.serverConfig;
   }
 }

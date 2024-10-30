@@ -66,7 +66,9 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind<PreferredLanguageService>(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).to(PreferredLanguageServiceImpl);
   bind<ProvinceTerritoryStateService>(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).to(ProvinceTerritoryStateServiceImpl);
   bind<ProvincialGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(ProvincialGovernmentInsurancePlanServiceImpl);
-  bind<RedisService>(SERVICE_IDENTIFIER.REDIS_SERVICE).to(RedisServiceImpl);
+
+  // RedisService bindings depend on the SESSION_STORAGE_TYPE configuration string
+  bind<RedisService>(SERVICE_IDENTIFIER.REDIS_SERVICE).to(RedisServiceImpl).when(sessionTypeIs('redis'));
 
   // SessionService bindings depend on the SESSION_STORAGE_TYPE configuration string
   bind<SessionService>(SERVICE_IDENTIFIER.SESSION_SERVICE).to(FileSessionService).when(sessionTypeIs('file'));
