@@ -161,7 +161,7 @@ export default function RenewFlowChildSummary() {
                     <DescriptionListItem term={t('renew-adult-child:children.index.dob-title')}>
                       <p>{dateOfBirth}</p>
                     </DescriptionListItem>
-                    <DescriptionListItem term={t('renew-adult-child:children.index.sin-title')}>
+                    <DescriptionListItem term={t('renew-adult-child:children.index.client-number-title')}>
                       <p>{child.information?.clientNumber}</p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('renew-adult-child:children.index.dental-insurance-title')}>{child.dentalInsurance ? t('renew-adult-child:children.index.yes') : t('renew-adult-child:children.index.no')}</DescriptionListItem>
