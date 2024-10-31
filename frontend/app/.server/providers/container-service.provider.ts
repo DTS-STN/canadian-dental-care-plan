@@ -9,6 +9,7 @@ import type {
   ClientApplicationService,
   ClientFriendlyStatusService,
   CountryService,
+  DemographicSurveyService,
   FederalGovernmentInsurancePlanService,
   LetterService,
   LetterTypeService,
@@ -39,6 +40,7 @@ export interface ContainerServiceProvider {
   getProvincialGovernmentInsurancePlanService(): ProvincialGovernmentInsurancePlanService;
   getRedisService(): RedisService | undefined;
   getSessionService(): SessionService;
+  getDemographicSurveyService(): DemographicSurveyService;
 }
 
 @injectable()
@@ -61,6 +63,7 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
     @inject(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE) private readonly provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService,
     @inject(SERVICE_IDENTIFIER.REDIS_SERVICE) @optional() private readonly redisService: RedisService | undefined,
     @inject(SERVICE_IDENTIFIER.SESSION_SERVICE) private readonly sessionService: SessionService,
+    @inject(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_SERVICE) private readonly demographicSurveyService: DemographicSurveyService,
   ) {}
 
   getAddressValidationService(): AddressValidationService {
@@ -129,5 +132,9 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
 
   getSessionService(): SessionService {
     return this.sessionService;
+  }
+
+  getDemographicSurveyService(): DemographicSurveyService {
+    return this.demographicSurveyService;
   }
 }

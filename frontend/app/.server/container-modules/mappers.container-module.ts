@@ -8,6 +8,7 @@ import {
   ClientApplicationDtoMapperImpl,
   ClientFriendlyStatusDtoMapperImpl,
   CountryDtoMapperImpl,
+  DemographicSurveyDtoMapperImpl,
   FederalGovernmentInsurancePlanDtoMapperImpl,
   LetterDtoMapperImpl,
   LetterTypeDtoMapperImpl,
@@ -24,6 +25,7 @@ import type {
   ClientApplicationDtoMapper,
   ClientFriendlyStatusDtoMapper,
   CountryDtoMapper,
+  DemographicSurveyDtoMapper,
   FederalGovernmentInsurancePlanDtoMapper,
   LetterDtoMapper,
   LetterTypeDtoMapper,
@@ -44,6 +46,7 @@ export const mappersContainerModule = new ContainerModule((bind) => {
   bind<ClientApplicationDtoMapper>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_DTO_MAPPER).to(ClientApplicationDtoMapperImpl);
   bind<ClientFriendlyStatusDtoMapper>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_DTO_MAPPER).to(ClientFriendlyStatusDtoMapperImpl);
   bind<CountryDtoMapper>(SERVICE_IDENTIFIER.COUNTRY_DTO_MAPPER).to(CountryDtoMapperImpl);
+  bind<DemographicSurveyDtoMapper>(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_DTO_MAPPER).to(DemographicSurveyDtoMapperImpl);
   bind<FederalGovernmentInsurancePlanDtoMapper>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER).to(FederalGovernmentInsurancePlanDtoMapperImpl);
   bind<LetterDtoMapper>(SERVICE_IDENTIFIER.LETTER_DTO_MAPPER).to(LetterDtoMapperImpl);
   bind<LetterTypeDtoMapper>(SERVICE_IDENTIFIER.LETTER_TYPE_DTO_MAPPER).to(LetterTypeDtoMapperImpl);
