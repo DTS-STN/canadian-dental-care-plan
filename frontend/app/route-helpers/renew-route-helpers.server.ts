@@ -37,6 +37,19 @@ export interface RenewState {
       province?: string;
     };
     readonly dentalInsurance?: boolean;
+    readonly confirmDentalBenefits?: {
+      federalBenefitsChanged: boolean;
+      provincialTerritorialBenefitsChanged: boolean;
+    };
+    readonly updateDentalFederalBenefits?: {
+      hasFederalBenefits: boolean;
+      federalSocialProgram?: string;
+    };
+    readonly updateDentalProvincialTerritorialBenefits?: {
+      hasProvincialTerritorialBenefits: boolean;
+      provincialTerritorialSocialProgram?: string;
+      province?: string;
+    };
     readonly information?: {
       firstName: string;
       lastName: string;

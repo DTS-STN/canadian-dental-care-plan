@@ -280,7 +280,7 @@ export default function RenewFlowChildSummary() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/federal-provincial-territorial-benefits"
+                routeId="public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
