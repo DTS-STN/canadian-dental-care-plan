@@ -21,14 +21,6 @@ function toNumber(str?: string): number | undefined {
   return isNaN(num) ? undefined : num;
 }
 
-/**
- * A do-nothing health check intended to be used while testing.
- */
-const dummyHealthCheck: HealthCheck = {
-  name: 'dummy-check',
-  check: () => new Promise((resolve) => setTimeout(resolve, 2 * 1000)),
-};
-
 export async function loader({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
   const { buildRevision: buildId, buildVersion: version } = getBuildInfoService().getBuildInfo();
@@ -38,20 +30,31 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     includeComponents: toArray(include),
     includeDetails: isAuthorized(request),
     metadata: { buildId, version },
-    timeout: toNumber(timeout),
+    timeoutMs: toNumber(timeout),
   };
 
   //
   // TODO :: GjB ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   //
-  //   - add actual, non-dummy health checks
   //   - include details when isAuthorized()
   //   - cache execute() response for a short period (ie: rate-limiting)
   //
   // TODO :: GjB ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   //
 
-  const systemHealthSummary = await execute([dummyHealthCheck], healthCheckOptions);
+  const redisHealthCheck: HealthCheck = {
+    name: 'redis',
+    check: async () => {
+      await serviceProvider.getRedisService()?.ping();
+    },
+  };
+
+  // exclude the redis health check if the application is not using it
+  const useRedis = configProvider.getServerConfig().SESSION_STORAGE_TYPE === 'redis';
+  if (!useRedis) (healthCheckOptions.excludeComponents ??= []).push(redisHealthCheck.name);
+
+  // execute the health checks
+  const systemHealthSummary = await execute([redisHealthCheck], healthCheckOptions);
 
   return json(systemHealthSummary, {
     headers: { 'Content-Type': HealthCheckConfig.responses.contentType },

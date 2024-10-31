@@ -37,6 +37,7 @@ describe('RedisServiceImpl', () => {
           REDIS_STANDALONE_PORT: 8443,
           REDIS_USERNAME: 'redis',
           REDIS_PASSWORD: 'password',
+          REDIS_MAX_RETRIES_PER_REQUEST: 1,
         }),
       );
 
@@ -46,6 +47,7 @@ describe('RedisServiceImpl', () => {
         port: 8443,
         username: 'redis',
         password: 'password',
+        maxRetriesPerRequest: 1,
       });
     });
 
@@ -58,6 +60,7 @@ describe('RedisServiceImpl', () => {
           REDIS_SENTINEL_PORT: 8443,
           REDIS_USERNAME: 'redis',
           REDIS_PASSWORD: 'password',
+          REDIS_MAX_RETRIES_PER_REQUEST: 1,
         }),
       );
 
@@ -67,6 +70,7 @@ describe('RedisServiceImpl', () => {
         sentinels: [{ host: 'example.com', port: 8443 }],
         username: 'redis',
         password: 'password',
+        maxRetriesPerRequest: 1,
       });
     });
   });
