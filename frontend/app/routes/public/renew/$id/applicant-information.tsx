@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -48,7 +50,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:applicant-information.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.applicantInformation, clientApplication: state.clientApplication, editMode: state.editMode });
 }
 
 export async function action({ context: { session, serviceProvider }, params, request }: ActionFunctionArgs) {
@@ -155,7 +157,7 @@ export async function action({ context: { session, serviceProvider }, params, re
 
 export default function RenewApplicationInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode, csrfToken } = useLoaderData<typeof loader>();
+  const { defaultState, clientApplication, editMode, csrfToken } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -173,10 +175,19 @@ export default function RenewApplicationInformation() {
 
   const eligibilityLink = <InlineLink to={t('renew:applicant-information.eligibility-link')} className="external-link" newTabIndicator target="_blank" />;
 
+  useEffect(() => {
+    if (clientApplication === null) {
+      const targetElement = document.getElementById('status-not-found');
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+        targetElement.focus();
+      }
+    }
+  }, [clientApplication]);
+
   return (
     <>
-      {/* TODO: add conditional check to show <StatusNotFound> if clientApplication returned null */}
-      <StatusNotFound />
+      {clientApplication === null && <StatusNotFound />}
       <div className="my-6 sm:my-8">
         <Progress value={25} size="lg" label={t('apply:progress.label')} />
       </div>
@@ -296,7 +307,7 @@ function StatusNotFound() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const noWrap = <span className="whitespace-nowrap" />;
   return (
-    <div className="mb-4">
+    <div id="status-not-found" className="mb-4">
       <ContextualAlert type="danger">
         <h2 className="mb-2 font-bold">{t('renew:applicant-information.status-not-found.heading')}</h2>
         <p className="mb-2">{t('renew:applicant-information.status-not-found.please-review')}</p>
