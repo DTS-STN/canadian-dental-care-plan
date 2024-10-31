@@ -55,9 +55,9 @@ function securityHeadersRequestHandler(request: Request, response: Response, nex
  * Returns `true` if session handling should be skipped for the current request.
  * Typically, this rule applies to stateless API endpoints.
  */
-function shouldSkipSessionHandling({ url: pathname }: Request) {
+function shouldSkipSessionHandling({ path }: Request) {
   const statelessPaths = ['/api/buildinfo', '/api/health', '/api/readyz'];
-  return statelessPaths.includes(pathname);
+  return statelessPaths.includes(path);
 }
 
 export const expressApp = await createExpressApp({
