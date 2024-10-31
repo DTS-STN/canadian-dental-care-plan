@@ -12,3 +12,4 @@ export type * from './preferred-language.entity';
 export type * from './province-territory-state.entity';
 export type * from './provincial-government-insurance-plan.entity';
 export type * from './benefit-renewal.entity';
+export type * from './demographic-survey.entity';

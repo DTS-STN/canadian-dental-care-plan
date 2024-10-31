@@ -15,3 +15,4 @@ export * from './province-territory-state.service';
 export * from './provincial-government-insurance-plan.service';
 export * from './redis.service';
 export * from './session.service';
+export * from './demographic-survey.service';

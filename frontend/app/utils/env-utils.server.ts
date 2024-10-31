@@ -159,6 +159,7 @@ const serverEnv = clientEnvSchema.extend({
   LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
+  LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 
   // OpenTelemetry/Dynatrace settings
   OTEL_LOG_LEVEL: z.string().refine((val) => otelLogLevels.includes(val)).default('info'),

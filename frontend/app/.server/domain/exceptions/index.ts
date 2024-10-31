@@ -9,3 +9,4 @@ export * from './preferred-language-not-found.exception';
 export * from './province-territory-state-not-found.exception';
 export * from './provincial-government-insurance-plan-not-found.exception';
 export * from './resource-not-found.exception';
+export * from './demographic-survey-not-found.exception';

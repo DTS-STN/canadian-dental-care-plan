@@ -12,3 +12,4 @@ export * from './preferred-language.dto.mapper';
 export * from './province-territory-state.dto.mapper';
 export * from './provincial-government-insurance-plan.dto.mapper';
 export * from './benefit-renewal.dto.mapper';
+export * from './demographic-survey.dto.mapper';

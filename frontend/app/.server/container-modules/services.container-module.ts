@@ -11,6 +11,7 @@ import type {
   ClientApplicationService,
   ClientFriendlyStatusService,
   CountryService,
+  DemographicSurveyService,
   FederalGovernmentInsurancePlanService,
   LetterService,
   LetterTypeService,
@@ -30,6 +31,7 @@ import {
   ClientApplicationServiceImpl,
   ClientFriendlyStatusServiceImpl,
   CountryServiceImpl,
+  DemographicSurveyServiceServiceImpl,
   FederalGovernmentInsurancePlanServiceImpl,
   FileSessionService,
   LetterServiceImpl,
@@ -61,6 +63,7 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind<ClientApplicationService>(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE).to(ClientApplicationServiceImpl);
   bind<ClientFriendlyStatusService>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE).to(ClientFriendlyStatusServiceImpl);
   bind<CountryService>(SERVICE_IDENTIFIER.COUNTRY_SERVICE).to(CountryServiceImpl);
+  bind<DemographicSurveyService>(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_SERVICE).to(DemographicSurveyServiceServiceImpl);
   bind<FederalGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(FederalGovernmentInsurancePlanServiceImpl);
   bind<LetterService>(SERVICE_IDENTIFIER.LETTER_SERVICE).to(LetterServiceImpl);
   bind<LetterTypeService>(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE).to(LetterTypeServiceImpl);
