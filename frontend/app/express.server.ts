@@ -60,7 +60,7 @@ function shouldSkipSessionHandling({ path }: Request) {
   return statelessPaths.includes(path);
 }
 
-export const expressApp = await createExpressApp({
+const expressApp = await createExpressApp({
   configure: (app) => {
     // disable the X-Powered-By header to make it harder to fingerprint the server
     // (GjB :: yes, I acknowledge that this is rather moot, since our application is open source)
@@ -141,3 +141,20 @@ export const expressApp = await createExpressApp({
     return { ...appLoadContext, session } as AppLoadContext;
   },
 });
+
+/**
+ * This is the error handler middleware for the express application.
+ * It must be added using `app.use` after all other middleware and
+ * routes have been defined. Otherwise, it will never be called.
+ */
+expressApp.use((err: unknown, request: Request, response: Response, next: NextFunction) => {
+  const log = getLogger('express.server/errorHandler');
+  log.error(err);
+  response.status(500).json({
+    application: 'Canadian Dental Care Plan',
+    error: 'Internal Server Error',
+    description: 'An unexpected error occurred while processing your request. Please try again later.',
+  });
+});
+
+export { expressApp };
