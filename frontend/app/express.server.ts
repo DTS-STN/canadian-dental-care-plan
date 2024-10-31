@@ -51,8 +51,12 @@ function securityHeadersRequestHandler(request: Request, response: Response, nex
   next();
 }
 
+/**
+ * Returns `true` if session handling should be skipped for the current request.
+ * Typically, this rule applies to stateless API endpoints.
+ */
 function shouldSkipSessionHandling({ url: pathname }: Request) {
-  const statelessPaths = ['/api/readyz'];
+  const statelessPaths = ['/api/buildinfo', '/api/health', '/api/readyz'];
   return statelessPaths.includes(pathname);
 }
 
@@ -107,9 +111,15 @@ export const expressApp = await createExpressApp({
   getLoadContext: async (request: Request, response: Response) => {
     const log = getLogger('express.server/getLoadContext');
 
+    const appLoadContext: Partial<AppLoadContext> = {
+      configProvider: getContainerConfigProvider(),
+      serviceProvider: getContainerServiceProvider(),
+      webValidatorProvider: getContainerWebValidatorProvider(),
+    };
+
     if (shouldSkipSessionHandling(request)) {
       log.debug('Stateless request to [%s] detected; bypassing session init', request.url);
-      return {} as AppLoadContext;
+      return appLoadContext as AppLoadContext;
     }
 
     log.debug('Initializing server session...');
@@ -128,11 +138,6 @@ export const expressApp = await createExpressApp({
     log.debug('Setting session.lastAccessTime to [%s]', lastAccessTime);
     session.set('lastAccessTime', lastAccessTime);
 
-    return {
-      configProvider: getContainerConfigProvider(),
-      serviceProvider: getContainerServiceProvider(),
-      session,
-      webValidatorProvider: getContainerWebValidatorProvider(),
-    };
+    return { ...appLoadContext, session } as AppLoadContext;
   },
 });
