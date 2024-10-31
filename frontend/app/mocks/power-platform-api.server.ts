@@ -187,6 +187,26 @@ export function getPowerPlatformApiMockHandlers() {
 
       const requestBody = await request.json();
 
+      function getFlagsByIdentificationId(identificationId: string): Array<{ Flag: boolean; FlagCategoryText: string }> {
+        switch (identificationId) {
+          case '10000000001':
+            return [
+              { Flag: true, FlagCategoryText: 'isCraAssessed' },
+              { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
+            ];
+          case '10000000002':
+            return [
+              { Flag: false, FlagCategoryText: 'isCraAssessed' },
+              { Flag: true, FlagCategoryText: 'appliedBeforeApril302024' },
+            ];
+          default:
+            return [
+              { Flag: false, FlagCategoryText: 'isCraAssessed' },
+              { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
+            ];
+        }
+      }
+
       if (action === 'GET') {
         const clientApplicationRequestSchema = z.object({
           Applicant: z.object({
@@ -214,7 +234,19 @@ export function getPowerPlatformApiMockHandlers() {
           return new HttpResponse(null, { status: 400 });
         }
 
-        return HttpResponse.json(clientApplicationJsonDataSource);
+        const identificationId = parsedClientApplicationRequest.data.Applicant.ClientIdentification[0].IdentificationID;
+        const flags = getFlagsByIdentificationId(identificationId);
+
+        return HttpResponse.json({
+          ...clientApplicationJsonDataSource,
+          BenefitApplication: {
+            ...clientApplicationJsonDataSource.BenefitApplication,
+            Applicant: {
+              ...clientApplicationJsonDataSource.BenefitApplication.Applicant,
+              Flags: flags,
+            },
+          },
+        });
       }
       if (scenario === 'RENEWAL') {
         const parsedBenefitRenewalRequest = await benefitRenewalRequestSchema.safeParseAsync(requestBody);

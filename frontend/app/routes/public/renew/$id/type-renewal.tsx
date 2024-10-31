@@ -45,7 +45,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:type-of-renewal.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.typeOfRenewal });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.typeOfRenewal, hasBeenAssessedByCRA: state.clientApplication?.hasBeenAssessedByCRA });
 }
 
 export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
@@ -105,7 +105,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
 
 export default function RenewTypeOfRenewal() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, hasBeenAssessedByCRA } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -151,7 +151,14 @@ export default function RenewTypeOfRenewal() {
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form:Continue - Type of renewal click">
               {t('renew:type-of-renewal.continue-btn')}
             </LoadingButton>
-            <ButtonLink id="back-button" routeId="public/apply/$id/terms-and-conditions" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form:Back - Type of renewal click">
+            <ButtonLink
+              id="back-button"
+              routeId={hasBeenAssessedByCRA ? 'public/renew/$id/applicant-information' : 'public/renew/$id/tax-filing'}
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form:Back - Type of renewal click"
+            >
               {t('renew:type-of-renewal.back-btn')}
             </ButtonLink>
           </div>
