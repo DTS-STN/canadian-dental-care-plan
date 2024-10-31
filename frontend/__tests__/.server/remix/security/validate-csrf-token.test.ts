@@ -2,8 +2,8 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { validateCsrfToken } from '~/.server/remix/security/validate-csrf-token';
-import { CsrfTokenInvalidException } from '~/.server/web/exceptions/csrf-token-invalid.exception';
+import { validateCsrfToken } from '~/.server/remix/security';
+import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
 
 describe('validateCsrfToken', () => {
   it('should call the CSRF token validator with the request', async () => {

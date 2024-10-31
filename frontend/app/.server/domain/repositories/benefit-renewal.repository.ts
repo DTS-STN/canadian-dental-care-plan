@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 
-import { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '../entities/benefit-renewal.entity';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 

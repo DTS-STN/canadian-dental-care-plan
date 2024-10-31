@@ -1,3 +1,3 @@
-import { BaseWebException } from '~/.server/web/exceptions/base-web.exception';
+import { BaseWebException } from './base-web.exception';
 
 export class CsrfTokenInvalidException extends BaseWebException {}

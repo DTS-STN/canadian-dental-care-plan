@@ -3,11 +3,10 @@ import type { interfaces } from 'inversify';
 import { Container } from 'inversify';
 import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
 
-import { containerProvidersContainerModule } from './container-modules/container-providers.container-module';
-import type { ContainerConfigProvider, ContainerServiceProvider, ContainerWebValidatorProvider } from './providers';
 import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import { configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule } from '~/.server/container-modules';
+import { configsContainerModule, containerProvidersContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule } from '~/.server/container-modules';
+import type { ContainerConfigProvider, ContainerServiceProvider, ContainerWebValidatorProvider } from '~/.server/providers';
 import { getLogger } from '~/utils/logging.server';
 
 /**

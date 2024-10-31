@@ -5,8 +5,8 @@ import { mock } from 'vitest-mock-extended';
 
 import type { SessionService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { CsrfTokenInvalidException } from '~/.server/web/exceptions/csrf-token-invalid.exception';
-import { CsrfTokenValidatorImpl } from '~/.server/web/validators/csrf-token.validator';
+import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
+import { CsrfTokenValidatorImpl } from '~/.server/web/validators';
 
 describe('CsrfTokenValidatorImpl', () => {
   const mockLogFactory = mock<LogFactory>();

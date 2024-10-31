@@ -2,7 +2,7 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 
 import type { PickDeep } from 'type-fest';
 
-import { CsrfTokenInvalidException } from '~/.server/web/exceptions/csrf-token-invalid.exception';
+import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
 
 /**
  * Validates the CSRF token in the request.
@@ -18,7 +18,7 @@ import { CsrfTokenInvalidException } from '~/.server/web/exceptions/csrf-token-i
  *
  * ```typescript
  * import { json } from 'remix';
- * import { validateCsrfToken } from './security';
+ * import { validateCsrfToken } from '~/.server/remix/security';
  *
  * export const action = async ({ request, context }: ActionFunctionArgs) => {
  *   // Validate CSRF token first

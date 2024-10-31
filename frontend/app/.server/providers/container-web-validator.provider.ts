@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { CsrfTokenValidator } from '~/.server/web/validators/csrf-token.validator';
+import type { CsrfTokenValidator } from '~/.server/web/validators';
 
 export interface ContainerWebValidatorProvider {
   getCsrfTokenValidator(): CsrfTokenValidator;

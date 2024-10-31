@@ -1,8 +1,8 @@
 import { UTCDate } from '@date-fns/utc';
 import { inject, injectable } from 'inversify';
 
-import { AuditDetails } from '../dtos/audit.dto';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { AuditDetails } from '~/.server/domain/dtos';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface AuditService {

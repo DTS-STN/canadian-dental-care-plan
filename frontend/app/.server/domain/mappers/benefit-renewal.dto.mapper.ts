@@ -3,8 +3,8 @@ import { formatISO } from 'date-fns';
 import { injectable } from 'inversify';
 import validator from 'validator';
 
-import type { BenefitRenewalRequestDto, BenefitRenewalResponseDto } from '../dtos/benefit-renewal.dto';
-import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '../entities';
+import type { BenefitRenewalRequestDto, BenefitRenewalResponseDto } from '~/.server/domain/dtos';
+import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '~/.server/domain/entities';
 import type {
   AddressInformationState,
   ApplicantInformationState,

@@ -1,3 +1,3 @@
-import { BaseDomainException } from '~/.server/domain/exceptions/base-domain.exception';
+import { BaseDomainException } from './base-domain.exception';
 
 export class ResourceNotFoundException extends BaseDomainException {}

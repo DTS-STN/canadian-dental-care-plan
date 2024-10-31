@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
-import { BenefitRenewalRequestDto, BenefitRenewalResponseDto } from '../dtos/benefit-renewal.dto';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { BenefitRenewalRequestDto, BenefitRenewalResponseDto } from '~/.server/domain/dtos';
 import type { BenefitRenewalDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitRenewalRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';

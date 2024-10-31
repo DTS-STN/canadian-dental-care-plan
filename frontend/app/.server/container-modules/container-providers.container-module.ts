@@ -1,8 +1,8 @@
 import { ContainerModule } from 'inversify';
 
-import type { ContainerConfigProvider, ContainerServiceProvider, ContainerWebValidatorProvider } from '../providers';
-import { ContainerConfigProviderImpl, ContainerServiceProviderImpl, ContainerWebValidatorProviderImpl } from '../providers';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type { ContainerConfigProvider, ContainerServiceProvider, ContainerWebValidatorProvider } from '~/.server/providers';
+import { ContainerConfigProviderImpl, ContainerServiceProviderImpl, ContainerWebValidatorProviderImpl } from '~/.server/providers';
 
 /**
  * Container module for container providers.

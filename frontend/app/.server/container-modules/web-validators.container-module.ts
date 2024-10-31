@@ -1,8 +1,8 @@
 import { ContainerModule } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { CsrfTokenValidator } from '~/.server/web/validators/csrf-token.validator';
-import { CsrfTokenValidatorImpl } from '~/.server/web/validators/csrf-token.validator';
+import type { CsrfTokenValidator } from '~/.server/web/validators';
+import { CsrfTokenValidatorImpl } from '~/.server/web/validators';
 
 /**
  * Container module for web validators.

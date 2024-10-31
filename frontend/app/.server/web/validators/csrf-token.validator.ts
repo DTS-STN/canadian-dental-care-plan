@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
 
-import { CsrfTokenInvalidException } from '../exceptions/csrf-token-invalid.exception';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { SessionService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
 
 /**
  * Provides functionality to validate CSRF tokens.
