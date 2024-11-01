@@ -3,7 +3,6 @@ import type { interfaces } from 'inversify';
 import { Container } from 'inversify';
 import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
 
-import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { configsContainerModule, containerProvidersContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule } from '~/.server/container-modules';
 import type { ContainerConfigProvider, ContainerServiceProvider, ContainerWebValidatorProvider } from '~/.server/providers';
@@ -43,7 +42,7 @@ function getContainer(): interfaces.Container {
  * @returns The ContainerConfigProvider singleton instance.
  */
 export function getContainerConfigProvider(): ContainerConfigProvider {
-  return (containerConfigProviderInstance ??= getContainer().get<ContainerConfigProvider>(SERVICE_IDENTIFIER.CONTAINER_CONFIG_PROVIDER));
+  return (containerConfigProviderInstance ??= getContainer().get(SERVICE_IDENTIFIER.CONTAINER_CONFIG_PROVIDER));
 }
 
 /**
@@ -52,7 +51,7 @@ export function getContainerConfigProvider(): ContainerConfigProvider {
  * @returns The ContainerServiceProvider singleton instance.
  */
 export function getContainerServiceProvider(): ContainerServiceProvider {
-  return (containerServiceProviderInstance ??= getContainer().get<ContainerServiceProvider>(SERVICE_IDENTIFIER.CONTAINER_SERVICE_PROVIDER));
+  return (containerServiceProviderInstance ??= getContainer().get(SERVICE_IDENTIFIER.CONTAINER_SERVICE_PROVIDER));
 }
 
 /**
@@ -61,7 +60,7 @@ export function getContainerServiceProvider(): ContainerServiceProvider {
  * @returns The ContainerWebValidatorProvider singleton instance.
  */
 export function getContainerWebValidatorProvider(): ContainerWebValidatorProvider {
-  return (containerWebValidatorProviderInstance ??= getContainer().get<ContainerWebValidatorProvider>(SERVICE_IDENTIFIER.CONTAINER_WEB_VALIDATOR_PROVIDER));
+  return (containerWebValidatorProviderInstance ??= getContainer().get(SERVICE_IDENTIFIER.CONTAINER_WEB_VALIDATOR_PROVIDER));
 }
 
 /**
@@ -79,7 +78,7 @@ function createContainer(): interfaces.Container {
   container.load(configsContainerModule, containerProvidersContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule);
 
   // configure container logger middleware
-  const serverConfig = container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const serverConfig = container.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
   if (serverConfig.NODE_ENV === 'development') {
     container.applyMiddleware(createLoggerMidddlware());
