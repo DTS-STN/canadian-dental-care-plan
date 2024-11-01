@@ -6,7 +6,7 @@ import { HealthCheckConfig, execute, getHttpStatusCode } from '@dts-stn/health-c
 import { isEmpty } from 'moderndash';
 import moize from 'moize';
 
-import { getContainerConfigProvider, getContainerServiceProvider } from '~/.server/container';
+import { getContainerConfigProvider, getContainerServiceProvider } from '~/.server/app.container';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 
 const { HEALTH_CACHE_TTL, SESSION_STORAGE_TYPE } = getContainerConfigProvider().getServerConfig();

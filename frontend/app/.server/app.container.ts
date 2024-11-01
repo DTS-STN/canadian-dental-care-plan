@@ -5,7 +5,8 @@ import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middlewar
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { configsContainerModule, containerProvidersContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule } from '~/.server/container-modules';
-import type { ContainerConfigProvider, ContainerServiceProvider, ContainerWebValidatorProvider } from '~/.server/providers';
+import type { AppContainerProvider, ContainerConfigProvider, ContainerServiceProvider } from '~/.server/providers';
+import { AppContainerProviderImpl } from '~/.server/providers';
 import { getLogger } from '~/utils/logging.server';
 
 /**
@@ -22,18 +23,27 @@ import { getLogger } from '~/utils/logging.server';
  * application is wired together.
  */
 
-let containerInstance: interfaces.Container | undefined;
+let appContainerInstance: interfaces.Container | undefined;
+let appContainerProviderInstance: AppContainerProvider | undefined;
 let containerConfigProviderInstance: ContainerConfigProvider | undefined;
 let containerServiceProviderInstance: ContainerServiceProvider | undefined;
-let containerWebValidatorProviderInstance: ContainerWebValidatorProvider | undefined;
 
 /**
- * Return the IoC container singleton.
+ * Return the IoC app container singleton.
  *
- * @returns the IoC container singleton
+ * @returns the IoC app container singleton
  */
-function getContainer(): interfaces.Container {
-  return (containerInstance ??= createContainer());
+function getAppContainer(): interfaces.Container {
+  return (appContainerInstance ??= createContainer());
+}
+
+/**
+ * Returns the ContainerConfigProvider singleton instance.
+ *
+ * @returns The ContainerConfigProvider singleton instance.
+ */
+export function getAppContainerProvider(): AppContainerProvider {
+  return (appContainerProviderInstance ??= new AppContainerProviderImpl(getAppContainer()));
 }
 
 /**
@@ -42,7 +52,7 @@ function getContainer(): interfaces.Container {
  * @returns The ContainerConfigProvider singleton instance.
  */
 export function getContainerConfigProvider(): ContainerConfigProvider {
-  return (containerConfigProviderInstance ??= getContainer().get(SERVICE_IDENTIFIER.CONTAINER_CONFIG_PROVIDER));
+  return (containerConfigProviderInstance ??= getAppContainer().get(SERVICE_IDENTIFIER.CONTAINER_CONFIG_PROVIDER));
 }
 
 /**
@@ -51,16 +61,7 @@ export function getContainerConfigProvider(): ContainerConfigProvider {
  * @returns The ContainerServiceProvider singleton instance.
  */
 export function getContainerServiceProvider(): ContainerServiceProvider {
-  return (containerServiceProviderInstance ??= getContainer().get(SERVICE_IDENTIFIER.CONTAINER_SERVICE_PROVIDER));
-}
-
-/**
- * Returns the ContainerWebValidatorProvider singleton instance.
- *
- * @returns The ContainerWebValidatorProvider singleton instance.
- */
-export function getContainerWebValidatorProvider(): ContainerWebValidatorProvider {
-  return (containerWebValidatorProviderInstance ??= getContainer().get(SERVICE_IDENTIFIER.CONTAINER_WEB_VALIDATOR_PROVIDER));
+  return (containerServiceProviderInstance ??= getAppContainer().get(SERVICE_IDENTIFIER.CONTAINER_SERVICE_PROVIDER));
 }
 
 /**
