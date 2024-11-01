@@ -104,22 +104,22 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
     ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
     : undefined;
 
-  const selectedProvincialBenefit = state.dentalBenefits.provincialTerritorialSocialProgram
+  const selectedProvincialBenefit = state.dentalBenefits?.provincialTerritorialSocialProgram
     ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.dentalBenefits.hasFederalBenefits,
+      access: state.dentalBenefits?.hasFederalBenefits,
       benefit: selectedFederalGovernmentInsurancePlan?.name,
     },
     provTerrBenefit: {
-      access: state.dentalBenefits.hasProvincialTerritorialBenefits,
-      province: state.dentalBenefits.province,
+      access: state.dentalBenefits?.hasProvincialTerritorialBenefits,
+      province: state.dentalBenefits?.province,
       benefit: selectedProvincialBenefit?.name,
     },
   };

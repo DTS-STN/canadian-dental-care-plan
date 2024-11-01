@@ -9,20 +9,22 @@ import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
+import pageIds from '../../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
+import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
-import { loadRenewAdultChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
+import { loadRenewAdultChildState, loadRenewAdultSingleChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
 import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/route-helpers/renew-route-helpers.server';
 import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
@@ -40,8 +42,7 @@ enum HasProvincialTerritorialBenefitsOption {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.adultChild.updateFederalProvincialTerritorialBenefits,
-  pageTitleI18nKey: 'renew-adult-child:update-dental-benefits.title',
-};
+} as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
@@ -50,22 +51,29 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const { CANADA_COUNTRY_ID } = configProvider.getServerConfig();
 
-  const state = loadRenewAdultChildState({ params, request, session });
+  const state = loadRenewAdultSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
+
+  const childNumber = t('renew-adult-child:children.child-number', { childNumber: state.childNumber });
+  const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
 
   const federalSocialPrograms = serviceProvider.getFederalGovernmentInsurancePlanService().listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
   const provinceTerritoryStates = serviceProvider.getProvinceTerritoryStateService().listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
   const provincialTerritorialSocialPrograms = serviceProvider.getProvincialGovernmentInsurancePlanService().listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:update-dental-benefits.title') }) };
+  const meta = {
+    title: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.update-dental-benefits.title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.information.page-title', { childName: childNumber }) }),
+  };
 
   return json({
     csrfToken,
     defaultState: state.dentalBenefits,
     federalBenefitsChanged: state.confirmDentalBenefits?.federalBenefitsChanged,
     provincialTerritorialBenefitsChanged: state.confirmDentalBenefits?.provincialTerritorialBenefitsChanged,
+    childName,
     editMode: state.editMode,
     federalSocialPrograms,
     id: state.id,
@@ -76,21 +84,22 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 }
 
 export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('renew/adult-child/update-federal-provincial-territorial');
-  const state = loadRenewAdultChildState({ params, request, session });
+  const log = getLogger('renew/adult-child/children/update-federal-provincial-territorial');
+  const state = loadRenewAdultSingleChildState({ params, request, session });
+  const renewState = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
   const federalBenefitsSchema = z
     .object({
-      hasFederalBenefits: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:update-dental-benefits.error-message.federal-benefit-required') }) }),
+      hasFederalBenefits: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:children.update-dental-benefits.error-message.federal-benefit-required') }) }),
       federalSocialProgram: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.hasFederalBenefits) {
         if (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:update-dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:children.update-dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
         }
       }
     })
@@ -103,16 +112,16 @@ export async function action({ context: { configProvider, serviceProvider, sessi
 
   const provincialTerritorialBenefitsSchema = z
     .object({
-      hasProvincialTerritorialBenefits: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:update-dental-benefits.error-message.provincial-benefit-required') }) }),
+      hasProvincialTerritorialBenefits: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:children.update-dental-benefits.error-message.provincial-benefit-required') }) }),
       provincialTerritorialSocialProgram: z.string().trim().optional(),
       province: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.hasProvincialTerritorialBenefits) {
         if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:update-dental-benefits.error-message.provincial-territorial-required'), path: ['province'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:children.update-dental-benefits.error-message.provincial-territorial-required'), path: ['province'] });
         } else if (!val.provincialTerritorialSocialProgram || validator.isEmpty(val.provincialTerritorialSocialProgram)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:update-dental-benefits.error-message.provincial-benefit-program-required'), path: ['provincialTerritorialSocialProgram'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:children.update-dental-benefits.error-message.provincial-benefit-program-required'), path: ['provincialTerritorialSocialProgram'] });
         }
       }
     })
@@ -133,22 +142,20 @@ export async function action({ context: { configProvider, serviceProvider, sessi
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const dentalFederalBenefits =
-    state.confirmDentalBenefits?.federalBenefitsChanged && formData.get('hasFederalBenefits')
-      ? {
-          hasFederalBenefits: formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes,
-          federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
-        }
-      : undefined;
+  const dentalFederalBenefits = state.confirmDentalBenefits?.federalBenefitsChanged
+    ? {
+        hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes : undefined,
+        federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
+      }
+    : undefined;
 
-  const dentalProvincialTerritorialBenefits =
-    state.confirmDentalBenefits?.provincialTerritorialBenefitsChanged && formData.get('hasProvincialTerritorialBenefits')
-      ? {
-          hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') === HasProvincialTerritorialBenefitsOption.Yes,
-          provincialTerritorialSocialProgram: formData.get('provincialTerritorialSocialProgram') ? String(formData.get('provincialTerritorialSocialProgram')) : undefined,
-          province: formData.get('province') ? String(formData.get('province')) : undefined,
-        }
-      : undefined;
+  const dentalProvincialTerritorialBenefits = state.confirmDentalBenefits?.provincialTerritorialBenefitsChanged
+    ? {
+        hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') ? formData.get('hasProvincialTerritorialBenefits') === HasProvincialTerritorialBenefitsOption.Yes : undefined,
+        provincialTerritorialSocialProgram: formData.get('provincialTerritorialSocialProgram') ? String(formData.get('provincialTerritorialSocialProgram')) : undefined,
+        province: formData.get('province') ? String(formData.get('province')) : undefined,
+      }
+    : undefined;
 
   const parsedFederalBenefitsResult = dentalFederalBenefits ? federalBenefitsSchema.safeParse(dentalFederalBenefits) : undefined;
   const parsedProvincialTerritorialBenefitsResult = dentalProvincialTerritorialBenefits ? provincialTerritorialBenefitsSchema.safeParse(dentalProvincialTerritorialBenefits) : undefined;
@@ -166,15 +173,21 @@ export async function action({ context: { configProvider, serviceProvider, sessi
     params,
     session,
     state: {
-      dentalBenefits: {
-        ...(parsedFederalBenefitsResult ? parsedFederalBenefitsResult.data : { hasFederalBenefits: false }), //TODO Replace placeholder data with renewal user data
-        ...(parsedProvincialTerritorialBenefitsResult ? parsedProvincialTerritorialBenefitsResult.data : { hasProvincialTerritorialBenefits: false }), //TODO Replace placeholder data with renewal user data
-      },
+      children: renewState.children.map((child) => {
+        if (child.id !== state.id) return child;
+        return {
+          ...child,
+          dentalBenefits: {
+            ...(parsedFederalBenefitsResult ? parsedFederalBenefitsResult.data : { hasFederalBenefits: false }), //TODO Replace placeholder data with renewal user data
+            ...(parsedProvincialTerritorialBenefitsResult ? parsedProvincialTerritorialBenefitsResult.data : { hasProvincialTerritorialBenefits: false }), //TODO Replace placeholder data with renewal user data
+          },
+        };
+      }),
     },
   });
 
   if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
+    return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
   }
 
   return redirect(getPathById('public/renew/$id/adult-child/children/index', params));
@@ -182,7 +195,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
 
 export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefits() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, editMode, federalBenefitsChanged, provincialTerritorialBenefitsChanged } = useLoaderData<typeof loader>();
+  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, childName, editMode, federalBenefitsChanged, provincialTerritorialBenefitsChanged } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -223,26 +236,27 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
 
   return (
     <>
+      <AppPageTitle>{t('renew-adult-child:children.update-dental-benefits.title', { childName })}</AppPageTitle>
       <div className="my-6 sm:my-8">
         <Progress value={88} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4">{t('renew-adult-child:update-dental-benefits.access-to-dental')}</p>
-        <p className="mb-4">{t('renew-adult-child:update-dental-benefits.eligibility-criteria')}</p>
+        <p className="mb-4">{t('renew-adult-child:children.update-dental-benefits.access-to-dental')}</p>
+        <p className="mb-4">{t('renew-adult-child:children.update-dental-benefits.eligibility-criteria')}</p>
         <p className="mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           {federalBenefitsChanged && (
             <fieldset className="mb-6">
-              <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-adult-child:update-dental-benefits.federal-benefits.title')}</legend>
+              <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-adult-child:children.update-dental-benefits.federal-benefits.title')}</legend>
               <InputRadios
                 id="has-federal-benefits"
                 name="hasFederalBenefits"
-                legend={t('renew-adult-child:update-dental-benefits.federal-benefits.legend')}
+                legend={t('renew-adult-child:children.update-dental-benefits.federal-benefits.legend', { childName })}
                 options={[
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:update-dental-benefits.federal-benefits.option-yes" />,
+                    children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:children.update-dental-benefits.federal-benefits.option-yes" />,
                     value: HasFederalBenefitsOption.Yes,
                     defaultChecked: hasFederalBenefitValue === true,
                     onChange: handleOnHasFederalBenefitChanged,
@@ -250,7 +264,7 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
                       <InputRadios
                         id="federal-social-programs"
                         name="federalSocialProgram"
-                        legend={t('renew-adult-child:update-dental-benefits.federal-benefits.social-programs.legend')}
+                        legend={t('renew-adult-child:children.update-dental-benefits.federal-benefits.social-programs.legend')}
                         legendClassName="font-normal"
                         options={federalSocialPrograms.map((option) => ({
                           children: option.name,
@@ -263,7 +277,7 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
                     ),
                   },
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:update-dental-benefits.federal-benefits.option-no" />,
+                    children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:children.update-dental-benefits.federal-benefits.option-no" />,
                     value: HasFederalBenefitsOption.No,
                     defaultChecked: hasFederalBenefitValue === false,
                     onChange: handleOnHasFederalBenefitChanged,
@@ -276,14 +290,14 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
           )}
           {provincialTerritorialBenefitsChanged && (
             <fieldset className="mb-8">
-              <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-adult-child:update-dental-benefits.provincial-territorial-benefits.title')}</legend>
+              <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-adult-child:children.update-dental-benefits.provincial-territorial-benefits.title')}</legend>
               <InputRadios
                 id="has-provincial-territorial-benefits"
                 name="hasProvincialTerritorialBenefits"
-                legend={t('renew-adult-child:update-dental-benefits.provincial-territorial-benefits.legend')}
+                legend={t('renew-adult-child:children.update-dental-benefits.provincial-territorial-benefits.legend', { childName })}
                 options={[
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:update-dental-benefits.provincial-territorial-benefits.option-yes" />,
+                    children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:children.update-dental-benefits.provincial-territorial-benefits.option-yes" />,
                     value: HasProvincialTerritorialBenefitsOption.Yes,
                     defaultChecked: hasProvincialTerritorialBenefitValue === true,
                     onChange: handleOnHasProvincialTerritorialBenefitChanged,
@@ -293,11 +307,11 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
                           id="province"
                           name="province"
                           className="w-full sm:w-1/2"
-                          label={t('renew-adult-child:update-dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
+                          label={t('renew-adult-child:children.update-dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
                           onChange={handleOnRegionChanged}
                           options={[
                             {
-                              children: t('renew-adult-child:update-dental-benefits.select-one'),
+                              children: t('renew-adult-child:children.update-dental-benefits.select-one'),
                               value: '',
                               hidden: true,
                             },
@@ -311,7 +325,7 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
                           <InputRadios
                             id="provincial-territorial-social-programs"
                             name="provincialTerritorialSocialProgram"
-                            legend={t('renew-adult-child:update-dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}
+                            legend={t('renew-adult-child:children.update-dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}
                             legendClassName="font-normal"
                             errorMessage={errors?.provincialTerritorialSocialProgram}
                             options={provincialTerritorialSocialPrograms
@@ -329,7 +343,7 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
                     ),
                   },
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:update-dental-benefits.provincial-territorial-benefits.option-no" />,
+                    children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:children.update-dental-benefits.provincial-territorial-benefits.option-no" />,
                     value: HasProvincialTerritorialBenefitsOption.No,
                     defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
                     onChange: handleOnHasProvincialTerritorialBenefitChanged,
@@ -343,32 +357,32 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental benefits click">
-                {t('renew-adult-child:update-dental-benefits.button.save-btn')}
+                {t('renew-adult-child:children.update-dental-benefits.button.save-btn')}
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/review-adult-information"
+                routeId="public/renew/$id/adult-child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental benefits click"
               >
-                {t('renew-adult-child:update-dental-benefits.button.cancel-btn')}
+                {t('renew-adult-child:children.update-dental-benefits.button.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Access to other dental benefits click">
-                {t('renew-adult-child:update-dental-benefits.button.continue')}
+                {t('renew-adult-child:children.update-dental-benefits.button.continue')}
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits"
+                routeId="public/renew/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Access to other dental benefits click"
               >
-                {t('renew-adult-child:update-dental-benefits.button.back')}
+                {t('renew-adult-child:children.update-dental-benefits.button.back')}
               </ButtonLink>
             </div>
           )}

@@ -54,9 +54,9 @@ export function toBenefitRenewalRequestFromRenewItaState({
 
 export interface ToBenefitRenewRequestFromRenewAdultChildStateArgs {
   applicantInformation: ApplicantInformationState;
-  children: Required<ChildState>[];
+  children: ChildState[];
   communicationPreferences?: CommunicationPreferenceState;
-  dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   partnerInformation: PartnerInformationState | undefined;
   contactInformation: ContactInformationState;
@@ -98,7 +98,7 @@ interface ToBenefitRenewalRequestArgs {
   typeOfRenewal: TypeOfRenewalState;
   maritalStatus: string;
   addressInformation?: AddressInformationState;
-  children?: Required<ChildState>[];
+  children?: ChildState[];
 }
 
 function toBenefitRenewalRequest({
