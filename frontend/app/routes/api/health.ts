@@ -51,7 +51,10 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   // exclude the redis health check if the application is not using it
   const useRedis = configProvider.getServerConfig().SESSION_STORAGE_TYPE === 'redis';
-  if (!useRedis) (healthCheckOptions.excludeComponents ??= []).push(redisHealthCheck.name);
+  if (!useRedis) {
+    healthCheckOptions.excludeComponents ??= [];
+    healthCheckOptions.excludeComponents.push(redisHealthCheck.name);
+  }
 
   // execute the health checks
   const systemHealthSummary = await execute([redisHealthCheck], healthCheckOptions);
