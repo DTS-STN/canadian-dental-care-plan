@@ -193,18 +193,11 @@ export function getPowerPlatformApiMockHandlers() {
           '10000000001',
           [
             { Flag: false, FlagCategoryText: 'isCraAssessed' },
-            { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
-          ],
-        ],
-        [
-          '10000000002',
-          [
-            { Flag: false, FlagCategoryText: 'isCraAssessed' },
             { Flag: true, FlagCategoryText: 'appliedBeforeApril302024' },
           ],
         ],
         [
-          '10000000003',
+          '10000000002',
           [
             { Flag: true, FlagCategoryText: 'isCraAssessed' },
             { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
@@ -244,7 +237,14 @@ export function getPowerPlatformApiMockHandlers() {
         const personSurName = parsedClientApplicationRequest.data.Applicant.PersonName[0].PersonSurName;
         const personBirthDate = parsedClientApplicationRequest.data.Applicant.PersonBirthDate.date;
 
-        const clientApplicationFlags = mockApplicantFlags.get(identificationId);
+        // If the ID is '10000000000', return a 404 error
+        if (identificationId === '10000000000') {
+          log.debug('Client application not found for identification id [%s]', identificationId);
+          return new HttpResponse(null, { status: 404 });
+        }
+
+        // Otherwise, return specific flags or the default
+        const clientApplicationFlags = mockApplicantFlags.get(identificationId) ?? clientApplicationJsonDataSource.BenefitApplication.Applicant.Flags;
 
         if (!clientApplicationFlags) {
           log.debug('Client application not found for identification id [%s]', identificationId);
