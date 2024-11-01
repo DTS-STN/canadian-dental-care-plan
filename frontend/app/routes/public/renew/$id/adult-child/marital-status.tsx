@@ -118,7 +118,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
   saveRenewState({ params, session, state: { maritalStatus: parsedMaritalStatus.data.maritalStatus, partnerInformation: parsedPartnerInformation.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/adult-child/review-information', params));
+    return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
   }
 
   return redirect(getPathById('public/renew/$id/adult-child/confirm-phone', params));

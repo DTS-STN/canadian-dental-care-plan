@@ -368,7 +368,7 @@ export default function RenewAdultChildReviewAdultInformation() {
                   <p>{t('renew-adult-child:review-adult-information.no')}</p>
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-dental-benefits" routeId="public/renew/$id/adult-child/federal-provincial-territorial-benefits" params={params}>
+                  <InlineLink id="change-dental-benefits" routeId="public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits" params={params}>
                     {t('renew-adult-child:review-adult-information.dental-benefit-change')}
                   </InlineLink>
                 </div>

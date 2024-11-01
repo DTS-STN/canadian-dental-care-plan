@@ -75,7 +75,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
   saveRenewState({ params, session, state: { dentalInsurance: parsedDataResult.data.dentalInsurance } });
 
   if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/adult-child/review-information', params));
+    return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
   }
 
   return redirect(getPathById('public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
@@ -159,7 +159,7 @@ export default function RenewAdultChildAccessToDentalInsuranceQuestion() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/review-information"
+                routeId="public/renew/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental insurance click"

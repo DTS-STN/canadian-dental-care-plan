@@ -195,7 +195,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
   saveRenewState({ params, session, state: { addressInformation: updatedData } });
 
   if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/adult-child/review-information', params));
+    return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
   }
 
   return redirect(getPathById('public/renew/$id/adult-child/dental-insurance', params));
