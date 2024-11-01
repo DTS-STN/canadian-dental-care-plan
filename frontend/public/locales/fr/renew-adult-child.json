@@ -486,19 +486,19 @@
     }
   },
   "review-adult-information": {
-    "read-carefully": "(FR) Review this information carefully. The information provided will be used to update your Canadian Dental Care Plan member account.",
+    "read-carefully": "Examinez attentivement ces renseignements. Les renseignements fournis seront utilisés pour mettre à jour votre compte de membre du Régime canadien de soins dentaires.",
     "page-title": "Vérifiez vos renseignements",
-    "page-sub-title": "(FR) Member information",
+    "page-sub-title": "Renseignements sur le membre",
     "dob-title": "Date de naissance",
     "dob-change": "Modifier la date de naissance",
-    "client-number-title": "(FR) Client number",
+    "client-number-title": "Numéro de client",
     "sin-title": "Numéro d'assurance sociale (NAS)",
     "sin-change": "Modifier le NAS",
     "full-name-title": "Nom complet",
     "full-name-change": "Modifier le nom complet",
     "marital-title": "État civil",
     "marital-change": "Modifier l'état civil",
-    "year-of-birth": "(FR) Year of birth",
+    "year-of-birth": "Année de naissance",
     "spouse-title": "Renseignements sur l'époux/épouse ou le conjoint(e) de fait",
     "spouse-consent": {
       "label": "Consentement",
@@ -528,9 +528,9 @@
     "continue-button": "Continuer",
     "yes": "Oui",
     "no": "Non",
-    "submit-app-title": "Submit your renewal application",
-    "submit-p-proceed": "By proceeding with this renewal, you are agreeing to attest truthfully to the information provided.",
-    "submit-p-false-info": "If you provide false information on your renewal, you and others you applied for may be removed from the plan.",
-    "submit-p-repayment": "If you or your family members were not eligible to renew, you or your family member may have to repay the full cost of care received through the Canadian Dental Care Plan."
+    "submit-app-title": "Soumettre votre demande de renouvellement",
+    "submit-p-proceed": "En procédant à cette demande de renouvellement, vous acceptez d'attester la véracité des renseignements fournis.",
+    "submit-p-false-info": "Si vous fournissez de faux renseignements dans votre demande de renouvellement, vous et les autres personnes pour lesquelles vous avez présenté une demande pourriez être exclus du régime.",
+    "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles au renouvellement, vous pourriez avoir à rembourser la totalité des frais pour les soins reçus par l'intermédiaire du Régime canadien de soins dentaires."
   }
 }
