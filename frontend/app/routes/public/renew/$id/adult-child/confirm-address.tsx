@@ -52,6 +52,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
 export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/adult-child/confirm-address');
+  const state = loadRenewAdultChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -103,6 +104,10 @@ export async function action({ context: { configProvider, serviceProvider, sessi
 
   if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No) {
     return redirect(getPathById('public/renew/$id/adult-child/dental-insurance', params));
+  }
+
+  if (state.editMode) {
+    return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
   }
 
   return redirect(getPathById('public/renew/$id/adult-child/update-address', params));
