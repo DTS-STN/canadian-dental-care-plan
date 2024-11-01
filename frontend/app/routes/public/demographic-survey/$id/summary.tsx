@@ -2,7 +2,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
@@ -74,10 +75,16 @@ export default function DemographicSurveySummary() {
             <strong>{t('demographic-survey:summary.please-select')}</strong>
           </dt>
           {members.map((member) => (
-            <dd key={member.id}>
+            <dd key={member.id} className="flex gap-4">
               <InlineLink routeId="public/demographic-survey/$id/questions/$memberId" params={{ ...params, memberId: member.id }}>
                 {`${member.firstName} ${member.lastName}`}
               </InlineLink>
+              {member.isSurveyCompleted && (
+                <span className="text-zinc-800">
+                  <FontAwesomeIcon icon={faCircleCheck} className="mr-2 size-4 text-green-700" />
+                  {t('demographic-survey:summary.completed')}
+                </span>
+              )}
             </dd>
           ))}
         </dl>
