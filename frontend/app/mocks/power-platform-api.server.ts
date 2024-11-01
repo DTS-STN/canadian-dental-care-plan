@@ -246,11 +246,6 @@ export function getPowerPlatformApiMockHandlers() {
         // Otherwise, return specific flags or the default
         const clientApplicationFlags = mockApplicantFlags.get(identificationId) ?? clientApplicationJsonDataSource.BenefitApplication.Applicant.Flags;
 
-        if (!clientApplicationFlags) {
-          log.debug('Client application not found for identification id [%s]', identificationId);
-          return new HttpResponse(null, { status: 404 });
-        }
-
         return HttpResponse.json({
           ...clientApplicationJsonDataSource,
           BenefitApplication: {
