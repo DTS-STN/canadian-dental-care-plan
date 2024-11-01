@@ -2,6 +2,7 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 
 import type { PickDeep } from 'type-fest';
 
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
 
 /**
@@ -29,9 +30,9 @@ import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
  * };
  * ```
  */
-export async function validateCsrfToken({ context, request }: PickDeep<ActionFunctionArgs, 'context.webValidatorProvider' | 'request'>): Promise<void> {
+export async function validateCsrfToken({ context, request }: PickDeep<ActionFunctionArgs, 'context.appContainer' | 'request'>): Promise<void> {
   try {
-    const csrfTokenValidator = context.webValidatorProvider.getCsrfTokenValidator();
+    const csrfTokenValidator = context.appContainer.get(SERVICE_IDENTIFIER.WEB_CSRF_TOKEN_VALIDATOR);
     await csrfTokenValidator.validateCsrfToken(request);
   } catch (err) {
     if (err instanceof CsrfTokenInvalidException) {

@@ -100,9 +100,9 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   };
 }
 
-export async function action({ context: { configProvider, serviceProvider, session, webValidatorProvider }, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, configProvider, serviceProvider, session }, request }: ActionFunctionArgs) {
   featureEnabled('address-validation');
-  await validateCsrfToken({ context: { webValidatorProvider }, request });
+  await validateCsrfToken({ context: { appContainer }, request });
 
   if (request.method !== 'POST') {
     throw json({ message: 'Method not allowed' }, { status: 405 });

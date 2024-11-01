@@ -56,10 +56,10 @@ import type {
   SessionService,
 } from '~/.server/domain/services';
 import type { ConfigFactory, LogFactory } from '~/.server/factories';
-import type { ContainerConfigProvider, ContainerServiceProvider, ContainerWebValidatorProvider } from '~/.server/providers';
+import type { ContainerConfigProvider, ContainerServiceProvider } from '~/.server/providers';
 import type { CsrfTokenValidator } from '~/.server/web/validators';
 
-type ServiceIdentifier<T = unknown> = Exclude<interfaces.ServiceIdentifier<T>, string | symbol>;
+export type ServiceIdentifier<T = unknown> = Exclude<interfaces.ServiceIdentifier<T>, string | symbol>;
 
 export const SERVICE_IDENTIFIER = {
   ADDRESS_VALIDATION_DTO_MAPPER: serviceIdentifier<AddressValidationDtoMapper>('AddressValidationDtoMapper'),
@@ -82,7 +82,6 @@ export const SERVICE_IDENTIFIER = {
   CONFIG_FACTORY: serviceIdentifier<ConfigFactory>('ConfigFactory'),
   CONTAINER_CONFIG_PROVIDER: serviceIdentifier<ContainerConfigProvider>('ContainerConfigProvider'),
   CONTAINER_SERVICE_PROVIDER: serviceIdentifier<ContainerServiceProvider>('ContainerServiceProvider'),
-  CONTAINER_WEB_VALIDATOR_PROVIDER: serviceIdentifier<ContainerWebValidatorProvider>('ContainerWebValidatorProvider'),
   COUNTRY_DTO_MAPPER: serviceIdentifier<CountryDtoMapper>('CountryDtoMapper'),
   COUNTRY_REPOSITORY: serviceIdentifier<CountryRepository>('CountryRepository'),
   COUNTRY_SERVICE: serviceIdentifier<CountryService>('CountryService'),

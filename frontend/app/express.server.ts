@@ -11,10 +11,11 @@ import morgan from 'morgan';
 import { createExpressApp } from 'remix-create-express-app';
 import { createRemixRequest, sendRemixResponse } from 'remix-create-express-app/remix';
 import invariant from 'tiny-invariant';
+import type { SetOptional } from 'type-fest';
 
 import { getEnv } from './utils/env-utils.server';
 import { randomString } from './utils/string-utils';
-import { getContainerConfigProvider, getContainerServiceProvider, getContainerWebValidatorProvider } from '~/.server/container';
+import { getAppContainerProvider, getContainerConfigProvider, getContainerServiceProvider } from '~/.server/app.container';
 import { getLogger } from '~/utils/logging.server';
 
 const { NODE_ENV } = getEnv();
@@ -111,15 +112,15 @@ const expressApp = await createExpressApp({
   getLoadContext: async (request: Request, response: Response) => {
     const log = getLogger('express.server/getLoadContext');
 
-    const appLoadContext: Partial<AppLoadContext> = {
+    const partialAppLoadContext = {
+      appContainer: getAppContainerProvider(),
       configProvider: getContainerConfigProvider(),
       serviceProvider: getContainerServiceProvider(),
-      webValidatorProvider: getContainerWebValidatorProvider(),
-    };
+    } as const satisfies SetOptional<AppLoadContext, 'session'>;
 
     if (shouldSkipSessionHandling(request)) {
       log.debug('Stateless request to [%s] detected; bypassing session init', request.url);
-      return appLoadContext as AppLoadContext;
+      return partialAppLoadContext as AppLoadContext;
     }
 
     log.debug('Initializing server session...');
@@ -138,7 +139,7 @@ const expressApp = await createExpressApp({
     log.debug('Setting session.lastAccessTime to [%s]', lastAccessTime);
     session.set('lastAccessTime', lastAccessTime);
 
-    return { ...appLoadContext, session } as AppLoadContext;
+    return { ...partialAppLoadContext, session };
   },
 });
 
