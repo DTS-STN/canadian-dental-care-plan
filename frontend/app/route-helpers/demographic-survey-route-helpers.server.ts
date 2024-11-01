@@ -1,5 +1,5 @@
 import type { Session } from '@remix-run/node';
-import { redirectDocument } from '@remix-run/node';
+import { redirect, redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
 import { randomUUID } from 'crypto';
@@ -8,6 +8,7 @@ import { z } from 'zod';
 import type { RenewState } from './renew-route-helpers.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { getPathById } from '~/utils/route-utils';
 import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
 
 export interface DemographicSurveyState {
@@ -17,6 +18,13 @@ export interface DemographicSurveyState {
     readonly firstName: string;
     readonly lastName: string;
     readonly isSurveyCompleted: boolean;
+    readonly questions?: {
+      readonly indigenousStatus?: string;
+      readonly disabilityStatus?: string;
+      readonly ethnicGroups?: string[];
+      readonly locationBornStatus?: string;
+      readonly genderStatus?: string;
+    };
   }[];
 }
 
@@ -72,6 +80,40 @@ export function loadDemographicSurveyState({ params, session }: LoadStateArgs) {
 
   const state: DemographicSurveyState = session.get(sessionName);
   return state;
+}
+
+interface LoadDemographicSurveySingleMemberStateArgs {
+  params: Params;
+  session: Session;
+}
+
+/**
+ * Loads single member state from renew adult member state.
+ * @param args - The arguments.
+ * @returns The loaded member state.
+ */
+export function loadDemographicSurveySingleMemberState({ params, session }: LoadDemographicSurveySingleMemberStateArgs) {
+  const log = getLogger('demographic-survey-route-helpers.server/loadDemographicSurveySingleMemberState');
+  const demographicSurveyState = loadDemographicSurveyState({ params, session });
+
+  const parsedMemberId = z.string().uuid().safeParse(params.memberId);
+
+  if (!parsedMemberId.success) {
+    log.warn('Invalid "memberId" param format; memberId: [%s]', params.memberId);
+    throw redirect(getPathById('public/demographic-survey/$id/summary', params));
+  }
+
+  const memberId = parsedMemberId.data;
+  const memberIndex = demographicSurveyState.memberInformation.findIndex(({ id }) => id === memberId);
+
+  if (memberIndex === -1) {
+    log.warn('Demographic survey single member has not been found; memberId: [%s]', memberId);
+    throw redirect(getPathById('public/demographic-survey/$id/summary', params));
+  }
+
+  const memberState = demographicSurveyState.memberInformation[memberIndex];
+
+  return memberState;
 }
 
 interface SaveStateArgs {
@@ -145,9 +187,19 @@ export function startDemographicSurveyState({ id, session, memberInformation }: 
 }
 
 export function getMemberInformationFromRenewState(state: RenewState) {
-  const memberInformation = [{ id: randomUUID().toString(), firstName: state.applicantInformation?.firstName ?? '', lastName: state.applicantInformation?.lastName ?? '', isSurveyCompleted: false }];
-  for (const child of state.children) {
-    memberInformation.push({ id: randomUUID().toString(), firstName: child.information?.firstName ?? '', lastName: child.information?.lastName ?? '', isSurveyCompleted: false });
+  function composeMemberInformation(firstName: string, lastName: string) {
+    return {
+      id: randomUUID().toString(),
+      firstName,
+      lastName,
+      isSurveyCompleted: false,
+    };
   }
+
+  const memberInformation = [
+    composeMemberInformation(state.applicantInformation?.firstName ?? '', state.applicantInformation?.lastName ?? ''),
+    ...state.children.map((child) => composeMemberInformation(child.information?.firstName ?? '', child.information?.lastName ?? '')),
+  ];
+
   return memberInformation;
 }
