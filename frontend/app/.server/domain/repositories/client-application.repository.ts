@@ -51,21 +51,25 @@ export class ClientApplicationRepositoryImpl implements ClientApplicationReposit
       body: JSON.stringify(clientApplicationBasicInfoRequestEntity),
     });
 
-    if (!response.ok) {
-      this.log.error('%j', {
-        message: "Failed to 'POST' for client application data",
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-      throw new Error(`Failed to 'POST' for client application data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    if (response.ok) {
+      const data = await response.json();
+      this.log.trace('Client application [%j]', data);
+      return data;
     }
 
-    const data = await response.json();
-    this.log.trace('Client application [%j]', data);
+    if (response.status === 404) {
+      this.log.trace('Client application not found for basic info [%j]', clientApplicationBasicInfoRequestEntity);
+      return null;
+    }
 
-    return data;
+    this.log.error('%j', {
+      message: "Failed to 'POST' for client application data",
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+    throw new Error(`Failed to 'POST' for client application data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
   async findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<ClientApplicationEntity | null> {
