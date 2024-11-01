@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@date-fns/utc": "^2.1.0",
-    "@dts-stn/health-checks": "^1.0.0",
+    "@dts-stn/health-checks": "^2.0.0",
     "@faker-js/faker": "^9.1.0",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
