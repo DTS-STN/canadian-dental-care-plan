@@ -192,7 +192,7 @@ export function getPowerPlatformApiMockHandlers() {
         [
           '10000000001',
           [
-            { Flag: true, FlagCategoryText: 'isCraAssessed' },
+            { Flag: false, FlagCategoryText: 'isCraAssessed' },
             { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
           ],
         ],
@@ -206,7 +206,7 @@ export function getPowerPlatformApiMockHandlers() {
         [
           '10000000003',
           [
-            { Flag: false, FlagCategoryText: 'isCraAssessed' },
+            { Flag: true, FlagCategoryText: 'isCraAssessed' },
             { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
           ],
         ],
