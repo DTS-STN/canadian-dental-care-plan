@@ -186,6 +186,9 @@ const serverEnv = clientEnvSchema.extend({
   CDCP_WEBSITE_STATUS_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#etat'),
   CDCP_WEBSITE_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html'),
   CDCP_WEBSITE_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html'),
+
+  // health check configuration
+  HEALTH_CACHE_TTL: z.coerce.number().default(10 * 1000),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
