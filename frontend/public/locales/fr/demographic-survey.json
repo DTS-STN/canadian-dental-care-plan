@@ -49,5 +49,12 @@
     "gender-status": "What is this person's gender?",
     "back-btn": "Back",
     "save-btn": "Save"
+  },
+  "submitted": {
+    "page-title": "Response submitted",
+    "sbumitted": "Your response has been submitted.",
+    "thank-you": "Thank you for taking the time to complete these voluntary demographic questions.",
+    "close-btn": "Close survey",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   }
 }
