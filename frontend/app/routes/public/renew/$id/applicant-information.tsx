@@ -1,10 +1,11 @@
+import { useEffect, useRef } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -136,8 +137,9 @@ export async function action({ context: { session, serviceProvider }, params, re
   // Fetch client application data using ClientApplicationService
   const clientApplication = await clientApplicationService.findClientApplicationByBasicInfo(parsedDataResult.data);
 
-  // TODO: handle when clientApplication is not found (null)
-  invariant(clientApplication, 'Expected clientApplication to be found (not null).');
+  if (!clientApplication) {
+    return { status: 'status-not-found' } as const;
+  }
 
   saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data, clientApplication } });
 
@@ -160,7 +162,8 @@ export default function RenewApplicationInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const errors = fetcher.data?.errors;
+  const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
+  const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     firstName: 'first-name',
     lastName: 'last-name',
@@ -175,8 +178,7 @@ export default function RenewApplicationInformation() {
 
   return (
     <>
-      {/* TODO: add conditional check to show <StatusNotFound> if clientApplication returned null */}
-      <StatusNotFound />
+      {fetcherStatus === 'status-not-found' && <StatusNotFound />}
       <div className="my-6 sm:my-8">
         <Progress value={25} size="lg" label={t('apply:progress.label')} />
       </div>
@@ -295,8 +297,17 @@ export default function RenewApplicationInformation() {
 function StatusNotFound() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const noWrap = <span className="whitespace-nowrap" />;
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (wrapperRef.current) {
+      wrapperRef.current.scrollIntoView({ behavior: 'smooth' });
+      wrapperRef.current.focus();
+    }
+  }, []);
+
   return (
-    <div className="mb-4">
+    <div ref={wrapperRef} id="status-not-found" className="mb-4">
       <ContextualAlert type="danger">
         <h2 className="mb-2 font-bold">{t('renew:applicant-information.status-not-found.heading')}</h2>
         <p className="mb-2">{t('renew:applicant-information.status-not-found.please-review')}</p>

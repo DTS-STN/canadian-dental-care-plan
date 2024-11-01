@@ -2,6 +2,7 @@ import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
 import clientApplicationJsonDataSource from './client-application-data/client-application.json';
+import type { ClientApplicationEntity } from '~/.server/domain/entities';
 import { db } from '~/mocks/db';
 import type { BenefitApplicationResponse } from '~/schemas/benefit-application-service-schemas.server';
 import { benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
@@ -187,25 +188,22 @@ export function getPowerPlatformApiMockHandlers() {
 
       const requestBody = await request.json();
 
-      function getFlagsByIdentificationId(identificationId: string): Array<{ Flag: boolean; FlagCategoryText: string }> {
-        switch (identificationId) {
-          case '10000000001':
-            return [
-              { Flag: true, FlagCategoryText: 'isCraAssessed' },
-              { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
-            ];
-          case '10000000002':
-            return [
-              { Flag: false, FlagCategoryText: 'isCraAssessed' },
-              { Flag: true, FlagCategoryText: 'appliedBeforeApril302024' },
-            ];
-          default:
-            return [
-              { Flag: false, FlagCategoryText: 'isCraAssessed' },
-              { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
-            ];
-        }
-      }
+      const mockApplicantFlags: ReadonlyMap<string, ReadonlyArray<{ Flag: boolean; FlagCategoryText: string }>> = new Map<string, ReadonlyArray<{ Flag: boolean; FlagCategoryText: string }>>([
+        [
+          '10000000001',
+          [
+            { Flag: false, FlagCategoryText: 'isCraAssessed' },
+            { Flag: true, FlagCategoryText: 'appliedBeforeApril302024' },
+          ],
+        ],
+        [
+          '10000000002',
+          [
+            { Flag: true, FlagCategoryText: 'isCraAssessed' },
+            { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
+          ],
+        ],
+      ]);
 
       if (action === 'GET') {
         const clientApplicationRequestSchema = z.object({
@@ -235,7 +233,18 @@ export function getPowerPlatformApiMockHandlers() {
         }
 
         const identificationId = parsedClientApplicationRequest.data.Applicant.ClientIdentification[0].IdentificationID;
-        const flags = getFlagsByIdentificationId(identificationId);
+        const personGivenName = parsedClientApplicationRequest.data.Applicant.PersonName[0].PersonGivenName[0];
+        const personSurName = parsedClientApplicationRequest.data.Applicant.PersonName[0].PersonSurName;
+        const personBirthDate = parsedClientApplicationRequest.data.Applicant.PersonBirthDate.date;
+
+        // If the ID is '10000000000', return a 404 error
+        if (identificationId === '10000000000') {
+          log.debug('Client application not found for identification id [%s]', identificationId);
+          return new HttpResponse(null, { status: 404 });
+        }
+
+        // Otherwise, return specific flags or the default
+        const clientApplicationFlags = mockApplicantFlags.get(identificationId) ?? clientApplicationJsonDataSource.BenefitApplication.Applicant.Flags;
 
         return HttpResponse.json({
           ...clientApplicationJsonDataSource,
@@ -243,11 +252,21 @@ export function getPowerPlatformApiMockHandlers() {
             ...clientApplicationJsonDataSource.BenefitApplication,
             Applicant: {
               ...clientApplicationJsonDataSource.BenefitApplication.Applicant,
-              Flags: flags,
+              PersonName: [
+                {
+                  PersonGivenName: [personGivenName],
+                  PersonSurName: personSurName,
+                },
+              ],
+              PersonBirthDate: {
+                date: personBirthDate,
+              },
+              Flags: clientApplicationFlags,
             },
           },
-        });
+        } satisfies ClientApplicationEntity);
       }
+
       if (scenario === 'RENEWAL') {
         const parsedBenefitRenewalRequest = await benefitRenewalRequestSchema.safeParseAsync(requestBody);
 

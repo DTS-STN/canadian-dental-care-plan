@@ -26,7 +26,7 @@ export interface RenewState {
     hasBeenAssessedByCRA: boolean;
     lastName: string;
     sin: string;
-  };
+  } | null;
   readonly children: {
     readonly id: string;
     readonly dentalBenefits?: {

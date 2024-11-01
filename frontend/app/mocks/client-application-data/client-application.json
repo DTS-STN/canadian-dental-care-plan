@@ -184,8 +184,8 @@
             "ReferenceDataName": ""
           },
           "ApplicantDetail": {
-            "AttestParentOrGuardianIndicator": "",
-            "ConsentToSharePersonalInformationIndicator": "",
+            "AttestParentOrGuardianIndicator": false,
+            "ConsentToSharePersonalInformationIndicator": false,
             "DisabilityTaxCreditIndicator": "",
             "FederalDentalCoverageIndicator": "",
             "InsurancePlan": [
@@ -215,7 +215,7 @@
               }
             ],
             "LivingIndependentlyIndicator": "",
-            "PrivateDentalInsuranceIndicator": "",
+            "PrivateDentalInsuranceIndicator": false,
             "ProvincialDentalCoverageIndicator": ""
           },
           "PersonSINIdentification": {
