@@ -66,11 +66,11 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const payload = viewPayloadEnabled && toBenefitRenewRequestFromRenewAdultChildState(state);
 
   const children = state.children.map((child) => {
-    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram
+    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
       ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
-    const selectedProvincialBenefit = child.dentalBenefits.provincialTerritorialSocialProgram
+    const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
       ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
@@ -84,12 +84,12 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
       dentalInsurance: {
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
-          access: child.dentalBenefits.hasFederalBenefits,
+          access: child.dentalBenefits?.hasFederalBenefits,
           benefit: selectedFederalGovernmentInsurancePlan?.name,
         },
         provTerrBenefit: {
-          access: child.dentalBenefits.hasProvincialTerritorialBenefits,
-          province: child.dentalBenefits.province,
+          access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
+          province: child.dentalBenefits?.province,
           benefit: selectedProvincialBenefit?.name,
         },
       },

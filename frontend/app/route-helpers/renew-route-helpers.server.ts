@@ -36,20 +36,11 @@ export interface RenewState {
       provincialTerritorialSocialProgram?: string;
       province?: string;
     };
-    readonly dentalInsurance?: boolean;
     readonly confirmDentalBenefits?: {
       federalBenefitsChanged: boolean;
       provincialTerritorialBenefitsChanged: boolean;
     };
-    readonly updateDentalFederalBenefits?: {
-      hasFederalBenefits: boolean;
-      federalSocialProgram?: string;
-    };
-    readonly updateDentalProvincialTerritorialBenefits?: {
-      hasProvincialTerritorialBenefits: boolean;
-      provincialTerritorialSocialProgram?: string;
-      province?: string;
-    };
+    readonly dentalInsurance?: boolean;
     readonly information?: {
       firstName: string;
       lastName: string;
@@ -100,15 +91,6 @@ export interface RenewState {
     federalBenefitsChanged: boolean;
     provincialTerritorialBenefitsChanged: boolean;
   };
-  readonly updateDentalFederalBenefits?: {
-    hasFederalBenefits: boolean;
-    federalSocialProgram?: string;
-  };
-  readonly updateDentalProvincialTerritorialBenefits?: {
-    hasProvincialTerritorialBenefits: boolean;
-    provincialTerritorialSocialProgram?: string;
-    province?: string;
-  };
   readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
   readonly communicationPreference?: {
     email?: string;
@@ -133,8 +115,6 @@ export type AddressInformationState = NonNullable<RenewState['addressInformation
 export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ConfirmDentalBenefitsState = NonNullable<RenewState['confirmDentalBenefits']>;
-export type UpdateDentalFederalBenefitsState = NonNullable<RenewState['updateDentalFederalBenefits']>;
-export type UpdateDentalProvincialTerritorialBenefitsState = NonNullable<RenewState['updateDentalProvincialTerritorialBenefits']>;
 export type ContactInformationState = NonNullable<RenewState['contactInformation']>;
 export type CommunicationPreferenceState = NonNullable<RenewState['communicationPreference']>;
 

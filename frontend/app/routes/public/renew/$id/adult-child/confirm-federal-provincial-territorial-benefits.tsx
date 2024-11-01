@@ -18,7 +18,7 @@ import { loadRenewAdultChildState } from '~/route-helpers/renew-adult-child-rout
 import type { ConfirmDentalBenefitsState } from '~/route-helpers/renew-route-helpers.server';
 import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';

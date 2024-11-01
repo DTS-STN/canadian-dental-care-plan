@@ -938,14 +938,6 @@
                     }
                   },
                   {
-                    "id": "public/renew/$id/adult-child/children/$childId/federal-provincial-territorial-benefits",
-                    "file": "routes/public/renew/$id/adult-child/children/$childId/federal-provincial-territorial-benefits.tsx",
-                    "paths": {
-                      "en": "/:lang/renew/:id/adult-child/children/:childId/federal-provincial-territorial-benefits",
-                      "fr": "/:lang/renew/:id/adult-child/children/:childId/prestations-dentaires-federales-provinciales-territoriales"
-                    }
-                  },
-                  {
                     "id": "public/renew/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits",
                     "file": "routes/public/renew/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits.tsx",
                     "paths": {

@@ -17,8 +17,7 @@ import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { loadRenewAdultChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
-import type { UpdateDentalFederalBenefitsState, UpdateDentalProvincialTerritorialBenefitsState } from '~/route-helpers/renew-route-helpers.server';
-import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -63,8 +62,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   return json({
     csrfToken,
-    defaultFederalState: state.updateDentalFederalBenefits,
-    defaultProvincialTerritorialState: state.updateDentalProvincialTerritorialBenefits,
+    defaultState: state.dentalBenefits,
     federalBenefitsChanged: state.confirmDentalBenefits?.federalBenefitsChanged,
     provincialTerritorialBenefitsChanged: state.confirmDentalBenefits?.provincialTerritorialBenefitsChanged,
     editMode: state.editMode,
@@ -100,7 +98,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
         ...val,
         federalSocialProgram: val.hasFederalBenefits ? val.federalSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<UpdateDentalFederalBenefitsState>;
+    }) satisfies z.ZodType<DentalFederalBenefitsState>;
 
   const provincialTerritorialBenefitsSchema = z
     .object({
@@ -123,7 +121,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
         province: val.hasProvincialTerritorialBenefits ? val.province : undefined,
         provincialTerritorialSocialProgram: val.hasProvincialTerritorialBenefits ? val.provincialTerritorialSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<UpdateDentalProvincialTerritorialBenefitsState>;
+    }) satisfies z.ZodType<DentalProvincialTerritorialBenefitsState>;
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -134,20 +132,22 @@ export async function action({ context: { configProvider, serviceProvider, sessi
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const dentalFederalBenefits = state.confirmDentalBenefits?.federalBenefitsChanged
-    ? {
-        hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes : undefined,
-        federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
-      }
-    : undefined;
+  const dentalFederalBenefits =
+    state.confirmDentalBenefits?.federalBenefitsChanged && formData.get('hasFederalBenefits')
+      ? {
+          hasFederalBenefits: formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes,
+          federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
+        }
+      : undefined;
 
-  const dentalProvincialTerritorialBenefits = state.confirmDentalBenefits?.provincialTerritorialBenefitsChanged
-    ? {
-        hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') ? formData.get('hasProvincialTerritorialBenefits') === HasProvincialTerritorialBenefitsOption.Yes : undefined,
-        provincialTerritorialSocialProgram: formData.get('provincialTerritorialSocialProgram') ? String(formData.get('provincialTerritorialSocialProgram')) : undefined,
-        province: formData.get('province') ? String(formData.get('province')) : undefined,
-      }
-    : undefined;
+  const dentalProvincialTerritorialBenefits =
+    state.confirmDentalBenefits?.provincialTerritorialBenefitsChanged && formData.get('hasProvincialTerritorialBenefits')
+      ? {
+          hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') === HasProvincialTerritorialBenefitsOption.Yes,
+          provincialTerritorialSocialProgram: formData.get('provincialTerritorialSocialProgram') ? String(formData.get('provincialTerritorialSocialProgram')) : undefined,
+          province: formData.get('province') ? String(formData.get('province')) : undefined,
+        }
+      : undefined;
 
   const parsedFederalBenefitsResult = dentalFederalBenefits ? federalBenefitsSchema.safeParse(dentalFederalBenefits) : undefined;
   const parsedProvincialTerritorialBenefitsResult = dentalProvincialTerritorialBenefits ? provincialTerritorialBenefitsSchema.safeParse(dentalProvincialTerritorialBenefits) : undefined;
@@ -165,8 +165,10 @@ export async function action({ context: { configProvider, serviceProvider, sessi
     params,
     session,
     state: {
-      ...(parsedFederalBenefitsResult && { updateDentalFederalBenefits: parsedFederalBenefitsResult.data }),
-      ...(parsedProvincialTerritorialBenefitsResult && { updateDentalProvincialTerritorialBenefits: parsedProvincialTerritorialBenefitsResult.data }),
+      dentalBenefits: {
+        ...(parsedFederalBenefitsResult ? parsedFederalBenefitsResult.data : { hasFederalBenefits: false }), //TODO Replace placeholder data with renewal user data
+        ...(parsedProvincialTerritorialBenefitsResult ? parsedProvincialTerritorialBenefitsResult.data : { hasProvincialTerritorialBenefits: false }), //TODO Replace placeholder data with renewal user data
+      },
     },
   });
 
@@ -179,15 +181,14 @@ export async function action({ context: { configProvider, serviceProvider, sessi
 
 export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefits() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultFederalState, defaultProvincialTerritorialState, editMode, federalBenefitsChanged, provincialTerritorialBenefitsChanged } =
-    useLoaderData<typeof loader>();
+  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, editMode, federalBenefitsChanged, provincialTerritorialBenefitsChanged } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultFederalState?.hasFederalBenefits);
-  const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(defaultProvincialTerritorialState?.hasProvincialTerritorialBenefits);
-  const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(defaultProvincialTerritorialState?.provincialTerritorialSocialProgram);
-  const [provinceValue, setProvinceValue] = useState(defaultProvincialTerritorialState?.province);
+  const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultState?.hasFederalBenefits);
+  const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(defaultState?.hasProvincialTerritorialBenefits);
+  const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(defaultState?.provincialTerritorialSocialProgram);
+  const [provinceValue, setProvinceValue] = useState(defaultState?.province);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -252,7 +253,7 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
                         legendClassName="font-normal"
                         options={federalSocialPrograms.map((option) => ({
                           children: option.name,
-                          defaultChecked: defaultFederalState?.federalSocialProgram === option.id,
+                          defaultChecked: defaultState?.federalSocialProgram === option.id,
                           value: option.id,
                         }))}
                         errorMessage={errors?.federalSocialProgram}
@@ -329,7 +330,7 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
                   {
                     children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:update-dental-benefits.provincial-territorial-benefits.option-no" />,
                     value: HasProvincialTerritorialBenefitsOption.No,
-                    defaultChecked: defaultProvincialTerritorialState?.hasProvincialTerritorialBenefits === false,
+                    defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
                     onChange: handleOnHasProvincialTerritorialBenefitChanged,
                   },
                 ]}
