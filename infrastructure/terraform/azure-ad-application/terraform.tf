@@ -10,13 +10,13 @@ terraform {
     azuread = {
       # see: https://registry.terraform.io/providers/hashicorp/azuread/latest/docs
       source  = "hashicorp/azuread"
-      version = "~> 2.0"
+      version = "~> 3.0"
     }
 
     azurerm = {
       # see: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
       source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+      version = "~> 4.0"
     }
   }
 }
@@ -90,5 +90,5 @@ resource "azuread_application_password" "main" {
 
   application_id    = azuread_application.main.id
   display_name      = each.value
-  end_date_relative = "876000h"
+  end_date          = "2100-01-01T00:00:00Z"
 }
