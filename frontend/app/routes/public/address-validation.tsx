@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 
 import { faCheck, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,6 @@ import { validateCsrfToken } from '~/.server/remix/security';
 import { Address } from '~/components/address';
 import { AddressDiff } from '~/components/address-diff';
 import { Button } from '~/components/buttons';
-import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputOptionProps } from '~/components/input-option';
@@ -23,6 +22,7 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
+import { useFetcher } from '~/hooks';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -298,7 +298,6 @@ export default function AddressValidationRoute() {
         <p className="mb-4 italic">{t('address-validation:optional-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form ref={formElementRef} method="post" noValidate>
-          <CsrfTokenInput />
           <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('address-validation:address-header')}</legend>
             <div className="space-y-6">
