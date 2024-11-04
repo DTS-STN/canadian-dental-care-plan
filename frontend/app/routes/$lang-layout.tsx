@@ -6,7 +6,7 @@ import { BilingualNotFoundError, NotFoundError, ServerError } from '~/components
 import { isAppLocale } from '~/utils/locale-utils';
 import { getLogger } from '~/utils/logging.server';
 
-export function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const log = getLogger('$lang/_route');
   const lang = params.lang;
 

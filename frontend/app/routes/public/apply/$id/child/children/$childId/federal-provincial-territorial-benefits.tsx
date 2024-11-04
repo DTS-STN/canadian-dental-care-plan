@@ -10,6 +10,7 @@ import validator from 'validator';
 import { z } from 'zod';
 
 import pageIds from '../../../../../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
@@ -47,10 +48,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title, data.meta.dcTermsTitle);
 });
 
-export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplySingleChildState({ params, request, session });
 
-  const { CANADA_COUNTRY_ID } = configProvider.getServerConfig();
+  const { CANADA_COUNTRY_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -82,7 +83,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   });
 }
 
-export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/child/children/federal-provincial-territorial-benefits');
 
   const state = loadApplySingleChildState({ params, request, session });

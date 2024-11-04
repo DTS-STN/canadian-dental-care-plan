@@ -2,8 +2,9 @@ import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
+import { mockDeep } from 'vitest-mock-extended';
 
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { loader } from '~/routes/protected/letters/index';
 
 vi.mock('~/services/instrumentation-service.server', () => ({
@@ -53,8 +54,7 @@ describe('Letters Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
-      const mockAppLoadContext = mock<AppLoadContext>({
-        configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) },
+      const mockAppLoadContext = mockDeep<AppLoadContext>({
         serviceProvider: {
           getApplicantService: vi.fn().mockReturnValue({ findClientNumberBySin: vi.fn().mockReturnValue('some-client-number') }),
           getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }),
@@ -72,6 +72,9 @@ describe('Letters Page', () => {
             ]),
           }),
         },
+      });
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.CLIENT_CONFIG).mockReturnValueOnce({
+        SCCH_BASE_URI: 'https://api.example.com',
       });
 
       const response = await loader({
@@ -95,8 +98,7 @@ describe('Letters Page', () => {
     session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
     session.set('userInfoToken', { sin: '999999999' });
 
-    const mockAppLoadContext = mock<AppLoadContext>({
-      configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) },
+    const mockAppLoadContext = mockDeep<AppLoadContext>({
       serviceProvider: {
         getApplicantService: vi.fn().mockReturnValue({ findClientNumberBySin: vi.fn().mockReturnValue('some-client-number') }),
         getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }),
@@ -115,6 +117,7 @@ describe('Letters Page', () => {
         }),
       },
     });
+    mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.CLIENT_CONFIG).mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' });
 
     const response = await loader({
       request: new Request('http://localhost/letters'),

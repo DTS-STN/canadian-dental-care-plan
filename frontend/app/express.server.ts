@@ -15,7 +15,7 @@ import type { SetOptional } from 'type-fest';
 
 import { getEnv } from './utils/env-utils.server';
 import { randomString } from './utils/string-utils';
-import { getAppContainerProvider, getContainerConfigProvider, getContainerServiceProvider } from '~/.server/app.container';
+import { getAppContainerProvider, getContainerServiceProvider } from '~/.server/app.container';
 import { getLogger } from '~/utils/logging.server';
 
 const { NODE_ENV } = getEnv();
@@ -114,7 +114,6 @@ const expressApp = await createExpressApp({
 
     const partialAppLoadContext = {
       appContainer: getAppContainerProvider(),
-      configProvider: getContainerConfigProvider(),
       serviceProvider: getContainerServiceProvider(),
     } as const satisfies SetOptional<AppLoadContext, 'session'>;
 

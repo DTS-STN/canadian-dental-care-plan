@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css?url';
 import invariant from 'tiny-invariant';
 
+import { SERVICE_IDENTIFIER } from './.server/constants';
 import { getDynatraceService } from './services/dynatrace-service.server';
 import type { FeatureName } from './utils/env-utils';
 import { ClientEnv } from '~/components/client-env';
@@ -59,7 +60,7 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   };
 };
 
-export async function loader({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
   const dynatraceService = getDynatraceService();
   const requestUrl = new URL(request.url);
@@ -68,7 +69,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const buildInfo = buildInfoService.getBuildInfo();
   const dynatraceRumScript = await dynatraceService.retrieveRumScript();
-  const env = configProvider.getClientConfig();
+  const env = appContainer.get(SERVICE_IDENTIFIER.CLIENT_CONFIG);
   const meta = {
     author: t('gcweb:meta.author'),
     description: t('gcweb:meta.description'),

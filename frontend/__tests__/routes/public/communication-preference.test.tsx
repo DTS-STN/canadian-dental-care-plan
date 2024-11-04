@@ -2,8 +2,9 @@ import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
+import { mockDeep } from 'vitest-mock-extended';
 
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { action, loader } from '~/routes/public/apply/$id/adult/communication-preference';
 
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
@@ -31,12 +32,7 @@ describe('_public.apply.id.communication-preference', () => {
     it('should id, state, country list and region list', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
-      const mockAppLoadContext = mock<AppLoadContext>({
-        configProvider: {
-          getServerConfig: vi.fn().mockReturnValue({
-            COMMUNICATION_METHOD_EMAIL_ID: 'email',
-          }),
-        },
+      const mockAppLoadContext = mockDeep<AppLoadContext>({
         serviceProvider: {
           getPreferredCommunicationMethodService: () => ({
             listPreferredCommunicationMethods: vi.fn(),
@@ -60,6 +56,9 @@ describe('_public.apply.id.communication-preference', () => {
             ],
           }),
         },
+      });
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
+        COMMUNICATION_METHOD_EMAIL_ID: 'email',
       });
 
       const response = await loader({
@@ -99,12 +98,9 @@ describe('_public.apply.id.communication-preference', () => {
       formData.append('_csrf', 'csrfToken');
       formData.append('preferredLanguage', 'fr');
 
-      const mockAppLoadContext = mock<AppLoadContext>({
-        configProvider: {
-          getServerConfig: vi.fn().mockReturnValue({
-            COMMUNICATION_METHOD_EMAIL_ID: 'email',
-          }),
-        },
+      const mockAppLoadContext = mockDeep<AppLoadContext>();
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
+        COMMUNICATION_METHOD_EMAIL_ID: 'email',
       });
 
       const response = await action({
@@ -128,12 +124,9 @@ describe('_public.apply.id.communication-preference', () => {
       formData.append('email', '');
       formData.append('preferredLanguage', 'fr');
 
-      const mockAppLoadContext = mock<AppLoadContext>({
-        configProvider: {
-          getServerConfig: vi.fn().mockReturnValue({
-            COMMUNICATION_METHOD_EMAIL_ID: 'email',
-          }),
-        },
+      const mockAppLoadContext = mockDeep<AppLoadContext>();
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
+        COMMUNICATION_METHOD_EMAIL_ID: 'email',
       });
 
       const response = await action({
@@ -158,12 +151,9 @@ describe('_public.apply.id.communication-preference', () => {
       formData.append('confirmEmail', 'johndoe@example.com');
       formData.append('preferredLanguage', 'fr');
 
-      const mockAppLoadContext = mock<AppLoadContext>({
-        configProvider: {
-          getServerConfig: vi.fn().mockReturnValue({
-            COMMUNICATION_METHOD_EMAIL_ID: 'email',
-          }),
-        },
+      const mockAppLoadContext = mockDeep<AppLoadContext>();
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
+        COMMUNICATION_METHOD_EMAIL_ID: 'email',
       });
 
       const response = await action({
