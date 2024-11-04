@@ -57,6 +57,9 @@ import type {
 } from '~/.server/domain/services';
 import type { ConfigFactory, LogFactory } from '~/.server/factories';
 import type { ContainerConfigProvider, ContainerServiceProvider } from '~/.server/providers';
+import type { HCaptchaDtoMapper } from '~/.server/web/mappers';
+import type { HCaptchaRepository } from '~/.server/web/repositories';
+import type { HCaptchaService } from '~/.server/web/services';
 import type { CsrfTokenValidator } from '~/.server/web/validators';
 
 export type ServiceIdentifier<T = unknown> = Exclude<interfaces.ServiceIdentifier<T>, string | symbol>;
@@ -91,6 +94,9 @@ export const SERVICE_IDENTIFIER = {
   FEDERAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER: serviceIdentifier<FederalGovernmentInsurancePlanDtoMapper>('FederalGovernmentInsurancePlanDtoMapper'),
   FEDERAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY: serviceIdentifier<FederalGovernmentInsurancePlanRepository>('FederalGovernmentInsurancePlanRepository'),
   FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE: serviceIdentifier<FederalGovernmentInsurancePlanService>('FederalGovernmentInsurancePlanService'),
+  HCAPTCHA_DTO_MAPPER: serviceIdentifier<HCaptchaDtoMapper>('HCaptchaDtoMapper'),
+  HCAPTCHA_REPOSITORY: serviceIdentifier<HCaptchaRepository>('HCaptchaRepository'),
+  HCAPTCHA_SERVICE: serviceIdentifier<HCaptchaService>('HCaptchaService'),
   LETTER_DTO_MAPPER: serviceIdentifier<LetterDtoMapper>('LetterDtoMapper'),
   LETTER_REPOSITORY: serviceIdentifier<LetterRepository>('LetterRepository'),
   LETTER_SERVICE: serviceIdentifier<LetterService>('LetterService'),

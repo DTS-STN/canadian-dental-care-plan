@@ -21,6 +21,7 @@ import type {
   RedisService,
   SessionService,
 } from '~/.server/domain/services';
+import type { HCaptchaService } from '~/.server/web/services';
 
 export interface ContainerServiceProvider {
   getAddressValidationService(): AddressValidationService;
@@ -31,6 +32,7 @@ export interface ContainerServiceProvider {
   getClientFriendlyStatusService(): ClientFriendlyStatusService;
   getCountryService(): CountryService;
   getFederalGovernmentInsurancePlanService(): FederalGovernmentInsurancePlanService;
+  getHCaptchaService(): HCaptchaService;
   getLetterService(): LetterService;
   getLetterTypeService(): LetterTypeService;
   getMaritalStatusService(): MaritalStatusService;
@@ -54,6 +56,7 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
     @inject(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE) private readonly clientFriendlyStatusService: ClientFriendlyStatusService,
     @inject(SERVICE_IDENTIFIER.COUNTRY_SERVICE) private readonly countryService: CountryService,
     @inject(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE) private readonly federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,
+    @inject(SERVICE_IDENTIFIER.HCAPTCHA_SERVICE) private readonly hCaptchaService: HCaptchaService,
     @inject(SERVICE_IDENTIFIER.LETTER_SERVICE) private readonly letterService: LetterService,
     @inject(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE) private readonly letterTypeService: LetterTypeService,
     @inject(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE) private readonly maritalStatusService: MaritalStatusService,
@@ -96,6 +99,10 @@ export class ContainerServiceProviderImpl implements ContainerServiceProvider {
 
   getFederalGovernmentInsurancePlanService(): FederalGovernmentInsurancePlanService {
     return this.federalGovernmentInsurancePlanService;
+  }
+
+  getHCaptchaService(): HCaptchaService {
+    return this.hCaptchaService;
   }
 
   getLetterService(): LetterService {

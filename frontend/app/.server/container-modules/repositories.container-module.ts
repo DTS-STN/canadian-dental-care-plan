@@ -18,6 +18,7 @@ import {
   ProvinceTerritoryStateRepositoryImpl,
   ProvincialGovernmentInsurancePlanRepositoryImpl,
 } from '~/.server/domain/repositories';
+import { HCaptchaRepositoryImpl } from '~/.server/web/repositories';
 
 /**
  * Container module for repositories.
@@ -31,6 +32,7 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(SERVICE_IDENTIFIER.COUNTRY_REPOSITORY).to(CountryRepositoryImpl);
   bind(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_REPOSITORY).to(DemographicSurveyRepositoryImpl);
   bind(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY).to(FederalGovernmentInsurancePlanRepositoryImpl);
+  bind(SERVICE_IDENTIFIER.HCAPTCHA_REPOSITORY).to(HCaptchaRepositoryImpl);
   bind(SERVICE_IDENTIFIER.LETTER_REPOSITORY).to(LetterRepositoryImpl);
   bind(SERVICE_IDENTIFIER.LETTER_TYPE_REPOSITORY).to(LetterTypeRepositoryImpl);
   bind(SERVICE_IDENTIFIER.MARITAL_STATUS_REPOSITORY).to(MaritalStatusRepositoryImpl);

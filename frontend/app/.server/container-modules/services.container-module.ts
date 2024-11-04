@@ -24,6 +24,7 @@ import {
   RedisServiceImpl,
   RedisSessionService,
 } from '~/.server/domain/services';
+import { HCaptchaServiceImpl } from '~/.server/web/services';
 
 function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
   return ({ parentContext }: interfaces.Request) => {
@@ -45,6 +46,7 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind(SERVICE_IDENTIFIER.COUNTRY_SERVICE).to(CountryServiceImpl);
   bind(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_SERVICE).to(DemographicSurveyServiceServiceImpl);
   bind(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(FederalGovernmentInsurancePlanServiceImpl);
+  bind(SERVICE_IDENTIFIER.HCAPTCHA_SERVICE).to(HCaptchaServiceImpl);
   bind(SERVICE_IDENTIFIER.LETTER_SERVICE).to(LetterServiceImpl);
   bind(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE).to(LetterTypeServiceImpl);
   bind(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE).to(MaritalStatusServiceImpl);

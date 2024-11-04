@@ -18,6 +18,7 @@ import {
   ProvinceTerritoryStateDtoMapperImpl,
   ProvincialGovernmentInsurancePlanDtoMapperImpl,
 } from '~/.server/domain/mappers';
+import { HCaptchaDtoMapperImpl } from '~/.server/web/mappers';
 
 /**
  * Container module for mappers.
@@ -31,6 +32,7 @@ export const mappersContainerModule = new ContainerModule((bind) => {
   bind(SERVICE_IDENTIFIER.COUNTRY_DTO_MAPPER).to(CountryDtoMapperImpl);
   bind(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_DTO_MAPPER).to(DemographicSurveyDtoMapperImpl);
   bind(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER).to(FederalGovernmentInsurancePlanDtoMapperImpl);
+  bind(SERVICE_IDENTIFIER.HCAPTCHA_DTO_MAPPER).to(HCaptchaDtoMapperImpl);
   bind(SERVICE_IDENTIFIER.LETTER_DTO_MAPPER).to(LetterDtoMapperImpl);
   bind(SERVICE_IDENTIFIER.LETTER_TYPE_DTO_MAPPER).to(LetterTypeDtoMapperImpl);
   bind(SERVICE_IDENTIFIER.MARITAL_STATUS_DTO_MAPPER).to(MaritalStatusDtoMapperImpl);
