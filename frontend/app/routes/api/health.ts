@@ -6,8 +6,8 @@ import { HealthCheckConfig, execute, getHttpStatusCode } from '@dts-stn/health-c
 import { isEmpty } from 'moderndash';
 import moize from 'moize';
 
+import type { AppContainerProvider } from '~/.server/app-container.provider';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { AppContainerProvider } from '~/.server/providers';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 
 function getRedisCheck(appContainer: AppContainerProvider) {

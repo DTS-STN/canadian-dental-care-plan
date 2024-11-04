@@ -14,7 +14,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export async function loader({ context: { appContainer, serviceProvider, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const locale = getLocale(request);
   const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(SERVICE_IDENTIFIER.CLIENT_CONFIG);
   return { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };

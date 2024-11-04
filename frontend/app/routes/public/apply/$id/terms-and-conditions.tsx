@@ -29,7 +29,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   loadApplyState({ params, session });
   const csrfToken = String(session.get('csrfToken'));
 
@@ -39,7 +39,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
   return json({ csrfToken, meta });
 }
 
-export async function action({ context: { appContainer, serviceProvider, session }, request, params }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
   const log = getLogger('apply/terms-and-conditions');
 
   const formData = await request.formData();

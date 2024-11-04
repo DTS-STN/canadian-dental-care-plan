@@ -60,7 +60,7 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   };
 };
 
-export async function loader({ context: { appContainer, serviceProvider, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
   const dynatraceService = getDynatraceService();
   const requestUrl = new URL(request.url);

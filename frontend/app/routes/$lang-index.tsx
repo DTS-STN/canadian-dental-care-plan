@@ -5,12 +5,12 @@ import { BilingualNotFoundError, NotFoundError } from '~/components/layouts/publ
 import { isAppLocale } from '~/utils/locale-utils';
 import { getLogger } from '~/utils/logging.server';
 
-export function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   // Return a 404 status response because the displayed content is "not found"
   return new Response(null, { status: 404 });
 }
 
-export function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('$lang/index');
   const lang = params.lang;
 

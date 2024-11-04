@@ -9,6 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -42,7 +43,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -52,13 +53,13 @@ export async function loader({ context: { appContainer, serviceProvider, session
   return json({ id: state.id, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode });
 }
 
-export async function action({ context: { session, serviceProvider }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/applicant-information');
 
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const clientApplicationService = serviceProvider.getClientApplicationService();
+  const clientApplicationService = appContainer.get(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE);
 
   // state validation schema
   const applicantInformationSchema = z

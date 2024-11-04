@@ -7,6 +7,7 @@ import { useParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
 import { useFeature } from '~/root';
@@ -29,12 +30,12 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
   const idToken: IdToken = session.get('idToken');
-  serviceProvider.getAuditService().createAudit('page-view.home', { userId: idToken.sub });
+  appContainer.get(SERVICE_IDENTIFIER.AUDIT_SERVICE).createAudit('page-view.home', { userId: idToken.sub });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('index:page-title') }) };

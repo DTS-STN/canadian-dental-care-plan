@@ -4,7 +4,9 @@ import { createMemorySessionStorage } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mockDeep } from 'vitest-mock-extended';
 
+import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type { PreferredCommunicationMethodService, PreferredLanguageService } from '~/.server/domain/services';
 import { action, loader } from '~/routes/public/apply/$id/adult/communication-preference';
 
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
@@ -32,34 +34,26 @@ describe('_public.apply.id.communication-preference', () => {
     it('should id, state, country list and region list', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
-      const mockAppLoadContext = mockDeep<AppLoadContext>({
-        serviceProvider: {
-          getPreferredCommunicationMethodService: () => ({
-            listPreferredCommunicationMethods: vi.fn(),
-            getPreferredCommunicationMethodById: vi.fn(),
-            getLocalizedPreferredCommunicationMethodById: vi.fn(),
-            listAndSortLocalizedPreferredCommunicationMethods: () => [
-              { id: 'email', name: 'Email' },
-              { id: 'mail', name: 'Mail' },
-            ],
-          }),
-          getPreferredLanguageService: () => ({
-            getLocalizedPreferredLanguageById: vi.fn(),
-            getPreferredLanguageById: vi.fn(),
-            listPreferredLanguages: () => [
-              { id: 'fr', nameEn: 'French', nameFr: 'Français' },
-              { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
-            ],
-            listAndSortLocalizedPreferredLanguages: () => [
-              { id: 'en', name: 'English' },
-              { id: 'fr', name: 'French' },
-            ],
-          }),
-        },
-      });
+      const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
-      });
+      } satisfies Partial<ServerConfig>);
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE).mockReturnValueOnce({
+        listAndSortLocalizedPreferredCommunicationMethods: () => [
+          { id: 'email', name: 'Email' },
+          { id: 'mail', name: 'Mail' },
+        ],
+      } satisfies Partial<PreferredCommunicationMethodService>);
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).mockReturnValueOnce({
+        listPreferredLanguages: () => [
+          { id: 'fr', nameEn: 'French', nameFr: 'Français' },
+          { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
+        ],
+        listAndSortLocalizedPreferredLanguages: () => [
+          { id: 'en', name: 'English' },
+          { id: 'fr', name: 'French' },
+        ],
+      } satisfies Partial<PreferredLanguageService>);
 
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/communication-preference'),
@@ -101,7 +95,7 @@ describe('_public.apply.id.communication-preference', () => {
       const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
-      });
+      } satisfies Partial<ServerConfig>);
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
@@ -127,7 +121,7 @@ describe('_public.apply.id.communication-preference', () => {
       const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
-      });
+      } satisfies Partial<ServerConfig>);
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
@@ -154,7 +148,7 @@ describe('_public.apply.id.communication-preference', () => {
       const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
-      });
+      } satisfies Partial<ServerConfig>);
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),

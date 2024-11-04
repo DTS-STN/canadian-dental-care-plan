@@ -4,7 +4,9 @@ import { createMemorySessionStorage } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mockDeep } from 'vitest-mock-extended';
 
+import type { ServerConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type { CountryService, ProvinceTerritoryStateService } from '~/.server/domain/services';
 import { loader } from '~/routes/public/apply/$id/adult/contact-information';
 
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
@@ -32,29 +34,20 @@ describe('_public.apply.id.contact-information', () => {
     it('should id, state, country list and region list', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
-      const mockAppLoadContext = mockDeep<AppLoadContext>({
-        serviceProvider: {
-          getCountryService: () => ({
-            getCountryById: vi.fn(),
-            getLocalizedCountryById: vi.fn(),
-            listCountries: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
-            listAndSortLocalizedCountries: () => [{ id: '1', name: 'super country' }],
-          }),
-          getProvinceTerritoryStateService: () => ({
-            listProvinceTerritoryStates: vi.fn(),
-            getProvinceTerritoryStateById: vi.fn(),
-            getLocalizedProvinceTerritoryStateById: vi.fn(),
-            listAndSortLocalizedProvinceTerritoryStates: () => [{ id: 'SP', countryId: 'CAN', name: 'sample', abbr: 'SP' }],
-            listAndSortLocalizedProvinceTerritoryStatesByCountryId: vi.fn(),
-          }),
-        },
-      });
+      const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
-        MARITAL_STATUS_CODE_COMMONLAW: 'COMMONLAW',
-        MARITAL_STATUS_CODE_MARRIED: 'MARRIED',
+        MARITAL_STATUS_CODE_COMMONLAW: 1,
+        MARITAL_STATUS_CODE_MARRIED: 2,
         CANADA_COUNTRY_ID: 'CAN',
         USA_COUNTRY_ID: 'USA',
-      });
+      } satisfies Partial<ServerConfig>);
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.COUNTRY_SERVICE).mockReturnValueOnce({
+        listCountries: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
+        listAndSortLocalizedCountries: () => [{ id: '1', name: 'super country' }],
+      } satisfies Partial<CountryService>);
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).mockReturnValueOnce({
+        listAndSortLocalizedProvinceTerritoryStates: () => [{ id: 'SP', countryId: 'CAN', name: 'sample', abbr: 'SP' }],
+      } satisfies Partial<ProvinceTerritoryStateService>);
 
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/contact-information'),

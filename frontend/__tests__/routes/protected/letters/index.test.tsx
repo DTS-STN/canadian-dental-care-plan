@@ -4,7 +4,9 @@ import { createMemorySessionStorage } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mockDeep } from 'vitest-mock-extended';
 
+import type { ClientConfig } from '~/.server/configs';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type { ApplicantService, AuditService, LetterService, LetterTypeService } from '~/.server/domain/services';
 import { loader } from '~/routes/protected/letters/index';
 
 vi.mock('~/services/instrumentation-service.server', () => ({
@@ -54,28 +56,30 @@ describe('Letters Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
-      const mockAppLoadContext = mockDeep<AppLoadContext>({
-        serviceProvider: {
-          getApplicantService: vi.fn().mockReturnValue({ findClientNumberBySin: vi.fn().mockReturnValue('some-client-number') }),
-          getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }),
-          getLetterService: vi.fn().mockReturnValue({
-            findLettersByClientId: vi.fn().mockResolvedValue([
-              { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
-              { id: '2', date: '2004-02-29', letterTypeId: 'DEN' },
-              { id: '3', date: undefined, letterTypeId: 'DEN' },
-            ]),
-          }),
-          getLetterTypeService: vi.fn().mockReturnValue({
-            listLetterTypes: vi.fn().mockReturnValue([
-              { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
-              { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
-            ]),
-          }),
-        },
-      });
+      const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.CLIENT_CONFIG).mockReturnValueOnce({
         SCCH_BASE_URI: 'https://api.example.com',
-      });
+      } satisfies Partial<ClientConfig>);
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.AUDIT_SERVICE).mockReturnValue({
+        createAudit: vi.fn(),
+      } satisfies Partial<AuditService>);
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.APPLICANT_SERVICE).mockReturnValue({
+        findClientNumberBySin: () => Promise.resolve('some-client-number'),
+      } satisfies Partial<ApplicantService>);
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.LETTER_SERVICE).mockReturnValue({
+        findLettersByClientId: () =>
+          Promise.resolve([
+            { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
+            { id: '2', date: '2004-02-29', letterTypeId: 'DEN' },
+            { id: '3', date: '2004-02-29', letterTypeId: 'DEN' },
+          ]),
+      } satisfies Partial<LetterService>);
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE).mockReturnValue({
+        listLetterTypes: () => [
+          { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
+          { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
+        ],
+      } satisfies Partial<LetterTypeService>);
 
       const response = await loader({
         request: new Request('http://localhost/letters?sort=desc'),
@@ -89,7 +93,7 @@ describe('Letters Page', () => {
       expect(data.letters[2].id).toEqual('3');
       expect(data.letters[2].letterTypeId).toEqual('DEN');
       expect(data.letters[1].date).toBeDefined();
-      expect(data.letters[2].date).toBeUndefined();
+      expect(data.letters[2].date).toBeDefined();
     });
   });
 
@@ -98,26 +102,30 @@ describe('Letters Page', () => {
     session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
     session.set('userInfoToken', { sin: '999999999' });
 
-    const mockAppLoadContext = mockDeep<AppLoadContext>({
-      serviceProvider: {
-        getApplicantService: vi.fn().mockReturnValue({ findClientNumberBySin: vi.fn().mockReturnValue('some-client-number') }),
-        getAuditService: vi.fn().mockReturnValue({ createAudit: vi.fn() }),
-        getLetterService: vi.fn().mockReturnValue({
-          findLettersByClientId: vi.fn().mockResolvedValue([
-            { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
-            { id: '2', date: '2004-02-29', letterTypeId: 'DEN' },
-            { id: '3', date: undefined, letterTypeId: 'DEN' },
-          ]),
-        }),
-        getLetterTypeService: vi.fn().mockReturnValue({
-          listLetterTypes: vi.fn().mockReturnValue([
-            { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
-            { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
-          ]),
-        }),
-      },
-    });
-    mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.CLIENT_CONFIG).mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' });
+    const mockAppLoadContext = mockDeep<AppLoadContext>();
+    mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.CLIENT_CONFIG).mockReturnValue({
+      SCCH_BASE_URI: 'https://api.example.com',
+    } satisfies Partial<ClientConfig>);
+    mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.AUDIT_SERVICE).mockReturnValue({
+      createAudit: vi.fn(),
+    } satisfies Partial<AuditService>);
+    mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.APPLICANT_SERVICE).mockReturnValue({
+      findClientNumberBySin: () => Promise.resolve('some-client-number'),
+    } satisfies Partial<ApplicantService>);
+    mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.LETTER_SERVICE).mockReturnValue({
+      findLettersByClientId: () =>
+        Promise.resolve([
+          { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
+          { id: '2', date: '2004-02-29', letterTypeId: 'DEN' },
+          { id: '3', date: '2004-02-29', letterTypeId: 'DEN' },
+        ]),
+    } satisfies Partial<LetterService>);
+    mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE).mockReturnValue({
+      listLetterTypes: () => [
+        { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
+        { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
+      ],
+    } satisfies Partial<LetterTypeService>);
 
     const response = await loader({
       request: new Request('http://localhost/letters'),

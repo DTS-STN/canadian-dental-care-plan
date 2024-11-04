@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 import { Buffer } from 'node:buffer';
 import { sanitize } from 'sanitize-filename-ts';
 
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { LetterDto } from '~/.server/domain/dtos';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -10,7 +11,7 @@ import { featureEnabled } from '~/utils/env-utils.server';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 
-export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
 
   const instrumentationService = getInstrumentationService();
@@ -32,16 +33,16 @@ export async function loader({ context: { appContainer, serviceProvider, session
   }
 
   const locale = getLocale(request);
-  const letterType = serviceProvider.getLetterTypeService().getLocalizedLetterTypeById(letter.letterTypeId, locale);
+  const letterType = appContainer.get(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE).getLocalizedLetterTypeById(letter.letterTypeId, locale);
   const documentName = sanitize(letterType.name);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
-  const pdfBytes = await serviceProvider.getLetterService().getPdfByLetterId({ letterId: params.id, userId: userInfoToken.sub });
+  const pdfBytes = await appContainer.get(SERVICE_IDENTIFIER.LETTER_SERVICE).getPdfByLetterId({ letterId: params.id, userId: userInfoToken.sub });
   instrumentationService.countHttpStatus('letters.download', 200);
 
   const idToken: IdToken = session.get('idToken');
-  serviceProvider.getAuditService().createAudit('download.letter', { userId: idToken.sub });
+  appContainer.get(SERVICE_IDENTIFIER.AUDIT_SERVICE).createAudit('download.letter', { userId: idToken.sub });
 
   const decodedPdfBytes = Buffer.from(pdfBytes, 'base64');
   return new Response(decodedPdfBytes, {

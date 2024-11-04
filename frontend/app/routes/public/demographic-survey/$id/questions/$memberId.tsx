@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputCheckboxesProps } from '~/components/input-checkboxes';
@@ -36,7 +37,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   const csrfToken = String(session.get('csrfToken'));
 
   const member = loadDemographicSurveySingleMemberState({ params, session });
@@ -46,16 +47,17 @@ export async function loader({ context: { appContainer, serviceProvider, session
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('demographic-survey:questions.page-title', { memberName }) }) };
 
-  const indigenousStatuses = serviceProvider.getDemographicSurveyService().listLocalizedIndigenousStatuses(locale);
-  const disabilityStatuses = serviceProvider.getDemographicSurveyService().listLocalizedDisabilityStatuses(locale);
-  const ethnicGroups = serviceProvider.getDemographicSurveyService().listLocalizedEthnicGroups(locale);
-  const locationBornStatuses = serviceProvider.getDemographicSurveyService().listLocalizedLocationBornStatuses(locale);
-  const genderStatuses = serviceProvider.getDemographicSurveyService().listLocalizedGenderStatuses(locale);
+  const demographicSurveyService = appContainer.get(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_SERVICE);
+  const indigenousStatuses = demographicSurveyService.listLocalizedIndigenousStatuses(locale);
+  const disabilityStatuses = demographicSurveyService.listLocalizedDisabilityStatuses(locale);
+  const ethnicGroups = demographicSurveyService.listLocalizedEthnicGroups(locale);
+  const locationBornStatuses = demographicSurveyService.listLocalizedLocationBornStatuses(locale);
+  const genderStatuses = demographicSurveyService.listLocalizedGenderStatuses(locale);
 
   return json({ csrfToken, meta, memberName, indigenousStatuses, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState: member.questions });
 }
 
-export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('demographic-survey/questions');
 
   const state = loadDemographicSurveyState({ params, session });

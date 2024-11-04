@@ -10,6 +10,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Button } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -39,7 +40,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
 
   const statusStateId = getStatusStateIdFromUrl(request.url);
@@ -54,7 +55,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
 
   const statusId = statusCheckResult.statusId ?? null;
   const alertType = getContextualAlertType(statusId);
-  const clientFriendlyStatus = statusId ? serviceProvider.getClientFriendlyStatusService().getLocalizedClientFriendlyStatusById(statusId, locale) : null;
+  const clientFriendlyStatus = statusId ? appContainer.get(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE).getLocalizedClientFriendlyStatusById(statusId, locale) : null;
 
   return json({
     statusResult: { alertType, clientFriendlyStatus },
@@ -63,7 +64,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
   });
 }
 
-export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
 
   const statusStateId = getStatusStateIdFromUrl(request.url);

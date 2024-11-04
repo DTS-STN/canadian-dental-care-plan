@@ -6,13 +6,16 @@ import { mock, mockDeep } from 'vitest-mock-extended';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { validateCsrfToken } from '~/.server/remix/security';
 import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
+import type { CsrfTokenValidator } from '~/.server/web/validators';
 
 describe('validateCsrfToken', () => {
   it('should call the CSRF token validator with the request', async () => {
     const mockValidateCsrfToken = vi.fn();
     const mockRequest = mock<ActionFunctionArgs['request']>();
-    const mockContext = mockDeep<ActionFunctionArgs['context']>({ funcPropSupport: true });
-    mockContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({ validateCsrfToken: mockValidateCsrfToken });
+    const mockContext = mockDeep<ActionFunctionArgs['context']>();
+    mockContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({
+      validateCsrfToken: mockValidateCsrfToken,
+    } satisfies Partial<CsrfTokenValidator>);
 
     await validateCsrfToken({ context: mockContext, request: mockRequest });
 
@@ -24,8 +27,10 @@ describe('validateCsrfToken', () => {
       throw new CsrfTokenInvalidException('Invalid CSRF token');
     });
     const mockRequest = mock<ActionFunctionArgs['request']>();
-    const mockContext = mockDeep<ActionFunctionArgs['context']>({ funcPropSupport: true });
-    mockContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({ validateCsrfToken: mockValidateCsrfToken });
+    const mockContext = mockDeep<ActionFunctionArgs['context']>();
+    mockContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({
+      validateCsrfToken: mockValidateCsrfToken,
+    } satisfies Partial<CsrfTokenValidator>);
 
     const response = await validateCsrfToken({ context: mockContext, request: mockRequest }).catch((e) => e);
 
@@ -37,8 +42,10 @@ describe('validateCsrfToken', () => {
       throw new Error('Something went wrong');
     });
     const mockRequest = mock<ActionFunctionArgs['request']>();
-    const mockContext = mockDeep<ActionFunctionArgs['context']>({ funcPropSupport: true });
-    mockContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({ validateCsrfToken: mockValidateCsrfToken });
+    const mockContext = mockDeep<ActionFunctionArgs['context']>();
+    mockContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({
+      validateCsrfToken: mockValidateCsrfToken,
+    } satisfies Partial<CsrfTokenValidator>);
 
     await expect(validateCsrfToken({ context: mockContext, request: mockRequest })).rejects.toThrowError('Something went wrong');
   });
