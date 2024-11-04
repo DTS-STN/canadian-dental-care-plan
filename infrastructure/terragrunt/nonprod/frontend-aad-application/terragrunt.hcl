@@ -12,6 +12,14 @@ include "root" {
 
 inputs = {
   application_display_name = "Canadian Dental Care Program: Service Principal"
+  application_app_roles = [{
+    id                   = "42a55bc0-5c40-4502-a729-791e1fe9d4e0"
+    display_name         = "HealthCheck Monitor"
+    value                = "HealthCheck.ViewDetails"
+    description          = "HealthCheck monitors can view detailed output of a health check."
+    allowed_member_types = ["Application", "User"]
+    members              = ["gregory.j.baker@hrsdc-rhdcc.gc.ca"]
+  }]
   application_identifier_uris = [
     "api://cdcp.esdc-edsc.gc.ca/frontend"
   ]
