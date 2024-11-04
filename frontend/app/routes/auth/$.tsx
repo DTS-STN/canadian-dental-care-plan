@@ -72,14 +72,14 @@ function handleLoginRequest({ request }: LoaderFunctionArgs) {
 /**
  * Handler for /auth/logout requests
  */
-async function handleLogoutRequest({ context: { appContainer, serviceProvider, session }, request }: LoaderFunctionArgs) {
+async function handleLogoutRequest({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleLogoutRequest');
   log.debug('Handling RAOIDC logout request');
   getInstrumentationService().createCounter('auth.logout.requests').add(1);
 
   const { AUTH_RASCL_LOGOUT_URL } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
-  const sessionService = serviceProvider.getSessionService();
+  const sessionService = appContainer.get(SERVICE_IDENTIFIER.SESSION_SERVICE);
 
   if (!session.has('idToken')) {
     log.debug(`User has not authenticated; bypassing RAOIDC logout and redirecting to RASCL logout`);
@@ -104,12 +104,12 @@ async function handleLogoutRequest({ context: { appContainer, serviceProvider, s
 /**
  * Handler for /auth/login/raoidc requests
  */
-async function handleRaoidcLoginRequest({ context: { appContainer, serviceProvider, session }, request }: LoaderFunctionArgs) {
+async function handleRaoidcLoginRequest({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleRaoidcLoginRequest');
   log.debug('Handling RAOIDC login request');
   getInstrumentationService().createCounter('auth.login.raoidc.requests').add(1);
 
-  const sessionService = serviceProvider.getSessionService();
+  const sessionService = appContainer.get(SERVICE_IDENTIFIER.SESSION_SERVICE);
   await sessionService.destroySession(session);
 
   const { origin, searchParams } = new URL(request.url);
@@ -139,7 +139,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, serviceProvid
 /**
  * Handler for /auth/callback/raoidc requests
  */
-async function handleRaoidcCallbackRequest({ context: { appContainer, serviceProvider, session }, request }: LoaderFunctionArgs) {
+async function handleRaoidcCallbackRequest({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleRaoidcCallbackRequest');
   log.debug('Handling RAOIDC callback request');
   getInstrumentationService().createCounter('auth.callback.raoidc.requests').add(1);

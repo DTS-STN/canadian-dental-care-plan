@@ -81,13 +81,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   featureEnabled('address-validation');
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
   const locale = getLocale(request);
-  const countries = serviceProvider.getCountryService().listAndSortLocalizedCountries(locale);
-  const provinceTerritoryStates = serviceProvider.getProvinceTerritoryStateService().listAndSortLocalizedProvinceTerritoryStates(locale);
+  const countries = appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).listAndSortLocalizedCountries(locale);
+  const provinceTerritoryStates = appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('address-validation:page-title') }) };
@@ -101,7 +101,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
   };
 }
 
-export async function action({ context: { appContainer, serviceProvider, session }, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, request }: ActionFunctionArgs) {
   featureEnabled('address-validation');
   await validateCsrfToken({ context: { appContainer }, request });
 
@@ -167,9 +167,9 @@ export async function action({ context: { appContainer, serviceProvider, session
     address: parsedData.address,
     apartment: parsedData.apartment,
     city: parsedData.city,
-    country: serviceProvider.getCountryService().getLocalizedCountryById(parsedData.country, locale).name,
+    country: appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(parsedData.country, locale).name,
     postalZipCode: parsedData.postalZipCode,
-    provinceState: parsedData.provinceState && serviceProvider.getProvinceTerritoryStateService().getLocalizedProvinceTerritoryStateById(parsedData.provinceState, locale).abbr,
+    provinceState: parsedData.provinceState && appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).getLocalizedProvinceTerritoryStateById(parsedData.provinceState, locale).abbr,
   };
 
   // International address, skip validation
@@ -190,7 +190,7 @@ export async function action({ context: { appContainer, serviceProvider, session
     provinceState: resolvedAddress.provinceState,
   };
 
-  const addressCorrectionResult = await serviceProvider.getAddressValidationService().getAddressCorrectionResult({
+  const addressCorrectionResult = await appContainer.get(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE).getAddressCorrectionResult({
     address: resolvedAddress.address,
     city: resolvedAddress.city,
     postalCode: resolvedAddress.postalZipCode,

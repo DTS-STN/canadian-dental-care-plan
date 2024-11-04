@@ -13,9 +13,10 @@ import { createRemixRequest, sendRemixResponse } from 'remix-create-express-app/
 import invariant from 'tiny-invariant';
 import type { SetOptional } from 'type-fest';
 
+import { SERVICE_IDENTIFIER } from './.server/constants';
 import { getEnv } from './utils/env-utils.server';
 import { randomString } from './utils/string-utils';
-import { getAppContainerProvider, getContainerServiceProvider } from '~/.server/app.container';
+import { getAppContainerProvider } from '~/.server/app.container';
 import { getLogger } from '~/utils/logging.server';
 
 const { NODE_ENV } = getEnv();
@@ -95,7 +96,7 @@ const expressApp = await createExpressApp({
             invariant(loadContext.session, 'Expected loadContext.session to be defined');
 
             log.debug('Auto-committing session and creating session cookie');
-            const sessionService = getContainerServiceProvider().getSessionService();
+            const sessionService = getAppContainerProvider().get(SERVICE_IDENTIFIER.SESSION_SERVICE);
             const sessionCookie = await sessionService.commitSession(loadContext.session);
             remixResponse.headers.append('Set-Cookie', sessionCookie);
           }
@@ -114,7 +115,6 @@ const expressApp = await createExpressApp({
 
     const partialAppLoadContext = {
       appContainer: getAppContainerProvider(),
-      serviceProvider: getContainerServiceProvider(),
     } as const satisfies SetOptional<AppLoadContext, 'session'>;
 
     if (shouldSkipSessionHandling(request)) {
@@ -123,7 +123,7 @@ const expressApp = await createExpressApp({
     }
 
     log.debug('Initializing server session...');
-    const sessionService = getContainerServiceProvider().getSessionService();
+    const sessionService = partialAppLoadContext.appContainer.get(SERVICE_IDENTIFIER.SESSION_SERVICE);
     const session = await sessionService.getSession(request.headers.cookie);
 
     // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.

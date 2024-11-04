@@ -6,6 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -37,7 +38,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -56,17 +57,19 @@ export async function loader({ context: { appContainer, serviceProvider, session
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
-  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
-  const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram
-    ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram
+    ? appContainer.get(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
     : undefined;
-  const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? serviceProvider.getProvinceTerritoryStateService().getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
-  const countryMailing = serviceProvider.getCountryService().getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
-  const countryHome = serviceProvider.getCountryService().getLocalizedCountryById(state.contactInformation.homeCountry, locale);
-  const preferredLanguage = serviceProvider.getPreferredLanguageService().getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
-  const maritalStatus = serviceProvider.getMaritalStatusService().getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
-  const communicationPreference = serviceProvider.getPreferredCommunicationMethodService().getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
+  const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram
+    ? appContainer.get(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
+  const countryMailing = appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
+  const countryHome = appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(state.contactInformation.homeCountry, locale);
+  const preferredLanguage = appContainer.get(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
+  const maritalStatus = appContainer.get(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE).getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
+  const communicationPreference = appContainer.get(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -121,9 +124,11 @@ export async function loader({ context: { appContainer, serviceProvider, session
       throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
     }
 
-    const federalBenefit = child.dentalBenefits.federalSocialProgram ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale) : undefined;
+    const federalBenefit = child.dentalBenefits.federalSocialProgram
+      ? appContainer.get(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      : undefined;
     const provincialTerritorialSocialProgram = child.dentalBenefits.provincialTerritorialSocialProgram
-      ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      ? appContainer.get(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
     return {
@@ -164,7 +169,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
   });
 }
 
-export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult-child/confirmation');
 
   const t = await getFixedT(request, handle.i18nNamespaces);

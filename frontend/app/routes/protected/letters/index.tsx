@@ -39,7 +39,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 const orderEnumSchema = z.enum(['asc', 'desc']);
 
-export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
 
   const instrumentationService = getInstrumentationService();
@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
 
   const clientNumber =
     session.get('clientNumber') ??
-    (await serviceProvider.getApplicantService().findClientNumberBySin({
+    (await appContainer.get(SERVICE_IDENTIFIER.APPLICANT_SERVICE).findClientNumberBySin({
       sin: userInfoToken.sin,
       userId: userInfoToken.sub,
     }));
@@ -64,8 +64,8 @@ export async function loader({ context: { appContainer, serviceProvider, session
     throw redirect(getPathById('protected/data-unavailable', params));
   }
 
-  const allLetters = await serviceProvider.getLetterService().findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
-  const letterTypes = serviceProvider.getLetterTypeService().listLetterTypes();
+  const allLetters = await appContainer.get(SERVICE_IDENTIFIER.LETTER_SERVICE).findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
+  const letterTypes = appContainer.get(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE).listLetterTypes();
   const letters = allLetters.filter(({ letterTypeId }) => letterTypes.some(({ id }) => letterTypeId === id));
 
   session.set('clientNumber', clientNumber);
@@ -76,7 +76,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
   const { SCCH_BASE_URI } = appContainer.get(SERVICE_IDENTIFIER.CLIENT_CONFIG);
 
   const idToken: IdToken = session.get('idToken');
-  serviceProvider.getAuditService().createAudit('page-view.letters', { userId: idToken.sub });
+  appContainer.get(SERVICE_IDENTIFIER.AUDIT_SERVICE).createAudit('page-view.letters', { userId: idToken.sub });
   instrumentationService.countHttpStatus('letters.view', 200);
 
   return json({ letters, letterTypes, meta, sortOrder, SCCH_BASE_URI });

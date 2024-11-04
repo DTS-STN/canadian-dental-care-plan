@@ -51,7 +51,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
@@ -71,11 +71,11 @@ export async function loader({ context: { appContainer, serviceProvider, session
 
   const children = state.children.map((child) => {
     const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram
-      ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      ? appContainer.get(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
     const selectedProvincialBenefit = child.dentalBenefits.provincialTerritorialSocialProgram
-      ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      ? appContainer.get(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
     return {
@@ -111,7 +111,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
   });
 }
 
-export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult-child/review-child-information');
 
   const state = loadApplyAdultChildStateForReview({ params, request, session });
@@ -138,7 +138,7 @@ export async function action({ context: { appContainer, serviceProvider, session
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: serviceProvider.getHCaptchaService(), hCaptchaResponse, request }))) {
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(SERVICE_IDENTIFIER.HCAPTCHA_SERVICE), hCaptchaResponse, request }))) {
       clearApplyState({ params, session });
       return redirect(getPathById('public/unable-to-process-request', params));
     }

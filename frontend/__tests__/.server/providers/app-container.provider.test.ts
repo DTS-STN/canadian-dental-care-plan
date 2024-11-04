@@ -3,10 +3,10 @@ import { Container } from 'inversify';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
+import { AppContainerProviderImpl } from '~/.server/app-container.provider';
 import type { ServiceIdentifier } from '~/.server/constants/service-identifier.constant';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.constant';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { AppContainerProviderImpl } from '~/.server/providers/app-container.provider';
 
 describe('AppContainerProviderImpl', () => {
   let container: interfaces.Container;

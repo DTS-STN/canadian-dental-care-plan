@@ -41,15 +41,15 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const preferredLanguages = serviceProvider.getPreferredLanguageService().listAndSortLocalizedPreferredLanguages(locale);
-  const preferredCommunicationMethods = serviceProvider.getPreferredCommunicationMethodService().listAndSortLocalizedPreferredCommunicationMethods(locale);
+  const preferredLanguages = appContainer.get(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).listAndSortLocalizedPreferredLanguages(locale);
+  const preferredCommunicationMethods = appContainer.get(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE).listAndSortLocalizedPreferredCommunicationMethods(locale);
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
   if (!communicationMethodEmail) {
@@ -74,7 +74,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
   });
 }
 
-export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/ita/communication-preference');
 
   const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);

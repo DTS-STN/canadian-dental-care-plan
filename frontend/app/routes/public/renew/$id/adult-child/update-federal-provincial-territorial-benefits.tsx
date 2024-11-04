@@ -48,16 +48,16 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const { CANADA_COUNTRY_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
   const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const federalSocialPrograms = serviceProvider.getFederalGovernmentInsurancePlanService().listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
-  const provinceTerritoryStates = serviceProvider.getProvinceTerritoryStateService().listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
-  const provincialTerritorialSocialPrograms = serviceProvider.getProvincialGovernmentInsurancePlanService().listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
+  const federalSocialPrograms = appContainer.get(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const provinceTerritoryStates = appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
+  const provincialTerritorialSocialPrograms = appContainer.get(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:update-dental-benefits.title') }) };
@@ -76,7 +76,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
   });
 }
 
-export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/adult-child/update-federal-provincial-territorial');
   const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);

@@ -1,5 +1,4 @@
 export * from './configs.container-module';
-export * from './container-providers.container-module';
 export * from './factories.container-module';
 export * from './mappers.container-module';
 export * from './repositories.container-module';

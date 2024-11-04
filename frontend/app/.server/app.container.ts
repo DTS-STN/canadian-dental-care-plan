@@ -3,10 +3,10 @@ import type { interfaces } from 'inversify';
 import { Container } from 'inversify';
 import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
 
+import type { AppContainerProvider } from '~/.server/app-container.provider';
+import { AppContainerProviderImpl } from '~/.server/app-container.provider';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import { configsContainerModule, containerProvidersContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule } from '~/.server/container-modules';
-import type { AppContainerProvider, ContainerServiceProvider } from '~/.server/providers';
-import { AppContainerProviderImpl } from '~/.server/providers';
+import { configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule } from '~/.server/container-modules';
 import { getLogger } from '~/utils/logging.server';
 
 /**
@@ -25,7 +25,6 @@ import { getLogger } from '~/utils/logging.server';
 
 let appContainerInstance: interfaces.Container | undefined;
 let appContainerProviderInstance: AppContainerProvider | undefined;
-let containerServiceProviderInstance: ContainerServiceProvider | undefined;
 
 /**
  * Return the IoC app container singleton.
@@ -46,15 +45,6 @@ export function getAppContainerProvider(): AppContainerProvider {
 }
 
 /**
- * Returns the ContainerServiceProvider singleton instance.
- *
- * @returns The ContainerServiceProvider singleton instance.
- */
-export function getContainerServiceProvider(): ContainerServiceProvider {
-  return (containerServiceProviderInstance ??= getAppContainer().get(SERVICE_IDENTIFIER.CONTAINER_SERVICE_PROVIDER));
-}
-
-/**
  * Create a new IoC container.
  *
  * @returns the new IoC container
@@ -66,7 +56,7 @@ function createContainer(): interfaces.Container {
   log.info('Creating IoC container; id: [%s], options: [%j]', container.id, container.options);
 
   // load container modules
-  container.load(configsContainerModule, containerProvidersContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule);
+  container.load(configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule);
 
   // configure container logger middleware
   const serverConfig = container.get(SERVICE_IDENTIFIER.SERVER_CONFIG);

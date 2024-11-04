@@ -12,6 +12,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
@@ -47,7 +48,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -57,11 +58,11 @@ export async function loader({ context: { appContainer, serviceProvider, session
 
   const children = getChildrenState(state).map((child) => {
     const federalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
-      ? serviceProvider.getFederalGovernmentInsurancePlanService().getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      ? appContainer.get(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
     const provincialTerritorialSocialProgram = child.dentalBenefits?.provincialTerritorialSocialProgram
-      ? serviceProvider.getProvincialGovernmentInsurancePlanService().getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      ? appContainer.get(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
     return {
       ...child,
@@ -76,7 +77,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
   return json({ csrfToken, meta, children, editMode: state.editMode });
 }
 
-export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const state = loadApplyAdultChildState({ params, request, session });
 
   const log = getLogger('apply/adult-child/child-summary');

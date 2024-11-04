@@ -48,11 +48,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const maritalStatuses = serviceProvider.getMaritalStatusService().listLocalizedMaritalStatuses(locale);
+  const maritalStatuses = appContainer.get(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE).listLocalizedMaritalStatuses(locale);
   const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
   const csrfToken = String(session.get('csrfToken'));
@@ -61,7 +61,7 @@ export async function loader({ context: { appContainer, serviceProvider, session
   return json({ csrfToken, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED });
 }
 
-export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/adult-child/marital-status');
 
   const state = loadRenewAdultChildState({ params, request, session });
