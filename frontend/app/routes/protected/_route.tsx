@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { Outlet, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
 
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { NotFoundError, ProtectedLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { useApiSession } from '~/utils/api-session-utils';
@@ -11,8 +12,8 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export async function loader({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
-  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = configProvider.getClientConfig();
+export async function loader({ context: { appContainer, serviceProvider, session }, request }: LoaderFunctionArgs) {
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(SERVICE_IDENTIFIER.CLIENT_CONFIG);
   return { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 

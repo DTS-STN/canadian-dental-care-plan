@@ -10,6 +10,7 @@ import validator from 'validator';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
@@ -47,8 +48,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
-  const { CANADA_COUNTRY_ID } = configProvider.getServerConfig();
+export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+  const { CANADA_COUNTRY_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -73,7 +74,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   });
 }
 
-export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/ita/federal-provincial-territorial');
 
   const t = await getFixedT(request, handle.i18nNamespaces);

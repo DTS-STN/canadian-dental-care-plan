@@ -50,7 +50,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewAdultChildStateForReview({ params, request, session });
 
   // renew state is valid then edit mode can be set to true

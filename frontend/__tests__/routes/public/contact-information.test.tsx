@@ -2,8 +2,9 @@ import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
+import { mockDeep } from 'vitest-mock-extended';
 
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { loader } from '~/routes/public/apply/$id/adult/contact-information';
 
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
@@ -31,15 +32,7 @@ describe('_public.apply.id.contact-information', () => {
     it('should id, state, country list and region list', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
-      const mockAppLoadContext = mock<AppLoadContext>({
-        configProvider: {
-          getServerConfig: vi.fn().mockReturnValue({
-            MARITAL_STATUS_CODE_COMMONLAW: 'COMMONLAW',
-            MARITAL_STATUS_CODE_MARRIED: 'MARRIED',
-            CANADA_COUNTRY_ID: 'CAN',
-            USA_COUNTRY_ID: 'USA',
-          }),
-        },
+      const mockAppLoadContext = mockDeep<AppLoadContext>({
         serviceProvider: {
           getCountryService: () => ({
             getCountryById: vi.fn(),
@@ -55,6 +48,12 @@ describe('_public.apply.id.contact-information', () => {
             listAndSortLocalizedProvinceTerritoryStatesByCountryId: vi.fn(),
           }),
         },
+      });
+      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
+        MARITAL_STATUS_CODE_COMMONLAW: 'COMMONLAW',
+        MARITAL_STATUS_CODE_MARRIED: 'MARRIED',
+        CANADA_COUNTRY_ID: 'CAN',
+        USA_COUNTRY_ID: 'USA',
       });
 
       const response = await loader({

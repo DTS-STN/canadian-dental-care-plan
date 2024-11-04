@@ -10,6 +10,7 @@ import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { validateCsrfToken } from '~/.server/remix/security';
 import { Address } from '~/components/address';
 import { AddressDiff } from '~/components/address-diff';
@@ -80,9 +81,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, request }: LoaderFunctionArgs) {
   featureEnabled('address-validation');
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = configProvider.getServerConfig();
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
   const locale = getLocale(request);
   const countries = serviceProvider.getCountryService().listAndSortLocalizedCountries(locale);
@@ -100,7 +101,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   };
 }
 
-export async function action({ context: { appContainer, configProvider, serviceProvider, session }, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, serviceProvider, session }, request }: ActionFunctionArgs) {
   featureEnabled('address-validation');
   await validateCsrfToken({ context: { appContainer }, request });
 
@@ -109,7 +110,7 @@ export async function action({ context: { appContainer, configProvider, serviceP
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = configProvider.getServerConfig();
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
   const locale = getLocale(request);
 
   const addressSchema = z

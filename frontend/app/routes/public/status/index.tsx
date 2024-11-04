@@ -10,6 +10,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Collapsible } from '~/components/collapsible';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
@@ -42,9 +43,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = configProvider.getServerConfig();
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
   const csrfToken = String(session.get('csrfToken'));
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -56,10 +57,10 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   return json({ csrfToken, hCaptchaEnabled, meta, siteKey: HCAPTCHA_SITE_KEY });
 }
 
-export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
   const log = getLogger('status/index');
-  const { ENABLED_FEATURES } = configProvider.getServerConfig();
+  const { ENABLED_FEATURES } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const formData = await request.formData();

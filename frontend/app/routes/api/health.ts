@@ -6,17 +6,26 @@ import { HealthCheckConfig, execute, getHttpStatusCode } from '@dts-stn/health-c
 import { isEmpty } from 'moderndash';
 import moize from 'moize';
 
-import { getContainerConfigProvider, getContainerServiceProvider } from '~/.server/app.container';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import type { AppContainerProvider } from '~/.server/providers';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 
-const { HEALTH_CACHE_TTL, SESSION_STORAGE_TYPE } = getContainerConfigProvider().getServerConfig();
+function getRedisCheck(appContainer: AppContainerProvider) {
+  const { HEALTH_CACHE_TTL } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const redisService = appContainer.find(SERVICE_IDENTIFIER.REDIS_SERVICE);
 
-const redisCheckFn = async () => void (await getContainerServiceProvider().getRedisService()?.ping());
-const redisCheck = moize.promise(redisCheckFn, { maxAge: HEALTH_CACHE_TTL, transformArgs: () => [] });
+  async function redisCheckFn() {
+    if (!redisService) return;
+    await redisService.ping();
+  }
 
-export async function loader({ context: { serviceProvider }, request }: LoaderFunctionArgs) {
+  return moize.promise(redisCheckFn, { maxAge: HEALTH_CACHE_TTL, transformArgs: () => [] });
+}
+
+export async function loader({ context: { appContainer }, request }: LoaderFunctionArgs) {
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
   const { buildRevision: buildId, buildVersion: version } = getBuildInfoService().getBuildInfo();
+  const { SESSION_STORAGE_TYPE } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
   const healthCheckOptions: HealthCheckOptions = {
     excludeComponents: toArray(exclude),
@@ -34,7 +43,7 @@ export async function loader({ context: { serviceProvider }, request }: LoaderFu
   // TODO :: GjB ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   //
 
-  const redisHealthCheck: HealthCheck = { name: 'redis', check: redisCheck };
+  const redisHealthCheck: HealthCheck = { name: 'redis', check: getRedisCheck(appContainer) };
 
   // exclude the redis health check if the application is not using it
   if (SESSION_STORAGE_TYPE !== 'redis') {

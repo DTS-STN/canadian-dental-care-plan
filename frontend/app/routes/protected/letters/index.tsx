@@ -9,6 +9,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
@@ -38,7 +39,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 const orderEnumSchema = z.enum(['asc', 'desc']);
 
-export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
 
   const instrumentationService = getInstrumentationService();
@@ -72,7 +73,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
-  const { SCCH_BASE_URI } = configProvider.getClientConfig();
+  const { SCCH_BASE_URI } = appContainer.get(SERVICE_IDENTIFIER.CLIENT_CONFIG);
 
   const idToken: IdToken = session.get('idToken');
   serviceProvider.getAuditService().createAudit('page-view.letters', { userId: idToken.sub });

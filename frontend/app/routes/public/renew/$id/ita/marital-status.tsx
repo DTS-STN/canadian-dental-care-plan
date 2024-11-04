@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -47,12 +48,12 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const maritalStatuses = serviceProvider.getMaritalStatusService().listLocalizedMaritalStatuses(locale);
-  const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = configProvider.getServerConfig();
+  const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:marital-status.page-title') }) };
@@ -60,7 +61,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   return json({ csrfToken, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED });
 }
 
-export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/ita/marital-status');
 
   const state = loadRenewItaState({ params, request, session });

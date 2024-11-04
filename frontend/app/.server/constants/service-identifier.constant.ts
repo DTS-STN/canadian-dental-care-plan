@@ -56,7 +56,7 @@ import type {
   SessionService,
 } from '~/.server/domain/services';
 import type { ConfigFactory, LogFactory } from '~/.server/factories';
-import type { ContainerConfigProvider, ContainerServiceProvider } from '~/.server/providers';
+import type { ContainerServiceProvider } from '~/.server/providers';
 import type { HCaptchaDtoMapper } from '~/.server/web/mappers';
 import type { HCaptchaRepository } from '~/.server/web/repositories';
 import type { HCaptchaService } from '~/.server/web/services';
@@ -83,7 +83,6 @@ export const SERVICE_IDENTIFIER = {
   CLIENT_FRIENDLY_STATUS_REPOSITORY: serviceIdentifier<ClientFriendlyStatusRepository>('ClientFriendlyStatusRepository'),
   CLIENT_FRIENDLY_STATUS_SERVICE: serviceIdentifier<ClientFriendlyStatusService>('ClientFriendlyStatusService'),
   CONFIG_FACTORY: serviceIdentifier<ConfigFactory>('ConfigFactory'),
-  CONTAINER_CONFIG_PROVIDER: serviceIdentifier<ContainerConfigProvider>('ContainerConfigProvider'),
   CONTAINER_SERVICE_PROVIDER: serviceIdentifier<ContainerServiceProvider>('ContainerServiceProvider'),
   COUNTRY_DTO_MAPPER: serviceIdentifier<CountryDtoMapper>('CountryDtoMapper'),
   COUNTRY_REPOSITORY: serviceIdentifier<CountryRepository>('CountryRepository'),

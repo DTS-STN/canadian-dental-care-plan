@@ -36,7 +36,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { configProvider, serviceProvider, session }, request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, request, params }: LoaderFunctionArgs) {
   const csrfToken = String(session.get('csrfToken'));
 
   const member = loadDemographicSurveySingleMemberState({ params, session });
@@ -55,7 +55,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   return json({ csrfToken, meta, memberName, indigenousStatuses, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState: member.questions });
 }
 
-export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('demographic-survey/questions');
 
   const state = loadDemographicSurveyState({ params, session });

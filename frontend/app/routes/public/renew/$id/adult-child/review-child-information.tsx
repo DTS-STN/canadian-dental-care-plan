@@ -12,6 +12,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Button } from '~/components/buttons';
 import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -47,13 +48,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewAdultChildStateForReview({ params, request, session });
 
   // renew state is valid then edit mode can be set to true
   saveRenewState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = configProvider.getServerConfig();
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -107,12 +108,12 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   });
 }
 
-export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('renew/adult-child/review-child-information');
 
   const state = loadRenewAdultChildStateForReview({ params, request, session });
 
-  const { ENABLED_FEATURES } = configProvider.getServerConfig();
+  const { ENABLED_FEATURES } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();

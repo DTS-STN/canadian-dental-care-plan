@@ -10,7 +10,7 @@ import { featureEnabled } from '~/utils/env-utils.server';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 
-export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
 
   const instrumentationService = getInstrumentationService();

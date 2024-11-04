@@ -5,7 +5,7 @@ import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middlewar
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { configsContainerModule, containerProvidersContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule } from '~/.server/container-modules';
-import type { AppContainerProvider, ContainerConfigProvider, ContainerServiceProvider } from '~/.server/providers';
+import type { AppContainerProvider, ContainerServiceProvider } from '~/.server/providers';
 import { AppContainerProviderImpl } from '~/.server/providers';
 import { getLogger } from '~/utils/logging.server';
 
@@ -25,7 +25,6 @@ import { getLogger } from '~/utils/logging.server';
 
 let appContainerInstance: interfaces.Container | undefined;
 let appContainerProviderInstance: AppContainerProvider | undefined;
-let containerConfigProviderInstance: ContainerConfigProvider | undefined;
 let containerServiceProviderInstance: ContainerServiceProvider | undefined;
 
 /**
@@ -44,15 +43,6 @@ function getAppContainer(): interfaces.Container {
  */
 export function getAppContainerProvider(): AppContainerProvider {
   return (appContainerProviderInstance ??= new AppContainerProviderImpl(getAppContainer()));
-}
-
-/**
- * Returns the ContainerConfigProvider singleton instance.
- *
- * @returns The ContainerConfigProvider singleton instance.
- */
-export function getContainerConfigProvider(): ContainerConfigProvider {
-  return (containerConfigProviderInstance ??= getAppContainer().get(SERVICE_IDENTIFIER.CONTAINER_CONFIG_PROVIDER));
 }
 
 /**

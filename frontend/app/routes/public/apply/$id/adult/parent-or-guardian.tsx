@@ -31,7 +31,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -48,7 +48,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   return json({ ageCategory, csrfToken, defaultState: state.disabilityTaxCredit, id: state.id, meta });
 }
 
-export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult/parent-or-guardian');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
