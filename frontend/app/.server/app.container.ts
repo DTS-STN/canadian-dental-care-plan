@@ -1,4 +1,3 @@
-import { error } from 'console';
 import type { interfaces } from 'inversify';
 import { Container } from 'inversify';
 import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
@@ -87,12 +86,18 @@ function createLoggerMidddlware(): interfaces.Middleware {
       time: true,
     },
     (out) => {
-      if (out.error) {
-        loggerMiddlewareLog.error(error);
+      // NOTE: The "find" method in AppContainerProvider will return null if that error is thrown. This might be intentional.
+      if (out.exception && out.exception instanceof Error && out.exception.message.startsWith('No matching bindings found for serviceIdentifier')) {
+        loggerMiddlewareLog.warn(out.exception.message);
         return;
       }
 
-      loggerMiddlewareLog.trace(textSerializer(out));
+      if (out.exception) {
+        loggerMiddlewareLog.error(out.exception);
+        return;
+      }
+
+      loggerMiddlewareLog.debug(textSerializer(out));
     },
   );
 }
