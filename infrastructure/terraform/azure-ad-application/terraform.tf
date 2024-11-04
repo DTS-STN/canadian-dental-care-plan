@@ -35,6 +35,16 @@ data "azuread_users" "owners" {
   user_principal_names = var.application_owners
 }
 
+data "azuread_users" "role_assignments" {
+  # Creates a [{app_role_id → azuread_users}] data structure for mapping roles to users.
+  # see: https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/users
+
+  for_each = { for application_app_role in var.application_app_roles : application_app_role.id => application_app_role.members }
+
+  user_principal_names = each.value
+}
+
+
 resource "azuread_application" "main" {
   # see: https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
 
@@ -98,4 +108,25 @@ resource "azuread_service_principal" "main" {
 
   client_id = azuread_application.main.client_id
   owners    = azuread_application.main.owners
+}
+
+resource "azuread_app_role_assignment" "main" {
+  # see: https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/app_role_assignment
+
+  for_each = {
+    # Creates a collection of azuread_app_role_assignment resources...
+    # Each key follows the format: azuread_app_role_assignment.main[${app_role_id}/${principal_object_id}]
+    for role_assignment in flatten([
+      for app_role_id, role_assignments in data.azuread_users.role_assignments : [
+        for principal_object_id in role_assignments.object_ids : {
+          app_role_id         = app_role_id
+          principal_object_id = principal_object_id
+        }
+      ]
+    ]) : "${role_assignment.app_role_id}/${role_assignment.principal_object_id}" => role_assignment
+  }
+
+  app_role_id         = each.value.app_role_id
+  principal_object_id = each.value.principal_object_id
+  resource_object_id  = azuread_service_principal.main.object_id
 }

@@ -34,6 +34,7 @@ variable "application_app_roles" {
     allowed_member_types = list(string)
     description          = string
     display_name         = string
+    members              = optional(list(string), [])
     value                = string
   }))
   default = []
