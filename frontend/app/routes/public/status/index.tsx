@@ -15,7 +15,7 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
-import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
+import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -86,7 +86,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: serviceProvider.getHCaptchaService(), hCaptchaResponse, request }))) {
       return redirect(getPathById('public/unable-to-process-request', params));
     }
   }

@@ -20,7 +20,7 @@ import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
-import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
+import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
@@ -191,7 +191,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: serviceProvider.getHCaptchaService(), hCaptchaResponse, request }))) {
       return redirect(getPathById('public/unable-to-process-request', params));
     }
   }
