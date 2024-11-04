@@ -3,6 +3,7 @@ import { json } from '@remix-run/node';
 
 import type { HealthCheck, HealthCheckOptions } from '@dts-stn/health-checks';
 import { HealthCheckConfig, execute, getHttpStatusCode } from '@dts-stn/health-checks';
+import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { isEmpty } from 'moderndash';
 import moize from 'moize';
 
@@ -30,18 +31,10 @@ export async function loader({ context: { appContainer }, request }: LoaderFunct
   const healthCheckOptions: HealthCheckOptions = {
     excludeComponents: toArray(exclude),
     includeComponents: toArray(include),
-    includeDetails: isAuthorized(request),
+    includeDetails: await isAuthorized(appContainer, request),
     metadata: { buildId, version },
     timeoutMs: toNumber(timeout),
   };
-
-  //
-  // TODO :: GjB ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-  //
-  //   - include details when isAuthorized()
-  //
-  // TODO :: GjB ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-  //
 
   const redisHealthCheck: HealthCheck = { name: 'redis', check: getRedisCheck(appContainer) };
 
@@ -63,8 +56,31 @@ export async function loader({ context: { appContainer }, request }: LoaderFunct
 /**
  * Returns true if the incoming request is authorized to view detailed responses.
  */
-function isAuthorized(request: Request): boolean {
-  return false; // TODO :: GjB :: add authentication check when AAD integration is ready
+async function isAuthorized(appContainer: AppContainerProvider, request: Request): Promise<boolean> {
+  const log = appContainer.get(SERVICE_IDENTIFIER.LOG_FACTORY).createLogger('health/isAuthorized');
+
+  const authorization = request.headers.get('authorization');
+  const [scheme, accessToken] = authorization?.split(' ') ?? [];
+
+  if (scheme.toLowerCase() !== 'bearer') {
+    log.debug('Missing or invalid authorization header. Authorization failed.');
+    return false;
+  }
+
+  const { HEALTH_AUTH_JWKS_URI: jwksUri, HEALTH_AUTH_ROLE: authorizedRole, HEALTH_AUTH_TOKEN_AUDIENCE: audience, HEALTH_AUTH_TOKEN_ISSUER: issuer } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+
+  if (!jwksUri) {
+    log.debug('JWK endpoint not configured. Authorization failed.');
+    return false;
+  }
+
+  try {
+    const { payload } = await jwtVerify<{ roles?: string[] }>(accessToken, createRemoteJWKSet(new URL(jwksUri)), { audience, issuer });
+    return payload.roles?.includes(authorizedRole) ?? false;
+  } catch (error) {
+    log.error('Error verifying JWT: %o. Authorization failed.', error);
+    return false;
+  }
 }
 
 /**
