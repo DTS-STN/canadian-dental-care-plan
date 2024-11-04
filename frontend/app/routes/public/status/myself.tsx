@@ -16,7 +16,7 @@ import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
-import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
+import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
@@ -57,7 +57,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   return json({ csrfToken, hCaptchaEnabled, meta, siteKey: HCAPTCHA_SITE_KEY });
 }
 
-export async function action({ context: { configProvider, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { configProvider, serviceProvider, session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
   const log = getLogger('status/myself/index');
   const { ENABLED_FEATURES } = configProvider.getServerConfig();
@@ -104,7 +104,7 @@ export async function action({ context: { configProvider, session }, params, req
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: serviceProvider.getHCaptchaService(), hCaptchaResponse, request }))) {
       return redirect(getPathById('public/unable-to-process-request', params));
     }
   }

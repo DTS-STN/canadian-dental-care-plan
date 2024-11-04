@@ -22,7 +22,7 @@ import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequestFromApplyAdultChildState } from '~/mappers/benefit-application-service-mappers.server';
 import { loadApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
+import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -137,7 +137,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: serviceProvider.getHCaptchaService(), hCaptchaResponse, request }))) {
       clearApplyState({ params, session });
       return redirect(getPathById('public/unable-to-process-request', params));
     }

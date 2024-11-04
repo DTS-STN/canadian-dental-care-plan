@@ -20,7 +20,7 @@ import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { toBenefitRenewalRequestFromRenewItaState } from '~/mappers/benefit-renewal-service-mappers.server';
-import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
+import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
 import { loadRenewItaStateForReview } from '~/route-helpers/renew-ita-route-helpers.server';
 import { clearRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -181,7 +181,7 @@ export async function action({ context: { configProvider, serviceProvider, sessi
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: serviceProvider.getHCaptchaService(), hCaptchaResponse, request }))) {
       clearRenewState({ params, session });
       return redirect(getPathById('public/unable-to-process-request', params));
     }
