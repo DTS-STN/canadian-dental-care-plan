@@ -44,7 +44,7 @@ resource "azuread_application" "main" {
   owners          = data.azuread_users.owners.object_ids
 
   api {
-    mapped_claims_enabled = true
+    mapped_claims_enabled          = true
     requested_access_token_version = 2
 
     dynamic "oauth2_permission_scope" {
@@ -78,7 +78,7 @@ resource "azuread_application" "main" {
 
     implicit_grant {
       access_token_issuance_enabled = var.application_web_implicit_grants_access_token_issuance_enabled
-      id_token_issuance_enabled = var.application_web_implicit_grants_id_token_issuance_enabled
+      id_token_issuance_enabled     = var.application_web_implicit_grants_id_token_issuance_enabled
     }
   }
 }
@@ -86,9 +86,16 @@ resource "azuread_application" "main" {
 resource "azuread_application_password" "main" {
   # see: https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_password
 
-  for_each = { for application_password in var.application_passwords : application_password => application_password}
+  for_each = { for application_password in var.application_passwords : application_password => application_password }
 
-  application_id    = azuread_application.main.id
-  display_name      = each.value
-  end_date          = "2100-01-01T00:00:00Z"
+  application_id = azuread_application.main.id
+  display_name   = each.value
+  end_date       = "2100-01-01T00:00:00Z"
+}
+
+resource "azuread_service_principal" "main" {
+  # see: https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal
+
+  client_id = azuread_application.main.client_id
+  owners    = azuread_application.main.owners
 }
