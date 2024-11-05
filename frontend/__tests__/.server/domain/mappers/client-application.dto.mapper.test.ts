@@ -175,6 +175,25 @@ describe('ClientApplicationDtoMapperImpl', () => {
         hasBeenAssessedByCRA: true,
         lastName: 'Doe',
         sin: '80000002',
+        relatedPerson: [
+          {
+            PersonBirthDate: {
+              date: '2000-01-01',
+            },
+            PersonName: [
+              {
+                PersonGivenName: ['Jane'],
+                PersonSurName: 'Doe',
+              },
+            ],
+            PersonRelationshipCode: {
+              ReferenceDataName: 'Sibling',
+            },
+            PersonSINIdentification: {
+              IdentificationID: '80000002',
+            },
+          },
+        ],
       };
 
       // Act
