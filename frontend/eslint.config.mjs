@@ -8,6 +8,8 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
+import { remixCsrfRule } from './eslint-rules/remix-csrf.mjs';
+
 const compat = new FlatCompat({ baseDirectory: import.meta.name });
 
 export default tseslint.config(
@@ -47,6 +49,15 @@ export default tseslint.config(
     //
     files: ['**/*.{ts,tsx}'],
     extends: [eslint.configs.recommended, ...tseslint.configs.strict, ...fixupConfigRules(compat.config(importPlugin.configs.recommended))],
+    plugins: {
+      ['remix']: {
+        meta: {
+          name: 'remix-plugin',
+          version: '1.0.0',
+        },
+        rules: { 'csrf-validation': remixCsrfRule },
+      },
+    },
     rules: {
       'no-param-reassign': 'error',
       '@typescript-eslint/await-thenable': 'error',
@@ -69,6 +80,7 @@ export default tseslint.config(
       '@typescript-eslint/return-await': ['error', 'always'],
       '@typescript-eslint/switch-exhaustiveness-check': ['error', { considerDefaultExhaustiveForUnions: true, requireDefaultForNonUnion: true }],
       'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
+      'remix/csrf-validation': 'error',
     },
     settings: {
       'import/resolver': {
