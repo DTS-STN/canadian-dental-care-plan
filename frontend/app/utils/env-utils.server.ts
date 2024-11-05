@@ -74,6 +74,10 @@ const serverEnv = clientEnvSchema.extend({
   MARITAL_STATUS_CODE_MARRIED: z.coerce.number().default(775170001),
   MARITAL_STATUS_CODE_COMMONLAW:z.coerce.number().default(775170002),
 
+  // demographic survey codes
+  IS_APPLICANT_FIRST_NATIONS_YES_OPTION: z.coerce.number().default(775170000),
+  ANOTHER_ETHNIC_GROUP_OPTION: z.coerce.number().default(775170009),
+
   // interop api settings
   INTEROP_API_BASE_URI: z.string().url(),
   INTEROP_API_SUBSCRIPTION_KEY: z.string().trim().min(1),

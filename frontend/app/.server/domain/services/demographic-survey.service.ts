@@ -8,6 +8,8 @@ import type {
   DisabilityStatusLocalizedDto,
   EthnicGroupDto,
   EthnicGroupLocalizedDto,
+  FirstNationsDto,
+  FirstNationsLocalizedDto,
   GenderStatusDto,
   GenderStatusLocalizedDto,
   IndigenousStatusDto,
@@ -15,7 +17,7 @@ import type {
   LocationBornStatusDto,
   LocationBornStatusLocalizedDto,
 } from '~/.server/domain/dtos';
-import { DisabilityStatusNotFoundException, EthnicGroupNotFoundException, GenderStatusNotFoundException, IndigenousStatusNotFoundException, LocationBornStatusNotFoundException } from '~/.server/domain/exceptions';
+import { DisabilityStatusNotFoundException, EthnicGroupNotFoundException, FirstNationsNotFoundException, GenderStatusNotFoundException, IndigenousStatusNotFoundException, LocationBornStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { DemographicSurveyDtoMapper } from '~/.server/domain/mappers';
 import type { DemographicSurveyRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
@@ -47,6 +49,40 @@ export interface DemographicSurveyService {
    * @returns An array of IndigenousStatus DTOs in the specified locale.
    */
   listLocalizedIndigenousStatuses(locale: AppLocale): ReadonlyArray<IndigenousStatusLocalizedDto>;
+
+  /**
+   * Retrieves a list of all First Nations.
+   *
+   * @returns An array of FirstNations DTOs.
+   */
+  listFirstNations(): ReadonlyArray<FirstNationsDto>;
+
+  /**
+   * Retrieves a specific First Nation by its ID.
+   *
+   * @param id - The ID of the First Nation to retrieve.
+   * @returns The FirstNations DTO corresponding to the specified ID.
+   * @throws {FirstNationsNotFoundException} If no First Nation is found with the specified ID.
+   */
+  getFirstNationsById(id: string): FirstNationsDto;
+
+  /**
+   * Retrieves a list of all First Nations in the specified locale.
+   *
+   * @param locale - The desired locale (e.g., 'en' or 'fr').
+   * @returns An array of FirstNations DTOs in the specified locale.
+   */
+  listLocalizedFirstNations(locale: AppLocale): ReadonlyArray<FirstNationsLocalizedDto>;
+
+  /**
+   * Retrieves a specific First Nation by its ID in the specified locale.
+   *
+   * @param id - The ID of the First Nation to retrieve.
+   * @param locale - The desired locale (e.g., 'en' or 'fr').
+   * @returns The FirstNations DTO corresponding to the specified ID in the given locale.
+   * @throws {FirstNationsNotFoundException} If no First Nation is found with the specified ID.
+   */
+  getLocalizedFirstNationsById(id: string, locale: AppLocale): FirstNationsLocalizedDto;
 
   /**
    * Retrieves a specific inidigenous status by its ID in the specified locale.
@@ -219,6 +255,8 @@ export class DemographicSurveyServiceServiceImpl implements DemographicSurveySer
     // Configure caching
     this.listIndigenousStatuses.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS;
     this.getIndigenousStatusById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS;
+    this.listFirstNations.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS;
+    this.getFirstNationsById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS;
     this.listDisabilityStatuses.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS;
     this.getDisabilityStatusById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS;
     this.listEthnicGroups.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS;
@@ -275,6 +313,54 @@ export class DemographicSurveyServiceServiceImpl implements DemographicSurveySer
     const indigenousStatusDto = this.DemographicSurveyDtoMapper.mapIndigenousStatusEntityToIndigenousStatusDto(indigenousStatusEntity);
     this.log.trace('Returning inidigenous status: [%j]', indigenousStatusDto);
     return indigenousStatusDto;
+  }
+
+  // First Nations
+  listFirstNations = moize(this.listFirstNationsImpl, {
+    onCacheAdd: () => this.log.info('Creating new listFirstNations memo'),
+  });
+
+  getFirstNationsById = moize(this.getFirstNationsByIdImpl, {
+    maxSize: Infinity,
+    onCacheAdd: () => this.log.info('Creating new getFirstNationsById memo'),
+  });
+
+  listLocalizedFirstNations(locale: AppLocale): ReadonlyArray<FirstNationsLocalizedDto> {
+    this.log.debug('Get all localized First Nations with locale: [%s]', locale);
+    const firstNationsDtos = this.listFirstNations();
+    const localizedFirstNationsDtos = this.DemographicSurveyDtoMapper.mapFirstNationsDtosToFirstNationsLocalizedDtos(firstNationsDtos, locale);
+    this.log.trace('Returning localized First Nations: [%j]', localizedFirstNationsDtos);
+    return localizedFirstNationsDtos;
+  }
+
+  getLocalizedFirstNationsById(id: string, locale: AppLocale): FirstNationsLocalizedDto {
+    this.log.debug('Get localized First Nation with id: [%s] and locale: [%s]', id, locale);
+    const firstNationsDto = this.getFirstNationsById(id);
+    const localizedFirstNationsDto = this.DemographicSurveyDtoMapper.mapFirstNationsDtoToFirstNationsLocalizedDto(firstNationsDto, locale);
+    this.log.trace('Returning localized First Nation: [%j]', localizedFirstNationsDto);
+    return localizedFirstNationsDto;
+  }
+
+  private listFirstNationsImpl(): ReadonlyArray<FirstNationsDto> {
+    this.log.debug('Get all First Nations');
+    const firstNationsEntities = this.DemographicSurveyRepository.listAllFirstNations();
+    const firstNationsDtos = this.DemographicSurveyDtoMapper.mapFirstNationsEntitiesToFirstNationsDtos(firstNationsEntities);
+    this.log.trace('Returning First Nations: [%j]', firstNationsDtos);
+    return firstNationsDtos;
+  }
+
+  private getFirstNationsByIdImpl(id: string): FirstNationsDto {
+    this.log.debug('Get First Nation with id: [%s]', id);
+    const firstNationsEntity = this.DemographicSurveyRepository.findFirstNationsById(id);
+
+    if (!firstNationsEntity) {
+      this.log.error('First Nation with id: [%s] not found', id);
+      throw new FirstNationsNotFoundException(`First Nation with id: [${id}] not found`);
+    }
+
+    const firstNationsDto = this.DemographicSurveyDtoMapper.mapFirstNationsEntityToFirstNationsDto(firstNationsEntity);
+    this.log.trace('Returning First Nation: [%j]', firstNationsDto);
+    return firstNationsDto;
   }
 
   // Disability status

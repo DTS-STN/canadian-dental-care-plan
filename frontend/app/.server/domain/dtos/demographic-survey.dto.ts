@@ -22,6 +22,29 @@ export type IndigenousStatusLocalizedDto = Omit<IndigenousStatusDto, 'nameEn' | 
   }>;
 
 /**
+ * Represents a Data Transfer Object (DTO) for a First Nations type.
+ */
+export type FirstNationsDto = Readonly<{
+  /** Unique identifier for the First Nations type. */
+  id: string;
+
+  /** First Nations type name in English. */
+  nameEn: string;
+
+  /** First Nations type name in French. */
+  nameFr: string;
+}>;
+
+/**
+ * Represents a localized version of a First Nations type DTO.
+ */
+export type FirstNationsLocalizedDto = Omit<FirstNationsDto, 'nameEn' | 'nameFr'> &
+  Readonly<{
+    /** Localized name of the First Nations type. */
+    name: string;
+  }>;
+
+/**
  * Represents a Data Transfer Object (DTO) for a disability status.
  */
 export type DisabilityStatusDto = Readonly<{

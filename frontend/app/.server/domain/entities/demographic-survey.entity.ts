@@ -10,6 +10,18 @@ export type IndigenousStatusEntity = Readonly<{
   }>;
 }>;
 
+export type FirstNationsEntity = Readonly<{
+  Value: number;
+  Label: Readonly<{
+    LocalizedLabels: ReadonlyArray<
+      Readonly<{
+        LanguageCode: number;
+        Label: string;
+      }>
+    >;
+  }>;
+}>;
+
 export type DisabilityStatusEntity = Readonly<{
   Value: number;
   Label: Readonly<{

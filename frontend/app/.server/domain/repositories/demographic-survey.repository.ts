@@ -1,9 +1,10 @@
 import { inject, injectable } from 'inversify';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
-import type { DisabilityStatusEntity, EthnicGroupEntity, GenderStatusEntity, IndigenousStatusEntity, LocationBornStatusEntity } from '~/.server/domain/entities';
+import type { DisabilityStatusEntity, EthnicGroupEntity, FirstNationsEntity, GenderStatusEntity, IndigenousStatusEntity, LocationBornStatusEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import EthnicGroupJsonDataSource from '~/.server/resources/power-platform/demographic-survey/ethnic-groups.json';
+import FirstNationsJsonDataSource from '~/.server/resources/power-platform/demographic-survey/first-nations.json';
 import DisabilityStatusJsonDataSource from '~/.server/resources/power-platform/demographic-survey/has-disability.json';
 import IndigenousStatusJsonDataSource from '~/.server/resources/power-platform/demographic-survey/is-indigenous.json';
 import GenderStatusJsonDataSource from '~/.server/resources/power-platform/demographic-survey/persons-gender.json';
@@ -22,6 +23,19 @@ export interface DemographicSurveyRepository {
    * @returns The indigenous status entity or null if not found.
    */
   findIndigenousStatusById(id: string): IndigenousStatusEntity | null;
+
+  /**
+   * Fetch all First Nations entities.
+   * @returns All First Nations entities.
+   */
+  listAllFirstNations(): FirstNationsEntity[];
+
+  /**
+   * Fetch a First Nations entity by its id.
+   * @param id The id of the First Nations entity.
+   * @returns The First Nations entity or null if not found.
+   */
+  findFirstNationsById(id: string): FirstNationsEntity | null;
 
   /**
    * Fetch all disability status entities.
@@ -109,6 +123,33 @@ export class DemographicSurveyRepositoryImpl implements DemographicSurveyReposit
     }
 
     return indigenousStatusEntity;
+  }
+
+  listAllFirstNations(): FirstNationsEntity[] {
+    this.log.debug('Fetching all First Nations');
+    const firstNationsEntities = FirstNationsJsonDataSource.value.at(0)?.OptionSet.Options;
+
+    if (!firstNationsEntities) {
+      this.log.warn('No First Nations found');
+      return [];
+    }
+
+    this.log.trace('Returning First Nations: [%j]', firstNationsEntities);
+    return firstNationsEntities;
+  }
+
+  findFirstNationsById(id: string): FirstNationsEntity | null {
+    this.log.debug('Fetching First Nations with id: [%s]', id);
+
+    const firstNationsEntities = FirstNationsJsonDataSource.value.at(0)?.OptionSet.Options;
+    const firstNationsEntity = firstNationsEntities?.find(({ Value }) => Value.toString() === id);
+
+    if (!firstNationsEntity) {
+      this.log.warn('First Nations not found; id: [%s]', id);
+      return null;
+    }
+
+    return firstNationsEntity;
   }
 
   listAllDisabilityStatuses(): DisabilityStatusEntity[] {
