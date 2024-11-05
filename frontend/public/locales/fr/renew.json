@@ -1,22 +1,22 @@
 {
   "progress": {
-    "label": "Application progress"
+    "label": "Progression de la demande"
   },
   "required-label": "Remplir tous les champs.",
   "optional-label": "Remplir tous les champs sauf s'ils sont indiqués facultatifs.",
   "index": {
-    "page-title": "(FR) Renew",
-    "eligibility": "(FR) To renew your Canadian Dental Care Plan, you'll need to provide the following information for each applicant:",
-    "full-name": "(FR) Full name",
-    "client-number": "(FR) Client number",
-    "dob": "(FR) Date of birth",
-    "sin": "(FR) Spouse or common-law partner's Social Insurance Number (SIN) (if applicable)",
-    "address": "(FR) Home and mailing address",
-    "dental-coverage": "(FR) List of the dental coverage you currently have through government social programs (if applicable)",
-    "renew-now": "(FR) Renew now",
-    "to-apply": "(FR) To apply for the Canadian Dental Care Plan, click the button below.",
-    "start-button": "(FR) Renew now",
-    "back-button": "(FR) Back",
+    "page-title": "Renouvelez votre adhésion au Régime canadien de soins dentaires",
+    "eligibility": "Pour renouveler votre adhésion au Régime canadien de soins dentaires, vous devez fournir les renseignements suivants pour chaque demandeur\u00a0:",
+    "full-name": "Nom complet",
+    "client-number": "Numéro de client",
+    "dob": "Date de naissance",
+    "sin": "Numéro d'assurance sociale (NAS) de l'époux ou du conjoint de fait (le cas échéant)",
+    "address": "Adresse personnelle et adresse postale",
+    "dental-coverage": "Liste des assurances pour soins dentaires dont vous bénéficiez actuellement dans le cadre de programmes sociaux gouvernementaux (le cas échéant)",
+    "renew-now": "Renouvelez maintenant",
+    "to-apply": "Pour renouveler votre adhésion au Régime canadien de soins dentaires, cliquez sur le bouton ci-dessous.",
+    "start-button": "Renouvelez maintenant",
+    "back-button": "Retour",
     "apply-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
   },
   "terms-and-conditions": {
@@ -95,13 +95,13 @@
       "sun-life": "https://www.sunlife.ca/fr/"
     },
     "checkboxes": {
-      "acknowledge-terms": "(FR) I acknowledge that I've read the Terms and Conditions",
-      "acknowledge-privacy": "(FR) I acknowledge that I have read the Privacy Notice Statement",
-      "share-data": "(FR) I consent to the sharing of data",
+      "acknowledge-terms": "Je reconnais avoir lu les modalités",
+      "acknowledge-privacy": "Je reconnais avoir lu l'avis de confidentialité",
+      "share-data": "Je consens à l'échange des données",
       "error-message": {
-        "acknowledge-terms-required": "(FR) Terms and Conditions checkbox must be selected",
-        "acknowledge-privacy-required": "(FR) Privacy Notice Statement checkbox must be selected",
-        "share-data-required": "(FR) Sharing of data checkbox must be selected"
+        "acknowledge-terms-required": "La case à cocher des modalités doit être sélectionnée",
+        "acknowledge-privacy-required": "La case à cocher de l'avis de confidentialité doit être sélectionnée",
+        "share-data-required": "La case à cocher de l'échange des données doit être sélectionnée"
       }
     }
   },
