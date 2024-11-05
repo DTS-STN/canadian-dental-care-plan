@@ -11,6 +11,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
+import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { AppPageTitle } from '~/components/layouts/public-layout';
@@ -259,11 +260,12 @@ export default function RenewFlowChildInformation() {
               }}
               required
             />
-            <InputSanitizeField
+            <InputPatternField
               id="client-number"
               name="clientNumber"
               label={t('renew-adult-child:children.information.client-number')}
               inputMode="numeric"
+              format="#############"
               helpMessagePrimary={t('renew-adult-child:children.information.client-number-detail')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.clientNumber ?? ''}
