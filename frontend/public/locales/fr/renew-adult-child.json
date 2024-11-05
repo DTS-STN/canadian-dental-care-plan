@@ -309,7 +309,8 @@
         "client-number-valid": "Doit être un numéro de client valide. Votre saisie doit comporter 11, 13 chiffres",
         "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
         "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
-        "no-digits": "Le nom de famille doit contenir uniquement des lettres"
+        "no-digits": "Le nom de famille doit contenir uniquement des lettres",
+        "no-record": "Aucun dossier correspondant trouvé pour votre enfant"
       }
     },
     "parent-or-guardian": {

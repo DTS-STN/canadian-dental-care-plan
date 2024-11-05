@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../../../page-ids.json';
+import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -72,6 +73,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const renewState = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const clientApplicationService = appContainer.get(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE);
+
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
@@ -107,6 +110,10 @@ export async function action({ context: { appContainer, session }, params, reque
       dateOfBirth: z.string(),
       clientNumber: z.string().trim().min(1, t('renew-adult-child:children.information.error-message.client-number-required')).refine(isValidClientNumberRenewal, t('renew-adult-child:children.information.error-message.client-number-valid')),
       isParent: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:children.information.error-message.is-parent') }) }),
+      notFound: z
+        .boolean()
+        .optional()
+        .refine((val) => val === false || val === undefined, t('renew-adult-child:children.information.error-message.no-record')),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
@@ -160,11 +167,26 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
-  // TODO: Implement logic to check if the form data matches any existing children
-  // for the applicant. Retrieve the applicant's list of children (possibily 'RelatedPerson') and compare the
-  // provided child data (first name, last name, date of birth, and client number)
-  // with the stored data. If a match is found, proceed with the next screen;
-  // otherwise, return an error indicating no matching child was found.
+  const clientApplication = renewState.applicantInformation ? await clientApplicationService.findClientApplicationByBasicInfo(renewState.applicantInformation) : undefined;
+  if (!clientApplication) {
+    log.warn('Renew session state clientApplication has not been found; redirecting to public/renew/$id/applicant-information; sessionId: [%s]', session.id);
+    throw redirect(getPathById('public/renew/$id/applicant-information', params));
+  }
+
+  const matches = clientApplication.relatedPerson.map(
+    (person) =>
+      person.PersonRelationshipCode.ReferenceDataName === ('Dependant' as const) &&
+      person.PersonSINIdentification.IdentificationID === parsedDataResult.data.clientNumber &&
+      person.PersonBirthDate.date === parsedDataResult.data.dateOfBirth &&
+      person.PersonName.map((name) => name.PersonSurName === parsedDataResult.data.lastName && name.PersonGivenName.includes(parsedDataResult.data.firstName)).includes(true),
+  );
+
+  const recordCheckParsedDataResult = childInformationSchema.safeParse({ notFound: !matches.includes(true), ...data });
+  if (!recordCheckParsedDataResult.success) {
+    return json({
+      errors: transformFlattenedError(recordCheckParsedDataResult.error.flatten()),
+    });
+  }
 
   saveRenewState({
     params,
@@ -206,6 +228,7 @@ export default function RenewFlowChildInformation() {
     dateOfBirthYear: 'date-picker-date-of-birth-year',
     clientNumber: 'client-number',
     isParent: 'input-radio-is-parent-radios-option-0',
+    notFound: 'not-found',
   });
 
   return (

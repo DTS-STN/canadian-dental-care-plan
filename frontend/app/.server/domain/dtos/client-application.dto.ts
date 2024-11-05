@@ -6,6 +6,26 @@ export type ClientApplicationDto = Readonly<{
   hasBeenAssessedByCRA: boolean;
   lastName: string;
   sin: string;
+  relatedPerson: {
+    PersonBirthDate: {
+      date: string;
+      dateTime?: string;
+      DayDate?: string;
+      MonthDate?: string;
+      YearDate?: string;
+    };
+    PersonName: {
+      PersonGivenName: string[];
+      PersonSurName: string;
+    }[];
+    PersonRelationshipCode: {
+      ReferenceDataName: string;
+    };
+    PersonSINIdentification: {
+      IdentificationID: string;
+      IdentificationCategoryText?: string;
+    };
+  }[];
 }>;
 
 export type ClientApplicationBasicInfoRequestDto = Readonly<{
