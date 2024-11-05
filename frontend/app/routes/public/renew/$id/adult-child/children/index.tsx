@@ -189,7 +189,7 @@ export default function RenewFlowChildSummary() {
                       disabled={isSubmitting}
                       size="sm"
                       variant="alternative"
-                      routeId="public/renew/$id/adult-child/children/$childId/information"
+                      routeId="public/renew/$id/adult-child/children/$childId/dental-insurance"
                       params={{ ...params, childId: child.id }}
                       startIcon={faEdit}
                       data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Edit child - Child(ren) application click"
