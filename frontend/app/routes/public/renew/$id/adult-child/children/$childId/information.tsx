@@ -47,23 +47,21 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewAdultSingleChildState({ params, request, session });
 
-  const isNew = Boolean(state.isNew);
-  if (!isNew) {
+  if (!state.isNew) {
     return redirect(getPathById('public/renew/$id/adult-child/children/$childId/dental-insurance', params));
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('renew-adult-child:children.child-number', { childNumber: state.childNumber });
-  const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
+  const childName = t('renew-adult-child:children.child-number', { childNumber: state.childNumber });
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.information.page-title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.information.page-title', { childName: childNumber }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.information.page-title', { childName }) }),
   };
 
-  return json({ csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode, isNew: state.isNew });
+  return json({ csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode });
 }
 
 export async function action({ context: { appContainer, serviceProvider, session }, params, request }: ActionFunctionArgs) {
@@ -192,7 +190,7 @@ export async function action({ context: { appContainer, serviceProvider, session
 
 export default function RenewFlowChildInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, childName, editMode, isNew } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, childName, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -281,8 +279,8 @@ export default function RenewFlowChildInformation() {
               name="isParent"
               legend={t('renew-adult-child:children.information.parent-legend')}
               options={[
-                { value: YesNoOption.Yes, children: t('renew-adult-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
-                { value: YesNoOption.No, children: t('renew-adult-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
+                { value: YesNoOption.Yes, children: t('renew-adult-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true, readOnly: false, tabIndex: 0 },
+                { value: YesNoOption.No, children: t('renew-adult-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: false, tabIndex: 0 },
               ]}
               errorMessage={errors?.isParent}
             />
