@@ -20,8 +20,10 @@ export interface DemographicSurveyState {
     readonly isSurveyCompleted: boolean;
     readonly questions?: {
       readonly indigenousStatus?: string;
+      readonly firstNations?: string[];
       readonly disabilityStatus?: string;
       readonly ethnicGroups?: string[];
+      readonly anotherEthnicGroup?: string;
       readonly locationBornStatus?: string;
       readonly genderStatus?: string;
     };

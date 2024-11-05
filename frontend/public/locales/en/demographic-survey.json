@@ -48,7 +48,11 @@
     "location-born-status": "Where was this person born?",
     "gender-status": "What is this person's gender?",
     "back-btn": "Back",
-    "save-btn": "Save"
+    "save-btn": "Save",
+    "error-message": {
+      "first-nations-required": "Please select if this person is First Nations, Métis or Inuk (Inuit)",
+      "another-ethnic-group-required": "Please specify the ethnic group"
+    }
   },
   "submitted": {
     "page-title": "Response submitted",

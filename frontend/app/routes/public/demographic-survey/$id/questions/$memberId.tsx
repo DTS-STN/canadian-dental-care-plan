@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
@@ -16,6 +16,7 @@ import type { InputCheckboxesProps } from '~/components/input-checkboxes';
 import { InputCheckboxes } from '~/components/input-checkboxes';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
+import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { loadDemographicSurveySingleMemberState, loadDemographicSurveyState, saveDemographicSurveyState } from '~/route-helpers/demographic-survey-route-helpers.server';
@@ -40,6 +41,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   const csrfToken = String(session.get('csrfToken'));
 
+  const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+
   const member = loadDemographicSurveySingleMemberState({ params, session });
   const memberName = `${member.firstName} ${member.lastName}`;
 
@@ -49,18 +52,22 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const demographicSurveyService = appContainer.get(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_SERVICE);
   const indigenousStatuses = demographicSurveyService.listLocalizedIndigenousStatuses(locale);
+  const firstNations = demographicSurveyService.listLocalizedFirstNations(locale);
   const disabilityStatuses = demographicSurveyService.listLocalizedDisabilityStatuses(locale);
   const ethnicGroups = demographicSurveyService.listLocalizedEthnicGroups(locale);
   const locationBornStatuses = demographicSurveyService.listLocalizedLocationBornStatuses(locale);
   const genderStatuses = demographicSurveyService.listLocalizedGenderStatuses(locale);
 
-  return json({ csrfToken, meta, memberName, indigenousStatuses, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState: member.questions });
+  return json({ csrfToken, meta, memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState: member.questions, IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION });
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('demographic-survey/questions');
 
   const state = loadDemographicSurveyState({ params, session });
+
+  const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -71,18 +78,32 @@ export async function action({ context: { appContainer, session }, params, reque
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const demographicSurveySchema = z.object({
-    indigenousStatus: z.string().trim().optional(),
-    disabilityStatus: z.string().trim().optional(),
-    ethnicGroups: z.array(z.string().trim()),
-    locationBornStatus: z.string().trim().optional(),
-    genderStatus: z.string().trim().optional(),
-  });
+  const demographicSurveySchema = z
+    .object({
+      indigenousStatus: z.string().trim().optional(),
+      firstNations: z.array(z.string().trim()),
+      disabilityStatus: z.string().trim().optional(),
+      ethnicGroups: z.array(z.string().trim()),
+      anotherEthnicGroup: z.string().trim().optional(),
+      locationBornStatus: z.string().trim().optional(),
+      genderStatus: z.string().trim().optional(),
+    })
+    .superRefine((val, ctx) => {
+      if (val.indigenousStatus === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && !val.firstNations.length) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('demographic-survey:questions.error-message.first-nations-required'), path: ['firstNations'] });
+      }
+
+      if (val.ethnicGroups.includes(ANOTHER_ETHNIC_GROUP_OPTION.toString()) && !val.anotherEthnicGroup) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('demographic-survey:questions.error-message.another-ethnic-group-required'), path: ['anotherEthnicGroup'] });
+      }
+    });
 
   const data = {
     indigenousStatus: String(formData.get('indigenousStatus') ?? ''),
+    firstNations: formData.getAll('firstNations'),
     disabilityStatus: String(formData.get('disabilityStatus') ?? ''),
     ethnicGroups: formData.getAll('ethnicGroups'),
+    anotherEthnicGroup: String(formData.get('anotherEthnicGroup') ?? ''),
     locationBornStatus: String(formData.get('locationBornStatus') ?? ''),
     genderStatus: String(formData.get('genderStatus') ?? ''),
   };
@@ -110,31 +131,60 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function DemographicSurveyQuestions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, memberName, indigenousStatuses, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState } = useLoaderData<typeof loader>();
+  const { csrfToken, memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState, IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const params = useParams();
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
-    indigenousStatus: 'indigenous-status',
-    disabilityStatus: 'disability-status',
-    ethnicGroups: 'ethnic-groups',
-    locationBornStatus: 'location-born-status',
-    genderStatus: 'genderStatus',
+    indigenousStatus: 'input-radio-indigenous-status-option-0-label',
+    firstNations: 'input-checkbox-first-nations-option-0-label',
+    disabilityStatus: 'input-radio-disability-status-option-0-label',
+    ethnicGroups: 'input-checkboxes-ethnic-groups',
+    anotherEthnicGroup: 'another-ethnic-group',
+    locationBornStatus: 'input-radio-location-born-status-option-0-label',
+    genderStatus: 'input-radio-gender-status-option-0-label',
   });
 
-  const indigenousStatusOptions = useMemo<InputRadiosProps['options']>(() => {
-    return indigenousStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.indigenousStatus, children: status.name, value: status.id }));
-  }, [defaultState?.indigenousStatus, indigenousStatuses]);
+  const [isIndigenousStatusValue, setIsIndigenousStatusValue] = useState(defaultState?.indigenousStatus === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString());
+  const [isAnotherEthnicGroupValue, setIsAnotherEthnicGroupValue] = useState(defaultState?.ethnicGroups?.includes(ANOTHER_ETHNIC_GROUP_OPTION.toString()));
+
+  function handleOnIsIndigenousStatusChanged(e: React.ChangeEvent<HTMLInputElement>) {
+    setIsIndigenousStatusValue(e.target.value === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString());
+  }
+
+  function handleOnIsAnotherEthnicGroupChanged(e: React.ChangeEvent<HTMLInputElement>) {
+    setIsAnotherEthnicGroupValue(e.target.value === ANOTHER_ETHNIC_GROUP_OPTION.toString());
+  }
+
+  const firstNationsOptions = useMemo<InputCheckboxesProps['options']>(() => {
+    return firstNations.map((status) => ({ defaultChecked: defaultState?.firstNations?.includes(status.id), children: status.name, value: status.id }));
+  }, [defaultState?.firstNations, firstNations]);
+
+  const indigenousStatusOptions = indigenousStatuses.map((status) => ({
+    defaultChecked: status.id === defaultState?.indigenousStatus,
+    children: status.name,
+    value: status.id,
+    onChange: handleOnIsIndigenousStatusChanged,
+    append: status.id === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && isIndigenousStatusValue && (
+      <InputCheckboxes id="first-nations" name="firstNations" legend={t('demographic-survey:questions.indigenous-status')} options={firstNationsOptions} errorMessage={errors?.firstNations} required />
+    ),
+  }));
 
   const disabilityStatusOptions = useMemo<InputRadiosProps['options']>(() => {
     return disabilityStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.disabilityStatus, children: status.name, value: status.id }));
   }, [defaultState?.disabilityStatus, disabilityStatuses]);
 
-  const ethnicGroupOptions = useMemo<InputCheckboxesProps['options']>(() => {
-    return ethnicGroups.map((status) => ({ defaultChecked: defaultState?.ethnicGroups?.includes(status.id), children: status.name, value: status.id }));
-  }, [defaultState?.ethnicGroups, ethnicGroups]);
+  const ethnicGroupOptions = ethnicGroups.map((status) => ({
+    defaultChecked: defaultState?.ethnicGroups?.includes(status.id),
+    children: status.name,
+    value: status.id,
+    onChange: status.id === ANOTHER_ETHNIC_GROUP_OPTION.toString() ? handleOnIsAnotherEthnicGroupChanged : undefined,
+    append: status.id === ANOTHER_ETHNIC_GROUP_OPTION.toString() && isAnotherEthnicGroupValue && (
+      <InputSanitizeField id="another-ethnic-group" name="anotherEthnicGroup" label={t('demographic-survey:questions.ethnic-groups')} defaultValue={defaultState?.anotherEthnicGroup ?? ''} errorMessage={errors?.anotherEthnicGroup} required />
+    ),
+  }));
 
   const locationBornStatusOptions = useMemo<InputRadiosProps['options']>(() => {
     return locationBornStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.locationBornStatus, children: status.name, value: status.id }));

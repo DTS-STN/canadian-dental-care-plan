@@ -7,6 +7,8 @@ import type {
   DisabilityStatusLocalizedDto,
   EthnicGroupDto,
   EthnicGroupLocalizedDto,
+  FirstNationsDto,
+  FirstNationsLocalizedDto,
   GenderStatusDto,
   GenderStatusLocalizedDto,
   IndigenousStatusDto,
@@ -14,13 +16,18 @@ import type {
   LocationBornStatusDto,
   LocationBornStatusLocalizedDto,
 } from '~/.server/domain/dtos';
-import type { DisabilityStatusEntity, EthnicGroupEntity, GenderStatusEntity, IndigenousStatusEntity, LocationBornStatusEntity } from '~/.server/domain/entities';
+import type { DisabilityStatusEntity, EthnicGroupEntity, FirstNationsEntity, GenderStatusEntity, IndigenousStatusEntity, LocationBornStatusEntity } from '~/.server/domain/entities';
 
 export interface DemographicSurveyDtoMapper {
   mapIndigenousStatusDtoToIndigenousStatusLocalizedDto(indigenousStatusDto: IndigenousStatusDto, locale: AppLocale): IndigenousStatusLocalizedDto;
   mapIndigenousStatusDtosToIndigenousStatusLocalizedDtos(indigenousStatusDtos: ReadonlyArray<IndigenousStatusDto>, locale: AppLocale): ReadonlyArray<IndigenousStatusLocalizedDto>;
   mapIndigenousStatusEntityToIndigenousStatusDto(indigenousStatusEntity: IndigenousStatusEntity): IndigenousStatusDto;
   mapIndigenousStatusEntitiesToIndigenousStatusDtos(indigenousStatusEntities: ReadonlyArray<IndigenousStatusEntity>): ReadonlyArray<IndigenousStatusDto>;
+
+  mapFirstNationsDtoToFirstNationsLocalizedDto(firstNationsDto: FirstNationsDto, locale: AppLocale): FirstNationsLocalizedDto;
+  mapFirstNationsDtosToFirstNationsLocalizedDtos(firstNationsDtos: ReadonlyArray<FirstNationsDto>, locale: AppLocale): ReadonlyArray<FirstNationsLocalizedDto>;
+  mapFirstNationsEntityToFirstNationsDto(firstNationsEntity: FirstNationsEntity): FirstNationsDto;
+  mapFirstNationsEntitiesToFirstNationsDtos(firstNationsEntities: ReadonlyArray<FirstNationsEntity>): ReadonlyArray<FirstNationsDto>;
 
   mapDisabilityStatusDtoToDisabilityStatusLocalizedDto(disabilityStatusDto: DisabilityStatusDto, locale: AppLocale): DisabilityStatusLocalizedDto;
   mapDisabilityStatusDtosToDisabilityStatusLocalizedDtos(disabilityStatusDtos: ReadonlyArray<DisabilityStatusDto>, locale: AppLocale): ReadonlyArray<DisabilityStatusLocalizedDto>;
@@ -78,6 +85,37 @@ export class DemographicSurveyDtoMapperImpl implements DemographicSurveyDtoMappe
 
   mapIndigenousStatusEntitiesToIndigenousStatusDtos(indigenousStatusEntities: ReadonlyArray<IndigenousStatusEntity>): ReadonlyArray<IndigenousStatusDto> {
     return indigenousStatusEntities.map((entity) => this.mapIndigenousStatusEntityToIndigenousStatusDto(entity));
+  }
+
+  // First Nations
+  mapFirstNationsDtoToFirstNationsLocalizedDto(firstNationsDto: FirstNationsDto, locale: AppLocale): FirstNationsLocalizedDto {
+    const { nameEn, nameFr, ...rest } = firstNationsDto;
+    return {
+      ...rest,
+      name: locale === 'fr' ? nameFr : nameEn,
+    };
+  }
+
+  mapFirstNationsDtosToFirstNationsLocalizedDtos(firstNationsDtos: ReadonlyArray<FirstNationsDto>, locale: AppLocale): ReadonlyArray<FirstNationsLocalizedDto> {
+    return firstNationsDtos.map((dto) => this.mapFirstNationsDtoToFirstNationsLocalizedDto(dto, locale));
+  }
+
+  mapFirstNationsEntityToFirstNationsDto(firstNationsEntity: FirstNationsEntity): FirstNationsDto {
+    const { ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = this.serverConfig;
+
+    const id = firstNationsEntity.Value.toString();
+    const nameEn = firstNationsEntity.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label;
+    const nameFr = firstNationsEntity.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label;
+
+    if (nameEn === undefined || nameFr === undefined) {
+      throw new Error(`First Nations missing English or French name; id: [${id}]`);
+    }
+
+    return { id, nameEn, nameFr };
+  }
+
+  mapFirstNationsEntitiesToFirstNationsDtos(firstNationsEntities: ReadonlyArray<FirstNationsEntity>): ReadonlyArray<FirstNationsDto> {
+    return firstNationsEntities.map((entity) => this.mapFirstNationsEntityToFirstNationsDto(entity));
   }
 
   // Disability status
