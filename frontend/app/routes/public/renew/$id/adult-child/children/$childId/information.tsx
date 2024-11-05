@@ -47,7 +47,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewAdultSingleChildState({ params, request, session });
 
-  if (!state.isNew) {
+  if (state.isNew === false) {
     return redirect(getPathById('public/renew/$id/adult-child/children/$childId/dental-insurance', params));
   }
 
