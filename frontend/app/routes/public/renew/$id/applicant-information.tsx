@@ -16,6 +16,7 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
+import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
@@ -236,11 +237,12 @@ export default function RenewApplicationInformation() {
               }}
               required
             />
-            <InputSanitizeField
+            <InputPatternField
               id="client-number"
               name="clientNumber"
               label={t('renew:applicant-information.client-number')}
               inputMode="numeric"
+              format="#############"
               helpMessagePrimary={t('renew:applicant-information.help-message.client-number')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.clientNumber ?? ''}
