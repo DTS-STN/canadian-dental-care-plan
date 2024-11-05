@@ -199,30 +199,9 @@ export default function RenewAdultChildReviewChildInformation() {
                 <section className="space-y-6">
                   <h3 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-child-information.page-sub-title', { child: child.firstName })}</h3>
                   <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('renew-adult-child:review-child-information.full-name-title')}>
-                      {`${child.firstName} ${child.lastName}`}
-                      <p className="mt-4">
-                        <InlineLink id="change-full-name" routeId="public/renew/$id/adult-child/children/$childId/information" params={childParams}>
-                          {t('renew-adult-child:review-child-information.full-name-change')}
-                        </InlineLink>
-                      </p>
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('renew-adult-child:review-child-information.dob-title')}>
-                      {dateOfBirth}
-                      <p className="mt-4">
-                        <InlineLink id="change-date-of-birth" routeId="public/renew/$id/adult-child/children/$childId/information" params={childParams}>
-                          {t('renew-adult-child:review-child-information.dob-change')}
-                        </InlineLink>
-                      </p>
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('renew-adult-child:review-child-information.client-number-title')}>
-                      {child.clientNumber}
-                      <p className="mt-4">
-                        <InlineLink id="client-number" routeId="public/renew/$id/adult-child/children/$childId/information" params={childParams}>
-                          {t('renew-adult-child:review-child-information.client-number-change')}
-                        </InlineLink>
-                      </p>
-                    </DescriptionListItem>
+                    <DescriptionListItem term={t('renew-adult-child:review-child-information.full-name-title')}>{`${child.firstName} ${child.lastName}`}</DescriptionListItem>
+                    <DescriptionListItem term={t('renew-adult-child:review-child-information.dob-title')}>{dateOfBirth}</DescriptionListItem>
+                    <DescriptionListItem term={t('renew-adult-child:review-child-information.client-number-title')}>{child.clientNumber}</DescriptionListItem>
                     <DescriptionListItem term={t('renew-adult-child:review-child-information.is-parent')}>{child.isParent ? t('renew-adult-child:review-child-information.yes') : t('renew-adult-child:review-child-information.no')}</DescriptionListItem>
                   </dl>
                 </section>
