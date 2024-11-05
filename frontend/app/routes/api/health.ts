@@ -8,20 +8,17 @@ import { isEmpty } from 'moderndash';
 import moize from 'moize';
 
 import type { AppContainerProvider } from '~/.server/app-container.provider';
+import { getAppContainerProvider } from '~/.server/app.container';
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 
-function getRedisCheck(appContainer: AppContainerProvider) {
-  const { HEALTH_CACHE_TTL } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
-  const redisService = appContainer.find(SERVICE_IDENTIFIER.REDIS_SERVICE);
+const { HEALTH_CACHE_TTL } = getAppContainerProvider().get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+const redisCheckFn = async () => void (await getAppContainerProvider().find(SERVICE_IDENTIFIER.REDIS_SERVICE)?.ping());
 
-  async function redisCheckFn() {
-    if (!redisService) return;
-    await redisService.ping();
-  }
-
-  return moize.promise(redisCheckFn, { maxAge: HEALTH_CACHE_TTL, transformArgs: () => [] });
-}
+// memoize the result of redisCheckFn for a period of time
+// transformArgs is require to effectively ignore the abort signal sent from @dts-stn/health-checks when caching
+// for memoization to work, the call to moize must be done in module scope, so it only ever happens once
+const redisCheck = moize.promise(redisCheckFn, { maxAge: HEALTH_CACHE_TTL, transformArgs: () => [] });
 
 export async function loader({ context: { appContainer }, request }: LoaderFunctionArgs) {
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
@@ -36,7 +33,7 @@ export async function loader({ context: { appContainer }, request }: LoaderFunct
     timeoutMs: toNumber(timeout),
   };
 
-  const redisHealthCheck: HealthCheck = { name: 'redis', check: getRedisCheck(appContainer) };
+  const redisHealthCheck: HealthCheck = { name: 'redis', check: redisCheck };
 
   // exclude the redis health check if the application is not using it
   if (SESSION_STORAGE_TYPE !== 'redis') {
