@@ -18,10 +18,13 @@ inputs = {
     value                = "HealthCheck.ViewDetails"
     description          = "HealthCheck monitors can view detailed output of a health check."
     allowed_member_types = ["Application", "User"]
-    members              = ["gregory.j.baker@hrsdc-rhdcc.gc.ca"]
+    members = [
+      "gregory.j.baker@hrsdc-rhdcc.gc.ca",
+      "nicholas.ly@hrsdc-rhdcc.gc.ca",
+    ]
   }]
   application_identifier_uris = [
-    "api://cdcp.esdc-edsc.gc.ca/frontend"
+    "api://cdcp.esdc-edsc.gc.ca/frontend",
   ]
   application_owners = [
     "amy.wong@hrsdc-rhdcc.gc.ca",
@@ -29,7 +32,7 @@ inputs = {
     "nicholas.ly@hrsdc-rhdcc.gc.ca",
   ]
   application_passwords = [
-    "Default secret"
+    "Default secret",
   ]
   application_web_redirect_uris = [
     "https://srv024.service.canada.ca/auth/callback",
