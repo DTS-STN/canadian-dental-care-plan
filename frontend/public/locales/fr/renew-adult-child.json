@@ -149,11 +149,11 @@
       "option-no": "<strong>Non</strong>, mes prestations fédérales n'ont pas changé"
     },
     "provincial-territorial-benefits": {
-      "title": "Prestations provinciales ou territoriales  ",
+      "title": "Prestations provinciales ou territoriales",
       "legend": "Votre accès aux prestations provinciales ou territoriales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
       "help-message": "Les prestations gouvernementales que nous avons au dossier se trouvent également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
-      "option-yes": "<strong>Oui</strong>, mes prestations provinciales ou territoriales ont changé ",
-      "option-no": "<strong>Non</strong>, mes prestations provinciales ou territoriales n'ont pas changé  "
+      "option-yes": "<strong>Oui</strong>, mes prestations provinciales ou territoriales ont changé",
+      "option-no": "<strong>Non</strong>, mes prestations provinciales ou territoriales n'ont pas changé"
     },
     "button": {
       "back": "Retour",
@@ -168,7 +168,7 @@
   },
   "update-dental-benefits": {
     "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
-    "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires. ",
+    "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
     "select-one": "Sélectionnez une option",
     "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
     "federal-benefits": {
@@ -278,8 +278,8 @@
       "last-name": "Nom de famille",
       "first-name": "Prénom",
       "date-of-birth": "Date de naissance",
-      "client-number": "(FR) Child's client number",
-      "client-number-detail": "(FR) You can find the child's client number in the upper right corner of the renewal letter from Service Canada or on the child's Sun Life member card.",
+      "client-number": "Numéro de client de l'enfant",
+      "client-number-detail": "Vous trouverez le numéro de client de l'enfant dans le coin supérieur droit de la lettre de renouvellement de Service Canada ou sur la carte de membre de la Sun Life de l'enfant.",
       "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
       "radio-options": {
         "yes": "Oui",
@@ -300,7 +300,7 @@
         "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
         "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
         "date-of-birth-year-required": "La date de naissance doit inclure une année",
-        "client-number-required": "(FR) Enter child's client number",
+        "client-number-required": "Numéro de client de l'enfant",
         "client-number-valid": "Doit être un numéro de client valide. Votre saisie doit comporter 11, 13 chiffres",
         "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
         "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
@@ -354,71 +354,71 @@
       }
     },
     "confirm-dental-benefits": {
-      "title": "(FR) {{childName}}: access to other federal, provincial or territorial dental benefits",
-      "access-to-dental": "(FR) Access to dental coverage through a provincial, territorial or federal government social programs will not impact the child's eligibility for the Canadian Dental Care Plan.",
-      "select-one": "(FR) Select one",
-      "eligibility-criteria": "(FR) If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
+      "title": "{{childName}}\u00a0: accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
+      "access-to-dental": "L'accès à des prestations dentaires dans le cadre d'un programme social n'aura aucune incidence sur l'admissibilité de l'enfant au Régime canadien de soins dentaires.",
+      "select-one": "Sélectionnez une option",
+      "eligibility-criteria": "Si l'enfant répond à tous les critères d'admissibilité, sa couverture doit être coordonnée entre les régimes afin qu'il n'y ait pas de dédoublement ou de lacunes dans la couverture.",
       "federal-benefits": {
-        "title": "(FR) Federal benefits",
-        "legend": "(FR) Has {{childName}}'s access to federal benefits changed since you applied for the Canadian Dental Care Plan?",
-        "help-message": "(FR) The government benefits we have on file for {{childName}} can be found on the renewal letter you received from Service Canada.",
-        "option-yes": "(FR) <strong>Yes</strong>, this child's federal benefits have changed.",
-        "option-no": "(FR) <strong>No</strong>, this child's federal benefits have not changed."
+        "title": "Prestations fédérales",
+        "legend": "L'accès de {{childName}} aux prestations fédérales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
+        "help-message": "Les prestations gouvernementales que nous avons au dossier pour {{childName}} se trouvent sur la lettre de renouvellement que vous avez reçue de Service Canada.",
+        "option-yes": "<strong>Oui</strong>, les prestations fédérales de cet enfant ont changé",
+        "option-no": "<strong>Non</strong>, les prestations fédérales de cet enfant n'ont pas changé"
       },
       "provincial-territorial-benefits": {
-        "title": "(FR) Provincial or territorial benefits",
-        "legend": "(FR) Has {{childName}}'s access to provincial or territorial benefits changed since you applied for the Canadian Dental Care Plan?",
-        "help-message": "(FR) The government benefits we have on file for {{childName}} can be found on the renewal letter you received from Service Canada.",
-        "option-yes": "(FR) <strong>Yes</strong>, this child's provincial or territorial benefits have changed.",
-        "option-no": "(FR) <strong>No</strong>, this child's provincial or territorial benefits have not changed."
+        "title": "Prestations provinciales ou territoriales",
+        "legend": "L'accès de {{childName}} aux prestations provinciales ou territoriales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
+        "help-message": "Les prestations gouvernementales que nous avons au dossier se trouvent sur la lettre de renouvellement que vous avez reçue de Service Canada.",
+        "option-yes": "<strong>Oui</strong, les prestations provinciales ou territoriales de cet enfant ont changé",
+        "option-no": "<strong>Non</strong, les prestations provinciales ou territoriales de cet enfant n'ont pas changé"
       },
       "button": {
-        "back": "(FR) Back",
-        "continue": "(FR) Continue",
-        "cancel-btn": "(FR) Cancel",
-        "save-btn": "(FR) Save"
+        "back": "Retour",
+        "continue": "Continuer",
+        "cancel-btn": "Annuler",
+        "save-btn": "Sauvegarder"
       },
       "error-message": {
-        "federal-benefit-required": "(FR) Select whether you have federal dental benefits",
-        "provincial-benefit-required": "(FR) Select whether you have provincial or territorial dental benefits"
+        "federal-benefit-required": "Sélectionnez si votre enfant bénéficie de prestations dentaires fédérales",
+        "provincial-benefit-required": "Sélectionnez si votre enfant bénéficie d'une assurance dentaire provinciale ou territoriale"
       }
     },
     "update-dental-benefits": {
-      "title": "(FR) {{childName}}: access to other federal, provincial or territorial dental benefits",
-      "access-to-dental": "(FR) Access to dental coverage through a provincial, territorial or federal government social programs will not impact the child's eligibility for the Canadian Dental Care Plan.",
-      "select-one": "(FR) Select one",
-      "eligibility-criteria": "(FR) If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
+      "title": "{{childName}}\u00a0: accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
+      "access-to-dental": "L'accès à des prestations dentaires dans le cadre d'un programme social n'aura aucune incidence sur l'admissibilité de l'enfant au Régime canadien de soins dentaires.",
+      "select-one": "Sélectionnez une option",
+      "eligibility-criteria": "Si l'enfant répond à tous les critères d'admissibilité, sa couverture doit être coordonnée entre les régimes afin qu'il n'y ait pas de dédoublement ou de lacunes dans la couverture.",
       "federal-benefits": {
-        "title": "(FR) Federal benefits",
-        "legend": "(FR) Does {{childName}} have dental benefits through a federal social program?",
-        "option-yes": "(FR) <strong>Yes</strong>, this child has <strong>federal</strong> benefits",
-        "option-no": "(FR) <strong>No</strong>, this child does not have <strong>federal</strong> benefits",
+        "title": "Prestations fédérales",
+        "legend": "L'accès de {{childName}} aux prestations fédérales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
+        "option-yes": "<strong>Oui</strong>, les prestations fédérales de cet enfant ont changé",
+        "option-no": "<strong>Non</strong>, les prestations fédérales de cet enfant n'ont pas changé",
         "social-programs": {
-          "legend": "(FR) Please select which social program this child is covered under. If this child has more than one, please select the one they use the most."
+          "legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
         }
       },
       "provincial-territorial-benefits": {
-        "title": "(FR) Provincial or territorial benefits",
-        "legend": "(FR) Does {{childName}} have dental benefits through a provincial or territorial social program?",
-        "option-yes": "(FR) <strong>Yes</strong>, this child has <strong>provincial or territorial</strong> benefits",
-        "option-no": "(FR) <strong>No</strong>, this child does not have <strong>provincial or territorial</strong> benefits",
+        "title": "Prestations provinciales ou territoriales",
+        "legend": "L'accès de {{childName}} aux prestations provinciales ou territoriales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
+        "option-yes": "<strong>Oui</strong, les prestations provinciales ou territoriales de cet enfant ont changé",
+        "option-no": "<strong>Non</strong, les prestations provinciales ou territoriales de cet enfant n'ont pas changé",
         "social-programs": {
-          "input-legend": "(FR) Through which province or territory?",
-          "radio-legend": "(FR) Please select which social program this child is covered under. If this child has more than one, please select the one they use the most."
+          "input-legend": "Par l'entremise de quelle province ou de quel territoire?",
+          "radio-legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
         }
       },
       "button": {
-        "back": "(FR) Back",
-        "continue": "(FR) Continue",
-        "cancel-btn": "(FR) Cancel",
-        "save-btn": "(FR) Save"
+        "back": "Retour",
+        "continue": "Continuer",
+        "cancel-btn": "Annuler",
+        "save-btn": "Sauvegarder"
       },
       "error-message": {
-        "federal-benefit-program-required": "(FR) Select which federal program you are covered under",
-        "federal-benefit-required": "(FR) Select whether you have federal dental benefits",
-        "provincial-benefit-program-required": "(FR) Select which provincial or territorial program you are covered under",
-        "provincial-benefit-required": "(FR) Select whether you have provincial or territorial dental benefits",
-        "provincial-territorial-required": "(FR) Select a province or territory"
+        "federal-benefit-program-required": "Sélectionnez le programme fédéral dont relève votre enfant",
+        "federal-benefit-required": "Sélectionnez si votre enfant bénéficie de prestations dentaires fédérales",
+        "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial dont relève votre enfant",
+        "provincial-benefit-required": "Sélectionnez si votre enfant bénéficie d'une assurance dentaire provinciale ou territoriale",
+        "provincial-territorial-required": "Sélectionnez une province ou un territoire"
       }
     }
   },

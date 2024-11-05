@@ -289,11 +289,11 @@
       "btn": "Take the survey"
     },
     "modal": {
-      "header": "(FR) Close application",
-      "info": "(FR) By closing the application, you will end your session and any information entered will be cleared from your browser. Make sure you printed or save a copy of your application code.",
-      "are-you-sure": "(FR) Are you sure you want to close the application?",
-      "back-btn": "(FR) Back",
-      "close-btn": "(FR) Close application"
+      "header": "Fermer la demande",
+      "info": "En fermant cette demande, vous mettrez fin à votre session et les informations saisies seront effacées de votre navigateur. Assurez-vous d'avoir une copie de votre code de demande.",
+      "are-you-sure": "Êtes-vous sûr de vouloir fermer la demande?",
+      "back-btn": "Retour",
+      "close-btn": "Fermer la demande"
     }
   },
   "communication-preference": {
