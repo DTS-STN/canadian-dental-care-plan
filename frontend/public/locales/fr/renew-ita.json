@@ -44,7 +44,7 @@
       "confirm-required": "La case à cocher doit être sélectionnée",
       "date-of-birth-year-required": "L'année de naissance doit être fournie",
       "sin-required": "Entrez un NAS de 9 chiffres",
-      "sin-valid": "Doit être un NAS valide",
+      "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
   },
@@ -58,7 +58,7 @@
     },
     "help-message": "L'adresse que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
     "error-message": {
-      "has-address-changed-required": "Sélectionnez si votre adresse a changé ou non",
+      "has-address-changed-required": "Sélectionnez si vous avez déménagé ou changé d'adresse postale",
       "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
     },
     "back-btn": "Retour",

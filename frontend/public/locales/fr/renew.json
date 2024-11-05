@@ -158,7 +158,7 @@
       "delegate": "Je présente une demande de renouvellement <strong>au nom d'une autre personne à titre de représentant légal ou mandataire</strong>"
     },
     "error-message": {
-      "type-of-renewal-required": "Sélectionnez la personne à qui s'adresse ce renouvellement"
+      "type-of-renewal-required": "Sélectionnez pour qui vous renouvelez"
     },
     "back-btn": "Retour",
     "continue-btn": "Continuer"

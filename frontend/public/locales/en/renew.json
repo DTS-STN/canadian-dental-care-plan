@@ -158,7 +158,7 @@
       "delegate": "I am renewing on behalf of someone else as a <strong>legal delegate or Power of Attorney</strong>"
     },
     "error-message": {
-      "type-of-renewal-required": "Select who this renewal is for"
+      "type-of-renewal-required": "Select who you are renewing for"
     },
     "back-btn": "Back",
     "continue-btn": "Continue"

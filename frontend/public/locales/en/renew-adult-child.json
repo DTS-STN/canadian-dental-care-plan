@@ -41,8 +41,8 @@
     "option-no": "No",
     "error-message": {
       "add-or-update-required": "Select whether you would like to add or update your phone number",
-      "phone-number-valid": "Invalid phone number format",
-      "phone-number-alt-valid": "Invalid phone number format",
+      "phone-number-valid": "Invalid phone number",
+      "phone-number-alt-valid": "Invalid phone number",
       "phone-required": "Enter a phone number"
     }
   },
@@ -80,7 +80,7 @@
     },
     "help-message": "The address we have on file can also be found on the renewal letter you received from Service Canada.",
     "error-message": {
-      "has-address-changed-required": "Select whether or not your address has changed",
+      "has-address-changed-required": "Select whether you have moved or changed your mailing address",
       "is-home-address-same-as-mailing-address-required": "Select whether or not your mailing address and home address are the same"
     },
     "back-btn": "Back",
