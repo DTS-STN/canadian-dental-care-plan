@@ -41,8 +41,8 @@
     "option-no": "Non",
     "error-message": {
       "add-or-update-required": "Indiquez si vous souhaitez ajouter ou mettre à jour votre numéro de téléphone",
-      "phone-number-valid": "Format de numéro de téléphone non valide",
-      "phone-number-alt-valid": "Format de numéro de téléphone non valide",
+      "phone-number-valid": "Numéro de téléphone invalide",
+      "phone-number-alt-valid": "Numéro de téléphone invalide",
       "phone-required": "Entrer un numéro de téléphone"
     }
   },
@@ -62,7 +62,7 @@
     "option-yes": "Oui",
     "option-no": "Non",
     "error-message": {
-      "add-or-update-required": "Indiquez si vous souhaitez ajouter ou mettre à jour votre adresse électroniqueFormat de numéro de téléphone invalide",
+      "add-or-update-required": "Sélectionnez si vous souhaitez mettre à jour ou ajouter une adresse courriel",
       "email-match": "Les adresses courriel entrées ne concordent pas",
       "confirm-email-required": "Confirmez l'adresse courriel",
       "email-required": "Entrez l'adresse courriel",
@@ -80,7 +80,7 @@
     },
     "help-message": "L'adresse que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
     "error-message": {
-      "has-address-changed-required": "Sélectionnez si votre adresse a changé ou non",
+      "has-address-changed-required": "Sélectionnez si vous avez déménagé ou changé d'adresse postale",
       "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
     },
     "back-btn": "Retour",
@@ -350,7 +350,7 @@
         }
       },
       "error-message": {
-        "dental-insurance-required": "Select whether the child has access to dental insurance"
+        "dental-insurance-required": "Sélectionnez si cet enfant a accès à une assurance dentaire"
       }
     },
     "confirm-dental-benefits": {
