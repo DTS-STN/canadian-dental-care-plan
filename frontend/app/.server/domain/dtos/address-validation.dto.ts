@@ -13,6 +13,9 @@ export type AddressCorrectionRequestDto = Readonly<{
 
   /** The 2-character Canadian province or territorial code. */
   provinceCode: string;
+
+  /** A unique identifier for the user making the request - used for auditing */
+  userId: string;
 }>;
 
 /**

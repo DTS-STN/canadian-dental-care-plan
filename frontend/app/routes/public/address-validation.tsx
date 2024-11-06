@@ -190,6 +190,7 @@ export async function action({ context: { appContainer, session }, request }: Ac
     city: resolvedAddress.city,
     postalCode: resolvedAddress.postalZipCode,
     provinceCode: resolvedAddress.provinceState,
+    userId: 'anonymous',
   });
 
   if (addressCorrectionResult.status === 'NotCorrect') {
