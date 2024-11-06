@@ -1,64 +1,63 @@
 {
   "terms-and-conditions": {
-    "page-title": "Terms and conditions",
-    "page-heading": "Voluntary demographic questions",
-    "intro-text": "Thank you for taking the time to complete these voluntary demographic questions. Your answers will help Health Canada improve the Canadian Dental Care Plan and make sure our services are accessible to everyone.",
-    "answering-questions": "Answering these questions is optional. The information collected will only be used for statistical purposes and all responses will be kept confidential.",
-    "completion-of-survey": "Your completion of the demographic questions will not impact your enrolment in the Canadian Dental Care Plan.",
-    "feedback-time": "This feedback takes 3 minutes to complete.",
+    "page-title": "Conditions d'utilisation",
+    "page-heading": "Questions démographiques facultatives",
+    "intro-text": "Merci de prendre le temps de répondre à ces questions démographiques facultatives. Vos réponses aideront Santé Canada à améliorer le Régime canadien de soins dentaires et à faire en sorte que nos services soient accessibles à tous.",
+    "answering-questions": "Répondre à ces questions est facultatif. Les renseignements recueillis ne seront utilisés qu'à des fins statistiques et toutes les réponses resteront confidentielles.",
+    "completion-of-survey": "Vos réponses aux questions démographiques n'auront pas d'incidence sur votre adhésion au Régime canadien de soins dentaires.",
+    "feedback-time": "Ce questionnaire prend trois minutes à remplir.",
     "privacy-notice-statement": {
-      "summary": "Privacy Notice Statement",
-      "your-privacy": "Your privacy is important to us. You have the right to the protection of, access to, and correction of your personal information.",
-      "privacy-act": "The collection, use, and disclosure of your personal information is authorized by, among other laws, the Department of Health Act, the Dental Care Measures Act, the Department of Employment and Social Development Act, and is protected by the provisions of the Privacy Act.",
-      "information-you-provide": "The information you provide may be used and/or disclosed for policy analysis, research and/or evaluation purposes. However, these additional uses and/or disclosures of your personal information will never result in an administrative decision being made about you.",
-      "third-party": "Employment and Social Development Canada carries out this survey using services from a third-party provider, Microsoft Corporation, which may be subject to foreign laws. For more information, see Microsoft Data Privacy Policy & Privacy Principles.",
+      "summary": "Énoncé de confidentialité",
+      "your-privacy": "La protection de votre vie privée est importante pour nous. Vous avez droit à la protection de, à l'accès à, et à la correction de vos renseignements personnels. ",
+      "privacy-act": "La collecte, l'utilisation et la divulgation de vos renseignements personnels sont autorisées en vertu de la Loi sur le ministère de la Santé, la Loi sur les mesures de soins dentaires et la Loi sur le ministère de l'Emploi et du Développement social, entre autres, et sont protégées par les dispositions de la Loi sur la protection des renseignements personnels.",
+      "information-you-provide": "Les renseignements que vous fournissez pourraient être utilisés ou communiqués à des fins d'analyse de politique, de recherche ou d'évaluation. Cependant, les autres utilisations ou divulgations de vos renseignements ne serviront jamais à prendre une décision administrative à votre sujet. ",
+      "third-party": "Pour réaliser ce sondage, Emploi et Développement social Canada fait appel aux services d'un fournisseur tiers, Microsoft Corporation, qui peut être soumis à des lois étrangères. Vous trouverez de plus amples renseignements en consultant cette page Web : Politique de protection des données et principes de confidentialité de Microsoft.",
       "how-we-protect-your-privacy": {
-        "heading": "How we protect your privacy",
-        "personal-information-rights-and-access": "You have the right to the protection of, access to, and where applicable, the correction of your personal information. It is kept in the following personal information banks (PIBS):",
+        "heading": "Comment protégeons-nous vos renseignements personnels?",
+        "personal-information-rights-and-access": "Vous avez droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, le cas échéant, à leur correction. Ils sont conservés dans les fichiers de renseignements personnels (FRP) suivants\u00a0:",
         "personal-information-banks": {
-          "esdc-ppu-712": "Canadian Dental Care Plan (ESDC PPU 712)",
-          "hc-ppu-440": "Canadian Dental Care Plan (HC PPU 440)"
+          "esdc-ppu-712": "Régime canadien de soins dentaires (SC PPU 440) ",
+          "hc-ppu-440": "Régime canadien de soins dentaires (EDSC PPU 712)"
         }
       },
-      "info-source-access": "You can learn how to access this information in the government publication called Info Source. You can also access Info Source online at any Service Canada Centre.",
-      "personal-information-handling-complaint-process": "If you do not agree with the way your personal information was handled by ESDC, you can contact the Office of the Privacy Commissioner of Canada (OPC) to file a complaint."
+      "info-source-access": "Vous pouvez apprendre comment accéder à ces renseignements dans la publication du gouvernement intitulée Info Source. Vous pouvez également accéder à Info Source en ligne dans n'importe quel Centre Service Canada.",
+      "personal-information-handling-complaint-process": "Si vous n'êtes pas satisfait de la façon dont vos renseignements personnels ont été traités par EDSC, vous pouvez communiquer avec le Commissariat à la protection de la vie privée du Canada (CPVP) pour déposer une plainte."
     },
     "take-survey": {
-      "application-participation": "By continuing with the survey you agree to the above Privacy Notice Statement.",
-      "application-consent": "By continuing with this application you agree that you have read and accept the above terms and conditions and privacy notice statement. In addition, you also consent to the sharing of your personal information for the purposes listed above.",
-      "start-button": "Agree and continue"
+      "application-participation": "En répondant au sondage, vous approuvez l'énoncé de confidentialité susmentionné.",
+      "start-button": "Accepter et poursuivre"
     }
   },
   "summary": {
-    "page-title": "Demographic questions summary",
-    "page-heading": "Voluntary demographic questions",
-    "provide-a-response": "You can provide a response for each Canada Dental Care Plan member.",
-    "please-select": "Please select the Canadian Dental Care Plan member.",
-    "when-you-have-finished": "When you have finished, please select 'Submit'.",
-    "completed": "Completed",
-    "back-btn": "Back",
-    "continue-btn": "Submit"
+    "page-title": "Résumé des questions démographiques",
+    "page-heading": "Questions démographiques facultatives",
+    "provide-a-response": "Vous pouvez fournir une réponse pour chaque membre du Régime canadien de soins dentaires.",
+    "please-select": "Veuillez sélectionner le membre du Régime canadien de soins dentaires.",
+    "when-you-have-finished": "Lorsque vous avez terminé, cliquez sur «\u00a0Soumettre\u00a0».",
+    "completed": "Complété",
+    "back-btn": "Retour",
+    "continue-btn": "Soumettre"
   },
   "questions": {
-    "page-title": "Voluntary demographic questions for {{memberName}}",
-    "optional": "All questions are optional.",
-    "indigenous-status": "Is this person First Nations, Métis or Inuk (Inuit)?",
-    "disability-status": "Does this person have a disability?",
-    "ethnic-groups": "To which ethnic group(s) does this person belong? Please select all that apply.",
-    "location-born-status": "Where was this person born?",
-    "gender-status": "What is this person's gender?",
-    "back-btn": "Back",
-    "save-btn": "Save",
+    "page-title": "Questions démographiques facultatives pour {{memberName}}",
+    "optional": "Toutes les questions sont facultatives.",
+    "indigenous-status": "Cette personne est-elle membre d'une collectivité autochtone (Premières Nations, Métis ou Inuits)?",
+    "disability-status": "Cette personne souffre-t-elle d'un handicap?",
+    "ethnic-groups": "À quel(s) groupe(s) ethnique(s) cette personne appartient-elle? Veuillez sélectionner toutes les réponses qui s'appliquent.",
+    "location-born-status": "Où est née cette personne?",
+    "gender-status": "Quel est le genre de cette personne?",
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder",
     "error-message": {
-      "first-nations-required": "Please select if this person is First Nations, Métis or Inuk (Inuit)",
-      "another-ethnic-group-required": "Please specify the ethnic group"
+      "first-nations-required": "Veuillez sélectionner si cette personne est une Première nation, un Métis ou un Inuk (Inuit)",
+      "another-ethnic-group-required": "Veuillez préciser le groupe ethnique"
     }
   },
   "submitted": {
-    "page-title": "Response submitted",
-    "sbumitted": "Your response has been submitted.",
-    "thank-you": "Thank you for taking the time to complete these voluntary demographic questions.",
-    "close-btn": "Close survey",
-    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+    "page-title": "Réponse soumise",
+    "sbumitted": "Votre réponse a été soumise.",
+    "thank-you": "Merci d'avoir pris le temps de répondre à ces questions démographiques facultatives.",
+    "close-btn": "Mettre fin au sondage",
+    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   }
 }
