@@ -1,5 +1,6 @@
 export * from './address-validation.service';
 export * from './applicant.service';
+export * from './application-status.service';
 export * from './audit.service';
 export * from './benefit-renewal.service';
 export * from './client-application.service';

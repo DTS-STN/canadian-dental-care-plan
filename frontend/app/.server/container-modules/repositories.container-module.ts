@@ -4,6 +4,7 @@ import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import {
   AddressValidationRepositoryImpl,
   ApplicantRepositoryImpl,
+  ApplicationStatusRepositoryImpl,
   BenefitRenewalRepositoryImpl,
   ClientApplicationRepositoryImpl,
   ClientFriendlyStatusRepositoryImpl,
@@ -26,6 +27,7 @@ import { HCaptchaRepositoryImpl } from '~/.server/web/repositories';
 export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_REPOSITORY).to(AddressValidationRepositoryImpl);
   bind(SERVICE_IDENTIFIER.APPLICANT_REPOSITORY).to(ApplicantRepositoryImpl);
+  bind(SERVICE_IDENTIFIER.APPLICATION_STATUS_REPOSITORY).to(ApplicationStatusRepositoryImpl);
   bind(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_REPOSITORY).to(BenefitRenewalRepositoryImpl);
   bind(SERVICE_IDENTIFIER.CLIENT_APPLICATION_REPOSITORY).to(ClientApplicationRepositoryImpl);
   bind(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_REPOSITORY).to(ClientFriendlyStatusRepositoryImpl);

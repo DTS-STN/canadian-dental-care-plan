@@ -4,6 +4,7 @@ import type { ClientConfig, ServerConfig } from '~/.server/configs';
 import type {
   AddressValidationDtoMapper,
   ApplicantDtoMapper,
+  ApplicationStatusDtoMapper,
   BenefitRenewalDtoMapper,
   ClientApplicationDtoMapper,
   ClientFriendlyStatusDtoMapper,
@@ -21,6 +22,7 @@ import type {
 import type {
   AddressValidationRepository,
   ApplicantRepository,
+  ApplicationStatusRepository,
   BenefitRenewalRepository,
   ClientApplicationRepository,
   ClientFriendlyStatusRepository,
@@ -38,6 +40,7 @@ import type {
 import type {
   AddressValidationService,
   ApplicantService,
+  ApplicationStatusService,
   AuditService,
   BenefitRenewalService,
   ClientApplicationService,
@@ -70,6 +73,9 @@ export const SERVICE_IDENTIFIER = {
   APPLICANT_DTO_MAPPER: serviceIdentifier<ApplicantDtoMapper>('ApplicantDtoMapper'),
   APPLICANT_REPOSITORY: serviceIdentifier<ApplicantRepository>('ApplicantRepository'),
   APPLICANT_SERVICE: serviceIdentifier<ApplicantService>('ApplicantService'),
+  APPLICATION_STATUS_DTO_MAPPER: serviceIdentifier<ApplicationStatusDtoMapper>('ApplicationStatusDtoMapper'),
+  APPLICATION_STATUS_REPOSITORY: serviceIdentifier<ApplicationStatusRepository>('ApplicationStatusRepository'),
+  APPLICATION_STATUS_SERVICE: serviceIdentifier<ApplicationStatusService>('ApplicationStatusService'),
   AUDIT_SERVICE: serviceIdentifier<AuditService>('AuditService'),
   BENEFIT_RENEWAL_DTO_MAPPER: serviceIdentifier<BenefitRenewalDtoMapper>('BenefitRenewalDtoMapper'),
   BENEFIT_RENEWAL_REPOSITORY: serviceIdentifier<BenefitRenewalRepository>('BenefitRenewalRepository'),

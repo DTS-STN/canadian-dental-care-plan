@@ -23,7 +23,6 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/route-helpers/status-route-helpers.server';
-import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env-utils.server';
@@ -197,18 +196,18 @@ export async function action({ context: { appContainer, session }, params, reque
     }
   }
 
-  const applicationStatusService = getApplicationStatusService();
-
   const statusId = parsedSinResult
-    ? await applicationStatusService.getStatusIdWithSin({
+    ? await appContainer.get(SERVICE_IDENTIFIER.APPLICATION_STATUS_SERVICE).findApplicationStatusIdBySin({
         sin: parsedSinResult.data.sin,
         applicationCode: parsedCodeResult.data.code,
+        userId: 'anonymous',
       })
-    : await applicationStatusService.getStatusIdWithoutSin({
+    : await appContainer.get(SERVICE_IDENTIFIER.APPLICATION_STATUS_SERVICE).findApplicationStatusIdByBasicInfo({
         applicationCode: parsedCodeResult.data.code,
         firstName: parsedChildInfoResult?.data.firstName ?? '',
         lastName: parsedChildInfoResult?.data.lastName ?? '',
         dateOfBirth: parsedChildInfoResult?.data.dateOfBirth ?? '',
+        userId: 'anonymous',
       });
 
   const id = randomUUID().toString();
@@ -219,7 +218,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       statusCheckResult: {
-        statusId: statusId,
+        statusId,
       },
     },
   });
