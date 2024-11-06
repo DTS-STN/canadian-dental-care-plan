@@ -61,6 +61,7 @@ export interface RenewState {
     phoneNumber?: string;
     phoneNumberAlt?: string;
     email?: string;
+    shouldReceiveEmailCommunication?: boolean;
   };
   readonly hasAddressChanged?: boolean;
   readonly isHomeAddressSameAsMailingAddress?: boolean;

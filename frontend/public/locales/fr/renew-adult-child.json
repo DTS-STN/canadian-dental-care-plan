@@ -53,6 +53,9 @@
       "legend": "Souhaitez-vous mettre à jour ou ajouter votre adresse courriel?",
       "help-message": "L'adresse courriel que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada."
     },
+    "receive-comms": {
+      "legend": "Souhaitez-vous recevoir des communications par courriel de la part de la Sun Life et du gouvernement du Canada?"
+    },
     "email": "Adresse courriel",
     "confirm-email": "Confirmer l'adresse courriel",
     "back-btn": "Retour",
@@ -67,7 +70,8 @@
       "confirm-email-required": "Confirmez l'adresse courriel",
       "email-required": "Entrez l'adresse courriel",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@example.com",
-      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com"
+      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com",
+      "receive-comms-required": "Select whether you would like to receive email communication"
     }
   },
   "confirm-address": {
