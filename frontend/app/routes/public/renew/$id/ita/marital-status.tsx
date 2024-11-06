@@ -84,9 +84,14 @@ export async function action({ context: { appContainer, session }, params, reque
       .min(1, t('renew-ita:marital-status.error-message.marital-status-required')),
   });
 
+  const currentYear = new Date().getFullYear().toString();
   const partnerInformationSchema = z.object({
     confirm: z.boolean().refine((val) => val === true, t('renew-ita:marital-status.error-message.confirm-required')),
-    yearOfBirth: z.string().trim().min(1, t('renew-ita:marital-status.error-message.date-of-birth-year-required')),
+    yearOfBirth: z
+      .string()
+      .trim()
+      .min(1, t('renew-ita:marital-status.error-message.date-of-birth-year-required'))
+      .refine((year) => year < currentYear, t('renew-ita:marital-status.error-message.yob-is-future')),
     socialInsuranceNumber: z
       .string()
       .trim()
