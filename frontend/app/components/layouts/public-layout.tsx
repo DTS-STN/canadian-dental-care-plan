@@ -151,10 +151,8 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
         <div id="wb-bnr">
           <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
             <div property="publisher" typeof="GovernmentOrganization">
-              <Link to="https://canada.ca/" property="url" target="_blank" rel="noreferrer">
-                <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
-                <span className="sr-only">/ {altLogoContent}</span>
-              </Link>
+              <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
+              <span className="sr-only">/ {altLogoContent}</span>
               <meta property="name" content={`${en('gcweb:header.govt-of-canada.text')} / ${fr('gcweb:header.govt-of-canada.text')}`} />
               <meta property="areaServed" typeof="Country" content="Canada" />
               <link property="logo" href="/assets/wmms-blk.svg" />

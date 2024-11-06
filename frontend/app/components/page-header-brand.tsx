@@ -1,5 +1,3 @@
-import { Link } from '@remix-run/react';
-
 import { useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
@@ -15,10 +13,8 @@ export function PageHeaderBrand() {
     <div id="wb-bnr">
       <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
         <div property="publisher" typeof="GovernmentOrganization">
-          <Link to={t('gcweb:header.govt-of-canada.href')} property="url" target="_blank" rel="noreferrer">
-            <img className="h-8 w-auto" src={`/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
-            <span className="sr-only">/ {altLogoContent}</span>
-          </Link>
+          <img className="h-8 w-auto" src={`/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
+          <span className="sr-only">/ {altLogoContent}</span>
           <meta property="name" content={t('gcweb:header.govt-of-canada.text')} />
           <meta property="areaServed" typeof="Country" content="Canada" />
           <link property="logo" href="/assets/wmms-blk.svg" />
