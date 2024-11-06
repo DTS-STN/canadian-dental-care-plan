@@ -12,8 +12,7 @@ const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-n
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
 export interface InputSanitizeFieldProps
-  extends OmitStrict<React.ComponentProps<typeof NumberFormatBase>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'value' | 'onChange' | 'format' | 'type' | 'removeFormatting' | 'isValidInputCharacter' | 'getCaretBoundary'> {
-  defaultValue: string;
+  extends OmitStrict<React.ComponentProps<typeof NumberFormatBase>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'format' | 'type' | 'removeFormatting' | 'isValidInputCharacter' | 'getCaretBoundary'> {
   errorMessage?: string;
   helpMessagePrimary?: React.ReactNode;
   helpMessagePrimaryClassName?: string;
@@ -25,7 +24,7 @@ export interface InputSanitizeFieldProps
 }
 
 export function InputSanitizeField(props: InputSanitizeFieldProps) {
-  const { 'aria-describedby': ariaDescribedby, className, defaultValue, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, ...restProps } = props;
+  const { 'aria-describedby': ariaDescribedby, className, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, ...restProps } = props;
 
   const inputWrapperId = `input-sanitize-field-${id}`;
   const inputErrorId = `${inputWrapperId}-error`;
@@ -67,7 +66,6 @@ export function InputSanitizeField(props: InputSanitizeFieldProps) {
         className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, errorMessage && inputErrorClassName, className)}
         required={required}
         {...restProps}
-        defaultValue={defaultValue}
         type="text"
         inputMode="text"
         format={(value) => normalizeHyphens(removeInvalidInputCharacters(value))}
