@@ -38,6 +38,11 @@ enum AddOrUpdateEmailOption {
   No = 'no',
 }
 
+enum ShouldReceiveEmailCommunicationOption {
+  Yes = 'yes',
+  No = 'no',
+}
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.adultChild.confirmEmail,
@@ -62,6 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     defaultState: {
       isNewOrUpdatedEmail: state.contactInformation?.isNewOrUpdatedEmail,
       email: state.contactInformation?.email,
+      shouldReceiveEmailCommunication: state.contactInformation?.shouldReceiveEmailCommunication,
     },
     editMode: state.editMode,
   });
@@ -80,6 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
       }),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
+      shouldReceiveEmailCommunication: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.isNewOrUpdatedEmail === AddOrUpdateEmailOption.Yes) {
@@ -103,10 +110,17 @@ export async function action({ context: { appContainer, session }, params, reque
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:confirm-email.error-message.email-match'), path: ['confirmEmail'] });
         }
       }
+
+      if (val.isNewOrUpdatedEmail === AddOrUpdateEmailOption.Yes) {
+        if (val.shouldReceiveEmailCommunication === undefined) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:confirm-email.error-message.receive-comms-required'), path: ['shouldReceiveEmailCommunication'] });
+        }
+      }
     })
     .transform((val) => ({
       ...val,
       isNewOrUpdatedEmail: val.isNewOrUpdatedEmail === AddOrUpdateEmailOption.Yes,
+      shouldReceiveEmailCommunication: val.shouldReceiveEmailCommunication ? val.shouldReceiveEmailCommunication === ShouldReceiveEmailCommunicationOption.Yes : undefined,
     }));
 
   const formData = await request.formData();
@@ -123,6 +137,7 @@ export async function action({ context: { appContainer, session }, params, reque
     isNewOrUpdatedEmail: formData.get('isNewOrUpdatedEmail'),
     email: formData.get('email') ? String(formData.get('email')) : undefined,
     confirmEmail: formData.get('confirmEmail') ? String(formData.get('confirmEmail')) : undefined,
+    shouldReceiveEmailCommunication: formData.get('shouldReceiveEmailCommunication') ? String(formData.get('shouldReceiveEmailCommunication')) : undefined,
   };
   const parsedDataResult = emailSchema.safeParse(data);
 
@@ -151,6 +166,7 @@ export default function RenewAdultChildConfirmEmail() {
     isNewOrUpdatedEmail: 'input-radio-is-new-or-updated-email-option-0',
     email: 'email',
     confirmEmail: 'confirm-email',
+    shouldReceiveEmailCommunication: 'input-radio-should-receive-email-communication-option-0',
   });
 
   const [isNewOrUpdatedEmail, setIsNewOrUpdatedEmail] = useState(defaultState.isNewOrUpdatedEmail);
@@ -226,6 +242,29 @@ export default function RenewAdultChildConfirmEmail() {
               required
             />
           </div>
+          {isNewOrUpdatedEmail && (
+            <div className="mb-6">
+              <InputRadios
+                id="should-receive-email-communication"
+                name="shouldReceiveEmailCommunication"
+                legend={t('renew-adult-child:confirm-email.receive-comms.legend')}
+                options={[
+                  {
+                    children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:confirm-email.option-yes" />,
+                    value: ShouldReceiveEmailCommunicationOption.Yes,
+                    defaultChecked: defaultState.shouldReceiveEmailCommunication === true,
+                  },
+                  {
+                    children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:confirm-email.option-no" />,
+                    value: ShouldReceiveEmailCommunicationOption.No,
+                    defaultChecked: defaultState.shouldReceiveEmailCommunication === false,
+                  },
+                ]}
+                errorMessage={errors?.shouldReceiveEmailCommunication}
+                required
+              />
+            </div>
+          )}
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Contact information click">
