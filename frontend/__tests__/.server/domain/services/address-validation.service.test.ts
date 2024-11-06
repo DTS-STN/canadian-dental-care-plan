@@ -6,6 +6,7 @@ import type { AddressCorrectionResultEntity } from '~/.server/domain/entities';
 import type { AddressValidationDtoMapper } from '~/.server/domain/mappers';
 import type { AddressValidationRepository } from '~/.server/domain/repositories';
 import { AddressValidationServiceImpl } from '~/.server/domain/services';
+import type { AuditService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 describe('AddressValidationServiceImpl', () => {
@@ -38,9 +39,11 @@ describe('AddressValidationServiceImpl', () => {
       const mockAddressValidationRepository = mock<AddressValidationRepository>();
       mockAddressValidationRepository.getAddressCorrectionResult.mockResolvedValue(mockAddressCorrectionResultEntity);
 
-      const service = new AddressValidationServiceImpl(mockLogFactory, mockAddressValidationDtoMapper, mockAddressValidationRepository);
+      const mockAuditService = mock<AuditService>();
 
-      const result = await service.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' });
+      const service = new AddressValidationServiceImpl(mockLogFactory, mockAddressValidationDtoMapper, mockAddressValidationRepository, mockAuditService);
+
+      const result = await service.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0', userId: 'userId' });
       expect(result).toEqual(mockAddressCorrectionResultDto);
     });
   });

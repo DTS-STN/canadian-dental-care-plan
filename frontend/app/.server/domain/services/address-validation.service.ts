@@ -4,6 +4,7 @@ import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import type { AddressCorrectionRequestDto, AddressCorrectionResultDto } from '~/.server/domain/dtos';
 import type { AddressValidationDtoMapper } from '~/.server/domain/mappers';
 import type { AddressValidationRepository } from '~/.server/domain/repositories';
+import type { AuditService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface AddressValidationService {
@@ -24,14 +25,19 @@ export class AddressValidationServiceImpl implements AddressValidationService {
     @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
     @inject(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_DTO_MAPPER) private readonly addressValidationDtoMapper: AddressValidationDtoMapper,
     @inject(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_REPOSITORY) private readonly addressValidationRepository: AddressValidationRepository,
+    @inject(SERVICE_IDENTIFIER.AUDIT_SERVICE) private readonly auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('AddressValidationServiceImpl');
   }
 
   async getAddressCorrectionResult(addressCorrectionRequestDto: AddressCorrectionRequestDto): Promise<AddressCorrectionResultDto> {
     this.log.trace('Getting address correction results with addressCorrectionRequest: [%j]', addressCorrectionRequestDto);
+
+    this.auditService.createAudit('address-validation.get-address-correction-result', { userId: addressCorrectionRequestDto.userId });
+
     const addressCorrectionResultEntity = await this.addressValidationRepository.getAddressCorrectionResult(addressCorrectionRequestDto);
     const addressCorrectionResultDto = this.addressValidationDtoMapper.mapAddressCorrectionResultEntityToAddressCorrectionResultDto(addressCorrectionResultEntity);
+
     this.log.trace('Returning address correction result: [%j]', addressCorrectionResultDto);
     return addressCorrectionResultDto;
   }
