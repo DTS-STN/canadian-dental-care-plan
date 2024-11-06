@@ -66,7 +66,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
   const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
   const countryHome = state.addressInformation?.homeCountry ? appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
-  const communicationPreference = appContainer.get(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE).getLocalizedPreferredCommunicationMethodById(state.communicationPreference.preferredMethod, locale);
   const maritalStatus = appContainer.get(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE).getLocalizedMaritalStatusById(state.maritalStatus, locale);
 
   const userInfo = {
@@ -78,8 +77,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     clientNumber: state.applicantInformation.clientNumber,
     maritalStatus: maritalStatus.name,
     contactInformationEmail: state.contactInformation.email,
-    communicationPreferenceEmail: state.communicationPreference.email,
-    communicationPreference: communicationPreference.name,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -289,7 +286,7 @@ export default function RenewItaReviewInformation() {
               <DescriptionListItem term={t('renew-ita:review-information.phone-title')}>
                 <p>{userInfo.phoneNumber}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-phone-number" routeId="public/renew/$id/ita/contact-information" params={params}>
+                  <InlineLink id="change-phone-number" routeId="public/renew/$id/ita/confirm-phone" params={params}>
                     {t('renew-ita:review-information.phone-change')}
                   </InlineLink>
                 </div>
@@ -297,7 +294,7 @@ export default function RenewItaReviewInformation() {
               <DescriptionListItem term={t('renew-ita:review-information.alt-phone-title')}>
                 <p>{userInfo.altPhoneNumber}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-alternate-phone-number" routeId="public/renew/$id/ita/contact-information" params={params}>
+                  <InlineLink id="change-alternate-phone-number" routeId="public/renew/$id/ita/confirm-phone" params={params}>
                     {t('renew-ita:review-information.alt-phone-change')}
                   </InlineLink>
                 </div>
@@ -305,7 +302,7 @@ export default function RenewItaReviewInformation() {
               <DescriptionListItem term={t('renew-ita:review-information.email')}>
                 <p>{userInfo.contactInformationEmail}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-email" routeId="public/renew/$id/ita/contact-information" params={params}>
+                  <InlineLink id="change-email" routeId="public/renew/$id/ita/confirm-email" params={params}>
                     {t('renew-ita:review-information.email-change')}
                   </InlineLink>
                 </div>

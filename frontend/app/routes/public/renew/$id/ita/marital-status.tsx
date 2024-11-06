@@ -122,7 +122,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/ita/review-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/ita/contact-information', params));
+  return redirect(getPathById('public/renew/$id/ita/confirm-phone', params));
 }
 
 export default function RenewItaMaritalStatus() {

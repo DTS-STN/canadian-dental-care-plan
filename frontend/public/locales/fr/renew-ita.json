@@ -1,28 +1,4 @@
 {
-  "contact-information": {
-    "page-title": "Coordonnées",
-    "phone-header": "Numéro de téléphone",
-    "add-phone": "L'ajout d'un numéro de téléphone à jour au dossier aidera le gouvernement du Canada à communiquer avec vous en cas de problème lié à votre demande de renouvellement. Sinon, nous communiquerons avec vous par la poste.",
-    "phone-number": "Numéro de téléphone (facultatif)",
-    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
-    "email-header": "Adresse courriel",
-    "add-email": "L'ajout d'une adresse courriel à jour au dossier aidera le gouvernement du Canada et la Sun Life à communiquer avec vous au sujet de votre adhésion au Régime canadien de soins dentaires.",
-    "email": "Adresse courriel (facultatif)",
-    "confirm-email": "Confirmer l'adresse courriel (facultatif)",
-    "back-btn": "Retour",
-    "continue-btn": "Continuer",
-    "cancel-btn": "Annuler",
-    "save-btn": "Enregistrer",
-    "error-message": {
-      "phone-number-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
-      "phone-number-alt-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
-      "email-match": "Les adresses courriel entrées ne concordent pas",
-      "confirm-email-required": "Confirmez l'adresse courriel",
-      "email-required": "Entrez l'adresse courriel",
-      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@example.com",
-      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com"
-    }
-  },
   "marital-status": {
     "page-title": "État civil",
     "marital-status": "Quel est votre état civil actuel?",
@@ -46,6 +22,47 @@
       "sin-required": "Entrez un NAS de 9 chiffres",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
+    }
+  },
+  "confirm-phone": {
+    "page-title": "Numéro de téléphone",
+    "add-phone": "L'ajout d'un numéro de téléphone à jour au dossier aidera le gouvernement du Canada à communiquer avec vous en cas de problème lié à votre demande de renouvellement. Sinon, nous communiquerons avec vous par la poste.",
+    "phone-number": "Numéro de téléphone",
+    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Sauvegarder",
+    "option-yes": "Oui",
+    "option-no": "Non",
+    "error-message": {
+      "phone-number-valid": "Numéro de téléphone invalide",
+      "phone-number-alt-valid": "Numéro de téléphone invalide",
+      "phone-required": "Entrer un numéro de téléphone"
+    }
+  },
+  "confirm-email": {
+    "page-title": "Adresse courriel",
+    "add-email": "Adresse courriel",
+    "add-or-update": {
+      "legend": "Souhaitez-vous recevoir des communications par courriel de la part de la Sun Life et du gouvernement du Canada?",
+      "help-message": "La communication par courriel aidera au gouvernement du Canada et à Sun Life de vous contacter au sujet de votre adhésion au Régime canadien de soins dentaires. Sinon, nous vous contacterons par la poste."
+    },
+    "email": "Adresse courriel",
+    "confirm-email": "Confirmer l'adresse courriel",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Sauvegarder",
+    "option-yes": "Oui",
+    "option-no": "Non",
+    "error-message": {
+      "add-or-update-required": "Sélectionnez si vous souhaitez mettre à jour ou ajouter une adresse courriel",
+      "email-match": "Les adresses courriel entrées ne concordent pas",
+      "confirm-email-required": "Confirmez l'adresse courriel",
+      "email-required": "Entrez l'adresse courriel",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@example.com",
+      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com"
     }
   },
   "confirm-address": {
@@ -295,22 +312,5 @@
       "back-btn": "Retour",
       "close-btn": "Fermer la demande"
     }
-  },
-  "communication-preference": {
-    "page-title": "Communication",
-    "update-info": "Nous mettrons à jour vos renseignements auprès de la Sun Life du Canada, compagnie d'assurance-vie (Sun Life). La Sun Life est responsable de l'administration du traitement des demandes de règlement et des prestations du Régime de soins dentaires du Canada.",
-    "preferred-method": "Quel est votre mode de communication préféré pour la Sun Life?",
-    "email": "Adresse courriel",
-    "confirm-email": "Confirmer l'adresse courriel",
-    "error-message": {
-      "communication-preference-required": "Le mode de communication doit être sélectionné",
-      "email-match": "Les adresses courriels entrées ne concordent pas",
-      "confirm-email-required": "La confirmation de l'adresse courriel doit être fournie",
-      "email-required": "L'adresse courriel doit être fournie",
-      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@example.com",
-      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com"
-    },
-    "back-btn": "Retour",
-    "continue-btn": "Continuer"
   }
 }
