@@ -19,6 +19,7 @@
       "marital-status-required": "Sélectionnez l'état civil",
       "confirm-required": "La case à cocher doit être sélectionnée",
       "date-of-birth-year-required": "L'année de naissance doit être fournie",
+      "yob-is-future": "L'année de naissance doit être dans le passé",
       "sin-required": "Entrez un NAS de 9 chiffres",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
