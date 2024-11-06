@@ -22,7 +22,7 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
-import { useEnhancedFetcher } from '~/hooks';
+import { useEnhancedFetcher, useFetcherKey } from '~/hooks';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -30,7 +30,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { isAllValidInputCharacters, randomString } from '~/utils/string-utils';
+import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 interface CanadianAddress {
@@ -217,8 +217,8 @@ export default function AddressValidationRoute() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, countries, provinceTerritoryStates, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const formElementRef = useRef<HTMLFormElement>(null);
-  const [formKey, setFormKey] = useState(randomString(16));
-  const fetcher = useEnhancedFetcher<typeof action>({ key: formKey });
+  const fetcherKey = useFetcherKey();
+  const fetcher = useEnhancedFetcher<typeof action>({ key: fetcherKey.key });
 
   const [countryProvinceTerritoryStates, setCountryProvinceTerritoryStates] = useState(() => {
     return provinceTerritoryStates.filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
@@ -269,7 +269,14 @@ export default function AddressValidationRoute() {
 
   function onResetClickHandler(event: React.SyntheticEvent<HTMLButtonElement>) {
     event.preventDefault();
-    setFormKey(randomString(16));
+    setCountryValue(CANADA_COUNTRY_ID);
+    setAddressValue('');
+    setProvinceStateValue('');
+    setCityValue('');
+    setPostalZipCodeValue('');
+    setAddressDialogContent(null);
+    fetcherKey.reset();
+
     const headingElement = document.querySelector<HTMLElement>('h1#wb-cont');
     headingElement?.scrollIntoView({ behavior: 'smooth' });
     headingElement?.focus();
@@ -279,11 +286,8 @@ export default function AddressValidationRoute() {
     setAddressValue(address.address);
     setCityValue(address.city);
     setPostalZipCodeValue(address.postalZipCode);
-    setAddressDialogContent(null);
-
     const provinceTerritoryState = provinceTerritoryStates.find(({ abbr }) => abbr === address.provinceState);
     setProvinceStateValue(provinceTerritoryState?.id ?? '');
-
     setAddressDialogContent(null);
   }
 

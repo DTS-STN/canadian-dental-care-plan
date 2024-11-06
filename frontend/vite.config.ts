@@ -118,6 +118,5 @@ export default defineConfig({
       include: ['**/app/**/*.{ts,tsx}'],
       exclude: ['!**/app/[.]client/**', '!**/app/[.]server/**', '**/app/mocks/**', ...coverageConfigDefaults.exclude],
     },
-    globals: true,
   },
 });
