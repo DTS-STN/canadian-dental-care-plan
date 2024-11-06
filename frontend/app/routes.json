@@ -757,6 +757,22 @@
                 }
               },
               {
+                "id": "public/renew/$id/ita/confirm-phone",
+                "file": "routes/public/renew/$id/ita/confirm-phone.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/ita/confirm-phone",
+                  "fr": "/:lang/renew/:id/ita/confirm-phone"
+                }
+              },
+              {
+                "id": "public/renew/$id/ita/confirm-email",
+                "file": "routes/public/renew/$id/ita/confirm-email.tsx",
+                "paths": {
+                  "en": "/:lang/renew/:id/ita/confirm-email",
+                  "fr": "/:lang/renew/:id/ita/confirm-email"
+                }
+              },
+              {
                 "id": "public/renew/$id/ita/confirm-address",
                 "file": "routes/public/renew/$id/ita/confirm-address.tsx",
                 "paths": {
@@ -773,14 +789,6 @@
                 }
               },
               {
-                "id": "public/renew/$id/ita/communication-preference",
-                "file": "routes/public/renew/$id/ita/communication-preference.tsx",
-                "paths": {
-                  "en": "/:lang/renew/:id/ita/communication-preference",
-                  "fr": "/:lang/renew/:id/ita/communication-preference"
-                }
-              },
-              {
                 "id": "public/renew/$id/ita/dental-insurance",
                 "file": "routes/public/renew/$id/ita/dental-insurance.tsx",
                 "paths": {
@@ -794,14 +802,6 @@
                 "paths": {
                   "en": "/:lang/renew/:id/ita/federal-provincial-territorial-benefits",
                   "fr": "/:lang/renew/:id/ita/federal-provincial-territorial-benefits"
-                }
-              },
-              {
-                "id": "public/renew/$id/ita/contact-information",
-                "file": "routes/public/renew/$id/ita/contact-information.tsx",
-                "paths": {
-                  "en": "/:lang/renew/:id/ita/contact-information",
-                  "fr": "/:lang/renew/:id/ita/renseignements-personnels"
                 }
               },
               {

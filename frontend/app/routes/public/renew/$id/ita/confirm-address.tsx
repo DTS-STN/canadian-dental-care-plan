@@ -170,7 +170,7 @@ export default function RenewItaConfirmAddress() {
             </LoadingButton>
             <ButtonLink
               id="back-button"
-              routeId="public/renew/$id/ita/communication-preference"
+              routeId="public/renew/$id/ita/confirm-email"
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}

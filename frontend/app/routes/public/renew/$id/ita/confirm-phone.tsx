@@ -5,19 +5,16 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
-import validator from 'validator';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
-import { InputField } from '~/components/input-field';
 import { InputPhoneField } from '~/components/input-phone-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { loadRenewItaState } from '~/route-helpers/renew-ita-route-helpers.server';
 import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
-import type { ContactInformationState } from '~/route-helpers/renew-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -35,8 +32,8 @@ enum FormAction {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.ita.contactInformation,
-  pageTitleI18nKey: 'renew-ita:contact-information.page-title',
+  pageIdentifier: pageIds.public.renew.ita.confirmPhone,
+  pageTitleI18nKey: 'renew-ita:confirm-phone.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -48,63 +45,46 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:contact-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:confirm-phone.page-title') }) };
 
   return json({
     id: state.id,
     csrfToken,
     meta,
-    defaultState: state.contactInformation,
+    defaultState: {
+      phoneNumber: state.contactInformation?.phoneNumber,
+      phoneNumberAlt: state.contactInformation?.phoneNumberAlt,
+    },
     maritalStatus: state.maritalStatus,
     editMode: state.editMode,
   });
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('renew/ita/contact-information');
+  const log = getLogger('renew/ita/confirm-phone');
 
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const personalInformationSchema = z
+  const phoneNumberSchema = z
     .object({
       phoneNumber: z
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('renew-ita:contact-information.error-message.phone-number-valid'))
+        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('renew-ita:confirm-phone.error-message.phone-number-valid'))
         .optional(),
       phoneNumberAlt: z
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('renew-ita:contact-information.error-message.phone-number-alt-valid'))
+        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('renew-ita:confirm-phone.error-message.phone-number-alt-valid'))
         .optional(),
-      email: z.string().trim().max(64).optional(),
-      confirmEmail: z.string().trim().max(64).optional(),
-    })
-    .superRefine((val, ctx) => {
-      if (val.email ?? val.confirmEmail) {
-        if (typeof val.email !== 'string' || validator.isEmpty(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:contact-information.error-message.email-required'), path: ['email'] });
-        } else if (!validator.isEmail(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:contact-information.error-message.email-valid'), path: ['email'] });
-        }
-
-        if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:contact-information.error-message.confirm-email-required'), path: ['confirmEmail'] });
-        } else if (!validator.isEmail(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:contact-information.error-message.confirm-email-valid'), path: ['confirmEmail'] });
-        } else if (val.email !== val.confirmEmail) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:contact-information.error-message.email-match'), path: ['confirmEmail'] });
-        }
-      }
     })
     .transform((val) => ({
-      ...val,
       phoneNumber: val.phoneNumber ? parsePhoneNumber(val.phoneNumber, 'CA').formatInternational() : val.phoneNumber,
       phoneNumberAlt: val.phoneNumberAlt ? parsePhoneNumber(val.phoneNumberAlt, 'CA').formatInternational() : val.phoneNumberAlt,
-    })) satisfies z.ZodType<ContactInformationState>;
+    }));
 
   const formData = await request.formData();
 
@@ -119,25 +99,23 @@ export async function action({ context: { appContainer, session }, params, reque
   const data = {
     phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
     phoneNumberAlt: formData.get('phoneNumberAlt') ? String(formData.get('phoneNumberAlt')) : undefined,
-    email: formData.get('email') ? String(formData.get('email')) : undefined,
-    confirmEmail: formData.get('confirmEmail') ? String(formData.get('confirmEmail')) : undefined,
   };
-  const parsedDataResult = personalInformationSchema.safeParse(data);
+  const parsedDataResult = phoneNumberSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
     return json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) });
   }
 
-  saveRenewState({ params, session, state: { contactInformation: parsedDataResult.data } });
+  saveRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/ita/review-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/ita/communication-preference', params));
+  return redirect(getPathById('public/renew/$id/ita/confirm-email', params));
 }
 
-export default function RenewFlowContactInformation() {
+export default function RenewAdultChildConfirmPhone() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
@@ -148,8 +126,6 @@ export default function RenewFlowContactInformation() {
   const errorSummary = useErrorSummary(errors, {
     phoneNumber: 'phone-number',
     phoneNumberAlt: 'phone-number-alt',
-    email: 'email',
-    confirmEmail: 'confirm-email',
   });
 
   return (
@@ -162,10 +138,9 @@ export default function RenewFlowContactInformation() {
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-ita:contact-information.phone-header')}</legend>
+          <div className="mb-6">
             <p className="mb-4" id="adding-phone">
-              {t('renew-ita:contact-information.add-phone')}
+              {t('renew-ita:confirm-phone.add-phone')}
             </p>
             <div className="grid items-end gap-6">
               <InputPhoneField
@@ -175,9 +150,9 @@ export default function RenewFlowContactInformation() {
                 inputMode="tel"
                 className="w-full"
                 autoComplete="tel"
-                defaultValue={defaultState?.phoneNumber ?? ''}
+                defaultValue={defaultState.phoneNumber ?? ''}
                 errorMessage={errors?.phoneNumber}
-                label={t('renew-ita:contact-information.phone-number')}
+                label={t('renew-ita:confirm-phone.phone-number')}
                 maxLength={100}
                 aria-describedby="adding-phone"
               />
@@ -188,55 +163,21 @@ export default function RenewFlowContactInformation() {
                 inputMode="tel"
                 className="w-full"
                 autoComplete="tel"
-                defaultValue={defaultState?.phoneNumberAlt ?? ''}
+                defaultValue={defaultState.phoneNumberAlt ?? ''}
                 errorMessage={errors?.phoneNumberAlt}
-                label={t('renew-ita:contact-information.phone-number-alt')}
+                label={t('renew-ita:confirm-phone.phone-number-alt')}
                 maxLength={100}
                 aria-describedby="adding-phone"
               />
             </div>
-          </fieldset>
-          <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-ita:contact-information.email-header')}</legend>
-            <p id="adding-email" className="mb-4">
-              {t('renew-ita:contact-information.add-email')}
-            </p>
-            <div className="grid gap-6 md:grid-cols-2">
-              <InputField
-                id="email"
-                name="email"
-                type="email"
-                inputMode="email"
-                className="w-full"
-                autoComplete="email"
-                defaultValue={defaultState?.email ?? ''}
-                errorMessage={errors?.email}
-                label={t('renew-ita:contact-information.email')}
-                maxLength={64}
-                aria-describedby="adding-email"
-              />
-              <InputField
-                id="confirm-email"
-                name="confirmEmail"
-                type="email"
-                inputMode="email"
-                className="w-full"
-                autoComplete="email"
-                defaultValue={defaultState?.email ?? ''}
-                errorMessage={errors?.confirmEmail}
-                label={t('renew-ita:contact-information.confirm-email')}
-                maxLength={64}
-                aria-describedby="adding-email"
-              />
-            </div>
-          </fieldset>
+          </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Contact information click">
-                {t('renew-ita:contact-information.save-btn')}
+                {t('renew-ita:confirm-phone.save-btn')}
               </Button>
               <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Contact information click">
-                {t('renew-ita:contact-information.cancel-btn')}
+                {t('renew-ita:confirm-phone.cancel-btn')}
               </Button>
             </div>
           ) : (
@@ -250,7 +191,7 @@ export default function RenewFlowContactInformation() {
                 endIcon={faChevronRight}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Contact information click"
               >
-                {t('renew-ita:contact-information.continue-btn')}
+                {t('renew-ita:confirm-phone.continue-btn')}
               </LoadingButton>
               <ButtonLink
                 id="back-button"
@@ -260,7 +201,7 @@ export default function RenewFlowContactInformation() {
                 startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Contact information click"
               >
-                {t('renew-ita:contact-information.back-btn')}
+                {t('renew-ita:confirm-phone.back-btn')}
               </ButtonLink>
             </div>
           )}

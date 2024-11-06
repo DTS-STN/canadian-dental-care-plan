@@ -90,8 +90,8 @@
       "renewalDelegate": "CDCP-RENW-0007",
       "ita": {
         "maritalStatus": "CDCP-RENW-ITA-0001",
-        "contactInformation": "CDCP-RENW-ITA-0002",
-        "communicationPreference": "CDCP-ITA-0003",
+        "confirmPhone": "CDCP-RENW-ITA-0002",
+        "confirmEmail": "CDCP-ITA-0003",
         "confirmAddress": "CDCP-RENW-ITA-0004",
         "updateAddress": "CDCP-RENW-ITA-0005",
         "dentalInsurance": "CDCP-RENW-ITA-0006",

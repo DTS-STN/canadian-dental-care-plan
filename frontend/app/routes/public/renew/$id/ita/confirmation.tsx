@@ -52,7 +52,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   // prettier-ignore
   // The review page should, in theory, validate the state so this is to prevent Typescript from complaining.
   if (state.applicantInformation === undefined ||
-    state.communicationPreference === undefined ||
     state.contactInformation === undefined ||
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
@@ -76,7 +75,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
   const countryHome = state.addressInformation?.homeCountry ? appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
   const maritalStatus = appContainer.get(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE).getLocalizedMaritalStatusById(state.maritalStatus, locale);
-  const communicationPreference = appContainer.get(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE).getLocalizedPreferredCommunicationMethodById(state.communicationPreference.preferredMethod, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -86,8 +84,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     martialStatus: maritalStatus.name,
     contactInformationEmail: state.contactInformation.email,
-    communicationPreferenceEmail: state.communicationPreference.email,
-    communicationPreference: communicationPreference.name,
     clientNumber: state.applicantInformation.clientNumber,
   };
 
