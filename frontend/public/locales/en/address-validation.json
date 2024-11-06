@@ -2,7 +2,6 @@
   "address-field": {
     "address": "Address",
     "address-note": "Include street number and name",
-    "apartment": "Apartment, suite, etc. (optional)",
     "city": "City or town",
     "country": "Country",
     "postal-zip-code": "Postal code or ZIP code",
@@ -11,12 +10,14 @@
   },
   "address-header": "Mailing address",
   "dialog": {
-    "corrected-address": {
-      "close-button": "Close",
-      "description": "We've made some corrections to your mailing address. Please review the updated information below:",
-      "header": "Corrected mailing address",
-      "initial-address": "Your initial mailing address",
-      "corrected-address": "Our corrected mailing address"
+    "address-suggestion": {
+      "address-selection-legend": "Please select an address option below:",
+      "cancel-button": "Cancel",
+      "description": "We found a suggested correction for the address you entered.",
+      "entered-address-option": "Entered address:",
+      "header": "Address correction suggestion",
+      "suggested-address-option": "Suggested corrected address:",
+      "use-selected-address-button": "Use selected address"
     },
     "international-address": {
       "close-button": "Close",
