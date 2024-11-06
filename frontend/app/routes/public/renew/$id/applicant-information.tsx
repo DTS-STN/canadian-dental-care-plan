@@ -242,7 +242,7 @@ export default function RenewApplicationInformation() {
               name="clientNumber"
               label={t('renew:applicant-information.client-number')}
               inputMode="numeric"
-              format="#############"
+              format="### ### ### ####"
               helpMessagePrimary={t('renew:applicant-information.help-message.client-number')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.clientNumber ?? ''}

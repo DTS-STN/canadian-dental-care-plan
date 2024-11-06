@@ -269,7 +269,7 @@ export default function RenewFlowChildInformation() {
               name="clientNumber"
               label={t('renew-adult-child:children.information.client-number')}
               inputMode="numeric"
-              format="#############"
+              format="### ### ### ####"
               helpMessagePrimary={t('renew-adult-child:children.information.client-number-detail')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.clientNumber ?? ''}
