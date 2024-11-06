@@ -289,7 +289,7 @@ export default function RenewAdultChildConfirmEmail() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/marital-status"
+                routeId="public/renew/$id/adult-child/confirm-phone"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

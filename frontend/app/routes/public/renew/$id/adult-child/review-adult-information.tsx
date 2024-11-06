@@ -170,7 +170,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
     saveRenewState({ params, session, state: { editMode: false } });
-    return redirect(getPathById('public/renew/$id/adult-child/federal-provincial-territorial-benefits', params));
+    return redirect(getPathById('public/renew/$id/adult-child/children/index', params));
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
