@@ -19,7 +19,6 @@ import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/route-helpers/status-route-helpers.server';
-import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -111,9 +110,8 @@ export async function action({ context: { appContainer, session }, params, reque
     }
   }
 
-  const applicationStatusService = getApplicationStatusService();
   const { sin, code } = parsedDataResult.data;
-  const statusId = await applicationStatusService.getStatusIdWithSin({ sin, applicationCode: code });
+  const statusId = await appContainer.get(SERVICE_IDENTIFIER.APPLICATION_STATUS_SERVICE).findApplicationStatusIdBySin({ sin, applicationCode: code, userId: 'anonymous' });
 
   const id = randomUUID().toString();
   startStatusState({ id, session });
@@ -123,7 +121,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       statusCheckResult: {
-        statusId: statusId,
+        statusId,
       },
     },
   });

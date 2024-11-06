@@ -4,6 +4,7 @@ import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import {
   AddressValidationDtoMapperImpl,
   ApplicantDtoMapperImpl,
+  ApplicationStatusDtoMapperImpl,
   BenefitRenewalDtoMapperImpl,
   ClientApplicationDtoMapperImpl,
   ClientFriendlyStatusDtoMapperImpl,
@@ -26,6 +27,7 @@ import { HCaptchaDtoMapperImpl } from '~/.server/web/mappers';
 export const mappersContainerModule = new ContainerModule((bind) => {
   bind(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_DTO_MAPPER).to(AddressValidationDtoMapperImpl);
   bind(SERVICE_IDENTIFIER.APPLICANT_DTO_MAPPER).to(ApplicantDtoMapperImpl);
+  bind(SERVICE_IDENTIFIER.APPLICATION_STATUS_DTO_MAPPER).to(ApplicationStatusDtoMapperImpl);
   bind(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_DTO_MAPPER).to(BenefitRenewalDtoMapperImpl);
   bind(SERVICE_IDENTIFIER.CLIENT_APPLICATION_DTO_MAPPER).to(ClientApplicationDtoMapperImpl);
   bind(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_DTO_MAPPER).to(ClientFriendlyStatusDtoMapperImpl);

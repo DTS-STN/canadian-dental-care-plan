@@ -1,5 +1,6 @@
 export type * from './address-validation.dto';
 export type * from './applicant.dto';
+export type * from './application-status.dto';
 export type * from './audit.dto';
 export type * from './benefit-renewal.dto';
 export type * from './client-application.dto';

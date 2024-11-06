@@ -6,6 +6,7 @@ import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import {
   AddressValidationServiceImpl,
   ApplicantServiceImpl,
+  ApplicationStatusServiceImpl,
   AuditServiceImpl,
   BenefitRenewalServiceImpl,
   ClientApplicationServiceImpl,
@@ -39,6 +40,7 @@ function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
 export const servicesContainerModule = new ContainerModule((bind) => {
   bind(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE).to(AddressValidationServiceImpl);
   bind(SERVICE_IDENTIFIER.APPLICANT_SERVICE).to(ApplicantServiceImpl);
+  bind(SERVICE_IDENTIFIER.APPLICATION_STATUS_SERVICE).to(ApplicationStatusServiceImpl);
   bind(SERVICE_IDENTIFIER.AUDIT_SERVICE).to(AuditServiceImpl);
   bind(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_SERVICE).to(BenefitRenewalServiceImpl);
   bind(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE).to(ClientApplicationServiceImpl);
