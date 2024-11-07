@@ -102,6 +102,7 @@
     },
     "address-field": {
       "address": "Adresse postale",
+      "mailing-address": "Adresse postale",
       "apartment": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple : 4B - 123 Rue Main",
       "country": "Pays",
       "province": "Province, territoire, État ou région",
