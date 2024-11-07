@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -85,6 +85,12 @@ export default function DemographicSurveySummary() {
                   {t('demographic-survey:summary.completed')}
                 </span>
               )}
+              {!member.isSurveyCompleted && (
+                <span className="text-zinc-800">
+                  <FontAwesomeIcon icon={faCircleXmark} className="mr-2 size-4 text-red-700" />
+                  {t('demographic-survey:summary.not-completed')}
+                </span>
+              )}
             </dd>
           ))}
         </dl>
@@ -93,7 +99,7 @@ export default function DemographicSurveySummary() {
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Continue - Summary click">
+          <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="green" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Continue - Summary click">
             {t('demographic-survey:summary.continue-btn')}
           </LoadingButton>
           <ButtonLink
