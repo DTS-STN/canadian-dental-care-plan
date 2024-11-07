@@ -294,6 +294,11 @@
       "continue-btn": "Continuer",
       "cancel-btn": "Annuler",
       "save-btn": "Enregistrer",
+      "child-not-found": {
+        "heading": "(FR) We could not find your child's application with the information you gave us.",
+        "please-review": "(FR) Please make sure the information you entered for your child is correct.",
+        "contact-service-canada": "(FR) Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
+      },
       "error-message": {
         "first-name-required": "Entrez le prénom de l'enfant",
         "last-name-required": "Entrez le nom de famille de l'enfant",
@@ -309,7 +314,8 @@
         "client-number-valid": "Doit être un numéro de client valide. Votre saisie doit comporter 11, 13 chiffres",
         "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
         "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
-        "no-digits": "Le nom de famille doit contenir uniquement des lettres"
+        "no-digits": "Le nom de famille doit contenir uniquement des lettres",
+        "no-record": "Aucun dossier correspondant trouvé pour votre enfant"
       }
     },
     "parent-or-guardian": {

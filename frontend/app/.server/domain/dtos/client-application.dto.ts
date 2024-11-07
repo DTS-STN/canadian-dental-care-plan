@@ -6,6 +6,14 @@ export type ClientApplicationDto = Readonly<{
   hasBeenAssessedByCRA: boolean;
   lastName: string;
   sin: string;
+  children: {
+    information: {
+      firstName: string;
+      lastName: string;
+      dateOfBirth: string;
+      clientNumber: string;
+    };
+  }[];
 }>;
 
 export type ClientApplicationBasicInfoRequestDto = Readonly<{

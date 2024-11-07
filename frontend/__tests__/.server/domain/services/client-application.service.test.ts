@@ -179,6 +179,16 @@ describe('ClientApplicationServiceImpl', () => {
     hasBeenAssessedByCRA: true,
     lastName: 'Doe',
     sin: '80000002',
+    children: [
+      {
+        information: {
+          firstName: 'John',
+          lastName: 'Doe',
+          dateOfBirth: '2000-01-01',
+          clientNumber: '123456789',
+        },
+      },
+    ],
   };
 
   describe('findClientApplicationBySin', () => {

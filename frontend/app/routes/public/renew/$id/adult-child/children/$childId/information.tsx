@@ -1,14 +1,17 @@
+import { useEffect, useRef } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
@@ -165,11 +168,17 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
-  // TODO: Implement logic to check if the form data matches any existing children
-  // for the applicant. Retrieve the applicant's list of children (possibily 'RelatedPerson') and compare the
-  // provided child data (first name, last name, date of birth, and client number)
-  // with the stored data. If a match is found, proceed with the next screen;
-  // otherwise, return an error indicating no matching child was found.
+  const matches = renewState.clientApplication?.children.map(
+    (child) =>
+      child.information.clientNumber === parsedDataResult.data.clientNumber &&
+      child.information.dateOfBirth === parsedDataResult.data.dateOfBirth &&
+      child.information.lastName === parsedDataResult.data.lastName &&
+      child.information.firstName === parsedDataResult.data.firstName,
+  );
+
+  if (matches && !matches.includes(true)) {
+    return { status: 'child-not-found' } as const;
+  }
 
   saveRenewState({
     params,
@@ -201,7 +210,8 @@ export default function RenewFlowChildInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const errors = fetcher.data?.errors;
+  const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
+  const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     firstName: 'first-name',
     lastName: 'last-name',
@@ -216,6 +226,7 @@ export default function RenewFlowChildInformation() {
   return (
     <>
       <AppPageTitle>{t('renew-adult-child:children.information.page-title', { childName })}</AppPageTitle>
+      {fetcherStatus === 'child-not-found' && <ChildNotFound />}
       <div className="max-w-prose">
         <p className="mb-4">{t('renew-adult-child:children.information.form-instructions-sin')}</p>
         <p className="mb-4 italic">{t('renew:required-label')}</p>
@@ -327,5 +338,30 @@ export default function RenewFlowChildInformation() {
         </fetcher.Form>
       </div>
     </>
+  );
+}
+
+function ChildNotFound() {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const noWrap = <span className="whitespace-nowrap" />;
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (wrapperRef.current) {
+      wrapperRef.current.scrollIntoView({ behavior: 'smooth' });
+      wrapperRef.current.focus();
+    }
+  }, []);
+
+  return (
+    <div ref={wrapperRef} id="child-not-found" className="mb-4">
+      <ContextualAlert type="danger">
+        <h2 className="mb-2 font-bold">{t('renew-adult-child:children.information.child-not-found.heading')}</h2>
+        <p className="mb-2">{t('renew-adult-child:children.information.child-not-found.please-review')}</p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:children.information.child-not-found.contact-service-canada" components={{ noWrap }} />
+        </p>
+      </ContextualAlert>
+    </div>
   );
 }

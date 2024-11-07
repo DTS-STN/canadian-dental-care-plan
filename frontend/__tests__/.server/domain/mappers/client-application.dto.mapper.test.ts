@@ -175,6 +175,7 @@ describe('ClientApplicationDtoMapperImpl', () => {
         hasBeenAssessedByCRA: true,
         lastName: 'Doe',
         sin: '80000002',
+        children: [],
       };
 
       // Act
