@@ -41,9 +41,9 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const formattedMailingAddress = {
     address: validatedMailingAddress.address,
     city: validatedMailingAddress.city,
-    country: appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(validatedMailingAddress.country, locale).name,
+    country: appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(validatedMailingAddress.countryId, locale).name,
     postalZipCode: validatedMailingAddress.postalZipCode,
-    provinceState: validatedMailingAddress.provinceState && appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceState, locale).abbr,
+    provinceState: validatedMailingAddress.provinceStateId && appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceStateId, locale).abbr,
   };
 
   const t = await getFixedT(request, handle.i18nNamespaces);
