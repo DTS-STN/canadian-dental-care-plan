@@ -18,7 +18,7 @@ import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { loadRenewAdultChildState, loadRenewAdultSingleChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
 import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
-import { applicationCodeInputPatternFormat, isValidClientNumberRenewal } from '~/utils/application-code-utils';
+import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -27,7 +27,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
+import { extractDigits, hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum YesNoOption {
@@ -105,7 +105,12 @@ export async function action({ context: { appContainer, session }, params, reque
         invalid_type_error: t('renew-adult-child:children.information.error-message.date-of-birth-day-number'),
       }),
       dateOfBirth: z.string(),
-      clientNumber: z.string().trim().min(1, t('renew-adult-child:children.information.error-message.client-number-required')).refine(isValidClientNumberRenewal, t('renew-adult-child:children.information.error-message.client-number-valid')),
+      clientNumber: z
+        .string()
+        .trim()
+        .min(1, t('renew-adult-child:children.information.error-message.client-number-required'))
+        .refine(isValidClientNumberRenewal, t('renew-adult-child:children.information.error-message.client-number-valid'))
+        .transform((code) => extractDigits(code)),
       isParent: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:children.information.error-message.is-parent') }) }),
     })
     .superRefine((val, ctx) => {
@@ -269,7 +274,7 @@ export default function RenewFlowChildInformation() {
               name="clientNumber"
               label={t('renew-adult-child:children.information.client-number')}
               inputMode="numeric"
-              format={applicationCodeInputPatternFormat}
+              format={renewalCodeInputPatternFormat}
               helpMessagePrimary={t('renew-adult-child:children.information.client-number-detail')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.clientNumber ?? ''}

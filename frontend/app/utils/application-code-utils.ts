@@ -1,4 +1,5 @@
 export const applicationCodeInputPatternFormat = '### ### ### ####';
+export const renewalCodeInputPatternFormat = '### ### ### ##';
 
 const applicationCodeFormatRegex = /^\d{3}[ ]?\d{3}$/;
 const clientNumberFormatRegex = /^\d{3}[ ]?\d{3}[ ]?\d{3}[ ]?\d{2}$/;
