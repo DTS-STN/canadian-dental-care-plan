@@ -18,6 +18,13 @@ export interface ProvinceTerritoryStateRepository {
    * @returns The province territory state entity or null if not found.
    */
   findProvinceTerritoryStateById(id: string): ProvinceTerritoryStateEntity | null;
+
+  /**
+   * Fetch a province territory state entity by its id.
+   * @param id The id of the province territory state entity.
+   * @returns The province territory state entity or null if not found.
+   */
+  findProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateEntity | null;
 }
 
 @injectable()
@@ -49,6 +56,20 @@ export class ProvinceTerritoryStateRepositoryImpl implements ProvinceTerritorySt
 
     if (!provinceTerritoryStateEntity) {
       this.log.warn('ProvinceTerritoryState not found; id: [%s]', id);
+      return null;
+    }
+
+    return provinceTerritoryStateEntity;
+  }
+
+  findProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateEntity | null {
+    this.log.debug('Fetching province territory state with code: [%s]', code);
+
+    const provinceTerritoryStateEntities = provinceTerritoryStateJsonDataSource.value;
+    const provinceTerritoryStateEntity = provinceTerritoryStateEntities.find(({ esdc_internationalalphacode }) => esdc_internationalalphacode === code);
+
+    if (!provinceTerritoryStateEntity) {
+      this.log.warn('ProvinceTerritoryState not found; code: [%s]', code);
       return null;
     }
 

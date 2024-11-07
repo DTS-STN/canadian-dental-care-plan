@@ -1,5 +1,7 @@
+import { fakerEN_CA as faker } from '@faker-js/faker';
 import { HttpResponse, http } from 'msw';
 
+import type { AddressCorrectionStatus } from '~/.server/domain/dtos';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -43,7 +45,7 @@ export function getWSAddressApiMockHandlers() {
           'wsaddr:DeliveryInformation': null,
           'wsaddr:ExtraInformation': null,
           'wsaddr:Information': {
-            'wsaddr:StatusCode': 'Corrected',
+            'wsaddr:StatusCode': faker.helpers.arrayElement<AddressCorrectionStatus>(['Corrected', 'NotCorrect', 'Valid']),
             'nc:MessageText': null,
           },
         },

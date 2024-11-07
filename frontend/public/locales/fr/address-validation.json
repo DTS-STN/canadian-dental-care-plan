@@ -20,10 +20,12 @@
         "suggested-address-option": "Adresse corrigée suggérée\u00a0:",
         "use-selected-address-button": "Utiliser l'adresse sélectionnée"
       },
-      "not-correct-address": {
+      "address-invalid": {
         "close-button": "Fermer",
-        "description": "Il semble y avoir un problème avec l'adresse postale que vous avez saisie. Veuillez vérifier les informations ci\u2011dessous\u00a0:",
-        "header": "Erreur d'adresse postale"
+        "description": "L'adresse postale que vous avez saisie semble invalide. Veuillez vérifier les détails ci\u2011dessous.",
+        "entered-address": "Adresse saisie\u00a0:",
+        "header": "Adresse invalide",
+        "use-entered-address-button": "Utiliser l'adresse saisie"
       }
     },
     "error-message": {
