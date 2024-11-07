@@ -93,6 +93,7 @@
     },
     "address-field": {
       "address": "Adresse postale",
+      "mailing-address": "Adresse postale",
       "address-note": "Inclure le numéro municipal et le nom de rue",
       "apartment": "Appartement, suite, etc. (facultatif)",
       "country": "Pays",

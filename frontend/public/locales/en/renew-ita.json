@@ -92,6 +92,7 @@
     },
     "address-field": {
       "address": "Address",
+      "mailing-address": "Mailing address",
       "address-note": "Include street number and name",
       "apartment": "Apartment, suite, etc. (optional)",
       "country": "Country",

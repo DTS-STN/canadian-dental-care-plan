@@ -290,7 +290,7 @@ export default function RenewItaUpdateAddress() {
                 id="mailing-address"
                 name="mailingAddress"
                 className="w-full"
-                label={t('renew-ita:update-address.address-field.address')}
+                label={t('renew-ita:update-address.address-field.mailing-address')}
                 maxLength={30}
                 helpMessagePrimary={t('renew-ita:update-address.address-field.address-note')}
                 helpMessagePrimaryClassName="text-black"
