@@ -256,8 +256,8 @@ export default function RenewApplicationInformation() {
             />
             <Collapsible id="no-client-number" summary={t('renew:applicant-information.no-client-number')}>
               <div className="space-y-2">
-                <p>{t('renew:applicant-information.unique-client-number')}</p>
-                <p>{t('renew:applicant-information.not-eligible')}</p>
+                <p>{t('renew:applicant-information.renew-client-number')}</p>
+                <p>{t('renew:applicant-information.apply-to-cdcp')}</p>
                 <p>
                   <Trans ns={handle.i18nNamespaces} i18nKey="renew:applicant-information.check-eligibility" components={{ eligibilityLink }} />
                 </p>
