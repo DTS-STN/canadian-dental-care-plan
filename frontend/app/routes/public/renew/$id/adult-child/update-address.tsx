@@ -78,14 +78,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const addressInformationSchema = z
     .object({
       mailingAddress: z.string().trim().min(1, t('renew-adult-child:update-address.error-message.mailing-address.address-required')).max(30).refine(isAllValidInputCharacters, t('renew-adult-child:update-address.error-message.characters-valid')),
-      mailingApartment: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-adult-child:update-address.error-message.characters-valid')).optional(),
       mailingCountry: z.string().trim().min(1, t('renew-adult-child:update-address.error-message.mailing-address.country-required')),
       mailingProvince: z.string().trim().min(1, t('renew-adult-child:update-address.error-message.mailing-address.province-required')).optional(),
       mailingCity: z.string().trim().min(1, t('renew-adult-child:update-address.error-message.mailing-address.city-required')).max(100).refine(isAllValidInputCharacters, t('renew-adult-child:update-address.error-message.characters-valid')),
       mailingPostalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-adult-child:update-address.error-message.characters-valid')).optional(),
       copyMailingAddress: z.boolean(),
       homeAddress: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-adult-child:update-address.error-message.characters-valid')).optional(),
-      homeApartment: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-adult-child:update-address.error-message.characters-valid')).optional(),
       homeCountry: z.string().trim().optional(),
       homeProvince: z.string().trim().optional(),
       homeCity: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-adult-child:update-address.error-message.characters-valid')).optional(),
@@ -160,14 +158,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const data = {
     mailingAddress: String(formData.get('mailingAddress') ?? ''),
-    mailingApartment: formData.get('mailingApartment') ? String(formData.get('mailingApartment')) : undefined,
     mailingCountry: String(formData.get('mailingCountry') ?? ''),
     mailingProvince: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
     mailingCity: String(formData.get('mailingCity') ?? ''),
     mailingPostalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
     copyMailingAddress: formData.get('copyMailingAddress') === 'copy',
     homeAddress: formData.get('homeAddress') ? String(formData.get('homeAddress')) : undefined,
-    homeApartment: formData.get('homeApartment') ? String(formData.get('homeApartment')) : undefined,
     homeCountry: formData.get('homeCountry') ? String(formData.get('homeCountry')) : undefined,
     homeProvince: formData.get('homeProvince') ? String(formData.get('homeProvince')) : undefined,
     homeCity: formData.get('homeCity') ? String(formData.get('homeCity')) : undefined,
@@ -185,7 +181,6 @@ export async function action({ context: { appContainer, session }, params, reque
     ? {
         ...parsedDataResult.data,
         homeAddress: parsedDataResult.data.mailingAddress,
-        homeApartment: parsedDataResult.data.mailingApartment,
         homeCountry: parsedDataResult.data.mailingCountry,
         homeProvince: parsedDataResult.data.mailingProvince,
         homeCity: parsedDataResult.data.mailingCity,
@@ -221,14 +216,12 @@ export default function RenewAdultChildUpdateAddress() {
     email: 'email',
     confirmEmail: 'confirm-email',
     mailingAddress: 'mailing-address',
-    mailingApartment: 'mailing-apartment',
     mailingProvince: 'mailing-province',
     mailingCountry: 'mailing-country',
     mailingCity: 'mailing-city',
     mailingPostalCode: 'mailing-postal-code',
     copyMailingAddress: 'copy-mailing-address',
     homeAddress: 'home-address',
-    homeApartment: 'home-apartment',
     homeProvince: 'home-province',
     homeCountry: 'home-country',
     homeCity: 'home-city',
@@ -298,16 +291,6 @@ export default function RenewAdultChildUpdateAddress() {
                 defaultValue={defaultState?.mailingAddress ?? ''}
                 errorMessage={errors?.mailingAddress}
                 required
-              />
-              <InputSanitizeField
-                id="mailing-apartment"
-                name="mailingApartment"
-                className="w-full"
-                label={t('renew-adult-child:update-address.address-field.apartment')}
-                maxLength={30}
-                autoComplete="address-line2"
-                defaultValue={defaultState?.mailingApartment ?? ''}
-                errorMessage={errors?.mailingApartment}
               />
               <InputSelect
                 id="mailing-country"
@@ -379,16 +362,6 @@ export default function RenewAdultChildUpdateAddress() {
                     defaultValue={defaultState?.homeAddress ?? ''}
                     errorMessage={errors?.homeAddress}
                     required
-                  />
-                  <InputSanitizeField
-                    id="home-apartment"
-                    name="homeApartment"
-                    className="w-full"
-                    label={t('renew-adult-child:update-address.address-field.apartment')}
-                    maxLength={30}
-                    autoComplete="address-line2"
-                    defaultValue={defaultState?.homeApartment ?? ''}
-                    errorMessage={errors?.homeApartment}
                   />
                   <InputSelect
                     id="home-country"
