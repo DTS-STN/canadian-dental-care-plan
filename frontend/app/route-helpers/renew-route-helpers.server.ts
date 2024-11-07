@@ -26,6 +26,14 @@ export interface RenewState {
     hasBeenAssessedByCRA: boolean;
     lastName: string;
     sin: string;
+    children: {
+      information: {
+        firstName: string;
+        lastName: string;
+        dateOfBirth: string;
+        socialInsuranceNumber: string;
+      };
+    }[];
   } | null;
   readonly children: {
     readonly id: string;

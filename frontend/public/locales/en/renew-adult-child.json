@@ -294,6 +294,11 @@
       "continue-btn": "Continue",
       "cancel-btn": "Cancel",
       "save-btn": "Save",
+      "child-not-found": {
+        "heading": "We could not find your child's application with the information you gave us.",
+        "please-review": "Please make sure the information you entered for your child is correct.",
+        "contact-service-canada": "Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
+      },
       "error-message": {
         "first-name-required": "Enter child's first name",
         "last-name-required": "Enter child's last name",
@@ -309,8 +314,7 @@
         "client-number-valid": "Must be a valid client number. Your input must be 11 or 13 digits long.",
         "is-parent": "Select whether you are the parent or legal guardian of the child",
         "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
-        "no-digits": "Last name must contain letters only",
-        "no-record": "No matching records found for your child"
+        "no-digits": "Last name must contain letters only"
       }
     },
     "parent-or-guardian": {

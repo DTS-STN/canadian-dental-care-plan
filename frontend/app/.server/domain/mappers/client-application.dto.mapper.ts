@@ -21,14 +21,13 @@ export class ClientApplicationDtoMapperImpl implements ClientApplicationDtoMappe
       hasBeenAssessedByCRA: this.resolveFlagValue(Flags, 'isCraAssessed'),
       lastName: clientApplicationEntity.BenefitApplication.Applicant.PersonName[0].PersonSurName,
       sin: clientApplicationEntity.BenefitApplication.Applicant.PersonSINIdentification.IdentificationID,
-      relatedPerson: clientApplicationEntity.BenefitApplication.Applicant.RelatedPerson.map((person) => ({
-        PersonBirthDate: person.PersonBirthDate,
-        PersonName: person.PersonName.map((name) => ({
-          PersonGivenName: [...name.PersonGivenName],
-          PersonSurName: name.PersonSurName,
-        })),
-        PersonRelationshipCode: person.PersonRelationshipCode,
-        PersonSINIdentification: person.PersonSINIdentification,
+      children: clientApplicationEntity.BenefitApplication.Applicant.RelatedPerson.filter((person) => person.PersonRelationshipCode.ReferenceDataName === ('Dependant' as const)).map((person) => ({
+        information: {
+          dateOfBirth: person.PersonBirthDate.date,
+          firstName: person.PersonName[0].PersonGivenName[0],
+          lastName: person.PersonName[0].PersonSurName,
+          socialInsuranceNumber: person.PersonSINIdentification.IdentificationID,
+        },
       })),
     };
   }

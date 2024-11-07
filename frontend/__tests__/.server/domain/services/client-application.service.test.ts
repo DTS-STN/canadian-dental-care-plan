@@ -179,27 +179,13 @@ describe('ClientApplicationServiceImpl', () => {
     hasBeenAssessedByCRA: true,
     lastName: 'Doe',
     sin: '80000002',
-    relatedPerson: [
+    children: [
       {
-        PersonBirthDate: {
-          date: '2000-01-01',
-          dateTime: '2000-01-01',
-          DayDate: '01',
-          MonthDate: '01',
-          YearDate: '2000',
-        },
-        PersonName: [
-          {
-            PersonGivenName: ['John'],
-            PersonSurName: 'Doe',
-          },
-        ],
-        PersonRelationshipCode: {
-          ReferenceDataName: 'Dependant',
-        },
-        PersonSINIdentification: {
-          IdentificationID: '123456789',
-          IdentificationCategoryText: 'SIN',
+        information: {
+          firstName: 'John',
+          lastName: 'Doe',
+          dateOfBirth: '2000-01-01',
+          socialInsuranceNumber: '123456789',
         },
       },
     ],

@@ -1,15 +1,17 @@
+import { useEffect, useRef } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../../../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
@@ -73,8 +75,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const renewState = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const clientApplicationService = appContainer.get(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE);
-
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
@@ -110,10 +110,6 @@ export async function action({ context: { appContainer, session }, params, reque
       dateOfBirth: z.string(),
       clientNumber: z.string().trim().min(1, t('renew-adult-child:children.information.error-message.client-number-required')).refine(isValidClientNumberRenewal, t('renew-adult-child:children.information.error-message.client-number-valid')),
       isParent: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:children.information.error-message.is-parent') }) }),
-      notFound: z
-        .boolean()
-        .optional()
-        .refine((val) => val === false || val === undefined, t('renew-adult-child:children.information.error-message.no-record')),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
@@ -167,25 +163,16 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
-  const clientApplication = renewState.applicantInformation ? await clientApplicationService.findClientApplicationByBasicInfo(renewState.applicantInformation) : undefined;
-  if (!clientApplication) {
-    log.warn('Renew session state clientApplication has not been found; redirecting to public/renew/$id/applicant-information; sessionId: [%s]', session.id);
-    throw redirect(getPathById('public/renew/$id/applicant-information', params));
-  }
-
-  const matches = clientApplication.relatedPerson.map(
-    (person) =>
-      person.PersonRelationshipCode.ReferenceDataName === ('Dependant' as const) &&
-      person.PersonSINIdentification.IdentificationID === parsedDataResult.data.clientNumber &&
-      person.PersonBirthDate.date === parsedDataResult.data.dateOfBirth &&
-      person.PersonName.map((name) => name.PersonSurName === parsedDataResult.data.lastName && name.PersonGivenName.includes(parsedDataResult.data.firstName)).includes(true),
+  const matches = renewState.clientApplication?.children.map(
+    (child) =>
+      child.information.socialInsuranceNumber === parsedDataResult.data.clientNumber &&
+      child.information.dateOfBirth === parsedDataResult.data.dateOfBirth &&
+      child.information.lastName === parsedDataResult.data.lastName &&
+      child.information.firstName === parsedDataResult.data.firstName,
   );
 
-  const recordCheckParsedDataResult = childInformationSchema.safeParse({ notFound: !matches.includes(true), ...data });
-  if (!recordCheckParsedDataResult.success) {
-    return json({
-      errors: transformFlattenedError(recordCheckParsedDataResult.error.flatten()),
-    });
+  if (matches && !matches.includes(true)) {
+    return { status: 'child-not-found' } as const;
   }
 
   saveRenewState({
@@ -218,7 +205,8 @@ export default function RenewFlowChildInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const errors = fetcher.data?.errors;
+  const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
+  const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     firstName: 'first-name',
     lastName: 'last-name',
@@ -228,12 +216,12 @@ export default function RenewFlowChildInformation() {
     dateOfBirthYear: 'date-picker-date-of-birth-year',
     clientNumber: 'client-number',
     isParent: 'input-radio-is-parent-radios-option-0',
-    notFound: 'not-found',
   });
 
   return (
     <>
       <AppPageTitle>{t('renew-adult-child:children.information.page-title', { childName })}</AppPageTitle>
+      {fetcherStatus === 'child-not-found' && <ChildNotFound />}
       <div className="max-w-prose">
         <p className="mb-4">{t('renew-adult-child:children.information.form-instructions-sin')}</p>
         <p className="mb-4 italic">{t('renew:required-label')}</p>
@@ -345,5 +333,30 @@ export default function RenewFlowChildInformation() {
         </fetcher.Form>
       </div>
     </>
+  );
+}
+
+function ChildNotFound() {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const noWrap = <span className="whitespace-nowrap" />;
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (wrapperRef.current) {
+      wrapperRef.current.scrollIntoView({ behavior: 'smooth' });
+      wrapperRef.current.focus();
+    }
+  }, []);
+
+  return (
+    <div ref={wrapperRef} id="child-not-found" className="mb-4">
+      <ContextualAlert type="danger">
+        <h2 className="mb-2 font-bold">{t('renew-adult-child:children.information.child-not-found.heading')}</h2>
+        <p className="mb-2">{t('renew-adult-child:children.information.child-not-found.please-review')}</p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:children.information.child-not-found.contact-service-canada" components={{ noWrap }} />
+        </p>
+      </ContextualAlert>
+    </div>
   );
 }
