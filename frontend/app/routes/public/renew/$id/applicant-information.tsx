@@ -22,7 +22,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import type { ApplicantInformationState } from '~/route-helpers/renew-route-helpers.server';
 import { loadRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
-import { isValidClientNumberRenewal } from '~/utils/application-code-utils';
+import { applicationCodeInputPatternFormat, isValidClientNumberRenewal } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -242,7 +242,7 @@ export default function RenewApplicationInformation() {
               name="clientNumber"
               label={t('renew:applicant-information.client-number')}
               inputMode="numeric"
-              format="#############"
+              format={applicationCodeInputPatternFormat}
               helpMessagePrimary={t('renew:applicant-information.help-message.client-number')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.clientNumber ?? ''}

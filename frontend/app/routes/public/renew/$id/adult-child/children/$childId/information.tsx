@@ -18,7 +18,7 @@ import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { loadRenewAdultChildState, loadRenewAdultSingleChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
 import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
-import { isValidClientNumberRenewal } from '~/utils/application-code-utils';
+import { applicationCodeInputPatternFormat, isValidClientNumberRenewal } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -269,7 +269,7 @@ export default function RenewFlowChildInformation() {
               name="clientNumber"
               label={t('renew-adult-child:children.information.client-number')}
               inputMode="numeric"
-              format="#############"
+              format={applicationCodeInputPatternFormat}
               helpMessagePrimary={t('renew-adult-child:children.information.client-number-detail')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.clientNumber ?? ''}
