@@ -165,7 +165,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const matches = renewState.clientApplication?.children.map(
     (child) =>
-      child.information.socialInsuranceNumber === parsedDataResult.data.clientNumber &&
+      child.information.clientNumber === parsedDataResult.data.clientNumber &&
       child.information.dateOfBirth === parsedDataResult.data.dateOfBirth &&
       child.information.lastName === parsedDataResult.data.lastName &&
       child.information.firstName === parsedDataResult.data.firstName,

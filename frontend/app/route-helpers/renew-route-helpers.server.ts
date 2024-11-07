@@ -31,7 +31,8 @@ export interface RenewState {
         firstName: string;
         lastName: string;
         dateOfBirth: string;
-        socialInsuranceNumber: string;
+        clientNumber?: string;
+        socialInsuranceNumber?: string;
       };
     }[];
   } | null;
