@@ -114,11 +114,11 @@ export async function action({ context: { appContainer, session }, request, para
 
   const mailingAddressValidator = new MailingAddressValidator(locale, serverConfig);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
-    address: String(formData.get('address') ?? ''),
-    city: String(formData.get('city') ?? ''),
-    country: String(formData.get('country') ?? ''),
+    address: formData.get('address') ? String(formData.get('address')) : undefined,
+    city: formData.get('city') ? String(formData.get('city')) : undefined,
+    countryId: formData.get('countryId') ? String(formData.get('countryId')) : undefined,
     postalZipCode: formData.get('postalZipCode') ? String(formData.get('postalZipCode')) : undefined,
-    provinceState: formData.get('provinceState') ? String(formData.get('provinceState')) : undefined,
+    provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
   });
 
   if (!validatedResult.success) {
@@ -127,7 +127,7 @@ export async function action({ context: { appContainer, session }, request, para
 
   const validatedMailingAddress = validatedResult.data;
 
-  const isNotCanada = validatedMailingAddress.country !== serverConfig.CANADA_COUNTRY_ID;
+  const isNotCanada = validatedMailingAddress.countryId !== serverConfig.CANADA_COUNTRY_ID;
   const isUseInvalidAddressAction = formAction === 'use-invalid-address';
   const isUseSelectedAddressAction = formAction === 'use-selected-address';
   const canProceedToReview = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
@@ -139,7 +139,7 @@ export async function action({ context: { appContainer, session }, request, para
 
   // Validate Canadian adddress
   invariant(validatedMailingAddress.postalZipCode, 'Postal zip code is required for Canadian addresses');
-  invariant(validatedMailingAddress.provinceState, 'Province state is required for Canadian addresses');
+  invariant(validatedMailingAddress.provinceStateId, 'Province state is required for Canadian addresses');
 
   // Build the address object using validated data, transforming unique identifiers
   // for country and province/state into localized names for rendering on the screen.
@@ -147,11 +147,11 @@ export async function action({ context: { appContainer, session }, request, para
   const formattedMailingAddress: CanadianAddress = {
     address: validatedMailingAddress.address,
     city: validatedMailingAddress.city,
-    countryId: validatedMailingAddress.country,
-    country: countryService.getLocalizedCountryById(validatedMailingAddress.country, locale).name,
+    countryId: validatedMailingAddress.countryId,
+    country: countryService.getLocalizedCountryById(validatedMailingAddress.countryId, locale).name,
     postalZipCode: validatedMailingAddress.postalZipCode,
-    provinceStateId: validatedMailingAddress.provinceState,
-    provinceState: validatedMailingAddress.provinceState && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceState, locale).abbr,
+    provinceStateId: validatedMailingAddress.provinceStateId,
+    provinceState: validatedMailingAddress.provinceStateId && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceStateId, locale).abbr,
   };
 
   const addressCorrectionResult = await addressValidationService.getAddressCorrectionResult({
@@ -207,9 +207,9 @@ export default function AddressValidationIndexRoute() {
   const errorSummary = useErrorSummary(errors, {
     address: 'address',
     city: 'city',
-    country: 'country',
+    countryId: 'country',
     postalZipCode: 'postal-zip-code',
-    provinceState: 'province-state',
+    provinceStateId: 'province-state',
   });
 
   useEffect(() => {
@@ -268,7 +268,7 @@ export default function AddressValidationIndexRoute() {
               />
               <InputSelect
                 id="country"
-                name="country"
+                name="countryId"
                 className="w-full sm:w-1/2"
                 label={t('address-validation:index.address-field.country')}
                 autoComplete="country"
@@ -276,18 +276,18 @@ export default function AddressValidationIndexRoute() {
                 onChange={(e) => {
                   setCountryValue(e.target.value);
                 }}
-                errorMessage={errors?.country}
+                errorMessage={errors?.countryId}
                 options={countryInputOptions}
                 required
               />
               {countryProvinceTerritoryStateInputOptions.length > 0 && (
                 <InputSelect
                   id="province-state"
-                  name="provinceState"
+                  name="provinceStateId"
                   className="w-full sm:w-1/2"
                   label={t('address-validation:index.address-field.province-state')}
-                  defaultValue={defaultMailingAddress?.provinceState ?? ''}
-                  errorMessage={errors?.provinceState}
+                  defaultValue={defaultMailingAddress?.provinceStateId ?? ''}
+                  errorMessage={errors?.provinceStateId}
                   options={countryProvinceTerritoryStateInputOptions}
                   required
                 />
@@ -364,9 +364,9 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
     const selectedAddressSuggestion = selectedAddressSuggestionOption === enteredAddressOptionValue ? enteredAddress : suggestedAddress;
     formData.set('address', selectedAddressSuggestion.address);
     formData.set('city', selectedAddressSuggestion.city);
-    formData.set('country', selectedAddressSuggestion.countryId);
+    formData.set('countryId', selectedAddressSuggestion.countryId);
     formData.set('postalZipCode', selectedAddressSuggestion.postalZipCode);
-    formData.set('provinceState', selectedAddressSuggestion.provinceStateId);
+    formData.set('provinceStateId', selectedAddressSuggestion.provinceStateId);
 
     fetcher.submit(formData, { method: 'POST' });
   }
@@ -444,9 +444,9 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
     // Append selected address suggestion to form data
     formData.set('address', invalidAddress.address);
     formData.set('city', invalidAddress.city);
-    formData.set('country', invalidAddress.countryId);
+    formData.set('countryId', invalidAddress.countryId);
     formData.set('postalZipCode', invalidAddress.postalZipCode);
-    formData.set('provinceState', invalidAddress.provinceStateId);
+    formData.set('provinceStateId', invalidAddress.provinceStateId);
 
     fetcher.submit(formData, { method: 'POST' });
   }

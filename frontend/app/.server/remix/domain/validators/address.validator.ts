@@ -11,11 +11,16 @@ import { transformFlattenedError } from '~/utils/zod-utils.server';
  * Interface for Address input data.
  */
 export interface Address {
+  /** Street address or specific location detail. */
   address: string;
+  /** Name of the city associated with the address. */
   city: string;
-  country: string;
+  /** Identifier for the country associated with the address. */
+  countryId: string;
+  /** Postal or ZIP code for the address. */
   postalZipCode?: string;
-  provinceState?: string;
+  /** Identifier for the province or state associated with the address. */
+  provinceStateId?: string;
 }
 
 /**
@@ -83,13 +88,13 @@ export class AddressValidator {
     return z
       .object({
         address: z.string().trim().min(1, this.errorMessages.address.required).max(30).refine(isAllValidInputCharacters, this.errorMessages.address.invalidCharacters),
-        country: z.string().trim().min(1, this.errorMessages.country.required),
-        provinceState: z.string().trim().min(1, this.errorMessages.provinceState.required).optional(),
+        countryId: z.string().trim().min(1, this.errorMessages.country.required),
+        provinceStateId: z.string().trim().min(1, this.errorMessages.provinceState.required).optional(),
         city: z.string().trim().min(1, this.errorMessages.city.required).max(100).refine(isAllValidInputCharacters, this.errorMessages.city.invalidCharacters),
         postalZipCode: z.string().trim().max(100).refine(isAllValidInputCharacters, this.errorMessages.postalZipCode.invalidCharacters).optional(),
       })
       .superRefine((val, ctx) => {
-        const { country, provinceState, postalZipCode } = val;
+        const { countryId: country, provinceStateId: provinceState, postalZipCode } = val;
         const isCanada = country === CANADA_COUNTRY_ID;
         const isUSA = country === USA_COUNTRY_ID;
 
@@ -98,7 +103,7 @@ export class AddressValidator {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: this.errorMessages.provinceState.required,
-            path: ['provinceState'],
+            path: ['provinceStateId'],
           });
         }
 
@@ -136,13 +141,13 @@ export class AddressValidator {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: this.errorMessages.postalZipCode.invalidPostalZipCodeForCountry,
-            path: ['country'],
+            path: ['countryId'],
           });
         }
       })
       .transform((val) => ({
         ...val,
-        postalZipCode: val.country && val.postalZipCode ? formatPostalCode(val.country, val.postalZipCode) : val.postalZipCode,
+        postalZipCode: val.countryId && val.postalZipCode ? formatPostalCode(val.countryId, val.postalZipCode) : val.postalZipCode,
       }));
   }
 }
