@@ -48,10 +48,11 @@ data "azuread_users" "role_assignments" {
 resource "azuread_application" "main" {
   # see: https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
 
-  display_name    = var.application_display_name
-  identifier_uris = var.application_identifier_uris
-  logo_image      = filebase64("assets/logo.png")
-  owners          = data.azuread_users.owners.object_ids
+  display_name                   = var.application_display_name
+  fallback_public_client_enabled = var.application_public
+  identifier_uris                = var.application_identifier_uris
+  logo_image                     = filebase64("assets/logo.png")
+  owners                         = data.azuread_users.owners.object_ids
 
   api {
     mapped_claims_enabled          = true

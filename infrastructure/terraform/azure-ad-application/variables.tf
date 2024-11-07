@@ -9,6 +9,12 @@ variable "application_display_name" {
   type        = string
 }
 
+variable "application_public" {
+  description = "Specifies whether the application is a public client. Appropriate for apps using token grant flows that don't use a redirect URI."
+  type        = bool
+  default     = false
+}
+
 variable "application_identifier_uris" {
   description = "A set of user-defined URIs that uniquely identify this AAD application within the AAD tenant."
   type        = set(string)

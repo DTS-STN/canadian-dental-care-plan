@@ -12,6 +12,7 @@ include "root" {
 
 inputs = {
   application_display_name = "Canadian Dental Care Program: Service Principal (nonprod)"
+  application_public       = true
   application_app_roles = [{
     id           = "42a55bc0-5c40-4502-a729-791e1fe9d4e0"
     display_name = "HealthCheck Monitor"
