@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -56,24 +54,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const confirmAddressSchema = z
-    .object({
-      hasAddressChanged: z.nativeEnum(AddressRadioOptions, {
-        errorMap: () => ({ message: t('renew-adult-child:confirm-address.error-message.has-address-changed-required') }),
-      }),
-      isHomeAddressSameAsMailingAddress: z.nativeEnum(AddressRadioOptions).or(z.literal('')).optional(),
-    })
-    .superRefine((val, ctx) => {
-      if (val.hasAddressChanged === AddressRadioOptions.Yes) {
-        if (!val.isHomeAddressSameAsMailingAddress) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:confirm-address.error-message.is-home-address-same-as-mailing-address-required'), path: ['isHomeAddressSameAsMailingAddress'] });
-        }
-      }
-    })
-    .transform((val) => ({
-      ...val,
-      isHomeAddressSameAsMailingAddress: val.isHomeAddressSameAsMailingAddress ? val.isHomeAddressSameAsMailingAddress : undefined,
-    }));
+  const confirmAddressSchema = z.object({
+    hasAddressChanged: z.nativeEnum(AddressRadioOptions, {
+      errorMap: () => ({ message: t('renew-adult-child:confirm-address.error-message.has-address-changed-required') }),
+    }),
+  });
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -98,7 +83,6 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasAddressChanged: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes,
-      isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes ? parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes : undefined,
     },
   });
 
@@ -122,14 +106,7 @@ export default function RenewAdultChildConfirmAddress() {
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     hasAddressChanged: 'input-radio-has-address-changed-option-0',
-    isHomeAddressSameAsMailingAddress: 'input-radio-is-home-address-same-as-mailing-address-option-0',
   });
-
-  const [hasAddressChangedRadioValue, setHasAddressChangeRadioValue] = useState(defaultState.hasAddressChanged);
-
-  function handleHasAddressChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setHasAddressChangeRadioValue(e.target.value === AddressRadioOptions.Yes);
-  }
 
   return (
     <>
@@ -147,26 +124,13 @@ export default function RenewAdultChildConfirmAddress() {
               name="hasAddressChanged"
               legend={t('renew-adult-child:confirm-address.have-you-moved')}
               options={[
-                { value: AddressRadioOptions.Yes, children: t('renew-adult-child:confirm-address.radio-options.yes'), defaultChecked: defaultState.hasAddressChanged === true, onChange: handleHasAddressChanged },
-                { value: AddressRadioOptions.No, children: t('renew-adult-child:confirm-address.radio-options.no'), defaultChecked: defaultState.hasAddressChanged === false, onChange: handleHasAddressChanged },
+                { value: AddressRadioOptions.Yes, children: t('renew-adult-child:confirm-address.radio-options.yes'), defaultChecked: defaultState.hasAddressChanged === true },
+                { value: AddressRadioOptions.No, children: t('renew-adult-child:confirm-address.radio-options.no'), defaultChecked: defaultState.hasAddressChanged === false },
               ]}
               helpMessagePrimary={t('renew-adult-child:confirm-address.help-message')}
               errorMessage={errors?.hasAddressChanged}
               required
             />
-            {hasAddressChangedRadioValue && (
-              <InputRadios
-                id="is-home-address-same-as-mailing-address"
-                name="isHomeAddressSameAsMailingAddress"
-                legend={t('renew-adult-child:confirm-address.is-home-address-same-as-mailing-address')}
-                options={[
-                  { value: AddressRadioOptions.Yes, children: t('renew-adult-child:confirm-address.radio-options.yes'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === true },
-                  { value: AddressRadioOptions.No, children: t('renew-adult-child:confirm-address.radio-options.no'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === false },
-                ]}
-                errorMessage={errors?.isHomeAddressSameAsMailingAddress}
-                required
-              />
-            )}
           </div>
 
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
