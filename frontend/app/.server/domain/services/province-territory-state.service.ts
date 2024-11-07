@@ -30,6 +30,15 @@ export interface ProvinceTerritoryStateService {
   getProvinceTerritoryStateById(id: string): ProvinceTerritoryStateDto;
 
   /**
+   * Retrieves a specific province territory state by its Code.
+   *
+   * @param code - The code of the province territory state to retrieve.
+   * @returns The province territory state DTO corresponding to the specified code.
+   * @throws {ProvinceTerritoryStateNotFoundException} If no province territory state is found with the specified Code.
+   */
+  getProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateDto;
+
+  /**
    * Retrieves a list of all province territory states, localized to the specified locale.
    *
    * @param locale - The locale code for localization.
@@ -55,6 +64,16 @@ export interface ProvinceTerritoryStateService {
    * @throws {ProvinceTerritoryStateNotFoundException} If no province territory state is found with the specified ID.
    */
   getLocalizedProvinceTerritoryStateById(id: string, locale: AppLocale): ProvinceTerritoryStateLocalizedDto;
+
+  /**
+   * Retrieves a specific province territory state by its code, localized to the specified locale.
+   *
+   * @param id - The code of the province territory state to retrieve.
+   * @param locale - The locale code for localization.
+   * @returns The localized province territory state DTO corresponding to the specified code.
+   * @throws {ProvinceTerritoryStateNotFoundException} If no province territory state is found with the specified code.
+   */
+  getLocalizedProvinceTerritoryStateByCode(code: string, locale: AppLocale): ProvinceTerritoryStateLocalizedDto;
 }
 
 @injectable()
@@ -72,6 +91,7 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
     // set moize options
     this.listProvinceTerritoryStates.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS;
     this.getProvinceTerritoryStateById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS;
+    this.getProvinceTerritoryStateByCode.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS;
   }
 
   listProvinceTerritoryStates = moize(this.listProvinceTerritoryStatesImpl, {
@@ -81,6 +101,11 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
   getProvinceTerritoryStateById = moize(this.getProvinceTerritoryStateByIdImpl, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateById memo'),
+  });
+
+  getProvinceTerritoryStateByCode = moize(this.getProvinceTerritoryStateByCodeImpl, {
+    maxSize: Infinity,
+    onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateByCode memo'),
   });
 
   listAndSortLocalizedProvinceTerritoryStates(locale: AppLocale): ReadonlyArray<ProvinceTerritoryStateLocalizedDto> {
@@ -110,6 +135,14 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
     return localizedProvinceTerritoryStateDto;
   }
 
+  getLocalizedProvinceTerritoryStateByCode(code: string, locale: AppLocale): ProvinceTerritoryStateLocalizedDto {
+    this.log.debug('Get localized province territory state with code: [%s] and locale: [%s]', code, locale);
+    const provinceTerritoryStateDto = this.getProvinceTerritoryStateByCode(code);
+    const localizedProvinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto(provinceTerritoryStateDto, locale);
+    this.log.trace('Returning localized province territory state with code [%s]: [%j]', code, localizedProvinceTerritoryStateDto);
+    return localizedProvinceTerritoryStateDto;
+  }
+
   private listProvinceTerritoryStatesImpl(): ReadonlyArray<ProvinceTerritoryStateDto> {
     this.log.debug('Get all province territory states');
     const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.listAllProvinceTerritoryStates();
@@ -124,6 +157,19 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
 
     if (!provinceTerritoryStateEntity) {
       throw new ProvinceTerritoryStateNotFoundException(`Province territory state: [${id}] not found`);
+    }
+
+    const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity);
+    this.log.trace('Returning province territory state: [%j]', provinceTerritoryStateDto);
+    return provinceTerritoryStateDto;
+  }
+
+  private getProvinceTerritoryStateByCodeImpl(code: string): ProvinceTerritoryStateDto {
+    this.log.debug('Get province territory state with code: [%s]', code);
+    const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateByCode(code);
+
+    if (!provinceTerritoryStateEntity) {
+      throw new ProvinceTerritoryStateNotFoundException(`Province territory state with code [${code}] not found`);
     }
 
     const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity);

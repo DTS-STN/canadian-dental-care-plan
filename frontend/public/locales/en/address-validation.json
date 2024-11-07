@@ -20,10 +20,12 @@
         "suggested-address-option": "Suggested corrected address:",
         "use-selected-address-button": "Use selected address"
       },
-      "not-correct-address": {
+      "address-invalid": {
         "close-button": "Close",
-        "description": "There seems to be an issue with the mailing address you entered. Please verify the information below:",
-        "header": "Mailing address error"
+        "description": "The mailing address you entered appears to be invalid. Please review the details below.",
+        "entered-address": "Entered address:",
+        "header": "Invalid address",
+        "use-entered-address-button": "Use entered address"
       }
     },
     "error-message": {
