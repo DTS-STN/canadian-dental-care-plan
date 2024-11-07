@@ -22,7 +22,7 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
-import { useEnhancedFetcher, useFetcherKey } from '~/hooks';
+import { useEnhancedFetcher } from '~/hooks';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -218,8 +218,7 @@ export default function AddressValidationRoute() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, countries, provinceTerritoryStates, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const formElementRef = useRef<HTMLFormElement>(null);
-  const fetcherKey = useFetcherKey();
-  const fetcher = useEnhancedFetcher<typeof action>({ key: fetcherKey.key });
+  const fetcher = useEnhancedFetcher<typeof action>();
 
   const [countryProvinceTerritoryStates, setCountryProvinceTerritoryStates] = useState(() => {
     return provinceTerritoryStates.filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
@@ -276,7 +275,7 @@ export default function AddressValidationRoute() {
     setCityValue('');
     setPostalZipCodeValue('');
     setAddressDialogContent(null);
-    fetcherKey.reset();
+    fetcher.reset();
 
     const headingElement = document.querySelector<HTMLElement>('h1#wb-cont');
     headingElement?.scrollIntoView({ behavior: 'smooth' });

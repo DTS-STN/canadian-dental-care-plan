@@ -1,76 +1,132 @@
 import type { ComponentProps } from 'react';
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useCallback, useMemo } from 'react';
 
 import { useFetcher } from '@remix-run/react';
 
+import { useFetcherKey } from './use-fetcher-key.hook';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 
 interface UseEnhancedFetcherOptions {
   /** Determines if a CSRF token input should be included in the form. Default is `true`. */
   includeCsrfToken?: boolean;
-
-  /** @see https://remix.run/docs/hi/main/hooks/use-fetcher#key */
-  key?: string;
 }
 
-const DEFAULT_OPTIONS = {
+/** Default options for the enhanced fetcher, used when options are not provided */
+const DEFAULT_OPTIONS: Required<UseEnhancedFetcherOptions> = {
   includeCsrfToken: true,
-} as const satisfies UseEnhancedFetcherOptions;
+};
 
 type EnhancedFetcher<TData = unknown> = ReturnType<typeof useFetcher<TData>> & {
-  /**
-   * Indicate whether the form is currently submitting. This is useful for disabling submit buttons
-   * while a request is in progress.
-   */
+  /** Indicates if a request is in progress, useful for disabling UI elements during submission */
   isSubmitting: boolean;
 };
 
-/**
- * Custom hook that extends Remix's `useFetcher` to inject additional functionality,
- * including an optional CSRF token input within the form and an `isSubmitting` property
- * to track the submission state. This hook provides an enhanced `fetcher` object
- * with a customizable `Form` component.
- *
- * @param options - Configuration object for customizing the enhanced fetcher behavior.
- *   - `key`: A unique key to distinguish fetcher instances, useful for managing
- *     multiple fetcher states.
- *   - `includeCsrfToken`: Determines if a CSRF token input should be included
- *     in the form. Defaults to `true`.
- * @returns An enhanced fetcher object, similar to the standard fetcher but with a
- *   modified `Form` component and an `isSubmitting` flag.
- *
- * @example
- * const fetcher = useEnhancedFetcher({ includeCsrfToken: true });
- *
- * <fetcher.Form method="post" action="/submit">
- *   <input type="text" name="exampleField" required />
- *   <button type="submit" disabled={fetcher.isSubmitting}>Submit</button>
- * </fetcher.Form>
- */
-export function useEnhancedFetcher<TData = unknown>(options: UseEnhancedFetcherOptions = {}): EnhancedFetcher<TData> {
-  const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
+type EnhancedFetcherWithReset<TData = unknown> = EnhancedFetcher<TData> & {
+  /** Unique key associated with the fetcher instance */
+  key: string;
+  /** Resets the fetcher state and key */
+  reset(): void;
+};
 
-  const fetcher = useFetcher<TData>({ key: mergedOptions.key });
+/**
+ * Internal hook that creates an enhanced fetcher with a reset capability.
+ * It utilizes a unique key from `useFetcherKey` for controlled resetting.
+ *
+ * @param options - Optional settings to configure the enhanced fetcher
+ * @returns An enhanced fetcher with `key`, `reset` functionality, and `isSubmitting` status
+ */
+function useEnhancedFetcherWithResetInternal<TData = unknown>(options?: UseEnhancedFetcherOptions): EnhancedFetcherWithReset<TData> {
+  const fetcherKey = useFetcherKey();
+  const key = fetcherKey.key;
+  const enhancedFetcher = useEnhancedFetcherInternal<TData>(key, options);
+
+  // Callback to reset the fetcher key, clearing any current state
+  const reset = useCallback(() => {
+    fetcherKey.reset();
+  }, [fetcherKey]);
+
+  return useMemo(
+    () => ({
+      ...enhancedFetcher,
+      key,
+      reset,
+    }),
+    [enhancedFetcher, key, reset],
+  );
+}
+
+/**
+ * Internal hook to create an enhanced fetcher, optionally injecting a CSRF token input
+ * and monitoring the fetcher state for submission status.
+ *
+ * @param key - Unique identifier for the fetcher instance
+ * @param options - Configures additional functionality for the enhanced fetcher
+ * @returns Enhanced fetcher with CSRF token option and `isSubmitting` status
+ */
+function useEnhancedFetcherInternal<TData = unknown>(key: string, options?: UseEnhancedFetcherOptions): EnhancedFetcher<TData> {
+  const { includeCsrfToken } = { ...DEFAULT_OPTIONS, ...(options ?? {}) };
+
+  const fetcher = useFetcher<TData>({ key });
   const FetcherForm = fetcher.Form;
 
+  // Enhanced form that conditionally includes the CSRF token input
   const EnhancedFetcherForm = useMemo(() => {
-    const EnhancedForm = forwardRef<HTMLFormElement, ComponentProps<typeof FetcherForm>>(({ children, ...props }, ref) => {
-      return (
-        <FetcherForm {...props} ref={ref}>
-          {mergedOptions.includeCsrfToken && <CsrfTokenInput />}
-          {children}
-        </FetcherForm>
-      );
-    });
-    EnhancedForm.displayName = 'enhanced.fetcher.Form';
+    const EnhancedForm = forwardRef<HTMLFormElement, ComponentProps<typeof FetcherForm>>(({ children, ...props }, ref) => (
+      <FetcherForm {...props} ref={ref}>
+        {includeCsrfToken && <CsrfTokenInput />}
+        {children}
+      </FetcherForm>
+    ));
+    EnhancedForm.displayName = 'EnhancedFetcherForm';
     return EnhancedForm;
-  }, [FetcherForm, mergedOptions.includeCsrfToken]);
+  }, [FetcherForm, includeCsrfToken]);
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       ...fetcher,
       Form: EnhancedFetcherForm,
       isSubmitting: fetcher.state !== 'idle',
-    };
-  }, [EnhancedFetcherForm, fetcher]);
+    }),
+    [EnhancedFetcherForm, fetcher],
+  );
+}
+
+/**
+ * Use this overload to create an enhanced fetcher with reset functionality.
+ * This variant does not require a key and automatically manages a unique fetcher key.
+ *
+ * @param options - Optional settings for configuring the fetcher behavior
+ * @returns An enhanced fetcher with reset functionality, which includes `Form`, `isSubmitting`, `key`, and `reset` properties.
+ */
+export function useEnhancedFetcher<TData = unknown>(options?: UseEnhancedFetcherOptions): EnhancedFetcherWithReset<TData>;
+
+/**
+ * Use this overload to create an enhanced fetcher with a specified unique key.
+ * This variant does not have reset functionality, as it is expected to use a provided key.
+ *
+ * @param key - A unique identifier for the fetcher instance, enabling custom management of fetcher state
+ * @param options - Optional settings for configuring the fetcher behavior
+ * @returns An enhanced fetcher that includes `Form`, `isSubmitting`, and other fetcher properties.
+ */
+export function useEnhancedFetcher<TData = unknown>(key: string, options?: UseEnhancedFetcherOptions): EnhancedFetcher<TData>;
+
+/**
+ * Main hook implementation with overloads, selecting the correct internal hook based on the arguments.
+ * - If `keyOrOptions` is a string, `useEnhancedFetcherInternal` is used, creating an enhanced fetcher without reset capability.
+ * - If `keyOrOptions` is an options object or undefined, `useEnhancedFetcherWithResetInternal` is used, providing a resettable fetcher.
+ *
+ * @param keyOrOptions - Either a unique key string or the options object to configure the fetcher behavior
+ * @param options - Additional settings for configuring the fetcher behavior (only if `keyOrOptions` is a string)
+ * @returns Enhanced fetcher with either reset functionality or without, based on the overload.
+ */
+export function useEnhancedFetcher<TData = unknown>(keyOrOptions?: string | UseEnhancedFetcherOptions, options?: UseEnhancedFetcherOptions): EnhancedFetcher<TData> | EnhancedFetcherWithReset<TData> {
+  if (typeof keyOrOptions === 'string') {
+    // When a key is provided, use the internal enhanced fetcher without reset capability
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useEnhancedFetcherInternal(keyOrOptions, options);
+  }
+
+  // When no key is provided, use the internal enhanced fetcher with reset capability
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  return useEnhancedFetcherWithResetInternal(keyOrOptions);
 }
