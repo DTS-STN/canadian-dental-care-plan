@@ -90,11 +90,20 @@
         }
       },
       {
-        "id": "public/address-validation",
-        "file": "routes/public/address-validation.tsx",
+        "id": "public/address-validation/index",
+        "index": true,
+        "file": "routes/public/address-validation/index.tsx",
         "paths": {
           "en": "/:lang/address-validation",
           "fr": "/:lang/validation-adresse"
+        }
+      },
+      {
+        "id": "public/address-validation/review",
+        "file": "routes/public/address-validation/review.tsx",
+        "paths": {
+          "en": "/:lang/address-validation/review",
+          "fr": "/:lang/validation-adresse/revue"
         }
       },
       {
