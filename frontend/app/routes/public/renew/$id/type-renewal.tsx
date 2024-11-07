@@ -93,7 +93,7 @@ export async function action({ context: { appContainer, session }, params, reque
     if (state.clientApplication?.hasAppliedBeforeApril302024) {
       return redirect(getPathById('public/renew/$id/ita/marital-status', params));
     }
-    return redirect(getPathById('public/renew/$id/adult-child/marital-status', params));
+    return redirect(getPathById('public/renew/$id/adult-child/confirm-marital-status', params));
   }
 
   if (parsedDataResult.data.typeOfRenewal === RenewalType.Child) {

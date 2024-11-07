@@ -62,6 +62,7 @@ export interface RenewState {
     yearOfBirth: string;
     socialInsuranceNumber: string;
   };
+  readonly hasMaritalStatusChanged?: boolean;
   readonly maritalStatus?: string;
   readonly contactInformation?: {
     isNewOrUpdatedPhoneNumber?: boolean;

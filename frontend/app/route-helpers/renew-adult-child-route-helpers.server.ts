@@ -142,7 +142,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
   }
 
   if (maritalStatus === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult-child/marital-status', params));
+    throw redirect(getPathById('public/renew/$id/adult-child/confirm-marital-status', params));
   }
 
   if (hasAddressChanged && addressInformation === undefined) {
