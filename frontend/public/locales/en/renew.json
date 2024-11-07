@@ -106,7 +106,7 @@
     }
   },
   "applicant-information": {
-    "page-title": "Applicant information",
+    "page-title": "Personal information",
     "required-information": "We will use the information you provide below to verify your identity.",
     "client-number": "Client number",
     "date-of-birth": "Date of birth",
@@ -115,8 +115,8 @@
     "single-legal-name": "If you have a single legal name",
     "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
     "no-client-number": "I don't have a client number",
-    "unique-client-number": "All CDCP members have unique client number. It is also your Sun Life Member ID.",
-    "not-eligible": "If you are not a CDCP member and do not have a client number, you are not eligible for renewal.",
+    "renew-client-number": "To renew your membership, you must have a client number.",
+    "apply-to-cdcp": "If you don't have one, you will need to apply for the Canadian Dental Care Plan.",
     "check-eligibility": "<eligibilityLink>Check if you are eligible to apply for the CDCP.</eligibilityLink>",
     "eligibility-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
     "back-btn": "Back",
