@@ -2,15 +2,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { redirect, useLoaderData } from '@remix-run/react';
 
 import { faCheck, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
-import validator from 'validator';
-import { z } from 'zod';
 
 import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { MailingAddressValidator } from '~/.server/remix/domain/routes/address-validation/mailing-address.validator';
 import { validateCsrfToken } from '~/.server/remix/security';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
@@ -27,11 +26,10 @@ import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
+import { formatPostalCode } from '~/utils/postal-zip-code-utils.server';
+import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { isAllValidInputCharacters } from '~/utils/string-utils';
-import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 interface CanadianAddress {
   postalZipCode: string;
@@ -41,23 +39,10 @@ interface CanadianAddress {
   provinceState: string;
 }
 
-interface InternationalAddress {
-  postalZipCode?: string;
-  address: string;
-  city: string;
-  country: string;
-  provinceState?: string;
-}
-
 interface AddressSuggestionResponse {
   status: 'address-suggestion';
   enteredAddress: CanadianAddress;
   suggestedAddress: CanadianAddress;
-}
-
-interface InternationalAddressResponse {
-  status: 'international-address';
-  address: InternationalAddress;
 }
 
 interface NotCorrectAddressResponse {
@@ -65,14 +50,9 @@ interface NotCorrectAddressResponse {
   address: CanadianAddress;
 }
 
-interface ValidAddressResponse {
-  status: 'valid-address';
-  address: CanadianAddress;
-}
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('address-validation', 'gcweb'),
-  pageTitleI18nKey: 'address-validation:page-title',
+  pageTitleI18nKey: 'address-validation:index.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -81,25 +61,31 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   featureEnabled('address-validation');
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const serverConfig = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = serverConfig;
+
+  const mailingAddressValidator = new MailingAddressValidator(getLocale(request), appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG));
+  const validationResult = await mailingAddressValidator.validateMailingAddress(session.get('route.address-validation'));
+  const defaultMailingAddress = validationResult.success ? validationResult.data : undefined;
 
   const locale = getLocale(request);
   const countries = appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).listAndSortLocalizedCountries(locale);
   const provinceTerritoryStates = appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('address-validation:page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('address-validation:index.page-title') }) };
 
   return {
     CANADA_COUNTRY_ID,
     countries,
+    defaultMailingAddress,
     meta,
     provinceTerritoryStates,
     USA_COUNTRY_ID,
   };
 }
 
-export async function action({ context: { appContainer, session }, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
   featureEnabled('address-validation');
   await validateCsrfToken({ context: { appContainer }, request });
 
@@ -107,129 +93,95 @@ export async function action({ context: { appContainer, session }, request }: Ac
     throw json({ message: 'Method not allowed' }, { status: 405 });
   }
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const serverConfig = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
   const locale = getLocale(request);
 
-  const addressSchema = z
-    .object({
-      address: z.string().trim().min(1, t('address-validation:error-message.address-required')).max(30).refine(isAllValidInputCharacters, t('address-validation:error-message.characters-valid')),
-      country: z.string().trim().min(1, t('address-validation:error-message.country-required')),
-      provinceState: z.string().trim().min(1, t('address-validation:error-message.province-state-required')).optional(),
-      city: z.string().trim().min(1, t('address-validation:error-message.city-required')).max(100).refine(isAllValidInputCharacters, t('address-validation:error-message.characters-valid')),
-      postalZipCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('address-validation:error-message.characters-valid')).optional(),
-    })
-    .superRefine((val, ctx) => {
-      if (val.country === CANADA_COUNTRY_ID || val.country === USA_COUNTRY_ID) {
-        if (!val.provinceState || validator.isEmpty(val.provinceState)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.province-state-required'), path: ['provinceState'] });
-        }
-        if (!val.postalZipCode || validator.isEmpty(val.postalZipCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.postal-zip-code-required'), path: ['postalZipCode'] });
-        } else if (!isValidPostalCode(val.country, val.postalZipCode)) {
-          const message = val.country === CANADA_COUNTRY_ID ? t('address-validation:error-message.postal-zip-code-valid') : t('address-validation:error-message.zip-code-valid');
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['postalZipCode'] });
-        } else if (val.country === CANADA_COUNTRY_ID && val.provinceState && !isValidCanadianPostalCode(val.provinceState, val.postalZipCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.invalid-postal-zip-code-for-province'), path: ['postalZipCode'] });
-        }
-      }
-
-      if (val.country && val.country !== CANADA_COUNTRY_ID && val.postalZipCode && isValidPostalCode(CANADA_COUNTRY_ID, val.postalZipCode)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('address-validation:error-message.invalid-postal-zip-code-for-country'), path: ['country'] });
-      }
-    })
-    .transform((val) => ({
-      ...val,
-      postalZipCode: val.country && val.postalZipCode ? formatPostalCode(val.country, val.postalZipCode) : val.postalZipCode,
-    }));
-
+  const mailingAddressValidator = new MailingAddressValidator(locale, serverConfig);
   const formData = await request.formData();
-  const data = {
+  const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('address') ?? ''),
     city: String(formData.get('city') ?? ''),
     country: String(formData.get('country') ?? ''),
     postalZipCode: formData.get('postalZipCode') ? String(formData.get('postalZipCode')) : undefined,
     provinceState: formData.get('provinceState') ? String(formData.get('provinceState')) : undefined,
-  };
+  });
 
-  const parsedDataResult = addressSchema.safeParse(data);
-
-  if (!parsedDataResult.success) {
-    return json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) });
+  if (!validatedResult.success) {
+    return json({ errors: validatedResult.errors });
   }
 
-  const parsedData = parsedDataResult.data;
-  const resolvedAddress = {
-    address: parsedData.address,
-    city: parsedData.city,
-    country: appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(parsedData.country, locale).name,
-    postalZipCode: parsedData.postalZipCode,
-    provinceState: parsedData.provinceState && appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).getLocalizedProvinceTerritoryStateById(parsedData.provinceState, locale).abbr,
-  };
+  const validatedMailingAddress = validatedResult.data;
 
-  // International address, skip validation
-  if (parsedData.country !== CANADA_COUNTRY_ID) {
-    return {
-      status: 'international-address',
-      address: resolvedAddress,
-    } as const satisfies InternationalAddressResponse;
+  // International address, go to review page
+  if (validatedMailingAddress.country !== serverConfig.CANADA_COUNTRY_ID) {
+    session.set('route.address-validation', validatedMailingAddress);
+    return redirect(getPathById('public/address-validation/review', params));
   }
 
   // Validate Canadian adddress
-  invariant(resolvedAddress.postalZipCode, 'Postal zip code is required for Canadian addresses');
-  invariant(resolvedAddress.provinceState, 'Province state is required for Canadian addresses');
+  invariant(validatedMailingAddress.postalZipCode, 'Postal zip code is required for Canadian addresses');
+  invariant(validatedMailingAddress.provinceState, 'Province state is required for Canadian addresses');
 
-  const canadianAddress: CanadianAddress = {
-    ...resolvedAddress,
-    postalZipCode: resolvedAddress.postalZipCode,
-    provinceState: resolvedAddress.provinceState,
+  // Build the address object using validated data, transforming unique identifiers
+  // for country and province/state into localized names for rendering on the screen.
+  // The localized country and province/state names are retrieved based on the user's locale.
+  const formattedMailingAddress: CanadianAddress = {
+    address: validatedMailingAddress.address,
+    city: validatedMailingAddress.city,
+    country: appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).getLocalizedCountryById(validatedMailingAddress.country, locale).name,
+    postalZipCode: validatedMailingAddress.postalZipCode,
+    provinceState: validatedMailingAddress.provinceState && appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceState, locale).abbr,
   };
 
   const addressCorrectionResult = await appContainer.get(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE).getAddressCorrectionResult({
-    address: resolvedAddress.address,
-    city: resolvedAddress.city,
-    postalCode: resolvedAddress.postalZipCode,
-    provinceCode: resolvedAddress.provinceState,
+    address: formattedMailingAddress.address,
+    city: formattedMailingAddress.city,
+    postalCode: formattedMailingAddress.postalZipCode,
+    provinceCode: formattedMailingAddress.provinceState,
     userId: 'anonymous',
   });
 
   if (addressCorrectionResult.status === 'NotCorrect') {
-    return { status: 'not-correct-address', address: canadianAddress } as const satisfies NotCorrectAddressResponse;
+    return {
+      status: 'not-correct-address',
+      address: formattedMailingAddress,
+    } as const satisfies NotCorrectAddressResponse;
   }
 
   if (addressCorrectionResult.status === 'Corrected') {
     return {
       status: 'address-suggestion',
-      enteredAddress: canadianAddress,
+      enteredAddress: formattedMailingAddress,
       suggestedAddress: {
         address: addressCorrectionResult.address,
         city: addressCorrectionResult.city,
-        country: canadianAddress.country,
-        postalZipCode: formatPostalCode(CANADA_COUNTRY_ID, addressCorrectionResult.postalCode),
+        country: formattedMailingAddress.country,
+        postalZipCode: formatPostalCode(serverConfig.CANADA_COUNTRY_ID, addressCorrectionResult.postalCode),
         provinceState: addressCorrectionResult.provinceCode,
       },
     } as const satisfies AddressSuggestionResponse;
   }
 
-  return { status: 'valid-address', address: canadianAddress } as const satisfies ValidAddressResponse;
+  session.set('route.address-validation', validatedMailingAddress);
+  return redirect(getPathById('public/address-validation/review', params));
 }
 
-export default function AddressValidationRoute() {
+export default function AddressValidationIndexRoute() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, countries, provinceTerritoryStates, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
+  const { CANADA_COUNTRY_ID, countries, defaultMailingAddress, provinceTerritoryStates, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const formElementRef = useRef<HTMLFormElement>(null);
   const fetcher = useEnhancedFetcher<typeof action>();
 
   const [countryProvinceTerritoryStates, setCountryProvinceTerritoryStates] = useState(() => {
-    return provinceTerritoryStates.filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
+    return provinceTerritoryStates.filter(({ countryId }) => countryId === (defaultMailingAddress?.country ?? CANADA_COUNTRY_ID));
   });
-  const [countryValue, setCountryValue] = useState(CANADA_COUNTRY_ID);
-  const [addressValue, setAddressValue] = useState('');
-  const [provinceStateValue, setProvinceStateValue] = useState('');
-  const [cityValue, setCityValue] = useState('');
-  const [postalZipCodeValue, setPostalZipCodeValue] = useState('');
+  const [countryValue, setCountryValue] = useState(defaultMailingAddress?.country ?? CANADA_COUNTRY_ID);
+  const [addressValue, setAddressValue] = useState(defaultMailingAddress?.address ?? '');
+  const [provinceStateValue, setProvinceStateValue] = useState(defaultMailingAddress?.provinceState ?? '');
+  const [cityValue, setCityValue] = useState(defaultMailingAddress?.city ?? '');
+  const [postalZipCodeValue, setPostalZipCodeValue] = useState(defaultMailingAddress?.postalZipCode ?? '');
 
-  type AddressDialogContentState = AddressSuggestionResponse | InternationalAddressResponse | NotCorrectAddressResponse | ValidAddressResponse | null;
+  type AddressDialogContentState = AddressSuggestionResponse | NotCorrectAddressResponse | null;
   const [addressDialogContent, setAddressDialogContent] = useState<AddressDialogContentState>(null);
 
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
@@ -305,19 +257,19 @@ export default function AddressValidationRoute() {
   return (
     <PublicLayout>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('address-validation:optional-label')}</p>
+        <p className="mb-4 italic">{t('address-validation:index.optional-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form ref={formElementRef} method="post" noValidate>
           <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('address-validation:address-header')}</legend>
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('address-validation:index.address-header')}</legend>
             <div className="space-y-6">
               <InputSanitizeField
                 id="address"
                 name="address"
                 className="w-full"
-                label={t('address-validation:address-field.address')}
+                label={t('address-validation:index.address-field.address')}
                 maxLength={30}
-                helpMessagePrimary={t('address-validation:address-field.address-note')}
+                helpMessagePrimary={t('address-validation:index.address-field.address-note')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"
                 value={addressValue}
@@ -331,7 +283,7 @@ export default function AddressValidationRoute() {
                 id="country"
                 name="country"
                 className="w-full sm:w-1/2"
-                label={t('address-validation:address-field.country')}
+                label={t('address-validation:index.address-field.country')}
                 autoComplete="country"
                 value={countryValue}
                 onChange={(e) => {
@@ -346,7 +298,7 @@ export default function AddressValidationRoute() {
                   id="province-state"
                   name="provinceState"
                   className="w-full sm:w-1/2"
-                  label={t('address-validation:address-field.province-state')}
+                  label={t('address-validation:index.address-field.province-state')}
                   value={provinceStateValue}
                   onChange={(e) => {
                     setProvinceStateValue(e.target.value);
@@ -361,7 +313,7 @@ export default function AddressValidationRoute() {
                   id="city"
                   name="city"
                   className="w-full"
-                  label={t('address-validation:address-field.city')}
+                  label={t('address-validation:index.address-field.city')}
                   maxLength={100}
                   autoComplete="address-level2"
                   value={cityValue}
@@ -375,7 +327,7 @@ export default function AddressValidationRoute() {
                   id="postal-zip-code"
                   name="postalZipCode"
                   className="w-full"
-                  label={isPostalCodeRequired ? t('address-validation:address-field.postal-zip-code') : t('address-validation:address-field.postal-zip-code-optional')}
+                  label={isPostalCodeRequired ? t('address-validation:index.address-field.postal-zip-code') : t('address-validation:index.address-field.postal-zip-code-optional')}
                   maxLength={100}
                   autoComplete="postal-zip-code"
                   value={postalZipCodeValue}
@@ -392,18 +344,16 @@ export default function AddressValidationRoute() {
             <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
               <DialogTrigger asChild>
                 <LoadingButton variant="primary" id="submit-button" loading={fetcher.isSubmitting} endIcon={faCheck}>
-                  {t('address-validation:submit-button')}
+                  {t('address-validation:index.submit-button')}
                 </LoadingButton>
               </DialogTrigger>
               {addressDialogContent && addressDialogContent.status === 'address-suggestion' && (
                 <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} onAddressSuggestionSelected={onCorrectedAddressDialogAddressSelectedHandler} />
               )}
-              {addressDialogContent && addressDialogContent.status === 'international-address' && <InternationalAddressDialogContent address={addressDialogContent.address} />}
               {addressDialogContent && addressDialogContent.status === 'not-correct-address' && <NotCorrectAddressDialogContent address={addressDialogContent.address} />}
-              {addressDialogContent && addressDialogContent.status === 'valid-address' && <ValidAddressDialogContent address={addressDialogContent.address} />}
             </Dialog>
             <Button id="reset-button" endIcon={faRefresh} onClick={onResetClickHandler}>
-              {t('address-validation:reset-button')}
+              {t('address-validation:index.reset-button')}
             </Button>
           </div>
         </fetcher.Form>
@@ -433,19 +383,19 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, onAd
   return (
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
-        <DialogTitle>{t('address-validation:dialog.address-suggestion.header')}</DialogTitle>
-        <DialogDescription>{t('address-validation:dialog.address-suggestion.description')}</DialogDescription>
+        <DialogTitle>{t('address-validation:index.dialog.address-suggestion.header')}</DialogTitle>
+        <DialogDescription>{t('address-validation:index.dialog.address-suggestion.description')}</DialogDescription>
       </DialogHeader>
       <InputRadios
         id="addressSelection"
         name="addressSelection"
-        legend={t('address-validation:dialog.address-suggestion.address-selection-legend')}
+        legend={t('address-validation:index.dialog.address-suggestion.address-selection-legend')}
         options={[
           {
             value: enteredAddressOptionValue,
             children: (
               <>
-                <p className="mb-2 font-semibold">{t('address-validation:dialog.address-suggestion.entered-address-option')}</p>
+                <p className="mb-2 font-semibold">{t('address-validation:index.dialog.address-suggestion.entered-address-option')}</p>
                 <Address address={enteredAddress} />
               </>
             ),
@@ -454,7 +404,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, onAd
             value: suggestedAddressOptionValue,
             children: (
               <>
-                <p className="mb-2 font-semibold">{t('address-validation:dialog.address-suggestion.suggested-address-option')}</p>
+                <p className="mb-2 font-semibold">{t('address-validation:index.dialog.address-suggestion.suggested-address-option')}</p>
                 <Address address={suggestedAddress} />
               </>
             ),
@@ -471,36 +421,12 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, onAd
       <DialogFooter>
         <DialogClose asChild>
           <Button id="dialog.corrected-address-close-button" variant="default" size="sm">
-            {t('address-validation:dialog.address-suggestion.cancel-button')}
+            {t('address-validation:index.dialog.address-suggestion.cancel-button')}
           </Button>
         </DialogClose>
         <Button id="dialog.corrected-address-use-selected-address-button" variant="primary" size="sm" onClick={onUseSelectedAddressButtonClickHandler}>
-          {t('address-validation:dialog.address-suggestion.use-selected-address-button')}
+          {t('address-validation:index.dialog.address-suggestion.use-selected-address-button')}
         </Button>
-      </DialogFooter>
-    </DialogContent>
-  );
-}
-
-interface InternationalAddressDialogContentProps {
-  address: InternationalAddress;
-}
-
-function InternationalAddressDialogContent({ address }: InternationalAddressDialogContentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return (
-    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>{t('address-validation:dialog.international-address.header')}</DialogTitle>
-        <DialogDescription>{t('address-validation:dialog.international-address.description')}</DialogDescription>
-      </DialogHeader>
-      <Address address={address} />
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button id="dialog.international-address-close-button" variant="default" size="sm">
-            {t('address-validation:dialog.international-address.close-button')}
-          </Button>
-        </DialogClose>
       </DialogFooter>
     </DialogContent>
   );
@@ -515,38 +441,14 @@ function NotCorrectAddressDialogContent({ address }: NotCorrectAddressDialogCont
   return (
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
-        <DialogTitle>{t('address-validation:dialog.not-correct-address.header')}</DialogTitle>
-        <DialogDescription>{t('address-validation:dialog.not-correct-address.description')}</DialogDescription>
+        <DialogTitle>{t('address-validation:index.dialog.not-correct-address.header')}</DialogTitle>
+        <DialogDescription>{t('address-validation:index.dialog.not-correct-address.description')}</DialogDescription>
       </DialogHeader>
       <Address address={address} />
       <DialogFooter>
         <DialogClose asChild>
           <Button id="dialog.not-correct-address-close-button" variant="default" size="sm">
-            {t('address-validation:dialog.not-correct-address.close-button')}
-          </Button>
-        </DialogClose>
-      </DialogFooter>
-    </DialogContent>
-  );
-}
-
-interface ValidAddressDialogContentProps {
-  address: CanadianAddress;
-}
-
-function ValidAddressDialogContent({ address }: ValidAddressDialogContentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return (
-    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>{t('address-validation:dialog.valid-address.header')}</DialogTitle>
-        <DialogDescription>{t('address-validation:dialog.valid-address.description')}</DialogDescription>
-      </DialogHeader>
-      <Address address={address} />
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button id="dialog.valid-address-close-button" variant="default" size="sm">
-            {t('address-validation:dialog.valid-address.close-button')}
+            {t('address-validation:index.dialog.not-correct-address.close-button')}
           </Button>
         </DialogClose>
       </DialogFooter>
