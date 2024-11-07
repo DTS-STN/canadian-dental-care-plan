@@ -202,13 +202,13 @@ export default function RenewTermsAndConditions() {
         {t('renew:terms-and-conditions.apply.application-consent')}
       </p>
       <fetcher.Form method="post" noValidate>
-        <InputCheckbox id="acknowledgeTerms" name="acknowledgeTerms" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgeTerms} required>
+        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgeTerms} required>
           {t('renew:terms-and-conditions.checkboxes.acknowledge-terms')}
         </InputCheckbox>
-        <InputCheckbox id="acknowledgePrivacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgePrivacy} required>
+        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgePrivacy} required>
           {t('renew:terms-and-conditions.checkboxes.acknowledge-privacy')}
         </InputCheckbox>
-        <InputCheckbox id="shareData" name="shareData" value={CheckboxValue.Yes} errorMessage={errors?.shareData} required>
+        <InputCheckbox id="share-data" name="shareData" value={CheckboxValue.Yes} errorMessage={errors?.shareData} required>
           {t('renew:terms-and-conditions.checkboxes.share-data')}
         </InputCheckbox>
         <input type="hidden" name="_csrf" value={csrfToken} />
