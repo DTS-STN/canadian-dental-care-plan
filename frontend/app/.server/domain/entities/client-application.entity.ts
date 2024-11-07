@@ -147,6 +147,12 @@ export type ClientApplicationEntity = Readonly<{
             ConsentToSharePersonalInformationIndicator?: boolean;
             AttestParentOrGuardianIndicator?: boolean;
           }>;
+          ClientIdentification: ReadonlyArray<
+            Readonly<{
+              IdentificationID: string;
+              IdentificationCategoryText?: string;
+            }>
+          >;
         }>
       >;
     }>;
