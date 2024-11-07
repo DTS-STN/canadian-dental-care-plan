@@ -185,7 +185,7 @@ describe('ClientApplicationServiceImpl', () => {
           firstName: 'John',
           lastName: 'Doe',
           dateOfBirth: '2000-01-01',
-          socialInsuranceNumber: '123456789',
+          clientNumber: '123456789',
         },
       },
     ],

@@ -11,8 +11,7 @@ export type ClientApplicationDto = Readonly<{
       firstName: string;
       lastName: string;
       dateOfBirth: string;
-      clientNumber?: string;
-      socialInsuranceNumber?: string;
+      clientNumber: string;
     };
   }[];
 }>;
