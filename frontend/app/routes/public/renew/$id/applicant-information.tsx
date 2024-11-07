@@ -22,7 +22,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import type { ApplicantInformationState } from '~/route-helpers/renew-route-helpers.server';
 import { loadRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
-import { applicationCodeInputPatternFormat, isValidClientNumberRenewal } from '~/utils/application-code-utils';
+import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -31,7 +31,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
+import { extractDigits, hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
@@ -85,7 +85,12 @@ export async function action({ context: { appContainer, session }, params, reque
         .max(100)
         .refine(isAllValidInputCharacters, t('renew:applicant-information.error-message.characters-valid'))
         .refine((lastName) => !hasDigits(lastName), t('renew:applicant-information.error-message.no-digits')),
-      clientNumber: z.string().trim().min(1, t('renew:applicant-information.error-message.client-number-required')).refine(isValidClientNumberRenewal, t('renew:applicant-information.error-message.client-number-valid')),
+      clientNumber: z
+        .string()
+        .trim()
+        .min(1, t('renew:applicant-information.error-message.client-number-required'))
+        .refine(isValidClientNumberRenewal, t('renew:applicant-information.error-message.client-number-valid'))
+        .transform((code) => extractDigits(code)),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
@@ -242,7 +247,7 @@ export default function RenewApplicationInformation() {
               name="clientNumber"
               label={t('renew:applicant-information.client-number')}
               inputMode="numeric"
-              format={applicationCodeInputPatternFormat}
+              format={renewalCodeInputPatternFormat}
               helpMessagePrimary={t('renew:applicant-information.help-message.client-number')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.clientNumber ?? ''}
