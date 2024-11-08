@@ -114,6 +114,11 @@ export interface RenewState {
     submittedOn: string;
   };
   readonly taxFiling?: boolean;
+  readonly termsAndConditions?: {
+    acknowledgeTerms: boolean;
+    acknowledgePrivacy: boolean;
+    shareData: boolean;
+  };
   // TODO Add remaining states
 }
 
