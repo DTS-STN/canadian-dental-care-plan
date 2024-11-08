@@ -14,6 +14,7 @@ import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
+import { getClientEnv } from '~/utils/env-utils';
 import { getAltLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useI18nNamespaces, usePageTitleI18nKey, usePageTitleI18nOptions } from '~/utils/route-utils';
 
@@ -55,13 +56,17 @@ export function AppPageTitle({ children }: PropsWithChildren) {
 }
 
 function PageHeader() {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t, i18n } = useTranslation(i18nNamespaces);
+  const { HEADER_LOGO_URL_EN, HEADER_LOGO_URL_FR } = getClientEnv();
+
+  // Select the correct logo URL based on the current language
+  const headerLogoUrl = i18n.language === 'fr' ? HEADER_LOGO_URL_FR : HEADER_LOGO_URL_EN;
 
   return (
     <header className="border-b-[3px] border-slate-700 print:hidden">
       <SkipNavigationLinks />
       {useFeature('show-prototype-banner') && <Banner alert={t('gcweb:header.banner.alert')} description={t('gcweb:header.banner.desc')} />}
-      <PageHeaderBrand />
+      <PageHeaderBrand headerLogoUrl={headerLogoUrl} />
     </header>
   );
 }

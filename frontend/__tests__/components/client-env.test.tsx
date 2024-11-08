@@ -14,6 +14,8 @@ describe('<ClientEnv>', () => {
       I18NEXT_DEBUG: true,
       ECAS_BASE_URI: 'https://srv136.services.gc.ca/ecas-seca/rascl/SCL',
       SCCH_BASE_URI: 'https://service.canada.ca',
+      HEADER_LOGO_URL_EN: 'https://canada.ca/en',
+      HEADER_LOGO_URL_FR: 'https://canada.ca/fr',
       SESSION_TIMEOUT_SECONDS: 120,
       SESSION_TIMEOUT_PROMPT_SECONDS: 30,
       ADOBE_ANALYTICS_JQUERY_SRC: 'https://example.com/jquery.min.js',
