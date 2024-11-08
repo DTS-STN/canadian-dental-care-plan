@@ -23,6 +23,13 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
+enum FormAction {
+  Continue = 'continue',
+  Cancel = 'cancel',
+  Back = 'back',
+  Save = 'save',
+}
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.adultChild.dentalInsurance,
@@ -61,6 +68,14 @@ export async function action({ context: { appContainer, session }, params, reque
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  if (formAction === FormAction.Back) {
+    if (state.hasAddressChanged) {
+      return redirect(getPathById('public/renew/$id/adult-child/update-address', params));
+    }
+    return redirect(getPathById('public/renew/$id/adult-child/confirm-address', params));
   }
 
   const data = { dentalInsurance: formData.get('dentalInsurance') ? formData.get('dentalInsurance') === 'yes' : undefined };
@@ -154,7 +169,7 @@ export default function RenewAdultChildAccessToDentalInsuranceQuestion() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
+              <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
                 {t('dental-insurance.button.save-btn')}
               </Button>
               <ButtonLink
@@ -169,19 +184,19 @@ export default function RenewAdultChildAccessToDentalInsuranceQuestion() {
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Access to other dental insurance click">
+              <LoadingButton
+                name="_action"
+                value={FormAction.Continue}
+                variant="primary"
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Access to other dental insurance click"
+              >
                 {t('dental-insurance.button.continue')}
               </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="public/renew/$id/adult-child/confirm-address"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Access to other dental insurance click"
-              >
+              <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Access to other dental insurance click">
                 {t('dental-insurance.button.back')}
-              </ButtonLink>
+              </Button>
             </div>
           )}
         </fetcher.Form>
