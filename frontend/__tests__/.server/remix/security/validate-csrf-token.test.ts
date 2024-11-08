@@ -3,7 +3,7 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 import { describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { validateCsrfToken } from '~/.server/remix/security';
 import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
 import type { CsrfTokenValidator } from '~/.server/web/validators';
@@ -13,7 +13,7 @@ describe('validateCsrfToken', () => {
     const mockValidateCsrfToken = vi.fn();
     const mockRequest = mock<ActionFunctionArgs['request']>();
     const mockContext = mockDeep<ActionFunctionArgs['context']>();
-    mockContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({
+    mockContext.appContainer.get.calledWith(TYPES.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({
       validateCsrfToken: mockValidateCsrfToken,
     } satisfies Partial<CsrfTokenValidator>);
 
@@ -28,7 +28,7 @@ describe('validateCsrfToken', () => {
     });
     const mockRequest = mock<ActionFunctionArgs['request']>();
     const mockContext = mockDeep<ActionFunctionArgs['context']>();
-    mockContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({
+    mockContext.appContainer.get.calledWith(TYPES.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({
       validateCsrfToken: mockValidateCsrfToken,
     } satisfies Partial<CsrfTokenValidator>);
 
@@ -43,7 +43,7 @@ describe('validateCsrfToken', () => {
     });
     const mockRequest = mock<ActionFunctionArgs['request']>();
     const mockContext = mockDeep<ActionFunctionArgs['context']>();
-    mockContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({
+    mockContext.appContainer.get.calledWith(TYPES.WEB_CSRF_TOKEN_VALIDATOR).mockReturnValueOnce({
       validateCsrfToken: mockValidateCsrfToken,
     } satisfies Partial<CsrfTokenValidator>);
 

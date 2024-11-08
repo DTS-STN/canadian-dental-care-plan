@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -52,8 +52,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const maritalStatuses = appContainer.get(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE).listLocalizedMaritalStatuses(locale);
-  const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const maritalStatuses = appContainer.get(TYPES.MARITAL_STATUS_SERVICE).listLocalizedMaritalStatuses(locale);
+  const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(TYPES.SERVER_CONFIG);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:marital-status.page-title') }) };

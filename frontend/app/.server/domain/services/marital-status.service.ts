@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { MaritalStatusDto, MaritalStatusLocalizedDto } from '~/.server/domain/dtos';
 import { MaritalStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
@@ -62,10 +62,10 @@ export class MaritalStatusServiceImpl implements MaritalStatusService {
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.MARITAL_STATUS_DTO_MAPPER) private readonly maritalStatusDtoMapper: MaritalStatusDtoMapper,
-    @inject(SERVICE_IDENTIFIER.MARITAL_STATUS_REPOSITORY) private readonly maritalStatusRepository: MaritalStatusRepository,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.MARITAL_STATUS_DTO_MAPPER) private readonly maritalStatusDtoMapper: MaritalStatusDtoMapper,
+    @inject(TYPES.MARITAL_STATUS_REPOSITORY) private readonly maritalStatusRepository: MaritalStatusRepository,
+    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('MaritalStatusServiceImpl');
 

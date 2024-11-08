@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { CountryDto, CountryLocalizedDto } from '~/.server/domain/dtos';
 import { CountryNotFoundException } from '~/.server/domain/exceptions';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
@@ -72,10 +72,10 @@ export class CountryServiceImpl implements CountryService {
    * @param serverConfig - The server configuration containing necessary constants and cache TTL values.
    */
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.COUNTRY_DTO_MAPPER) private readonly countryDtoMapper: CountryDtoMapper,
-    @inject(SERVICE_IDENTIFIER.COUNTRY_REPOSITORY) private readonly countryRepository: CountryRepository,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: CountryServiceImpl_ServiceConfig,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.COUNTRY_DTO_MAPPER) private readonly countryDtoMapper: CountryDtoMapper,
+    @inject(TYPES.COUNTRY_REPOSITORY) private readonly countryRepository: CountryRepository,
+    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: CountryServiceImpl_ServiceConfig,
   ) {
     this.log = logFactory.createLogger('CountryServiceImpl');
 

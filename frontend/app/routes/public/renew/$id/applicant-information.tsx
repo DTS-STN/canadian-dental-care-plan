@@ -9,7 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -60,7 +60,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const clientApplicationService = appContainer.get(SERVICE_IDENTIFIER.CLIENT_APPLICATION_SERVICE);
+  const clientApplicationService = appContainer.get(TYPES.CLIENT_APPLICATION_SERVICE);
 
   // state validation schema
   const applicantInformationSchema = z

@@ -1,6 +1,6 @@
 import { ContainerModule } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import {
   AddressValidationRepositoryImpl,
   ApplicantRepositoryImpl,
@@ -25,21 +25,21 @@ import { HCaptchaRepositoryImpl } from '~/.server/web/repositories';
  * Container module for repositories.
  */
 export const repositoriesContainerModule = new ContainerModule((bind) => {
-  bind(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_REPOSITORY).to(AddressValidationRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.APPLICANT_REPOSITORY).to(ApplicantRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.APPLICATION_STATUS_REPOSITORY).to(ApplicationStatusRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_REPOSITORY).to(BenefitRenewalRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.CLIENT_APPLICATION_REPOSITORY).to(ClientApplicationRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_REPOSITORY).to(ClientFriendlyStatusRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.COUNTRY_REPOSITORY).to(CountryRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_REPOSITORY).to(DemographicSurveyRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY).to(FederalGovernmentInsurancePlanRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.HCAPTCHA_REPOSITORY).to(HCaptchaRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.LETTER_REPOSITORY).to(LetterRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.LETTER_TYPE_REPOSITORY).to(LetterTypeRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.MARITAL_STATUS_REPOSITORY).to(MaritalStatusRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_REPOSITORY).to(PreferredCommunicationMethodRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_REPOSITORY).to(PreferredLanguageRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_REPOSITORY).to(ProvinceTerritoryStateRepositoryImpl);
-  bind(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY).to(ProvincialGovernmentInsurancePlanRepositoryImpl);
+  bind(TYPES.ADDRESS_VALIDATION_REPOSITORY).to(AddressValidationRepositoryImpl);
+  bind(TYPES.APPLICANT_REPOSITORY).to(ApplicantRepositoryImpl);
+  bind(TYPES.APPLICATION_STATUS_REPOSITORY).to(ApplicationStatusRepositoryImpl);
+  bind(TYPES.BENEFIT_RENEWAL_REPOSITORY).to(BenefitRenewalRepositoryImpl);
+  bind(TYPES.CLIENT_APPLICATION_REPOSITORY).to(ClientApplicationRepositoryImpl);
+  bind(TYPES.CLIENT_FRIENDLY_STATUS_REPOSITORY).to(ClientFriendlyStatusRepositoryImpl);
+  bind(TYPES.COUNTRY_REPOSITORY).to(CountryRepositoryImpl);
+  bind(TYPES.DEMOGRAPHIC_SURVEY_REPOSITORY).to(DemographicSurveyRepositoryImpl);
+  bind(TYPES.FEDERAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY).to(FederalGovernmentInsurancePlanRepositoryImpl);
+  bind(TYPES.HCAPTCHA_REPOSITORY).to(HCaptchaRepositoryImpl);
+  bind(TYPES.LETTER_REPOSITORY).to(LetterRepositoryImpl);
+  bind(TYPES.LETTER_TYPE_REPOSITORY).to(LetterTypeRepositoryImpl);
+  bind(TYPES.MARITAL_STATUS_REPOSITORY).to(MaritalStatusRepositoryImpl);
+  bind(TYPES.PREFERRED_COMMUNICATION_METHOD_REPOSITORY).to(PreferredCommunicationMethodRepositoryImpl);
+  bind(TYPES.PREFERRED_LANGUAGE_REPOSITORY).to(PreferredLanguageRepositoryImpl);
+  bind(TYPES.PROVINCE_TERRITORY_STATE_REPOSITORY).to(ProvinceTerritoryStateRepositoryImpl);
+  bind(TYPES.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY).to(ProvincialGovernmentInsurancePlanRepositoryImpl);
 });

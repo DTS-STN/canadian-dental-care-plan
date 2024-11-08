@@ -1,7 +1,7 @@
 import type { interfaces } from 'inversify';
 
-import type { ServiceIdentifier } from '~/.server/constants/service-identifier.constant';
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.constant';
+import type { ServiceIdentifier } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { Logger } from '~/.server/factories';
 
 /**
@@ -27,7 +27,7 @@ export class AppContainerProviderImpl implements AppContainerProvider {
   private readonly log: Logger;
 
   constructor(private readonly container: interfaces.Container) {
-    const logFactory = container.get(SERVICE_IDENTIFIER.LOG_FACTORY);
+    const logFactory = container.get(TYPES.LOG_FACTORY);
     this.log = logFactory.createLogger('AppContainerProviderImpl');
   }
 

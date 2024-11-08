@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { ProvinceTerritoryStateDto, ProvinceTerritoryStateLocalizedDto } from '~/.server/domain/dtos';
 import { ProvinceTerritoryStateNotFoundException } from '~/.server/domain/exceptions';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
@@ -81,10 +81,10 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_DTO_MAPPER) private readonly provinceTerritoryStateDtoMapper: ProvinceTerritoryStateDtoMapper,
-    @inject(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_REPOSITORY) private readonly provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.PROVINCE_TERRITORY_STATE_DTO_MAPPER) private readonly provinceTerritoryStateDtoMapper: ProvinceTerritoryStateDtoMapper,
+    @inject(TYPES.PROVINCE_TERRITORY_STATE_REPOSITORY) private readonly provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
+    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('ProvinceTerritoryStateServiceImpl');
 

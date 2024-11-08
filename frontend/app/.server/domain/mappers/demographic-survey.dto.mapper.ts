@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type {
   DisabilityStatusDto,
   DisabilityStatusLocalizedDto,
@@ -54,7 +54,7 @@ export type DemographicSurveyDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'EN
 
 @injectable()
 export class DemographicSurveyDtoMapperImpl implements DemographicSurveyDtoMapper {
-  constructor(@inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: DemographicSurveyDtoMapperImpl_ServerConfig) {}
+  constructor(@inject(TYPES.SERVER_CONFIG) private readonly serverConfig: DemographicSurveyDtoMapperImpl_ServerConfig) {}
 
   // Indigenous status
   mapIndigenousStatusDtoToIndigenousStatusLocalizedDto(indigenousStatusDto: IndigenousStatusDto, locale: AppLocale): IndigenousStatusLocalizedDto {

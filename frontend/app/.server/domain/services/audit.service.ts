@@ -1,7 +1,7 @@
 import { UTCDate } from '@date-fns/utc';
 import { inject, injectable } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { AuditDetails } from '~/.server/domain/dtos';
 import type { LogFactory, Logger } from '~/.server/factories';
 
@@ -19,7 +19,7 @@ export interface AuditService {
 export class AuditServiceImpl implements AuditService {
   private readonly log: Logger;
 
-  constructor(@inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory) {
+  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory) {
     this.log = logFactory.createLogger('AuditServiceImpl');
   }
 

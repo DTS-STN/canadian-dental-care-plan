@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { CountryEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import countryJsonDataSource from '~/.server/resources/power-platform/country.json';
@@ -24,7 +24,7 @@ export interface CountryRepository {
 export class CountryRepositoryImpl implements CountryRepository {
   private readonly log: Logger;
 
-  constructor(@inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory) {
+  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory) {
     this.log = logFactory.createLogger('CountryRepositoryImpl');
   }
 

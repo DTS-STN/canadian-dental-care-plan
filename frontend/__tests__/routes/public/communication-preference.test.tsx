@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mockDeep } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { PreferredCommunicationMethodService, PreferredLanguageService } from '~/.server/domain/services';
 import { action, loader } from '~/routes/public/apply/$id/adult/communication-preference';
 
@@ -35,16 +35,16 @@ describe('_public.apply.id.communication-preference', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
-      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.SERVER_CONFIG).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
       } satisfies Partial<ServerConfig>);
-      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.PREFERRED_COMMUNICATION_METHOD_SERVICE).mockReturnValueOnce({
         listAndSortLocalizedPreferredCommunicationMethods: () => [
           { id: 'email', name: 'Email' },
           { id: 'mail', name: 'Mail' },
         ],
       } satisfies Partial<PreferredCommunicationMethodService>);
-      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.PREFERRED_LANGUAGE_SERVICE).mockReturnValueOnce({
         listPreferredLanguages: () => [
           { id: 'fr', nameEn: 'French', nameFr: 'Français' },
           { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
@@ -93,7 +93,7 @@ describe('_public.apply.id.communication-preference', () => {
       formData.append('preferredLanguage', 'fr');
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
-      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.SERVER_CONFIG).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
       } satisfies Partial<ServerConfig>);
 
@@ -119,7 +119,7 @@ describe('_public.apply.id.communication-preference', () => {
       formData.append('preferredLanguage', 'fr');
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
-      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.SERVER_CONFIG).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
       } satisfies Partial<ServerConfig>);
 
@@ -146,7 +146,7 @@ describe('_public.apply.id.communication-preference', () => {
       formData.append('preferredLanguage', 'fr');
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
-      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.SERVER_CONFIG).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
       } satisfies Partial<ServerConfig>);
 

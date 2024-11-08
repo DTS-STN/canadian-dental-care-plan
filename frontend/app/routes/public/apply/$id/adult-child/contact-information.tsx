@@ -11,7 +11,7 @@ import validator from 'validator';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -50,10 +50,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(TYPES.SERVER_CONFIG);
 
-  const countryList = appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).listAndSortLocalizedCountries(locale);
-  const regionList = appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const countryList = appContainer.get(TYPES.COUNTRY_SERVICE).listAndSortLocalizedCountries(locale);
+  const regionList = appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:contact-information.page-title') }) };
@@ -79,7 +79,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.SERVER_CONFIG);
 
   const personalInformationSchema = z
     .object({

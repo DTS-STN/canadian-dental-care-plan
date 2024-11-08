@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { BenefitRenewalRequestDto, BenefitRenewalResponseDto } from '~/.server/domain/dtos';
 import type { BenefitRenewalDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitRenewalRepository } from '~/.server/domain/repositories';
@@ -21,9 +21,9 @@ export class BenefitRenewalServiceImpl implements BenefitRenewalService {
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_DTO_MAPPER) private readonly BenefitRenewalDtoMapper: BenefitRenewalDtoMapper,
-    @inject(SERVICE_IDENTIFIER.BENEFIT_RENEWAL_REPOSITORY) private readonly BenefitRenewalRepository: BenefitRenewalRepository,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.BENEFIT_RENEWAL_DTO_MAPPER) private readonly BenefitRenewalDtoMapper: BenefitRenewalDtoMapper,
+    @inject(TYPES.BENEFIT_RENEWAL_REPOSITORY) private readonly BenefitRenewalRepository: BenefitRenewalRepository,
   ) {
     this.log = logFactory.createLogger('BenefitRenewalServiceImpl');
   }

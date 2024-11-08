@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mockDeep } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { CountryService, ProvinceTerritoryStateService } from '~/.server/domain/services';
 import { loader } from '~/routes/public/apply/$id/adult/contact-information';
 
@@ -35,17 +35,17 @@ describe('_public.apply.id.contact-information', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
-      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.SERVER_CONFIG).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.SERVER_CONFIG).mockReturnValueOnce({
         MARITAL_STATUS_CODE_COMMONLAW: 1,
         MARITAL_STATUS_CODE_MARRIED: 2,
         CANADA_COUNTRY_ID: 'CAN',
         USA_COUNTRY_ID: 'USA',
       } satisfies Partial<ServerConfig>);
-      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.COUNTRY_SERVICE).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.COUNTRY_SERVICE).mockReturnValueOnce({
         listCountries: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
         listAndSortLocalizedCountries: () => [{ id: '1', name: 'super country' }],
       } satisfies Partial<CountryService>);
-      mockAppLoadContext.appContainer.get.calledWith(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).mockReturnValueOnce({
         listAndSortLocalizedProvinceTerritoryStates: () => [{ id: 'SP', countryId: 'CAN', name: 'sample', abbr: 'SP' }],
       } satisfies Partial<ProvinceTerritoryStateService>);
 

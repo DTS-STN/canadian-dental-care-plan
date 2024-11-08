@@ -1,1 +1,1 @@
-export * from './service-identifier.constant';
+export * from './types.constant';

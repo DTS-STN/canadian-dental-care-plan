@@ -10,7 +10,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { Button } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const statusId = statusCheckResult.statusId ?? null;
   const alertType = getContextualAlertType(statusId);
-  const clientFriendlyStatus = statusId ? appContainer.get(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE).getLocalizedClientFriendlyStatusById(statusId, locale) : null;
+  const clientFriendlyStatus = statusId ? appContainer.get(TYPES.CLIENT_FRIENDLY_STATUS_SERVICE).getLocalizedClientFriendlyStatusById(statusId, locale) : null;
 
   return json({
     statusResult: { alertType, clientFriendlyStatus },

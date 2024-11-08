@@ -3,7 +3,7 @@ import Redis from 'ioredis';
 import type { Logger } from 'winston';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { LogFactory } from '~/.server/factories';
 
 /**
@@ -36,7 +36,7 @@ export class RedisServiceImpl implements RedisService {
   private readonly log: Logger;
   private readonly redisClient: Redis;
 
-  constructor(@inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory, @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) serverConfig: ServerConfig) {
+  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory, @inject(TYPES.SERVER_CONFIG) serverConfig: ServerConfig) {
     this.log = logFactory.createLogger('RedisServiceImpl');
     this.redisClient = serverConfig.REDIS_SENTINEL_NAME ? this.newSentinelClient(serverConfig) : this.newRedisClient(serverConfig);
   }

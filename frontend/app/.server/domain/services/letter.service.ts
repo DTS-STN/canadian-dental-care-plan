@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { sort } from 'moderndash';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { LetterDto, LettersRequestDto, PdfRequestDto } from '~/.server/domain/dtos';
 import type { LetterDtoMapper } from '~/.server/domain/mappers';
 import type { LetterRepository } from '~/.server/domain/repositories';
@@ -31,10 +31,10 @@ export class LetterServiceImpl implements LetterService {
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.LETTER_DTO_MAPPER) private readonly letterDtoMapper: LetterDtoMapper,
-    @inject(SERVICE_IDENTIFIER.LETTER_REPOSITORY) private readonly letterRepository: LetterRepository,
-    @inject(SERVICE_IDENTIFIER.AUDIT_SERVICE) private readonly auditService: AuditService,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.LETTER_DTO_MAPPER) private readonly letterDtoMapper: LetterDtoMapper,
+    @inject(TYPES.LETTER_REPOSITORY) private readonly letterRepository: LetterRepository,
+    @inject(TYPES.AUDIT_SERVICE) private readonly auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('LetterServiceImpl');
   }

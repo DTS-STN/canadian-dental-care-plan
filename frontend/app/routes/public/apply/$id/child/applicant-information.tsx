@@ -10,7 +10,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const maritalStatuses = appContainer.get(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE).listLocalizedMaritalStatuses(locale);
+  const maritalStatuses = appContainer.get(TYPES.MARITAL_STATUS_SERVICE).listLocalizedMaritalStatuses(locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:applicant-information.page-title') }) };

@@ -5,7 +5,7 @@ import { useLoaderData, useParams } from '@remix-run/react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -34,7 +34,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('data-unavailable:page-title') }) };
 
-  const { SCCH_BASE_URI } = appContainer.get(SERVICE_IDENTIFIER.CLIENT_CONFIG);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.CLIENT_CONFIG);
 
   return json({ meta, SCCH_BASE_URI });
 }

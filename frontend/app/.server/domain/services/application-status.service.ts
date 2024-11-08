@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { ApplicationStatusBasicInfoRequestDto, ApplicationStatusSinRequestDto } from '~/.server/domain/dtos';
 import type { ApplicationStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicationStatusRepository } from '~/.server/domain/repositories';
@@ -33,10 +33,10 @@ export class ApplicationStatusServiceImpl implements ApplicationStatusService {
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.APPLICATION_STATUS_DTO_MAPPER) private readonly applicationStatusDtoMapper: ApplicationStatusDtoMapper,
-    @inject(SERVICE_IDENTIFIER.APPLICATION_STATUS_REPOSITORY) private readonly applicationStatusRepository: ApplicationStatusRepository,
-    @inject(SERVICE_IDENTIFIER.AUDIT_SERVICE) private readonly auditService: AuditService,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.APPLICATION_STATUS_DTO_MAPPER) private readonly applicationStatusDtoMapper: ApplicationStatusDtoMapper,
+    @inject(TYPES.APPLICATION_STATUS_REPOSITORY) private readonly applicationStatusRepository: ApplicationStatusRepository,
+    @inject(TYPES.AUDIT_SERVICE) private readonly auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('ApplicationStatusServiceImpl');
   }
