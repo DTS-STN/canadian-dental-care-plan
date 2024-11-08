@@ -30,6 +30,10 @@ export const clientEnvSchema = z.object({
   ECAS_BASE_URI: z.string().url().default('https://srv136.services.gc.ca/ecas-seca/rascl/SCL'),
   SCCH_BASE_URI: z.string().url().default('https://service.canada.ca'),
 
+  // Header Logo URLs
+  HEADER_LOGO_URL_EN: z.string().url().default('https://canada.ca/en'),
+  HEADER_LOGO_URL_FR: z.string().url().default('https://canada.ca/fr'),
+
   SESSION_TIMEOUT_SECONDS: z.coerce.number().min(0).default(19 * 60),
   SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce.number().min(0).default(5 * 60),
 });
