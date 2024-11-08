@@ -420,7 +420,7 @@ export default function RenewAdultChildUpdateAddress() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Update address click">
                 {t('renew-adult-child:update-address.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/adult-child/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Update address click">
+              <ButtonLink id="back-button" routeId="public/renew/$id/adult-child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Update address click">
                 {t('renew-adult-child:update-address.cancel-btn')}
               </ButtonLink>
             </div>

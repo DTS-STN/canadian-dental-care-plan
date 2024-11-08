@@ -186,6 +186,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     addressInformation,
     partnerInformation,
     children,
+    hasAddressChanged,
   };
 }
 
