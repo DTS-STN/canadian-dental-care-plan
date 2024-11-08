@@ -52,8 +52,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const maritalStatuses = appContainer.get(TYPES.MARITAL_STATUS_SERVICE).listLocalizedMaritalStatuses(locale);
-  const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(TYPES.SERVER_CONFIG);
+  const maritalStatuses = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
+  const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(TYPES.ServerConfig);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:marital-status.page-title') }) };

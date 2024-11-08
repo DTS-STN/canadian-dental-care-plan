@@ -33,10 +33,10 @@ export class ApplicationStatusServiceImpl implements ApplicationStatusService {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
-    @inject(TYPES.APPLICATION_STATUS_DTO_MAPPER) private readonly applicationStatusDtoMapper: ApplicationStatusDtoMapper,
-    @inject(TYPES.APPLICATION_STATUS_REPOSITORY) private readonly applicationStatusRepository: ApplicationStatusRepository,
-    @inject(TYPES.AUDIT_SERVICE) private readonly auditService: AuditService,
+    @inject(TYPES.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.ApplicationStatusDtoMapper) private readonly applicationStatusDtoMapper: ApplicationStatusDtoMapper,
+    @inject(TYPES.ApplicationStatusRepository) private readonly applicationStatusRepository: ApplicationStatusRepository,
+    @inject(TYPES.AuditService) private readonly auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('ApplicationStatusServiceImpl');
   }

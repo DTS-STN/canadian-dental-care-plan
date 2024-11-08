@@ -22,10 +22,10 @@ export class AddressValidationServiceImpl implements AddressValidationService {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
-    @inject(TYPES.ADDRESS_VALIDATION_DTO_MAPPER) private readonly addressValidationDtoMapper: AddressValidationDtoMapper,
-    @inject(TYPES.ADDRESS_VALIDATION_REPOSITORY) private readonly addressValidationRepository: AddressValidationRepository,
-    @inject(TYPES.AUDIT_SERVICE) private readonly auditService: AuditService,
+    @inject(TYPES.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.AddressValidationDtoMapper) private readonly addressValidationDtoMapper: AddressValidationDtoMapper,
+    @inject(TYPES.AddressValidationRepository) private readonly addressValidationRepository: AddressValidationRepository,
+    @inject(TYPES.AuditService) private readonly auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('AddressValidationServiceImpl');
   }

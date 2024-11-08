@@ -60,7 +60,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const clientApplicationService = appContainer.get(TYPES.CLIENT_APPLICATION_SERVICE);
+  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
 
   // state validation schema
   const applicantInformationSchema = z

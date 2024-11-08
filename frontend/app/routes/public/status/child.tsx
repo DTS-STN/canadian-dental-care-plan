@@ -55,7 +55,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.SERVER_CONFIG);
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.ServerConfig);
 
   const csrfToken = String(session.get('csrfToken'));
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -70,7 +70,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
   const log = getLogger('status/child/index');
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.SERVER_CONFIG);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ServerConfig);
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -191,18 +191,18 @@ export async function action({ context: { appContainer, session }, params, reque
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(TYPES.HCAPTCHA_SERVICE), hCaptchaResponse, request }))) {
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(TYPES.HCaptchaService), hCaptchaResponse, request }))) {
       return redirect(getPathById('public/unable-to-process-request', params));
     }
   }
 
   const statusId = parsedSinResult
-    ? await appContainer.get(TYPES.APPLICATION_STATUS_SERVICE).findApplicationStatusIdBySin({
+    ? await appContainer.get(TYPES.ApplicationStatusService).findApplicationStatusIdBySin({
         sin: parsedSinResult.data.sin,
         applicationCode: parsedCodeResult.data.code,
         userId: 'anonymous',
       })
-    : await appContainer.get(TYPES.APPLICATION_STATUS_SERVICE).findApplicationStatusIdByBasicInfo({
+    : await appContainer.get(TYPES.ApplicationStatusService).findApplicationStatusIdByBasicInfo({
         applicationCode: parsedCodeResult.data.code,
         firstName: parsedChildInfoResult?.data.firstName ?? '',
         lastName: parsedChildInfoResult?.data.lastName ?? '',

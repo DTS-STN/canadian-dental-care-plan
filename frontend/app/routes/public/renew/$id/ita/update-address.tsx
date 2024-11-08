@@ -47,10 +47,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.SERVER_CONFIG);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.ServerConfig);
 
-  const countryList = appContainer.get(TYPES.COUNTRY_SERVICE).listAndSortLocalizedCountries(locale);
-  const regionList = appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const countryList = appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
+  const regionList = appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:update-address.page-title') }) };
@@ -73,7 +73,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.SERVER_CONFIG);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.ServerConfig);
 
   const addressInformationSchema = z
     .object({

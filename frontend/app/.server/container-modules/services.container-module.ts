@@ -29,7 +29,7 @@ import { HCaptchaServiceImpl } from '~/.server/web/services';
 
 function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
   return ({ parentContext }: interfaces.Request) => {
-    const serverConfig = parentContext.container.get(TYPES.SERVER_CONFIG);
+    const serverConfig = parentContext.container.get(TYPES.ServerConfig);
     return serverConfig.SESSION_STORAGE_TYPE === sessionType;
   };
 }
@@ -38,29 +38,29 @@ function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
  * Container module for services.
  */
 export const servicesContainerModule = new ContainerModule((bind) => {
-  bind(TYPES.ADDRESS_VALIDATION_SERVICE).to(AddressValidationServiceImpl);
-  bind(TYPES.APPLICANT_SERVICE).to(ApplicantServiceImpl);
-  bind(TYPES.APPLICATION_STATUS_SERVICE).to(ApplicationStatusServiceImpl);
-  bind(TYPES.AUDIT_SERVICE).to(AuditServiceImpl);
-  bind(TYPES.BENEFIT_RENEWAL_SERVICE).to(BenefitRenewalServiceImpl);
-  bind(TYPES.CLIENT_APPLICATION_SERVICE).to(ClientApplicationServiceImpl);
-  bind(TYPES.CLIENT_FRIENDLY_STATUS_SERVICE).to(ClientFriendlyStatusServiceImpl);
-  bind(TYPES.COUNTRY_SERVICE).to(CountryServiceImpl);
-  bind(TYPES.DEMOGRAPHIC_SURVEY_SERVICE).to(DemographicSurveyServiceServiceImpl);
-  bind(TYPES.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(FederalGovernmentInsurancePlanServiceImpl);
-  bind(TYPES.HCAPTCHA_SERVICE).to(HCaptchaServiceImpl);
-  bind(TYPES.LETTER_SERVICE).to(LetterServiceImpl);
-  bind(TYPES.LETTER_TYPE_SERVICE).to(LetterTypeServiceImpl);
-  bind(TYPES.MARITAL_STATUS_SERVICE).to(MaritalStatusServiceImpl);
-  bind(TYPES.PREFERRED_COMMUNICATION_METHOD_SERVICE).to(PreferredCommunicationMethodServiceImpl);
-  bind(TYPES.PREFERRED_LANGUAGE_SERVICE).to(PreferredLanguageServiceImpl);
-  bind(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).to(ProvinceTerritoryStateServiceImpl);
-  bind(TYPES.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(ProvincialGovernmentInsurancePlanServiceImpl);
+  bind(TYPES.AddressValidationService).to(AddressValidationServiceImpl);
+  bind(TYPES.ApplicantService).to(ApplicantServiceImpl);
+  bind(TYPES.ApplicationStatusService).to(ApplicationStatusServiceImpl);
+  bind(TYPES.AuditService).to(AuditServiceImpl);
+  bind(TYPES.BenefitRenewalService).to(BenefitRenewalServiceImpl);
+  bind(TYPES.ClientApplicationService).to(ClientApplicationServiceImpl);
+  bind(TYPES.ClientFriendlyStatusService).to(ClientFriendlyStatusServiceImpl);
+  bind(TYPES.CountryService).to(CountryServiceImpl);
+  bind(TYPES.DemographicSurveyService).to(DemographicSurveyServiceServiceImpl);
+  bind(TYPES.FederalGovernmentInsurancePlanService).to(FederalGovernmentInsurancePlanServiceImpl);
+  bind(TYPES.HCaptchaService).to(HCaptchaServiceImpl);
+  bind(TYPES.LetterService).to(LetterServiceImpl);
+  bind(TYPES.LetterTypeService).to(LetterTypeServiceImpl);
+  bind(TYPES.MaritalStatusService).to(MaritalStatusServiceImpl);
+  bind(TYPES.PreferredCommunicationMethodService).to(PreferredCommunicationMethodServiceImpl);
+  bind(TYPES.PreferredLanguageService).to(PreferredLanguageServiceImpl);
+  bind(TYPES.ProvinceTerritoryStateService).to(ProvinceTerritoryStateServiceImpl);
+  bind(TYPES.ProvincialGovernmentInsurancePlanService).to(ProvincialGovernmentInsurancePlanServiceImpl);
 
   // RedisService bindings depend on the SESSION_STORAGE_TYPE configuration string
-  bind(TYPES.REDIS_SERVICE).to(RedisServiceImpl).when(sessionTypeIs('redis'));
+  bind(TYPES.RedisService).to(RedisServiceImpl).when(sessionTypeIs('redis'));
 
   // SessionService bindings depend on the SESSION_STORAGE_TYPE configuration string
-  bind(TYPES.SESSION_SERVICE).to(FileSessionService).when(sessionTypeIs('file'));
-  bind(TYPES.SESSION_SERVICE).to(RedisSessionService).when(sessionTypeIs('redis'));
+  bind(TYPES.SessionService).to(FileSessionService).when(sessionTypeIs('file'));
+  bind(TYPES.SessionService).to(RedisSessionService).when(sessionTypeIs('redis'));
 });

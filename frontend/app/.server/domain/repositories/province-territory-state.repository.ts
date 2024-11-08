@@ -31,7 +31,7 @@ export interface ProvinceTerritoryStateRepository {
 export class ProvinceTerritoryStateRepositoryImpl implements ProvinceTerritoryStateRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory) {
+  constructor(@inject(TYPES.LogFactory) logFactory: LogFactory) {
     this.log = logFactory.createLogger('ProvinceTerritoryStateRepositoryImpl');
   }
 

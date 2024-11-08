@@ -40,10 +40,10 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
-    @inject(TYPES.PREFERRED_LANGUAGE_DTO_MAPPER) private readonly preferredLanguageDtoMapper: PreferredLanguageDtoMapper,
-    @inject(TYPES.PREFERRED_LANGUAGE_REPOSITORY) private readonly preferredLanguageRepository: PreferredLanguageRepository,
-    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: PreferredLanguageServiceImpl_ServerConfig,
+    @inject(TYPES.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.PreferredLanguageDtoMapper) private readonly preferredLanguageDtoMapper: PreferredLanguageDtoMapper,
+    @inject(TYPES.PreferredLanguageRepository) private readonly preferredLanguageRepository: PreferredLanguageRepository,
+    @inject(TYPES.ServerConfig) private readonly serverConfig: PreferredLanguageServiceImpl_ServerConfig,
   ) {
     this.log = logFactory.createLogger('PreferredLanguageServiceImpl');
 

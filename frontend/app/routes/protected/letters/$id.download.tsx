@@ -33,16 +33,16 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const locale = getLocale(request);
-  const letterType = appContainer.get(TYPES.LETTER_TYPE_SERVICE).getLocalizedLetterTypeById(letter.letterTypeId, locale);
+  const letterType = appContainer.get(TYPES.LetterTypeService).getLocalizedLetterTypeById(letter.letterTypeId, locale);
   const documentName = sanitize(letterType.name);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
-  const pdfBytes = await appContainer.get(TYPES.LETTER_SERVICE).getPdfByLetterId({ letterId: params.id, userId: userInfoToken.sub });
+  const pdfBytes = await appContainer.get(TYPES.LetterService).getPdfByLetterId({ letterId: params.id, userId: userInfoToken.sub });
   instrumentationService.countHttpStatus('letters.download', 200);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.AUDIT_SERVICE).createAudit('download.letter', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('download.letter', { userId: idToken.sub });
 
   const decodedPdfBytes = Buffer.from(pdfBytes, 'base64');
   return new Response(decodedPdfBytes, {

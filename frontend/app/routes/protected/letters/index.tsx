@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const clientNumber =
     session.get('clientNumber') ??
-    (await appContainer.get(TYPES.APPLICANT_SERVICE).findClientNumberBySin({
+    (await appContainer.get(TYPES.ApplicantService).findClientNumberBySin({
       sin: userInfoToken.sin,
       userId: userInfoToken.sub,
     }));
@@ -64,8 +64,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('protected/data-unavailable', params));
   }
 
-  const allLetters = await appContainer.get(TYPES.LETTER_SERVICE).findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
-  const letterTypes = appContainer.get(TYPES.LETTER_TYPE_SERVICE).listLetterTypes();
+  const allLetters = await appContainer.get(TYPES.LetterService).findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
+  const letterTypes = appContainer.get(TYPES.LetterTypeService).listLetterTypes();
   const letters = allLetters.filter(({ letterTypeId }) => letterTypes.some(({ id }) => letterTypeId === id));
 
   session.set('clientNumber', clientNumber);
@@ -73,10 +73,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
-  const { SCCH_BASE_URI } = appContainer.get(TYPES.CLIENT_CONFIG);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.AUDIT_SERVICE).createAudit('page-view.letters', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.letters', { userId: idToken.sub });
   instrumentationService.countHttpStatus('letters.view', 200);
 
   return json({ letters, letterTypes, meta, sortOrder, SCCH_BASE_URI });

@@ -46,7 +46,7 @@ export async function action({ context: { appContainer, session }, request }: Ac
   switch (action) {
     case 'end': {
       log.debug("Ending user's server-side session; sessionId: [%s], locale: [%s], redirectTo: [%s]", sessionId, locale, redirectTo);
-      const sessionService = appContainer.get(TYPES.SESSION_SERVICE);
+      const sessionService = appContainer.get(TYPES.SessionService);
       const headers = { 'Set-Cookie': await sessionService.destroySession(session) };
 
       if (redirectTo) {
