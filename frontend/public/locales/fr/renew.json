@@ -163,14 +163,14 @@
     "continue-btn": "Continuer"
   },
   "renewal-delegate": {
-    "page-title": "Renewing on behalf of someone as a legal delegate or Power of Attorney",
-    "contact-representative": "You must speak to a Service Canada representative if you are renewing on behalf of someone as their legal delegate or Power of Attorney. You can contact Service Canada by calling <noWrap>1-833-537-4342</noWrap> or by visiting a <contactServiceCanada>Service Canada Centre</contactServiceCanada> near you.",
-    "prepare-to-apply": "<preparingToRenew>Preparing to renew on behalf of someone</preparingToRenew>",
-    "contact-service-canada-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
-    "preparing-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#helping",
-    "back-btn": "Back",
-    "return-btn": "Return to main page",
-    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+    "page-title": "Je présente une demande de renouvellement au nom d'une autre personne à titre de représentant légal ou mandataire",
+    "contact-representative": "Vous devez parler à un agent de Service Canada si vous présentez une demande de renouvellement au nom d'une autre personne à titre de représentant légal ou mandataire. Vous pouvez communiquer avec Service Canada en téléphonant au <noWrap>1-833-537-4342</noWrap> ou en vous rendant dans un <contactServiceCanada>Centre Service Canada</contactServiceCanada> près de chez vous.",
+    "prepare-to-apply": "<preparingToRenew>Se préparer à présenter une demande au nom de quelqu'un.</preparingToRenew>",
+    "contact-service-canada-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
+    "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
+    "back-btn": "Retour",
+    "return-btn": "Revenir à la page principale",
+    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
   "tax-filing": {
     "page-title": "Déclaration de revenus",
