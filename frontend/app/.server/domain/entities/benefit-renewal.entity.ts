@@ -60,7 +60,7 @@ export type BenefitRenewalRequestEntity = Readonly<{
       >;
       PersonMaritalStatus: Readonly<{
         StatusCode: Readonly<{
-          ReferenceDataID: string;
+          ReferenceDataID?: string;
         }>;
       }>;
       PersonName: ReadonlyArray<

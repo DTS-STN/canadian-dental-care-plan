@@ -61,7 +61,7 @@ export interface ToBenefitRenewRequestFromRenewAdultChildStateArgs {
   partnerInformation: PartnerInformationState | undefined;
   contactInformation: ContactInformationState;
   typeOfRenewal: Extract<TypeOfRenewalState, 'adult-child'>;
-  maritalStatus: string;
+  maritalStatus?: string;
 }
 
 export function toBenefitRenewRequestFromRenewAdultChildState({
@@ -96,7 +96,7 @@ interface ToBenefitRenewalRequestArgs {
   partnerInformation: PartnerInformationState | undefined;
   contactInformation: ContactInformationState;
   typeOfRenewal: TypeOfRenewalState;
-  maritalStatus: string;
+  maritalStatus?: string;
   addressInformation?: AddressInformationState;
   children?: ChildState[];
 }

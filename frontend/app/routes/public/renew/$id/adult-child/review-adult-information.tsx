@@ -65,7 +65,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
   const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
   const countryHome = state.addressInformation?.homeCountry ? appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
-  const maritalStatus = appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale);
+  const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined;
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -74,7 +74,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     altPhoneNumber: state.contactInformation.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     clientNumber: state.applicantInformation.clientNumber,
-    maritalStatus: maritalStatus.name,
+    maritalStatus: maritalStatus ? maritalStatus.name : undefined,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreference?.email,
   };
@@ -250,9 +250,9 @@ export default function RenewAdultChildReviewAdultInformation() {
                 <p>{userInfo.clientNumber}</p>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-adult-child:review-adult-information.marital-title')}>
-                <p>{userInfo.maritalStatus}</p>
+                <p>{userInfo.maritalStatus ? userInfo.maritalStatus : t('renew-adult-child:review-adult-information.no-change')}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-martial-status" routeId="public/renew/$id/adult-child/marital-status" params={params}>
+                  <InlineLink id="change-martial-status" routeId="public/renew/$id/adult-child/confirm-marital-status" params={params}>
                     {t('renew-adult-child:review-adult-information.marital-change')}
                   </InlineLink>
                 </div>

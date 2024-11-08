@@ -1,4 +1,20 @@
 {
+  "confirm-marital-status": {
+    "page-title": "Marital status",
+    "has-marital-status-changed": "Has your marital status or spouse changed since you applied for the Canadian Dental Care Plan?",
+    "help-message": "The marital status we have on file can also be found on the renewal letter you received from Service Canada.",
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "error-message": {
+      "has-marital-status-changed-required": "Please indicate if your marital status has changed"
+    }
+  },
   "marital-status": {
     "page-title": "Marital status",
     "marital-status": "What is your current marital status?",
@@ -558,6 +574,7 @@
     "dental-benefit-title": "Access to government dental benefits",
     "dental-benefit-change": "Change answer to government dental benefits",
     "dental-benefit-has-access": "Has access to the following benefits:",
+    "no-change": "No update",
     "submit-button": "Submit Application",
     "exit-button": "Exit application",
     "back-button": "Back",
