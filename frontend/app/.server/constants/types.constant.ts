@@ -59,86 +59,120 @@ import type {
   SessionService,
 } from '~/.server/domain/services';
 import type { ConfigFactory, LogFactory } from '~/.server/factories';
+import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.server/utils/service-identifier.utils';
 import type { HCaptchaDtoMapper } from '~/.server/web/mappers';
 import type { HCaptchaRepository } from '~/.server/web/repositories';
 import type { HCaptchaService } from '~/.server/web/services';
 import type { CsrfTokenValidator } from '~/.server/web/validators';
 
 /**
- * A type representing a service identifier for dependency injection purposes.
- * The identifier excludes `string` and `symbol` types, allowing only specific types
- * from the `interfaces.ServiceIdentifier`.
+ * Represents a service identifier for dependency injection purposes.
+ * The identifier restricts the use of `string` and `symbol` types, allowing only specific types
+ * from `interfaces.ServiceIdentifier` to be used for registering and resolving dependencies.
  *
  * @template T - The type associated with the service identifier.
+ * @example
+ * ```typescript
+ * const identifier: ServiceIdentifier<ExampleService> = serviceIdentifier('ExampleService');
+ * ```
  */
-export type ServiceIdentifier<T = unknown> = Exclude<interfaces.ServiceIdentifier<T>, string | symbol>;
+export type ServiceIdentifier<T> = Exclude<interfaces.ServiceIdentifier<T>, string | symbol>;
 
 /**
- * A constant object defining various service identifiers for dependency injection.
- * These identifiers are used to register and resolve services in a dependency container.
+ * Recursive type defining the structure of the service identifier registry.
+ * Allows nesting of `Types` objects to create hierarchical structures.
+ *
+ * @template T - Type associated with each key in the registry.
+ * @example
+ * ```typescript
+ * const exampleRegistry: Types = {
+ *   ExampleService: serviceId<ExampleService>(),
+ *   nested: {
+ *     NestedService: serviceId<NestedService>()
+ *   }
+ * };
+ * ```
  */
-export const TYPES = {
-  AddressValidationDtoMapper: serviceIdentifier<AddressValidationDtoMapper>('AddressValidationDtoMapper'),
-  AddressValidationRepository: serviceIdentifier<AddressValidationRepository>('AddressValidationRepository'),
-  AddressValidationService: serviceIdentifier<AddressValidationService>('AddressValidationService'),
-  ApplicantDtoMapper: serviceIdentifier<ApplicantDtoMapper>('ApplicantDtoMapper'),
-  ApplicantRepository: serviceIdentifier<ApplicantRepository>('ApplicantRepository'),
-  ApplicantService: serviceIdentifier<ApplicantService>('ApplicantService'),
-  ApplicationStatusDtoMapper: serviceIdentifier<ApplicationStatusDtoMapper>('ApplicationStatusDtoMapper'),
-  ApplicationStatusRepository: serviceIdentifier<ApplicationStatusRepository>('ApplicationStatusRepository'),
-  ApplicationStatusService: serviceIdentifier<ApplicationStatusService>('ApplicationStatusService'),
-  AuditService: serviceIdentifier<AuditService>('AuditService'),
-  BenefitRenewalDtoMapper: serviceIdentifier<BenefitRenewalDtoMapper>('BenefitRenewalDtoMapper'),
-  BenefitRenewalRepository: serviceIdentifier<BenefitRenewalRepository>('BenefitRenewalRepository'),
-  BenefitRenewalService: serviceIdentifier<BenefitRenewalService>('BenefitRenewalService'),
-  ClientApplicationDtoMapper: serviceIdentifier<ClientApplicationDtoMapper>('ClientApplicationDtoMapper'),
-  ClientApplicationRepository: serviceIdentifier<ClientApplicationRepository>('ClientApplicationRepository'),
-  ClientApplicationService: serviceIdentifier<ClientApplicationService>('ClientApplicationService'),
-  ClientConfig: serviceIdentifier<ClientConfig>('ClientConfig'),
-  ClientFriendlyStatusDtoMapper: serviceIdentifier<ClientFriendlyStatusDtoMapper>('ClientFriendlyStatusDtoMapper'),
-  ClientFriendlyStatusRepository: serviceIdentifier<ClientFriendlyStatusRepository>('ClientFriendlyStatusRepository'),
-  ClientFriendlyStatusService: serviceIdentifier<ClientFriendlyStatusService>('ClientFriendlyStatusService'),
-  ConfigFactory: serviceIdentifier<ConfigFactory>('ConfigFactory'),
-  CountryDtoMapper: serviceIdentifier<CountryDtoMapper>('CountryDtoMapper'),
-  CountryRepository: serviceIdentifier<CountryRepository>('CountryRepository'),
-  CountryService: serviceIdentifier<CountryService>('CountryService'),
-  DemographicSurveyDtoMapper: serviceIdentifier<DemographicSurveyDtoMapper>('DemographicSurveyDtoMapper'),
-  DemographicSurveyRepository: serviceIdentifier<DemographicSurveyRepository>('DemographicSurveyRepository'),
-  DemographicSurveyService: serviceIdentifier<DemographicSurveyService>('DemographicSurveyService'),
-  FederalGovernmentInsurancePlanDtoMapper: serviceIdentifier<FederalGovernmentInsurancePlanDtoMapper>('FederalGovernmentInsurancePlanDtoMapper'),
-  FederalGovernmentInsurancePlanRepository: serviceIdentifier<FederalGovernmentInsurancePlanRepository>('FederalGovernmentInsurancePlanRepository'),
-  FederalGovernmentInsurancePlanService: serviceIdentifier<FederalGovernmentInsurancePlanService>('FederalGovernmentInsurancePlanService'),
-  HCaptchaDtoMapper: serviceIdentifier<HCaptchaDtoMapper>('HCaptchaDtoMapper'),
-  HCaptchaRepository: serviceIdentifier<HCaptchaRepository>('HCaptchaRepository'),
-  HCaptchaService: serviceIdentifier<HCaptchaService>('HCaptchaService'),
-  LetterDtoMapper: serviceIdentifier<LetterDtoMapper>('LetterDtoMapper'),
-  LetterRepository: serviceIdentifier<LetterRepository>('LetterRepository'),
-  LetterService: serviceIdentifier<LetterService>('LetterService'),
-  LetterTypeDtoMapper: serviceIdentifier<LetterTypeDtoMapper>('LetterTypeDtoMapper'),
-  LetterTypeRepository: serviceIdentifier<LetterTypeRepository>('LetterTypeRepository'),
-  LetterTypeService: serviceIdentifier<LetterTypeService>('LetterTypeService'),
-  LogFactory: serviceIdentifier<LogFactory>('LogFactory'),
-  MaritalStatusDtoMapper: serviceIdentifier<MaritalStatusDtoMapper>('MaritalStatusDtoMapper'),
-  MaritalStatusRepository: serviceIdentifier<MaritalStatusRepository>('MaritalStatusRepository'),
-  MaritalStatusService: serviceIdentifier<MaritalStatusService>('MaritalStatusService'),
-  PreferredCommunicationMethodDtoMapper: serviceIdentifier<PreferredCommunicationMethodDtoMapper>('PreferredCommunicationMethodDtoMapper'),
-  PreferredCommunicationMethodRepository: serviceIdentifier<PreferredCommunicationMethodRepository>('PreferredCommunicationMethodRepository'),
-  PreferredCommunicationMethodService: serviceIdentifier<PreferredCommunicationMethodService>('PreferredCommunicationMethodService'),
-  PreferredLanguageDtoMapper: serviceIdentifier<PreferredLanguageDtoMapper>('PreferredLanguageDtoMapper'),
-  PreferredLanguageRepository: serviceIdentifier<PreferredLanguageRepository>('PreferredLanguageRepository'),
-  PreferredLanguageService: serviceIdentifier<PreferredLanguageService>('PreferredLanguageService'),
-  ProvinceTerritoryStateDtoMapper: serviceIdentifier<ProvinceTerritoryStateDtoMapper>('ProvinceTerritoryStateDtoMapper'),
-  ProvinceTerritoryStateRepository: serviceIdentifier<ProvinceTerritoryStateRepository>('ProvinceTerritoryStateRepository'),
-  ProvinceTerritoryStateService: serviceIdentifier<ProvinceTerritoryStateService>('ProvinceTerritoryStateService'),
-  ProvincialGovernmentInsurancePlanDtoMapper: serviceIdentifier<ProvincialGovernmentInsurancePlanDtoMapper>('ProvincialGovernmentInsurancePlanDtoMapper'),
-  ProvincialGovernmentInsurancePlanRepository: serviceIdentifier<ProvincialGovernmentInsurancePlanRepository>('ProvincialGovernmentInsurancePlanRepository'),
-  ProvincialGovernmentInsurancePlanService: serviceIdentifier<ProvincialGovernmentInsurancePlanService>('ProvincialGovernmentInsurancePlanService'),
-  RedisService: serviceIdentifier<RedisService>('RedisService'),
-  ServerConfig: serviceIdentifier<ServerConfig>('ServerConfig'),
-  SessionService: serviceIdentifier<SessionService>('SessionService'),
-  Web_CsrfTokenValidator: serviceIdentifier<CsrfTokenValidator>('WebCsrfTokenValidator'),
-} as const satisfies Record<string, ServiceIdentifier>;
+export type TypesContant<T = unknown> = Readonly<{
+  // The index signature ensures that the registry can hold a string key with either a
+  // service identifier or another nested `Types` object.
+  [key: string]: ServiceIdentifier<T> | TypesContant<T>;
+}>;
 
-function serviceIdentifier<T>(identifier: string): ServiceIdentifier<T> {
-  return Symbol.for(identifier) as unknown as ServiceIdentifier<T>;
-}
+/**
+ * Contains service identifiers for dependency injection, structured by categories for easier organization.
+ * This constant provides unique identifiers for each service, repository, and mapper used in the application.
+ *
+ * @example
+ * ```typescript
+ * const addressValidationService = container.get(TYPES.AddressValidationService);
+ * const applicantDtoMapper = container.get(TYPES.ApplicantDtoMapper);
+ * ```
+ */
+export const TYPES = assignServiceIdentifiers({
+  AddressValidationDtoMapper: serviceId<AddressValidationDtoMapper>(),
+  AddressValidationRepository: serviceId<AddressValidationRepository>(),
+  AddressValidationService: serviceId<AddressValidationService>(),
+  ApplicantDtoMapper: serviceId<ApplicantDtoMapper>(),
+  ApplicantRepository: serviceId<ApplicantRepository>(),
+  ApplicantService: serviceId<ApplicantService>(),
+  ApplicationStatusDtoMapper: serviceId<ApplicationStatusDtoMapper>(),
+  ApplicationStatusRepository: serviceId<ApplicationStatusRepository>(),
+  ApplicationStatusService: serviceId<ApplicationStatusService>(),
+  AuditService: serviceId<AuditService>(),
+  BenefitRenewalDtoMapper: serviceId<BenefitRenewalDtoMapper>(),
+  BenefitRenewalRepository: serviceId<BenefitRenewalRepository>(),
+  BenefitRenewalService: serviceId<BenefitRenewalService>(),
+  ClientApplicationDtoMapper: serviceId<ClientApplicationDtoMapper>(),
+  ClientApplicationRepository: serviceId<ClientApplicationRepository>(),
+  ClientApplicationService: serviceId<ClientApplicationService>(),
+  ClientConfig: serviceId<ClientConfig>(),
+  ClientFriendlyStatusDtoMapper: serviceId<ClientFriendlyStatusDtoMapper>(),
+  ClientFriendlyStatusRepository: serviceId<ClientFriendlyStatusRepository>(),
+  ClientFriendlyStatusService: serviceId<ClientFriendlyStatusService>(),
+  ConfigFactory: serviceId<ConfigFactory>(),
+  CountryDtoMapper: serviceId<CountryDtoMapper>(),
+  CountryRepository: serviceId<CountryRepository>(),
+  CountryService: serviceId<CountryService>(),
+  DemographicSurveyDtoMapper: serviceId<DemographicSurveyDtoMapper>(),
+  DemographicSurveyRepository: serviceId<DemographicSurveyRepository>(),
+  DemographicSurveyService: serviceId<DemographicSurveyService>(),
+  FederalGovernmentInsurancePlanDtoMapper: serviceId<FederalGovernmentInsurancePlanDtoMapper>(),
+  FederalGovernmentInsurancePlanRepository: serviceId<FederalGovernmentInsurancePlanRepository>(),
+  FederalGovernmentInsurancePlanService: serviceId<FederalGovernmentInsurancePlanService>(),
+  HCaptchaDtoMapper: serviceId<HCaptchaDtoMapper>(),
+  HCaptchaRepository: serviceId<HCaptchaRepository>(),
+  HCaptchaService: serviceId<HCaptchaService>(),
+  LetterDtoMapper: serviceId<LetterDtoMapper>(),
+  LetterRepository: serviceId<LetterRepository>(),
+  LetterService: serviceId<LetterService>(),
+  LetterTypeDtoMapper: serviceId<LetterTypeDtoMapper>(),
+  LetterTypeRepository: serviceId<LetterTypeRepository>(),
+  LetterTypeService: serviceId<LetterTypeService>(),
+  LogFactory: serviceId<LogFactory>(),
+  MaritalStatusDtoMapper: serviceId<MaritalStatusDtoMapper>(),
+  MaritalStatusRepository: serviceId<MaritalStatusRepository>(),
+  MaritalStatusService: serviceId<MaritalStatusService>(),
+  PreferredCommunicationMethodDtoMapper: serviceId<PreferredCommunicationMethodDtoMapper>(),
+  PreferredCommunicationMethodRepository: serviceId<PreferredCommunicationMethodRepository>(),
+  PreferredCommunicationMethodService: serviceId<PreferredCommunicationMethodService>(),
+  PreferredLanguageDtoMapper: serviceId<PreferredLanguageDtoMapper>(),
+  PreferredLanguageRepository: serviceId<PreferredLanguageRepository>(),
+  PreferredLanguageService: serviceId<PreferredLanguageService>(),
+  ProvinceTerritoryStateDtoMapper: serviceId<ProvinceTerritoryStateDtoMapper>(),
+  ProvinceTerritoryStateRepository: serviceId<ProvinceTerritoryStateRepository>(),
+  ProvinceTerritoryStateService: serviceId<ProvinceTerritoryStateService>(),
+  ProvincialGovernmentInsurancePlanDtoMapper: serviceId<ProvincialGovernmentInsurancePlanDtoMapper>(),
+  ProvincialGovernmentInsurancePlanRepository: serviceId<ProvincialGovernmentInsurancePlanRepository>(),
+  ProvincialGovernmentInsurancePlanService: serviceId<ProvincialGovernmentInsurancePlanService>(),
+  RedisService: serviceId<RedisService>(),
+  ServerConfig: serviceId<ServerConfig>(),
+  SessionService: serviceId<SessionService>(),
+  web: {
+    validators: {
+      CsrfTokenValidator: serviceId<CsrfTokenValidator>(),
+    },
+  },
+} as const satisfies TypesContant);
+
+export default { TYPES };

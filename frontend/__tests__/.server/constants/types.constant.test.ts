@@ -1,16 +1,26 @@
-import type { interfaces } from 'inversify';
+import { flatKeys } from 'moderndash';
 import { describe, expect, it } from 'vitest';
 
 import { TYPES } from '~/.server/constants';
 
-describe('TYPES', () => {
-  it('should have unique Symbol values', () => {
-    const uniqueIdentifiers: interfaces.ServiceIdentifier[] = [];
+/**
+ * Generic tests for the `TYPES` constant
+ */
+describe('TYPES constant', () => {
+  it('should contain unique service identifiers', () => {
+    const flattenedKeys = flatKeys(TYPES);
+    const allIdentifiers = Object.values(flattenedKeys);
+    const uniqueIdentifiers = new Set(allIdentifiers);
+    expect(uniqueIdentifiers.size).toBe(allIdentifiers.length);
+  });
 
-    for (const key in TYPES) {
-      const identifier = TYPES[key as keyof typeof TYPES];
-      expect(uniqueIdentifiers.includes(identifier)).toBe(false);
-      uniqueIdentifiers.push(identifier);
-    }
+  it('should contain unique service identifiers for each entry', () => {
+    const flattenedKeys = flatKeys(TYPES);
+    expect.hasAssertions();
+    Object.keys(flattenedKeys).forEach((identifierKey) => {
+      const identifier = flattenedKeys[identifierKey as keyof typeof flattenedKeys];
+      expect(identifier).toBeTypeOf('symbol');
+      expect((identifier as symbol).description).toBe(identifierKey);
+    });
   });
 });
