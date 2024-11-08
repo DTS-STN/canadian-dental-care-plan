@@ -13,7 +13,7 @@ describe('validateCsrfToken', () => {
     const mockValidateCsrfToken = vi.fn();
     const mockRequest = mock<ActionFunctionArgs['request']>();
     const mockContext = mockDeep<ActionFunctionArgs['context']>();
-    mockContext.appContainer.get.calledWith(TYPES.Web_CsrfTokenValidator).mockReturnValueOnce({
+    mockContext.appContainer.get.calledWith(TYPES.web.validators.CsrfTokenValidator).mockReturnValueOnce({
       validateCsrfToken: mockValidateCsrfToken,
     } satisfies Partial<CsrfTokenValidator>);
 
@@ -28,7 +28,7 @@ describe('validateCsrfToken', () => {
     });
     const mockRequest = mock<ActionFunctionArgs['request']>();
     const mockContext = mockDeep<ActionFunctionArgs['context']>();
-    mockContext.appContainer.get.calledWith(TYPES.Web_CsrfTokenValidator).mockReturnValueOnce({
+    mockContext.appContainer.get.calledWith(TYPES.web.validators.CsrfTokenValidator).mockReturnValueOnce({
       validateCsrfToken: mockValidateCsrfToken,
     } satisfies Partial<CsrfTokenValidator>);
 
@@ -43,7 +43,7 @@ describe('validateCsrfToken', () => {
     });
     const mockRequest = mock<ActionFunctionArgs['request']>();
     const mockContext = mockDeep<ActionFunctionArgs['context']>();
-    mockContext.appContainer.get.calledWith(TYPES.Web_CsrfTokenValidator).mockReturnValueOnce({
+    mockContext.appContainer.get.calledWith(TYPES.web.validators.CsrfTokenValidator).mockReturnValueOnce({
       validateCsrfToken: mockValidateCsrfToken,
     } satisfies Partial<CsrfTokenValidator>);
 
