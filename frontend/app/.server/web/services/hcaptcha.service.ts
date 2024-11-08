@@ -22,10 +22,10 @@ export class HCaptchaServiceImpl implements HCaptchaService {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.HCaptchaDtoMapper) private readonly hCaptchaDtoMapper: HCaptchaDtoMapper,
-    @inject(TYPES.HCaptchaRepository) private readonly hCaptchaRepository: HCaptchaRepository,
-    @inject(TYPES.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.web.mappers.HCaptchaDtoMapper) private readonly hCaptchaDtoMapper: HCaptchaDtoMapper,
+    @inject(TYPES.web.repositories.HCaptchaRepository) private readonly hCaptchaRepository: HCaptchaRepository,
+    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('HCaptchaServiceImpl');
   }

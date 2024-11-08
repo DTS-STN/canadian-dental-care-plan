@@ -5,9 +5,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { RedisService } from '~/.server/domain/services';
-import { FileSessionService, RedisSessionService } from '~/.server/domain/services';
+import type { RedisService } from '~/.server/data/services';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { FileSessionService, RedisSessionService } from '~/.server/web/services';
 
 describe('FileSessionService', () => {
   beforeEach(() => {

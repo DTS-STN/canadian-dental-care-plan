@@ -77,9 +77,9 @@ async function handleLogoutRequest({ context: { appContainer, session }, request
   log.debug('Handling RAOIDC logout request');
   getInstrumentationService().createCounter('auth.logout.requests').add(1);
 
-  const { AUTH_RASCL_LOGOUT_URL } = appContainer.get(TYPES.ServerConfig);
+  const { AUTH_RASCL_LOGOUT_URL } = appContainer.get(TYPES.configs.ServerConfig);
 
-  const sessionService = appContainer.get(TYPES.SessionService);
+  const sessionService = appContainer.get(TYPES.web.services.SessionService);
 
   if (!session.has('idToken')) {
     log.debug(`User has not authenticated; bypassing RAOIDC logout and redirecting to RASCL logout`);
@@ -109,7 +109,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
   log.debug('Handling RAOIDC login request');
   getInstrumentationService().createCounter('auth.login.raoidc.requests').add(1);
 
-  const sessionService = appContainer.get(TYPES.SessionService);
+  const sessionService = appContainer.get(TYPES.web.services.SessionService);
   await sessionService.destroySession(session);
 
   const { origin, searchParams } = new URL(request.url);
@@ -170,7 +170,7 @@ function handleMockAuthorizeRequest({ context: { appContainer }, request }: Load
   log.debug('Handling (mock) RAOIDC authorize request');
   getInstrumentationService().createCounter('auth.authorize.requests').add(1);
 
-  const { MOCK_AUTH_ALLOWED_REDIRECTS } = appContainer.get(TYPES.ServerConfig);
+  const { MOCK_AUTH_ALLOWED_REDIRECTS } = appContainer.get(TYPES.configs.ServerConfig);
   const isValidRedirectUri = (val: string): boolean => MOCK_AUTH_ALLOWED_REDIRECTS.includes(val);
 
   const searchParamsSchema = z.object({

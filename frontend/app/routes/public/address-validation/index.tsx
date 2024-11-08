@@ -71,16 +71,16 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   featureEnabled('address-validation');
-  const serverConfig = appContainer.get(TYPES.ServerConfig);
+  const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = serverConfig;
 
-  const mailingAddressValidator = new MailingAddressValidator(getLocale(request), appContainer.get(TYPES.ServerConfig));
+  const mailingAddressValidator = new MailingAddressValidator(getLocale(request), appContainer.get(TYPES.configs.ServerConfig));
   const validationResult = await mailingAddressValidator.validateMailingAddress(session.get('route.address-validation'));
   const defaultMailingAddress = validationResult.success ? validationResult.data : undefined;
 
   const locale = getLocale(request);
-  const countries = appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
-  const provinceTerritoryStates = appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const countries = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
+  const provinceTerritoryStates = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('address-validation:index.page-title') }) };
@@ -103,10 +103,10 @@ export async function action({ context: { appContainer, session }, request, para
     throw json({ message: 'Method not allowed' }, { status: 405 });
   }
 
-  const serverConfig = appContainer.get(TYPES.ServerConfig);
-  const addressValidationService = appContainer.get(TYPES.AddressValidationService);
-  const countryService = appContainer.get(TYPES.CountryService);
-  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
+  const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
+  const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
+  const countryService = appContainer.get(TYPES.domain.services.CountryService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
   const locale = getLocale(request);
 
   const formData = await request.formData();

@@ -14,7 +14,7 @@ export interface PreferredLanguageDtoMapper {
 
 @injectable()
 export class PreferredLanguageDtoMapperImpl implements PreferredLanguageDtoMapper {
-  constructor(@inject(TYPES.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>) {}
+  constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>) {}
 
   mapPreferredLanguageDtoToPreferredLanguageLocalizedDto(preferredLanguageDto: PreferredLanguageDto, locale: AppLocale): PreferredLanguageLocalizedDto {
     const { nameEn, nameFr, ...rest } = preferredLanguageDto;

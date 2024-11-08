@@ -31,10 +31,10 @@ export class LetterServiceImpl implements LetterService {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.LetterDtoMapper) private readonly letterDtoMapper: LetterDtoMapper,
-    @inject(TYPES.LetterRepository) private readonly letterRepository: LetterRepository,
-    @inject(TYPES.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.LetterDtoMapper) private readonly letterDtoMapper: LetterDtoMapper,
+    @inject(TYPES.domain.repositories.LetterRepository) private readonly letterRepository: LetterRepository,
+    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('LetterServiceImpl');
   }

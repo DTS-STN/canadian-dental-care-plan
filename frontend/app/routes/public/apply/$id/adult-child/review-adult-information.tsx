@@ -56,18 +56,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   // apply state is valid then edit mode can be set to true
   saveApplyState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.ServerConfig);
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.configs.ServerConfig);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
-  const countryMailing = appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
-  const countryHome = appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.contactInformation.homeCountry, locale);
-  const communicationPreference = appContainer.get(TYPES.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
-  const preferredLanguage = appContainer.get(TYPES.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
-  const maritalStatus = appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
+  const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
+  const countryMailing = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
+  const countryHome = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.contactInformation.homeCountry, locale);
+  const communicationPreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
+  const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
+  const maritalStatus = appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -110,9 +110,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
+  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram
+    ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
+    : undefined;
   const selectedProvincialBenefit = state.dentalBenefits.provincialTerritorialSocialProgram
-    ? appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const dentalBenefit = {
@@ -153,7 +155,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   loadApplyAdultChildStateForReview({ params, request, session });
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.ServerConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ServerConfig);
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();
@@ -175,7 +177,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(TYPES.HCaptchaService), hCaptchaResponse, request }))) {
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(TYPES.web.services.HCaptchaService), hCaptchaResponse, request }))) {
       clearApplyState({ params, session });
       return redirect(getPathById('public/unable-to-process-request', params));
     }

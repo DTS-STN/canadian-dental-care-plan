@@ -62,10 +62,10 @@ export class MaritalStatusServiceImpl implements MaritalStatusService {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.MaritalStatusDtoMapper) private readonly maritalStatusDtoMapper: MaritalStatusDtoMapper,
-    @inject(TYPES.MaritalStatusRepository) private readonly maritalStatusRepository: MaritalStatusRepository,
-    @inject(TYPES.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.MaritalStatusDtoMapper) private readonly maritalStatusDtoMapper: MaritalStatusDtoMapper,
+    @inject(TYPES.domain.repositories.MaritalStatusRepository) private readonly maritalStatusRepository: MaritalStatusRepository,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('MaritalStatusServiceImpl');
 

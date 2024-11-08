@@ -32,9 +32,9 @@ export class ClientApplicationServiceImpl implements ClientApplicationService {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.ClientApplicationDtoMapper) private readonly clientApplicationDtoMapper: ClientApplicationDtoMapper,
-    @inject(TYPES.ClientApplicationRepository) private readonly clientApplicationRepository: ClientApplicationRepository,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.ClientApplicationDtoMapper) private readonly clientApplicationDtoMapper: ClientApplicationDtoMapper,
+    @inject(TYPES.domain.repositories.ClientApplicationRepository) private readonly clientApplicationRepository: ClientApplicationRepository,
   ) {
     this.log = logFactory.createLogger('ClientApplicationServiceImpl');
   }

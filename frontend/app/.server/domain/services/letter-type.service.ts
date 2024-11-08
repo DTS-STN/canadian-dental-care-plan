@@ -53,10 +53,10 @@ export class LetterTypeServiceImpl implements LetterTypeService {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.LetterTypeDtoMapper) private readonly letterTypeDtoMapper: LetterTypeDtoMapper,
-    @inject(TYPES.LetterTypeRepository) private readonly letterTypeRepository: LetterTypeRepository,
-    @inject(TYPES.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.LetterTypeDtoMapper) private readonly letterTypeDtoMapper: LetterTypeDtoMapper,
+    @inject(TYPES.domain.repositories.LetterTypeRepository) private readonly letterTypeRepository: LetterTypeRepository,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('LetterTypeServiceImpl');
 

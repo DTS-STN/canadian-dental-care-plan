@@ -27,7 +27,7 @@ export class AppContainerProviderImpl implements AppContainerProvider {
   private readonly log: Logger;
 
   constructor(private readonly container: interfaces.Container) {
-    const logFactory = container.get(TYPES.LogFactory);
+    const logFactory = container.get(TYPES.factories.LogFactory);
     this.log = logFactory.createLogger('AppContainerProviderImpl');
   }
 

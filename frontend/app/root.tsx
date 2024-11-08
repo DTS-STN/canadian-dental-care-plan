@@ -69,7 +69,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 
   const buildInfo = buildInfoService.getBuildInfo();
   const dynatraceRumScript = await dynatraceService.retrieveRumScript();
-  const env = appContainer.get(TYPES.ClientConfig);
+  const env = appContainer.get(TYPES.configs.ClientConfig);
   const meta = {
     author: t('gcweb:meta.author'),
     description: t('gcweb:meta.description'),

@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import type { SessionService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
+import type { SessionService } from '~/.server/web/services';
 
 /**
  * Provides functionality to validate CSRF tokens.
@@ -23,8 +23,8 @@ export class CsrfTokenValidatorImpl implements CsrfTokenValidator {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.SessionService) private readonly sessionService: SessionService,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.web.services.SessionService) private readonly sessionService: SessionService,
   ) {
     this.log = logFactory.createLogger('CsrfTokenValidatorImpl');
   }

@@ -81,10 +81,10 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.ProvinceTerritoryStateDtoMapper) private readonly provinceTerritoryStateDtoMapper: ProvinceTerritoryStateDtoMapper,
-    @inject(TYPES.ProvinceTerritoryStateRepository) private readonly provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
-    @inject(TYPES.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.ProvinceTerritoryStateDtoMapper) private readonly provinceTerritoryStateDtoMapper: ProvinceTerritoryStateDtoMapper,
+    @inject(TYPES.domain.repositories.ProvinceTerritoryStateRepository) private readonly provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('ProvinceTerritoryStateServiceImpl');
 

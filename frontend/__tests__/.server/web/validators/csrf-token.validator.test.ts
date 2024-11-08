@@ -3,9 +3,9 @@ import type { Session } from '@remix-run/node';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { SessionService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
+import type { SessionService } from '~/.server/web/services';
 import { CsrfTokenValidatorImpl } from '~/.server/web/validators';
 
 describe('CsrfTokenValidatorImpl', () => {

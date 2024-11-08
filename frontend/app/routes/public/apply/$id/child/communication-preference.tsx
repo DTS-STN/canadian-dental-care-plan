@@ -42,14 +42,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.ServerConfig);
+  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ServerConfig);
 
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const preferredLanguages = appContainer.get(TYPES.PreferredLanguageService).listAndSortLocalizedPreferredLanguages(locale);
-  const preferredCommunicationMethods = appContainer.get(TYPES.PreferredCommunicationMethodService).listAndSortLocalizedPreferredCommunicationMethods(locale);
+  const preferredLanguages = appContainer.get(TYPES.domain.services.PreferredLanguageService).listAndSortLocalizedPreferredLanguages(locale);
+  const preferredCommunicationMethods = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).listAndSortLocalizedPreferredCommunicationMethods(locale);
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
   if (!communicationMethodEmail) {
@@ -78,7 +78,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/child/communication-preference');
 
-  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.ServerConfig);
+  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ServerConfig);
 
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);

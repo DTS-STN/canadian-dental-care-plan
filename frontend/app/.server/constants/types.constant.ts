@@ -1,6 +1,7 @@
 import type { interfaces } from 'inversify';
 
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
+import type { RedisService } from '~/.server/data/services';
 import type {
   AddressValidationDtoMapper,
   ApplicantDtoMapper,
@@ -55,15 +56,13 @@ import type {
   PreferredLanguageService,
   ProvinceTerritoryStateService,
   ProvincialGovernmentInsurancePlanService,
-  RedisService,
-  SessionService,
 } from '~/.server/domain/services';
 import type { ConfigFactory, LogFactory } from '~/.server/factories';
 import type { BenefitApplicationStateMapper } from '~/.server/remix/domain/mappers';
 import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.server/utils/service-identifier.utils';
 import type { HCaptchaDtoMapper } from '~/.server/web/mappers';
 import type { HCaptchaRepository } from '~/.server/web/repositories';
-import type { HCaptchaService } from '~/.server/web/services';
+import type { HCaptchaService, SessionService } from '~/.server/web/services';
 import type { CsrfTokenValidator } from '~/.server/web/validators';
 
 /**
@@ -111,66 +110,88 @@ export type TypesContant<T = unknown> = Readonly<{
  * ```
  */
 export const TYPES = assignServiceIdentifiers({
-  AddressValidationDtoMapper: serviceId<AddressValidationDtoMapper>(),
-  AddressValidationRepository: serviceId<AddressValidationRepository>(),
-  AddressValidationService: serviceId<AddressValidationService>(),
-  ApplicantDtoMapper: serviceId<ApplicantDtoMapper>(),
-  ApplicantRepository: serviceId<ApplicantRepository>(),
-  ApplicantService: serviceId<ApplicantService>(),
-  ApplicationStatusDtoMapper: serviceId<ApplicationStatusDtoMapper>(),
-  ApplicationStatusRepository: serviceId<ApplicationStatusRepository>(),
-  ApplicationStatusService: serviceId<ApplicationStatusService>(),
-  AuditService: serviceId<AuditService>(),
-  BenefitApplicationStateMapper: serviceId<BenefitApplicationStateMapper>(),
-  BenefitRenewalDtoMapper: serviceId<BenefitRenewalDtoMapper>(),
-  BenefitRenewalRepository: serviceId<BenefitRenewalRepository>(),
-  BenefitRenewalService: serviceId<BenefitRenewalService>(),
-  ClientApplicationDtoMapper: serviceId<ClientApplicationDtoMapper>(),
-  ClientApplicationRepository: serviceId<ClientApplicationRepository>(),
-  ClientApplicationService: serviceId<ClientApplicationService>(),
-  ClientConfig: serviceId<ClientConfig>(),
-  ClientFriendlyStatusDtoMapper: serviceId<ClientFriendlyStatusDtoMapper>(),
-  ClientFriendlyStatusRepository: serviceId<ClientFriendlyStatusRepository>(),
-  ClientFriendlyStatusService: serviceId<ClientFriendlyStatusService>(),
-  ConfigFactory: serviceId<ConfigFactory>(),
-  CountryDtoMapper: serviceId<CountryDtoMapper>(),
-  CountryRepository: serviceId<CountryRepository>(),
-  CountryService: serviceId<CountryService>(),
-  DemographicSurveyDtoMapper: serviceId<DemographicSurveyDtoMapper>(),
-  DemographicSurveyRepository: serviceId<DemographicSurveyRepository>(),
-  DemographicSurveyService: serviceId<DemographicSurveyService>(),
-  FederalGovernmentInsurancePlanDtoMapper: serviceId<FederalGovernmentInsurancePlanDtoMapper>(),
-  FederalGovernmentInsurancePlanRepository: serviceId<FederalGovernmentInsurancePlanRepository>(),
-  FederalGovernmentInsurancePlanService: serviceId<FederalGovernmentInsurancePlanService>(),
-  HCaptchaDtoMapper: serviceId<HCaptchaDtoMapper>(),
-  HCaptchaRepository: serviceId<HCaptchaRepository>(),
-  HCaptchaService: serviceId<HCaptchaService>(),
-  LetterDtoMapper: serviceId<LetterDtoMapper>(),
-  LetterRepository: serviceId<LetterRepository>(),
-  LetterService: serviceId<LetterService>(),
-  LetterTypeDtoMapper: serviceId<LetterTypeDtoMapper>(),
-  LetterTypeRepository: serviceId<LetterTypeRepository>(),
-  LetterTypeService: serviceId<LetterTypeService>(),
-  LogFactory: serviceId<LogFactory>(),
-  MaritalStatusDtoMapper: serviceId<MaritalStatusDtoMapper>(),
-  MaritalStatusRepository: serviceId<MaritalStatusRepository>(),
-  MaritalStatusService: serviceId<MaritalStatusService>(),
-  PreferredCommunicationMethodDtoMapper: serviceId<PreferredCommunicationMethodDtoMapper>(),
-  PreferredCommunicationMethodRepository: serviceId<PreferredCommunicationMethodRepository>(),
-  PreferredCommunicationMethodService: serviceId<PreferredCommunicationMethodService>(),
-  PreferredLanguageDtoMapper: serviceId<PreferredLanguageDtoMapper>(),
-  PreferredLanguageRepository: serviceId<PreferredLanguageRepository>(),
-  PreferredLanguageService: serviceId<PreferredLanguageService>(),
-  ProvinceTerritoryStateDtoMapper: serviceId<ProvinceTerritoryStateDtoMapper>(),
-  ProvinceTerritoryStateRepository: serviceId<ProvinceTerritoryStateRepository>(),
-  ProvinceTerritoryStateService: serviceId<ProvinceTerritoryStateService>(),
-  ProvincialGovernmentInsurancePlanDtoMapper: serviceId<ProvincialGovernmentInsurancePlanDtoMapper>(),
-  ProvincialGovernmentInsurancePlanRepository: serviceId<ProvincialGovernmentInsurancePlanRepository>(),
-  ProvincialGovernmentInsurancePlanService: serviceId<ProvincialGovernmentInsurancePlanService>(),
-  RedisService: serviceId<RedisService>(),
-  ServerConfig: serviceId<ServerConfig>(),
-  SessionService: serviceId<SessionService>(),
+  configs: {
+    ClientConfig: serviceId<ClientConfig>(),
+    ServerConfig: serviceId<ServerConfig>(),
+  },
+  data: {
+    services: {
+      RedisService: serviceId<RedisService>(),
+    },
+  },
+  domain: {
+    mappers: {
+      AddressValidationDtoMapper: serviceId<AddressValidationDtoMapper>(),
+      ApplicantDtoMapper: serviceId<ApplicantDtoMapper>(),
+      ApplicationStatusDtoMapper: serviceId<ApplicationStatusDtoMapper>(),
+      BenefitApplicationStateMapper: serviceId<BenefitApplicationStateMapper>(),
+      BenefitRenewalDtoMapper: serviceId<BenefitRenewalDtoMapper>(),
+      ClientApplicationDtoMapper: serviceId<ClientApplicationDtoMapper>(),
+      ClientFriendlyStatusDtoMapper: serviceId<ClientFriendlyStatusDtoMapper>(),
+      CountryDtoMapper: serviceId<CountryDtoMapper>(),
+      DemographicSurveyDtoMapper: serviceId<DemographicSurveyDtoMapper>(),
+      FederalGovernmentInsurancePlanDtoMapper: serviceId<FederalGovernmentInsurancePlanDtoMapper>(),
+      LetterDtoMapper: serviceId<LetterDtoMapper>(),
+      LetterTypeDtoMapper: serviceId<LetterTypeDtoMapper>(),
+      MaritalStatusDtoMapper: serviceId<MaritalStatusDtoMapper>(),
+      PreferredCommunicationMethodDtoMapper: serviceId<PreferredCommunicationMethodDtoMapper>(),
+      PreferredLanguageDtoMapper: serviceId<PreferredLanguageDtoMapper>(),
+      ProvinceTerritoryStateDtoMapper: serviceId<ProvinceTerritoryStateDtoMapper>(),
+      ProvincialGovernmentInsurancePlanDtoMapper: serviceId<ProvincialGovernmentInsurancePlanDtoMapper>(),
+    },
+    repositories: {
+      AddressValidationRepository: serviceId<AddressValidationRepository>(),
+      ApplicantRepository: serviceId<ApplicantRepository>(),
+      ApplicationStatusRepository: serviceId<ApplicationStatusRepository>(),
+      BenefitRenewalRepository: serviceId<BenefitRenewalRepository>(),
+      ClientApplicationRepository: serviceId<ClientApplicationRepository>(),
+      ClientFriendlyStatusRepository: serviceId<ClientFriendlyStatusRepository>(),
+      CountryRepository: serviceId<CountryRepository>(),
+      DemographicSurveyRepository: serviceId<DemographicSurveyRepository>(),
+      FederalGovernmentInsurancePlanRepository: serviceId<FederalGovernmentInsurancePlanRepository>(),
+      LetterRepository: serviceId<LetterRepository>(),
+      LetterTypeRepository: serviceId<LetterTypeRepository>(),
+      MaritalStatusRepository: serviceId<MaritalStatusRepository>(),
+      PreferredCommunicationMethodRepository: serviceId<PreferredCommunicationMethodRepository>(),
+      PreferredLanguageRepository: serviceId<PreferredLanguageRepository>(),
+      ProvinceTerritoryStateRepository: serviceId<ProvinceTerritoryStateRepository>(),
+      ProvincialGovernmentInsurancePlanRepository: serviceId<ProvincialGovernmentInsurancePlanRepository>(),
+    },
+    services: {
+      AddressValidationService: serviceId<AddressValidationService>(),
+      ApplicantService: serviceId<ApplicantService>(),
+      ApplicationStatusService: serviceId<ApplicationStatusService>(),
+      AuditService: serviceId<AuditService>(),
+      BenefitRenewalService: serviceId<BenefitRenewalService>(),
+      ClientApplicationService: serviceId<ClientApplicationService>(),
+      ClientFriendlyStatusService: serviceId<ClientFriendlyStatusService>(),
+      ConfigFactory: serviceId<ConfigFactory>(),
+      CountryService: serviceId<CountryService>(),
+      DemographicSurveyService: serviceId<DemographicSurveyService>(),
+      FederalGovernmentInsurancePlanService: serviceId<FederalGovernmentInsurancePlanService>(),
+      LetterService: serviceId<LetterService>(),
+      LetterTypeService: serviceId<LetterTypeService>(),
+      MaritalStatusService: serviceId<MaritalStatusService>(),
+      PreferredCommunicationMethodService: serviceId<PreferredCommunicationMethodService>(),
+      PreferredLanguageService: serviceId<PreferredLanguageService>(),
+      ProvinceTerritoryStateService: serviceId<ProvinceTerritoryStateService>(),
+      ProvincialGovernmentInsurancePlanService: serviceId<ProvincialGovernmentInsurancePlanService>(),
+    },
+  },
+  factories: {
+    LogFactory: serviceId<LogFactory>(),
+  },
   web: {
+    repositories: {
+      HCaptchaRepository: serviceId<HCaptchaRepository>(),
+    },
+    mappers: {
+      HCaptchaDtoMapper: serviceId<HCaptchaDtoMapper>(),
+    },
+    services: {
+      HCaptchaService: serviceId<HCaptchaService>(),
+      SessionService: serviceId<SessionService>(),
+    },
     validators: {
       CsrfTokenValidator: serviceId<CsrfTokenValidator>(),
     },

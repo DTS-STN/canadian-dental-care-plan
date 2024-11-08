@@ -21,10 +21,10 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.PreferredCommunicationMethodDtoMapper) private readonly preferredCommunicationMethodDtoMapper: PreferredCommunicationMethodDtoMapper,
-    @inject(TYPES.PreferredCommunicationMethodRepository) private readonly preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository,
-    @inject(TYPES.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.PreferredCommunicationMethodDtoMapper) private readonly preferredCommunicationMethodDtoMapper: PreferredCommunicationMethodDtoMapper,
+    @inject(TYPES.domain.repositories.PreferredCommunicationMethodRepository) private readonly preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('PreferredCommunicationMethodServiceImpl');
 

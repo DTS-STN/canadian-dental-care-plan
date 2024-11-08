@@ -94,7 +94,7 @@ export interface DemographicSurveyRepository {
 export class DemographicSurveyRepositoryImpl implements DemographicSurveyRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.LogFactory) logFactory: LogFactory) {
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
     this.log = logFactory.createLogger('DemographicSurveyRepositoryImpl');
   }
 
