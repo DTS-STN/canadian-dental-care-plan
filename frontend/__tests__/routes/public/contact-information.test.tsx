@@ -35,17 +35,17 @@ describe('_public.apply.id.contact-information', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.ServerConfig).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ServerConfig).mockReturnValueOnce({
         MARITAL_STATUS_CODE_COMMONLAW: 1,
         MARITAL_STATUS_CODE_MARRIED: 2,
         CANADA_COUNTRY_ID: 'CAN',
         USA_COUNTRY_ID: 'USA',
       } satisfies Partial<ServerConfig>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.CountryService).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.CountryService).mockReturnValueOnce({
         listCountries: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
         listAndSortLocalizedCountries: () => [{ id: '1', name: 'super country' }],
       } satisfies Partial<CountryService>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.ProvinceTerritoryStateService).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.ProvinceTerritoryStateService).mockReturnValueOnce({
         listAndSortLocalizedProvinceTerritoryStates: () => [{ id: 'SP', countryId: 'CAN', name: 'sample', abbr: 'SP' }],
       } satisfies Partial<ProvinceTerritoryStateService>);
 

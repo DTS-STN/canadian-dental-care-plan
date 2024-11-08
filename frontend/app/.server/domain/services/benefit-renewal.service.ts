@@ -21,9 +21,9 @@ export class BenefitRenewalServiceImpl implements BenefitRenewalService {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.BenefitRenewalDtoMapper) private readonly BenefitRenewalDtoMapper: BenefitRenewalDtoMapper,
-    @inject(TYPES.BenefitRenewalRepository) private readonly BenefitRenewalRepository: BenefitRenewalRepository,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.BenefitRenewalDtoMapper) private readonly BenefitRenewalDtoMapper: BenefitRenewalDtoMapper,
+    @inject(TYPES.domain.repositories.BenefitRenewalRepository) private readonly BenefitRenewalRepository: BenefitRenewalRepository,
   ) {
     this.log = logFactory.createLogger('BenefitRenewalServiceImpl');
   }

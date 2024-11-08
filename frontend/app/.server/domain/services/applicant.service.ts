@@ -25,10 +25,10 @@ export class ApplicantServiceImpl implements ApplicantService {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.ApplicantDtoMapper) private readonly applicantDtoMapper: ApplicantDtoMapper,
-    @inject(TYPES.ApplicantRepository) private readonly applicantRepository: ApplicantRepository,
-    @inject(TYPES.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.ApplicantDtoMapper) private readonly applicantDtoMapper: ApplicantDtoMapper,
+    @inject(TYPES.domain.repositories.ApplicantRepository) private readonly applicantRepository: ApplicantRepository,
+    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('ApplicantServiceImpl');
   }

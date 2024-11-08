@@ -50,10 +50,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(TYPES.ServerConfig);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(TYPES.configs.ServerConfig);
 
-  const countryList = appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
-  const regionList = appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
+  const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:contact-information.page-title') }) };
@@ -79,7 +79,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.ServerConfig);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ServerConfig);
 
   const personalInformationSchema = z
     .object({

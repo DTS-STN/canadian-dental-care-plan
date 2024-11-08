@@ -13,15 +13,15 @@ import { TYPES } from '~/.server/constants';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 
 const appContainerProvider = getAppContainerProvider();
-const { HEALTH_CACHE_TTL } = appContainerProvider.get(TYPES.ServerConfig);
+const { HEALTH_CACHE_TTL } = appContainerProvider.get(TYPES.configs.ServerConfig);
 
 // memoize the result of redisCheckFn for a period of time
 // transformArgs is require to effectively ignore the abort signal sent from @dts-stn/health-checks when caching
 // for memoization to work, the call to moize must be done in module scope, so it only ever happens once
-const redisCheck = moize.promise(async () => void (await appContainerProvider.find(TYPES.RedisService)?.ping()), { maxAge: HEALTH_CACHE_TTL, transformArgs: () => [] });
+const redisCheck = moize.promise(async () => void (await appContainerProvider.find(TYPES.data.services.RedisService)?.ping()), { maxAge: HEALTH_CACHE_TTL, transformArgs: () => [] });
 
 export async function loader({ context: { appContainer }, request }: LoaderFunctionArgs) {
-  const serverConfig = appContainer.get(TYPES.ServerConfig);
+  const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
 
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
   const { buildRevision: buildId, buildVersion: version } = getBuildInfoService().getBuildInfo();
@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer }, request }: LoaderFunct
  * Returns true if the incoming request is authorized to view detailed responses.
  */
 async function isAuthorized(appContainer: AppContainerProvider, request: Request): Promise<boolean> {
-  const log = appContainer.get(TYPES.LogFactory).createLogger('health/isAuthorized');
+  const log = appContainer.get(TYPES.factories.LogFactory).createLogger('health/isAuthorized');
 
   const authorization = request.headers.get('authorization') ?? '';
   const [scheme, accessToken] = authorization.split(' ');
@@ -83,7 +83,7 @@ async function isAuthorized(appContainer: AppContainerProvider, request: Request
     HEALTH_AUTH_ROLE: authorizedRole,
     HEALTH_AUTH_TOKEN_AUDIENCE: audience,
     HEALTH_AUTH_TOKEN_ISSUER: issuer,
-  } = appContainer.get(TYPES.ServerConfig);
+  } = appContainer.get(TYPES.configs.ServerConfig);
 
   if (!jwksUri) {
     log.debug('JWK endpoint not configured. Authorization failed.');

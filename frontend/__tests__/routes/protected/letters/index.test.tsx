@@ -57,16 +57,16 @@ describe('Letters Page', () => {
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.ClientConfig).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         SCCH_BASE_URI: 'https://api.example.com',
       } satisfies Partial<ClientConfig>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.AuditService).mockReturnValue({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.AuditService).mockReturnValue({
         createAudit: vi.fn(),
       } satisfies Partial<AuditService>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.ApplicantService).mockReturnValue({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.ApplicantService).mockReturnValue({
         findClientNumberBySin: () => Promise.resolve('some-client-number'),
       } satisfies Partial<ApplicantService>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.LetterService).mockReturnValue({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterService).mockReturnValue({
         findLettersByClientId: () =>
           Promise.resolve([
             { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
@@ -74,7 +74,7 @@ describe('Letters Page', () => {
             { id: '3', date: '2004-02-29', letterTypeId: 'DEN' },
           ]),
       } satisfies Partial<LetterService>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.LetterTypeService).mockReturnValue({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterTypeService).mockReturnValue({
         listLetterTypes: () => [
           { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
           { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
@@ -103,16 +103,16 @@ describe('Letters Page', () => {
     session.set('userInfoToken', { sin: '999999999' });
 
     const mockAppLoadContext = mockDeep<AppLoadContext>();
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.ClientConfig).mockReturnValue({
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValue({
       SCCH_BASE_URI: 'https://api.example.com',
     } satisfies Partial<ClientConfig>);
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.AuditService).mockReturnValue({
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.AuditService).mockReturnValue({
       createAudit: vi.fn(),
     } satisfies Partial<AuditService>);
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.ApplicantService).mockReturnValue({
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.ApplicantService).mockReturnValue({
       findClientNumberBySin: () => Promise.resolve('some-client-number'),
     } satisfies Partial<ApplicantService>);
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.LetterService).mockReturnValue({
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterService).mockReturnValue({
       findLettersByClientId: () =>
         Promise.resolve([
           { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
@@ -120,7 +120,7 @@ describe('Letters Page', () => {
           { id: '3', date: '2004-02-29', letterTypeId: 'DEN' },
         ]),
     } satisfies Partial<LetterService>);
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.LetterTypeService).mockReturnValue({
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterTypeService).mockReturnValue({
       listLetterTypes: () => [
         { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
         { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },

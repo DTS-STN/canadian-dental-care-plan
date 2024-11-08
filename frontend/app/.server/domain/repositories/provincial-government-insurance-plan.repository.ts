@@ -24,7 +24,7 @@ export interface ProvincialGovernmentInsurancePlanRepository {
 export class ProvincialGovernmentInsurancePlanRepositoryImpl implements ProvincialGovernmentInsurancePlanRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.LogFactory) logFactory: LogFactory) {
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
     this.log = logFactory.createLogger('ProvincialGovernmentInsurancePlanRepositoryImpl');
   }
 

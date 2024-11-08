@@ -25,21 +25,21 @@ import { HCaptchaRepositoryImpl } from '~/.server/web/repositories';
  * Container module for repositories.
  */
 export const repositoriesContainerModule = new ContainerModule((bind) => {
-  bind(TYPES.AddressValidationRepository).to(AddressValidationRepositoryImpl);
-  bind(TYPES.ApplicantRepository).to(ApplicantRepositoryImpl);
-  bind(TYPES.ApplicationStatusRepository).to(ApplicationStatusRepositoryImpl);
-  bind(TYPES.BenefitRenewalRepository).to(BenefitRenewalRepositoryImpl);
-  bind(TYPES.ClientApplicationRepository).to(ClientApplicationRepositoryImpl);
-  bind(TYPES.ClientFriendlyStatusRepository).to(ClientFriendlyStatusRepositoryImpl);
-  bind(TYPES.CountryRepository).to(CountryRepositoryImpl);
-  bind(TYPES.DemographicSurveyRepository).to(DemographicSurveyRepositoryImpl);
-  bind(TYPES.FederalGovernmentInsurancePlanRepository).to(FederalGovernmentInsurancePlanRepositoryImpl);
-  bind(TYPES.HCaptchaRepository).to(HCaptchaRepositoryImpl);
-  bind(TYPES.LetterRepository).to(LetterRepositoryImpl);
-  bind(TYPES.LetterTypeRepository).to(LetterTypeRepositoryImpl);
-  bind(TYPES.MaritalStatusRepository).to(MaritalStatusRepositoryImpl);
-  bind(TYPES.PreferredCommunicationMethodRepository).to(PreferredCommunicationMethodRepositoryImpl);
-  bind(TYPES.PreferredLanguageRepository).to(PreferredLanguageRepositoryImpl);
-  bind(TYPES.ProvinceTerritoryStateRepository).to(ProvinceTerritoryStateRepositoryImpl);
-  bind(TYPES.ProvincialGovernmentInsurancePlanRepository).to(ProvincialGovernmentInsurancePlanRepositoryImpl);
+  bind(TYPES.domain.repositories.AddressValidationRepository).to(AddressValidationRepositoryImpl);
+  bind(TYPES.domain.repositories.ApplicantRepository).to(ApplicantRepositoryImpl);
+  bind(TYPES.domain.repositories.ApplicationStatusRepository).to(ApplicationStatusRepositoryImpl);
+  bind(TYPES.domain.repositories.BenefitRenewalRepository).to(BenefitRenewalRepositoryImpl);
+  bind(TYPES.domain.repositories.ClientApplicationRepository).to(ClientApplicationRepositoryImpl);
+  bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(ClientFriendlyStatusRepositoryImpl);
+  bind(TYPES.domain.repositories.CountryRepository).to(CountryRepositoryImpl);
+  bind(TYPES.domain.repositories.DemographicSurveyRepository).to(DemographicSurveyRepositoryImpl);
+  bind(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository).to(FederalGovernmentInsurancePlanRepositoryImpl);
+  bind(TYPES.domain.repositories.LetterRepository).to(LetterRepositoryImpl);
+  bind(TYPES.domain.repositories.LetterTypeRepository).to(LetterTypeRepositoryImpl);
+  bind(TYPES.domain.repositories.MaritalStatusRepository).to(MaritalStatusRepositoryImpl);
+  bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(PreferredCommunicationMethodRepositoryImpl);
+  bind(TYPES.domain.repositories.PreferredLanguageRepository).to(PreferredLanguageRepositoryImpl);
+  bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(ProvinceTerritoryStateRepositoryImpl);
+  bind(TYPES.domain.repositories.ProvincialGovernmentInsurancePlanRepository).to(ProvincialGovernmentInsurancePlanRepositoryImpl);
+  bind(TYPES.web.repositories.HCaptchaRepository).to(HCaptchaRepositoryImpl);
 });

@@ -53,10 +53,10 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.FederalGovernmentInsurancePlanDtoMapper) private readonly federalGovernmentInsurancePlanDtoMapper: FederalGovernmentInsurancePlanDtoMapper,
-    @inject(TYPES.FederalGovernmentInsurancePlanRepository) private readonly federalGovernmentInsurancePlanRepository: FederalGovernmentInsurancePlanRepository,
-    @inject(TYPES.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.FederalGovernmentInsurancePlanDtoMapper) private readonly federalGovernmentInsurancePlanDtoMapper: FederalGovernmentInsurancePlanDtoMapper,
+    @inject(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository) private readonly federalGovernmentInsurancePlanRepository: FederalGovernmentInsurancePlanRepository,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('FederalGovernmentInsurancePlanServiceImpl');
 

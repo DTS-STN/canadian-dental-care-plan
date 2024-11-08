@@ -55,10 +55,10 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
    * @param serverConfig - The server configuration containing necessary constants and cache TTL values.
    */
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.ClientFriendlyStatusDtoMapper) private readonly clientFriendlyStatusDtoMapper: ClientFriendlyStatusDtoMapper,
-    @inject(TYPES.ClientFriendlyStatusRepository) private readonly clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
-    @inject(TYPES.ServerConfig) private readonly serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.ClientFriendlyStatusDtoMapper) private readonly clientFriendlyStatusDtoMapper: ClientFriendlyStatusDtoMapper,
+    @inject(TYPES.domain.repositories.ClientFriendlyStatusRepository) private readonly clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
   ) {
     this.log = logFactory.createLogger('ClientFriendlyStatusServiceImpl');
 

@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const maritalStatuses = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
+  const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:applicant-information.page-title') }) };

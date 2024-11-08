@@ -72,10 +72,10 @@ export class CountryServiceImpl implements CountryService {
    * @param serverConfig - The server configuration containing necessary constants and cache TTL values.
    */
   constructor(
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.CountryDtoMapper) private readonly countryDtoMapper: CountryDtoMapper,
-    @inject(TYPES.CountryRepository) private readonly countryRepository: CountryRepository,
-    @inject(TYPES.ServerConfig) private readonly serverConfig: CountryServiceImpl_ServiceConfig,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.CountryDtoMapper) private readonly countryDtoMapper: CountryDtoMapper,
+    @inject(TYPES.domain.repositories.CountryRepository) private readonly countryRepository: CountryRepository,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: CountryServiceImpl_ServiceConfig,
   ) {
     this.log = logFactory.createLogger('CountryServiceImpl');
 

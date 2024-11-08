@@ -50,7 +50,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ServerConfig);
+  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ServerConfig);
 
   const state = loadRenewAdultSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -59,9 +59,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childNumber = t('renew-adult-child:children.child-number', { childNumber: state.childNumber });
   const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
 
-  const federalSocialPrograms = appContainer.get(TYPES.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
-  const provinceTerritoryStates = appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
-  const provincialTerritorialSocialPrograms = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
+  const federalSocialPrograms = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const provinceTerritoryStates = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
+  const provincialTerritorialSocialPrograms = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = {

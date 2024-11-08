@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { RedisService } from '~/.server/domain/services';
+import type { RedisService } from '~/.server/data/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { createFileSessionStorage } from '~/utils/session-utils.server';
 
@@ -44,7 +44,7 @@ export class FileSessionService implements SessionService {
   private readonly log: Logger;
   private readonly sessionStorage: SessionStorage;
 
-  constructor(@inject(TYPES.LogFactory) logFactory: LogFactory, @inject(TYPES.ServerConfig) serverConfig: ServerConfig) {
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig) {
     this.log = logFactory.createLogger('FileSessionService');
     this.sessionStorage = createFileSessionStorage({
       cookie: createCookie(serverConfig.SESSION_COOKIE_NAME, {
@@ -96,9 +96,9 @@ export class RedisSessionService implements SessionService {
   private readonly sessionStorage: SessionStorage;
 
   constructor(
-    @inject(TYPES.RedisService) private readonly redisService: RedisService,
-    @inject(TYPES.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.ServerConfig) serverConfig: ServerConfig,
+    @inject(TYPES.data.services.RedisService) private readonly redisService: RedisService,
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig,
   ) {
     this.log = logFactory.createLogger('RedisSessionService');
 

@@ -58,7 +58,7 @@ function createContainer(): interfaces.Container {
   container.load(configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule);
 
   // configure container logger middleware
-  const serverConfig = container.get(TYPES.ServerConfig);
+  const serverConfig = container.get(TYPES.configs.ServerConfig);
 
   if (serverConfig.NODE_ENV === 'development') {
     container.applyMiddleware(createLoggerMidddlware());

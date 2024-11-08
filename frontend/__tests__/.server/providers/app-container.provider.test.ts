@@ -27,7 +27,7 @@ describe('AppContainerProviderImpl', () => {
     mockLogger.trace.mockClear();
     mockLogFactory.createLogger.mockReturnValue(mockLogger);
 
-    container.bind(TYPES.LogFactory).toConstantValue(mockLogFactory);
+    container.bind(TYPES.factories.LogFactory).toConstantValue(mockLogFactory);
     appContainerProvider = new AppContainerProviderImpl(container);
   });
 

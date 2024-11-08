@@ -58,11 +58,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = getChildrenState(state).map((child) => {
     const federalGovernmentInsurancePlanService = child.dentalBenefits?.federalSocialProgram
-      ? appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
     const provincialTerritorialSocialProgram = child.dentalBenefits?.provincialTerritorialSocialProgram
-      ? appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
     return {
