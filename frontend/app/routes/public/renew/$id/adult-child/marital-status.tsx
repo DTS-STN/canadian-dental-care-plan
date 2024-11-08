@@ -174,16 +174,6 @@ export default function RenewAdultChildMaritalStatus() {
                 <p className="mb-4">{t('renew-adult-child:marital-status.provide-sin')}</p>
                 <p className="mb-6">{t('renew-adult-child:marital-status.required-information')}</p>
                 <InputPatternField
-                  id="year-of-birth"
-                  name="yearOfBirth"
-                  inputMode="numeric"
-                  format="####"
-                  defaultValue={defaultState.yearOfBirth ?? ''}
-                  label={t('renew-adult-child:marital-status.year-of-birth')}
-                  errorMessage={errors?.yearOfBirth}
-                  required
-                />
-                <InputPatternField
                   id="social-insurance-number"
                   name="socialInsuranceNumber"
                   format={sinInputPatternFormat}
@@ -193,6 +183,16 @@ export default function RenewAdultChildMaritalStatus() {
                   helpMessagePrimaryClassName="text-black"
                   defaultValue={defaultState.socialInsuranceNumber ?? ''}
                   errorMessage={errors?.socialInsuranceNumber}
+                  required
+                />
+                <InputPatternField
+                  id="year-of-birth"
+                  name="yearOfBirth"
+                  inputMode="numeric"
+                  format="####"
+                  defaultValue={defaultState.yearOfBirth ?? ''}
+                  label={t('renew-adult-child:marital-status.year-of-birth')}
+                  errorMessage={errors?.yearOfBirth}
                   required
                 />
                 <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={errors?.confirm} defaultChecked={defaultState.confirm === true} required>
