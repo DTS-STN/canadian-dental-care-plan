@@ -118,7 +118,7 @@ export default function RenewAdultChildConfirmMaritalStatus() {
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <div className="space-y-6">
+          <div className="mb-6">
             <InputRadios
               id="has-marital-status-changed"
               name="hasMaritalStatusChanged"
@@ -135,7 +135,7 @@ export default function RenewAdultChildConfirmMaritalStatus() {
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button name="_action" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Confirm marital status click">
-                {t('renew-adult-child:marital-status.save-btn')}
+                {t('renew-adult-child:marital-status.continue-btn')}
               </Button>
               <ButtonLink
                 id="back-button"

@@ -64,6 +64,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       phoneNumber: state.contactInformation?.phoneNumber,
       phoneNumberAlt: state.contactInformation?.phoneNumberAlt,
     },
+    hasMaritalStatusChanged: state.hasMaritalStatusChanged,
     maritalStatus: state.maritalStatus,
     editMode: state.editMode,
   });
@@ -138,7 +139,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewAdultChildConfirmPhone() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, hasMaritalStatusChanged, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -247,7 +248,7 @@ export default function RenewAdultChildConfirmPhone() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/marital-status"
+                routeId={hasMaritalStatusChanged ? 'public/renew/$id/adult-child/marital-status' : 'public/renew/$id/adult-child/confirm-marital-status'}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
