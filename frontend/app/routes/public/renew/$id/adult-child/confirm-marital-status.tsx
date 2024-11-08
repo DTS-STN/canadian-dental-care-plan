@@ -83,10 +83,14 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasMaritalStatusChanged: parsedDataResult.data.hasMaritalStatusChanged,
+      maritalStatus: undefined,
     },
   });
 
   if (state.editMode) {
+    if (parsedDataResult.data.hasMaritalStatusChanged) {
+      return redirect(getPathById('public/renew/$id/adult-child/marital-status', params));
+    }
     return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
   }
 
@@ -135,7 +139,7 @@ export default function RenewAdultChildConfirmMaritalStatus() {
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button name="_action" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Confirm marital status click">
-                {t('renew-adult-child:marital-status.continue-btn')}
+                {t('renew-adult-child:marital-status.save-btn')}
               </Button>
               <ButtonLink
                 id="back-button"
