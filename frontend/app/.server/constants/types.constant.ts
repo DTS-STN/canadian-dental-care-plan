@@ -59,6 +59,7 @@ import type {
   SessionService,
 } from '~/.server/domain/services';
 import type { ConfigFactory, LogFactory } from '~/.server/factories';
+import type { BenefitApplicationStateMapper } from '~/.server/remix/domain/mappers';
 import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.server/utils/service-identifier.utils';
 import type { HCaptchaDtoMapper } from '~/.server/web/mappers';
 import type { HCaptchaRepository } from '~/.server/web/repositories';
@@ -120,6 +121,7 @@ export const TYPES = assignServiceIdentifiers({
   ApplicationStatusRepository: serviceId<ApplicationStatusRepository>(),
   ApplicationStatusService: serviceId<ApplicationStatusService>(),
   AuditService: serviceId<AuditService>(),
+  BenefitApplicationStateMapper: serviceId<BenefitApplicationStateMapper>(),
   BenefitRenewalDtoMapper: serviceId<BenefitRenewalDtoMapper>(),
   BenefitRenewalRepository: serviceId<BenefitRenewalRepository>(),
   BenefitRenewalService: serviceId<BenefitRenewalService>(),

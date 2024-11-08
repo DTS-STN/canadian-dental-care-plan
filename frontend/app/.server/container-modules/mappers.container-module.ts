@@ -19,6 +19,7 @@ import {
   ProvinceTerritoryStateDtoMapperImpl,
   ProvincialGovernmentInsurancePlanDtoMapperImpl,
 } from '~/.server/domain/mappers';
+import { BenefitApplicationStateMapperImpl } from '~/.server/remix/domain/mappers';
 import { HCaptchaDtoMapperImpl } from '~/.server/web/mappers';
 
 /**
@@ -28,6 +29,7 @@ export const mappersContainerModule = new ContainerModule((bind) => {
   bind(TYPES.AddressValidationDtoMapper).to(AddressValidationDtoMapperImpl);
   bind(TYPES.ApplicantDtoMapper).to(ApplicantDtoMapperImpl);
   bind(TYPES.ApplicationStatusDtoMapper).to(ApplicationStatusDtoMapperImpl);
+  bind(TYPES.BenefitApplicationStateMapper).to(BenefitApplicationStateMapperImpl);
   bind(TYPES.BenefitRenewalDtoMapper).to(BenefitRenewalDtoMapperImpl);
   bind(TYPES.ClientApplicationDtoMapper).to(ClientApplicationDtoMapperImpl);
   bind(TYPES.ClientFriendlyStatusDtoMapper).to(ClientFriendlyStatusDtoMapperImpl);
