@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
-import { ButtonLink } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -22,6 +22,12 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
+
+enum FormAction {
+  Continue = 'continue',
+  Cancel = 'cancel',
+  Save = 'save',
+}
 
 enum AddressRadioOptions {
   No = 'no',
@@ -45,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:confirm-address.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: { hasAddressChanged: state.hasAddressChanged, isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress } });
+  return json({ id: state.id, csrfToken, meta, defaultState: { hasAddressChanged: state.hasAddressChanged, isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress }, editMode: state.editMode });
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -83,23 +89,23 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasAddressChanged: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes,
+      addressInformation: state.editMode && parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No ? undefined : state.addressInformation,
     },
   });
 
-  if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No) {
-    return redirect(getPathById('public/renew/$id/adult-child/dental-insurance', params));
+  if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes) {
+    return redirect(getPathById('public/renew/$id/adult-child/update-address', params));
   }
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
   }
-
-  return redirect(getPathById('public/renew/$id/adult-child/update-address', params));
+  return redirect(getPathById('public/renew/$id/adult-child/dental-insurance', params));
 }
 
 export default function RenewAdultChildConfirmAddress() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -133,21 +139,32 @@ export default function RenewAdultChildConfirmAddress() {
             />
           </div>
 
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Confirm address click">
-              {t('renew-adult-child:confirm-address.continue-btn')}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              routeId="public/renew/$id/adult-child/confirm-email"
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Confirm address click"
-            >
-              {t('renew-adult-child:confirm-address.back-btn')}
-            </ButtonLink>
-          </div>
+          {editMode ? (
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Confirm address click">
+                {t('renew-adult-child:confirm-address.save-btn')}
+              </Button>
+              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Confirm address click">
+                {t('renew-adult-child:confirm-address.cancel-btn')}
+              </Button>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Confirm address click">
+                {t('renew-adult-child:confirm-address.continue-btn')}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                routeId="public/renew/$id/adult-child/confirm-email"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Confirm address click"
+              >
+                {t('renew-adult-child:confirm-address.back-btn')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
       </div>
     </>

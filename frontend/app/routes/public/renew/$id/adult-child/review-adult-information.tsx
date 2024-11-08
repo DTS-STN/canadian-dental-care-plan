@@ -85,23 +85,27 @@ export async function loader({ context: { appContainer, session }, params, reque
     consent: state.partnerInformation.confirm,
   };
 
-  const mailingAddressInfo = {
-    address: state.addressInformation?.mailingAddress,
-    city: state.addressInformation?.mailingCity,
-    province: mailingProvinceTerritoryStateAbbr,
-    postalCode: state.addressInformation?.mailingPostalCode,
-    country: countryMailing,
-    apartment: state.addressInformation?.mailingApartment,
-  };
+  const mailingAddressInfo = state.hasAddressChanged
+    ? {
+        address: state.addressInformation?.mailingAddress,
+        city: state.addressInformation?.mailingCity,
+        province: mailingProvinceTerritoryStateAbbr,
+        postalCode: state.addressInformation?.mailingPostalCode,
+        country: countryMailing,
+        apartment: state.addressInformation?.mailingApartment,
+      }
+    : undefined;
 
-  const homeAddressInfo = {
-    address: state.addressInformation?.homeAddress,
-    city: state.addressInformation?.homeCity,
-    province: homeProvinceTerritoryStateAbbr,
-    postalCode: state.addressInformation?.homePostalCode,
-    country: countryHome,
-    apartment: state.addressInformation?.homeApartment,
-  };
+  const homeAddressInfo = state.hasAddressChanged
+    ? {
+        address: state.addressInformation?.homeAddress,
+        city: state.addressInformation?.homeCity,
+        province: homeProvinceTerritoryStateAbbr,
+        postalCode: state.addressInformation?.homePostalCode,
+        country: countryHome,
+        apartment: state.addressInformation?.homeApartment,
+      }
+    : undefined;
 
   const dentalInsurance = state.dentalInsurance;
 
@@ -309,16 +313,20 @@ export default function RenewAdultChildReviewAdultInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-adult-child:review-adult-information.mailing-title')}>
-                <Address
-                  address={{
-                    address: mailingAddressInfo.address ?? '',
-                    city: mailingAddressInfo.city ?? '',
-                    provinceState: mailingAddressInfo.province,
-                    postalZipCode: mailingAddressInfo.postalCode,
-                    country: mailingAddressInfo.country?.name ?? '',
-                    apartment: mailingAddressInfo.apartment,
-                  }}
-                />
+                {mailingAddressInfo ? (
+                  <Address
+                    address={{
+                      address: mailingAddressInfo.address ?? '',
+                      city: mailingAddressInfo.city ?? '',
+                      provinceState: mailingAddressInfo.province,
+                      postalZipCode: mailingAddressInfo.postalCode,
+                      country: mailingAddressInfo.country?.name ?? '',
+                      apartment: mailingAddressInfo.apartment,
+                    }}
+                  />
+                ) : (
+                  <p>{t('renew-adult-child:review-adult-information.no-update')}</p>
+                )}
                 <div className="mt-4">
                   <InlineLink id="change-mailing-address" routeId="public/renew/$id/adult-child/confirm-address" params={params}>
                     {t('renew-adult-child:review-adult-information.mailing-change')}
@@ -326,16 +334,20 @@ export default function RenewAdultChildReviewAdultInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-adult-child:review-adult-information.home-title')}>
-                <Address
-                  address={{
-                    address: homeAddressInfo.address ?? '',
-                    city: homeAddressInfo.city ?? '',
-                    provinceState: homeAddressInfo.province,
-                    postalZipCode: homeAddressInfo.postalCode,
-                    country: homeAddressInfo.country?.name ?? '',
-                    apartment: homeAddressInfo.apartment,
-                  }}
-                />
+                {homeAddressInfo ? (
+                  <Address
+                    address={{
+                      address: homeAddressInfo.address ?? '',
+                      city: homeAddressInfo.city ?? '',
+                      provinceState: homeAddressInfo.province,
+                      postalZipCode: homeAddressInfo.postalCode,
+                      country: homeAddressInfo.country?.name ?? '',
+                      apartment: homeAddressInfo.apartment,
+                    }}
+                  />
+                ) : (
+                  <p>{t('renew-adult-child:review-adult-information.no-update')}</p>
+                )}
                 <div className="mt-4">
                   <InlineLink id="change-home-address" routeId="public/renew/$id/adult-child/confirm-address" params={params}>
                     {t('renew-adult-child:review-adult-information.home-change')}

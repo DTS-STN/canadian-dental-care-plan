@@ -89,7 +89,9 @@
       "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
     },
     "back-btn": "Retour",
-    "continue-btn": "Continuer"
+    "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer"
   },
   "update-address": {
     "page-title": "Mettez l'adresse à jour",
@@ -566,6 +568,7 @@
     "submit-app-title": "Soumettre votre demande de renouvellement",
     "submit-p-proceed": "En procédant à cette demande de renouvellement, vous acceptez d'attester la véracité des renseignements fournis.",
     "submit-p-false-info": "Si vous fournissez de faux renseignements dans votre demande de renouvellement, vous et les autres personnes pour lesquelles vous avez présenté une demande pourriez être exclus du régime.",
-    "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles au renouvellement, vous pourriez avoir à rembourser la totalité des frais pour les soins reçus par l'intermédiaire du Régime canadien de soins dentaires."
+    "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles au renouvellement, vous pourriez avoir à rembourser la totalité des frais pour les soins reçus par l'intermédiaire du Régime canadien de soins dentaires.",
+    "no-update": "Pas de mise à jour"
   }
 }
