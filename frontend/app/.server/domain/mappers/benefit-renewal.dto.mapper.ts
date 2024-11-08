@@ -82,7 +82,7 @@ interface ToBenefitRenewalRequestArgs {
   partnerInformation?: PartnerInformationState | undefined;
   contactInformation?: ContactInformationState;
   typeOfRenewal: TypeOfRenewalState;
-  maritalStatus: string;
+  maritalStatus?: string;
   addressInformation?: AddressInformationState;
 }
 

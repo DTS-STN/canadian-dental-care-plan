@@ -10,7 +10,7 @@ export type BenefitRenewalRequestDto = Readonly<{
     yearOfBirth: string;
     socialInsuranceNumber: string;
   }>;
-  maritalStatus: string;
+  maritalStatus?: string;
   contactInformation?: Readonly<{
     phoneNumber?: string;
     phoneNumberAlt?: string;

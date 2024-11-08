@@ -122,8 +122,23 @@ interface ValidateRenewAdultChildStateForReviewArgs {
 }
 
 export function validateRenewAdultChildStateForReview({ params, state }: ValidateRenewAdultChildStateForReviewArgs) {
-  const { hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, communicationPreference, addressInformation, applicantInformation, dentalBenefits, confirmDentalBenefits, dentalInsurance } =
-    state;
+  const {
+    hasMaritalStatusChanged,
+    hasAddressChanged,
+    maritalStatus,
+    partnerInformation,
+    contactInformation,
+    editMode,
+    id,
+    submissionInfo,
+    typeOfRenewal,
+    communicationPreference,
+    addressInformation,
+    applicantInformation,
+    dentalBenefits,
+    confirmDentalBenefits,
+    dentalInsurance,
+  } = state;
 
   if (typeOfRenewal === undefined) {
     throw redirect(getPathById('public/renew/$id/type-renewal', params));
@@ -141,7 +156,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/renew/$id/applicant-information', params));
   }
 
-  if (maritalStatus === undefined) {
+  if (hasMaritalStatusChanged && maritalStatus === undefined) {
     throw redirect(getPathById('public/renew/$id/adult-child/confirm-marital-status', params));
   }
 
@@ -172,6 +187,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
   const children = getChildrenState(state).length > 0 ? validateChildrenStateForReview({ childrenState: state.children, params }) : [];
 
   return {
+    hasMaritalStatusChanged,
     maritalStatus,
     editMode,
     id,

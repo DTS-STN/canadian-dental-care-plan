@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
-import { ButtonLink } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -45,7 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:confirm-marital-status.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: { hasMaritalStatusChanged: state.hasMaritalStatusChanged } });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.hasMaritalStatusChanged, editMode: state.editMode });
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -99,7 +99,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewAdultChildConfirmMaritalStatus() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -124,30 +124,46 @@ export default function RenewAdultChildConfirmMaritalStatus() {
               name="hasMaritalStatusChanged"
               legend={t('renew-adult-child:confirm-marital-status.has-marital-status-changed')}
               options={[
-                { value: MaritalStatusRadioOptions.Yes, children: t('renew-adult-child:confirm-marital-status.radio-options.yes'), defaultChecked: defaultState.hasMaritalStatusChanged === true },
-                { value: MaritalStatusRadioOptions.No, children: t('renew-adult-child:confirm-marital-status.radio-options.no'), defaultChecked: defaultState.hasMaritalStatusChanged === false },
+                { value: MaritalStatusRadioOptions.Yes, children: t('renew-adult-child:confirm-marital-status.radio-options.yes'), defaultChecked: defaultState === true },
+                { value: MaritalStatusRadioOptions.No, children: t('renew-adult-child:confirm-marital-status.radio-options.no'), defaultChecked: defaultState === false },
               ]}
               helpMessagePrimary={t('renew-adult-child:confirm-marital-status.help-message')}
               errorMessage={errors?.hasMaritalStatusChanged}
               required
             />
           </div>
-
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Confirm marital status click">
-              {t('renew-adult-child:confirm-marital-status.continue-btn')}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              routeId="public/renew/$id/adult-child/type-renewal"
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Confirm marital status click"
-            >
-              {t('renew-adult-child:confirm-marital-status.back-btn')}
-            </ButtonLink>
-          </div>
+          {editMode ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <Button name="_action" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Confirm marital status click">
+                {t('renew-adult-child:marital-status.save-btn')}
+              </Button>
+              <ButtonLink
+                id="back-button"
+                routeId="public/renew/$id/adult-child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Confirm marital status click"
+              >
+                {t('dental-insurance.button.cancel-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Confirm marital status click">
+                {t('renew-adult-child:confirm-marital-status.continue-btn')}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                routeId="public/renew/$id/type-renewal"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Confirm marital status click"
+              >
+                {t('renew-adult-child:confirm-marital-status.back-btn')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
       </div>
     </>

@@ -64,7 +64,7 @@ export const benefitRenewalRequestSchema = z.object({
       ),
       PersonMaritalStatus: z.object({
         StatusCode: z.object({
-          ReferenceDataID: z.string(),
+          ReferenceDataID: z.string().optional(),
         }),
       }),
       PersonName: z.array(
