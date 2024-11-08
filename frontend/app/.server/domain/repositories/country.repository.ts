@@ -24,7 +24,7 @@ export interface CountryRepository {
 export class CountryRepositoryImpl implements CountryRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory) {
+  constructor(@inject(TYPES.LogFactory) logFactory: LogFactory) {
     this.log = logFactory.createLogger('CountryRepositoryImpl');
   }
 

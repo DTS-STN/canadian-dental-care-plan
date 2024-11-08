@@ -24,7 +24,7 @@ export interface ClientFriendlyStatusRepository {
 export class ClientFriendlyStatusRepositoryImpl implements ClientFriendlyStatusRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory) {
+  constructor(@inject(TYPES.LogFactory) logFactory: LogFactory) {
     this.log = logFactory.createLogger('ClientFriendlyStatusRepositoryImpl');
   }
 

@@ -24,7 +24,7 @@ export interface MaritalStatusRepository {
 export class MaritalStatusRepositoryImpl implements MaritalStatusRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory) {
+  constructor(@inject(TYPES.LogFactory) logFactory: LogFactory) {
     this.log = logFactory.createLogger('MaritalStatusRepositoryImpl');
   }
 

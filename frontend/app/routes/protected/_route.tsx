@@ -13,7 +13,7 @@ export const handle = {
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
-  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.CLIENT_CONFIG);
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.ClientConfig);
   return { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 

@@ -57,17 +57,17 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
-  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? appContainer.get(TYPES.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
+  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram ? appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
   const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram
-    ? appContainer.get(TYPES.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    ? appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
-  const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
-  const countryMailing = appContainer.get(TYPES.COUNTRY_SERVICE).getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
-  const countryHome = appContainer.get(TYPES.COUNTRY_SERVICE).getLocalizedCountryById(state.contactInformation.homeCountry, locale);
-  const preferredLanguage = appContainer.get(TYPES.PREFERRED_LANGUAGE_SERVICE).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
-  const maritalStatus = appContainer.get(TYPES.MARITAL_STATUS_SERVICE).getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
-  const communicationPreference = appContainer.get(TYPES.PREFERRED_COMMUNICATION_METHOD_SERVICE).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
+  const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
+  const countryMailing = appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
+  const countryHome = appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.contactInformation.homeCountry, locale);
+  const preferredLanguage = appContainer.get(TYPES.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
+  const maritalStatus = appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.applicantInformation.maritalStatus, locale);
+  const communicationPreference = appContainer.get(TYPES.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -122,9 +122,9 @@ export async function loader({ context: { appContainer, session }, params, reque
       throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
     }
 
-    const federalBenefit = child.dentalBenefits.federalSocialProgram ? appContainer.get(TYPES.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale) : undefined;
+    const federalBenefit = child.dentalBenefits.federalSocialProgram ? appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale) : undefined;
     const provincialTerritorialSocialProgram = child.dentalBenefits.provincialTerritorialSocialProgram
-      ? appContainer.get(TYPES.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      ? appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
     return {

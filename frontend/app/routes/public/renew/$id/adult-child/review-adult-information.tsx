@@ -61,11 +61,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince ? appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
-  const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(TYPES.COUNTRY_SERVICE).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
-  const countryHome = state.addressInformation?.homeCountry ? appContainer.get(TYPES.COUNTRY_SERVICE).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
-  const maritalStatus = appContainer.get(TYPES.MARITAL_STATUS_SERVICE).getLocalizedMaritalStatusById(state.maritalStatus, locale);
+  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince ? appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
+  const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
+  const countryHome = state.addressInformation?.homeCountry ? appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
+  const maritalStatus = appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -110,11 +110,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const dentalInsurance = state.dentalInsurance;
 
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
-    ? appContainer.get(TYPES.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
+    ? appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
     : undefined;
 
   const selectedProvincialBenefit = state.dentalBenefits?.provincialTerritorialSocialProgram
-    ? appContainer.get(TYPES.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    ? appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const dentalBenefit = {
@@ -180,14 +180,14 @@ export async function action({ context: { appContainer, session }, params, reque
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(TYPES.HCAPTCHA_SERVICE), hCaptchaResponse, request }))) {
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(TYPES.HCaptchaService), hCaptchaResponse, request }))) {
       clearRenewState({ params, session });
       return redirect(getPathById('public/unable-to-process-request', params));
     }
   }
 
   if (getChildrenState(state).length === 0) {
-    const submissionInfo = await appContainer.get(TYPES.BENEFIT_RENEWAL_SERVICE).createBenefitRenewal(state);
+    const submissionInfo = await appContainer.get(TYPES.BenefitRenewalService).createBenefitRenewal(state);
     saveRenewState({ params, session, state: { submissionInfo } });
     return redirect(getPathById('public/renew/$id/adult-child/confirmation', params));
   }

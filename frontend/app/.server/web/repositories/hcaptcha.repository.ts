@@ -22,8 +22,8 @@ export class HCaptchaRepositoryImpl implements HCaptchaRepository {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
-    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL'>,
+    @inject(TYPES.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL'>,
   ) {
     this.log = logFactory.createLogger('HCaptchaRepositoryImpl');
   }

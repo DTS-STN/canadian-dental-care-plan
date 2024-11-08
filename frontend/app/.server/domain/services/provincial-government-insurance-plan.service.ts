@@ -21,10 +21,10 @@ export class ProvincialGovernmentInsurancePlanServiceImpl implements ProvincialG
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
-    @inject(TYPES.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER) private readonly provincialGovernmentInsurancePlanDtoMapper: ProvincialGovernmentInsurancePlanDtoMapper,
-    @inject(TYPES.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY) private readonly provincialGovernmentInsurancePlanRepository: ProvincialGovernmentInsurancePlanRepository,
-    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.ProvincialGovernmentInsurancePlanDtoMapper) private readonly provincialGovernmentInsurancePlanDtoMapper: ProvincialGovernmentInsurancePlanDtoMapper,
+    @inject(TYPES.ProvincialGovernmentInsurancePlanRepository) private readonly provincialGovernmentInsurancePlanRepository: ProvincialGovernmentInsurancePlanRepository,
+    @inject(TYPES.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('ProvincialGovernmentInsurancePlanServiceImpl');
 

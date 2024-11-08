@@ -32,7 +32,7 @@ import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
  */
 export async function validateCsrfToken({ context, request }: PickDeep<ActionFunctionArgs, 'context.appContainer' | 'request'>): Promise<void> {
   try {
-    const csrfTokenValidator = context.appContainer.get(TYPES.WEB_CSRF_TOKEN_VALIDATOR);
+    const csrfTokenValidator = context.appContainer.get(TYPES.Web_CsrfTokenValidator);
     await csrfTokenValidator.validateCsrfToken(request);
   } catch (err) {
     if (err instanceof CsrfTokenInvalidException) {

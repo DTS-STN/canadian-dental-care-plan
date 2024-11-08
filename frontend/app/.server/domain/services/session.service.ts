@@ -44,7 +44,7 @@ export class FileSessionService implements SessionService {
   private readonly log: Logger;
   private readonly sessionStorage: SessionStorage;
 
-  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory, @inject(TYPES.SERVER_CONFIG) serverConfig: ServerConfig) {
+  constructor(@inject(TYPES.LogFactory) logFactory: LogFactory, @inject(TYPES.ServerConfig) serverConfig: ServerConfig) {
     this.log = logFactory.createLogger('FileSessionService');
     this.sessionStorage = createFileSessionStorage({
       cookie: createCookie(serverConfig.SESSION_COOKIE_NAME, {
@@ -96,9 +96,9 @@ export class RedisSessionService implements SessionService {
   private readonly sessionStorage: SessionStorage;
 
   constructor(
-    @inject(TYPES.REDIS_SERVICE) private readonly redisService: RedisService,
-    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
-    @inject(TYPES.SERVER_CONFIG) serverConfig: ServerConfig,
+    @inject(TYPES.RedisService) private readonly redisService: RedisService,
+    @inject(TYPES.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.ServerConfig) serverConfig: ServerConfig,
   ) {
     this.log = logFactory.createLogger('RedisSessionService');
 

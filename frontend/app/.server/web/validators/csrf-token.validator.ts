@@ -23,8 +23,8 @@ export class CsrfTokenValidatorImpl implements CsrfTokenValidator {
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
-    @inject(TYPES.SESSION_SERVICE) private readonly sessionService: SessionService,
+    @inject(TYPES.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.SessionService) private readonly sessionService: SessionService,
   ) {
     this.log = logFactory.createLogger('CsrfTokenValidatorImpl');
   }

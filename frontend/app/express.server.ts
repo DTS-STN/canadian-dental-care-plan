@@ -96,7 +96,7 @@ const expressApp = await createExpressApp({
             invariant(loadContext.session, 'Expected loadContext.session to be defined');
 
             log.debug('Auto-committing session and creating session cookie');
-            const sessionService = getAppContainerProvider().get(TYPES.SESSION_SERVICE);
+            const sessionService = getAppContainerProvider().get(TYPES.SessionService);
             const sessionCookie = await sessionService.commitSession(loadContext.session);
             remixResponse.headers.append('Set-Cookie', sessionCookie);
           }
@@ -123,7 +123,7 @@ const expressApp = await createExpressApp({
     }
 
     log.debug('Initializing server session...');
-    const sessionService = partialAppLoadContext.appContainer.get(TYPES.SESSION_SERVICE);
+    const sessionService = partialAppLoadContext.appContainer.get(TYPES.SessionService);
     const session = await sessionService.getSession(request.headers.cookie);
 
     // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.

@@ -245,10 +245,10 @@ export class DemographicSurveyServiceServiceImpl implements DemographicSurveySer
   private readonly log: Logger;
 
   constructor(
-    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
-    @inject(TYPES.DEMOGRAPHIC_SURVEY_DTO_MAPPER) private readonly DemographicSurveyDtoMapper: DemographicSurveyDtoMapper,
-    @inject(TYPES.DEMOGRAPHIC_SURVEY_REPOSITORY) private readonly DemographicSurveyRepository: DemographicSurveyRepository,
-    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.DemographicSurveyDtoMapper) private readonly DemographicSurveyDtoMapper: DemographicSurveyDtoMapper,
+    @inject(TYPES.DemographicSurveyRepository) private readonly DemographicSurveyRepository: DemographicSurveyRepository,
+    @inject(TYPES.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('DemographicSurveyServiceServiceImpl');
 

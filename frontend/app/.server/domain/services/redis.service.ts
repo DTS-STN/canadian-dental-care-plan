@@ -36,7 +36,7 @@ export class RedisServiceImpl implements RedisService {
   private readonly log: Logger;
   private readonly redisClient: Redis;
 
-  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory, @inject(TYPES.SERVER_CONFIG) serverConfig: ServerConfig) {
+  constructor(@inject(TYPES.LogFactory) logFactory: LogFactory, @inject(TYPES.ServerConfig) serverConfig: ServerConfig) {
     this.log = logFactory.createLogger('RedisServiceImpl');
     this.redisClient = serverConfig.REDIS_SENTINEL_NAME ? this.newSentinelClient(serverConfig) : this.newRedisClient(serverConfig);
   }

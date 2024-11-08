@@ -24,7 +24,7 @@ export interface LetterTypeRepository {
 export class LetterTypeRepositoryImpl implements LetterTypeRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory) {
+  constructor(@inject(TYPES.LogFactory) logFactory: LogFactory) {
     this.log = logFactory.createLogger('LetterTypeRepositoryImpl');
   }
 

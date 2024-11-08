@@ -28,7 +28,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   featureEnabled('address-validation');
 
-  const mailingAddressValidator = new MailingAddressValidator(getLocale(request), appContainer.get(TYPES.SERVER_CONFIG));
+  const mailingAddressValidator = new MailingAddressValidator(getLocale(request), appContainer.get(TYPES.ServerConfig));
   const validationResult = await mailingAddressValidator.validateMailingAddress(session.get('route.address-validation'));
 
   if (!validationResult.success) {
@@ -41,9 +41,9 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const formattedMailingAddress = {
     address: validatedMailingAddress.address,
     city: validatedMailingAddress.city,
-    country: appContainer.get(TYPES.COUNTRY_SERVICE).getLocalizedCountryById(validatedMailingAddress.countryId, locale).name,
+    country: appContainer.get(TYPES.CountryService).getLocalizedCountryById(validatedMailingAddress.countryId, locale).name,
     postalZipCode: validatedMailingAddress.postalZipCode,
-    provinceState: validatedMailingAddress.provinceStateId && appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceStateId, locale).abbr,
+    provinceState: validatedMailingAddress.provinceStateId && appContainer.get(TYPES.ProvinceTerritoryStateService).getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceStateId, locale).abbr,
   };
 
   const t = await getFixedT(request, handle.i18nNamespaces);

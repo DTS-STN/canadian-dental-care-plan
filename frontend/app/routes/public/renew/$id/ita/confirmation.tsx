@@ -63,18 +63,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram
-    ? appContainer.get(TYPES.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
+    ? appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
     : undefined;
 
   const selectedProvincialBenefit = state.dentalBenefits.provincialTerritorialSocialProgram
-    ? appContainer.get(TYPES.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    ? appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince ? appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
-  const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(TYPES.COUNTRY_SERVICE).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
-  const countryHome = state.addressInformation?.homeCountry ? appContainer.get(TYPES.COUNTRY_SERVICE).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
-  const maritalStatus = appContainer.get(TYPES.MARITAL_STATUS_SERVICE).getLocalizedMaritalStatusById(state.maritalStatus, locale);
+  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince ? appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
+  const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
+  const countryHome = state.addressInformation?.homeCountry ? appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
+  const maritalStatus = appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,

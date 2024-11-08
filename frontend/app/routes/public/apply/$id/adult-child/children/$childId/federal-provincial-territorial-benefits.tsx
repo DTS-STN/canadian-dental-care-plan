@@ -54,11 +54,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.SERVER_CONFIG);
+  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ServerConfig);
 
-  const federalSocialPrograms = appContainer.get(TYPES.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
-  const provinceTerritoryStates = appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
-  const provincialTerritorialSocialPrograms = appContainer.get(TYPES.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
+  const federalSocialPrograms = appContainer.get(TYPES.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const provinceTerritoryStates = appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
+  const provincialTerritorialSocialPrograms = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const csrfToken = String(session.get('csrfToken'));
 
