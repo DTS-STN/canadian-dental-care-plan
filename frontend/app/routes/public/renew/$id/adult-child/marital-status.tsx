@@ -50,6 +50,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewAdultChildState({ params, request, session });
+  if (!state.hasMaritalStatusChanged) {
+    return redirect(getPathById('public/renew/$id/adult-child/confirm-marital-status', params));
+  }
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const maritalStatuses = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
