@@ -3,7 +3,7 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 import { Buffer } from 'node:buffer';
 import { sanitize } from 'sanitize-filename-ts';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { LetterDto } from '~/.server/domain/dtos';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -33,16 +33,16 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const locale = getLocale(request);
-  const letterType = appContainer.get(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE).getLocalizedLetterTypeById(letter.letterTypeId, locale);
+  const letterType = appContainer.get(TYPES.LETTER_TYPE_SERVICE).getLocalizedLetterTypeById(letter.letterTypeId, locale);
   const documentName = sanitize(letterType.name);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
-  const pdfBytes = await appContainer.get(SERVICE_IDENTIFIER.LETTER_SERVICE).getPdfByLetterId({ letterId: params.id, userId: userInfoToken.sub });
+  const pdfBytes = await appContainer.get(TYPES.LETTER_SERVICE).getPdfByLetterId({ letterId: params.id, userId: userInfoToken.sub });
   instrumentationService.countHttpStatus('letters.download', 200);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(SERVICE_IDENTIFIER.AUDIT_SERVICE).createAudit('download.letter', { userId: idToken.sub });
+  appContainer.get(TYPES.AUDIT_SERVICE).createAudit('download.letter', { userId: idToken.sub });
 
   const decodedPdfBytes = Buffer.from(pdfBytes, 'base64');
   return new Response(decodedPdfBytes, {

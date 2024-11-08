@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputCheckboxesProps } from '~/components/input-checkboxes';
@@ -41,7 +41,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   const csrfToken = String(session.get('csrfToken'));
 
-  const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(TYPES.SERVER_CONFIG);
 
   const member = loadDemographicSurveySingleMemberState({ params, session });
   const memberName = `${member.firstName} ${member.lastName}`;
@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('demographic-survey:questions.page-title', { memberName }) }) };
 
-  const demographicSurveyService = appContainer.get(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_SERVICE);
+  const demographicSurveyService = appContainer.get(TYPES.DEMOGRAPHIC_SURVEY_SERVICE);
   const indigenousStatuses = demographicSurveyService.listLocalizedIndigenousStatuses(locale);
   const firstNations = demographicSurveyService.listLocalizedFirstNations(locale);
   const disabilityStatuses = demographicSurveyService.listLocalizedDisabilityStatuses(locale);
@@ -66,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadDemographicSurveyState({ params, session });
 
-  const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(TYPES.SERVER_CONFIG);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();

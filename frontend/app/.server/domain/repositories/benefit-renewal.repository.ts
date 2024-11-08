@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
@@ -21,8 +21,8 @@ export class BenefitRenewalRepositoryImpl implements BenefitRenewalRepository {
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
   ) {
     this.log = logFactory.createLogger('BenefitRenewalRepositoryImpl');
   }

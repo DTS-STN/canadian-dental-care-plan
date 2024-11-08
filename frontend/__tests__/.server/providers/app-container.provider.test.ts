@@ -4,8 +4,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import { AppContainerProviderImpl } from '~/.server/app-container.provider';
-import type { ServiceIdentifier } from '~/.server/constants/service-identifier.constant';
-import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.constant';
+import type { ServiceIdentifier } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 describe('AppContainerProviderImpl', () => {
@@ -27,7 +27,7 @@ describe('AppContainerProviderImpl', () => {
     mockLogger.trace.mockClear();
     mockLogFactory.createLogger.mockReturnValue(mockLogger);
 
-    container.bind(SERVICE_IDENTIFIER.LOG_FACTORY).toConstantValue(mockLogFactory);
+    container.bind(TYPES.LOG_FACTORY).toConstantValue(mockLogFactory);
     appContainerProvider = new AppContainerProviderImpl(container);
   });
 

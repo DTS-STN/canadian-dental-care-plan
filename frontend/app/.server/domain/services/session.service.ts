@@ -4,7 +4,7 @@ import { inject, injectable } from 'inversify';
 import { randomUUID } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { RedisService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { createFileSessionStorage } from '~/utils/session-utils.server';
@@ -44,7 +44,7 @@ export class FileSessionService implements SessionService {
   private readonly log: Logger;
   private readonly sessionStorage: SessionStorage;
 
-  constructor(@inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory, @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) serverConfig: ServerConfig) {
+  constructor(@inject(TYPES.LOG_FACTORY) logFactory: LogFactory, @inject(TYPES.SERVER_CONFIG) serverConfig: ServerConfig) {
     this.log = logFactory.createLogger('FileSessionService');
     this.sessionStorage = createFileSessionStorage({
       cookie: createCookie(serverConfig.SESSION_COOKIE_NAME, {
@@ -96,9 +96,9 @@ export class RedisSessionService implements SessionService {
   private readonly sessionStorage: SessionStorage;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.REDIS_SERVICE) private readonly redisService: RedisService,
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) serverConfig: ServerConfig,
+    @inject(TYPES.REDIS_SERVICE) private readonly redisService: RedisService,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.SERVER_CONFIG) serverConfig: ServerConfig,
   ) {
     this.log = logFactory.createLogger('RedisSessionService');
 

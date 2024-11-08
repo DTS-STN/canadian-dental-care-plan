@@ -12,7 +12,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { Button } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
@@ -53,7 +53,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   // apply state is valid then edit mode can be set to true
   saveApplyState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.SERVER_CONFIG);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -64,11 +64,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = state.children.map((child) => {
     const selectFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram
-      ? appContainer.get(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      ? appContainer.get(TYPES.FEDERAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
     const selectedProvincialBenefit = child.dentalBenefits.provincialTerritorialSocialProgram
-      ? appContainer.get(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      ? appContainer.get(TYPES.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
     return {
@@ -108,7 +108,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   loadApplyChildStateForReview({ params, request, session });
 
-  const { ENABLED_FEATURES } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.SERVER_CONFIG);
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();
@@ -123,7 +123,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(SERVICE_IDENTIFIER.HCAPTCHA_SERVICE), hCaptchaResponse, request }))) {
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(TYPES.HCAPTCHA_SERVICE), hCaptchaResponse, request }))) {
       clearApplyState({ params, session });
       return redirect(getPathById('public/unable-to-process-request', params));
     }

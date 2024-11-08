@@ -64,9 +64,20 @@ import type { HCaptchaRepository } from '~/.server/web/repositories';
 import type { HCaptchaService } from '~/.server/web/services';
 import type { CsrfTokenValidator } from '~/.server/web/validators';
 
+/**
+ * A type representing a service identifier for dependency injection purposes.
+ * The identifier excludes `string` and `symbol` types, allowing only specific types
+ * from the `interfaces.ServiceIdentifier`.
+ *
+ * @template T - The type associated with the service identifier.
+ */
 export type ServiceIdentifier<T = unknown> = Exclude<interfaces.ServiceIdentifier<T>, string | symbol>;
 
-export const SERVICE_IDENTIFIER = {
+/**
+ * A constant object defining various service identifiers for dependency injection.
+ * These identifiers are used to register and resolve services in a dependency container.
+ */
+export const TYPES = {
   ADDRESS_VALIDATION_DTO_MAPPER: serviceIdentifier<AddressValidationDtoMapper>('AddressValidationDtoMapper'),
   ADDRESS_VALIDATION_REPOSITORY: serviceIdentifier<AddressValidationRepository>('AddressValidationRepository'),
   ADDRESS_VALIDATION_SERVICE: serviceIdentifier<AddressValidationService>('AddressValidationService'),

@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { ApplicantRequestDto } from '~/.server/domain/dtos';
 import type { ApplicantDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicantRepository } from '~/.server/domain/repositories';
@@ -25,10 +25,10 @@ export class ApplicantServiceImpl implements ApplicantService {
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.APPLICANT_DTO_MAPPER) private readonly applicantDtoMapper: ApplicantDtoMapper,
-    @inject(SERVICE_IDENTIFIER.APPLICANT_REPOSITORY) private readonly applicantRepository: ApplicantRepository,
-    @inject(SERVICE_IDENTIFIER.AUDIT_SERVICE) private readonly auditService: AuditService,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.APPLICANT_DTO_MAPPER) private readonly applicantDtoMapper: ApplicantDtoMapper,
+    @inject(TYPES.APPLICANT_REPOSITORY) private readonly applicantRepository: ApplicantRepository,
+    @inject(TYPES.AUDIT_SERVICE) private readonly auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('ApplicantServiceImpl');
   }

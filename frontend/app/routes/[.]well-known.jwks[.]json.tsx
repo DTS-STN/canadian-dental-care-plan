@@ -4,7 +4,7 @@ import { json } from '@remix-run/node';
 import { subtle } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -39,7 +39,7 @@ async function getJwks(serverConfig: Pick<ServerConfig, 'AUTH_JWT_PUBLIC_KEY'>) 
  * can be used by an auth provider to verify private key JWTs.
  */
 export async function loader({ context: { appContainer } }: LoaderFunctionArgs) {
-  const { AUTH_JWT_PUBLIC_KEY } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const { AUTH_JWT_PUBLIC_KEY } = appContainer.get(TYPES.SERVER_CONFIG);
   const keys = await getJwks({ AUTH_JWT_PUBLIC_KEY });
   const headers = { 'Content-Type': 'application/json' };
 

@@ -4,7 +4,7 @@ import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middlewar
 
 import type { AppContainerProvider } from '~/.server/app-container.provider';
 import { AppContainerProviderImpl } from '~/.server/app-container.provider';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule } from '~/.server/container-modules';
 import { getLogger } from '~/utils/logging.server';
 
@@ -58,7 +58,7 @@ function createContainer(): interfaces.Container {
   container.load(configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, servicesContainerModule, webValidatorsContainerModule);
 
   // configure container logger middleware
-  const serverConfig = container.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const serverConfig = container.get(TYPES.SERVER_CONFIG);
 
   if (serverConfig.NODE_ENV === 'development') {
     container.applyMiddleware(createLoggerMidddlware());

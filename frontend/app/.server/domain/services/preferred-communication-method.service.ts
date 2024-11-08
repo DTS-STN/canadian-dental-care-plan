@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { PreferredCommunicationMethodDto, PreferredCommunicationMethodLocalizedDto } from '~/.server/domain/dtos';
 import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
@@ -21,10 +21,10 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_DTO_MAPPER) private readonly preferredCommunicationMethodDtoMapper: PreferredCommunicationMethodDtoMapper,
-    @inject(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_REPOSITORY) private readonly preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.PREFERRED_COMMUNICATION_METHOD_DTO_MAPPER) private readonly preferredCommunicationMethodDtoMapper: PreferredCommunicationMethodDtoMapper,
+    @inject(TYPES.PREFERRED_COMMUNICATION_METHOD_REPOSITORY) private readonly preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository,
+    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('PreferredCommunicationMethodServiceImpl');
 

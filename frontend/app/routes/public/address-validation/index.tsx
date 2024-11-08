@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { MailingAddressValidator } from '~/.server/remix/domain/routes/address-validation/mailing-address.validator';
 import { validateCsrfToken } from '~/.server/remix/security';
 import { Address } from '~/components/address';
@@ -71,16 +71,16 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   featureEnabled('address-validation');
-  const serverConfig = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const serverConfig = appContainer.get(TYPES.SERVER_CONFIG);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = serverConfig;
 
-  const mailingAddressValidator = new MailingAddressValidator(getLocale(request), appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG));
+  const mailingAddressValidator = new MailingAddressValidator(getLocale(request), appContainer.get(TYPES.SERVER_CONFIG));
   const validationResult = await mailingAddressValidator.validateMailingAddress(session.get('route.address-validation'));
   const defaultMailingAddress = validationResult.success ? validationResult.data : undefined;
 
   const locale = getLocale(request);
-  const countries = appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE).listAndSortLocalizedCountries(locale);
-  const provinceTerritoryStates = appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const countries = appContainer.get(TYPES.COUNTRY_SERVICE).listAndSortLocalizedCountries(locale);
+  const provinceTerritoryStates = appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('address-validation:index.page-title') }) };
@@ -103,10 +103,10 @@ export async function action({ context: { appContainer, session }, request, para
     throw json({ message: 'Method not allowed' }, { status: 405 });
   }
 
-  const serverConfig = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
-  const addressValidationService = appContainer.get(SERVICE_IDENTIFIER.ADDRESS_VALIDATION_SERVICE);
-  const countryService = appContainer.get(SERVICE_IDENTIFIER.COUNTRY_SERVICE);
-  const provinceTerritoryStateService = appContainer.get(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE);
+  const serverConfig = appContainer.get(TYPES.SERVER_CONFIG);
+  const addressValidationService = appContainer.get(TYPES.ADDRESS_VALIDATION_SERVICE);
+  const countryService = appContainer.get(TYPES.COUNTRY_SERVICE);
+  const provinceTerritoryStateService = appContainer.get(TYPES.PROVINCE_TERRITORY_STATE_SERVICE);
   const locale = getLocale(request);
 
   const formData = await request.formData();

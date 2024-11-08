@@ -7,7 +7,7 @@ import { useParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
 import { useFeature } from '~/root';
@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   await raoidcService.handleSessionValidation(request, session);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(SERVICE_IDENTIFIER.AUDIT_SERVICE).createAudit('page-view.home', { userId: idToken.sub });
+  appContainer.get(TYPES.AUDIT_SERVICE).createAudit('page-view.home', { userId: idToken.sub });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('index:page-title') }) };

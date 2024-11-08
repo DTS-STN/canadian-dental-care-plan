@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { ClientApplicationRepository } from '~/.server/domain/repositories';
@@ -32,9 +32,9 @@ export class ClientApplicationServiceImpl implements ClientApplicationService {
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.CLIENT_APPLICATION_DTO_MAPPER) private readonly clientApplicationDtoMapper: ClientApplicationDtoMapper,
-    @inject(SERVICE_IDENTIFIER.CLIENT_APPLICATION_REPOSITORY) private readonly clientApplicationRepository: ClientApplicationRepository,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.CLIENT_APPLICATION_DTO_MAPPER) private readonly clientApplicationDtoMapper: ClientApplicationDtoMapper,
+    @inject(TYPES.CLIENT_APPLICATION_REPOSITORY) private readonly clientApplicationRepository: ClientApplicationRepository,
   ) {
     this.log = logFactory.createLogger('ClientApplicationServiceImpl');
   }

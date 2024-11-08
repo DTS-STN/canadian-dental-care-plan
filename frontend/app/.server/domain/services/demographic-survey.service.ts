@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type {
   DisabilityStatusDto,
   DisabilityStatusLocalizedDto,
@@ -245,10 +245,10 @@ export class DemographicSurveyServiceServiceImpl implements DemographicSurveySer
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_DTO_MAPPER) private readonly DemographicSurveyDtoMapper: DemographicSurveyDtoMapper,
-    @inject(SERVICE_IDENTIFIER.DEMOGRAPHIC_SURVEY_REPOSITORY) private readonly DemographicSurveyRepository: DemographicSurveyRepository,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.DEMOGRAPHIC_SURVEY_DTO_MAPPER) private readonly DemographicSurveyDtoMapper: DemographicSurveyDtoMapper,
+    @inject(TYPES.DEMOGRAPHIC_SURVEY_REPOSITORY) private readonly DemographicSurveyRepository: DemographicSurveyRepository,
+    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('DemographicSurveyServiceServiceImpl');
 

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { MaritalStatusDto, MaritalStatusLocalizedDto } from '~/.server/domain/dtos';
 import type { MaritalStatusEntity } from '~/.server/domain/entities';
 
@@ -16,7 +16,7 @@ export type MaritalStatusDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'ENGLIS
 
 @injectable()
 export class MaritalStatusDtoMapperImpl implements MaritalStatusDtoMapper {
-  constructor(@inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: MaritalStatusDtoMapperImpl_ServerConfig) {}
+  constructor(@inject(TYPES.SERVER_CONFIG) private readonly serverConfig: MaritalStatusDtoMapperImpl_ServerConfig) {}
 
   mapMaritalStatusDtoToMaritalStatusLocalizedDto(maritalStatusDto: MaritalStatusDto, locale: AppLocale): MaritalStatusLocalizedDto {
     const { nameEn, nameFr, ...rest } = maritalStatusDto;

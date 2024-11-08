@@ -9,7 +9,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const clientNumber =
     session.get('clientNumber') ??
-    (await appContainer.get(SERVICE_IDENTIFIER.APPLICANT_SERVICE).findClientNumberBySin({
+    (await appContainer.get(TYPES.APPLICANT_SERVICE).findClientNumberBySin({
       sin: userInfoToken.sin,
       userId: userInfoToken.sub,
     }));
@@ -64,8 +64,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('protected/data-unavailable', params));
   }
 
-  const allLetters = await appContainer.get(SERVICE_IDENTIFIER.LETTER_SERVICE).findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
-  const letterTypes = appContainer.get(SERVICE_IDENTIFIER.LETTER_TYPE_SERVICE).listLetterTypes();
+  const allLetters = await appContainer.get(TYPES.LETTER_SERVICE).findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
+  const letterTypes = appContainer.get(TYPES.LETTER_TYPE_SERVICE).listLetterTypes();
   const letters = allLetters.filter(({ letterTypeId }) => letterTypes.some(({ id }) => letterTypeId === id));
 
   session.set('clientNumber', clientNumber);
@@ -73,10 +73,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
-  const { SCCH_BASE_URI } = appContainer.get(SERVICE_IDENTIFIER.CLIENT_CONFIG);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.CLIENT_CONFIG);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(SERVICE_IDENTIFIER.AUDIT_SERVICE).createAudit('page-view.letters', { userId: idToken.sub });
+  appContainer.get(TYPES.AUDIT_SERVICE).createAudit('page-view.letters', { userId: idToken.sub });
   instrumentationService.countHttpStatus('letters.view', 200);
 
   return json({ letters, letterTypes, meta, sortOrder, SCCH_BASE_URI });

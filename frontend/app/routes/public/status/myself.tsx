@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
@@ -45,7 +45,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.SERVER_CONFIG);
 
   const csrfToken = String(session.get('csrfToken'));
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
   const log = getLogger('status/myself/index');
-  const { ENABLED_FEATURES } = appContainer.get(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.SERVER_CONFIG);
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -104,14 +104,14 @@ export async function action({ context: { appContainer, session }, params, reque
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    const hCaptchaService = appContainer.get(SERVICE_IDENTIFIER.HCAPTCHA_SERVICE);
+    const hCaptchaService = appContainer.get(TYPES.HCAPTCHA_SERVICE);
     if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService, hCaptchaResponse, request }))) {
       return redirect(getPathById('public/unable-to-process-request', params));
     }
   }
 
   const { sin, code } = parsedDataResult.data;
-  const statusId = await appContainer.get(SERVICE_IDENTIFIER.APPLICATION_STATUS_SERVICE).findApplicationStatusIdBySin({ sin, applicationCode: code, userId: 'anonymous' });
+  const statusId = await appContainer.get(TYPES.APPLICATION_STATUS_SERVICE).findApplicationStatusIdBySin({ sin, applicationCode: code, userId: 'anonymous' });
 
   const id = randomUUID().toString();
   startStatusState({ id, session });

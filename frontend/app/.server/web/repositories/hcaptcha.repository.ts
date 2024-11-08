@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 import type { HCaptchaVerifyRequestEntity, HCaptchaVerifyResponseEntity } from '~/.server/web/entities';
 import { instrumentedFetch } from '~/utils/fetch-utils.server';
@@ -22,8 +22,8 @@ export class HCaptchaRepositoryImpl implements HCaptchaRepository {
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL'>,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL'>,
   ) {
     this.log = logFactory.createLogger('HCaptchaRepositoryImpl');
   }

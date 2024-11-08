@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs';
-import { SERVICE_IDENTIFIER } from '~/.server/constants';
+import { TYPES } from '~/.server/constants';
 import type { LetterTypeDto, LetterTypeLocalizedDto } from '~/.server/domain/dtos';
 import { LetterTypeNotFoundException } from '~/.server/domain/exceptions';
 import type { LetterTypeDtoMapper } from '~/.server/domain/mappers';
@@ -53,10 +53,10 @@ export class LetterTypeServiceImpl implements LetterTypeService {
   private readonly log: Logger;
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
-    @inject(SERVICE_IDENTIFIER.LETTER_TYPE_DTO_MAPPER) private readonly letterTypeDtoMapper: LetterTypeDtoMapper,
-    @inject(SERVICE_IDENTIFIER.LETTER_TYPE_REPOSITORY) private readonly letterTypeRepository: LetterTypeRepository,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.LOG_FACTORY) logFactory: LogFactory,
+    @inject(TYPES.LETTER_TYPE_DTO_MAPPER) private readonly letterTypeDtoMapper: LetterTypeDtoMapper,
+    @inject(TYPES.LETTER_TYPE_REPOSITORY) private readonly letterTypeRepository: LetterTypeRepository,
+    @inject(TYPES.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('LetterTypeServiceImpl');
 
