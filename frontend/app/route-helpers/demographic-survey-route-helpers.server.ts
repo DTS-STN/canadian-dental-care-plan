@@ -6,6 +6,7 @@ import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
 import type { RenewState } from './renew-route-helpers.server';
+import { getChildrenState } from './renew-route-helpers.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
@@ -200,7 +201,7 @@ export function getMemberInformationFromRenewState(state: RenewState) {
 
   const memberInformation = [
     composeMemberInformation(state.applicantInformation?.firstName ?? '', state.applicantInformation?.lastName ?? ''),
-    ...state.children.map((child) => composeMemberInformation(child.information?.firstName ?? '', child.information?.lastName ?? '')),
+    ...getChildrenState(state).map((child) => composeMemberInformation(child.information?.firstName ?? '', child.information?.lastName ?? '')),
   ];
 
   return memberInformation;
