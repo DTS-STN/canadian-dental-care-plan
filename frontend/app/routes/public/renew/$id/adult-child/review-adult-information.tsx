@@ -289,7 +289,7 @@ export default function RenewAdultChildReviewAdultInformation() {
             <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-adult-information.contact-info-title')}</h2>
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('renew-adult-child:review-adult-information.phone-title')}>
-                <p>{userInfo.phoneNumber}</p>
+                <p>{userInfo.phoneNumber ?? t('renew-adult-child:review-adult-information.no-update')}</p>
                 <div className="mt-4">
                   <InlineLink id="change-phone-number" routeId="public/renew/$id/adult-child/confirm-phone" params={params}>
                     {t('renew-adult-child:review-adult-information.phone-change')}
@@ -297,7 +297,7 @@ export default function RenewAdultChildReviewAdultInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-adult-child:review-adult-information.alt-phone-title')}>
-                <p>{userInfo.altPhoneNumber}</p>
+                <p>{userInfo.altPhoneNumber ?? t('renew-adult-child:review-adult-information.no-update')}</p>
                 <div className="mt-4">
                   <InlineLink id="change-alternate-phone-number" routeId="public/renew/$id/adult-child/confirm-phone" params={params}>
                     {t('renew-adult-child:review-adult-information.alt-phone-change')}
@@ -305,7 +305,7 @@ export default function RenewAdultChildReviewAdultInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-adult-child:review-adult-information.email')}>
-                <p>{userInfo.contactInformationEmail}</p>
+                <p>{userInfo.contactInformationEmail ?? t('renew-adult-child:review-adult-information.no-update')}</p>
                 <div className="mt-4">
                   <InlineLink id="change-email" routeId="public/renew/$id/adult-child/confirm-email" params={params}>
                     {t('renew-adult-child:review-adult-information.email-change')}
