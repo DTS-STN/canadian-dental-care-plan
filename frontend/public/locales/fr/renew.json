@@ -187,14 +187,14 @@
   },
   "file-your-taxes": {
     "page-title": "File your taxes",
-    "ineligible-to-renew": "You are not eligible to renew for the Canadian Dental Care Plan at this time.",
-    "tax-not-filed": "You, your spouse or common-law partner have not filed a tax return for 2024 with the Canada Revenue Agency.",
-    "unable-to-assess": "We use the information from your tax file to verify that the income and residency eligibility requirements are met for the plan.",
-    "tax-info": "For more information on how to file your taxes, visit <taxInfo>Get ready to do your taxes</taxInfo>.",
-    "renew-after": "You can renew for the plan after you or your spouse or common-law partner have filed your taxes and received your Notice of Assessment.",
-    "tax-info-href": "https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax/get-ready-taxes.html",
-    "back-btn": "Back",
-    "return-btn": "Return to main page",
-    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+    "ineligible-to-renew": "Vous n'êtes pas admissible au renouvellement de votre adhésion au Régime canadien de soins dentaires pour le moment.",
+    "tax-not-filed": "Vous, votre époux/épouse ou conjoint/conjointe de fait n'avez pas produit de déclaration de revenus pour l'année 2024 auprès de l'Agence du revenu du Canada.",
+    "unable-to-assess": "Nous utilisons les renseignements de votre déclaration de revenus pour nous assurer que les critères d'admissibilité relatifs au revenu et à la résidence sont remplis.",
+    "tax-info": "Pour en savoir plus sur la façon de produire votre déclaration de revenus, consultez la page <taxInfo>Préparez-vous à faire vos impôts</taxInfo>.",
+    "renew-after": "Vous pourrez présenter une demande de renouvellement au régime après que vous ou votre époux/épouse ou conjoint/conjointe de fait aurez produit vos déclarations de revenus et reçu votre avis de cotisation.",
+    "tax-info-href": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
+    "back-btn": "Retour",
+    "return-btn": "Revenir à la page principale",
+    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   }
 }
