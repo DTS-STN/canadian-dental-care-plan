@@ -38,13 +38,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
-  loadRenewState({ params, session });
+  const state = loadRenewState({ params, session });
   const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:terms-and-conditions.page-title') }) };
 
-  return json({ csrfToken, meta });
+  return json({ csrfToken, meta, defaultState: state.termsAndConditions });
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -60,17 +60,23 @@ export async function action({ context: { appContainer, session }, request, para
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const consentSchema = z.object({
-    acknowledgeTerms: z.nativeEnum(CheckboxValue, {
-      errorMap: () => ({ message: t('renew:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required') }),
-    }),
-    acknowledgePrivacy: z.nativeEnum(CheckboxValue, {
-      errorMap: () => ({ message: t('renew:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required') }),
-    }),
-    shareData: z.nativeEnum(CheckboxValue, {
-      errorMap: () => ({ message: t('renew:terms-and-conditions.checkboxes.error-message.share-data-required') }),
-    }),
-  });
+  const consentSchema = z
+    .object({
+      acknowledgeTerms: z.nativeEnum(CheckboxValue, {
+        errorMap: () => ({ message: t('renew:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required') }),
+      }),
+      acknowledgePrivacy: z.nativeEnum(CheckboxValue, {
+        errorMap: () => ({ message: t('renew:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required') }),
+      }),
+      shareData: z.nativeEnum(CheckboxValue, {
+        errorMap: () => ({ message: t('renew:terms-and-conditions.checkboxes.error-message.share-data-required') }),
+      }),
+    })
+    .transform((val) => ({
+      acknowledgeTerms: val.acknowledgeTerms.valueOf() === CheckboxValue.Yes,
+      acknowledgePrivacy: val.acknowledgePrivacy.valueOf() === CheckboxValue.Yes,
+      shareData: val.shareData.valueOf() === CheckboxValue.Yes,
+    }));
 
   const data = {
     acknowledgeTerms: formData.get('acknowledgeTerms'),
@@ -86,14 +92,14 @@ export async function action({ context: { appContainer, session }, request, para
     });
   }
 
-  saveRenewState({ params, session, state: {} });
+  saveRenewState({ params, session, state: { termsAndConditions: parsedDataResult.data } });
 
   return redirect(getPathById('public/renew/$id/applicant-information', params));
 }
 
 export default function RenewTermsAndConditions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -202,13 +208,13 @@ export default function RenewTermsAndConditions() {
         {t('renew:terms-and-conditions.apply.application-consent')}
       </p>
       <fetcher.Form method="post" noValidate>
-        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgeTerms} required>
+        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CheckboxValue.Yes} defaultChecked={defaultState?.acknowledgeTerms} errorMessage={errors?.acknowledgeTerms} required>
           {t('renew:terms-and-conditions.checkboxes.acknowledge-terms')}
         </InputCheckbox>
-        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgePrivacy} required>
+        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} defaultChecked={defaultState?.acknowledgePrivacy} errorMessage={errors?.acknowledgePrivacy} required>
           {t('renew:terms-and-conditions.checkboxes.acknowledge-privacy')}
         </InputCheckbox>
-        <InputCheckbox id="share-data" name="shareData" value={CheckboxValue.Yes} errorMessage={errors?.shareData} required>
+        <InputCheckbox id="share-data" name="shareData" value={CheckboxValue.Yes} defaultChecked={defaultState?.shareData} errorMessage={errors?.shareData} required>
           {t('renew:terms-and-conditions.checkboxes.share-data')}
         </InputCheckbox>
         <input type="hidden" name="_csrf" value={csrfToken} />
