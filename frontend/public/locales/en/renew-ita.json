@@ -93,7 +93,7 @@
     "address-field": {
       "address": "Address",
       "mailing-address": "Mailing address",
-      "address-note": "Include street number and name",
+      "address-note": "Include apartment number (if applicable), street number, street name. For example: 123 Main Street Suite 4B",
       "apartment": "Apartment, suite, etc. (optional)",
       "country": "Country",
       "province": "Province, territory, state, or region",
