@@ -1,5 +1,6 @@
 import type { interfaces } from 'inversify';
 
+import type { BearerTokenResolver } from '~/.server/auth';
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
 import type { RedisService } from '~/.server/data/services';
 import type {
@@ -110,6 +111,9 @@ export type TypesContant<T = unknown> = Readonly<{
  * ```
  */
 export const TYPES = assignServiceIdentifiers({
+  auth: {
+    BearerTokenResolver: serviceId<BearerTokenResolver>(),
+  },
   configs: {
     ClientConfig: serviceId<ClientConfig>(),
     ServerConfig: serviceId<ServerConfig>(),
