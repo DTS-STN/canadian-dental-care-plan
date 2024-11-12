@@ -35,6 +35,7 @@ enum FormAction {
   Cancel = 'cancel',
   Save = 'save',
   Remove = 'remove',
+  Back = 'back',
 }
 
 export const handle = {
@@ -91,6 +92,13 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+
+  if (formAction === FormAction.Back) {
+    if (state.confirmDentalBenefits?.federalBenefitsChanged || state.confirmDentalBenefits?.provincialTerritorialBenefitsChanged) {
+      return redirect(getPathById('public/renew/$id/adult-child/update-federal-provincial-territorial-benefits', params));
+    }
+    return redirect(getPathById('public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
+  }
 
   if (formAction === FormAction.Add) {
     const childId = randomUUID();
@@ -279,16 +287,9 @@ export default function RenewFlowChildSummary() {
               >
                 {t('renew-adult-child:children.index.continue-btn')}
               </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child(ren) application click"
-              >
+              <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child(ren) application click">
                 {t('renew-adult-child:children.index.back-btn')}
-              </ButtonLink>
+              </Button>
             </div>
           )}
         </fetcher.Form>
