@@ -103,15 +103,16 @@ export async function action({ context: { appContainer, session }, params, reque
       confirmDentalBenefits: {
         ...parsedDentalBenefitsResult.data,
       },
+      dentalBenefits: parsedDentalBenefitsResult.data.federalBenefitsChanged || parsedDentalBenefitsResult.data.provincialTerritorialBenefitsChanged ? state.dentalBenefits : undefined,
     },
   });
 
-  if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
-  }
-
   if (dentalBenefits.federalBenefitsChanged || dentalBenefits.provincialTerritorialBenefitsChanged) {
     return redirect(getPathById('public/renew/$id/adult-child/update-federal-provincial-territorial-benefits', params));
+  }
+
+  if (state.editMode) {
+    return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
   }
 
   return redirect(getPathById('public/renew/$id/adult-child/children/index', params));
