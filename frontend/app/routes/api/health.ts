@@ -3,33 +3,33 @@ import { json } from '@remix-run/node';
 
 import type { HealthCheck, HealthCheckOptions } from '@dts-stn/health-checks';
 import { HealthCheckConfig, execute, getHttpStatusCode } from '@dts-stn/health-checks';
-import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { isEmpty } from 'moderndash';
 import moize from 'moize';
 
-import type { AppContainerProvider } from '~/.server/app-container.provider';
 import { getAppContainerProvider } from '~/.server/app.container';
 import { TYPES } from '~/.server/constants';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 
 const appContainerProvider = getAppContainerProvider();
-const { HEALTH_CACHE_TTL } = appContainerProvider.get(TYPES.configs.ServerConfig);
+
+const bearerTokenResolver = appContainerProvider.get(TYPES.auth.BearerTokenResolver);
+const serverConfig = appContainerProvider.get(TYPES.configs.ServerConfig);
+const tokenRolesExtractor = appContainerProvider.get(TYPES.auth.HealthTokenRolesExtractor);
+const redisService = appContainerProvider.find(TYPES.data.services.RedisService);
 
 // memoize the result of redisCheckFn for a period of time
 // transformArgs is require to effectively ignore the abort signal sent from @dts-stn/health-checks when caching
 // for memoization to work, the call to moize must be done in module scope, so it only ever happens once
-const redisCheck = moize.promise(async () => void (await appContainerProvider.find(TYPES.data.services.RedisService)?.ping()), { maxAge: HEALTH_CACHE_TTL, transformArgs: () => [] });
+const redisCheck = moize.promise(async () => void (await redisService?.ping()), { maxAge: serverConfig.HEALTH_CACHE_TTL, transformArgs: () => [] });
 
-export async function loader({ context: { appContainer }, request }: LoaderFunctionArgs) {
-  const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
-
+export async function loader({ request }: LoaderFunctionArgs) {
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
   const { buildRevision: buildId, buildVersion: version } = getBuildInfoService().getBuildInfo();
 
   const healthCheckOptions: HealthCheckOptions = {
     excludeComponents: toArray(exclude),
     includeComponents: toArray(include),
-    includeDetails: await isAuthorized(appContainer, request),
+    includeDetails: await isAuthorized(request),
     metadata: { buildId, version },
     timeoutMs: toNumber(timeout),
   };
@@ -66,39 +66,10 @@ export async function loader({ context: { appContainer }, request }: LoaderFunct
 /**
  * Returns true if the incoming request is authorized to view detailed responses.
  */
-async function isAuthorized(appContainer: AppContainerProvider, request: Request): Promise<boolean> {
-  const log = appContainer.get(TYPES.factories.LogFactory).createLogger('health/isAuthorized');
-
-  const authorization = request.headers.get('authorization') ?? '';
-  const [scheme, accessToken] = authorization.split(' ');
-
-  if (scheme.toLowerCase() !== 'bearer') {
-    log.debug('Missing or invalid authorization header. Authorization failed.');
-    return false;
-  }
-
-  const {
-    // prettier-ignore
-    HEALTH_AUTH_JWKS_URI: jwksUri,
-    HEALTH_AUTH_ROLE: authorizedRole,
-    HEALTH_AUTH_TOKEN_AUDIENCE: audience,
-    HEALTH_AUTH_TOKEN_ISSUER: issuer,
-  } = appContainer.get(TYPES.configs.ServerConfig);
-
-  if (!jwksUri) {
-    log.debug('JWK endpoint not configured. Authorization failed.');
-    return false;
-  }
-
-  try {
-    const getKeyFn = createRemoteJWKSet(new URL(jwksUri));
-    const jwtVerifyOptions = { audience: audience, issuer: issuer }; // require specific audience and issuer
-    const { payload } = await jwtVerify<{ roles?: string[] }>(accessToken, getKeyFn, jwtVerifyOptions);
-    return payload.roles?.includes(authorizedRole) ?? false;
-  } catch (error) {
-    log.error('Error verifying JWT: %o. Authorization failed.', error);
-    return false;
-  }
+async function isAuthorized(request: Request): Promise<boolean> {
+  const token = bearerTokenResolver.resolve(request);
+  const roles = await tokenRolesExtractor.extract(token);
+  return roles.includes(serverConfig.HEALTH_AUTH_ROLE);
 }
 
 /**

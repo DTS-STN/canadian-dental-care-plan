@@ -1,3 +1,4 @@
+export * from './auth.container-module';
 export * from './configs.container-module';
 export * from './factories.container-module';
 export * from './mappers.container-module';
