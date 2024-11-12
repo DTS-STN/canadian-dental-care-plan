@@ -1,8 +1,8 @@
 {
   "confirm-marital-status": {
     "page-title": "État civil",
-    "has-marital-status-changed": "Has your marital status or spouse changed since you applied for the Canadian Dental Care Plan?",
-    "help-message": "The marital status we have on file can also be found on the renewal letter you received from Service Canada.",
+    "has-marital-status-changed": "Votre état civil ou votre conjoint a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
+    "help-message": "L'état civil que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
