@@ -97,7 +97,7 @@ function createLoggerMidddlware(): interfaces.Middleware {
         return;
       }
 
-      loggerMiddlewareLog.debug(textSerializer(out));
+      loggerMiddlewareLog.trace(textSerializer(out));
     },
   );
 }
