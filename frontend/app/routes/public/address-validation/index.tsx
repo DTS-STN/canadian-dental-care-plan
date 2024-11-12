@@ -1,7 +1,6 @@
 import type { SyntheticEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect, useLoaderData } from '@remix-run/react';
 
@@ -100,7 +99,7 @@ export async function action({ context: { appContainer, session }, request, para
   await validateCsrfToken({ context: { appContainer }, request });
 
   if (request.method !== 'POST') {
-    throw json({ message: 'Method not allowed' }, { status: 405 });
+    return Response.json({ message: 'Method not allowed' }, { status: 405 });
   }
 
   const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
@@ -122,7 +121,7 @@ export async function action({ context: { appContainer, session }, request, para
   });
 
   if (!validatedResult.success) {
-    return json({ errors: validatedResult.errors });
+    return { errors: validatedResult.errors };
   }
 
   const validatedMailingAddress = validatedResult.data;

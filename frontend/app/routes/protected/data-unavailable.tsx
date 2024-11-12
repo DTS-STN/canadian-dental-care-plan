@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -36,7 +35,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
-  return json({ meta, SCCH_BASE_URI });
+  return { meta, SCCH_BASE_URI };
 }
 
 export default function DataUnavailable() {

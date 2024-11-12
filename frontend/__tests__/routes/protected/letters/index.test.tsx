@@ -87,13 +87,11 @@ describe('Letters Page', () => {
         params: {},
       });
 
-      const data = await response.json();
-
-      expect(data.letters).toHaveLength(3);
-      expect(data.letters[2].id).toEqual('3');
-      expect(data.letters[2].letterTypeId).toEqual('DEN');
-      expect(data.letters[1].date).toBeDefined();
-      expect(data.letters[2].date).toBeDefined();
+      expect(response.letters).toHaveLength(3);
+      expect(response.letters[2].id).toEqual('3');
+      expect(response.letters[2].letterTypeId).toEqual('DEN');
+      expect(response.letters[1].date).toBeDefined();
+      expect(response.letters[2].date).toBeDefined();
     });
   });
 
@@ -133,9 +131,7 @@ describe('Letters Page', () => {
       params: {},
     });
 
-    const data = await response.json();
-
-    expect(data.letterTypes.includes({ id: 'DEN', nameEn: 'DENIED', nameFr: '(FR) DENIED' }));
-    expect(data.letterTypes.includes({ id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' }));
+    expect(response.letterTypes.includes({ id: 'DEN', nameEn: 'DENIED', nameFr: '(FR) DENIED' }));
+    expect(response.letterTypes.includes({ id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' }));
   });
 });

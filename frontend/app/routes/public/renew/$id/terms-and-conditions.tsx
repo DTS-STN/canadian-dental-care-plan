@@ -1,5 +1,4 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { redirect, useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -44,7 +43,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:terms-and-conditions.page-title') }) };
 
-  return json({ csrfToken, meta, defaultState: state.termsAndConditions });
+  return { csrfToken, meta, defaultState: state.termsAndConditions };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -87,9 +86,12 @@ export async function action({ context: { appContainer, session }, request, para
   const parsedDataResult = consentSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({
-      errors: transformFlattenedError(parsedDataResult.error.flatten()),
-    });
+    return Response.json(
+      {
+        errors: transformFlattenedError(parsedDataResult.error.flatten()),
+      },
+      { status: 400 },
+    );
   }
 
   saveRenewState({ params, session, state: { termsAndConditions: parsedDataResult.data } });

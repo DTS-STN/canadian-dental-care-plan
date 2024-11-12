@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
@@ -70,9 +70,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDataResult = stubLoginSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({
-      errors: transformFlattenedError(parsedDataResult.error.flatten()),
-    });
+    return Response.json(
+      {
+        errors: transformFlattenedError(parsedDataResult.error.flatten()),
+      },
+      { status: 400 },
+    );
   }
 
   const sin = parsedDataResult.data.sin;

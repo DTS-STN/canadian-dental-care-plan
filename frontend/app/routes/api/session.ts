@@ -2,7 +2,7 @@
  * An API route that can be used to perform actions with user's server-side session.
  */
 import type { ActionFunctionArgs } from '@remix-run/node';
-import { json, redirectDocument } from '@remix-run/node';
+import { redirectDocument } from '@remix-run/node';
 
 import { z } from 'zod';
 
@@ -24,7 +24,7 @@ export async function action({ context: { appContainer, session }, request }: Ac
 
   if (request.method !== 'POST') {
     log.warn('Invalid method requested [%s]; responding with 405; sessionId: [%s]', request.method, sessionId);
-    throw json({ message: 'Method not allowed' }, { status: 405 });
+    throw Response.json({ message: 'Method not allowed' }, { status: 405 });
   }
 
   const bodySchema = z.object({
@@ -38,7 +38,7 @@ export async function action({ context: { appContainer, session }, request }: Ac
 
   if (!parsedBody.success) {
     log.debug('Invalid request body [%j]; sessionId: [%s]', requestBody, sessionId);
-    return json({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
+    return Response.json({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
   }
 
   const { action, locale = 'en', redirectTo } = parsedBody.data;

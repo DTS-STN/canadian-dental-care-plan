@@ -2,7 +2,7 @@ import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -134,7 +134,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:review-adult-information.page-title') }) };
 
-  return json({
+  return {
     id: state.id,
     userInfo,
     spouseInfo,
@@ -147,7 +147,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
-  });
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {

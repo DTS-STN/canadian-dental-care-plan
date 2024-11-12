@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
 
 import { subtle } from 'node:crypto';
 
@@ -43,5 +42,5 @@ export async function loader({ context: { appContainer } }: LoaderFunctionArgs) 
   const keys = await getJwks({ AUTH_JWT_PUBLIC_KEY });
   const headers = { 'Content-Type': 'application/json' };
 
-  return json({ keys }, { headers: headers });
+  return Response.json({ keys }, { headers: headers });
 }

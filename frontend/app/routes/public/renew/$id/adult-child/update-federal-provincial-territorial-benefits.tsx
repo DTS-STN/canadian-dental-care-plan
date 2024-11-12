@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -62,7 +62,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:update-dental-benefits.title') }) };
 
-  return json({
+  return {
     csrfToken,
     defaultState: state.dentalBenefits,
     federalBenefitsChanged: state.confirmDentalBenefits?.federalBenefitsChanged,
@@ -73,7 +73,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     provincialTerritorialSocialPrograms,
     provinceTerritoryStates,
-  });
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -155,12 +155,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedProvincialTerritorialBenefitsResult = dentalProvincialTerritorialBenefits ? provincialTerritorialBenefitsSchema.safeParse(dentalProvincialTerritorialBenefits) : undefined;
 
   if ((parsedFederalBenefitsResult && !parsedFederalBenefitsResult.success) || (parsedProvincialTerritorialBenefitsResult && !parsedProvincialTerritorialBenefitsResult.success)) {
-    return json({
+    return {
       errors: {
         ...(parsedFederalBenefitsResult && !parsedFederalBenefitsResult.success ? transformFlattenedError(parsedFederalBenefitsResult.error.flatten()) : {}),
         ...(parsedProvincialTerritorialBenefitsResult && !parsedProvincialTerritorialBenefitsResult.success ? transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten()) : {}),
       },
-    });
+    };
   }
 
   saveRenewState({

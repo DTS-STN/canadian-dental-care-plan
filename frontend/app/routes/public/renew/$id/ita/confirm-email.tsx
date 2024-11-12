@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:confirm-email.page-title') }) };
 
-  return json({
+  return {
     id: state.id,
     csrfToken,
     meta,
@@ -64,7 +64,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       email: state.contactInformation?.email,
     },
     editMode: state.editMode,
-  });
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -127,7 +127,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDataResult = emailSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) });
+    return Response.json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   saveRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });

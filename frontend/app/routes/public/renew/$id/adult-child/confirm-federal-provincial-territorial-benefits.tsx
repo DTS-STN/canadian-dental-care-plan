@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -52,12 +52,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:confirm-dental-benefits.title') }) };
 
-  return json({
+  return {
     csrfToken,
     defaultState: state.confirmDentalBenefits,
     editMode: state.editMode,
     meta,
-  });
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -89,11 +89,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDentalBenefitsResult = dentalBenefitsChangedSchema.safeParse(dentalBenefits);
 
   if (!parsedDentalBenefitsResult.success) {
-    return json({
+    return {
       errors: {
         ...transformFlattenedError(parsedDentalBenefitsResult.error.flatten()),
       },
-    });
+    };
   }
 
   saveRenewState({

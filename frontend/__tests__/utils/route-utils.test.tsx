@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 
-import { Outlet, json } from '@remix-run/react';
+import { Outlet } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
 
 import { describe, expect, it } from 'vitest';
@@ -104,28 +104,26 @@ describe('useBuildInfo()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () => {
-          return json<DataBuildInfo>({
-            buildInfo: {
-              buildDate: '0000-00-00T00:00:00Z',
-              buildId: '0000',
-              buildRevision: '00000000',
-              buildVersion: '0.0.0-00000000-0000',
-            },
-          });
-        },
+        loader: () => ({
+          buildInfo: {
+            buildDate: '0000-00-00T00:00:00Z',
+            buildId: '0000',
+            buildRevision: '00000000',
+            buildVersion: '0.0.0-00000000-0000',
+          },
+        }),
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useBuildInfo())}</div>,
             loader: () => {
-              return json<DataBuildInfo>({
+              return {
                 buildInfo: {
                   buildDate: '2000-01-01T00:00:00Z',
                   buildId: '6969',
                   buildRevision: '69696969',
                   buildVersion: '0.0.0-69696969-6969',
                 },
-              });
+              } satisfies DataBuildInfo;
             },
             path: '/',
           },

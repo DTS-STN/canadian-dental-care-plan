@@ -44,9 +44,7 @@ describe('_public.apply.id.tax-filing', () => {
         params: {},
       });
 
-      const data = await response.json();
-
-      expect(data).toMatchObject({
+      expect(response).toMatchObject({
         id: '123',
         meta: {},
         defaultState: true,
@@ -69,7 +67,7 @@ describe('_public.apply.id.tax-filing', () => {
       });
 
       const data = await response.json();
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(400);
       expect(data.errors.taxFiling2023).toBeUndefined();
     });
 

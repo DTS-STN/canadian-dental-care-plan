@@ -1,7 +1,6 @@
 import type { SyntheticEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { redirect, useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -57,11 +56,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const alertType = getContextualAlertType(statusId);
   const clientFriendlyStatus = statusId ? appContainer.get(TYPES.domain.services.ClientFriendlyStatusService).getLocalizedClientFriendlyStatusById(statusId, locale) : null;
 
-  return json({
+  return {
     statusResult: { alertType, clientFriendlyStatus },
     csrfToken,
     meta,
-  });
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {

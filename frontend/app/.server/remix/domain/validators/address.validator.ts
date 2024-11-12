@@ -71,7 +71,6 @@ export class AddressValidator {
     if (parsedDataResult.success) {
       return { success: true, data: parsedDataResult.data };
     }
-
     return {
       success: false,
       errors: transformFlattenedError(parsedDataResult.error.flatten()),
