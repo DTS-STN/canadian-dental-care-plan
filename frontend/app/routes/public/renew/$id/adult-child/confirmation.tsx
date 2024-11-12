@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     (state.hasAddressChanged && state.addressInformation === undefined) ||
     state.submissionInfo === undefined ||
     state.typeOfRenewal === undefined ||
-    state.maritalStatus === undefined
+    (state.hasMaritalStatusChanged && state.maritalStatus === undefined)
     ) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
@@ -70,13 +70,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
   const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
   const countryHome = state.addressInformation?.homeCountry ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
-  const maritalStatus = appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale);
+  const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined;
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
-    martialStatus: maritalStatus.name,
+    martialStatus: maritalStatus?.name,
     clientNumber: state.applicantInformation.clientNumber,
   };
 
@@ -274,7 +274,7 @@ export default function RenewAdultChildConfirm() {
             <DescriptionListItem term={t('confirm.client-number')}>
               <span className="text-nowrap">{formatSubmissionApplicationCode(userInfo.clientNumber)}</span>
             </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus ?? <p>{t('renew-adult-child:confirm.no-change')}</p>}</DescriptionListItem>
           </dl>
         </section>
 
