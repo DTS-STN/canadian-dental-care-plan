@@ -51,7 +51,7 @@ export const getLogger = (category: string): Logger => {
       fullFormat(),
       format.printf((info) => {
         const { label, level, message, timestamp, ...rest } = info;
-        let formattedInfo = `${timestamp} ${level.toUpperCase().padStart(7)} --- [${formatLabel(label, 25)}]: ${message}`;
+        let formattedInfo = `${timestamp} ${level.toUpperCase().padStart(7)} --- [${formatLabel(`${label}`, 25)}]: ${message}`;
 
         if (!isEmpty(rest)) {
           const stripped = omit(rest, [LEVEL, MESSAGE, SPLAT]);
@@ -74,7 +74,7 @@ export const getLogger = (category: string): Logger => {
         level: 'audit',
         dirname: env.auditLogDirname,
         filename: env.auditLogFilename,
-        format: format.printf((info) => info.message),
+        format: format.printf((info) => `${info.message}`),
         extension: `_${os.hostname()}.log`,
         utc: true,
       }),
