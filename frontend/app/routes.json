@@ -9,8 +9,8 @@
     }
   },
   {
-    "id": "[.]well-known.jwks[.]json",
-    "file": "routes/[.]well-known.jwks[.]json.tsx",
+    "id": "api/jwks",
+    "file": "routes/api/jwks.ts",
     "paths": {
       "en": "/.well-known/jwks.json",
       "fr": "/.well-known/jwks.json"

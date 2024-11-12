@@ -58,7 +58,7 @@ function securityHeadersRequestHandler(request: Request, response: Response, nex
  * Typically, this rule applies to stateless API endpoints.
  */
 function shouldSkipSessionHandling({ path }: Request) {
-  const statelessPaths = ['/api/buildinfo', '/api/health', '/api/readyz'];
+  const statelessPaths = ['/api/buildinfo', '/api/health', '/api/readyz', '/.well-known/jwks.json'];
   return statelessPaths.includes(path);
 }
 
