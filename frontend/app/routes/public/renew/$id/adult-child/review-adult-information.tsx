@@ -2,7 +2,7 @@ import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -138,7 +138,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const payload = viewPayloadEnabled && toBenefitRenewRequestFromRenewAdultChildState(state);
 
-  return json({
+  return {
     id: state.id,
     userInfo,
     spouseInfo,
@@ -152,7 +152,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     hCaptchaEnabled,
     payload,
     hasChildren: state.children.length > 0,
-  });
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {

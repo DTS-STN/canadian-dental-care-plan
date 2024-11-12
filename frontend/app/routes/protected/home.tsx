@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -40,7 +39,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('index:page-title') }) };
 
-  return json({ meta });
+  return { meta };
 }
 
 export default function Index() {

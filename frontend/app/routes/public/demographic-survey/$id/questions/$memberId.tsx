@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { redirect, useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -58,7 +57,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const locationBornStatuses = demographicSurveyService.listLocalizedLocationBornStatuses(locale);
   const genderStatuses = demographicSurveyService.listLocalizedGenderStatuses(locale);
 
-  return json({ csrfToken, meta, memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState: member.questions, IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION });
+  return { csrfToken, meta, memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState: member.questions, IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -110,9 +109,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedDataResult = demographicSurveySchema.safeParse(data);
   if (!parsedDataResult.success) {
-    return json({
-      errors: transformFlattenedError(parsedDataResult.error.flatten()),
-    });
+    return Response.json(
+      {
+        errors: transformFlattenedError(parsedDataResult.error.flatten()),
+      },
+      { status: 400 },
+    );
   }
 
   saveDemographicSurveyState({

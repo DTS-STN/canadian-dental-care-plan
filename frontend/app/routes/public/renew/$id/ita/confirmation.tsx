@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { randomUUID } from 'crypto';
@@ -126,7 +126,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:confirm.page-title') }) };
 
-  return json({
+  return {
     dentalInsurance,
     homeAddressInfo,
     mailingAddressInfo,
@@ -135,7 +135,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     spouseInfo,
     submissionInfo: state.submissionInfo,
     userInfo,
-  });
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {

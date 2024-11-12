@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.dental-insurance.title', { childName: childNumber }) }),
   };
 
-  return json({ csrfToken, meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } });
+  return { csrfToken, meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -74,9 +74,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDataResult = dentalInsuranceSchema.safeParse(dentalInsurance);
 
   if (!parsedDataResult.success) {
-    return json({
-      errors: transformFlattenedError(parsedDataResult.error.flatten()),
-    });
+    return Response.json(
+      {
+        errors: transformFlattenedError(parsedDataResult.error.flatten()),
+      },
+      { status: 400 },
+    );
   }
 
   saveRenewState({

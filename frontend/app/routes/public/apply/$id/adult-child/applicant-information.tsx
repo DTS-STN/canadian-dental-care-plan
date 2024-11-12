@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -62,7 +62,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
-  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, ageCategory, editMode: state.editMode });
+  return { id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, ageCategory, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -89,7 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
     if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
       const errorMessage = t('apply-adult-child:applicant-information.error-message.marital-status-no-partner-information');
       const flattenedErrors: z.typeToFlattenedError<ApplicantInformationState> = { formErrors: [errorMessage], fieldErrors: { maritalStatus: [errorMessage] } };
-      return json({ errors: transformFlattenedError(flattenedErrors) });
+      return { errors: transformFlattenedError(flattenedErrors) };
     }
 
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
@@ -137,9 +137,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedDataResult = applicantInformationSchema.safeParse(data);
   if (!parsedDataResult.success) {
-    return json({
-      errors: transformFlattenedError(parsedDataResult.error.flatten()),
-    });
+    return Response.json(
+      {
+        errors: transformFlattenedError(parsedDataResult.error.flatten()),
+      },
+      { status: 400 },
+    );
   }
 
   const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);

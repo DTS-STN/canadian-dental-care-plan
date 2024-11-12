@@ -2,7 +2,7 @@ import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
@@ -118,7 +118,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:review-adult-information.page-title') }) };
   const payload = viewPayloadEnabled && toBenefitApplicationRequestFromApplyChildState(state);
 
-  return json({
+  return {
     id: state.id,
     userInfo,
     spouseInfo,
@@ -130,7 +130,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
     payload,
-  });
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {

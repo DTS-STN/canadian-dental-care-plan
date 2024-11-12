@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
 
 import { getBuildInfoService } from '~/services/build-info-service.server';
 
@@ -10,5 +9,5 @@ export function loader({ context, params, request }: LoaderFunctionArgs) {
   const buildInfo = getBuildInfoService().getBuildInfo();
   const imageTag = `${buildInfo.buildVersion}-${buildInfo.buildRevision}-${buildInfo.buildId}`;
 
-  return json({ ...buildInfo, imageTag });
+  return { ...buildInfo, imageTag };
 }

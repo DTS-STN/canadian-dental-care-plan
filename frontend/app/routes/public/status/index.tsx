@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('status:page-title') }) };
 
-  return json({ csrfToken, hCaptchaEnabled, meta, siteKey: HCAPTCHA_SITE_KEY });
+  return { csrfToken, hCaptchaEnabled, meta, siteKey: HCAPTCHA_SITE_KEY };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -79,9 +79,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedCheckFor = formDataSchema.safeParse(data);
   if (!parsedCheckFor.success) {
-    return json({
+    return {
       errors: transformFlattenedError(parsedCheckFor.error.flatten()),
-    });
+    };
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');

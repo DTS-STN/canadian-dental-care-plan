@@ -33,9 +33,7 @@ describe('_public.apply.id.dob-eligibility', () => {
         params: {},
       });
 
-      const data = await response.json();
-
-      expect(data).toEqual({
+      expect(response).toEqual({
         id: '123',
         csrfToken: 'csrfToken',
         meta: {},

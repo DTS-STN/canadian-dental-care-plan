@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 
 import pageIds from './page-ids.json';
 import { NotFoundError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
@@ -20,7 +19,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('gcweb:public-not-found.document-title') }) };
-  return json({ meta }, { status: 404 });
+  return Response.json({ meta }, { status: 404 });
 }
 
 export default function NotFound() {

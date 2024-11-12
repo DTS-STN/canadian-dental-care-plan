@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -64,7 +64,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-benefits.title') }) };
 
-  return json({
+  return {
     csrfToken,
     defaultState: state.dentalBenefits,
     editMode: state.editMode,
@@ -73,7 +73,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     provincialTerritorialSocialPrograms,
     regions,
-  });
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -146,12 +146,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedProvincialTerritorialBenefitsResult = provincialTerritorialBenefitsSchema.safeParse(dentalBenefits);
 
   if (!parsedFederalBenefitsResult.success || !parsedProvincialTerritorialBenefitsResult.success) {
-    return json({
+    return {
       errors: {
         ...(!parsedFederalBenefitsResult.success ? transformFlattenedError(parsedFederalBenefitsResult.error.flatten()) : {}),
         ...(!parsedProvincialTerritorialBenefitsResult.success ? transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten()) : {}),
       },
-    });
+    };
   }
 
   saveApplyState({

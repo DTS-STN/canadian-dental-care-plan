@@ -1,9 +1,9 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
+import { isValidPhoneNumber, parsePhoneNumberWithError } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:confirm-phone.page-title') }) };
 
-  return json({
+  return {
     id: state.id,
     csrfToken,
     meta,
@@ -57,7 +57,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     },
     maritalStatus: state.maritalStatus,
     editMode: state.editMode,
-  });
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -82,8 +82,8 @@ export async function action({ context: { appContainer, session }, params, reque
         .optional(),
     })
     .transform((val) => ({
-      phoneNumber: val.phoneNumber ? parsePhoneNumber(val.phoneNumber, 'CA').formatInternational() : val.phoneNumber,
-      phoneNumberAlt: val.phoneNumberAlt ? parsePhoneNumber(val.phoneNumberAlt, 'CA').formatInternational() : val.phoneNumberAlt,
+      phoneNumber: val.phoneNumber ? parsePhoneNumberWithError(val.phoneNumber, 'CA').formatInternational() : val.phoneNumber,
+      phoneNumberAlt: val.phoneNumberAlt ? parsePhoneNumberWithError(val.phoneNumberAlt, 'CA').formatInternational() : val.phoneNumberAlt,
     }));
 
   const formData = await request.formData();
@@ -103,7 +103,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDataResult = phoneNumberSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) });
+    return Response.json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   saveRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });

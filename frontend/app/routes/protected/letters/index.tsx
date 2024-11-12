@@ -1,7 +1,6 @@
 import type { ChangeEvent } from 'react';
 
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { redirect, useLoaderData, useParams, useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -79,7 +78,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.letters', { userId: idToken.sub });
   instrumentationService.countHttpStatus('letters.view', 200);
 
-  return json({ letters, letterTypes, meta, sortOrder, SCCH_BASE_URI });
+  return { letters, letterTypes, meta, sortOrder, SCCH_BASE_URI };
 }
 
 export default function LettersIndex() {

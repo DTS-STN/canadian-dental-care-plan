@@ -26,7 +26,7 @@ import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
  *   await validateCsrfToken({ context, request });
  *
  *   // ... process the request and return a response
- *   return json({ success: true });
+ *   return {success: true};
  * };
  * ```
  */

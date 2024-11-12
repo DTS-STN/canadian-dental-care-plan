@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
@@ -41,7 +41,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const state = loadDemographicSurveyState({ params, session });
 
-  return json({ csrfToken, meta, members: state.memberInformation });
+  return { csrfToken, meta, members: state.memberInformation };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {

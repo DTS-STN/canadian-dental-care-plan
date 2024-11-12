@@ -2,7 +2,7 @@ import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -64,7 +64,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('status:child.page-title') }) };
 
-  return json({ csrfToken, hCaptchaEnabled, meta, siteKey: HCAPTCHA_SITE_KEY });
+  return { csrfToken, hCaptchaEnabled, meta, siteKey: HCAPTCHA_SITE_KEY };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -178,14 +178,14 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedChildInfoResult = parsedChildHasSinResult.success && !parsedChildHasSinResult.data.childHasSin ? childInfoSchema.safeParse(data) : undefined;
 
   if (!parsedCodeResult.success || !parsedChildHasSinResult.success || parsedSinResult?.success === false || parsedChildInfoResult?.success === false) {
-    return json({
+    return {
       errors: {
         ...(parsedCodeResult.success === false ? transformFlattenedError(parsedCodeResult.error.flatten()) : {}),
         ...(parsedChildHasSinResult.success === false ? transformFlattenedError(parsedChildHasSinResult.error.flatten()) : {}),
         ...(parsedSinResult?.success === false ? transformFlattenedError(parsedSinResult.error.flatten()) : {}),
         ...(parsedChildInfoResult?.success === false ? transformFlattenedError(parsedChildInfoResult.error.flatten()) : {}),
       },
-    });
+    };
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');

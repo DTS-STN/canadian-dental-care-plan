@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { useLoaderData, useNavigate, useParams } from '@remix-run/react';
 
 import { randomUUID } from 'crypto';
@@ -34,7 +33,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:index.page-title') }) };
 
-  return json({ id: state.id, locale, meta });
+  return { id: state.id, locale, meta };
 }
 
 export default function ApplyIndex() {

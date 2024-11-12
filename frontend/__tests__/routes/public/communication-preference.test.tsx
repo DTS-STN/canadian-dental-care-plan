@@ -61,9 +61,7 @@ describe('_public.apply.id.communication-preference', () => {
         params: {},
       });
 
-      const data = await response.json();
-
-      expect(data).toMatchObject({
+      expect(response).toMatchObject({
         communicationMethodEmail: { id: 'email', name: 'Email' },
         id: '123',
         meta: {},
@@ -104,7 +102,7 @@ describe('_public.apply.id.communication-preference', () => {
       });
 
       const data = await response.json();
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(400);
       expect(data.errors).toHaveProperty('preferredMethod');
     });
 
@@ -130,7 +128,7 @@ describe('_public.apply.id.communication-preference', () => {
       });
 
       const data = await response.json();
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(400);
       expect(data.errors).toHaveProperty('email');
     });
 
@@ -157,7 +155,7 @@ describe('_public.apply.id.communication-preference', () => {
       });
 
       const data = await response.json();
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(400);
       expect(data.errors).toHaveProperty('confirmEmail');
     });
   });

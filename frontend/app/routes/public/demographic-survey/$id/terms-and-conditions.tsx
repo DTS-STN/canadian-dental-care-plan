@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -32,7 +32,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('demographic-survey:terms-and-conditions.page-title') }) };
 
-  return json({ csrfToken, meta });
+  return { csrfToken, meta };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {

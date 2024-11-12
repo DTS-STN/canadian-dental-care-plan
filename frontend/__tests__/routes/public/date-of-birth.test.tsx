@@ -51,9 +51,7 @@ describe('_public.apply.id.date-of-birth', () => {
         params: {},
       });
 
-      const data = await response.json();
-
-      expect(data).toMatchObject({
+      expect(response).toMatchObject({
         id: '123',
         meta: {},
         defaultState: {
@@ -78,7 +76,7 @@ describe('_public.apply.id.date-of-birth', () => {
       });
 
       const data = await response.json();
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(400);
       expect(data.errors.dateOfBirth).toBeUndefined();
       expect(data.errors.dateOfBirthYear).toBeDefined();
       expect(data.errors.dateOfBirthMonth).toBeDefined();

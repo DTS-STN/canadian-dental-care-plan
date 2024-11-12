@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -61,7 +61,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:applicant-information.page-title') }) };
 
-  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, dateOfBirth: state.dateOfBirth, editMode: state.editMode });
+  return { id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, dateOfBirth: state.dateOfBirth, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -169,7 +169,7 @@ export async function action({ context: { appContainer, session }, params, reque
     if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
       const errorMessage = t('apply-child:applicant-information.error-message.marital-status-no-partner-information');
       const flattenedErrors: z.typeToFlattenedError<z.infer<typeof applicantInformationSchema> & z.infer<typeof dateOfBirthSchema>> = { formErrors: [errorMessage], fieldErrors: { maritalStatus: [errorMessage] } };
-      return json({ errors: transformFlattenedError(flattenedErrors) });
+      return { errors: transformFlattenedError(flattenedErrors) };
     }
 
     return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
@@ -189,12 +189,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDataResult = applicantInformationSchema.safeParse(data);
   const parsedDobResult = dateOfBirthSchema.safeParse(data);
   if (!parsedDataResult.success || !parsedDobResult.success) {
-    return json({
+    return {
       errors: {
         ...(!parsedDataResult.success ? transformFlattenedError(parsedDataResult.error.flatten()) : {}),
         ...(!parsedDobResult.success ? transformFlattenedError(parsedDobResult.error.flatten()) : {}),
       },
-    });
+    };
   }
 
   const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);

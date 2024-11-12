@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { Outlet, isRouteErrorResponse, useParams, useRouteError } from '@remix-run/react';
 
 import { BilingualNotFoundError, NotFoundError, ServerError } from '~/components/layouts/public-layout';
@@ -15,7 +14,7 @@ export function loader({ context: { appContainer, session }, params, request }: 
     throw new Response(null, { status: 404 });
   }
 
-  return json({ lang });
+  return { lang };
 }
 
 /**

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { redirect, useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -38,7 +37,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:index.page-title') }) };
 
-  return json({ locale, meta, csrfToken });
+  return { locale, meta, csrfToken };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {

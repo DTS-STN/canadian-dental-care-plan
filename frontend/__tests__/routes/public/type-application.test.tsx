@@ -42,9 +42,7 @@ describe('_public.apply.id.type-of-application', () => {
         params: {},
       });
 
-      const data = await response.json();
-
-      expect(data).toMatchObject({
+      expect(response).toMatchObject({
         id: '123',
         meta: { title: 'gcweb:meta.title.template' },
         defaultState: 'delegate',
@@ -66,8 +64,10 @@ describe('_public.apply.id.type-of-application', () => {
         params: {},
       });
 
+      expect(response).toBeInstanceOf(Response);
+      expect(response.status).toBe(400);
+
       const data = await response.json();
-      expect(response.status).toBe(200);
       expect(data.errors.typeOfApplication).toContain('apply:type-of-application.error-message.type-of-application-required');
     });
 

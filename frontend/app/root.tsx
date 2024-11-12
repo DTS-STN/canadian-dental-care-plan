@@ -1,7 +1,6 @@
 import { Suspense, useContext, useEffect } from 'react';
 
 import type { HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation, useRouteLoaderData } from '@remix-run/react';
 
 import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
@@ -82,14 +81,14 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const origin = requestUrl.origin;
   const csrfToken = String(session.get('csrfToken'));
 
-  return json({
+  return {
     buildInfo,
     csrfToken,
     dynatraceRumScript,
     env,
     meta,
     origin,
-  });
+  };
 }
 
 export default function App() {

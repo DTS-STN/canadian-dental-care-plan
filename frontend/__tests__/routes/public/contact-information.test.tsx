@@ -55,9 +55,7 @@ describe('_public.apply.id.contact-information', () => {
         params: {},
       });
 
-      const data = await response.json();
-
-      expect(data).toMatchObject({
+      expect(response).toMatchObject({
         id: '123',
         countryList: [{ id: '1', name: 'super country' }],
         regionList: [{ id: 'SP', countryId: 'CAN', name: 'sample', abbr: 'SP' }],

@@ -2,7 +2,7 @@ import type { ChangeEventHandler } from 'react';
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -63,7 +63,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('apply-child:children.information.page-title', { childName: childNumber }) }),
   };
 
-  return json({ csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode, isNew: state.isNew });
+  return { csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode, isNew: state.isNew };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -180,12 +180,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDataResult = childInformationSchema.safeParse(data);
   const parsedSinDataResult = childSinSchema.safeParse(data);
   if (!parsedDataResult.success || !parsedSinDataResult.success) {
-    return json({
+    return {
       errors: {
         ...(!parsedDataResult.success ? transformFlattenedError(parsedDataResult.error.flatten()) : {}),
         ...(!parsedSinDataResult.success ? transformFlattenedError(parsedSinDataResult.error.flatten()) : {}),
       },
-    });
+    };
   }
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);

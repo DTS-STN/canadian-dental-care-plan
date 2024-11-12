@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -45,7 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult-child/date-of-birth', params));
   }
 
-  return json({ id: state.id, csrfToken, meta, ageCategory });
+  return { id: state.id, csrfToken, meta, ageCategory };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
