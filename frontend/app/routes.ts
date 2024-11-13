@@ -1,25 +1,57 @@
-import type { I18nRoute } from 'vite.config';
+import type { RouteConfigEntry } from '@remix-run/route-config';
+import { index, layout, route } from '@remix-run/route-config';
 
-// note: to ensure compatibility with vite.config.ts, we cannot use aliased (~/) imports here
-//       aliased imports will not be a problem after migrating to React Router 7
-import { routes as apiRoutes } from './routes/api/routes';
-import { routes as authRoutes } from './routes/auth/routes';
-import { routes as protectedRoutes } from './routes/protected/routes';
-import { routes as publicRoutes } from './routes/public/routes';
+// note: because the routes are processed at build time by vite,
+//       we cannot use aliased imports (ie: ~/) here
+import type { I18nPageRoute, I18nRoute } from './routes/routes';
+import { routes as i18nRoutes, isI18nPageRoute } from './routes/routes';
 
-export const routes = [
-  {
-    id: 'language-chooser',
-    file: 'routes/language-chooser.tsx',
-    paths: { en: '/', fr: '/' },
-  },
-  {
-    id: 'catchall',
-    file: 'routes/catchall.tsx',
-    paths: { en: '/:lang/*', fr: '/:lang/*' },
-  },
-  ...apiRoutes,
-  ...authRoutes,
-  ...protectedRoutes,
-  ...publicRoutes,
-] as const satisfies I18nRoute[];
+/**
+ * Generates a route id by combining a base id and a language code.
+ * This is necessary because React Router route ids must be unique.
+ *
+ * @param id - The base route id.
+ * @param language - The language code.
+ * @returns The generated route id.
+ */
+function generateRouteId(id: string, language: string): string {
+  return `${id}-${language}`;
+}
+
+/**
+ * Generates an array of route config entries for different languages
+ * based on a given file and i18n paths.
+ *
+ * @param i18nPageRoute - The i18n route to generate the route config entry from.
+ * @returns An array of route config entries.
+ */
+function i18nPageRoutes(i18nPageRoute: I18nPageRoute): RouteConfigEntry[] {
+  return Object.entries(i18nPageRoute.paths).map(([language, path]) => {
+    const options = { id: generateRouteId(i18nPageRoute.id, language) };
+    return route(path, i18nPageRoute.file, options);
+  });
+}
+
+/**
+ * Recursive function that converts an I18nRoute[] to a RouteConfigEntry[]
+ * that can be used by React Router.
+ *
+ * @param routes - The array of i18n route definitions.
+ * @returns An array of React Router route configuration entries.
+ */
+function toRouteConfigEntries(routes: I18nRoute[]): RouteConfigEntry[] {
+  return routes.flatMap((route) => {
+    return isI18nPageRoute(route)
+      ? i18nPageRoutes(route) //
+      : layout(route.file, toRouteConfigEntries(route.children));
+  });
+}
+
+/**
+ * see: https://reactrouter.com/dev/start/framework/routing
+ */
+export const routes: RouteConfigEntry[] = [
+  index('routes/language-chooser.tsx'), //
+  route('/:lang/*', 'routes/catchall.tsx'),
+  ...toRouteConfigEntries(i18nRoutes),
+];

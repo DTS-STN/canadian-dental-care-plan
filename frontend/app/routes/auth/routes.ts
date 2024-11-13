@@ -1,4 +1,4 @@
-import type { I18nRoute } from 'vite.config';
+import type { I18nRoute } from '~/routes/routes';
 
 export const routes = [
   {

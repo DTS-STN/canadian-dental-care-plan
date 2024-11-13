@@ -40,6 +40,7 @@
     "@radix-ui/react-progress": "^1.1.0",
     "@remix-run/node": "^2.14.0",
     "@remix-run/react": "^2.14.0",
+    "@remix-run/route-config": "^2.14.0",
     "@remix-run/serve": "^2.14.0",
     "clsx": "^2.1.1",
     "compression": "^1.7.5",

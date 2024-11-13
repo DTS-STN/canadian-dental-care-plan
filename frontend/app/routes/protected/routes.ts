@@ -1,8 +1,7 @@
-import type { I18nRoute } from 'vite.config';
+import type { I18nRoute } from '~/routes/routes';
 
 export const routes = [
   {
-    id: 'protected/layout',
     file: 'routes/protected/layout.tsx',
     children: [
       {
@@ -18,7 +17,6 @@ export const routes = [
       {
         id: 'protected/letters/index',
         file: 'routes/protected/letters/index.tsx',
-        index: true,
         paths: { en: '/:lang/letters', fr: '/:lang/lettres' },
       },
       {
@@ -34,7 +32,6 @@ export const routes = [
       {
         id: 'protected/renew/index',
         file: 'routes/protected/renew/index.tsx',
-        index: true,
         paths: { en: '/:lang/protected/renew', fr: '/:lang/protected/renew' },
       },
       {

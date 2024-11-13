@@ -1,13 +1,11 @@
-import type { I18nRoute } from 'vite.config';
+import type { I18nRoute } from '~/routes/routes';
 
 export const routes = [
   {
-    id: 'public/layout',
     file: 'routes/public/layout.tsx',
     children: [
       {
         id: 'public/address-validation/index',
-        index: true,
         file: 'routes/public/address-validation/index.tsx',
         paths: { en: '/:lang/address-validation', fr: '/:lang/validation-adresse' },
       },
@@ -17,19 +15,15 @@ export const routes = [
         paths: { en: '/:lang/address-validation/review', fr: '/:lang/validation-adresse/revue' },
       },
       {
-        id: 'public/apply/_route',
         file: 'routes/public/apply/_route.tsx',
         children: [
           {
             id: 'public/apply/index',
             file: 'routes/public/apply/index.tsx',
             paths: { en: '/:lang/apply', fr: '/:lang/demander' },
-            index: true,
           },
           {
-            id: 'public/apply/$id/_route',
             file: 'routes/public/apply/$id/_route.tsx',
-            paths: { en: '/:lang/apply/:id', fr: '/:lang/demander/:id' },
             children: [
               {
                 id: 'public/apply/$id/adult/applicant-information',
@@ -114,11 +108,9 @@ export const routes = [
               {
                 id: 'public/apply/$id/adult-child/children/index',
                 file: 'routes/public/apply/$id/adult-child/children/index.tsx',
-                index: true,
                 paths: { en: '/:lang/apply/:id/adult-child/children', fr: '/:lang/demander/:id/adulte-enfant/enfants' },
               },
               {
-                id: 'public/apply/$id/adult-child/children/$childId/_route',
                 file: 'routes/public/apply/$id/adult-child/children/$childId/_route.tsx',
                 children: [
                   {
@@ -251,11 +243,9 @@ export const routes = [
               {
                 id: 'public/apply/$id/child/children/index',
                 file: 'routes/public/apply/$id/child/children/index.tsx',
-                index: true,
                 paths: { en: '/:lang/apply/:id/child/children', fr: '/:lang/demander/:id/enfant/enfants' },
               },
               {
-                id: 'public/apply/$id/child/children/$childId/_route',
                 file: 'routes/public/apply/$id/child/children/$childId/_route.tsx',
                 children: [
                   {
@@ -360,14 +350,11 @@ export const routes = [
         ],
       },
       {
-        id: 'public/status/_route',
         file: 'routes/public/status/_route.tsx',
-        paths: { en: '/:lang/status', fr: '/:lang/etat' },
         children: [
           {
             id: 'public/status/index',
             file: 'routes/public/status/index.tsx',
-            index: true,
             paths: { en: '/:lang/status', fr: '/:lang/etat' },
           },
           {
@@ -388,20 +375,15 @@ export const routes = [
         ],
       },
       {
-        id: 'public/renew/_route',
         file: 'routes/public/renew/_route.tsx',
-        paths: { en: '/:lang/renew', fr: '/:lang/renew' },
         children: [
           {
             id: 'public/renew/index',
             file: 'routes/public/renew/index.tsx',
-            index: true,
             paths: { en: '/:lang/renew', fr: '/:lang/renew' },
           },
           {
-            id: 'public/renew/$id/_route',
             file: 'routes/public/renew/$id/_route.tsx',
-            paths: { en: '/:lang/renew/:id', fr: '/:lang/renew/:id' },
             children: [
               {
                 id: 'public/renew/$id/terms-and-conditions',
@@ -536,11 +518,9 @@ export const routes = [
               {
                 id: 'public/renew/$id/adult-child/children/index',
                 file: 'routes/public/renew/$id/adult-child/children/index.tsx',
-                index: true,
                 paths: { en: '/:lang/renew/:id/adult-child/children', fr: '/:lang/renew/:id/adulte-enfant/enfant' },
               },
               {
-                id: 'public/renew/$id/adult-child/children/$childId/_route',
                 file: 'routes/public/renew/$id/adult-child/children/$childId/_route.tsx',
                 children: [
                   {
@@ -590,9 +570,7 @@ export const routes = [
         ],
       },
       {
-        id: 'public/demographic-survey/$id/_route',
         file: 'routes/public/demographic-survey/$id/_route.tsx',
-        paths: { en: '/:lang/demographic-survey/:id', fr: '/:lang/demographic-survey/:id' },
         children: [
           {
             id: 'public/demographic-survey/$id/terms-and-conditions',
