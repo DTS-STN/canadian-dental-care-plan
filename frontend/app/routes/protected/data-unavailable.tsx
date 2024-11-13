@@ -3,10 +3,10 @@ import { useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
-import pageIds from '../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
+import { pageIds } from '~/page-ids';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';

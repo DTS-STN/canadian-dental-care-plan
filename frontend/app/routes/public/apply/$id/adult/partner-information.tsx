@@ -6,7 +6,6 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -16,6 +15,7 @@ import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { pageIds } from '~/page-ids';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import type { PartnerInformationState } from '~/route-helpers/apply-route-helpers.server';
 import { applicantInformationStateHasPartner, saveApplyState } from '~/route-helpers/apply-route-helpers.server';

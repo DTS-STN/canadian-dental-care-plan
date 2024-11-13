@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
@@ -21,6 +20,7 @@ import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { toBenefitRenewalRequestFromRenewItaState } from '~/mappers/benefit-renewal-service-mappers.server';
+import { pageIds } from '~/page-ids';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
 import { loadRenewItaStateForReview } from '~/route-helpers/renew-ita-route-helpers.server';
 import { clearRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';

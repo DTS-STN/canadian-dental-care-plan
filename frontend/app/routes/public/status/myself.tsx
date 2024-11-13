@@ -11,12 +11,12 @@ import { randomUUID } from 'crypto';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
+import { pageIds } from '~/page-ids';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/route-helpers/status-route-helpers.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';

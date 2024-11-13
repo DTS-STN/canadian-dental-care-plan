@@ -1,9 +1,9 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
 
-import pageIds from './page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { BilingualNotFoundError, NotFoundError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
+import { pageIds } from '~/page-ids';
 import { isAppLocale } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';

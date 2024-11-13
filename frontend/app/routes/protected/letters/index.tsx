@@ -7,12 +7,12 @@ import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
+import { pageIds } from '~/page-ids';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env-utils.server';

@@ -5,10 +5,10 @@ import { useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
+import { pageIds } from '~/page-ids';
 import { useFeature } from '~/root';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';

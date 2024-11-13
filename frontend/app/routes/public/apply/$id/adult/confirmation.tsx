@@ -5,7 +5,6 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
@@ -13,6 +12,7 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
+import { pageIds } from '~/page-ids';
 import { useFeature } from '~/root';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';

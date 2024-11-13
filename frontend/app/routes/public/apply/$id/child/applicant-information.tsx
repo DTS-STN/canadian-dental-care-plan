@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -21,6 +20,7 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { pageIds } from '~/page-ids';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import type { ApplicantInformationState } from '~/route-helpers/apply-route-helpers.server';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
