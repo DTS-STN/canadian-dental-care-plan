@@ -116,12 +116,16 @@ export default defineConfig({
     noExternal: ['react-idle-timer', 'fast-json-patch'],
   },
   test: {
-    environment: 'jsdom',
     setupFiles: ['./__tests__/setup-test-env.ts'],
     include: ['./__tests__/**/*.test.{ts,tsx}'],
     coverage: {
       include: ['**/app/**/*.{ts,tsx}'],
       exclude: ['!**/app/[.]client/**', '!**/app/[.]server/**', '**/app/mocks/**', ...coverageConfigDefaults.exclude],
     },
+    environmentMatchGlobs: [
+      ['__tests__/components/**', 'jsdom'],
+      ['__tests__/hooks/**', 'jsdom'],
+      ['__tests__/routes/**', 'jsdom'],
+    ],
   },
 });

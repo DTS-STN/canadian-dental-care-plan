@@ -6,11 +6,6 @@ import { mock } from 'vitest-mock-extended';
 import { DefaultTokenRolesExtractor } from '~/.server/auth/token-roles-extractor';
 import type { LogFactory, Logger } from '~/.server/factories';
 
-/*
- * @vitest-environment node
- * (see: https://github.com/vitest-dev/vitest/issues/4043)
- */
-
 vi.mock('jose', () => ({
   createRemoteJWKSet: vi.fn(),
   decodeJwt: vi.fn(),

@@ -4,6 +4,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { scrollAndFocusFromAnchorLink } from '~/utils/link-utils';
 
+/*
+ * @vitest-environment jsdom
+ */
+
 const scrollIntoViewMock = vi.fn();
 Element.prototype.scrollIntoView = scrollIntoViewMock;
 
