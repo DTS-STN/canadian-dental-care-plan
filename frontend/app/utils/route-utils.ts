@@ -6,7 +6,7 @@ import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
-import routes from '~/routes.json';
+import { routes } from '~/routes';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
