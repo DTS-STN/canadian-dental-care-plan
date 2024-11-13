@@ -7,6 +7,7 @@ import { randomUUID } from 'crypto';
 
 import { pageIds } from '~/page-ids';
 import { startProtectedRenewState } from '~/route-helpers/protected-renew-route-helpers.server';
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -25,6 +26,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request, session);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -44,7 +48,7 @@ export default function ProtectedRenewIndex() {
   const path = getPathById('protected/renew/$id/terms-and-conditions', { ...params, id });
 
   useEffect(() => {
-    sessionStorage.setItem('flow.state', 'active');
+    sessionStorage.setItem('protected.renew.state', 'active');
     navigate(path, { replace: true });
   }, [navigate, path]);
 
