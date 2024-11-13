@@ -8,6 +8,7 @@ export const pageIds = {
       index: 'CDCP-PROT-RENW-0001',
       termsAndConditions: 'CDCP-PROT-RENW-0002',
       taxFiling: 'CDCP-PROT-RENW-0003',
+      fileYourTaxes: 'CDCP-PROT-RENW-0004',
     },
     dataUnavailable: 'CDCP-PROT-0099',
   },
