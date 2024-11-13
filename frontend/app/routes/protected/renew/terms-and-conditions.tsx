@@ -12,7 +12,8 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { LoadingButton } from '~/components/loading-button';
-import { loadRenewState, saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { loadProtectedRenewState, saveProtectedRenewState } from '~/route-helpers/protected-renew-route-helpers.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -37,13 +38,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
-  const state = loadRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, session });
   const csrfToken = String(session.get('csrfToken'));
 
+  const { SCCH_BASE_URI } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:terms-and-conditions.page-title') }) };
 
-  return { csrfToken, meta, defaultState: state.termsAndConditions };
+  return { csrfToken, meta, defaultState: state.termsAndConditions, SCCH_BASE_URI };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -94,14 +96,14 @@ export async function action({ context: { appContainer, session }, request, para
     );
   }
 
-  saveRenewState({ params, session, state: { termsAndConditions: parsedDataResult.data } });
+  saveProtectedRenewState({ params, session, state: { termsAndConditions: parsedDataResult.data } });
 
-  return redirect(getPathById('public/renew/$id/applicant-information', params));
+  return redirect(getPathById('protected/renew/$id/tax-filing', params));
 }
 
 export default function RenewTermsAndConditions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, SCCH_BASE_URI } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -231,7 +233,13 @@ export default function RenewTermsAndConditions() {
           >
             {t('protected-renew:terms-and-conditions.apply.start-button')}
           </LoadingButton>
-          <ButtonLink id="back-button" to={t('protected-renew:terms-and-conditions.apply.link')} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - Terms and Conditions click">
+          <ButtonLink
+            id="back-button"
+            to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - Terms and Conditions click"
+          >
             {t('protected-renew:terms-and-conditions.apply.back-button')}
           </ButtonLink>
         </div>
