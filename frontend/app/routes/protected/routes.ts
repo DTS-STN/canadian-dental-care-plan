@@ -2,8 +2,8 @@ import type { I18nRoute } from 'vite.config';
 
 export const routes = [
   {
-    id: 'protected/_route',
-    file: 'routes/protected/_route.tsx',
+    id: 'protected/layout',
+    file: 'routes/protected/layout.tsx',
     children: [
       {
         id: 'protected/data-unavailable',

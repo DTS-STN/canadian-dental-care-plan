@@ -14,25 +14,12 @@ export const routes = [
     paths: { en: '/', fr: '/' },
   },
   {
-    id: '$lang-layout',
-    file: 'routes/$lang-layout.tsx',
-    paths: { en: '/:lang', fr: '/:lang' },
-    children: [
-      {
-        id: '$lang-index',
-        file: 'routes/$lang-index.tsx',
-        index: true,
-        paths: { en: '/:lang/', fr: '/:lang/' },
-      },
-      {
-        id: '$lang-$',
-        file: 'routes/$lang-$.tsx',
-        paths: { en: '/:lang/*', fr: '/:lang/*' },
-      },
-      ...publicRoutes,
-      ...protectedRoutes,
-    ],
+    id: 'catchall',
+    file: 'routes/catchall.tsx',
+    paths: { en: '/:lang/*', fr: '/:lang/*' },
   },
   ...apiRoutes,
   ...authRoutes,
+  ...protectedRoutes,
+  ...publicRoutes,
 ] as const satisfies I18nRoute[];
