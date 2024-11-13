@@ -53,10 +53,11 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
+  const log = getLogger('protected-renew/terms-and-conditions');
+
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
-  const log = getLogger('protected-renew/terms-and-conditions');
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
