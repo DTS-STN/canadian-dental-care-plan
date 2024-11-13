@@ -101,7 +101,10 @@ export default defineConfig({
             // https://remix.run/docs/en/main/guides/dependency-optimization
             unstable_optimizeDeps: true,
             v3_fetcherPersist: true,
-            v3_lazyRouteDiscovery: true,
+            // XXX  :: GjB :: lazy route discovery breaks navigation from the language switcher when running in devmode
+            //                strangely, when running in production mode, it works perfectly fine 🤷
+            // TODO :: GjB :: figure out why this doesn't work in devmode and hopefully fix it.
+            v3_lazyRouteDiscovery: false,
             v3_relativeSplatPath: true,
             v3_singleFetch: true,
             v3_throwAbortReason: true,
