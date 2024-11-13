@@ -32,9 +32,20 @@ export const routes = [
         paths: { en: '/:lang/stub-login', fr: '/:lang/stub-login' },
       },
       {
-        id: 'protected/renew/file-taxes',
-        file: 'routes/protected/renew/file-taxes.tsx',
-        paths: { en: '/:lang/protected/renew/file-taxes', fr: '/:lang/protected/renew/file-taxes' },
+        id: 'protected/renew/index',
+        file: 'routes/protected/renew/index.tsx',
+        index: true,
+        paths: { en: '/:lang/protected/renew', fr: '/:lang/protected/renew' },
+      },
+      {
+        id: 'protected/renew/$id/terms-and-conditions',
+        file: 'routes/protected/renew/terms-and-conditions.tsx',
+        paths: { en: '/:lang/protected/renew/:id/terms-and-conditions', fr: '/:lang/protected/renew/:id/terms-and-conditions' },
+      },
+      {
+        id: 'protected/renew/$id/tax-filing',
+        file: 'routes/protected/renew/tax-filing.tsx',
+        paths: { en: '/:lang/protected/renew/:id/tax-filing', fr: '/:lang/protected/renew/:id/tax-filing' },
       },
     ],
   },
