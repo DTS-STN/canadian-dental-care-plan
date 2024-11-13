@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
@@ -22,6 +21,7 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { pageIds } from '~/page-ids';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import type { ContactInformationState } from '~/route-helpers/apply-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';

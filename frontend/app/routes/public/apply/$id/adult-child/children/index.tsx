@@ -11,13 +11,13 @@ import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../../../../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { Button, ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { pageIds } from '~/page-ids';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';

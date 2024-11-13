@@ -7,9 +7,9 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../../../../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { LoadingButton } from '~/components/loading-button';
+import { pageIds } from '~/page-ids';
 import { loadApplySingleChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';

@@ -6,7 +6,6 @@ import { randomUUID } from 'crypto';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
@@ -15,6 +14,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
+import { pageIds } from '~/page-ids';
 import { getMemberInformationFromRenewState, startDemographicSurveyState } from '~/route-helpers/demographic-survey-route-helpers.server';
 import { loadRenewItaState } from '~/route-helpers/renew-ita-route-helpers.server';
 import { clearRenewState } from '~/route-helpers/renew-route-helpers.server';

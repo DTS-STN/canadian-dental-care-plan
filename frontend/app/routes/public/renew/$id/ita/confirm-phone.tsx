@@ -7,12 +7,12 @@ import { isValidPhoneNumber, parsePhoneNumberWithError } from 'libphonenumber-js
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPhoneField } from '~/components/input-phone-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { pageIds } from '~/page-ids';
 import { loadRenewItaState } from '~/route-helpers/renew-ita-route-helpers.server';
 import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';

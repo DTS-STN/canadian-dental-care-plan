@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { Button } from '~/components/buttons';
 import { DebugPayload } from '~/components/debug-payload';
@@ -21,6 +20,7 @@ import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequestFromApplyAdultChildState } from '~/mappers/benefit-application-service-mappers.server';
+import { pageIds } from '~/page-ids';
 import { loadApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';

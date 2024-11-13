@@ -5,9 +5,9 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../../../page-ids.json';
 import { Collapsible } from '~/components/collapsible';
 import { LoadingButton } from '~/components/loading-button';
+import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';

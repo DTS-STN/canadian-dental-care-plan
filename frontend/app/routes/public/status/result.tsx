@@ -8,11 +8,11 @@ import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../page-ids.json';
 import { TYPES } from '~/.server/constants';
 import { Button } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { pageIds } from '~/page-ids';
 import { clearStatusState, getStatusStateIdFromUrl, loadStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getContextualAlertType } from '~/utils/application-code-utils.server';
 import { featureEnabled } from '~/utils/env-utils.server';
