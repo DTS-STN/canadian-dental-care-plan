@@ -10,6 +10,7 @@ import type demographicSurvey from '../public/locales/en/demographic-survey.json
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type letters from '../public/locales/en/letters.json';
+import type protectedRenew from '../public/locales/en/protected-renew.json';
 import type renewAdultChild from '../public/locales/en/renew-adult-child.json';
 import type renewIta from '../public/locales/en/renew-ita.json';
 import type renew from '../public/locales/en/renew.json';
@@ -78,6 +79,7 @@ declare module 'i18next' {
       'demographic-survey': typeof demographicSurvey;
       'stub-login': typeof stubLogin;
       'unable-to-process-request': typeof unableToProcessRequest;
+      'protected-renew': typeof protectedRenew;
     };
   }
 }

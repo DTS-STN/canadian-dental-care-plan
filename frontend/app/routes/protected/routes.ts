@@ -31,6 +31,11 @@ export const routes = [
         file: 'routes/protected/stub-login.tsx',
         paths: { en: '/:lang/stub-login', fr: '/:lang/stub-login' },
       },
+      {
+        id: 'protected/renew/file-taxes',
+        file: 'routes/protected/renew/file-taxes.tsx',
+        paths: { en: '/:lang/protected/renew/file-taxes', fr: '/:lang/protected/renew/file-taxes' },
+      },
     ],
   },
 ] as const satisfies I18nRoute[];
