@@ -1,20 +1,21 @@
 import { vitePlugin as remix } from '@remix-run/dev';
-import type { DefineRouteFunction, DefineRoutesFunction } from '@remix-run/dev/dist/config/routes';
+import type { DefineRouteFunction, DefineRoutesFunction, RouteManifest } from '@remix-run/dev/dist/config/routes';
 
 import react from '@vitejs/plugin-react';
-import { readFileSync } from 'node:fs';
 import { expressDevServer } from 'remix-express-dev-server';
 import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { coverageConfigDefaults } from 'vitest/config';
 
+// note: we can't import aliased (~/) paths in vite.config.ts
+import { routes } from './app/routes';
+
 /**
- * Represents a single route definition in the JSON configuration file.
- * Used for generating localized routes in the Remix application.
+ * Represents an internationalized route definition.
  */
-interface JsonRoute {
-  children?: Array<JsonRoute>;
+export interface I18nRoute {
+  children?: Array<I18nRoute>;
   file: string;
   id: string;
   index?: boolean;
@@ -25,19 +26,19 @@ interface JsonRoute {
 }
 
 /**
- * Generates a Remix RouteManifest based on a JSON configuration file.
+ * Generates a Remix RouteManifest from a collection of i18n routes.
  *
- * This function iterates through an array of JsonRoute route definitions
+ * This function iterates through an array of internationalized route definitions
  * and creates localized routes for both English ('en') and French ('fr') languages.
  *
  * @param defineRoutesFn - The Remix function for defining routes.
- * @param jsonRoutes - An array of JsonRoute route definitions.
+ * @param i18nRoutes - An array of i18n route definitions.
  */
-function jsonRoutes(defineRoutesFn: DefineRoutesFunction, jsonRoutes: Array<JsonRoute>) {
+function i18nRoutes(defineRoutesFn: DefineRoutesFunction, i18nRoutes: Array<I18nRoute>): RouteManifest {
   return defineRoutesFn((routeFn) => {
-    jsonRoutes.forEach((jsonRoute) => {
-      defineRoute('en', routeFn, jsonRoute);
-      defineRoute('fr', routeFn, jsonRoute);
+    i18nRoutes.forEach((i18nRoute) => {
+      defineRoute('en', routeFn, i18nRoute);
+      defineRoute('fr', routeFn, i18nRoute);
     });
   });
 }
@@ -51,16 +52,16 @@ function jsonRoutes(defineRoutesFn: DefineRoutesFunction, jsonRoutes: Array<Json
  *
  * @param language - The language for which to define the route ('en' or 'fr').
  * @param routeFn - The Remix function for defining a single route.
- * @param jsonRoute - The JsonRoute route definition.
+ * @param i18nRoute - The JsonRoute route definition.
  */
-function defineRoute(language: 'en' | 'fr', routeFn: DefineRouteFunction, jsonRoute: JsonRoute) {
-  const path = language === 'en' ? jsonRoute.paths?.en : jsonRoute.paths?.fr;
-  const options = { ...jsonRoute, id: `${jsonRoute.id}-${language}` } as const;
+function defineRoute(language: 'en' | 'fr', routeFn: DefineRouteFunction, i18nRoute: I18nRoute): void {
+  const path = language === 'en' ? i18nRoute.paths?.en : i18nRoute.paths?.fr;
+  const options = { ...i18nRoute, id: `${i18nRoute.id}-${language}` } as const;
 
   // if the route has child routes, generate a route function for each child (otherwise use a NOOP function)
-  const defineRouteChildrenFn = jsonRoute.children ? () => jsonRoute.children?.forEach((child) => defineRoute(language, routeFn, child)) : () => {};
+  const defineRouteChildrenFn = i18nRoute.children ? () => i18nRoute.children?.forEach((child) => defineRoute(language, routeFn, child)) : () => {};
 
-  routeFn(path, jsonRoute.file, options, defineRouteChildrenFn);
+  routeFn(path, i18nRoute.file, options, defineRouteChildrenFn);
 }
 
 export default defineConfig({
@@ -95,7 +96,7 @@ export default defineConfig({
       ? react()
       : remix({
           ignoredRouteFiles: ['**/*'], // we will manually configure routes
-          routes: (defineRoutes) => jsonRoutes(defineRoutes, JSON.parse(readFileSync('./app/routes.json', 'utf8'))),
+          routes: (defineRoutes) => i18nRoutes(defineRoutes, routes),
           future: {
             // Fix vite client-side dependency optimization issues that trigger a server restart.
             // https://remix.run/docs/en/main/guides/dependency-optimization
