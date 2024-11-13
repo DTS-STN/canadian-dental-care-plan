@@ -112,17 +112,17 @@ export async function action({ context: { appContainer, session }, params, reque
       children: renewState.children.map((child) => {
         if (child.id !== state.id) return child;
         const confirmDentalBenefits = { ...parsedDentalBenefitsResult.data };
-        return { ...child, confirmDentalBenefits };
+        return { ...child, confirmDentalBenefits, dentalBenefits: parsedDentalBenefitsResult.data.federalBenefitsChanged || parsedDentalBenefitsResult.data.provincialTerritorialBenefitsChanged ? state.dentalBenefits : undefined };
       }),
     },
   });
 
-  if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
-  }
-
   if (dentalBenefits.federalBenefitsChanged || dentalBenefits.provincialTerritorialBenefitsChanged) {
     return redirect(getPathById('public/renew/$id/adult-child/children/$childId/update-federal-provincial-territorial-benefits', params));
+  }
+
+  if (state.editMode) {
+    return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
   }
 
   return redirect(getPathById('public/renew/$id/adult-child/children/index', params));
