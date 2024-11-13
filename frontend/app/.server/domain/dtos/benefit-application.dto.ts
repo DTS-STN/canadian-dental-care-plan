@@ -12,6 +12,9 @@ export type BenefitApplicationDto = ReadonlyDeep<{
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationDto;
   typeOfApplication: TypeOfApplicationDto;
+
+  /** A unique identifier for the user making the request - used for auditing */
+  userId: string;
 }>;
 
 export type ApplicantInformationDto = ReadonlyDeep<{

@@ -5,6 +5,7 @@ import {
   AddressValidationRepositoryImpl,
   ApplicantRepositoryImpl,
   ApplicationStatusRepositoryImpl,
+  BenefitApplicationRepositoryImpl,
   BenefitRenewalRepositoryImpl,
   ClientApplicationRepositoryImpl,
   ClientFriendlyStatusRepositoryImpl,
@@ -28,6 +29,7 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.repositories.AddressValidationRepository).to(AddressValidationRepositoryImpl);
   bind(TYPES.domain.repositories.ApplicantRepository).to(ApplicantRepositoryImpl);
   bind(TYPES.domain.repositories.ApplicationStatusRepository).to(ApplicationStatusRepositoryImpl);
+  bind(TYPES.domain.repositories.BenefitApplicationRepository).to(BenefitApplicationRepositoryImpl);
   bind(TYPES.domain.repositories.BenefitRenewalRepository).to(BenefitRenewalRepositoryImpl);
   bind(TYPES.domain.repositories.ClientApplicationRepository).to(ClientApplicationRepositoryImpl);
   bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(ClientFriendlyStatusRepositoryImpl);

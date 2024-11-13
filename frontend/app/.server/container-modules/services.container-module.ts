@@ -9,6 +9,7 @@ import {
   ApplicantServiceImpl,
   ApplicationStatusServiceImpl,
   AuditServiceImpl,
+  BenefitApplicationServiceImpl,
   BenefitRenewalServiceImpl,
   ClientApplicationServiceImpl,
   ClientFriendlyStatusServiceImpl,
@@ -42,6 +43,7 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.services.ApplicantService).to(ApplicantServiceImpl);
   bind(TYPES.domain.services.ApplicationStatusService).to(ApplicationStatusServiceImpl);
   bind(TYPES.domain.services.AuditService).to(AuditServiceImpl);
+  bind(TYPES.domain.services.BenefitApplicationService).to(BenefitApplicationServiceImpl);
   bind(TYPES.domain.services.BenefitRenewalService).to(BenefitRenewalServiceImpl);
   bind(TYPES.domain.services.ClientApplicationService).to(ClientApplicationServiceImpl);
   bind(TYPES.domain.services.ClientFriendlyStatusService).to(ClientFriendlyStatusServiceImpl);

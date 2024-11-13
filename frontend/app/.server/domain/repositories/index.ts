@@ -1,6 +1,7 @@
 export * from './address-validation.repository';
 export * from './applicant-repository';
 export * from './application-status.repository';
+export * from './benefit-application.repository';
 export * from './client-application.repository';
 export * from './client-friendly-status.repository';
 export * from './country.repository';
