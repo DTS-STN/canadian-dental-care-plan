@@ -474,7 +474,8 @@
     "submit-button": "Présenter la demande de renouvellement",
     "exit-button": "Quitter la demande",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "no-update": "Aucun changement"
   },
   "exit-application": {
     "page-title": "Exiting the application",

@@ -473,7 +473,8 @@
     "submit-button": "Submit renewal application",
     "exit-button": "Exit application",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "no-update": "No update"
   },
   "exit-application": {
     "page-title": "Exiting the application",
