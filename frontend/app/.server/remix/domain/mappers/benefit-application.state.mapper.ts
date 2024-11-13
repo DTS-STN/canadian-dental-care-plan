@@ -140,6 +140,7 @@ export class BenefitApplicationStateMapperImpl implements BenefitApplicationStat
       livingIndependently,
       partnerInformation,
       typeOfApplication,
+      userId: 'anonymous',
     };
   }
 
