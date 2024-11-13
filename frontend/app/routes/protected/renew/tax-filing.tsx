@@ -51,9 +51,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
-  const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request, session);
-
   const log = getLogger('protected/renew/tax-filing');
 
   const raoidcService = await getRaoidcService();

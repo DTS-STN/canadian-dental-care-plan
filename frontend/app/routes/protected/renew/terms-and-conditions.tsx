@@ -5,13 +5,13 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { LoadingButton } from '~/components/loading-button';
+import { pageIds } from '~/page-ids';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/route-helpers/protected-renew-route-helpers.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getEnv } from '~/utils/env-utils.server';
@@ -53,10 +53,11 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
+  const log = getLogger('protected-renew/terms-and-conditions');
+
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
-  const log = getLogger('protected-renew/terms-and-conditions');
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
