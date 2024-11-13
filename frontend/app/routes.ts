@@ -1,12 +1,9 @@
 import type { I18nRoute } from 'vite.config';
 
 export const routes = [
-  {
-    id: 'index',
-    file: 'routes/index.tsx',
-    index: true,
-    paths: { en: '/', fr: '/' },
-  },
+  //
+  // API routes...
+  //
   {
     id: 'api/jwks',
     file: 'routes/api/jwks.ts',
@@ -37,10 +34,21 @@ export const routes = [
     file: 'routes/api/session.ts',
     paths: { en: '/api/session', fr: '/api/session' },
   },
+  //
+  // Auth routes...
+  //
   {
     id: 'auth/$',
     file: 'routes/auth/$.tsx',
     paths: { en: '/auth/*', fr: '/auth/*' },
+  },
+  //
+  // Page routes...
+  //
+  {
+    id: 'language-chooser',
+    file: 'routes/language-chooser.tsx',
+    paths: { en: '/', fr: '/' },
   },
   {
     id: '$lang-layout',

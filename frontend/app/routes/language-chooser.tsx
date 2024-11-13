@@ -11,11 +11,15 @@ export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('gcweb'),
 } as const satisfies RouteHandleData;
 
+// Meta tags are constructed for a bilingual page.
 export const meta: MetaFunction = mergeMeta((args) => {
-  // Meta tags are constructed for a bilingual page.
-  const description =
-    'The Canadian Dental Care Plan (CDCP) will help cover some of the cost of various oral health care services for eligible Canadian residents. | Le Régime canadien de soins dentaires (RCSD) permet de couvrir une partie du coût de divers services de santé buccodentaire pour les résidents canadiens éligibles.';
   const title = 'Canadian Dental Care Plan | Régime canadien de soins dentaires - Canada.ca';
+  const description =
+    'The Canadian Dental Care Plan (CDCP) will help cover some of the cost of various ' +
+    'oral health care services for eligible Canadian residents. | Le Régime canadien ' +
+    'de soins dentaires (RCSD) permet de couvrir une partie du coût de divers ' +
+    'services de santé buccodentaire pour les résidents canadiens éligibles.';
+
   return [
     ...getTitleMetaTags(title),
     ...getDescriptionMetaTags(description),
@@ -36,7 +40,7 @@ export const meta: MetaFunction = mergeMeta((args) => {
   ];
 });
 
-export default function RootIndex() {
+export default function LanguageChooser() {
   return (
     <main role="main" className="flex h-svh bg-splash-page bg-cover bg-center" property="mainContentOfPage">
       <div className="m-auto w-[300px] bg-white md:w-[400px] lg:w-[500px]">
