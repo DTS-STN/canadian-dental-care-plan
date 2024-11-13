@@ -2,6 +2,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getClientEnv } from '~/utils/env-utils';
 
+/*
+ * @vitest-environment jsdom
+ */
+
 describe('getClientEnv', () => {
   afterEach(() => {
     vi.resetAllMocks();

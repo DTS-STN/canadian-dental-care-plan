@@ -19,6 +19,10 @@ import {
   useMonths,
 } from '~/utils/date-utils';
 
+/*
+ * @vitest-environment jsdom
+ */
+
 beforeEach(() => {
   vi.useFakeTimers();
   vi.setSystemTime('2024-01-01');

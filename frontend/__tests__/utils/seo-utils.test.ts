@@ -6,6 +6,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
 
+/*
+ * @vitest-environment jsdom
+ */
+
 vi.mock('@remix-run/react');
 vi.mock('react-i18next');
 vi.mock('~/utils/env-utils');

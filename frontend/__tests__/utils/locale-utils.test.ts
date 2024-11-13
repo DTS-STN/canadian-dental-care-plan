@@ -4,6 +4,10 @@ import { describe, expect, it } from 'vitest';
 
 import { APP_LOCALES, isAppLocale, useAppLocale } from '~/utils/locale-utils';
 
+/*
+ * @vitest-environment jsdom
+ */
+
 describe('locale-utils', () => {
   describe('APP_LOCALES', () => {
     it('should contain only "en" and "fr"', () => {

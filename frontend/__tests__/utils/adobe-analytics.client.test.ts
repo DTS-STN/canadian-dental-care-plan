@@ -3,6 +3,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { isConfigured, pushErrorEvent, pushPageviewEvent, pushValidationErrorEvent } from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
 
+/*
+ * @vitest-environment jsdom
+ */
+
 vi.mock('~/utils/env-utils');
 
 describe('isConfigured', () => {
