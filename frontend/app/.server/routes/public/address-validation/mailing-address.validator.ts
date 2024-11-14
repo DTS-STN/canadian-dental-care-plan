@@ -1,18 +1,19 @@
-import type { ServerConfig } from '~/.server/configs';
-import type { Address, AddressValidatorErrorMessages } from '~/.server/remix/domain/validators/address.validator';
-import { AddressValidator } from '~/.server/remix/domain/validators/address.validator';
-import type { InvalidResult, ValidResult } from '~/.server/remix/domain/validators/types.validator';
+import { inject, injectable } from 'inversify';
+
+import { TYPES } from '~/.server/constants';
+import type { Address, AddressValidatorErrorMessages, AddressValidatorFactory } from '~/.server/routes/validators/';
+import type { InvalidResult, ValidResult } from '~/.server/routes/validators/types.validator';
 import { getFixedT } from '~/utils/locale-utils.server';
 
 export class MailingAddressValidator implements MailingAddressValidator {
   constructor(
     private readonly locale: AppLocale,
-    private readonly serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID' | 'USA_COUNTRY_ID'>,
+    private readonly addressValidatorFactory: AddressValidatorFactory,
   ) {}
 
   async validateMailingAddress(data: Partial<Address>): Promise<InvalidResult<Address> | ValidResult<Address>> {
     const errorMessages = await this.getMailingAddressSchemaErrorMessages();
-    const addressValidator = new AddressValidator(errorMessages, this.serverConfig);
+    const addressValidator = this.addressValidatorFactory.createAddressValidator(errorMessages);
     return addressValidator.validateAddress(data);
   }
 
@@ -42,5 +43,17 @@ export class MailingAddressValidator implements MailingAddressValidator {
         required: t('address-validation:index.error-message.postal-zip-code-required'),
       },
     };
+  }
+}
+
+@injectable()
+/**
+ * Factory for creating MailingAddressValidator instances.
+ */
+export class MailingAddressValidatorFactory {
+  constructor(@inject(TYPES.routes.validators.AddressValidatorFactory) private readonly addressValidatorFactory: AddressValidatorFactory) {}
+
+  create(locale: AppLocale): MailingAddressValidator {
+    return new MailingAddressValidator(locale, this.addressValidatorFactory);
   }
 }

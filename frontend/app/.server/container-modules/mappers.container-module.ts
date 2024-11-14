@@ -20,7 +20,7 @@ import {
   ProvinceTerritoryStateDtoMapperImpl,
   ProvincialGovernmentInsurancePlanDtoMapperImpl,
 } from '~/.server/domain/mappers';
-import { BenefitApplicationStateMapperImpl } from '~/.server/remix/domain/mappers';
+import { BenefitApplicationStateMapperImpl } from '~/.server/routes/mappers';
 import { HCaptchaDtoMapperImpl } from '~/.server/web/mappers';
 
 /**
@@ -31,7 +31,6 @@ export const mappersContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.mappers.ApplicantDtoMapper).to(ApplicantDtoMapperImpl);
   bind(TYPES.domain.mappers.ApplicationStatusDtoMapper).to(ApplicationStatusDtoMapperImpl);
   bind(TYPES.domain.mappers.BenefitApplicationDtoMapper).to(BenefitApplicationDtoMapperImpl);
-  bind(TYPES.domain.mappers.BenefitApplicationStateMapper).to(BenefitApplicationStateMapperImpl);
   bind(TYPES.domain.mappers.BenefitRenewalDtoMapper).to(BenefitRenewalDtoMapperImpl);
   bind(TYPES.domain.mappers.ClientApplicationDtoMapper).to(ClientApplicationDtoMapperImpl);
   bind(TYPES.domain.mappers.ClientFriendlyStatusDtoMapper).to(ClientFriendlyStatusDtoMapperImpl);
@@ -45,5 +44,6 @@ export const mappersContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.mappers.PreferredLanguageDtoMapper).to(PreferredLanguageDtoMapperImpl);
   bind(TYPES.domain.mappers.ProvinceTerritoryStateDtoMapper).to(ProvinceTerritoryStateDtoMapperImpl);
   bind(TYPES.domain.mappers.ProvincialGovernmentInsurancePlanDtoMapper).to(ProvincialGovernmentInsurancePlanDtoMapperImpl);
+  bind(TYPES.routes.mappers.BenefitApplicationStateMapper).to(BenefitApplicationStateMapperImpl);
   bind(TYPES.web.mappers.HCaptchaDtoMapper).to(HCaptchaDtoMapperImpl);
 });

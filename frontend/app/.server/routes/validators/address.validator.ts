@@ -2,7 +2,7 @@ import validator from 'validator';
 import { z } from 'zod';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { InvalidResult, ValidResult } from '~/.server/remix/domain/validators/types.validator';
+import type { InvalidResult, ValidResult } from '~/.server/routes/validators/types.validator';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';

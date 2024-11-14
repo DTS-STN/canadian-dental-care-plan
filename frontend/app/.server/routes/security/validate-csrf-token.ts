@@ -19,7 +19,7 @@ import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
  *
  * ```typescript
  * import { json } from 'remix';
- * import { validateCsrfToken } from '~/.server/remix/security';
+ * import { validateCsrfToken } from '~/.server/routes/security';
  *
  * export const action = async ({ request, context }: ActionFunctionArgs) => {
  *   // Validate CSRF token first

@@ -1,6 +1,6 @@
 import type { interfaces } from 'inversify';
 import { Container } from 'inversify';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import { AppContainerProviderImpl } from '~/.server/app-container.provider';
@@ -11,11 +11,7 @@ import type { LogFactory, Logger } from '~/.server/factories';
 describe('AppContainerProviderImpl', () => {
   let container: interfaces.Container;
   let appContainerProvider: AppContainerProviderImpl;
-  const mockLogger = mock<Logger>({
-    trace: vi.fn().mockImplementation((message: string, ...arg: unknown[]) => {
-      console.log(message, ...arg);
-    }),
-  });
+  const mockLogger = mock<Logger>();
   const mockLogFactory = mock<LogFactory>();
 
   type MockService = { name: string };
