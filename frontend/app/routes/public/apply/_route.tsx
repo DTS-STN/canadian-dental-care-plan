@@ -1,8 +1,8 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Outlet, isRouteErrorResponse, useLoaderData, useParams, useRouteError } from '@remix-run/react';
+import { Outlet, useLoaderData, useParams } from '@remix-run/react';
 
 import { TYPES } from '~/.server/constants';
-import { NotFoundError, PublicLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
+import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/apply-route-helpers';
 import { useApiApplyState } from '~/utils/api-apply-state-utils';
@@ -21,16 +21,6 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const locale = getLocale(request);
   const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.configs.ClientConfig);
   return { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError();
-
-  if (isRouteErrorResponse(error) && error.status === 404) {
-    return <NotFoundError error={error} />;
-  }
-
-  return <ServerError error={error} />;
 }
 
 export default function Layout() {
