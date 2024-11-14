@@ -9,6 +9,7 @@ export const pageIds = {
       termsAndConditions: 'CDCP-PROT-RENW-0002',
       taxFiling: 'CDCP-PROT-RENW-0003',
       fileYourTaxes: 'CDCP-PROT-RENW-0004',
+      dentalInsurance: 'CDCP-PROT-RENW-0006',
     },
     dataUnavailable: 'CDCP-PROT-0099',
   },

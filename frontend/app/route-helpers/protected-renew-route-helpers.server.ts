@@ -17,6 +17,7 @@ export interface ProtectedRenewState {
     readonly acknowledgePrivacy: boolean;
     readonly shareData: boolean;
   };
+  readonly dentalInsurance?: boolean;
   // TODO Add remaining states
 }
 
