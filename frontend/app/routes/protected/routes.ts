@@ -52,6 +52,11 @@ export const routes = [
         file: 'routes/protected/renew/file-taxes.tsx',
         paths: { en: '/:lang/protected/renew/:id/file-taxes', fr: '/:lang/protected/renew/:id/file-taxes' },
       },
+      {
+        id: 'protected/renew/$id/dental-insurance',
+        file: 'routes/protected/renew/dental-insurance.tsx',
+        paths: { en: '/:lang/protected/renew/:id/dental-insurance', fr: '/:lang/protected/renew/:id/dental-insurance' },
+      },
     ],
   },
 ] as const satisfies I18nRoute[];

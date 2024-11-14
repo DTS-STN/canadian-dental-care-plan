@@ -111,5 +111,42 @@
     "back-btn": "Back",
     "return-btn": "Return to dashboard",
     "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
+  "dental-insurance": {
+    "title": "{{name}}: Access to other dental insurance",
+    "legend": "Do you have access to dental insurance or coverage:",
+    "list": {
+      "employment": "Through your employment benefits or a family member's employment benefits, including health and wellness accounts",
+      "pension": "Through your pension benefits or a family member's pension benefits",
+      "purchased": "Purchased by you or a family member or through a group plan from an insurance or benefits company",
+      "professional": "Through a professional or student organization"
+    },
+    "option-yes": "<strong>Yes</strong>, I have access to dental insurance or coverage",
+    "option-no": "<strong>No</strong>, I do not have access to dental insurance or coverage",
+    "button": {
+      "back": "Back",
+      "continue": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save"
+    },
+    "detail": {
+      "additional-info": {
+        "title": "Additional information",
+        "eligible": "Exception: You may still be eligible if you are retired and:",
+        "list": {
+          "opted": "you opted out of pension benefits before December 11, 2023, and",
+          "cannot-opt": "you can't opt back in under the pension rules"
+        },
+        "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your or a family member's:",
+        "not-eligible-employer": "employer",
+        "not-eligible-pension": "pension (see exception)",
+        "not-eligible-organization": "professional or student organization.",
+        "not-eligible-note": "As such, you are not eligible for the Canadian Dental Care Plan.",
+        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own, you are not eligible for the Canadian Dental Care Plan while that coverage is in effect."
+      }
+    },
+    "error-message": {
+      "dental-insurance-required": "Select whether you have access to dental insurance"
+    }
   }
 }
