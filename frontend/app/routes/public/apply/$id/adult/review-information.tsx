@@ -20,12 +20,10 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
-import { toBenefitApplicationRequestFromApplyAdultState } from '~/mappers/benefit-application-service-mappers.server';
 import { pageIds } from '~/page-ids';
 import { loadApplyAdultStateForReview } from '~/route-helpers/apply-adult-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
-import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -139,7 +137,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:review-information.page-title') }) };
 
-  const payload = viewPayloadEnabled && toBenefitApplicationRequestFromApplyAdultState(state);
+  // prettier-ignore
+  const payload =
+    viewPayloadEnabled &&
+    appContainer.get(TYPES.domain.mappers.BenefitApplicationDtoMapper).mapBenefitApplicationDtoToBenefitApplicationRequestEntity(
+      appContainer.get(TYPES.domain.mappers.BenefitApplicationStateMapper).mapApplyAdultStateToBenefitApplicationDto(state)
+    );
 
   return {
     id: state.id,
@@ -164,7 +167,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ServerConfig);
-  const benefitApplicationService = getBenefitApplicationService();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();
@@ -191,8 +193,8 @@ export async function action({ context: { appContainer, session }, params, reque
     }
   }
 
-  const benefitApplicationRequest = toBenefitApplicationRequestFromApplyAdultState(state);
-  const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
+  const benefitApplicationDto = appContainer.get(TYPES.domain.mappers.BenefitApplicationStateMapper).mapApplyAdultStateToBenefitApplicationDto(state);
+  const confirmationCode = await appContainer.get(TYPES.domain.services.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
   saveApplyState({ params, session, state: { submissionInfo } });
