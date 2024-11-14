@@ -2,10 +2,9 @@ import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
 import clientApplicationJsonDataSource from './client-application-data/client-application.json';
-import type { ClientApplicationEntity } from '~/.server/domain/entities';
+import type { BenefitApplicationResponseEntity, ClientApplicationEntity } from '~/.server/domain/entities';
 import { db } from '~/mocks/db';
-import type { BenefitApplicationResponse } from '~/schemas/benefit-application-service-schemas.server';
-import { benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
+import { benefitApplicationRequestSchema } from '~/mocks/schemas/benefit-application-schemas.server';
 import { benefitRenewalRequestSchema } from '~/schemas/benefit-renewal-service-schemas.server';
 import type { BenefitRenewalResponse } from '~/schemas/benefit-renewal-service-schemas.server';
 import { getEnv } from '~/utils/env-utils.server';
@@ -296,7 +295,7 @@ export function getPowerPlatformApiMockHandlers() {
         return new HttpResponse('Invalid request body!', { status: 400 });
       }
 
-      const mockBenefitApplicationResponse: BenefitApplicationResponse = {
+      const mockBenefitApplicationResponse: BenefitApplicationResponseEntity = {
         BenefitApplication: {
           BenefitApplicationIdentification: [
             {

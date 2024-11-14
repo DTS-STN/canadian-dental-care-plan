@@ -132,18 +132,3 @@ export const benefitApplicationRequestSchema = z.object({
     }),
   }),
 });
-
-export type BenefitApplicationRequest = z.infer<typeof benefitApplicationRequestSchema>;
-
-export const benefitApplicationResponseSchema = z.object({
-  BenefitApplication: z.object({
-    BenefitApplicationIdentification: z.array(
-      z.object({
-        IdentificationID: z.string(),
-        IdentificationCategoryText: z.string(),
-      }),
-    ),
-  }),
-});
-
-export type BenefitApplicationResponse = z.infer<typeof benefitApplicationResponseSchema>;
