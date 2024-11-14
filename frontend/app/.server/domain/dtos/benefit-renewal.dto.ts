@@ -1,3 +1,20 @@
+import type { ReadonlyDeep } from 'type-fest';
+
+import type { BenefitApplicationDto } from './benefit-application.dto';
+
+export type BenefitRenewalDto = BenefitApplicationDto &
+  ReadonlyDeep<{
+    changeIndicators: {
+      hasAddressChanged: boolean;
+      hasEmailChanged: boolean;
+      hasMaritalStatusChanged: boolean;
+      hasPhoneChanged: boolean;
+      hasFederalBenefitsChanged: boolean;
+      hasProvincialTerritorialBenefitsChanged: boolean;
+    };
+  }>;
+
+// TODO remove this when mapping to BenefitRenewalDto is complete
 export type BenefitRenewalRequestDto = Readonly<{
   applicantInformation: Readonly<{
     firstName: string;
@@ -47,6 +64,7 @@ export type BenefitRenewalRequestDto = Readonly<{
   }>;
 }>;
 
+// TODO remove this when mapping to application code is complete
 export type BenefitRenewalResponseDto = Readonly<{
   confirmationCode: string;
   submittedOn: string;
