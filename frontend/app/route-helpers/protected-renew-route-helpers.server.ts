@@ -18,6 +18,16 @@ export interface ProtectedRenewState {
     readonly shareData: boolean;
   };
   readonly dentalInsurance?: boolean;
+  readonly isSurveyCompleted?: boolean;
+  readonly demographicSurvey?: {
+    readonly indigenousStatus?: string;
+    readonly firstNations?: string[];
+    readonly disabilityStatus?: string;
+    readonly ethnicGroups?: string[];
+    readonly anotherEthnicGroup?: string;
+    readonly locationBornStatus?: string;
+    readonly genderStatus?: string;
+  };
   // TODO Add remaining states
 }
 
