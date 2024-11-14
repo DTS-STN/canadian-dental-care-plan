@@ -62,7 +62,9 @@ import type {
   ProvincialGovernmentInsurancePlanService,
 } from '~/.server/domain/services';
 import type { ConfigFactory, LogFactory } from '~/.server/factories';
-import type { BenefitApplicationStateMapper } from '~/.server/remix/domain/mappers';
+import type { BenefitApplicationStateMapper } from '~/.server/routes/mappers';
+import type { MailingAddressValidatorFactory } from '~/.server/routes/public/address-validation';
+import type { AddressValidatorFactory } from '~/.server/routes/validators';
 import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.server/utils/service-identifier.utils';
 import type { HCaptchaDtoMapper } from '~/.server/web/mappers';
 import type { HCaptchaRepository } from '~/.server/web/repositories';
@@ -133,7 +135,6 @@ export const TYPES = assignServiceIdentifiers({
       ApplicantDtoMapper: serviceId<ApplicantDtoMapper>(),
       ApplicationStatusDtoMapper: serviceId<ApplicationStatusDtoMapper>(),
       BenefitApplicationDtoMapper: serviceId<BenefitApplicationDtoMapper>(),
-      BenefitApplicationStateMapper: serviceId<BenefitApplicationStateMapper>(),
       BenefitRenewalDtoMapper: serviceId<BenefitRenewalDtoMapper>(),
       ClientApplicationDtoMapper: serviceId<ClientApplicationDtoMapper>(),
       ClientFriendlyStatusDtoMapper: serviceId<ClientFriendlyStatusDtoMapper>(),
@@ -191,6 +192,19 @@ export const TYPES = assignServiceIdentifiers({
   },
   factories: {
     LogFactory: serviceId<LogFactory>(),
+  },
+  routes: {
+    mappers: {
+      BenefitApplicationStateMapper: serviceId<BenefitApplicationStateMapper>(),
+    },
+    public: {
+      addressValidation: {
+        MailingAddressValidatorFactory: serviceId<MailingAddressValidatorFactory>(),
+      },
+    },
+    validators: {
+      AddressValidatorFactory: serviceId<AddressValidatorFactory>(),
+    },
   },
   web: {
     repositories: {

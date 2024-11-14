@@ -10,8 +10,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { MailingAddressValidator } from '~/.server/remix/domain/routes/address-validation/mailing-address.validator';
-import { validateCsrfToken } from '~/.server/remix/security';
+import { validateCsrfToken } from '~/.server/routes/security';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
@@ -73,11 +72,11 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = serverConfig;
 
-  const mailingAddressValidator = new MailingAddressValidator(getLocale(request), appContainer.get(TYPES.configs.ServerConfig));
+  const locale = getLocale(request);
+  const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).create(locale);
   const validationResult = await mailingAddressValidator.validateMailingAddress(session.get('route.address-validation'));
   const defaultMailingAddress = validationResult.success ? validationResult.data : undefined;
 
-  const locale = getLocale(request);
   const countries = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const provinceTerritoryStates = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
@@ -111,7 +110,7 @@ export async function action({ context: { appContainer, session }, request, para
   const formData = await request.formData();
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
-  const mailingAddressValidator = new MailingAddressValidator(locale, serverConfig);
+  const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).create(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: formData.get('address') ? String(formData.get('address')) : undefined,
     city: formData.get('city') ? String(formData.get('city')) : undefined,

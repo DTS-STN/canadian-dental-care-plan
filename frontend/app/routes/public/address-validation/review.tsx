@@ -5,7 +5,6 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
-import { MailingAddressValidator } from '~/.server/remix/domain/routes/address-validation/mailing-address.validator';
 import { Address } from '~/components/address';
 import { ButtonLink } from '~/components/buttons';
 import { PublicLayout } from '~/components/layouts/public-layout';
@@ -28,7 +27,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   featureEnabled('address-validation');
 
-  const mailingAddressValidator = new MailingAddressValidator(getLocale(request), appContainer.get(TYPES.configs.ServerConfig));
+  const locale = getLocale(request);
+  const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).create(locale);
   const validationResult = await mailingAddressValidator.validateMailingAddress(session.get('route.address-validation'));
 
   if (!validationResult.success) {
@@ -37,7 +37,6 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   }
 
   const validatedMailingAddress = validationResult.data;
-  const locale = getLocale(request);
   const formattedMailingAddress = {
     address: validatedMailingAddress.address,
     city: validatedMailingAddress.city,

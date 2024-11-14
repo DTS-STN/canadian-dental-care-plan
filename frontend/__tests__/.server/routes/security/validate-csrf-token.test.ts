@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
 
 import { TYPES } from '~/.server/constants';
-import { validateCsrfToken } from '~/.server/remix/security';
+import { validateCsrfToken } from '~/.server/routes/security';
 import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
 import type { CsrfTokenValidator } from '~/.server/web/validators';
 

@@ -119,7 +119,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const payload =
     viewPayloadEnabled &&
     appContainer.get(TYPES.domain.mappers.BenefitApplicationDtoMapper).mapBenefitApplicationDtoToBenefitApplicationRequestEntity(
-      appContainer.get(TYPES.domain.mappers.BenefitApplicationStateMapper).mapApplyChildStateToBenefitApplicationDto(state)
+      appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyChildStateToBenefitApplicationDto(state)
     );
 
   return {
@@ -168,7 +168,7 @@ export async function action({ context: { appContainer, session }, params, reque
     }
   }
 
-  const benefitApplicationDto = appContainer.get(TYPES.domain.mappers.BenefitApplicationStateMapper).mapApplyChildStateToBenefitApplicationDto(state);
+  const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyChildStateToBenefitApplicationDto(state);
   const confirmationCode = await appContainer.get(TYPES.domain.services.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
