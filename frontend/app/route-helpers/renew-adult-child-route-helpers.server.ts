@@ -135,6 +135,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     communicationPreference,
     addressInformation,
     applicantInformation,
+    clientApplication,
     dentalBenefits,
     confirmDentalBenefits,
     dentalInsurance,
@@ -156,8 +157,20 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/renew/$id/applicant-information', params));
   }
 
+  if (clientApplication === undefined) {
+    throw redirect(getPathById('public/renew/$id/applicant-information', params));
+  }
+
+  if (hasMaritalStatusChanged === undefined) {
+    throw redirect(getPathById('public/renew/$id/adult-child/confirm-marital-status', params));
+  }
+
   if (hasMaritalStatusChanged && maritalStatus === undefined) {
     throw redirect(getPathById('public/renew/$id/adult-child/confirm-marital-status', params));
+  }
+
+  if (hasAddressChanged === undefined) {
+    throw redirect(getPathById('public/renew/$id/adult-child/confirm-address', params));
   }
 
   if (hasAddressChanged && addressInformation === undefined) {
@@ -193,6 +206,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     id,
     submissionInfo,
     typeOfRenewal,
+    clientApplication,
     contactInformation,
     communicationPreference,
     applicantInformation,

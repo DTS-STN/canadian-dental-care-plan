@@ -62,7 +62,7 @@ import type {
   ProvincialGovernmentInsurancePlanService,
 } from '~/.server/domain/services';
 import type { ConfigFactory, LogFactory } from '~/.server/factories';
-import type { BenefitApplicationStateMapper } from '~/.server/routes/mappers';
+import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
 import type { MailingAddressValidatorFactory } from '~/.server/routes/public/address-validation';
 import type { AddressValidatorFactory } from '~/.server/routes/validators';
 import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.server/utils/service-identifier.utils';
@@ -196,6 +196,7 @@ export const TYPES = assignServiceIdentifiers({
   routes: {
     mappers: {
       BenefitApplicationStateMapper: serviceId<BenefitApplicationStateMapper>(),
+      BenefitRenewalStateMapper: serviceId<BenefitRenewalStateMapper>(),
     },
     public: {
       addressValidation: {

@@ -4,6 +4,7 @@ import type { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
+import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -18,23 +19,7 @@ export interface RenewState {
     dateOfBirth: string;
     clientNumber: string;
   };
-  readonly clientApplication?: {
-    clientNumber: string;
-    dateOfBirth: string;
-    firstName: string;
-    hasAppliedBeforeApril302024: boolean;
-    hasBeenAssessedByCRA: boolean;
-    lastName: string;
-    sin: string;
-    children: {
-      information: {
-        firstName: string;
-        lastName: string;
-        dateOfBirth: string;
-        clientNumber: string;
-      };
-    }[];
-  } | null;
+  readonly clientApplication?: ClientApplicationDto;
   readonly children: {
     readonly id: string;
     readonly dentalBenefits?: {
