@@ -1,12 +1,13 @@
 import type { Params } from '@remix-run/react';
-import { useMatches } from '@remix-run/react';
+import { generatePath, useMatches } from '@remix-run/react';
 
 import type { FlatNamespace, KeysByTOptions, Namespace, ParseKeysByNamespaces, TOptions } from 'i18next';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
-import { routes } from '~/routes';
+import type { I18nPageRoute, I18nRoute, Language } from '~/routes/routes';
+import { isI18nLayoutRoute, isI18nPageRoute, routes } from '~/routes/routes';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
@@ -72,17 +73,6 @@ export interface RouteHandleData extends Record<string, unknown | undefined> {
   pageTitleI18nKey?: PageTitleI18nKey;
 }
 
-export interface Route {
-  id: string;
-  file: string;
-  paths?: {
-    en: string;
-    fr: string;
-  };
-  index?: boolean;
-  children?: Array<Route>;
-}
-
 export function useBreadcrumbs() {
   return (
     useMatches()
@@ -141,23 +131,26 @@ export function usePageTitleI18nOptions() {
     .reduce(coalesce);
 }
 
-export function findRouteById(id: string, routes: Array<Route> = []): Route | undefined {
+export function findRouteById(id: string, routes: I18nRoute[] = []): I18nPageRoute | undefined {
   for (const route of routes) {
-    const match = route.id === id ? route : findRouteById(id, route.children);
+    if (isI18nPageRoute(route) && route.id === id) {
+      return route;
+    }
 
-    if (match) {
-      return match;
+    if (isI18nLayoutRoute(route)) {
+      const matchingRoute = findRouteById(id, route.children);
+      if (matchingRoute) return matchingRoute;
     }
   }
 }
 
 export function getPathById(id: string, params: Params = {}) {
-  const { lang = 'en' } = params as { lang?: AppLocale };
+  const { lang = 'en' } = params as { lang?: Language };
 
   const route = findRouteById(id, routes);
-  const path = route?.paths?.[lang];
+  const path = route?.paths[lang];
   invariant(path, `path not found for route [${id}] and language [${lang}]`);
 
   // replace any path params with the provided params
-  return path.replace(/:([a-zA-Z]+)/g, (_, key) => params[key] ?? ':$1');
+  return generatePath(path, params);
 }

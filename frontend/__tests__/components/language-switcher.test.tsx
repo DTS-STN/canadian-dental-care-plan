@@ -17,10 +17,11 @@ vi.mock('react-i18next', () => ({
 vi.mock('@remix-run/react', async (actual) => {
   // XXX :: GjB :: using actual <Link> component and useHref hook because I'm too lazy to mock it 🤷
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const { Link, useHref } = await actual<typeof import('@remix-run/react')>();
+  const { Link, generatePath, useHref } = await actual<typeof import('@remix-run/react')>();
 
   return {
     Link,
+    generatePath,
     useHref,
     useLocation: vi.fn(),
     useMatches: vi.fn(),
