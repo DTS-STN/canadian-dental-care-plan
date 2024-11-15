@@ -191,5 +191,18 @@
       "sin-valid": "Doit être un NAS valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
+  },
+  "parent-or-guardian": {
+    "page-title": "{{childName}}\u00a0: parent or legal guardian",
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "form-instructions": "Are you the parent or legal guardian of this child?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "error-message": {
+      "parent-or-guardian-required": "Select whether you are the parent or legal guardian of this child"
+    }
   }
 }
