@@ -3,8 +3,6 @@ import { z } from 'zod';
 
 import clientApplicationJsonDataSource from './client-application-data/client-application.json';
 import type { ClientApplicationEntity } from '~/.server/domain/entities';
-import { benefitRenewalRequestSchema } from '~/schemas/benefit-renewal-service-schemas.server';
-import type { BenefitRenewalResponse } from '~/schemas/benefit-renewal-service-schemas.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -28,7 +26,6 @@ export function getPowerPlatformApiMockHandlers() {
 
       const url = new URL(request.url);
       const action = url.searchParams.get('action');
-      const scenario = url.searchParams.get('scenario');
 
       const requestBody = await request.json();
 
@@ -109,28 +106,6 @@ export function getPowerPlatformApiMockHandlers() {
             },
           },
         } satisfies ClientApplicationEntity);
-      }
-
-      if (scenario === 'RENEWAL') {
-        const parsedBenefitRenewalRequest = await benefitRenewalRequestSchema.safeParseAsync(requestBody);
-
-        if (!parsedBenefitRenewalRequest.success) {
-          log.debug('Invalid request body [%j]', requestBody);
-          return new HttpResponse('Invalid request body!', { status: 400 });
-        }
-
-        const mockBenefitRenewalResponse: BenefitRenewalResponse = {
-          BenefitApplication: {
-            BenefitRenewalIdentification: [
-              {
-                IdentificationID: '2476124092174',
-                IdentificationCategoryText: 'Confirmation Number',
-              },
-            ],
-          },
-        };
-
-        return HttpResponse.json(mockBenefitRenewalResponse);
       }
 
       throw Error('Missing action or scenario parameter in request.');

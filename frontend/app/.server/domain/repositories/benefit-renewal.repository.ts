@@ -17,14 +17,14 @@ export interface BenefitRenewalRepository {
 }
 
 @injectable()
-export class BenefitRenewalRepositoryImpl implements BenefitRenewalRepository {
+export class DefaultBenefitRenewalRepository implements BenefitRenewalRepository {
   private readonly log: Logger;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
   ) {
-    this.log = logFactory.createLogger('BenefitRenewalRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultBenefitRenewalRepository');
   }
 
   async createBenefitRenewal(benefitRenewalRequest: BenefitRenewalRequestEntity): Promise<BenefitRenewalResponseEntity> {
@@ -33,7 +33,7 @@ export class BenefitRenewalRepositoryImpl implements BenefitRenewalRepository {
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`);
     url.searchParams.set('scenario', 'RENEWAL');
 
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.benefit-application_renewal.posts', url, {
+    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.benefit-application-renewal.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -58,5 +58,33 @@ export class BenefitRenewalRepositoryImpl implements BenefitRenewalRepository {
     this.log.trace('Benefit renewal: [%j]', data);
 
     return data;
+  }
+}
+
+@injectable()
+export class MockBenefitRenewalRepository implements BenefitRenewalRepository {
+  private readonly log: Logger;
+
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
+    this.log = logFactory.createLogger('DefaultBenefitRenewalRepository');
+  }
+
+  createBenefitRenewal(benefitRenewalRequest: BenefitRenewalRequestEntity): Promise<BenefitRenewalResponseEntity> {
+    this.log.debug('Submiting benefit renewal for request [%j]', benefitRenewalRequest);
+
+    const benefitRenewalResponseEntity: BenefitRenewalResponseEntity = {
+      BenefitApplication: {
+        BenefitRenewalIdentification: [
+          {
+            IdentificationID: '2476124092174',
+            IdentificationCategoryText: 'Confirmation Number',
+          },
+        ],
+      },
+    };
+
+    this.log.debug('Benefit renewal: [%j]', benefitRenewalResponseEntity);
+
+    return Promise.resolve(benefitRenewalResponseEntity);
   }
 }
