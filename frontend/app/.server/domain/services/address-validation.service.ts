@@ -4,7 +4,7 @@ import { TYPES } from '~/.server/constants';
 import type { AddressCorrectionRequestDto, AddressCorrectionResultDto } from '~/.server/domain/dtos';
 import type { AddressValidationDtoMapper } from '~/.server/domain/mappers';
 import type { AddressValidationRepository } from '~/.server/domain/repositories';
-import type { AuditService } from '~/.server/domain/services';
+import type { AuditService } from '~/.server/domain/services/audit.service';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface AddressValidationService {
@@ -18,7 +18,7 @@ export interface AddressValidationService {
 }
 
 @injectable()
-export class AddressValidationServiceImpl implements AddressValidationService {
+export class DefaultAddressValidationService implements AddressValidationService {
   private readonly log: Logger;
 
   constructor(
@@ -27,18 +27,23 @@ export class AddressValidationServiceImpl implements AddressValidationService {
     @inject(TYPES.domain.repositories.AddressValidationRepository) private readonly addressValidationRepository: AddressValidationRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('AddressValidationServiceImpl');
+    this.log = logFactory.createLogger('DefaultAddressValidationService');
   }
 
   async getAddressCorrectionResult(addressCorrectionRequestDto: AddressCorrectionRequestDto): Promise<AddressCorrectionResultDto> {
     this.log.trace('Getting address correction results with addressCorrectionRequest: [%j]', addressCorrectionRequestDto);
-
     this.auditService.createAudit('address-validation.get-address-correction-result', { userId: addressCorrectionRequestDto.userId });
 
-    const addressCorrectionResultEntity = await this.addressValidationRepository.getAddressCorrectionResult(addressCorrectionRequestDto);
-    const addressCorrectionResultDto = this.addressValidationDtoMapper.mapAddressCorrectionResultEntityToAddressCorrectionResultDto(addressCorrectionResultEntity);
-
-    this.log.trace('Returning address correction result: [%j]', addressCorrectionResultDto);
-    return addressCorrectionResultDto;
+    try {
+      const addressCorrectionResultEntity = await this.addressValidationRepository.getAddressCorrectionResult(addressCorrectionRequestDto);
+      const addressCorrectionResultDto = this.addressValidationDtoMapper.mapAddressCorrectionResultEntityToAddressCorrectionResultDto(addressCorrectionResultEntity);
+      this.log.trace('Returning address correction result: [%j]', addressCorrectionResultDto);
+      return addressCorrectionResultDto;
+    } catch (error) {
+      this.log.warn('Unexpected error occurred while getting address correction results. [%s]', error);
+      const addressCorrectionResultDto = this.addressValidationDtoMapper.mapAddressCorrectionRequestDtoToAddressCorrectionResultDto(addressCorrectionRequestDto, 'service-unavailable');
+      this.log.trace('Service unavailable, returning address correction result: [%j]', addressCorrectionResultDto);
+      return addressCorrectionResultDto;
+    }
   }
 }

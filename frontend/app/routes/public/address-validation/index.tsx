@@ -26,7 +26,6 @@ import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { formatPostalCode } from '~/utils/postal-zip-code-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -160,14 +159,14 @@ export async function action({ context: { appContainer, session }, request, para
     userId: 'anonymous',
   });
 
-  if (addressCorrectionResult.status === 'NotCorrect') {
+  if (addressCorrectionResult.status === 'not-correct') {
     return {
       invalidAddress: formattedMailingAddress,
       status: 'address-invalid',
     } as const satisfies AddressInvalidResponse;
   }
 
-  if (addressCorrectionResult.status === 'Corrected') {
+  if (addressCorrectionResult.status === 'corrected') {
     const provinceTerritoryState = provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
     return {
       enteredAddress: formattedMailingAddress,
@@ -177,7 +176,7 @@ export async function action({ context: { appContainer, session }, request, para
         city: addressCorrectionResult.city,
         country: formattedMailingAddress.country,
         countryId: formattedMailingAddress.countryId,
-        postalZipCode: formatPostalCode(serverConfig.CANADA_COUNTRY_ID, addressCorrectionResult.postalCode),
+        postalZipCode: addressCorrectionResult.postalCode,
         provinceState: provinceTerritoryState.abbr,
         provinceStateId: provinceTerritoryState.id,
       },

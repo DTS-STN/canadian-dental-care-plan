@@ -23,7 +23,7 @@ export type AddressCorrectionRequestDto = Readonly<{
  */
 export type AddressCorrectionResultDto = Readonly<{
   /** The status of the address correction. */
-  status: AddressCorrectionStatus;
+  status: 'corrected' | 'not-correct' | 'valid' | 'service-unavailable';
 
   /** The full or partial address. */
   address: string;
@@ -41,4 +41,4 @@ export type AddressCorrectionResultDto = Readonly<{
 /**
  * Represents the possible statuses for an address correction result.
  */
-export type AddressCorrectionStatus = 'Corrected' | 'NotCorrect' | 'Valid';
+export type AddressCorrectionStatus = AddressCorrectionResultDto['status'];
