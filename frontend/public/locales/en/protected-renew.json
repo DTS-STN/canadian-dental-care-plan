@@ -204,5 +204,27 @@
     "error-message": {
       "parent-or-guardian-required": "Select whether you are the parent or legal guardian of this child"
     }
+  },
+  "confirm-phone": {
+    "page-title": "Phone Number",
+    "add-phone": "Having an up-to-date phone number on file helps the Government of Canada contact you if there is an issue with your renewal. Otherwise, we'll contact you by mail.",
+    "add-or-update": {
+      "legend": "Would you like to update or add your phone number?",
+      "help-message": "The phone number we have on file can also be found on the renewal letter you received from Service Canada."
+    },
+    "phone-number": "Phone number",
+    "phone-number-alt": "Alternate phone number (optional)",
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "option-yes": "Yes",
+    "option-no": "No",
+    "error-message": {
+      "add-or-update-required": "Select whether you would like to add or update your phone number",
+      "phone-number-valid": "Invalid phone number",
+      "phone-number-alt-valid": "Invalid phone number",
+      "phone-required": "Enter a phone number"
+    }
   }
 }
