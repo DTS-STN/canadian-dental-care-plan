@@ -41,6 +41,14 @@ export interface ProtectedRenewState {
     readonly isParentOrLegalGuardian?: boolean;
     readonly dentalInsurance?: boolean;
   }[];
+  readonly contactInformation?: {
+    isNewOrUpdatedPhoneNumber?: boolean;
+    isNewOrUpdatedEmail?: boolean;
+    phoneNumber?: string;
+    phoneNumberAlt?: string;
+    email?: string;
+    shouldReceiveEmailCommunication?: boolean;
+  };
   // TODO Add remaining states
 }
 

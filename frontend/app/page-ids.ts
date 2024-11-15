@@ -13,6 +13,7 @@ export const pageIds = {
       demographicSurvey: 'CDCP-PROT-RENW-0007',
       maritalStatus: 'CDCP-PROT-RENW-0008',
       parentOrGuardian: 'CDCP-PROT-RENW-0009',
+      confirmPhone: 'CDCP-PROT-RENW-0010',
     },
     dataUnavailable: 'CDCP-PROT-0099',
   },
