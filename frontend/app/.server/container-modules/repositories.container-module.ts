@@ -3,7 +3,6 @@ import { ContainerModule } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import {
-  ClientApplicationRepositoryImpl,
   ClientFriendlyStatusRepositoryImpl,
   CountryRepositoryImpl,
   DefaultAddressValidationRepository,
@@ -11,6 +10,7 @@ import {
   DefaultApplicationStatusRepository,
   DefaultBenefitApplicationRepository,
   DefaultBenefitRenewalRepository,
+  DefaultClientApplicationRepository,
   DefaultLetterRepository,
   DemographicSurveyRepositoryImpl,
   FederalGovernmentInsurancePlanRepositoryImpl,
@@ -21,6 +21,7 @@ import {
   MockApplicationStatusRepository,
   MockBenefitApplicationRepository,
   MockBenefitRenewalRepository,
+  MockClientApplicationRepository,
   MockLetterRepository,
   PreferredCommunicationMethodRepositoryImpl,
   PreferredLanguageRepositoryImpl,
@@ -74,7 +75,9 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.repositories.BenefitRenewalRepository).to(DefaultBenefitRenewalRepository).when(isMockEnabled('power-platform', false));
   bind(TYPES.domain.repositories.BenefitRenewalRepository).to(MockBenefitRenewalRepository).when(isMockEnabled('power-platform', true));
 
-  bind(TYPES.domain.repositories.ClientApplicationRepository).to(ClientApplicationRepositoryImpl);
+  bind(TYPES.domain.repositories.ClientApplicationRepository).to(DefaultClientApplicationRepository).when(isMockEnabled('power-platform', false));
+  bind(TYPES.domain.repositories.ClientApplicationRepository).to(MockClientApplicationRepository).when(isMockEnabled('power-platform', true));
+
   bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(ClientFriendlyStatusRepositoryImpl);
   bind(TYPES.domain.repositories.CountryRepository).to(CountryRepositoryImpl);
   bind(TYPES.domain.repositories.DemographicSurveyRepository).to(DemographicSurveyRepositoryImpl);
