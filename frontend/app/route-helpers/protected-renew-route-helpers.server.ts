@@ -1,5 +1,5 @@
 import type { Session } from '@remix-run/node';
-import { redirectDocument } from '@remix-run/node';
+import { redirect, redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
 import { z } from 'zod';
@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { getPathById } from '~/utils/route-utils';
 import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
 
 export interface ProtectedRenewState {
@@ -35,10 +36,16 @@ export interface ProtectedRenewState {
     yearOfBirth: string;
     socialInsuranceNumber: string;
   };
+  readonly children: {
+    readonly id: string;
+    readonly isParentOrLegalGuardian?: boolean;
+    readonly dentalInsurance?: boolean;
+  }[];
   // TODO Add remaining states
 }
 
 export type PartnerInformationState = NonNullable<ProtectedRenewState['partnerInformation']>;
+export type ChildState = ProtectedRenewState['children'][number];
 
 /**
  * Schema for validating UUID.
@@ -153,6 +160,7 @@ export function startProtectedRenewState({ id, session }: StartArgs) {
   const initialState: ProtectedRenewState = {
     id: parsedId,
     editMode: false,
+    children: [],
   };
 
   const sessionName = getSessionName(parsedId);
@@ -164,4 +172,49 @@ export function startProtectedRenewState({ id, session }: StartArgs) {
 export function renewStateHasPartner(maritalStatus: string) {
   const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
   return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
+}
+
+export function isNewChildState(child: ChildState) {
+  return child.dentalInsurance === undefined;
+}
+
+interface LoadProtectedRenewSingleChildStateArgs {
+  params: Params;
+  session: Session;
+}
+
+/**
+ * Loads single child state from renew adult child state.
+ * @param args - The arguments.
+ * @returns The loaded child state.
+ */
+export function loadProtectedRenewSingleChildState({ params, session }: LoadProtectedRenewSingleChildStateArgs) {
+  const log = getLogger('protected-renew-route-helpers.server/loadProtectedRenewSingleChildState');
+  const protectedRenewState = loadProtectedRenewState({ params, session });
+
+  const parsedChildId = z.string().uuid().safeParse(params.childId);
+
+  if (!parsedChildId.success) {
+    log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
+    throw redirect(getPathById('protected/renew/$id/member-selection', params));
+  }
+
+  const childId = parsedChildId.data;
+  const childStateIndex = protectedRenewState.children.findIndex(({ id }) => id === childId);
+
+  if (childStateIndex === -1) {
+    log.warn('Protected renew single child has not been found; childId: [%s]', childId);
+    throw redirect(getPathById('protected/renew/$id/member-selection', params));
+  }
+
+  const childState = protectedRenewState.children[childStateIndex];
+  const isNew = isNewChildState(childState);
+  const editMode = !isNew && protectedRenewState.editMode;
+
+  return {
+    ...childState,
+    childNumber: childStateIndex + 1,
+    editMode,
+    isNew,
+  };
 }
