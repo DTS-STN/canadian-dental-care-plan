@@ -4,6 +4,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import { LetterEntity, PdfEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
+import getPdfByLetterIdJson from '~/.server/resources/cct/get-pdf-by-letter-id.json';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 
 /**
@@ -28,7 +29,7 @@ export interface LetterRepository {
 }
 
 @injectable()
-export class LetterRepositoryImpl implements LetterRepository {
+export class DefaultLetterRepository implements LetterRepository {
   private readonly log: Logger;
 
   constructor(
@@ -36,7 +37,7 @@ export class LetterRepositoryImpl implements LetterRepository {
     @inject(TYPES.configs.ServerConfig)
     private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_BASE_URI' | 'INTEROP_CCT_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_COMMUNITY'>,
   ) {
-    this.log = logFactory.createLogger('LetterRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultLetterRepository');
   }
 
   async findLettersByClientId(clientId: string): Promise<ReadonlyArray<LetterEntity>> {
@@ -99,5 +100,38 @@ export class LetterRepositoryImpl implements LetterRepository {
     const pdfEntity: PdfEntity = await response.json();
     this.log.trace('Returning PDF [%j]', pdfEntity);
     return pdfEntity;
+  }
+}
+
+@injectable()
+export class MockLetterRepository implements LetterRepository {
+  private readonly log: Logger;
+
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
+    this.log = logFactory.createLogger('MockLetterRepository');
+  }
+
+  findLettersByClientId(clientId: string): Promise<ReadonlyArray<LetterEntity>> {
+    this.log.debug('Fetching letters for clientId [%s]', clientId);
+
+    const letterEntities: ReadonlyArray<LetterEntity> = [
+      {
+        LetterName: '775170001',
+        LetterId: '038d9d0f-fb35-4d98-8f31-a4b2171e521a',
+        LetterDate: '2024/04/05',
+      },
+    ];
+
+    this.log.debug('Returning letters [%j]', letterEntities);
+    return Promise.resolve(letterEntities);
+  }
+
+  getPdfByLetterId(letterId: string): Promise<PdfEntity> {
+    this.log.debug('Fetching PDF for letterId [%s]', letterId);
+
+    const pdfEntity: PdfEntity = getPdfByLetterIdJson;
+
+    this.log.debug('Returning PDF [%j]', pdfEntity);
+    return Promise.resolve(pdfEntity);
   }
 }
