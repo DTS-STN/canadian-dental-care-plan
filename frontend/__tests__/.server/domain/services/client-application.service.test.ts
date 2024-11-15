@@ -178,23 +178,30 @@ describe('ClientApplicationServiceImpl', () => {
 
   // Mock for ClientApplicationDto
   const mockClientApplicationDto: ClientApplicationDto = {
-    clientNumber: 'ABC123',
+    applicantInformation: {
+      firstName: 'John',
+      lastName: 'Doe',
+      maritalStatus: 'MARRIED',
+      socialInsuranceNumber: '80000002',
+    },
+    children: [],
+    communicationPreferences: {
+      preferredLanguage: 'ENG',
+      preferredMethod: 'EMAIL',
+    },
+    contactInformation: {
+      copyMailingAddress: true,
+      homeAddress: '123 Fake Street',
+      homeCity: 'Home City',
+      homeCountry: 'CAN',
+      mailingAddress: '456 Fake Street',
+      mailingCity: 'Mailing City',
+      mailingCountry: 'USA',
+    },
     dateOfBirth: '2000-01-01',
-    firstName: 'John',
-    hasAppliedBeforeApril302024: false,
-    hasBeenAssessedByCRA: true,
-    lastName: 'Doe',
-    sin: '80000002',
-    children: [
-      {
-        information: {
-          firstName: 'John',
-          lastName: 'Doe',
-          dateOfBirth: '2000-01-01',
-          clientNumber: '123456789',
-        },
-      },
-    ],
+    dentalBenefits: ['ID-123456'],
+    hasFiledTaxes: true,
+    isInvitationToApplyClient: false,
   };
 
   describe('findClientApplicationBySin', () => {

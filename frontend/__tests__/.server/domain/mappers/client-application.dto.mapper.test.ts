@@ -23,14 +23,14 @@ describe('ClientApplicationDtoMapperImpl', () => {
                     AddressCategoryCode: {
                       ReferenceDataName: 'Home',
                     },
-                    AddressCityName: 'Toronto',
+                    AddressCityName: 'Home City',
                     AddressCountry: {
                       CountryCode: {
                         ReferenceDataID: 'CAN',
                         ReferenceDataName: 'Canada',
                       },
                     },
-                    AddressPostalCode: 'M5H 2N2',
+                    AddressPostalCode: 'H0H 0H0',
                     AddressProvince: {
                       ProvinceCode: {
                         ReferenceDataID: 'ON',
@@ -39,7 +39,30 @@ describe('ClientApplicationDtoMapperImpl', () => {
                     },
                     AddressSecondaryUnitText: 'Unit 101',
                     AddressStreet: {
-                      StreetName: 'Main St',
+                      StreetName: '123 Fake Street',
+                    },
+                  },
+                  {
+                    AddressCategoryCode: {
+                      ReferenceDataName: 'Mailing',
+                    },
+                    AddressCityName: 'Mailing City',
+                    AddressCountry: {
+                      CountryCode: {
+                        ReferenceDataID: 'USA',
+                        ReferenceDataName: 'United States',
+                      },
+                    },
+                    AddressPostalCode: '90210',
+                    AddressProvince: {
+                      ProvinceCode: {
+                        ReferenceDataID: 'LA',
+                        ReferenceDataName: 'Los Angeles',
+                      },
+                    },
+                    AddressSecondaryUnitText: 'Unit 102',
+                    AddressStreet: {
+                      StreetName: '456 Fake Street',
                     },
                   },
                 ],
@@ -54,7 +77,15 @@ describe('ClientApplicationDtoMapperImpl', () => {
                       TelephoneNumberFullID: '555-555-5555',
                     },
                     TelephoneNumberCategoryCode: {
-                      ReferenceDataName: 'Mobile',
+                      ReferenceDataName: 'Primary',
+                    },
+                  },
+                  {
+                    FullTelephoneNumber: {
+                      TelephoneNumberFullID: '555-555-5556',
+                    },
+                    TelephoneNumberCategoryCode: {
+                      ReferenceDataName: 'Alternate',
                     },
                   },
                 ],
@@ -106,12 +137,8 @@ describe('ClientApplicationDtoMapperImpl', () => {
             },
             ClientIdentification: [
               {
-                IdentificationID: '4f35f70b-2f83-ee11-8179-000d3a09d000',
-                IdentificationCategoryText: 'Applicant ID',
-              },
-              {
-                IdentificationID: '1e97fe42-0263-ee11-8df0-000d3a09df08',
-                IdentificationCategoryText: 'Client ID',
+                IdentificationID: '00000000000',
+                IdentificationCategoryText: 'Client Number',
               },
             ],
             Flags: [
@@ -130,7 +157,7 @@ describe('ClientApplicationDtoMapperImpl', () => {
                   },
                 ],
                 PersonRelationshipCode: {
-                  ReferenceDataName: 'Sibling',
+                  ReferenceDataName: 'Spouse',
                 },
                 PersonSINIdentification: {
                   IdentificationID: '80000002',
@@ -174,14 +201,51 @@ describe('ClientApplicationDtoMapperImpl', () => {
       };
 
       const expectedClientApplicationDto: ClientApplicationDto = {
-        clientNumber: '4f35f70b-2f83-ee11-8179-000d3a09d000',
-        dateOfBirth: '2000-01-01',
-        firstName: 'John',
-        hasAppliedBeforeApril302024: false,
-        hasBeenAssessedByCRA: true,
-        lastName: 'Doe',
-        sin: '80000002',
+        applicantInformation: {
+          firstName: 'John',
+          lastName: 'Doe',
+          maritalStatus: 'MARRIED',
+          socialInsuranceNumber: '80000002',
+          clientNumber: '00000000000',
+        },
         children: [],
+        communicationPreferences: {
+          email: 'email@example.com',
+          preferredLanguage: 'ENG',
+          preferredMethod: 'EMAIL',
+        },
+        contactInformation: {
+          copyMailingAddress: true,
+          email: 'email@example.com',
+          homeAddress: '123 Fake Street',
+          homeApartment: 'Unit 101',
+          homeCity: 'Home City',
+          homeCountry: 'CAN',
+          homePostalCode: 'H0H 0H0',
+          homeProvince: 'ON',
+          mailingAddress: '456 Fake Street',
+          mailingApartment: 'Unit 102',
+          mailingCity: 'Mailing City',
+          mailingCountry: 'USA',
+          mailingPostalCode: '90210',
+          mailingProvince: 'LA',
+          phoneNumber: '555-555-5555',
+          phoneNumberAlt: '555-555-5556',
+        },
+        dateOfBirth: '2000-01-01',
+        dentalBenefits: ['ID-123456'],
+        dentalInsurance: true,
+        disabilityTaxCredit: true,
+        hasFiledTaxes: true,
+        isInvitationToApplyClient: false,
+        livingIndependently: true,
+        partnerInformation: {
+          confirm: false,
+          dateOfBirth: '2000-01-01',
+          firstName: 'Jane',
+          lastName: 'Doe',
+          socialInsuranceNumber: '80000002',
+        },
       };
 
       // Act
