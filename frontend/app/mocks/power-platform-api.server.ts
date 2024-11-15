@@ -2,8 +2,7 @@ import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
 import clientApplicationJsonDataSource from './client-application-data/client-application.json';
-import type { BenefitApplicationResponseEntity, ClientApplicationEntity } from '~/.server/domain/entities';
-import { benefitApplicationRequestSchema } from '~/mocks/schemas/benefit-application-schemas.server';
+import type { ClientApplicationEntity } from '~/.server/domain/entities';
 import { benefitRenewalRequestSchema } from '~/schemas/benefit-renewal-service-schemas.server';
 import type { BenefitRenewalResponse } from '~/schemas/benefit-renewal-service-schemas.server';
 import { getEnv } from '~/utils/env-utils.server';
@@ -134,25 +133,7 @@ export function getPowerPlatformApiMockHandlers() {
         return HttpResponse.json(mockBenefitRenewalResponse);
       }
 
-      const parsedBenefitApplicationRequest = await benefitApplicationRequestSchema.safeParseAsync(requestBody);
-
-      if (!parsedBenefitApplicationRequest.success) {
-        log.debug('Invalid request body [%j]', requestBody);
-        return new HttpResponse('Invalid request body!', { status: 400 });
-      }
-
-      const mockBenefitApplicationResponse: BenefitApplicationResponseEntity = {
-        BenefitApplication: {
-          BenefitApplicationIdentification: [
-            {
-              IdentificationID: '2476124092174',
-              IdentificationCategoryText: 'Confirmation Number',
-            },
-          ],
-        },
-      };
-
-      return HttpResponse.json(mockBenefitApplicationResponse);
+      throw Error('Missing action or scenario parameter in request.');
     }),
   ];
 }
