@@ -1,6 +1,4 @@
-export type * from './address-validation.repository';
-export * from './address-validation.repository.default';
-export * from './address-validation.repository.mock';
+export * from './address-validation.repository';
 export * from './applicant-repository';
 export * from './application-status.repository';
 export * from './benefit-application.repository';

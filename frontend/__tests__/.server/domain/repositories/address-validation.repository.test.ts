@@ -2,7 +2,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import { DefaultAddressValidationRepository } from '~/.server/domain/repositories';
+import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
+import { DefaultAddressValidationRepository, MockAddressValidationRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { instrumentedFetch } from '~/utils/fetch-utils.server';
 
@@ -56,5 +57,33 @@ describe('DefaultAddressValidationRepository', () => {
       const repository = new DefaultAddressValidationRepository(mockLogFactory, mockServerConfig);
       await expect(() => repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' })).rejects.toThrowError();
     });
+  });
+});
+
+describe('MockAddressValidationRepository', () => {
+  const mockLogFactory = mock<LogFactory>({ createLogger: () => mock<Logger>() });
+
+  it('should return a mocked address correction result', async () => {
+    const addressCorrectionRequest: AddressCorrectionRequestEntity = {
+      address: '111 Wellington Street',
+      city: 'Ottawa',
+      postalCode: 'K1A 0A9',
+      provinceCode: 'ON',
+    };
+
+    const repository = new MockAddressValidationRepository(mockLogFactory);
+    const result = await repository.getAddressCorrectionResult(addressCorrectionRequest);
+
+    expect(result).toEqual({
+      'wsaddr:CorrectionResults': {
+        'nc:AddressFullText': expect.any(String),
+        'nc:AddressCityName': addressCorrectionRequest.city.toUpperCase(),
+        'can:ProvinceCode': addressCorrectionRequest.provinceCode.toUpperCase(),
+        'nc:AddressPostalCode': addressCorrectionRequest.postalCode.toUpperCase(),
+        'wsaddr:Information': {
+          'wsaddr:StatusCode': expect.any(String),
+        },
+      },
+    } satisfies AddressCorrectionResultEntity);
   });
 });
