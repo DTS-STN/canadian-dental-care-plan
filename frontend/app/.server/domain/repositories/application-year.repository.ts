@@ -30,11 +30,8 @@ export class ApplicationYearRepositoryImpl implements ApplicationYearRepository 
   async listApplicationYears(applicationYearRequestEntity: ApplicationYearRequestEntity): Promise<ApplicationYearResultEntity> {
     this.log.trace('Getting possible application year dates given applicationYearRequest: [%j]', applicationYearRequestEntity);
 
-    // Mocking fake date
-    const date = '2024-11-13';
-
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/dts/v1/application-years`);
-    url.searchParams.set('currentDate', date);
+    url.searchParams.set('currentDate', applicationYearRequestEntity.date);
 
     const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.application-year.gets', url, {
       method: 'GET',
@@ -57,7 +54,7 @@ export class ApplicationYearRepositoryImpl implements ApplicationYearRepository 
     }
 
     const applicationYearResults: ApplicationYearResultEntity = await response.json();
-    this.log.trace('Address correction results: [%j]', applicationYearResults);
+    this.log.trace('Application year response: [%j]', applicationYearResults);
 
     return applicationYearResults;
   }

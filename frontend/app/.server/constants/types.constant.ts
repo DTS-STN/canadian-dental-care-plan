@@ -139,7 +139,6 @@ export const TYPES = assignServiceIdentifiers({
       ApplicationStatusDtoMapper: serviceId<ApplicationStatusDtoMapper>(),
       BenefitApplicationDtoMapper: serviceId<BenefitApplicationDtoMapper>(),
       ApplicationYearDtoMapper: serviceId<ApplicationYearDtoMapper>(),
-      BenefitApplicationStateMapper: serviceId<BenefitApplicationStateMapper>(),
       BenefitRenewalDtoMapper: serviceId<BenefitRenewalDtoMapper>(),
       ClientApplicationDtoMapper: serviceId<ClientApplicationDtoMapper>(),
       ClientFriendlyStatusDtoMapper: serviceId<ClientFriendlyStatusDtoMapper>(),
