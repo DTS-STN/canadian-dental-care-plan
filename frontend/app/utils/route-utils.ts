@@ -7,7 +7,7 @@ import validator from 'validator';
 import { z } from 'zod';
 
 import type { I18nPageRoute, I18nRoute, Language } from '~/routes/routes';
-import { isI18nLayoutRoute, isI18nPageRoute, routes } from '~/routes/routes';
+import { routes as i18nRoutes, isI18nLayoutRoute, isI18nPageRoute } from '~/routes/routes';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
@@ -131,7 +131,7 @@ export function usePageTitleI18nOptions() {
     .reduce(coalesce);
 }
 
-export function findRouteById(id: string, routes: I18nRoute[] = []): I18nPageRoute | undefined {
+export function findRouteById(id: string, routes: I18nRoute[] = i18nRoutes): I18nPageRoute | undefined {
   for (const route of routes) {
     if (isI18nPageRoute(route) && route.id === id) {
       return route;
@@ -144,13 +144,12 @@ export function findRouteById(id: string, routes: I18nRoute[] = []): I18nPageRou
   }
 }
 
-export function getPathById(id: string, params: Params = {}) {
+export function getPathById(id: string, params: Params = {}): string {
   const { lang = 'en' } = params as { lang?: Language };
 
-  const route = findRouteById(id, routes);
+  const route = findRouteById(id);
   const path = route?.paths[lang];
   invariant(path, `path not found for route [${id}] and language [${lang}]`);
 
-  // replace any path params with the provided params
   return generatePath(path, params);
 }
