@@ -3,8 +3,6 @@ import { ContainerModule } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import {
-  AddressValidationRepositoryImpl,
-  AddressValidationRepositoryMock,
   ApplicantRepositoryImpl,
   ApplicationStatusRepositoryImpl,
   BenefitApplicationRepositoryImpl,
@@ -12,11 +10,13 @@ import {
   ClientApplicationRepositoryImpl,
   ClientFriendlyStatusRepositoryImpl,
   CountryRepositoryImpl,
+  DefaultAddressValidationRepository,
   DemographicSurveyRepositoryImpl,
   FederalGovernmentInsurancePlanRepositoryImpl,
   LetterRepositoryImpl,
   LetterTypeRepositoryImpl,
   MaritalStatusRepositoryImpl,
+  MockAddressValidationRepository,
   PreferredCommunicationMethodRepositoryImpl,
   PreferredLanguageRepositoryImpl,
   ProvinceTerritoryStateRepositoryImpl,
@@ -39,8 +39,8 @@ import type { MockName } from '~/utils/env-utils.server';
  * @example
  * // Binds AddressValidationRepository to a mock if the mock is enabled in server config,
  * // otherwise binds to the actual implementation.
- * bind(TYPES.domain.repositories.AddressValidationRepository).to(AddressValidationRepositoryImpl).when(isMockEnabled('wsaddress', false));
- * bind(TYPES.domain.repositories.AddressValidationRepository).to(AddressValidationRepositoryMock).when(isMockEnabled('wsaddress', true));
+ * bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled('wsaddress', false));
+ * bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled('wsaddress', true));
  */
 function isMockEnabled(mockName: MockName, shouldEnable: boolean) {
   return ({ parentContext }: interfaces.Request) => {
@@ -54,8 +54,8 @@ function isMockEnabled(mockName: MockName, shouldEnable: boolean) {
  * Container module for repositories.
  */
 export const repositoriesContainerModule = new ContainerModule((bind) => {
-  bind(TYPES.domain.repositories.AddressValidationRepository).to(AddressValidationRepositoryImpl).when(isMockEnabled('wsaddress', false));
-  bind(TYPES.domain.repositories.AddressValidationRepository).to(AddressValidationRepositoryMock).when(isMockEnabled('wsaddress', true));
+  bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled('wsaddress', false));
+  bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled('wsaddress', true));
   bind(TYPES.domain.repositories.ApplicantRepository).to(ApplicantRepositoryImpl);
   bind(TYPES.domain.repositories.ApplicationStatusRepository).to(ApplicationStatusRepositoryImpl);
   bind(TYPES.domain.repositories.BenefitApplicationRepository).to(BenefitApplicationRepositoryImpl);

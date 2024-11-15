@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
-import { AddressValidationRepositoryMock } from '~/.server/domain/repositories';
+import { MockAddressValidationRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
-describe('AddressValidationRepositoryMock', () => {
+describe('MockAddressValidationRepository', () => {
   const mockLogFactory = mock<LogFactory>({ createLogger: () => mock<Logger>() });
 
   it('should return a mocked address correction result', async () => {
@@ -18,7 +18,7 @@ describe('AddressValidationRepositoryMock', () => {
 
     // vi.mocked(fakerEN_CA.location.streetAddress).mockReturnValue(addressCorrectionRequest.address);
 
-    const repository = new AddressValidationRepositoryMock(mockLogFactory);
+    const repository = new MockAddressValidationRepository(mockLogFactory);
     const result = await repository.getAddressCorrectionResult(addressCorrectionRequest);
 
     expect(result).toEqual({
