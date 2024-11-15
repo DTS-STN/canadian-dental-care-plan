@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import { AddressValidationRepositoryImpl } from '~/.server/domain/repositories';
+import { DefaultAddressValidationRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { instrumentedFetch } from '~/utils/fetch-utils.server';
 
@@ -11,7 +11,7 @@ vi.mock('~/utils/fetch-utils.server', () => ({
   instrumentedFetch: vi.fn(),
 }));
 
-describe('AddressValidationRepositoryImpl', () => {
+describe('DefaultAddressValidationRepository', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
@@ -38,7 +38,7 @@ describe('AddressValidationRepositoryImpl', () => {
       const mockServerConfig = mock<ServerConfig>();
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
-      const repository = new AddressValidationRepositoryImpl(mockLogFactory, mockServerConfig);
+      const repository = new DefaultAddressValidationRepository(mockLogFactory, mockServerConfig);
 
       const result = await repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' });
       expect(result).toEqual(mockResponseData);
@@ -53,7 +53,7 @@ describe('AddressValidationRepositoryImpl', () => {
       const mockServerConfig = mock<ServerConfig>();
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
-      const repository = new AddressValidationRepositoryImpl(mockLogFactory, mockServerConfig);
+      const repository = new DefaultAddressValidationRepository(mockLogFactory, mockServerConfig);
       await expect(() => repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' })).rejects.toThrowError();
     });
   });

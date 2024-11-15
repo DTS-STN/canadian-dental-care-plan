@@ -8,14 +8,14 @@ import type { LogFactory, Logger } from '~/.server/factories';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 
 @injectable()
-export class AddressValidationRepositoryImpl implements AddressValidationRepository {
+export class DefaultAddressValidationRepository implements AddressValidationRepository {
   private readonly log: Logger;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
   ) {
-    this.log = logFactory.createLogger('AddressValidationRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultAddressValidationRepository');
   }
 
   async getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity> {

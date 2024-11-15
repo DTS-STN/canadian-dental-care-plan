@@ -8,11 +8,11 @@ import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } fr
 import type { LogFactory, Logger } from '~/.server/factories';
 
 @injectable()
-export class AddressValidationRepositoryMock implements AddressValidationRepository {
+export class MockAddressValidationRepository implements AddressValidationRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('AddressValidationRepositoryMock');
+    this.log = logFactory.createLogger('MockAddressValidationRepository');
   }
 
   getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity> {
