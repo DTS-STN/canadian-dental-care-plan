@@ -5,6 +5,7 @@ export * from './applicant-repository';
 export * from './application-status.repository';
 export * from './benefit-application.repository';
 export * from './benefit-renewal.repository';
+export * from './application-year.repository';
 export * from './client-application.repository';
 export * from './client-friendly-status.repository';
 export * from './country.repository';
