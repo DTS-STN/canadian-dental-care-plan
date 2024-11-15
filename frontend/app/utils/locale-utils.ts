@@ -93,6 +93,9 @@ export async function initI18n(namespaces: Array<string>) {
       },
       ns: namespaces,
       preload: APP_LOCALES,
+      react: {
+        useSuspense: false,
+      },
     });
 
   return i18n;
