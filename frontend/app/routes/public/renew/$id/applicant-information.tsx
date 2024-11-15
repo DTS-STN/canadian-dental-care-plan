@@ -157,8 +157,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/review-information', params));
   }
 
-  // If isCraAssessed flag is true, skip tax-filing and go to type-renewal
-  if (clientApplication.hasBeenAssessedByCRA) {
+  if (clientApplication.hasFiledTaxes) {
     return redirect(getPathById('public/renew/$id/type-renewal', params));
   }
 

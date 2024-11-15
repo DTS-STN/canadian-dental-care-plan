@@ -45,7 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:type-of-renewal.page-title') }) };
 
-  return { id: state.id, csrfToken, meta, defaultState: state.typeOfRenewal, hasBeenAssessedByCRA: state.clientApplication?.hasBeenAssessedByCRA };
+  return { id: state.id, csrfToken, meta, defaultState: state.typeOfRenewal, hasFiledTaxes: state.clientApplication?.hasFiledTaxes };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -93,7 +93,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (parsedDataResult.data.typeOfRenewal === RenewalType.AdultChild) {
-    if (state.clientApplication?.hasAppliedBeforeApril302024) {
+    if (state.clientApplication?.isInvitationToApplyClient) {
       return redirect(getPathById('public/renew/$id/ita/marital-status', params));
     }
     return redirect(getPathById('public/renew/$id/adult-child/confirm-marital-status', params));
@@ -108,7 +108,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewTypeOfRenewal() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, hasBeenAssessedByCRA } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, hasFiledTaxes } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -156,7 +156,7 @@ export default function RenewTypeOfRenewal() {
             </LoadingButton>
             <ButtonLink
               id="back-button"
-              routeId={hasBeenAssessedByCRA ? 'public/renew/$id/applicant-information' : 'public/renew/$id/tax-filing'}
+              routeId={hasFiledTaxes ? 'public/renew/$id/applicant-information' : 'public/renew/$id/tax-filing'}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
