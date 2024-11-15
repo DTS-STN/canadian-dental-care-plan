@@ -11,13 +11,14 @@ import {
   CountryRepositoryImpl,
   DefaultAddressValidationRepository,
   DefaultApplicationStatusRepository,
+  DefaultLetterRepository,
   DemographicSurveyRepositoryImpl,
   FederalGovernmentInsurancePlanRepositoryImpl,
-  LetterRepositoryImpl,
   LetterTypeRepositoryImpl,
   MaritalStatusRepositoryImpl,
   MockAddressValidationRepository,
   MockApplicationStatusRepository,
+  MockLetterRepository,
   PreferredCommunicationMethodRepositoryImpl,
   PreferredLanguageRepositoryImpl,
   ProvinceTerritoryStateRepositoryImpl,
@@ -67,7 +68,8 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.repositories.CountryRepository).to(CountryRepositoryImpl);
   bind(TYPES.domain.repositories.DemographicSurveyRepository).to(DemographicSurveyRepositoryImpl);
   bind(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository).to(FederalGovernmentInsurancePlanRepositoryImpl);
-  bind(TYPES.domain.repositories.LetterRepository).to(LetterRepositoryImpl);
+  bind(TYPES.domain.repositories.LetterRepository).to(DefaultLetterRepository).when(isMockEnabled('cct', false));
+  bind(TYPES.domain.repositories.LetterRepository).to(MockLetterRepository).when(isMockEnabled('cct', true));
   bind(TYPES.domain.repositories.LetterTypeRepository).to(LetterTypeRepositoryImpl);
   bind(TYPES.domain.repositories.MaritalStatusRepository).to(MaritalStatusRepositoryImpl);
   bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(PreferredCommunicationMethodRepositoryImpl);
