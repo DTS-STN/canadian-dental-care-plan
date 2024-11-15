@@ -4,19 +4,20 @@ import { ContainerModule } from 'inversify';
 import { TYPES } from '~/.server/constants';
 import {
   ApplicantRepositoryImpl,
-  ApplicationStatusRepositoryImpl,
   BenefitApplicationRepositoryImpl,
   BenefitRenewalRepositoryImpl,
   ClientApplicationRepositoryImpl,
   ClientFriendlyStatusRepositoryImpl,
   CountryRepositoryImpl,
   DefaultAddressValidationRepository,
+  DefaultApplicationStatusRepository,
   DemographicSurveyRepositoryImpl,
   FederalGovernmentInsurancePlanRepositoryImpl,
   LetterRepositoryImpl,
   LetterTypeRepositoryImpl,
   MaritalStatusRepositoryImpl,
   MockAddressValidationRepository,
+  MockApplicationStatusRepository,
   PreferredCommunicationMethodRepositoryImpl,
   PreferredLanguageRepositoryImpl,
   ProvinceTerritoryStateRepositoryImpl,
@@ -57,7 +58,8 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled('wsaddress', false));
   bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled('wsaddress', true));
   bind(TYPES.domain.repositories.ApplicantRepository).to(ApplicantRepositoryImpl);
-  bind(TYPES.domain.repositories.ApplicationStatusRepository).to(ApplicationStatusRepositoryImpl);
+  bind(TYPES.domain.repositories.ApplicationStatusRepository).to(DefaultApplicationStatusRepository).when(isMockEnabled('status-check', false));
+  bind(TYPES.domain.repositories.ApplicationStatusRepository).to(MockApplicationStatusRepository).when(isMockEnabled('status-check', true));
   bind(TYPES.domain.repositories.BenefitApplicationRepository).to(BenefitApplicationRepositoryImpl);
   bind(TYPES.domain.repositories.BenefitRenewalRepository).to(BenefitRenewalRepositoryImpl);
   bind(TYPES.domain.repositories.ClientApplicationRepository).to(ClientApplicationRepositoryImpl);

@@ -4,6 +4,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicationStatusBasicInfoRequestEntity, ApplicationStatusEntity, ApplicationStatusSinRequestEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
+import clientFriendlyStatusDataSource from '~/.server/resources/power-platform/client-friendly-status.json';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 
 /**
@@ -28,14 +29,14 @@ export interface ApplicationStatusRepository {
 }
 
 @injectable()
-export class ApplicationStatusRepositoryImpl implements ApplicationStatusRepository {
+export class DefaultApplicationStatusRepository implements ApplicationStatusRepository {
   private readonly log: Logger;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_STATUS_CHECK_API_BASE_URI' | 'INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY'>,
   ) {
-    this.log = logFactory.createLogger('ApplicationStatusRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultApplicationStatusRepository');
   }
 
   async getApplicationStatusByBasicInfo(applicationStatusBasicInfoRequestEntity: ApplicationStatusBasicInfoRequestEntity): Promise<ApplicationStatusEntity> {
@@ -94,5 +95,70 @@ export class ApplicationStatusRepositoryImpl implements ApplicationStatusReposit
     const applicationStatusEntity: ApplicationStatusEntity = await response.json();
     this.log.trace('Returning application status [%j]', applicationStatusEntity);
     return applicationStatusEntity;
+  }
+}
+
+@injectable()
+export class MockApplicationStatusRepository implements ApplicationStatusRepository {
+  /**
+   * Mock mapping for application codes to application status codes
+   * which can then be used to render on the frontend
+   *
+   * Example mapping:
+   *  {
+   *    '000001': '873ac4c6-77c0-ee11-9079-000d3a09d132',
+   *    '000002': 'f752c665-c4e6-ee11-a204-000d3a09d1b8',
+   *    '000003': 'e882086c-c4e6-ee11-a204-000d3a09d1b8',
+   *  }
+   */
+  private readonly MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP: Record<string, string> = clientFriendlyStatusDataSource.value.reduce(
+    (acc, { esdc_clientfriendlystatusid }, i) => ({ ...acc, [(i + 1).toString().padStart(6, '0')]: esdc_clientfriendlystatusid }),
+    {},
+  );
+
+  private readonly log: Logger;
+
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
+    this.log = logFactory.createLogger('MockApplicationStatusRepository');
+  }
+
+  getApplicationStatusByBasicInfo(applicationStatusBasicInfoRequestEntity: ApplicationStatusBasicInfoRequestEntity): Promise<ApplicationStatusEntity> {
+    this.log.debug('Fetching application status for basic info [%j]', applicationStatusBasicInfoRequestEntity);
+
+    const statusCode = this.MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP[applicationStatusBasicInfoRequestEntity.BenefitApplication.Applicant.ClientIdentification[0].IdentificationID];
+
+    const applicationStatusEntity: ApplicationStatusEntity = {
+      BenefitApplication: {
+        BenefitApplicationStatus: [
+          {
+            ReferenceDataID: statusCode || 'c23252fe-604e-ee11-be6f-000d3a09d640',
+            ReferenceDataName: 'Dental Status Code',
+          },
+        ],
+      },
+    };
+
+    this.log.debug('Returning application status [%j]', applicationStatusEntity);
+    return Promise.resolve(applicationStatusEntity);
+  }
+
+  getApplicationStatusBySin(applicationStatusSinRequestEntity: ApplicationStatusSinRequestEntity): Promise<ApplicationStatusEntity> {
+    this.log.debug('Fetching application status for sin [%j]', applicationStatusSinRequestEntity);
+
+    const statusCode = this.MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP[applicationStatusSinRequestEntity.BenefitApplication.Applicant.ClientIdentification[0].IdentificationID];
+
+    const applicationStatusEntity: ApplicationStatusEntity = {
+      BenefitApplication: {
+        BenefitApplicationStatus: [
+          {
+            ReferenceDataID: statusCode || 'c23252fe-604e-ee11-be6f-000d3a09d640',
+            ReferenceDataName: 'Dental Status Code',
+          },
+        ],
+      },
+    };
+
+    this.log.debug('Returning application status [%j]', applicationStatusEntity);
+    return Promise.resolve(applicationStatusEntity);
   }
 }
