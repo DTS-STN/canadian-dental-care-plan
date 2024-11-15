@@ -369,7 +369,7 @@ export default function RenewFlowConfirm() {
                 size="sm"
                 name="_action"
                 value={FormAction.Close}
-                onClick={() => sessionStorage.removeItem('flow.state')}
+                onClick={() => sessionStorage.removeItem('renew.state')}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Confirmation exit modal - Application successfully submitted click"
               >
                 {t('renew-ita:confirm.modal.close-btn')}

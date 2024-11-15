@@ -67,7 +67,7 @@ export default function RenewFlowParentOrGuardian() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     fetcher.submit(event.currentTarget, { method: 'POST' });
-    sessionStorage.removeItem('flow.state');
+    sessionStorage.removeItem('renew.state');
   }
 
   return (
