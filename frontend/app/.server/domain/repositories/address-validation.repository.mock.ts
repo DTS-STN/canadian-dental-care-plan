@@ -1,7 +1,6 @@
 import { fakerEN_CA as faker } from '@faker-js/faker';
 import { inject, injectable } from 'inversify';
 
-import { AddressCorrectionStatus } from '../dtos';
 import { AddressValidationRepository } from './address-validation.repository';
 import { TYPES } from '~/.server/constants';
 import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
@@ -17,7 +16,7 @@ export class MockAddressValidationRepository implements AddressValidationReposit
 
   getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity> {
     this.log.debug('Checking correctness of address for addressCorrectionRequest: [%j]', addressCorrectionRequestEntity);
-
+    const statusCode = this.mockStatusCodeFromProvinceCode(addressCorrectionRequestEntity.provinceCode);
     const addressCorrectionResults: AddressCorrectionResultEntity = {
       'wsaddr:CorrectionResults': {
         'nc:AddressFullText': faker.location.streetAddress(true).toUpperCase(),
@@ -25,12 +24,32 @@ export class MockAddressValidationRepository implements AddressValidationReposit
         'can:ProvinceCode': addressCorrectionRequestEntity.provinceCode.toUpperCase(),
         'nc:AddressPostalCode': addressCorrectionRequestEntity.postalCode.toUpperCase(),
         'wsaddr:Information': {
-          'wsaddr:StatusCode': faker.helpers.arrayElement<AddressCorrectionStatus>(['Corrected', 'NotCorrect', 'Valid']),
+          'wsaddr:StatusCode': statusCode,
         },
       },
     };
 
     this.log.debug('Address correction results: [%j]', addressCorrectionResults);
     return Promise.resolve(addressCorrectionResults);
+  }
+
+  protected mockStatusCodeFromProvinceCode(provinceCode: string) {
+    // Newfoundland and Labrador
+    if (provinceCode === 'NL') {
+      throw Error('Address validation service is currently unavailable');
+    }
+
+    // Ontario
+    if (provinceCode === 'ON') {
+      return 'Corrected';
+    }
+
+    // Quebec
+    if (provinceCode === 'QC') {
+      return 'NotCorrect';
+    }
+
+    // Others
+    return 'Valid';
   }
 }

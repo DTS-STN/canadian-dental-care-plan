@@ -1,34 +1,57 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 
-import type { AddressCorrectionResultDto } from '~/.server/domain/dtos';
+import type { ServerConfig } from '~/.server/configs';
+import { TYPES } from '~/.server/constants';
+import type { AddressCorrectionRequestDto, AddressCorrectionResultDto, AddressCorrectionStatus } from '~/.server/domain/dtos';
 import type { AddressCorrectionResultEntity } from '~/.server/domain/entities';
+import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 
 export interface AddressValidationDtoMapper {
   mapAddressCorrectionResultEntityToAddressCorrectionResultDto(addressCorrectionResultEntity: AddressCorrectionResultEntity): AddressCorrectionResultDto;
+  mapAddressCorrectionRequestDtoToAddressCorrectionResultDto(addressCorrectionRequestDto: AddressCorrectionRequestDto, status: AddressCorrectionStatus): AddressCorrectionResultDto;
 }
 
 @injectable()
-export class AddressValidationDtoMapperImpl implements AddressValidationDtoMapper {
+export class DefaultAddressValidationDtoMapper implements AddressValidationDtoMapper {
+  constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID'>) {}
+
   mapAddressCorrectionResultEntityToAddressCorrectionResultDto(addressCorrectionResultEntity: AddressCorrectionResultEntity): AddressCorrectionResultDto {
     const correctionResults = addressCorrectionResultEntity['wsaddr:CorrectionResults'];
-
-    const address = correctionResults['nc:AddressFullText'];
-    const city = correctionResults['nc:AddressCityName'];
-    const postalCode = correctionResults['nc:AddressPostalCode'];
-    const provinceCode = correctionResults['can:ProvinceCode'];
-    const status = this.mapStatusCodeToStatus(correctionResults['wsaddr:Information']['wsaddr:StatusCode']);
-
-    return { address, city, postalCode, provinceCode, status };
+    return {
+      address: correctionResults['nc:AddressFullText'],
+      city: correctionResults['nc:AddressCityName'],
+      postalCode: this.formatPostalCode(correctionResults['nc:AddressPostalCode']),
+      provinceCode: correctionResults['can:ProvinceCode'],
+      status: this.mapAddressCorrectionResultEntityStatusCodeToStatus(correctionResults['wsaddr:Information']['wsaddr:StatusCode']),
+    };
   }
 
-  protected mapStatusCodeToStatus(statusCode: string) {
+  mapAddressCorrectionRequestDtoToAddressCorrectionResultDto(addressCorrectionRequestDto: AddressCorrectionRequestDto, status: AddressCorrectionStatus): AddressCorrectionResultDto {
+    return {
+      address: addressCorrectionRequestDto.address.toUpperCase(),
+      city: addressCorrectionRequestDto.city.toUpperCase(),
+      postalCode: addressCorrectionRequestDto.postalCode.toUpperCase(),
+      provinceCode: this.formatPostalCode(addressCorrectionRequestDto.postalCode),
+      status,
+    };
+  }
+
+  protected formatPostalCode(postalCode: string) {
+    if (!isValidPostalCode(this.serverConfig.CANADA_COUNTRY_ID, postalCode)) {
+      return postalCode.toUpperCase();
+    }
+
+    return formatPostalCode(this.serverConfig.CANADA_COUNTRY_ID, postalCode);
+  }
+
+  protected mapAddressCorrectionResultEntityStatusCodeToStatus(statusCode: string): AddressCorrectionStatus {
     switch (statusCode) {
       case 'Corrected':
-        return 'Corrected';
+        return 'corrected';
       case 'NotCorrect':
-        return 'NotCorrect';
+        return 'not-correct';
       case 'Valid':
-        return 'Valid';
+        return 'valid';
       default:
         throw new Error(`Unknown correction result status: [${statusCode}]`);
     }

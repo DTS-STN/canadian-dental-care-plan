@@ -5,7 +5,6 @@ import { RedisServiceImpl } from '../data/services';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import {
-  AddressValidationServiceImpl,
   ApplicantServiceImpl,
   ApplicationStatusServiceImpl,
   AuditServiceImpl,
@@ -14,6 +13,7 @@ import {
   ClientApplicationServiceImpl,
   ClientFriendlyStatusServiceImpl,
   CountryServiceImpl,
+  DefaultAddressValidationService,
   DemographicSurveyServiceServiceImpl,
   FederalGovernmentInsurancePlanServiceImpl,
   LetterServiceImpl,
@@ -39,7 +39,7 @@ function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
 export const servicesContainerModule = new ContainerModule((bind) => {
   // RedisService bindings depend on the SESSION_STORAGE_TYPE configuration string
   bind(TYPES.data.services.RedisService).to(RedisServiceImpl).when(sessionTypeIs('redis'));
-  bind(TYPES.domain.services.AddressValidationService).to(AddressValidationServiceImpl);
+  bind(TYPES.domain.services.AddressValidationService).to(DefaultAddressValidationService);
   bind(TYPES.domain.services.ApplicantService).to(ApplicantServiceImpl);
   bind(TYPES.domain.services.ApplicationStatusService).to(ApplicationStatusServiceImpl);
   bind(TYPES.domain.services.AuditService).to(AuditServiceImpl);
