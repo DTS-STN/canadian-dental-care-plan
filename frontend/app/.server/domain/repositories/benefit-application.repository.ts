@@ -17,7 +17,7 @@ export interface BenefitApplicationRepository {
 }
 
 @injectable()
-export class BenefitApplicationRepositoryImpl implements BenefitApplicationRepository {
+export class DefaultBenefitApplicationRepository implements BenefitApplicationRepository {
   private readonly log: Logger;
 
   constructor(
@@ -25,14 +25,14 @@ export class BenefitApplicationRepositoryImpl implements BenefitApplicationRepos
     @inject(TYPES.configs.ServerConfig)
     private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_BENEFIT_APPLICATION_API_BASE_URI' | 'INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY'>,
   ) {
-    this.log = logFactory.createLogger('BenefitApplicationRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultBenefitApplicationRepository');
   }
 
   async createBenefitApplication(benefitApplicationRequestEntity: BenefitApplicationRequestEntity): Promise<BenefitApplicationResponseEntity> {
     this.log.trace('Creating benefit application for request [%j]', benefitApplicationRequestEntity);
 
     const url = `${this.serverConfig.INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`;
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.status-fnlndob.posts', url, {
+    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.benefit-application.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -55,5 +55,32 @@ export class BenefitApplicationRepositoryImpl implements BenefitApplicationRepos
     const benefitApplicationResponseEntity: BenefitApplicationResponseEntity = await response.json();
     this.log.trace('Returning benefit application response [%j]', benefitApplicationResponseEntity);
     return benefitApplicationResponseEntity;
+  }
+}
+
+@injectable()
+export class MockBenefitApplicationRepository implements BenefitApplicationRepository {
+  private readonly log: Logger;
+
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
+    this.log = logFactory.createLogger('MockBenefitApplicationRepository');
+  }
+
+  createBenefitApplication(benefitApplicationRequestEntity: BenefitApplicationRequestEntity): Promise<BenefitApplicationResponseEntity> {
+    this.log.debug('Creating benefit application for request [%j]', benefitApplicationRequestEntity);
+
+    const benefitApplicationResponseEntity: BenefitApplicationResponseEntity = {
+      BenefitApplication: {
+        BenefitApplicationIdentification: [
+          {
+            IdentificationID: '2476124092174',
+            IdentificationCategoryText: 'Confirmation Number',
+          },
+        ],
+      },
+    };
+
+    this.log.debug('Returning benefit application response [%j]', benefitApplicationResponseEntity);
+    return Promise.resolve(benefitApplicationResponseEntity);
   }
 }

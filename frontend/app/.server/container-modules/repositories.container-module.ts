@@ -3,7 +3,6 @@ import { ContainerModule } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import {
-  BenefitApplicationRepositoryImpl,
   BenefitRenewalRepositoryImpl,
   ClientApplicationRepositoryImpl,
   ClientFriendlyStatusRepositoryImpl,
@@ -11,6 +10,7 @@ import {
   DefaultAddressValidationRepository,
   DefaultApplicantRepository,
   DefaultApplicationStatusRepository,
+  DefaultBenefitApplicationRepository,
   DefaultLetterRepository,
   DemographicSurveyRepositoryImpl,
   FederalGovernmentInsurancePlanRepositoryImpl,
@@ -19,6 +19,7 @@ import {
   MockAddressValidationRepository,
   MockApplicantRepository,
   MockApplicationStatusRepository,
+  MockBenefitApplicationRepository,
   MockLetterRepository,
   PreferredCommunicationMethodRepositoryImpl,
   PreferredLanguageRepositoryImpl,
@@ -59,19 +60,26 @@ function isMockEnabled(mockName: MockName, shouldEnable: boolean) {
 export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled('wsaddress', false));
   bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled('wsaddress', true));
+
   bind(TYPES.domain.repositories.ApplicantRepository).to(DefaultApplicantRepository).when(isMockEnabled('power-platform', false));
   bind(TYPES.domain.repositories.ApplicantRepository).to(MockApplicantRepository).when(isMockEnabled('power-platform', true));
+
   bind(TYPES.domain.repositories.ApplicationStatusRepository).to(DefaultApplicationStatusRepository).when(isMockEnabled('status-check', false));
   bind(TYPES.domain.repositories.ApplicationStatusRepository).to(MockApplicationStatusRepository).when(isMockEnabled('status-check', true));
-  bind(TYPES.domain.repositories.BenefitApplicationRepository).to(BenefitApplicationRepositoryImpl);
+
+  bind(TYPES.domain.repositories.BenefitApplicationRepository).to(DefaultBenefitApplicationRepository).when(isMockEnabled('power-platform', false));
+  bind(TYPES.domain.repositories.BenefitApplicationRepository).to(MockBenefitApplicationRepository).when(isMockEnabled('power-platform', true));
+
   bind(TYPES.domain.repositories.BenefitRenewalRepository).to(BenefitRenewalRepositoryImpl);
   bind(TYPES.domain.repositories.ClientApplicationRepository).to(ClientApplicationRepositoryImpl);
   bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(ClientFriendlyStatusRepositoryImpl);
   bind(TYPES.domain.repositories.CountryRepository).to(CountryRepositoryImpl);
   bind(TYPES.domain.repositories.DemographicSurveyRepository).to(DemographicSurveyRepositoryImpl);
   bind(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository).to(FederalGovernmentInsurancePlanRepositoryImpl);
+
   bind(TYPES.domain.repositories.LetterRepository).to(DefaultLetterRepository).when(isMockEnabled('cct', false));
   bind(TYPES.domain.repositories.LetterRepository).to(MockLetterRepository).when(isMockEnabled('cct', true));
+
   bind(TYPES.domain.repositories.LetterTypeRepository).to(LetterTypeRepositoryImpl);
   bind(TYPES.domain.repositories.MaritalStatusRepository).to(MaritalStatusRepositoryImpl);
   bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(PreferredCommunicationMethodRepositoryImpl);

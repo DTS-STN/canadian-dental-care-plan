@@ -139,13 +139,13 @@ export class MockApplicantRepository implements ApplicantRepository {
   }
 
   findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null> {
-    this.log.trace('Fetching applicant for sin [%j]', applicantRequestEntity);
+    this.log.debug('Fetching applicant for sin [%j]', applicantRequestEntity);
 
     const personSinIdentification = applicantRequestEntity.Applicant.PersonSINIdentification.IdentificationID;
     const peronalInformationEntity = this.mockPersonalInformationDb.find(({ sinIdentification }) => sinIdentification === personSinIdentification);
 
     if (!peronalInformationEntity) {
-      this.log.trace('No applicant found; Returning null');
+      this.log.debug('No applicant found; Returning null');
       return Promise.resolve(null);
     }
 
@@ -169,7 +169,7 @@ export class MockApplicantRepository implements ApplicantRepository {
       },
     };
 
-    this.log.trace('Returning applicant [%j]', applicantResponseEntity);
+    this.log.debug('Returning applicant [%j]', applicantResponseEntity);
     return Promise.resolve(applicantResponseEntity);
   }
 }
