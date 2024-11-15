@@ -11,6 +11,7 @@ export const pageIds = {
       fileYourTaxes: 'CDCP-PROT-RENW-0004',
       dentalInsurance: 'CDCP-PROT-RENW-0006',
       demographicSurvey: 'CDCP-PROT-RENW-0007',
+      maritalStatus: 'CDCP-PROT-RENW-0007',
     },
     dataUnavailable: 'CDCP-PROT-0099',
   },

@@ -4,6 +4,7 @@ import type { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
+import { getEnv } from '~/utils/env-utils.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
@@ -28,8 +29,16 @@ export interface ProtectedRenewState {
     readonly locationBornStatus?: string;
     readonly genderStatus?: string;
   };
+  readonly maritalStatus?: string;
+  readonly partnerInformation?: {
+    confirm: boolean;
+    yearOfBirth: string;
+    socialInsuranceNumber: string;
+  };
   // TODO Add remaining states
 }
+
+export type PartnerInformationState = NonNullable<ProtectedRenewState['partnerInformation']>;
 
 /**
  * Schema for validating UUID.
@@ -150,4 +159,9 @@ export function startProtectedRenewState({ id, session }: StartArgs) {
   session.set(sessionName, initialState);
   log.info('Protected renew session state started; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
   return initialState;
+}
+
+export function renewStateHasPartner(maritalStatus: string) {
+  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
+  return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
 }
