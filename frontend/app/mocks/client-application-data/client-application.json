@@ -94,8 +94,8 @@
       },
       "PersonName": [
         {
-          "PersonGivenName": ["MyFirstName50"],
-          "PersonSurName": "MyLastName50"
+          "PersonGivenName": ["John"],
+          "PersonSurName": "Doe"
         }
       ],
       "PersonSINIdentification": {
@@ -141,10 +141,6 @@
         "PrivateDentalInsuranceIndicator": true,
         "ProvincialDentalCoverageIndicator": true
       },
-      "ApplicantCategoryCode": {
-        "ReferenceDataID": "775170000",
-        "ReferenceDataName": ""
-      },
       "ClientIdentification": [
         {
           "IdentificationID": "4f35f70b-2f83-ee11-8179-000d3a09d000",
@@ -153,6 +149,10 @@
         {
           "IdentificationID": "1e97fe42-0263-ee11-8df0-000d3a09df08",
           "IdentificationCategoryText": "Client ID"
+        },
+        {
+          "IdentificationID": "10000000002",
+          "IdentificationCategoryText": "Client Number"
         }
       ],
       "Flags": [
@@ -168,26 +168,27 @@
       "RelatedPerson": [
         {
           "PersonBirthDate": {
-            "date": "",
-            "dateTime": "",
-            "DayDate": "",
-            "MonthDate": "",
-            "YearDate": ""
+            "date": "2020-01-01",
+            "dateTime": "2020-01-01",
+            "DayDate": "1",
+            "MonthDate": "1",
+            "YearDate": "2020"
           },
           "PersonName": [
             {
-              "PersonGivenName": [],
-              "PersonSurName": ""
+              "PersonGivenName": ["Jane"],
+              "PersonSurName": "Doe"
             }
           ],
           "PersonRelationshipCode": {
-            "ReferenceDataName": ""
+            "ReferenceDataName": "Dependant"
+          },
+          "PersonSINIdentification": {
+            "IdentificationID": "100000009",
+            "IdentificationCategoryText": "SIN"
           },
           "ApplicantDetail": {
-            "AttestParentOrGuardianIndicator": false,
-            "ConsentToSharePersonalInformationIndicator": false,
-            "DisabilityTaxCreditIndicator": "",
-            "FederalDentalCoverageIndicator": "",
+            "PrivateDentalInsuranceIndicator": false,
             "InsurancePlan": [
               {
                 "InsurancePlanIdentification": [
@@ -214,26 +215,13 @@
                 ]
               }
             ],
-            "LivingIndependentlyIndicator": "",
-            "PrivateDentalInsuranceIndicator": false,
-            "ProvincialDentalCoverageIndicator": ""
-          },
-          "PersonSINIdentification": {
-            "IdentificationID": "",
-            "IdentificationCategoryText": ""
+            "AttestParentOrGuardianIndicator": true,
+            "ConsentToSharePersonalInformationIndicator": false
           },
           "ClientIdentification": [
             {
-              "IdentificationID": "",
-              "IdentificationCategoryText": ""
-            },
-            {
-              "IdentificationID": "",
-              "IdentificationCategoryText": ""
-            },
-            {
-              "IdentificationID": "",
-              "IdentificationCategoryText": ""
+              "IdentificationID": "10000000003",
+              "IdentificationCategoryText": "Client Number"
             }
           ]
         }

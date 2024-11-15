@@ -26,7 +26,7 @@ export class ClientApplicationDtoMapperImpl implements ClientApplicationDtoMappe
           dateOfBirth: person.PersonBirthDate.date,
           firstName: person.PersonName[0].PersonGivenName[0],
           lastName: person.PersonName[0].PersonSurName,
-          clientNumber: person.PersonSINIdentification.IdentificationID,
+          clientNumber: person.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
         },
       })),
     };
