@@ -27,15 +27,15 @@ type ExtractI18nRouteIds<T, Filter = void> = T extends I18nLayoutRoute //
 /**
  * Type guard to determine if a route is an I18nLayoutRoute.
  */
-export function isI18nLayoutRoute(i18nRoute: I18nRoute): i18nRoute is I18nLayoutRoute {
-  return 'children' in i18nRoute;
+export function isI18nLayoutRoute(obj: unknown): obj is I18nLayoutRoute {
+  return obj !== null && typeof obj === 'object' && 'file' in obj && 'children' in obj;
 }
 
 /**
  * Type guard to determine if a route is an I18nPageRoute.
  */
-export function isI18nPageRoute(i18nRoute: I18nRoute): i18nRoute is I18nPageRoute {
-  return isI18nLayoutRoute(i18nRoute) === false;
+export function isI18nPageRoute(obj: unknown): obj is I18nPageRoute {
+  return obj !== null && typeof obj === 'object' && 'file' in obj && 'id' in obj && 'paths' in obj;
 }
 
 export const routes = [

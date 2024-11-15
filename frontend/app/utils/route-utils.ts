@@ -131,26 +131,29 @@ export function usePageTitleI18nOptions() {
     .reduce(coalesce);
 }
 
-export function findRouteById(id: string, routes: I18nRoute[] = []): I18nPageRoute | undefined {
-  for (const route of routes) {
-    if (isI18nPageRoute(route) && route.id === id) {
-      return route;
-    }
+export function findRouteById(id: string): I18nPageRoute | undefined {
+  function search(id: string, routes: I18nRoute[]): I18nPageRoute | undefined {
+    for (const route of routes) {
+      if (isI18nPageRoute(route) && route.id === id) {
+        return route;
+      }
 
-    if (isI18nLayoutRoute(route)) {
-      const matchingRoute = findRouteById(id, route.children);
-      if (matchingRoute) return matchingRoute;
+      if (isI18nLayoutRoute(route)) {
+        const matchingRoute = search(id, route.children);
+        if (matchingRoute) return matchingRoute;
+      }
     }
   }
+
+  return search(id, routes);
 }
 
-export function getPathById(id: string, params: Params = {}) {
+export function getPathById(id: string, params: Params = {}): string {
   const { lang = 'en' } = params as { lang?: Language };
 
-  const route = findRouteById(id, routes);
+  const route = findRouteById(id);
   const path = route?.paths[lang];
   invariant(path, `path not found for route [${id}] and language [${lang}]`);
 
-  // replace any path params with the provided params
   return generatePath(path, params);
 }
