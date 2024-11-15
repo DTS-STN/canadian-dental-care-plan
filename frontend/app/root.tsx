@@ -1,24 +1,26 @@
-import { Suspense, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 
 import type { HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation, useRouteLoaderData } from '@remix-run/react';
+import { Link, Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation, useRouteLoaderData } from '@remix-run/react';
 
 import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
 import fontawesomeStyleSheet from '@fortawesome/fontawesome-svg-core/styles.css?url';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css?url';
 import invariant from 'tiny-invariant';
 
-import { TYPES } from './.server/constants';
-import { getDynatraceService } from './services/dynatrace-service.server';
-import type { FeatureName } from './utils/env-utils';
+import { TYPES } from '~/.server/constants';
 import { ClientEnv } from '~/components/client-env';
+import { InlineLink } from '~/components/inline-link';
 import { NonceContext } from '~/components/nonce-context';
+import { PageTitle } from '~/components/page-title';
 import fontLatoStyleSheet from '~/fonts/lato.css?url';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css?url';
 import { getBuildInfoService } from '~/services/build-info-service.server';
+import { getDynatraceService } from '~/services/dynatrace-service.server';
 import tailwindStyleSheet from '~/tailwind.css?url';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
+import type { FeatureName } from '~/utils/env-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { useI18nNamespaces, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
@@ -129,9 +131,7 @@ export default function App() {
         )}
       </head>
       <body vocab="http://schema.org/" typeof="WebPage">
-        <Suspense>
-          <Outlet />
-        </Suspense>
+        <Outlet />
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
         <ClientEnv env={env} nonce={nonce} />
@@ -180,4 +180,81 @@ export function useCsrfToken() {
 export function useFeature(feature: FeatureName) {
   const clientEnv = useClientEnv();
   return clientEnv.ENABLED_FEATURES.includes(feature);
+}
+
+export function ErrorBoundary() {
+  const { i18n } = useTranslation(['gcweb']);
+  const en = i18n.getFixedT('en');
+  const fr = i18n.getFixedT('fr');
+
+  return (
+    <>
+      <html lang="en">
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <Meta />
+          <Links />
+        </head>
+        <body vocab="http://schema.org/" typeof="WebPage">
+          <header className="border-b-[3px] border-slate-700 print:hidden">
+            <div id="wb-bnr">
+              <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
+                <div property="publisher" typeof="GovernmentOrganization">
+                  <Link to="https://canada.ca/" property="url">
+                    <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={`${en('gcweb:header.govt-of-canada.text')} / ${fr('gcweb:header.govt-of-canada.text')}`} property="logo" width="300" height="28" decoding="async" />
+                  </Link>
+                  <meta property="name" content={`${en('gcweb:header.govt-of-canada.text')} / ${fr('gcweb:header.govt-of-canada.text')}`} />
+                  <meta property="areaServed" typeof="Country" content="Canada" />
+                  <link property="logo" href="/assets/wmms-blk.svg" />
+                </div>
+              </div>
+            </div>
+          </header>
+          <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
+            <div className="grid grid-cols-1 gap-6 py-2.5 sm:grid-cols-2 sm:py-3.5">
+              <div id="english" lang="en">
+                <PageTitle className="my-8">
+                  <span>{en('gcweb:server-error.page-title')}</span>
+                  <small className="block text-2xl font-normal text-neutral-500">{en('gcweb:server-error.page-subtitle')}</small>
+                </PageTitle>
+                <p className="mb-8 text-lg text-gray-500">{en('gcweb:server-error.page-message')}</p>
+                <ul className="list-disc space-y-2 pl-10">
+                  <li>{en('gcweb:server-error.option-01')}</li>
+                  <li>
+                    <Trans t={en} ns={['gcweb']} i18nKey="gcweb:server-error.option-02" components={{ home: <InlineLink to="/" /> }} />
+                  </li>
+                </ul>
+              </div>
+              <div id="french" lang="fr">
+                <PageTitle className="my-8">
+                  <span>{fr('gcweb:server-error.page-title')}</span>
+                  <small className="block text-2xl font-normal text-neutral-500">{fr('gcweb:server-error.page-subtitle')}</small>
+                </PageTitle>
+                <p className="mb-8 text-lg text-gray-500">{fr('gcweb:server-error.page-message')}</p>
+                <ul className="list-disc space-y-2 pl-10">
+                  <li>{fr('gcweb:server-error.option-01')}</li>
+                  <li>
+                    <Trans t={fr} ns={['gcweb']} i18nKey="gcweb:server-error.option-02" components={{ home: <InlineLink to="/" /> }} />
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </main>
+          <footer id="wb-info" tabIndex={-1} className="bg-stone-50 print:hidden">
+            <div className="container flex items-center justify-end gap-6 py-2.5 sm:py-3.5">
+              <div>
+                <h2 className="sr-only">
+                  <span lang="en">{en('gcweb:footer.about-site')}</span> / <span lang="fr">{fr('gcweb:footer.about-site')}</span>
+                </h2>
+                <div>
+                  <img src="/assets/wmms-blk.svg" alt={`${en('gcweb:footer.gc-symbol')} / ${fr('gcweb:footer.gc-symbol')}`} width={300} height={71} className="h-10 w-auto" />
+                </div>
+              </div>
+            </div>
+          </footer>
+        </body>
+      </html>
+    </>
+  );
 }
