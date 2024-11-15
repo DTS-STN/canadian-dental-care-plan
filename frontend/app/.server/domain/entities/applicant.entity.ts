@@ -1,18 +1,20 @@
-export type ApplicantRequestEntity = Readonly<{
-  Applicant: Readonly<{
-    PersonSINIdentification: Readonly<{
+import type { ReadonlyDeep } from 'type-fest';
+
+export type ApplicantRequestEntity = ReadonlyDeep<{
+  Applicant: {
+    PersonSINIdentification: {
       IdentificationID: string;
-    }>;
-  }>;
+    };
+  };
 }>;
 
-export type ApplicantResponseEntity = Readonly<{
-  BenefitApplication?: Readonly<{
-    Applicant?: Readonly<{
-      ClientIdentification?: ReadonlyArray<{
+export type ApplicantResponseEntity = ReadonlyDeep<{
+  BenefitApplication?: {
+    Applicant?: {
+      ClientIdentification?: Array<{
         IdentificationID?: string;
         IdentificationCategoryText?: string;
       }>;
-    }>;
-  }>;
+    };
+  };
 }>;
