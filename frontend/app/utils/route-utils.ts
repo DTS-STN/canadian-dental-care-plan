@@ -7,7 +7,7 @@ import validator from 'validator';
 import { z } from 'zod';
 
 import type { I18nPageRoute, I18nRoute, Language } from '~/routes/routes';
-import { isI18nLayoutRoute, isI18nPageRoute, routes } from '~/routes/routes';
+import { routes as i18nRoutes, isI18nLayoutRoute, isI18nPageRoute } from '~/routes/routes';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
@@ -131,21 +131,17 @@ export function usePageTitleI18nOptions() {
     .reduce(coalesce);
 }
 
-export function findRouteById(id: string): I18nPageRoute | undefined {
-  function search(id: string, routes: I18nRoute[]): I18nPageRoute | undefined {
-    for (const route of routes) {
-      if (isI18nPageRoute(route) && route.id === id) {
-        return route;
-      }
+export function findRouteById(id: string, routes: I18nRoute[] = i18nRoutes): I18nPageRoute | undefined {
+  for (const route of routes) {
+    if (isI18nPageRoute(route) && route.id === id) {
+      return route;
+    }
 
-      if (isI18nLayoutRoute(route)) {
-        const matchingRoute = search(id, route.children);
-        if (matchingRoute) return matchingRoute;
-      }
+    if (isI18nLayoutRoute(route)) {
+      const matchingRoute = findRouteById(id, route.children);
+      if (matchingRoute) return matchingRoute;
     }
   }
-
-  return search(id, routes);
 }
 
 export function getPathById(id: string, params: Params = {}): string {
