@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { Outlet, useNavigate, useParams } from '@remix-run/react';
 
-import { handle as layoutHandle } from '~/routes/public/renew/_route';
+import { handle as layoutHandle } from '~/routes/public/apply/layout';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 
@@ -12,18 +12,18 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 /**
- * The parent route of all /renew/{id}/* routes, used to
+ * The parent route of all /apply/{id}/* routes, used to
  * redirect to /apply if the flow has not yet been initialized.
  */
 export default function Route() {
   const navigate = useNavigate();
   const params = useParams();
 
-  const path = getPathById('public/renew/index', params);
+  const path = getPathById('public/apply/index', params);
 
   useEffect(() => {
     // redirect to start if the flow has not yet been initialized
-    const flowState = sessionStorage.getItem('renew.state');
+    const flowState = sessionStorage.getItem('flow.state');
 
     if (flowState !== 'active') {
       navigate(path, { replace: true });
