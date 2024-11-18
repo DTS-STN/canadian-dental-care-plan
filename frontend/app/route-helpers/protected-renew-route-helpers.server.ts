@@ -40,6 +40,7 @@ export interface ProtectedRenewState {
     readonly id: string;
     readonly isParentOrLegalGuardian?: boolean;
     readonly dentalInsurance?: boolean;
+    readonly firstName?: string;
   }[];
   readonly contactInformation?: {
     isNewOrUpdatedPhoneNumber?: boolean;

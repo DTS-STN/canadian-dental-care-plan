@@ -32,7 +32,7 @@ enum ParentOrGuardianOption {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.parentOrGuardian,
-  pageTitleI18nKey: 'protected-renew:parent-or-guardian.page-title',
+  pageTitleI18nKey: 'protected-renew:children.parent-or-guardian.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:parent-or-guardian.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:children.parent-or-guardian.page-title') }) };
 
   return { csrfToken, meta, defaultState: state.isParentOrLegalGuardian };
 }
@@ -76,7 +76,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parentOrGuardianSchema = z.object({
     parentOrGuardian: z.nativeEnum(ParentOrGuardianOption, {
-      errorMap: () => ({ message: t('protected-renew:parent-or-guardian.error-message.parent-or-guardian-required') }),
+      errorMap: () => ({ message: t('protected-renew:children.parent-or-guardian.error-message.parent-or-guardian-required') }),
     }),
   });
 
@@ -133,17 +133,17 @@ export default function ProtectedRenewParentOrGuardian() {
         <InputRadios
           id="parent-or-guardian"
           name="parentOrGuardian"
-          legend={t('protected-renew:parent-or-guardian.form-instructions')}
+          legend={t('protected-renew:children.parent-or-guardian.form-instructions')}
           options={[
-            { value: ParentOrGuardianOption.Yes, children: t('protected-renew:parent-or-guardian.radio-options.yes'), defaultChecked: defaultState === true },
-            { value: ParentOrGuardianOption.No, children: t('protected-renew:parent-or-guardian.radio-options.no'), defaultChecked: defaultState === false },
+            { value: ParentOrGuardianOption.Yes, children: t('protected-renew:children.parent-or-guardian.radio-options.yes'), defaultChecked: defaultState === true },
+            { value: ParentOrGuardianOption.No, children: t('protected-renew:children.parent-or-guardian.radio-options.no'), defaultChecked: defaultState === false },
           ]}
           errorMessage={errors?.taxFiling}
           required
         />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton type="submit" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Child must be a parent or legal guardian click">
-            {t('protected-renew:parent-or-guardian.continue-btn')}
+            {t('protected-renew:children.parent-or-guardian.continue-btn')}
           </LoadingButton>
           <ButtonLink
             id="back-button"
@@ -155,7 +155,7 @@ export default function ProtectedRenewParentOrGuardian() {
             startIcon={faChevronLeft}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child must be a parent or legal guardian click"
           >
-            {t('protected-renew:parent-or-guardian.back-btn')}
+            {t('protected-renew:children.parent-or-guardian.back-btn')}
           </ButtonLink>
         </div>
       </fetcher.Form>
