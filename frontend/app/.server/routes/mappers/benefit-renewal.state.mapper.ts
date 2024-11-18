@@ -5,7 +5,6 @@ import type {
   AddressInformationState,
   ApplicantInformationState,
   ChildState,
-  CommunicationPreferenceState,
   ConfirmDentalBenefitsState,
   ContactInformationState,
   DentalFederalBenefitsState,
@@ -19,7 +18,6 @@ export interface RenewAdultChildState {
   applicantInformation: ApplicantInformationState;
   children: ChildState[];
   clientApplication: ClientApplicationDto;
-  communicationPreferences?: CommunicationPreferenceState;
   confirmDentalBenefits: ConfirmDentalBenefitsState;
   contactInformation: ContactInformationState;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
