@@ -6,7 +6,7 @@ export type BenefitApplicationDto = ReadonlyDeep<{
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
   dateOfBirth: string;
-  dentalBenefits?: DentalBenefitsDto;
+  dentalBenefits: string[];
   dentalInsurance?: boolean;
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
@@ -25,7 +25,7 @@ export type ApplicantInformationDto = ReadonlyDeep<{
 }>;
 
 export type ChildDto = ReadonlyDeep<{
-  dentalBenefits: DentalBenefitsDto;
+  dentalBenefits: string[];
   dentalInsurance: boolean;
   information: {
     firstName: string;
@@ -59,13 +59,6 @@ export type ContactInformationDto = ReadonlyDeep<{
   phoneNumber?: string;
   phoneNumberAlt?: string;
   email?: string;
-}>;
-
-export type DentalBenefitsDto = ReadonlyDeep<{
-  hasFederalBenefits: boolean;
-  federalSocialProgram?: string;
-  hasProvincialTerritorialBenefits: boolean;
-  provincialTerritorialSocialProgram?: string;
 }>;
 
 export type PartnerInformationDto = ReadonlyDeep<{

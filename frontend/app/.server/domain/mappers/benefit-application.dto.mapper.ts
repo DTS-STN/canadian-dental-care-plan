@@ -4,7 +4,7 @@ import validator from 'validator';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { BenefitApplicationDto, ChildDto, ContactInformationDto, DentalBenefitsDto, PartnerInformationDto, TypeOfApplicationDto } from '~/.server/domain/dtos';
+import type { BenefitApplicationDto, ChildDto, ContactInformationDto, PartnerInformationDto, TypeOfApplicationDto } from '~/.server/domain/dtos';
 import type { BenefitApplicationRequestEntity, BenefitApplicationResponseEntity } from '~/.server/domain/entities';
 import { parseDateString } from '~/utils/date-utils';
 
@@ -52,7 +52,7 @@ export class BenefitApplicationDtoMapperImpl implements BenefitApplicationDtoMap
             PrivateDentalInsuranceIndicator: dentalInsurance,
             DisabilityTaxCreditIndicator: disabilityTaxCredit,
             LivingIndependentlyIndicator: livingIndependently,
-            InsurancePlan: dentalBenefits && this.toInsurancePlan(dentalBenefits),
+            InsurancePlan: this.toInsurancePlan(dentalBenefits),
           },
           PersonBirthDate: this.toDate(dateOfBirth),
           PersonContactInformation: [
@@ -100,22 +100,14 @@ export class BenefitApplicationDtoMapperImpl implements BenefitApplicationDtoMap
     };
   }
 
-  private toInsurancePlan({ hasFederalBenefits, federalSocialProgram, hasProvincialTerritorialBenefits, provincialTerritorialSocialProgram }: DentalBenefitsDto) {
-    const insurancePlanIdentification = [];
-
-    if (hasFederalBenefits && federalSocialProgram && !validator.isEmpty(federalSocialProgram)) {
-      insurancePlanIdentification.push({
-        IdentificationID: federalSocialProgram,
-      });
-    }
-
-    if (hasProvincialTerritorialBenefits && provincialTerritorialSocialProgram && !validator.isEmpty(provincialTerritorialSocialProgram)) {
-      insurancePlanIdentification.push({
-        IdentificationID: provincialTerritorialSocialProgram,
-      });
-    }
-
-    return [{ InsurancePlanIdentification: insurancePlanIdentification }];
+  private toInsurancePlan(dentalBenefits: readonly string[]) {
+    return [
+      {
+        InsurancePlanIdentification: dentalBenefits.map((dentalBenefit) => ({
+          IdentificationID: dentalBenefit,
+        })),
+      },
+    ];
   }
 
   private toDate(date: string) {
