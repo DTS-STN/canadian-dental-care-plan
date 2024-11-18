@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
+
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Outlet, useLoaderData } from '@remix-run/react';
+import { Outlet, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 
 import { TYPES } from '~/.server/constants';
 import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
@@ -8,6 +10,7 @@ import { useApiSession } from '~/utils/api-session-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces),
@@ -22,6 +25,21 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 
 export default function Route() {
   const { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
+
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const path = getPathById('public/renew/index', params);
+
+  useEffect(() => {
+    // redirect to start if the flow has not yet been initialized
+    const flowState = sessionStorage.getItem('renew.state');
+
+    if (flowState !== 'active') {
+      navigate(path, { replace: true });
+    }
+  }, [navigate, path]);
+
   const apiSession = useApiSession();
 
   function handleOnSessionEnd() {
