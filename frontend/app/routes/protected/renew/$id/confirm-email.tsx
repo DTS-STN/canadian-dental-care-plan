@@ -45,7 +45,7 @@ enum ShouldReceiveEmailCommunicationOption {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adultChild.confirmEmail,
+  pageIdentifier: pageIds.protected.renew.confirmEmail,
   pageTitleI18nKey: 'protected-renew:confirm-email.page-title',
 } as const satisfies RouteHandleData;
 
