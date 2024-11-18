@@ -97,6 +97,7 @@ const serverEnv = clientEnvSchema.extend({
   AUTH_LOGOUT_REDIRECT_URL: z.string().url(),
   AUTH_RAOIDC_BASE_URL: z.string().trim().min(1),
   AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
+  AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   AUTH_RASCL_LOGOUT_URL: z.string().trim().min(1),
 
   // hCaptcha settings
