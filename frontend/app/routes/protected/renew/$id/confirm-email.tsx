@@ -160,7 +160,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('protected/renew/$id/confirm-address', params));
 }
 
-export default function RenewAdultChildConfirmEmail() {
+export default function ProtectedRenewConfirmEmail() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
