@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { APP_LOCALES, getAltLanguage, getNamespaces, getTypedI18nNamespaces, isAppLocale, removeLanguageFromPath, useAppLocale } from '~/utils/locale-utils';
+import { APP_LOCALES, getAltLanguage, getLanguage, getNamespaces, getTypedI18nNamespaces, isAppLocale, removeLanguageFromPath, useAppLocale } from '~/utils/locale-utils';
 
 /*
  * @vitest-environment jsdom
@@ -29,16 +29,30 @@ describe('locale-utils', () => {
   });
 
   describe('getAltLanguage', () => {
-    it('should return "fr" for "en"', () => {
-      expect(getAltLanguage('en')).toBe('fr');
-    });
-
-    it('should return "en" for "fr"', () => {
-      expect(getAltLanguage('fr')).toBe('en');
+    it.each([
+      { language: 'en', expected: 'fr' },
+      { language: 'fr', expected: 'en' },
+    ])('should return $expected for language $language', ({ language, expected }) => {
+      expect(getAltLanguage(language)).toBe(expected);
     });
 
     it('should throw an error for invalid language', () => {
-      expect(() => getAltLanguage('es')).toThrowError('Unexpected language: es');
+      expect(() => getAltLanguage('es')).toThrowError(`Could not determine altLanguage for language: es.`);
+    });
+  });
+
+  describe('getLanguage', () => {
+    it.each([
+      { pathname: '/en', expected: 'en' },
+      { pathname: '/en/foo', expected: 'en' },
+      { pathname: '/fr', expected: 'fr' },
+      { pathname: '/fr/foo', expected: 'fr' },
+    ])('should return $expected for pathname $pathname', ({ pathname, expected }) => {
+      expect(getLanguage(pathname)).toBe(expected);
+    });
+
+    it('should throw an error for invalid pathname', () => {
+      expect(() => getLanguage('/es')).toThrowError(`Could not determine language for pathname: /es.`);
     });
   });
 

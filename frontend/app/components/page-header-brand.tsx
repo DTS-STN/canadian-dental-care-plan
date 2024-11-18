@@ -15,15 +15,15 @@ export interface PageHeaderBrandProps {
 
 export function PageHeaderBrand({ headerLogoUrl }: PageHeaderBrandProps) {
   const { i18n, t } = useTranslation(['gcweb']);
-
   const altLanguage = getAltLanguage(i18n.language);
-  const altLogoContent = <span lang={altLanguage}>{i18n.getFixedT(altLanguage)('gcweb:header.govt-of-canada.text')}</span>;
+
   const headerLogo = (
     <>
       <img className="h-8 w-auto" src={`/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
-      <span className="sr-only">{altLogoContent}</span>
+      <span className="sr-only">{<span lang={altLanguage}>{i18n.getFixedT(altLanguage)('gcweb:header.govt-of-canada.text')}</span>}</span>
     </>
   );
+
   return (
     <div id="wb-bnr">
       <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
