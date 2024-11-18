@@ -41,6 +41,16 @@ export interface ProtectedRenewState {
     readonly isParentOrLegalGuardian?: boolean;
     readonly dentalInsurance?: boolean;
     readonly firstName?: string;
+    readonly isSurveyCompleted?: boolean;
+    readonly demographicSurvey?: {
+      readonly indigenousStatus?: string;
+      readonly firstNations?: string[];
+      readonly disabilityStatus?: string;
+      readonly ethnicGroups?: string[];
+      readonly anotherEthnicGroup?: string;
+      readonly locationBornStatus?: string;
+      readonly genderStatus?: string;
+    };
   }[];
   readonly contactInformation?: {
     isNewOrUpdatedPhoneNumber?: boolean;
