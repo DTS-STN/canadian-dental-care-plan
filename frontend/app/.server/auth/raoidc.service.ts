@@ -1,25 +1,3 @@
-/**
- * The RAOIDC Service module is responsible for all RAOIDC interactions in the
- * application. It exports a single getRaoidcService() factory function that
- * should be used to get an instance of the service.
- *
- * The service exports three functions for making calls to the downstream RAOIDC
- * service:
- *
- *   - generateSigninRequest() -- generates a standard OIDC signing request
- *   - handleCallback() -- handles the OIDC callback request
- *   - handleLogout() -- handles an RAOIDC logout
- *
- * If an HTTP proxy is configured (via the HTTP_PROXY_URL environment
- * variable), the service will make all RAOIDC calls with a custom fetch()
- * function that uses that HTTP proxy. This is most commonly used during
- * development, when the nonprod RAOIDC instance is not accessible outside of
- * the ESDC network.
- *
- * The service module memoizes the service instance once it is successfully
- * initialized. This ensures that only a single instance of the service is
- * created for the application.
- */
 import type { Session } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 
@@ -128,6 +106,16 @@ interface SigninRequest {
   state: string;
 }
 
+/**
+ * The RAOIDC Service is responsible for all RAOIDC interactions in the
+ * application.
+ *
+ * If an HTTP proxy is configured (via the HTTP_PROXY_URL environment
+ * variable), the service will make all RAOIDC calls with a custom fetch()
+ * function that uses that HTTP proxy. This is most commonly used during
+ * development, when the nonprod RAOIDC instance is not accessible outside of
+ * the ESDC network.
+ */
 @injectable()
 export class DefaultRaoidcService implements RaoidcService {
   private readonly log: Logger;
