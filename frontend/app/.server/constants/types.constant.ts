@@ -1,6 +1,7 @@
 import type { interfaces } from 'inversify';
 
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
+import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
 import type { RedisService } from '~/.server/data/services';
 import type {
@@ -122,6 +123,7 @@ export const TYPES = assignServiceIdentifiers({
   auth: {
     BearerTokenResolver: serviceId<BearerTokenResolver>(),
     HealthTokenRolesExtractor: serviceId<TokenRolesExtractor>('HealthTokenRolesExtractor'),
+    RaoidcService: serviceId<RaoidcService>('RaoidcService'),
   },
   configs: {
     ClientConfig: serviceId<ClientConfig>(),
