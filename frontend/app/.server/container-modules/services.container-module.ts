@@ -2,6 +2,7 @@ import type { interfaces } from 'inversify';
 import { ContainerModule } from 'inversify';
 
 import { RedisServiceImpl } from '../data/services';
+import { DefaultRaoidcService } from '~/.server/auth/raoidc.service';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import {
@@ -37,6 +38,7 @@ function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
  * Container module for services.
  */
 export const servicesContainerModule = new ContainerModule((bind) => {
+  bind(TYPES.auth.RaoidcService).to(DefaultRaoidcService);
   // RedisService bindings depend on the SESSION_STORAGE_TYPE configuration string
   bind(TYPES.data.services.RedisService).to(RedisServiceImpl).when(sessionTypeIs('redis'));
   bind(TYPES.domain.services.AddressValidationService).to(DefaultAddressValidationService);
