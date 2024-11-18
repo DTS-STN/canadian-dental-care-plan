@@ -4,8 +4,7 @@ import type { ApplicantInformationDto, ChildDto, CommunicationPreferencesDto, Co
 
 export type ClientApplicationDto = ReadonlyDeep<{
   applicantInformation: ApplicantInformationDto & { clientNumber?: string };
-  children: (Omit<ChildDto, 'dentalBenefits' | 'information'> & {
-    dentalBenefits: string[]; // TODO this structure should be switched in BenefitApplicationDto as well
+  children: (Omit<ChildDto, 'information'> & {
     information: {
       firstName: string;
       lastName: string;
@@ -18,7 +17,7 @@ export type ClientApplicationDto = ReadonlyDeep<{
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
   dateOfBirth: string;
-  dentalBenefits: string[]; // TODO this structure should be switched in BenefitApplicationDto as well
+  dentalBenefits: string[];
   dentalInsurance?: boolean;
   disabilityTaxCredit?: boolean;
   hasFiledTaxes: boolean;

@@ -1,5 +1,6 @@
 import { injectable } from 'inversify';
 import invariant from 'tiny-invariant';
+import validator from 'validator';
 
 import type { BenefitApplicationDto } from '~/.server/domain/dtos';
 import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
@@ -57,13 +58,13 @@ interface ToBenefitApplicationDtoArgs {
   applicantInformation: ApplicantInformationState;
   children?: Required<ChildState>[];
   communicationPreferences: CommunicationPreferencesState;
+  contactInformation: ContactInformationState;
   dateOfBirth: string;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance?: boolean;
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationState;
-  contactInformation: ContactInformationState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult' | 'adult-child' | 'child'>;
 }
 
@@ -130,11 +131,11 @@ export class BenefitApplicationStateMapperImpl implements BenefitApplicationStat
   }: ToBenefitApplicationDtoArgs) {
     return {
       applicantInformation,
-      children: children ?? [],
+      children: this.toChildren(children),
       communicationPreferences,
       contactInformation: this.toContactInformation(contactInformation),
       dateOfBirth,
-      dentalBenefits,
+      dentalBenefits: this.toDentalBenefits(dentalBenefits),
       dentalInsurance,
       disabilityTaxCredit,
       livingIndependently,
@@ -144,11 +145,36 @@ export class BenefitApplicationStateMapperImpl implements BenefitApplicationStat
     };
   }
 
+  private toChildren(children?: Required<ChildState>[]) {
+    if (!children) return [];
+
+    return children.map((child) => ({
+      ...child,
+      dentalBenefits: this.toDentalBenefits(child.dentalBenefits),
+    }));
+  }
+
   private toContactInformation(contactInformation: ContactInformationState) {
     return {
       ...contactInformation,
       ...this.toHomeAddress(contactInformation),
     };
+  }
+
+  private toDentalBenefits(dentalBenefitsState?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState) {
+    if (!dentalBenefitsState) return [];
+
+    const dentalBenefits = [];
+
+    if (dentalBenefitsState.hasFederalBenefits && dentalBenefitsState.federalSocialProgram && !validator.isEmpty(dentalBenefitsState.federalSocialProgram)) {
+      dentalBenefits.push(dentalBenefitsState.federalSocialProgram);
+    }
+
+    if (dentalBenefitsState.hasProvincialTerritorialBenefits && dentalBenefitsState.provincialTerritorialSocialProgram && !validator.isEmpty(dentalBenefitsState.provincialTerritorialSocialProgram)) {
+      dentalBenefits.push(dentalBenefitsState.provincialTerritorialSocialProgram);
+    }
+
+    return dentalBenefits;
   }
 
   private toHomeAddress({ copyMailingAddress, homeAddress, homeApartment, homeCity, homeCountry, homePostalCode, homeProvince, mailingAddress, mailingApartment, mailingCity, mailingCountry, mailingPostalCode, mailingProvince }: ContactInformationState) {
