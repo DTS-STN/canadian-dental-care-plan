@@ -1,8 +1,6 @@
-import { renderHook } from '@testing-library/react';
-
 import { describe, expect, it } from 'vitest';
 
-import { APP_LOCALES, isAppLocale, useAppLocale } from '~/utils/locale-utils';
+import { APP_LOCALES, getAltLanguage, getNamespaces, getTypedI18nNamespaces, isAppLocale, removeLanguageFromPath, useAppLocale } from '~/utils/locale-utils';
 
 /*
  * @vitest-environment jsdom
@@ -16,66 +14,92 @@ describe('locale-utils', () => {
   });
 
   describe('isAppLocale', () => {
-    it('should return true for a valid locale "en"', () => {
-      const result = isAppLocale('en');
-      expect(result).toBe(true);
+    it.each([
+      { input: 'en', expected: true },
+      { input: 'fr', expected: true },
+      { input: 'es', expected: false },
+      { input: 123, expected: false },
+      { input: {}, expected: false },
+      { input: [], expected: false },
+      { input: null, expected: false },
+      { input: undefined, expected: false },
+    ])('should return $expected for input $input', ({ input, expected }) => {
+      expect(isAppLocale(input)).toBe(expected);
+    });
+  });
+
+  describe('getAltLanguage', () => {
+    it('should return "fr" for "en"', () => {
+      expect(getAltLanguage('en')).toBe('fr');
     });
 
-    it('should return true for a valid locale "fr"', () => {
-      const result = isAppLocale('fr');
-      expect(result).toBe(true);
+    it('should return "en" for "fr"', () => {
+      expect(getAltLanguage('fr')).toBe('en');
     });
 
-    it('should return false for an invalid locale "es"', () => {
-      const result = isAppLocale('es');
-      expect(result).toBe(false);
+    it('should throw an error for invalid language', () => {
+      expect(() => getAltLanguage('es')).toThrowError('Unexpected language: es');
+    });
+  });
+
+  describe('getNamespaces', () => {
+    it('should return an empty array if routes is undefined', () => {
+      expect(getNamespaces(undefined)).toEqual([]);
     });
 
-    it('should return false for a non-string value 123', () => {
-      const result = isAppLocale(123);
-      expect(result).toBe(false);
+    it('should return an empty array if routes is empty', () => {
+      expect(getNamespaces([])).toEqual([]);
     });
 
-    it('should return false for an object value', () => {
-      const result = isAppLocale({} as unknown);
-      expect(result).toBe(false);
+    it('should return a unique array of namespaces from route handles', () => {
+      const routes = [{ handle: { i18nNamespaces: ['namespace1', 'namespace2'] } }, { handle: { i18nNamespaces: ['namespace2', 'namespace3'] } }];
+      expect(getNamespaces(routes)).toEqual(['namespace1', 'namespace2', 'namespace3']);
     });
 
-    it('should return false for an array value', () => {
-      const result = isAppLocale([] as unknown);
-      expect(result).toBe(false);
-    });
+    it('should handle undefined or invalid i18nNamespaces', () => {
+      const routes: Array<{ handle?: unknown }> = [
+        { handle: { i18nNamespaces: undefined } },
+        { handle: { i18nNamespaces: 'invalid' } }, // Invalid type
+        { handle: { i18nNamespaces: ['namespace1'] } },
+      ];
 
-    it('should return false for null', () => {
-      const result = isAppLocale(null);
-      expect(result).toBe(false);
+      expect(getNamespaces(routes)).toEqual(['namespace1']);
     });
+  });
 
-    it('should return false for undefined', () => {
-      const result = isAppLocale(undefined);
-      expect(result).toBe(false);
+  describe('getTypedI18nNamespaces', () => {
+    it('should return a typed tuple of namespaces', () => {
+      const result = getTypedI18nNamespaces('apply', 'gcweb', 'unable-to-process-request');
+      expect(result).toEqual(['apply', 'gcweb', 'unable-to-process-request']);
+
+      type ExpectedType = readonly ['apply', 'gcweb', 'unable-to-process-request'];
+      const typedResult: ExpectedType = result; // No TypeScript error
+      expect(typedResult).toEqual(['apply', 'gcweb', 'unable-to-process-request']);
+    });
+  });
+
+  describe('removeLanguageFromPath', () => {
+    it.each([
+      { path: '/en', expected: '' },
+      { path: '/fr', expected: '' },
+      { path: '/en/foo', expected: '/foo' },
+      { path: '/fr/foo', expected: '/foo' },
+      { path: '/', expected: '/' },
+      { path: '/foo', expected: '/foo' },
+      { path: '/es/foo', expected: '/es/foo' },
+    ])('should return $expected for path $path', ({ path, expected }) => {
+      expect(removeLanguageFromPath(path)).toBe(expected);
     });
   });
 
   describe('useAppLocale', () => {
-    it('should return "fr" when locale is "fr"', () => {
-      const { result } = renderHook(() => useAppLocale('fr'));
-      expect(result.current).toBe('fr');
-    });
-
-    it('should return "en" when locale is "en"', () => {
-      const { result } = renderHook(() => useAppLocale('en'));
-      expect(result.current).toBe('en');
-    });
-
-    it('should return "en" when locale is "es"', () => {
-      const { result } = renderHook(() => useAppLocale('es'));
-      expect(result.current).toBe('en');
-    });
-
-    it('should return "en" when locale is an empty string', () => {
-      const { result } = renderHook(() => useAppLocale(''));
-      expect(result.current).toBe('en');
+    it.each([
+      { locale: 'en', expected: 'en' },
+      { locale: 'fr', expected: 'fr' },
+      { locale: 'es', expected: 'en' },
+      { locale: '', expected: 'en' },
+    ])('should return $expected for locale $locale', ({ locale, expected }) => {
+      expect(useAppLocale(locale)).toBe(expected);
     });
   });
 });
