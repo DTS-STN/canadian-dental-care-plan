@@ -10,7 +10,6 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { validateCsrfToken } from '~/.server/routes/security';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
@@ -94,7 +93,9 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
   featureEnabled('address-validation');
-  await validateCsrfToken({ context: { appContainer }, request });
+
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateCsrfToken(request);
 
   if (request.method !== 'POST') {
     return Response.json({ message: 'Method not allowed' }, { status: 405 });

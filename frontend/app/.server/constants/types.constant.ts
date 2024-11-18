@@ -1,5 +1,6 @@
 import type { interfaces } from 'inversify';
 
+import type { SecurityHandler } from '../routes/security';
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
@@ -73,7 +74,7 @@ import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.ser
 import type { HCaptchaDtoMapper } from '~/.server/web/mappers';
 import type { HCaptchaRepository } from '~/.server/web/repositories';
 import type { HCaptchaService, SessionService } from '~/.server/web/services';
-import type { CsrfTokenValidator } from '~/.server/web/validators';
+import type { CsrfTokenValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 
 /**
  * Represents a service identifier for dependency injection purposes.
@@ -211,6 +212,9 @@ export const TYPES = assignServiceIdentifiers({
         MailingAddressValidatorFactory: serviceId<MailingAddressValidatorFactory>(),
       },
     },
+    security: {
+      SecurityHandler: serviceId<SecurityHandler>(),
+    },
     validators: {
       AddressValidatorFactory: serviceId<AddressValidatorFactory>(),
     },
@@ -227,6 +231,7 @@ export const TYPES = assignServiceIdentifiers({
       SessionService: serviceId<SessionService>(),
     },
     validators: {
+      RaoidcSessionValidator: serviceId<RaoidcSessionValidator>(),
       CsrfTokenValidator: serviceId<CsrfTokenValidator>(),
     },
   },

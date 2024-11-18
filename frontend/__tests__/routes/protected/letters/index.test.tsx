@@ -2,22 +2,17 @@ import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mockDeep } from 'vitest-mock-extended';
+import { mock, mockDeep } from 'vitest-mock-extended';
 
 import type { ClientConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantService, AuditService, LetterService, LetterTypeService } from '~/.server/domain/services';
+import type { SecurityHandler } from '~/.server/routes/security';
 import { loader } from '~/routes/protected/letters/index';
 
 vi.mock('~/services/instrumentation-service.server', () => ({
   getInstrumentationService: () => ({
     countHttpStatus: vi.fn(),
-  }),
-}));
-
-vi.mock('~/services/raoidc-service.server', () => ({
-  getRaoidcService: vi.fn().mockResolvedValue({
-    handleSessionValidation: vi.fn().mockResolvedValue(true),
   }),
 }));
 
@@ -57,6 +52,7 @@ describe('Letters Page', () => {
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         SCCH_BASE_URI: 'https://api.example.com',
       } satisfies Partial<ClientConfig>);
@@ -101,6 +97,7 @@ describe('Letters Page', () => {
     session.set('userInfoToken', { sin: '999999999' });
 
     const mockAppLoadContext = mockDeep<AppLoadContext>();
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
     mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValue({
       SCCH_BASE_URI: 'https://api.example.com',
     } satisfies Partial<ClientConfig>);

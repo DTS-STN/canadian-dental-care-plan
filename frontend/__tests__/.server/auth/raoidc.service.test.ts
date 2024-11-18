@@ -1,5 +1,3 @@
-import type { Session } from '@remix-run/node';
-
 import type { JWTPayload } from 'jose';
 import { subtle } from 'node:crypto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -11,7 +9,7 @@ import type { ServerConfig } from '~/.server/configs';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
 import type { IdToken, JWKSet, ServerMetadata, UserinfoToken } from '~/utils/raoidc-utils.server';
-import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
+import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/utils/raoidc-utils.server';
 import { expandTemplate } from '~/utils/string-utils';
 
 vi.mock('node:crypto', () => ({
@@ -165,75 +163,6 @@ describe('DefaultRaoidcService', () => {
 
       const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
       await expect(service.handleCallback({ request: mockRequest, codeVerifier, expectedState, redirectUri })).rejects.toThrowError('CSRF error: incoming state [wrong_state] does not match expected state [mock_state]');
-    });
-  });
-
-  describe('handleSessionValidation', () => {
-    it('should handle session validation', async () => {
-      const mockRequest = new Request('http://localhost/en/home?lang=en&id=00000000-0000-0000-0000-000000000000');
-      const mockSession = mock<Session>();
-      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
-      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'mock_sid' });
-      mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: false });
-      vi.mocked(validateSession).mockResolvedValue(true);
-
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
-      await service.handleSessionValidation({ request: mockRequest, session: mockSession });
-
-      expect(validateSession).toHaveBeenCalledWith(mockServerConfig.AUTH_RAOIDC_BASE_URL, mockServerConfig.AUTH_RAOIDC_CLIENT_ID, 'mock_sid', undefined);
-      expect(mockLogger.debug).toHaveBeenLastCalledWith('Authentication check passed');
-    });
-
-    it('should redirect to login if no idToken', async () => {
-      const mockRequest = new Request('http://localhost/en/home?lang=en&id=00000000-0000-0000-0000-000000000000');
-      const mockSession = mock<Session>();
-      mockSession.has.calledWith('idToken').mockReturnValueOnce(false);
-      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(false);
-
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
-      await expect(service.handleSessionValidation({ request: mockRequest, session: mockSession })).rejects.toThrow('MockedRedirect(/auth/login?returnto=%2Fen%2Fhome%3Flang%3Den%26id%3D00000000-0000-0000-0000-000000000000)');
-      expect(validateSession).not.toHaveBeenCalled();
-    });
-
-    it('should redirect to login if no userInfoToken', async () => {
-      const mockRequest = new Request('http://localhost/en/home?lang=en&id=00000000-0000-0000-0000-000000000000');
-      const mockSession = mock<Session>();
-      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(false);
-
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
-      await expect(service.handleSessionValidation({ request: mockRequest, session: mockSession })).rejects.toThrow('MockedRedirect(/auth/login?returnto=%2Fen%2Fhome%3Flang%3Den%26id%3D00000000-0000-0000-0000-000000000000)');
-      expect(validateSession).not.toHaveBeenCalled();
-    });
-
-    it('should skip validation for mocked users', async () => {
-      const mockRequest = new Request('http://localhost/en/home?lang=en&id=00000000-0000-0000-0000-000000000000');
-      const mockSession = mock<Session>();
-      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
-      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'mock_sid' });
-      mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: true });
-
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
-      await service.handleSessionValidation({ request: mockRequest, session: mockSession });
-
-      expect(mockLogger.debug).toHaveBeenLastCalledWith('Mocked user; skipping RAOIDC session validation');
-      expect(validateSession).not.toHaveBeenCalled();
-    });
-
-    it('should redirect to login if session is invalid', async () => {
-      const mockRequest = new Request('http://localhost/en/home?lang=en&id=00000000-0000-0000-0000-000000000000');
-      const mockSession = mock<Session>();
-      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
-      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'mock_sid' });
-      mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: false });
-      vi.mocked(validateSession).mockResolvedValue(false);
-
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
-      await expect(service.handleSessionValidation({ request: mockRequest, session: mockSession })).rejects.toThrow('MockedRedirect(/auth/login?returnto=%2Fen%2Fhome%3Flang%3Den%26id%3D00000000-0000-0000-0000-000000000000)');
-      expect(validateSession).toHaveBeenCalledWith(mockServerConfig.AUTH_RAOIDC_BASE_URL, mockServerConfig.AUTH_RAOIDC_CLIENT_ID, 'mock_sid', undefined);
     });
   });
 });

@@ -113,8 +113,11 @@ const expressApp = await createExpressApp({
   getLoadContext: async (request: Request, response: Response) => {
     const log = getLogger('express.server/getLoadContext');
 
+    const appContainer = getAppContainerProvider();
+    const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
     const partialAppLoadContext = {
-      appContainer: getAppContainerProvider(),
+      appContainer,
+      securityHandler,
     } as const satisfies SetOptional<AppLoadContext, 'session'>;
 
     if (shouldSkipSessionHandling(request)) {
