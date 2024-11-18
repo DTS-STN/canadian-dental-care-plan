@@ -40,6 +40,6 @@ export function generateContentSecurityPolicy(nonce: string) {
     `style-src 'self' 'unsafe-inline' ${hcaptchaCSP.styleSrc}`,
   ].join('; ');
 
-  log.debug(`Generated content security policy: [${contentSecurityPolicy}]`);
+  log.trace(`Generated content security policy: [${contentSecurityPolicy}]`);
   return contentSecurityPolicy;
 }

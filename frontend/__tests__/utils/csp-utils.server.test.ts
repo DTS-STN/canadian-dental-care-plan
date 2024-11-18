@@ -9,7 +9,7 @@ vi.mock('~/utils/env-utils.server', () => ({
 
 vi.mock('~/utils/logging.server', () => ({
   getLogger: () => ({
-    debug: vi.fn(),
+    trace: vi.fn(),
   }),
 }));
 
