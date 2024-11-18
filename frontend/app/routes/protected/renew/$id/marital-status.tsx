@@ -130,6 +130,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveProtectedRenewState({ params, session, state: { maritalStatus: parsedMaritalStatus.data.maritalStatus, partnerInformation: parsedPartnerInformation.data } });
 
+  if (state.editMode) {
+    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  }
+
   return redirect(getPathById('protected/renew/$id/confirm-phone', params));
 }
 

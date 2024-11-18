@@ -14,6 +14,7 @@ export const pageIds = {
       maritalStatus: 'CDCP-PROT-RENW-0008',
       parentOrGuardian: 'CDCP-PROT-RENW-0009',
       confirmPhone: 'CDCP-PROT-RENW-0010',
+      confirmEmail: 'CDCP-PROT-RENW-0011',
     },
     dataUnavailable: 'CDCP-PROT-0099',
   },

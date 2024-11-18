@@ -16,8 +16,7 @@ import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
-import { loadProtectedRenewState } from '~/route-helpers/protected-renew-route-helpers.server';
-import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
+import { loadProtectedRenewState, saveProtectedRenewState } from '~/route-helpers/protected-renew-route-helpers.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -134,7 +133,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return Response.json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
+  saveProtectedRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
