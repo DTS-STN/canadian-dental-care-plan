@@ -87,10 +87,6 @@ export interface RenewState {
     provincialTerritorialBenefitsChanged: boolean;
   };
   readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
-  readonly communicationPreference?: {
-    email?: string;
-    preferredMethod: string;
-  };
   readonly submissionInfo?: {
     /**
      * The UTC date and time when the application was submitted.
@@ -116,7 +112,6 @@ export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBene
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ConfirmDentalBenefitsState = NonNullable<RenewState['confirmDentalBenefits']>;
 export type ContactInformationState = NonNullable<RenewState['contactInformation']>;
-export type CommunicationPreferenceState = NonNullable<RenewState['communicationPreference']>;
 
 /**
  * Schema for validating UUID.

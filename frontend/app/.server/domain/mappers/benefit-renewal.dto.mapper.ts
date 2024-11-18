@@ -8,7 +8,6 @@ import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '
 import type {
   AddressInformationState,
   ApplicantInformationState,
-  CommunicationPreferenceState,
   ContactInformationState,
   DentalFederalBenefitsState,
   DentalProvincialTerritorialBenefitsState,
@@ -40,7 +39,6 @@ export class BenefitRenewalDtoMapperImpl implements BenefitRenewalDtoMapper {
 
 export interface ToBenefitRenewalRequestFromRenewItaStateArgs {
   applicantInformation: ApplicantInformationState;
-  communicationPreferences?: CommunicationPreferenceState | undefined;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   partnerInformation: PartnerInformationState | undefined;
@@ -50,20 +48,9 @@ export interface ToBenefitRenewalRequestFromRenewItaStateArgs {
   addressInformation?: AddressInformationState;
 }
 
-export function toBenefitRenewalRequestFromRenewItaState({
-  applicantInformation,
-  communicationPreferences,
-  dentalBenefits,
-  dentalInsurance,
-  partnerInformation,
-  contactInformation,
-  typeOfRenewal,
-  maritalStatus,
-  addressInformation,
-}: ToBenefitRenewalRequestFromRenewItaStateArgs) {
+export function toBenefitRenewalRequestFromRenewItaState({ applicantInformation, dentalBenefits, dentalInsurance, partnerInformation, contactInformation, typeOfRenewal, maritalStatus, addressInformation }: ToBenefitRenewalRequestFromRenewItaStateArgs) {
   return toBenefitRenewalRequest({
     applicantInformation,
-    communicationPreferences,
     dentalBenefits,
     dentalInsurance,
     partnerInformation,
@@ -76,27 +63,16 @@ export function toBenefitRenewalRequestFromRenewItaState({
 
 interface ToBenefitRenewalRequestArgs {
   applicantInformation: ApplicantInformationState;
-  communicationPreferences?: CommunicationPreferenceState | undefined;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance?: boolean;
-  partnerInformation?: PartnerInformationState | undefined;
+  partnerInformation?: PartnerInformationState;
   contactInformation?: ContactInformationState;
   typeOfRenewal: TypeOfRenewalState;
   maritalStatus?: string;
   addressInformation?: AddressInformationState;
 }
 
-function toBenefitRenewalRequest({
-  applicantInformation,
-  communicationPreferences,
-  dentalBenefits,
-  dentalInsurance,
-  partnerInformation,
-  contactInformation,
-  typeOfRenewal,
-  maritalStatus,
-  addressInformation,
-}: ToBenefitRenewalRequestArgs): BenefitRenewalRequestEntity {
+function toBenefitRenewalRequest({ applicantInformation, dentalBenefits, dentalInsurance, partnerInformation, contactInformation, typeOfRenewal, maritalStatus, addressInformation }: ToBenefitRenewalRequestArgs): BenefitRenewalRequestEntity {
   return {
     BenefitApplication: {
       Applicant: {
@@ -108,7 +84,7 @@ function toBenefitRenewalRequest({
         PersonContactInformation: [
           {
             Address: addressInformation ? [toMailingAddress(addressInformation), toHomeAddress(addressInformation)] : [],
-            EmailAddress: toEmailAddress({ contactEmail: contactInformation?.email, communicationEmail: communicationPreferences?.email }),
+            EmailAddress: toEmailAddress(contactInformation?.email),
             TelephoneNumber: toTelephoneNumber(contactInformation ?? {}),
           },
         ],
@@ -129,7 +105,7 @@ function toBenefitRenewalRequest({
         RelatedPerson: toRelatedPersons({ partnerInformation }),
         MailingSameAsHomeIndicator: addressInformation?.copyMailingAddress ?? false,
         PreferredMethodCommunicationCode: {
-          ReferenceDataID: communicationPreferences?.preferredMethod,
+          ReferenceDataID: '777777777', // TODO use default value coming from client application service call
         },
       },
       BenefitRenewalCategoryCode: {
@@ -310,21 +286,12 @@ function toRelatedPersonSpouse({ confirm, yearOfBirth, socialInsuranceNumber }: 
   };
 }
 
-interface ToEmailAddressArgs {
-  contactEmail?: string;
-  communicationEmail?: string;
-}
-
-function toEmailAddress({ contactEmail, communicationEmail }: ToEmailAddressArgs) {
+function toEmailAddress(contactEmail?: string) {
   const emailAddress = [];
 
   if (contactEmail && !validator.isEmpty(contactEmail)) {
     emailAddress.push({
       EmailAddressID: contactEmail,
-    });
-  } else if (communicationEmail && !validator.isEmpty(communicationEmail)) {
-    emailAddress.push({
-      EmailAddressID: communicationEmail,
     });
   }
 

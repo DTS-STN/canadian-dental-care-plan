@@ -76,7 +76,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     clientNumber: state.applicantInformation.clientNumber,
     maritalStatus: maritalStatus ? maritalStatus.name : undefined,
     contactInformationEmail: state.contactInformation.email,
-    communicationPreferenceEmail: state.communicationPreference?.email,
   };
 
   const spouseInfo = state.partnerInformation && {
