@@ -192,17 +192,59 @@
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
   },
-  "parent-or-guardian": {
-    "page-title": "{{childName}}\u00a0: parent or legal guardian",
-    "back-btn": "Back",
-    "continue-btn": "Continue",
-    "form-instructions": "Are you the parent or legal guardian of this child?",
-    "radio-options": {
-      "yes": "Yes",
-      "no": "No"
+  "children": {
+    "child-number": "Child {{childNumber}}",
+    "parent-or-guardian": {
+      "page-title": "{{childName}}\u00a0: parent or legal guardian",
+      "back-btn": "Back",
+      "continue-btn": "Continue",
+      "form-instructions": "Are you the parent or legal guardian of this child?",
+      "radio-options": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "error-message": {
+        "parent-or-guardian-required": "Select whether you are the parent or legal guardian of this child"
+      }
     },
-    "error-message": {
-      "parent-or-guardian-required": "Select whether you are the parent or legal guardian of this child"
+    "dental-insurance": {
+      "title": "{{childName}}\u00a0: access to other dental insurance",
+      "legend": "Does {{childName}} have access to dental insurance or coverage\u00a0:",
+      "list": {
+        "employment": "Through a parent or legal guardian's employment benefits including health and wellness accounts",
+        "pension": "Through a parent or legal guardian's pension benefits",
+        "purchased": "Purchased by a parent or legal guardian from an insurance or benefits company",
+        "professional": "Through a professional or student organization"
+      },
+      "option-yes": "<strong>Yes</strong>, this child has access to dental insurance or coverage",
+      "option-no": "<strong>No</strong>, this child does not have access to dental insurance or coverage",
+      "button": {
+        "back": "Back",
+        "continue": "Continue",
+        "cancel-btn": "Cancel",
+        "save-btn": "Save"
+      },
+      "detail": {
+        "additional-info": {
+          "title": "Additional information",
+          "eligible": "A child is still considered to have access to dental insurance or coverage if a parent or legal guardian chooses to opt out of benefits provided through:",
+          "eligible-list": {
+            "employer": "an employer",
+            "pension": "pension (see exception)",
+            "professional": "professional or student organization."
+          },
+          "not-eligible": "As such, the child is not eligible for Canadian Dental Care Plan.",
+          "not-eligible-purchased": "If a parent or legal guardian purchased the current dental insurance policy privately, a child is not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
+          "excepton": "Exception: A child may still be eligible if a parent or legal guardian are retired and:",
+          "exception-list": {
+            "opted-out": "Opted out of pension benefits before December 11, 2023, and",
+            "opt-back": "Can't opt back in under the pension rules"
+          }
+        }
+      },
+      "error-message": {
+        "dental-insurance-required": "Select whether the child has access to dental insurance"
+      }
     }
   },
   "confirm-phone": {
