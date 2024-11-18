@@ -17,6 +17,11 @@ export function LanguageSwitcher({ children, ...props }: LanguageSwitcherProps) 
   const params = useParams();
   const [searchParams] = useSearchParams();
 
+  // can't toggle language if we don't know our current language
+  if (params.lang === undefined) {
+    return <></>;
+  }
+
   const altLang = getAltLanguage(params.lang);
   const currentRoute = matches[matches.length - 1];
   const routeId = currentRoute.id.replace(/-(en|fr)$/, '');

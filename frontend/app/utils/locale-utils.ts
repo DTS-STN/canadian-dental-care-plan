@@ -36,16 +36,31 @@ export function isAppLocale(value: unknown): value is AppLocale {
  * Returns the alternate language for the given input language.
  * (ie: 'en' → 'fr'; 'fr' → 'en')
  */
-export function getAltLanguage(language?: string) {
-  if (!isAppLocale(language)) {
-    throw new Error(`Unexpected language: ${language}`);
-  }
-
+export function getAltLanguage(language: string): AppLocale {
   switch (language) {
     case 'en':
       return 'fr';
     case 'fr':
       return 'en';
+    default:
+      throw new Error(`Could not determine altLanguage for language: ${language}.`);
+  }
+}
+
+/**
+ * Extracts the language code from a given pathname.
+ *
+ * @param pathname - The pathname to extract the language from.
+ * @returns The language code ('en' or 'fr') if found, otherwise undefined.
+ */
+export function getLanguage(pathname: string): AppLocale {
+  switch (true) {
+    case pathname === '/en' || pathname.startsWith('/en/'):
+      return 'en';
+    case pathname === '/fr' || pathname.startsWith('/fr/'):
+      return 'fr';
+    default:
+      throw new Error(`Could not determine language for pathname: ${pathname}.`);
   }
 }
 
@@ -124,8 +139,6 @@ export function getTypedI18nNamespaces<const T extends Readonly<FlatNamespace>, 
 /**
  * Returns translation based off provided locale
  *
- * @param language
- * @param { english translation, french translation}
  * @returns either the english translation or the french translation.
  */
 export function getNameByLanguage<T extends { nameEn: string; nameFr: string } | { nameEn?: string; nameFr?: string }>(language: string, obj: T): T extends { nameEn: infer N; nameFr: infer F } ? (typeof language extends 'fr' ? F : N) : never {

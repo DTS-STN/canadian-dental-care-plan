@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
+import { useEffect } from 'react';
 
 import { Link } from '@remix-run/react';
 
@@ -15,7 +15,7 @@ import { SkipNavigationLinks } from '~/components/skip-navigation-links';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
-import { getAltLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useI18nNamespaces, usePageTitleI18nKey, usePageTitleI18nOptions } from '~/utils/route-utils';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
@@ -138,12 +138,6 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
   const en = i18n.getFixedT('en');
   const fr = i18n.getFixedT('fr');
 
-  const altLanguage = getAltLanguage(i18n.language);
-  const altLogoContent = <span lang={altLanguage}>{i18n.getFixedT(altLanguage)('gcweb:header.govt-of-canada.text')}</span>;
-
-  const englishCdcpLink = <InlineLink to={en('gcweb:public-not-found.cdcp-link')} className="external-link" newTabIndicator target="_blank" />;
-  const frenchCdcpLink = <InlineLink to={fr('gcweb:public-not-found.cdcp-link')} className="external-link" newTabIndicator target="_blank" />;
-
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
       adobeAnalytics.pushErrorEvent(404);
@@ -158,7 +152,9 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
             <div property="publisher" typeof="GovernmentOrganization">
               <Link to="https://canada.ca/" property="url">
                 <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
-                <span className="sr-only">/ {altLogoContent}</span>
+                <span className="sr-only">
+                  / <span lang="fr">{fr('gcweb:header.govt-of-canada.text')}</span>
+                </span>
               </Link>
               <meta property="name" content={`${en('gcweb:header.govt-of-canada.text')} / ${fr('gcweb:header.govt-of-canada.text')}`} />
               <meta property="areaServed" typeof="Country" content="Canada" />
@@ -177,7 +173,7 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
             <p className="mb-8 text-lg text-gray-500">{en('gcweb:public-not-found.page-message')}</p>
             <ul className="list-disc space-y-2 pl-10">
               <li>
-                <Trans t={en} ns={['gcweb']} i18nKey="gcweb:public-not-found.return-cdcp" components={{ englishCdcpLink }} />
+                <Trans t={en} ns={['gcweb']} i18nKey="gcweb:public-not-found.return-cdcp" components={{ englishCdcpLink: <InlineLink to={en('gcweb:public-not-found.cdcp-link')} className="external-link" newTabIndicator target="_blank" /> }} />
               </li>
             </ul>
           </div>
@@ -189,7 +185,7 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
             <p className="mb-8 text-lg text-gray-500">{fr('gcweb:public-not-found.page-message')}</p>
             <ul className="list-disc space-y-2 pl-10">
               <li>
-                <Trans t={fr} ns={['gcweb']} i18nKey="gcweb:public-not-found.return-cdcp" components={{ frenchCdcpLink }} />
+                <Trans t={fr} ns={['gcweb']} i18nKey="gcweb:public-not-found.return-cdcp" components={{ frenchCdcpLink: <InlineLink to={fr('gcweb:public-not-found.cdcp-link')} className="external-link" newTabIndicator target="_blank" /> }} />
               </li>
             </ul>
           </div>
