@@ -30,6 +30,13 @@ vi.mock('@remix-run/react', async (actual) => {
   };
 });
 
+vi.mock('~/hooks', () => ({
+  useCurrentLanguage: vi.fn().mockReturnValue({
+    currentLanguage: 'en',
+    altLanguage: 'fr',
+  }),
+}));
+
 vi.mock('~/utils/env-utils', () => ({
   getClientEnv: vi.fn(),
 }));

@@ -12,6 +12,7 @@ import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
+import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -82,8 +83,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export default function LettersIndex() {
+  const { currentLanguage } = useCurrentLanguage();
   const [, setSearchParams] = useSearchParams();
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { letters, letterTypes, sortOrder, SCCH_BASE_URI } = useLoaderData<typeof loader>();
   const params = useParams();
 
@@ -121,7 +123,7 @@ export default function LettersIndex() {
             {letters.map((letter) => {
               const letterType = letterTypes.find(({ id }) => id === letter.letterTypeId);
               const gcAnalyticsCustomClickValue = `ESDC-EDSC:CDCP Letters Click:${letterType?.nameEn ?? letter.letterTypeId}`;
-              const letterName = letterType ? getNameByLanguage(i18n.language, letterType) : letter.letterTypeId;
+              const letterName = letterType ? getNameByLanguage(currentLanguage, letterType) : letter.letterTypeId;
 
               return (
                 <li key={letter.id} className="py-4 sm:py-6">

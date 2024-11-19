@@ -17,6 +17,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { loadApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
@@ -146,8 +147,9 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ReviewInformation() {
+  const { currentLanguage } = useCurrentLanguage();
   const params = useParams();
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { children, csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -190,7 +192,7 @@ export default function ReviewInformation() {
         <div className="mb-8 space-y-10">
           {children.map((child) => {
             const childParams = { ...params, childId: child.id };
-            const dateOfBirth = toLocaleDateString(parseDateString(child.birthday), i18n.language);
+            const dateOfBirth = toLocaleDateString(parseDateString(child.birthday), currentLanguage);
             return (
               <section key={child.id} className="space-y-10">
                 <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>

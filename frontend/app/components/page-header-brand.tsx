@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
-import { getAltLanguage } from '~/utils/locale-utils';
+import { useCurrentLanguage } from '~/hooks';
 
 export interface PageHeaderBrandProps {
   /**
@@ -14,12 +14,12 @@ export interface PageHeaderBrandProps {
 }
 
 export function PageHeaderBrand({ headerLogoUrl }: PageHeaderBrandProps) {
+  const { currentLanguage, altLanguage } = useCurrentLanguage();
   const { i18n, t } = useTranslation(['gcweb']);
-  const altLanguage = getAltLanguage(i18n.language);
 
   const headerLogo = (
     <>
-      <img className="h-8 w-auto" src={`/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
+      <img className="h-8 w-auto" src={`/assets/sig-blk-${currentLanguage}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
       <span className="sr-only">{<span lang={altLanguage}>{i18n.getFixedT(altLanguage)('gcweb:header.govt-of-canada.text')}</span>}</span>
     </>
   );
