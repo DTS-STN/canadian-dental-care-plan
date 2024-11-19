@@ -72,7 +72,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('renew/adult-child/update-address');
+  const log = getLogger('protected/renew/update-address');
 
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
