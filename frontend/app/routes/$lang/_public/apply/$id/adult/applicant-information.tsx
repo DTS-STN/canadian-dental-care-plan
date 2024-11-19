@@ -110,14 +110,20 @@ export async function action({ context: { session }, params, request }: ActionFu
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:applicant-information.error-message.sin-unique') });
         }
       }),
-    firstName: z.string().trim().min(1, t('apply-adult:applicant-information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult:applicant-information.error-message.characters-valid')),
+    firstName: z
+      .string()
+      .trim()
+      .min(1, t('apply-adult:applicant-information.error-message.first-name-required'))
+      .max(100)
+      .refine(isAllValidInputCharacters, t('apply-adult:applicant-information.error-message.characters-valid'))
+      .refine((firstName) => !hasDigits(firstName), t('apply-adult:applicant-information.error-message.first-name-no-digits')),
     lastName: z
       .string()
       .trim()
       .min(1, t('apply-adult:applicant-information.error-message.last-name-required'))
       .max(100)
       .refine(isAllValidInputCharacters, t('apply-adult:applicant-information.error-message.characters-valid'))
-      .refine((lastName) => !hasDigits(lastName), t('apply-adult:applicant-information.error-message.no-digits')),
+      .refine((lastName) => !hasDigits(lastName), t('apply-adult:applicant-information.error-message.last-name-no-digits')),
     maritalStatus: z
       .string({ errorMap: () => ({ message: t('apply-adult:applicant-information.error-message.marital-status-required') }) })
       .trim()

@@ -77,14 +77,20 @@ export async function action({ context: { session }, params, request }: ActionFu
         invalid_type_error: t('apply-child:partner-information.error-message.date-of-birth-day-number'),
       }),
       dateOfBirth: z.string(),
-      firstName: z.string().trim().min(1, t('apply-child:partner-information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-child:partner-information.error-message.characters-valid')),
+      firstName: z
+        .string()
+        .trim()
+        .min(1, t('apply-child:partner-information.error-message.first-name-required'))
+        .max(100)
+        .refine(isAllValidInputCharacters, t('apply-child:partner-information.error-message.characters-valid'))
+        .refine((firstName) => !hasDigits(firstName), t('apply-child:partner-information.error-message.first-name-no-digits')),
       lastName: z
         .string()
         .trim()
         .min(1, t('apply-child:partner-information.error-message.last-name-required'))
         .max(100)
         .refine(isAllValidInputCharacters, t('apply-child:partner-information.error-message.characters-valid'))
-        .refine((lastName) => !hasDigits(lastName), t('apply-child:partner-information.error-message.no-digits')),
+        .refine((lastName) => !hasDigits(lastName), t('apply-child:partner-information.error-message.last-name-no-digits')),
       socialInsuranceNumber: z
         .string()
         .trim()

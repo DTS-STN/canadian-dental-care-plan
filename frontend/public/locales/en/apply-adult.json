@@ -25,7 +25,8 @@
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "The Social Insurance Number (SIN) must be unique",
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
-      "no-digits": "Last name must contain letters only"
+      "first-name-no-digits": "First name must contain letters only",
+      "last-name-no-digits": "Last name must contain letters only"
     }
   },
   "communication-preference": {
@@ -288,7 +289,8 @@
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "The Social Insurance Number (SIN) must be unique",
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
-      "no-digits": "Last name must contain letters only"
+      "first-name-no-digits": "First name must contain letters only",
+      "last-name-no-digits": "Last name must contain letters only"
     }
   },
   "contact-information": {
