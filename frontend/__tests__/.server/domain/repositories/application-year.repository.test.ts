@@ -20,22 +20,22 @@ describe('ApplicationYearRepositoryImpl', () => {
 
   describe('getApplicationYearResult', () => {
     it('should return address correction results on successful fetch', async () => {
-        const mockResponseData: ApplicationYearResultEntity = {
-            ApplicationYearCollection: [
-              {
-                TaxYear: "2023",
-                ApplicationYearID: "AYR001",
-              },
-              {
-                TaxYear: undefined,
-                ApplicationYearID: "AYR005",
-              },
-              {
-                TaxYear: "2019",
-                ApplicationYearID: undefined,
-              },
-            ],
-          };
+      const mockResponseData: ApplicationYearResultEntity = {
+        ApplicationYearCollection: [
+          {
+            TaxYear: '2023',
+            ApplicationYearID: 'AYR001',
+          },
+          {
+            TaxYear: undefined,
+            ApplicationYearID: 'AYR005',
+          },
+          {
+            TaxYear: '2019',
+            ApplicationYearID: undefined,
+          },
+        ],
+      };
       vi.mocked(instrumentedFetch).mockResolvedValue(Response.json(mockResponseData));
 
       const mockLogFactory = mock<LogFactory>();
