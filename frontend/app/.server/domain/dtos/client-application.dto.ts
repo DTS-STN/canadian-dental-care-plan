@@ -4,16 +4,7 @@ import type { ApplicantInformationDto, ChildDto, CommunicationPreferencesDto, Co
 
 export type ClientApplicationDto = ReadonlyDeep<{
   applicantInformation: ApplicantInformationDto & { clientNumber?: string };
-  children: (Omit<ChildDto, 'information'> & {
-    information: {
-      firstName: string;
-      lastName: string;
-      dateOfBirth: string;
-      isParent: boolean;
-      clientNumber?: string;
-      socialInsuranceNumber: string;
-    };
-  })[];
+  children: ClientChildDto[];
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
   dateOfBirth: string;
@@ -25,6 +16,17 @@ export type ClientApplicationDto = ReadonlyDeep<{
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationDto;
 }>;
+
+export type ClientChildDto = Omit<ChildDto, 'information'> & {
+  information: {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    isParent: boolean;
+    clientNumber?: string;
+    socialInsuranceNumber: string;
+  };
+};
 
 export type ClientApplicationBasicInfoRequestDto = Readonly<{
   clientNumber: string;
