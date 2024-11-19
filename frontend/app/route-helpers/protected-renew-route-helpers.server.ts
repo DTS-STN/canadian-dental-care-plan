@@ -4,6 +4,7 @@ import type { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
+import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -19,6 +20,7 @@ export interface ProtectedRenewState {
     readonly acknowledgePrivacy: boolean;
     readonly shareData: boolean;
   };
+  readonly clientApplication?: ClientApplicationDto;
   readonly dentalInsurance?: boolean;
   readonly isSurveyCompleted?: boolean;
   readonly demographicSurvey?: {
@@ -60,6 +62,7 @@ export interface ProtectedRenewState {
     email?: string;
     shouldReceiveEmailCommunication?: boolean;
   };
+  readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
   // TODO Add remaining states
 }
 

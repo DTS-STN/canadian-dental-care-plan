@@ -149,6 +149,30 @@
       "dental-insurance-required": "Select whether you have access to dental insurance"
     }
   },
+  "type-of-renewal": {
+    "page-title": "Type de renouvellement",
+    "form-instructions": "Pour qui renouvelez-vous l'adhésion?",
+    "radio-options": {
+      "personal-and-child": "Je présente une demande de renouvellement pour <strong>moi-même</strong> ou pour <strong>moi-même et mon ou mes enfants</strong>",
+      "child": "Je présente une demande de renouvellement pour <strong>mon ou mes enfants</strong>",
+      "delegate": "Je présente une demande de renouvellement <strong>au nom d'une autre personne à titre de représentant légal ou mandataire</strong>"
+    },
+    "error-message": {
+      "type-of-renewal-required": "Sélectionnez pour qui vous renouvelez"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
+  },
+  "renewal-delegate": {
+    "page-title": "Je présente une demande de renouvellement au nom d'une autre personne à titre de représentant légal ou mandataire",
+    "contact-representative": "Vous devez parler à un agent de Service Canada si vous présentez une demande de renouvellement au nom d'une autre personne à titre de représentant légal ou mandataire. Vous pouvez communiquer avec Service Canada en téléphonant au <noWrap>1-833-537-4342</noWrap> ou en vous rendant dans un <contactServiceCanada>Centre Service Canada</contactServiceCanada> près de chez vous.",
+    "prepare-to-apply": "<preparingToRenew>Se préparer à présenter une demande au nom de quelqu'un.</preparingToRenew>",
+    "contact-service-canada-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
+    "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
+    "back-btn": "Retour",
+    "return-btn": "Revenir à la page principale",
+    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
   "demographic-survey": {
     "page-title": "Voluntary demographic questions for {{memberName}}",
     "optional": "All questions are optional.",

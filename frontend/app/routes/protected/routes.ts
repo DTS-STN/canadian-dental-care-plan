@@ -50,6 +50,16 @@ export const routes = [
         paths: { en: '/:lang/protected/renew/:id/file-taxes', fr: '/:lang/protected/renew/:id/file-taxes' },
       },
       {
+        id: 'protected/renew/$id/type-renewal',
+        file: 'routes/protected/renew/$id/type-renewal.tsx',
+        paths: { en: '/:lang/protected/renew/:id/type-renewal', fr: '/:lang/protected/renew/:id/type-renouvellement' },
+      },
+      {
+        id: 'protected/renew/$id/renewal-delegate',
+        file: 'routes/protected/renew/$id/renewal-delegate.tsx',
+        paths: { en: '/:lang/protected/renew/:id/renewal-delegate', fr: '/:lang/protected/renew/:id/renouvellement-delegue' },
+      },
+      {
         id: 'protected/renew/$id/dental-insurance',
         file: 'routes/protected/renew/$id/dental-insurance.tsx',
         paths: { en: '/:lang/protected/renew/:id/dental-insurance', fr: '/:lang/protected/renew/:id/dental-insurance' },
