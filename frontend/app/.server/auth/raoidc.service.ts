@@ -1,6 +1,3 @@
-import type { Session } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
 import { subtle } from 'node:crypto';
@@ -11,7 +8,7 @@ import type { LogFactory, Logger } from '~/.server/factories';
 import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
 import { FetchFn, getFetchFn } from '~/utils/fetch-utils.server';
 import type { ClientMetadata, IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
-import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
+import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/utils/raoidc-utils.server';
 import { expandTemplate } from '~/utils/string-utils';
 
 export interface RaoidcService {
@@ -38,14 +35,6 @@ export interface RaoidcService {
    * @returns A promise resolving to an object containing the access token, ID token, and user info token.
    */
   handleCallback(args: HandleCallbackArgs): Promise<HandleCallbackResult>;
-
-  /**
-   * Handles session validation.
-   *
-   * @param args - Parameters for session validation.
-   * @returns A promise that resolves when the session validation is complete.
-   */
-  handleSessionValidation(args: HandleSessionValidationArgs): Promise<void>;
 }
 
 /**
@@ -82,16 +71,6 @@ interface HandleCallbackResult {
   idToken: IdToken;
   /** The user information token. */
   userInfoToken: UserinfoToken;
-}
-
-/**
- * Parameters for session validation.
- */
-interface HandleSessionValidationArgs {
-  /** The HTTP request object associated with the session. */
-  request: Request;
-  /** The session to validate. */
-  session: Session;
 }
 
 /**
@@ -188,37 +167,6 @@ export class DefaultRaoidcService implements RaoidcService {
     const userInfoToken = await fetchUserInfo(serverMetadata.userinfo_endpoint, jwkSet, accessToken, client, this.fetchFn);
 
     return { accessToken, idToken, userInfoToken };
-  }
-
-  async handleSessionValidation({ request, session }: HandleSessionValidationArgs): Promise<void> {
-    this.log.debug('Performing RAOIDC session validation check');
-    const { AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID } = this.serverConfig;
-
-    const { pathname, searchParams } = new URL(request.url);
-    const returnTo = encodeURIComponent(`${pathname}?${searchParams}`);
-
-    if (!session.has('idToken') || !session.has('userInfoToken')) {
-      this.log.debug(`User has not authenticated, redirecting to /auth/login?returnto=${returnTo}`);
-      throw redirect(`/auth/login?returnto=${returnTo}`);
-    }
-
-    const idToken: IdToken = session.get('idToken');
-    const userInfoToken: UserinfoToken = session.get('userInfoToken');
-
-    if (userInfoToken.mocked) {
-      this.log.debug('Mocked user; skipping RAOIDC session validation');
-      return;
-    }
-
-    // idToken.sid is the RAOIDC session id
-    const sessionValid = await validateSession(AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID, idToken.sid, this.fetchFn);
-
-    if (!sessionValid) {
-      this.log.debug(`RAOIDC session has expired, redirecting to /auth/login?returnto=${returnTo}`);
-      throw redirect(`/auth/login?returnto=${returnTo}`);
-    }
-
-    this.log.debug('Authentication check passed');
   }
 
   protected fetchServerMetadata = moize(fetchServerMetadata, {

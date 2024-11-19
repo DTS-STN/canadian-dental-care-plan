@@ -1,57 +1,62 @@
+import type { Session } from '@remix-run/node';
+
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
-import type { SessionService } from '~/.server/web/services';
 
 /**
- * Provides functionality to validate CSRF tokens.
+ * Interface for validating CSRF tokens in incoming requests.
+ *
+ * Ensures that the CSRF token in the request matches the token stored in the session
+ * to protect against Cross-Site Request Forgery attacks.
  */
 export interface CsrfTokenValidator {
   /**
-   * Validates the CSRF token in the given request.
+   * Validates the CSRF token provided in the request against the session.
    *
-   * @param request The request to validate the CSRF token from.
-   * @throws {Response} If the CSRF token is not found in the request or session, or if the tokens do not match.
+   * @param request - The HTTP request containing the CSRF token to validate.
+   * @param session - The session containing the expected CSRF token.
+   * @throws {CsrfTokenInvalidException} If the CSRF token is missing or does not match the session token.
+   * @returns {Promise<void>} A promise that resolves if the CSRF token is valid or rejects with an exception if invalid.
    */
-  validateCsrfToken(request: Request): Promise<void>;
+  validateCsrfToken(request: Request, session: Session): Promise<void>;
 }
 
 @injectable()
 export class CsrfTokenValidatorImpl implements CsrfTokenValidator {
   private readonly log: Logger;
 
-  constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.web.services.SessionService) private readonly sessionService: SessionService,
-  ) {
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
     this.log = logFactory.createLogger('CsrfTokenValidatorImpl');
   }
 
-  async validateCsrfToken(request: Request): Promise<void> {
-    this.log.debug('Starting CSRF token validation');
+  async validateCsrfToken(request: Request, session: Session): Promise<void> {
+    this.log.debug('Starting CSRF token validation; session.id: %s', session.id);
 
     const requestCsrfToken = await this.getRequestCsrfToken(request);
-    this.log.trace('Request CSRF token: %s', requestCsrfToken);
+    this.log.trace('Request CSRF token: %s; session.id: %s', requestCsrfToken, session.id);
+
     if (!requestCsrfToken) {
-      this.log.warn('CSRF token not found in request');
-      throw new CsrfTokenInvalidException('CSRF token validation failed');
+      this.log.warn('CSRF token not found in request; session.id: %s', session.id);
+      throw new CsrfTokenInvalidException(`CSRF token validation failed; CSRF token not found in request; session.id: ${session.id}`);
     }
 
-    const sessionCsrfToken = await this.getSessionCsrfToken(request);
-    this.log.trace('Session CSRF token: %s', sessionCsrfToken);
+    const sessionCsrfToken = this.getSessionCsrfToken(session);
+    this.log.trace('Session CSRF token: %s; session.id: %s', sessionCsrfToken, session.id);
+
     if (!sessionCsrfToken) {
-      this.log.warn('CSRF token not found in session');
-      throw new CsrfTokenInvalidException('CSRF token validation failed');
+      this.log.warn('CSRF token not found in session; session.id: %s', session.id);
+      throw new CsrfTokenInvalidException(`CSRF token validation failed; CSRF token not found in session; session.id: ${session.id}`);
     }
 
     if (sessionCsrfToken !== requestCsrfToken) {
-      this.log.warn('Invalid CSRF token detected; sessionCsrfToken: [%s], requestCsrfToken: [%s]', sessionCsrfToken, requestCsrfToken);
-      throw new CsrfTokenInvalidException('CSRF token validation failed');
+      this.log.warn('Invalid CSRF token detected; sessionCsrfToken: [%s], requestCsrfToken: [%s], session.id: [%s]', sessionCsrfToken, requestCsrfToken, session.id);
+      throw new CsrfTokenInvalidException(`CSRF token validation failed; Invalid CSRF token detected; sessionCsrfToken: [${sessionCsrfToken}], requestCsrfToken: [${requestCsrfToken}], session.id: [${session.id}]`);
     }
 
-    this.log.debug('CSRF token validation successful');
+    this.log.debug('CSRF token validation successful; session.id: %s', session.id);
   }
 
   private async getRequestCsrfToken(request: Request): Promise<string | null> {
@@ -80,10 +85,8 @@ export class CsrfTokenValidatorImpl implements CsrfTokenValidator {
     return null;
   }
 
-  private async getSessionCsrfToken(request: Request): Promise<string | null> {
-    this.log.trace('Getting CSRF token from session');
-    const cookieHeader = request.headers.get('Cookie');
-    const session = await this.sessionService.getSession(cookieHeader);
+  private getSessionCsrfToken(session: Session): string | null {
+    this.log.trace('Getting CSRF token from session; session.id: %s', session.id);
 
     if (!session.has('csrfToken')) {
       return null;

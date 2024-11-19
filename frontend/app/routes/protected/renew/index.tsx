@@ -5,9 +5,9 @@ import { useLoaderData, useNavigate, useParams } from '@remix-run/react';
 
 import { randomUUID } from 'crypto';
 
+import { TYPES } from '~/.server/constants';
 import { pageIds } from '~/page-ids';
 import { startProtectedRenewState } from '~/route-helpers/protected-renew-route-helpers.server';
-import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -26,8 +26,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
-  const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request, session);
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession(request);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);

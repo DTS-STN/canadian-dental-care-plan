@@ -5,7 +5,6 @@ import { mock } from 'vitest-mock-extended';
 
 import type { LogFactory, Logger } from '~/.server/factories';
 import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
-import type { SessionService } from '~/.server/web/services';
 import { CsrfTokenValidatorImpl } from '~/.server/web/validators';
 
 describe('CsrfTokenValidatorImpl', () => {
@@ -34,15 +33,11 @@ describe('CsrfTokenValidatorImpl', () => {
       get: vi.fn().mockReturnValue('test-csrf-token'),
     });
 
-    const mockSessionService = mock<SessionService>();
-    mockSessionService.getSession.mockResolvedValue(mockSession);
+    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory);
 
-    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory, mockSessionService);
-
-    await expect(csrfTokenValidator.validateCsrfToken(mockRequest)).resolves.toBeUndefined();
+    await expect(csrfTokenValidator.validateCsrfToken(mockRequest, mockSession)).resolves.toBeUndefined();
 
     expect(mockLogFactory.createLogger).toHaveBeenCalledWith('CsrfTokenValidatorImpl');
-    expect(mockSessionService.getSession).toHaveBeenCalledWith('test-cookie-header');
   });
 
   it('should validate the CSRF token successfully with CSRF token in request body', async () => {
@@ -63,15 +58,11 @@ describe('CsrfTokenValidatorImpl', () => {
       get: vi.fn().mockReturnValue('test-csrf-token'),
     });
 
-    const mockSessionService = mock<SessionService>();
-    mockSessionService.getSession.mockResolvedValue(mockSession);
+    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory);
 
-    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory, mockSessionService);
-
-    await expect(csrfTokenValidator.validateCsrfToken(mockRequest)).resolves.toBeUndefined();
+    await expect(csrfTokenValidator.validateCsrfToken(mockRequest, mockSession)).resolves.toBeUndefined();
 
     expect(mockLogFactory.createLogger).toHaveBeenCalledWith('CsrfTokenValidatorImpl');
-    expect(mockSessionService.getSession).toHaveBeenCalledWith('test-cookie-header');
   });
 
   it('should throw an error if the CSRF token is not found in the request', async () => {
@@ -92,12 +83,9 @@ describe('CsrfTokenValidatorImpl', () => {
       get: vi.fn().mockReturnValue('test-csrf-token'),
     });
 
-    const mockSessionService = mock<SessionService>();
-    mockSessionService.getSession.mockResolvedValue(mockSession);
+    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory);
 
-    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory, mockSessionService);
-
-    await expect(csrfTokenValidator.validateCsrfToken(mockRequest)).rejects.toThrowError(CsrfTokenInvalidException);
+    await expect(csrfTokenValidator.validateCsrfToken(mockRequest, mockSession)).rejects.toThrowError(CsrfTokenInvalidException);
   });
 
   it('should throw an error if the CSRF token is not found in the session', async () => {
@@ -118,12 +106,9 @@ describe('CsrfTokenValidatorImpl', () => {
       get: vi.fn(),
     });
 
-    const mockSessionService = mock<SessionService>();
-    mockSessionService.getSession.mockResolvedValue(mockSession);
+    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory);
 
-    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory, mockSessionService);
-
-    await expect(csrfTokenValidator.validateCsrfToken(mockRequest)).rejects.toThrowError(CsrfTokenInvalidException);
+    await expect(csrfTokenValidator.validateCsrfToken(mockRequest, mockSession)).rejects.toThrowError(CsrfTokenInvalidException);
   });
 
   it('should throw an error if the CSRF tokens do not match', async () => {
@@ -144,11 +129,8 @@ describe('CsrfTokenValidatorImpl', () => {
       get: vi.fn().mockReturnValue('different-csrf-token'),
     });
 
-    const mockSessionService = mock<SessionService>();
-    mockSessionService.getSession.mockResolvedValue(mockSession);
+    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory);
 
-    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory, mockSessionService);
-
-    await expect(csrfTokenValidator.validateCsrfToken(mockRequest)).rejects.toThrowError(CsrfTokenInvalidException);
+    await expect(csrfTokenValidator.validateCsrfToken(mockRequest, mockSession)).rejects.toThrowError(CsrfTokenInvalidException);
   });
 });

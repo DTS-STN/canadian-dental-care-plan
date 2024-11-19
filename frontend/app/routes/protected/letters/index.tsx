@@ -15,7 +15,6 @@ import { InputSelect } from '~/components/input-select';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -43,9 +42,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   featureEnabled('view-letters');
 
   const instrumentationService = getInstrumentationService();
-  const raoidcService = await getRaoidcService();
 
-  await raoidcService.handleSessionValidation(request, session);
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession(request);
 
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);

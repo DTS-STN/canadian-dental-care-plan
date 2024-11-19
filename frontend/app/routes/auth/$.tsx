@@ -6,7 +6,6 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getRaoidcService } from '~/services/raoidc-service.server';
 import { mockEnabled } from '~/utils/env-utils.server';
 import { getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -90,8 +89,8 @@ async function handleLogoutRequest({ context: { appContainer, session }, request
   const idToken: IdToken = session.get('idToken');
   const locale = getLocale(request);
 
-  const raoidcService = await getRaoidcService();
-  const signoutUrl = raoidcService.generateSignoutRequest(idToken.sid, locale);
+  const raoidcService = appContainer.get(TYPES.auth.RaoidcService);
+  const signoutUrl = raoidcService.generateSignoutRequest({ sessionId: idToken.sid, locale });
 
   log.debug('Destroying CDCP application session session and redirecting to downstream logout handler: [%s]', signoutUrl);
   getAuditService().audit('auth.session-destroyed', { userId: idToken.sub });
@@ -124,8 +123,8 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
 
   const redirectUri = generateCallbackUri(origin, 'raoidc');
 
-  const raoidcService = await getRaoidcService();
-  const { authUrl, codeVerifier, state } = raoidcService.generateSigninRequest(redirectUri);
+  const raoidcService = appContainer.get(TYPES.auth.RaoidcService);
+  const { authUrl, codeVerifier, state } = await raoidcService.generateSigninRequest(redirectUri);
 
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
   session.set('codeVerifier', codeVerifier);
@@ -144,7 +143,7 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
   log.debug('Handling RAOIDC callback request');
   getInstrumentationService().createCounter('auth.callback.raoidc.requests').add(1);
 
-  const raoidcService = await getRaoidcService();
+  const raoidcService = appContainer.get(TYPES.auth.RaoidcService);
   const codeVerifier = session.get('codeVerifier');
   const returnUrl = session.get('returnUrl') ?? '/';
   const state = session.get('state');
@@ -152,7 +151,7 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
   const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');
 
   log.debug('Storing auth tokens and userinfo in session');
-  const { idToken, userInfoToken } = await raoidcService.handleCallback(request, codeVerifier, state, redirectUri);
+  const { idToken, userInfoToken } = await raoidcService.handleCallback({ request, codeVerifier, expectedState: state, redirectUri });
   session.set('idToken', idToken);
   session.set('userInfoToken', userInfoToken);
 

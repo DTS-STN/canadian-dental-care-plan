@@ -1,1 +1,1 @@
-export * from './validate-csrf-token';
+export * from './security.handler';

@@ -6,7 +6,6 @@ import { sanitize } from 'sanitize-filename-ts';
 import { TYPES } from '~/.server/constants';
 import type { LetterDto } from '~/.server/domain/dtos';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
@@ -21,8 +20,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw new Response(null, { status: 400 });
   }
 
-  const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request, session);
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession(request);
 
   // prevent users from entering any ID in the URL and seeing other users' letters
   const letters: ReadonlyArray<LetterDto> | undefined = session.get('letters');
