@@ -36,7 +36,7 @@ enum AddressRadioOptions {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adultChild.confirmAddress,
+  pageIdentifier: pageIds.protected.renew.confirmAddress,
   pageTitleI18nKey: 'protected-renew:confirm-address.page-title',
 } as const satisfies RouteHandleData;
 
