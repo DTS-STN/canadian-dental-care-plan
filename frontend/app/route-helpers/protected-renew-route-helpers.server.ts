@@ -60,6 +60,7 @@ export interface ProtectedRenewState {
     email?: string;
     shouldReceiveEmailCommunication?: boolean;
   };
+  readonly preferredLanguage?: string;
   // TODO Add remaining states
 }
 

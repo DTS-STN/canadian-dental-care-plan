@@ -15,6 +15,7 @@ export const pageIds = {
       parentOrGuardian: 'CDCP-PROT-RENW-0009',
       confirmPhone: 'CDCP-PROT-RENW-0010',
       confirmEmail: 'CDCP-PROT-RENW-0011',
+      communicationPreference: 'CDCP-PROT-RENW-0012',
     },
     dataUnavailable: 'CDCP-PROT-0099',
   },
