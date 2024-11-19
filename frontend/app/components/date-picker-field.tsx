@@ -8,6 +8,7 @@ import { InputHelp } from './input-help';
 import { InputLabel } from './input-label';
 import { InputLegend } from './input-legend';
 import { InputOption } from './input-option';
+import { useCurrentLanguage } from '~/hooks';
 import { extractDateParts, useMonths } from '~/utils/date-utils';
 import { padWithZero } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
@@ -40,7 +41,8 @@ export interface DatePickerFieldProps {
 }
 
 export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, names, required }: DatePickerFieldProps) => {
-  const { i18n, t } = useTranslation(['gcweb']);
+  const { currentLanguage } = useCurrentLanguage();
+  const { t } = useTranslation(['gcweb']);
   const [value] = useState(extractDateParts(defaultValue));
 
   const inputWrapperId = `date-picker-${id}`;
@@ -171,7 +173,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
         {(datePickerErrorMessages.all !== undefined || datePickerErrorMessages.year !== undefined || datePickerErrorMessages.month !== undefined || datePickerErrorMessages.day !== undefined) && (
           <div className="mb-2 space-y-2">
             {datePickerErrorMessages.all && <p>{datePickerErrorMessages.all}</p>}
-            {i18n.language === 'fr' ? (
+            {currentLanguage === 'fr' ? (
               <>
                 {datePickerErrorMessages.day && <p>{datePickerErrorMessages.day}</p>}
                 {datePickerErrorMessages.month && <p>{datePickerErrorMessages.month}</p>}
@@ -192,7 +194,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
           </InputHelp>
         )}
         <div className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
-          {i18n.language === 'fr' ? (
+          {currentLanguage === 'fr' ? (
             <>
               {datePickerDay}
               {datePickerMonth}
@@ -230,8 +232,8 @@ interface DatePickerMonthProps {
 }
 
 function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, placeholder, required }: DatePickerMonthProps) {
-  const { i18n } = useTranslation(['gcweb']);
-  const months = useMonths(i18n.language);
+  const { currentLanguage } = useCurrentLanguage();
+  const months = useMonths(currentLanguage);
 
   const selectId = `date-picker-${id}-month`;
   const wrapperId = `date-picker-${id}-month-wrapper`;

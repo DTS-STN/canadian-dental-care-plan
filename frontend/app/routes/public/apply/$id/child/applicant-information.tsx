@@ -20,6 +20,7 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import type { ApplicantInformationState } from '~/route-helpers/apply-route-helpers.server';
@@ -229,7 +230,8 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowApplicationInformation() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { currentLanguage } = useCurrentLanguage();
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, defaultState, dateOfBirth, maritalStatuses, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -239,7 +241,7 @@ export default function ApplyFlowApplicationInformation() {
   const errorSummary = useErrorSummary(errors, {
     firstName: 'first-name',
     lastName: 'last-name',
-    ...(i18n.language === 'fr'
+    ...(currentLanguage === 'fr'
       ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
       : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
     dateOfBirthYear: 'date-picker-date-of-birth-year',

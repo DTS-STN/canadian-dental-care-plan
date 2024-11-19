@@ -18,6 +18,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { useCurrentLanguage } from '~/hooks';
 import { toBenefitRenewRequestFromRenewAdultChildState } from '~/mappers/benefit-renewal-service-mappers.server';
 import { pageIds } from '~/page-ids';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
@@ -149,8 +150,9 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewAdultChildReviewChildInformation() {
+  const { currentLanguage } = useCurrentLanguage();
   const params = useParams();
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { children, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -193,7 +195,7 @@ export default function RenewAdultChildReviewChildInformation() {
         <div className="space-y-10">
           {children.map((child) => {
             const childParams = { ...params, childId: child.id };
-            const dateOfBirth = toLocaleDateString(parseDateString(child.birthday), i18n.language);
+            const dateOfBirth = toLocaleDateString(parseDateString(child.birthday), currentLanguage);
             return (
               <section key={child.id} className="space-y-8">
                 <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>

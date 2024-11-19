@@ -17,6 +17,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
@@ -112,7 +113,8 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowChildSummary() {
-  const { t, i18n } = useTranslation(handle.i18nNamespaces);
+  const { currentLanguage } = useCurrentLanguage();
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, children, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -147,7 +149,7 @@ export default function ApplyFlowChildSummary() {
           <div className="mt-6 space-y-8">
             {children.map((child) => {
               const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-              const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), i18n.language) : '';
+              const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
               return (
                 <section key={child.id}>
                   <h2 className="mb-4 font-lato text-2xl font-bold">{childName}</h2>

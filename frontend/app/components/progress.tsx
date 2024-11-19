@@ -1,8 +1,8 @@
 import React from 'react';
 
 import * as ProgressPrimitive from '@radix-ui/react-progress';
-import { useTranslation } from 'react-i18next';
 
+import { useCurrentLanguage } from '~/hooks';
 import { formatPercent } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -33,10 +33,10 @@ export interface ProgressProps extends React.ComponentPropsWithoutRef<typeof Pro
 }
 
 const Progress = React.forwardRef<React.ElementRef<typeof ProgressPrimitive.Root>, ProgressProps>(({ className, size = 'base', variant = 'default', value, label, ...props }, ref) => {
-  const { i18n } = useTranslation('gcweb');
+  const { currentLanguage } = useCurrentLanguage();
   return (
     <>
-      {label && <p id="progress-label" className="mb-2">{`${label} ${formatPercent(value, i18n.language)}`}</p>}
+      {label && <p id="progress-label" className="mb-2">{`${label} ${formatPercent(value, currentLanguage)}`}</p>}
       <ProgressPrimitive.Root ref={ref} className={cn(rootBaseClassName, sizes[size], className)} data-testid="progress-root" value={value} {...props} aria-labelledby={label && 'progress-label'}>
         <ProgressPrimitive.Indicator className={cn(indicatorBaseClassName, variants[variant])} style={{ transform: `translateX(-${100 - value}%)` }} data-testid="progress-indicator" />
       </ProgressPrimitive.Root>

@@ -18,6 +18,7 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
+import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { loadRenewAdultChildState, loadRenewAdultSingleChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
 import { saveRenewState } from '~/route-helpers/renew-route-helpers.server';
@@ -207,7 +208,8 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewFlowChildInformation() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { currentLanguage } = useCurrentLanguage();
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, defaultState, childName, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -218,7 +220,7 @@ export default function RenewFlowChildInformation() {
   const errorSummary = useErrorSummary(errors, {
     firstName: 'first-name',
     lastName: 'last-name',
-    ...(i18n.language === 'fr'
+    ...(currentLanguage === 'fr'
       ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
       : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
     dateOfBirthYear: 'date-picker-date-of-birth-year',

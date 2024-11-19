@@ -12,6 +12,7 @@ import { PageDetails } from '~/components/page-details';
 import { PageHeaderBrand } from '~/components/page-header-brand';
 import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
+import { useCurrentLanguage } from '~/hooks';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
@@ -56,11 +57,12 @@ export function AppPageTitle({ children }: PropsWithChildren) {
 }
 
 function PageHeader() {
-  const { t, i18n } = useTranslation(i18nNamespaces);
+  const { currentLanguage } = useCurrentLanguage();
+  const { t } = useTranslation(i18nNamespaces);
   const { HEADER_LOGO_URL_EN, HEADER_LOGO_URL_FR } = getClientEnv();
 
   // Select the correct logo URL based on the current language
-  const headerLogoUrl = i18n.language === 'fr' ? HEADER_LOGO_URL_FR : HEADER_LOGO_URL_EN;
+  const headerLogoUrl = currentLanguage === 'fr' ? HEADER_LOGO_URL_FR : HEADER_LOGO_URL_EN;
 
   return (
     <header className="border-b-[3px] border-slate-700 print:hidden">

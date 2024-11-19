@@ -19,6 +19,13 @@ vi.mock('~/components/language-switcher', () => ({
   LanguageSwitcher: vi.fn().mockImplementation(({ children }) => <div>{children}</div>),
 }));
 
+vi.mock('~/hooks', () => ({
+  useCurrentLanguage: vi.fn().mockReturnValue({
+    currentLanguage: 'en',
+    altLanguage: 'fr',
+  }),
+}));
+
 vi.mock('~/utils/locale-utils.ts', () => ({
   getAltLanguage: (lang: string) => lang,
 }));

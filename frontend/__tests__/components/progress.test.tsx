@@ -4,9 +4,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Progress } from '~/components/progress';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    i18n: { language: 'en' },
+vi.mock('~/hooks', () => ({
+  useCurrentLanguage: vi.fn().mockReturnValue({
+    currentLanguage: 'en',
+    altLanguage: 'fr',
   }),
 }));
 
