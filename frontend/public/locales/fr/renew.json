@@ -137,7 +137,8 @@
       "date-of-birth-year-required": "La date de naissance doit inclure une année",
       "first-name-required": "Entrez le prénom",
       "last-name-required": "Entrez le nom de famille",
-      "no-digits": "Le nom de famille doit contenir uniquement des lettres",
+      "first-name-no-digits": "Le prénom doit contenir uniquement des lettres",
+      "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres",
       "client-number-required": "Entrez le numéro de client ",
       "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
       "client-number-valid": "Doit être un numéro de client valide. Votre saisie doit comporter 11, 13 chiffres"

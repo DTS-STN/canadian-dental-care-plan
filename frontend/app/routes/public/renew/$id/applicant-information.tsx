@@ -78,14 +78,20 @@ export async function action({ context: { appContainer, session }, params, reque
         invalid_type_error: t('renew:applicant-information.error-message.date-of-birth-day-number'),
       }),
       dateOfBirth: z.string(),
-      firstName: z.string().trim().min(1, t('renew:applicant-information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('renew:applicant-information.error-message.characters-valid')),
+      firstName: z
+        .string()
+        .trim()
+        .min(1, t('renew:applicant-information.error-message.first-name-required'))
+        .max(100)
+        .refine(isAllValidInputCharacters, t('renew:applicant-information.error-message.characters-valid'))
+        .refine((firstName) => !hasDigits(firstName), t('renew:applicant-information.error-message.first-name-no-digits')),
       lastName: z
         .string()
         .trim()
         .min(1, t('renew:applicant-information.error-message.last-name-required'))
         .max(100)
         .refine(isAllValidInputCharacters, t('renew:applicant-information.error-message.characters-valid'))
-        .refine((lastName) => !hasDigits(lastName), t('renew:applicant-information.error-message.no-digits')),
+        .refine((lastName) => !hasDigits(lastName), t('renew:applicant-information.error-message.last-name-no-digits')),
       clientNumber: z
         .string()
         .trim()
