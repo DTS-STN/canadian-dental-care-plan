@@ -296,5 +296,16 @@
       "confirm-email-valid": "Enter confirmation of email address in the correct format, such as name@example.com",
       "receive-comms-required": "Select whether you would like to receive email communication"
     }
+  },
+  "communication-preference": {
+    "page-title": "Communication",
+    "preferred-language": "What is your preferred official language of communication?",
+    "back": "Back",
+    "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "error-message": {
+      "preferred-language-required": "Select preferred language of communication"
+    }
   }
 }
