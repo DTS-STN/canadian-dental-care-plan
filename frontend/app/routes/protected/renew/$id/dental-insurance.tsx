@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:dental-insurance.title') }) };
 
-  return { id: state, csrfToken, meta, defaultState: state.dentalInsurance, editMode: state.editMode };
+  return { id: state, csrfToken, meta, defaultState: state.dentalInsurance, hasAddressChanged: state.hasAddressChanged, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -98,7 +98,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, hasAddressChanged, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -192,7 +192,7 @@ export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion(
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="protected/renew/$id/member-selection"
+                routeId={hasAddressChanged ? 'protected/renew/$id/update-address' : 'protected/renew/$id/confirm-address'}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

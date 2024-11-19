@@ -61,11 +61,29 @@ export interface ProtectedRenewState {
     shouldReceiveEmailCommunication?: boolean;
   };
   readonly preferredLanguage?: string;
+  readonly hasAddressChanged?: boolean;
+  readonly isHomeAddressSameAsMailingAddress?: boolean;
+  readonly addressInformation?: {
+    copyMailingAddress: boolean;
+    homeAddress?: string;
+    homeApartment?: string;
+    homeCity?: string;
+    homeCountry?: string;
+    homePostalCode?: string;
+    homeProvince?: string;
+    mailingAddress: string;
+    mailingApartment?: string;
+    mailingCity: string;
+    mailingCountry: string;
+    mailingPostalCode?: string;
+    mailingProvince?: string;
+  };
   // TODO Add remaining states
 }
 
 export type PartnerInformationState = NonNullable<ProtectedRenewState['partnerInformation']>;
 export type ChildState = ProtectedRenewState['children'][number];
+export type AddressInformationState = NonNullable<ProtectedRenewState['addressInformation']>;
 
 /**
  * Schema for validating UUID.
