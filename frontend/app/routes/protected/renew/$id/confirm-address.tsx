@@ -13,7 +13,6 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/route-helpers/protected-renew-route-helpers.server';
-import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -45,8 +44,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request, session);
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession(request);
 
   const state = loadProtectedRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -60,8 +59,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('protected/renew/confirm-address');
 
-  const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request, session);
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession(request);
 
   const state = loadProtectedRenewState({ params, session });
 
