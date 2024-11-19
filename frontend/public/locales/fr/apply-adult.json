@@ -25,7 +25,8 @@
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
       "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
-      "no-digits": "Le nom de famille doit contenir uniquement des lettres"
+      "first-name-no-digits": "Le prénom doit contenir uniquement des lettres",
+      "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres"
     }
   },
   "communication-preference": {
@@ -288,7 +289,8 @@
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
       "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
-      "no-digits": "Le nom de famille doit contenir uniquement des lettres"
+      "first-name-no-digits": "Le prénom doit contenir uniquement des lettres",
+      "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres"
     }
   },
   "contact-information": {

@@ -137,7 +137,8 @@
       "date-of-birth-year-required": "Date of birth must include a year",
       "first-name-required": "Enter first name",
       "last-name-required": "Enter last name",
-      "no-digits": "Last name must contain letters only",
+      "first-name-no-digits": "First name must contain letters only",
+      "last-name-no-digits": "Last name must contain letters only",
       "client-number-required": "Enter client number",
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
       "client-number-valid": "Must be a valid client number. Your input must be 11 or 13 digits long."

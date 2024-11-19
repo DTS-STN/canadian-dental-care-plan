@@ -89,14 +89,20 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const childInformationSchema = z
     .object({
-      firstName: z.string().trim().min(1, t('renew-adult-child:children.information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('renew-adult-child:children.information.error-message.characters-valid')),
+      firstName: z
+        .string()
+        .trim()
+        .min(1, t('renew-adult-child:children.information.error-message.first-name-required'))
+        .max(100)
+        .refine(isAllValidInputCharacters, t('renew-adult-child:children.information.error-message.characters-valid'))
+        .refine((firstName) => !hasDigits(firstName), t('renew-adult-child:children.information.error-message.first-name-no-digits')),
       lastName: z
         .string()
         .trim()
         .min(1, t('renew-adult-child:children.information.error-message.last-name-required'))
         .max(100)
         .refine(isAllValidInputCharacters, t('renew-adult-child:children.information.error-message.characters-valid'))
-        .refine((lastName) => !hasDigits(lastName), t('renew-adult-child:children.information.error-message.no-digits')),
+        .refine((lastName) => !hasDigits(lastName), t('renew-adult-child:children.information.error-message.last-name-no-digits')),
       dateOfBirthYear: z.number({
         required_error: t('renew-adult-child:children.information.error-message.date-of-birth-year-required'),
         invalid_type_error: t('renew-adult-child:children.information.error-message.date-of-birth-year-number'),
