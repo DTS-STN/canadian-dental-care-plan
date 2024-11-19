@@ -297,6 +297,74 @@
       "receive-comms-required": "Select whether you would like to receive email communication"
     }
   },
+  "confirm-address": {
+    "page-title": "Address",
+    "have-you-moved": "Have you moved or changed your mailing address since you applied for the Canadian Dental Care Plan?",
+    "is-home-address-same-as-mailing-address": "Is your home address the same as your mailing address?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "help-message": "The address we have on file can also be found on the renewal letter you received from Service Canada.",
+    "error-message": {
+      "has-address-changed-required": "Select whether you have moved or changed your mailing address",
+      "is-home-address-same-as-mailing-address-required": "Select whether or not your mailing address and home address are the same"
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save"
+  },
+  "update-address": {
+    "page-title": "Update address",
+    "mailing-address": {
+      "header": "Mailing address"
+    },
+    "home-address": {
+      "header": "Home address",
+      "use-mailing-address": "My home address is the same as my mailing address"
+    },
+    "address-field": {
+      "address": "Address",
+      "mailing-address": "Mailing address",
+      "address-note": "Include apartment number (if applicable), street number, street name. For example: 4B - 123 Main St.",
+      "country": "Country",
+      "province": "Province, territory, state, or region",
+      "city": "City or town",
+      "postal-code": "Postal code or ZIP code",
+      "postal-code-optional": "Postal code or ZIP code (optional)",
+      "select-one": "Select one"
+    },
+    "back": "Back",
+    "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "error-message": {
+      "mailing-address": {
+        "address-required": "Enter mailing address, typically number and street",
+        "city-required": "Enter a city or town for your mailing address",
+        "country-required": "Select a country for your mailing address",
+        "postal-code-required": "Enter postal code or zip code for your mailing address",
+        "postal-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
+        "province-required": "Select a province, territory, state or region for your mailing address",
+        "zip-code-valid": "Enter mailing address zip code in the correct format, such as 12345 or 12345-6789",
+        "invalid-postal-code-for-country": "A Canadian postal code in the mailing address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
+        "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
+      },
+      "home-address": {
+        "address-required": "Enter home address, typically number and street",
+        "city-required": "Enter a city or town for your home address",
+        "country-required": "Select a country for your home address",
+        "postal-code-required": "Enter postal code or zip code for your home address",
+        "postal-code-valid": "Enter home address postal code in the correct format, such as A1A 1A1",
+        "province-required": "Select a province, territory, state or region for your home address",
+        "zip-code-valid": "Enter home address zip code in the correct format, such as 12345 or 12345-6789",
+        "invalid-postal-code-for-country": "A Canadian postal code in the home address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
+        "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
+      },
+      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+    }
+  },
   "communication-preference": {
     "page-title": "Communication",
     "preferred-language": "What is your preferred official language of communication?",

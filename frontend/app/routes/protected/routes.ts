@@ -94,6 +94,16 @@ export const routes = [
         file: 'routes/protected/renew/$id/communication-preference.tsx',
         paths: { en: '/:lang/protected/renew/:id/communication-preference', fr: '/:lang/protected/renew/:id/communication-preference' },
       },
+      {
+        id: 'protected/renew/$id/confirm-address',
+        file: 'routes/protected/renew/$id/confirm-address.tsx',
+        paths: { en: '/:lang/protected/renew/:id/confirm-address', fr: '/:lang/protected/renew/:id/confirmer-adresse' },
+      },
+      {
+        id: 'protected/renew/$id/update-address',
+        file: 'routes/protected/renew/$id/update-address.tsx',
+        paths: { en: '/:lang/protected/renew/:id/update-address', fr: '/:lang/protected/renew/:id/mise-a-jour-adresse' },
+      },
     ],
   },
 ] as const satisfies I18nRoute[];
