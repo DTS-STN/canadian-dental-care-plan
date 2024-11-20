@@ -30,79 +30,89 @@ export const routes = [
         paths: { en: '/:lang/stub-login', fr: '/:lang/stub-login' },
       },
       {
-        id: 'protected/renew/index',
-        file: 'routes/protected/renew/index.tsx',
-        paths: { en: '/:lang/protected/renew', fr: '/:lang/protected/renew' },
-      },
-      {
-        id: 'protected/renew/$id/terms-and-conditions',
-        file: 'routes/protected/renew/$id/terms-and-conditions.tsx',
-        paths: { en: '/:lang/protected/renew/:id/terms-and-conditions', fr: '/:lang/protected/renew/:id/terms-and-conditions' },
-      },
-      {
-        id: 'protected/renew/$id/tax-filing',
-        file: 'routes/protected/renew/$id/tax-filing.tsx',
-        paths: { en: '/:lang/protected/renew/:id/tax-filing', fr: '/:lang/protected/renew/:id/tax-filing' },
-      },
-      {
-        id: 'protected/renew/$id/file-taxes',
-        file: 'routes/protected/renew/$id/file-taxes.tsx',
-        paths: { en: '/:lang/protected/renew/:id/file-taxes', fr: '/:lang/protected/renew/:id/file-taxes' },
-      },
-      {
-        id: 'protected/renew/$id/dental-insurance',
-        file: 'routes/protected/renew/$id/dental-insurance.tsx',
-        paths: { en: '/:lang/protected/renew/:id/dental-insurance', fr: '/:lang/protected/renew/:id/dental-insurance' },
-      },
-      {
-        id: 'protected/renew/$id/demographic-survey',
-        file: 'routes/protected/renew/$id/demographic-survey.tsx',
-        paths: { en: '/:lang/protected/renew/:id/demographic-survey', fr: '/:lang/protected/renew/:id/demographic-survey' },
-      },
-      {
-        id: 'protected/renew/$id/marital-status',
-        file: 'routes/protected/renew/$id/marital-status.tsx',
-        paths: { en: '/:lang/protected/renew/:id/marital-status', fr: '/:lang/protected/renew/:id/etat-civil' },
-      },
-      {
-        id: 'protected/renew/$id/$childId/parent-or-guardian',
-        file: 'routes/protected/renew/$id/$childId/parent-or-guardian.tsx',
-        paths: { en: '/:lang/protected/renew/:id/:childId/parent-or-guardian', fr: '/:lang/protected/renew/:id/:childId/parent-or-guardian' },
-      },
-      {
-        id: 'protected/renew/$id/$childId/dental-insurance',
-        file: 'routes/protected/renew/$id/$childId/dental-insurance.tsx',
-        paths: { en: '/:lang/protected/renew/:id/:childId/dental-insurance', fr: '/:lang/protected/renew/:id/:childId/dental-insurance' },
-      },
-      {
-        id: 'protected/renew/$id/$childId/demographic-survey',
-        file: 'routes/protected/renew/$id/$childId/demographic-survey.tsx',
-        paths: { en: '/:lang/protected/renew/:id/:childId/demographic-survey', fr: '/:lang/protected/renew/:id/:childId/demographic-survey' },
-      },
-      {
-        id: 'protected/renew/$id/confirm-phone',
-        file: 'routes/protected/renew/$id/confirm-phone.tsx',
-        paths: { en: '/:lang/protected/renew/:id/confirm-phone', fr: '/:lang/protected/renew/:id/confirmer-telephone' },
-      },
-      {
-        id: 'protected/renew/$id/confirm-email',
-        file: 'routes/protected/renew/$id/confirm-email.tsx',
-        paths: { en: '/:lang/protected/renew/:id/confirm-email', fr: '/:lang/protected/renew/:id/confirmer-courriel' },
-      },
-      {
-        id: 'protected/renew/$id/communication-preference',
-        file: 'routes/protected/renew/$id/communication-preference.tsx',
-        paths: { en: '/:lang/protected/renew/:id/communication-preference', fr: '/:lang/protected/renew/:id/communication-preference' },
-      },
-      {
-        id: 'protected/renew/$id/confirm-address',
-        file: 'routes/protected/renew/$id/confirm-address.tsx',
-        paths: { en: '/:lang/protected/renew/:id/confirm-address', fr: '/:lang/protected/renew/:id/confirmer-adresse' },
-      },
-      {
-        id: 'protected/renew/$id/update-address',
-        file: 'routes/protected/renew/$id/update-address.tsx',
-        paths: { en: '/:lang/protected/renew/:id/update-address', fr: '/:lang/protected/renew/:id/mise-a-jour-adresse' },
+        file: 'routes/protected/renew/layout.tsx',
+        children: [
+          {
+            id: 'protected/renew/index',
+            file: 'routes/protected/renew/index.tsx',
+            paths: { en: '/:lang/protected/renew', fr: '/:lang/protected/renew' },
+          },
+          {
+            id: 'protected/renew/$id/terms-and-conditions',
+            file: 'routes/protected/renew/$id/terms-and-conditions.tsx',
+            paths: { en: '/:lang/protected/renew/:id/terms-and-conditions', fr: '/:lang/protected/renew/:id/terms-and-conditions' },
+          },
+          {
+            id: 'protected/renew/$id/tax-filing',
+            file: 'routes/protected/renew/$id/tax-filing.tsx',
+            paths: { en: '/:lang/protected/renew/:id/tax-filing', fr: '/:lang/protected/renew/:id/tax-filing' },
+          },
+          {
+            id: 'protected/renew/$id/file-taxes',
+            file: 'routes/protected/renew/$id/file-taxes.tsx',
+            paths: { en: '/:lang/protected/renew/:id/file-taxes', fr: '/:lang/protected/renew/:id/file-taxes' },
+          },
+          {
+            id: 'protected/renew/$id/dental-insurance',
+            file: 'routes/protected/renew/$id/dental-insurance.tsx',
+            paths: { en: '/:lang/protected/renew/:id/dental-insurance', fr: '/:lang/protected/renew/:id/dental-insurance' },
+          },
+          {
+            id: 'protected/renew/$id/demographic-survey',
+            file: 'routes/protected/renew/$id/demographic-survey.tsx',
+            paths: { en: '/:lang/protected/renew/:id/demographic-survey', fr: '/:lang/protected/renew/:id/demographic-survey' },
+          },
+          {
+            id: 'protected/renew/$id/marital-status',
+            file: 'routes/protected/renew/$id/marital-status.tsx',
+            paths: { en: '/:lang/protected/renew/:id/marital-status', fr: '/:lang/protected/renew/:id/etat-civil' },
+          },
+          {
+            file: 'routes/protected/renew/$id/$childId/layout.tsx',
+            children: [
+              {
+                id: 'protected/renew/$id/$childId/parent-or-guardian',
+                file: 'routes/protected/renew/$id/$childId/parent-or-guardian.tsx',
+                paths: { en: '/:lang/protected/renew/:id/:childId/parent-or-guardian', fr: '/:lang/protected/renew/:id/:childId/parent-or-guardian' },
+              },
+              {
+                id: 'protected/renew/$id/$childId/dental-insurance',
+                file: 'routes/protected/renew/$id/$childId/dental-insurance.tsx',
+                paths: { en: '/:lang/protected/renew/:id/:childId/dental-insurance', fr: '/:lang/protected/renew/:id/:childId/dental-insurance' },
+              },
+              {
+                id: 'protected/renew/$id/$childId/demographic-survey',
+                file: 'routes/protected/renew/$id/$childId/demographic-survey.tsx',
+                paths: { en: '/:lang/protected/renew/:id/:childId/demographic-survey', fr: '/:lang/protected/renew/:id/:childId/demographic-survey' },
+              },
+            ],
+          },
+          {
+            id: 'protected/renew/$id/confirm-phone',
+            file: 'routes/protected/renew/$id/confirm-phone.tsx',
+            paths: { en: '/:lang/protected/renew/:id/confirm-phone', fr: '/:lang/protected/renew/:id/confirmer-telephone' },
+          },
+          {
+            id: 'protected/renew/$id/confirm-email',
+            file: 'routes/protected/renew/$id/confirm-email.tsx',
+            paths: { en: '/:lang/protected/renew/:id/confirm-email', fr: '/:lang/protected/renew/:id/confirmer-courriel' },
+          },
+          {
+            id: 'protected/renew/$id/communication-preference',
+            file: 'routes/protected/renew/$id/communication-preference.tsx',
+            paths: { en: '/:lang/protected/renew/:id/communication-preference', fr: '/:lang/protected/renew/:id/communication-preference' },
+          },
+          {
+            id: 'protected/renew/$id/confirm-address',
+            file: 'routes/protected/renew/$id/confirm-address.tsx',
+            paths: { en: '/:lang/protected/renew/:id/confirm-address', fr: '/:lang/protected/renew/:id/confirmer-adresse' },
+          },
+          {
+            id: 'protected/renew/$id/update-address',
+            file: 'routes/protected/renew/$id/update-address.tsx',
+            paths: { en: '/:lang/protected/renew/:id/update-address', fr: '/:lang/protected/renew/:id/mise-a-jour-adresse' },
+          },
+        ],
       },
     ],
   },
