@@ -2,7 +2,6 @@ import type { FormEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -10,18 +9,18 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { getHCaptchaRouteHelpers } from '~/.server/routes/helpers/hcaptcha-route-helpers';
 import { Collapsible } from '~/components/collapsible';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
+import { useEnhancedFetcher } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import { useClientEnv, useFeature } from '~/root';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -45,32 +44,23 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.configs.ServerConfig);
-
-  const csrfToken = String(session.get('csrfToken'));
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('status:page-title') }) };
-
-  return { csrfToken, hCaptchaEnabled, meta, siteKey: HCAPTCHA_SITE_KEY };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
-  const log = getLogger('status/index');
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ServerConfig);
-  const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
-  const t = await getFixedT(request, handle.i18nNamespaces);
-  const formData = await request.formData();
-  const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData.get('_csrf'));
 
-  if (expectedCsrfToken !== submittedCsrfToken) {
-    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
-  }
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateCsrfToken(request);
+  await securityHandler.validateHCaptchaResponse(request, () => {
+    throw redirect(getPathById('public/unable-to-process-request', params));
+  });
+
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const formData = await request.formData();
   const formDataSchema = z.object({
     checkFor: z.nativeEnum(CheckFor, { errorMap: () => ({ message: t('status:form.error-message.selection-required') }) }),
   });
@@ -84,14 +74,6 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
-  if (hCaptchaEnabled) {
-    const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(TYPES.web.services.HCaptchaService), hCaptchaResponse, request }))) {
-      return redirect(getPathById('public/unable-to-process-request', params));
-    }
-  }
-
   if (parsedCheckFor.data.checkFor === CheckFor.Myself) {
     return redirect(getPathById('public/status/myself', { ...params }));
   }
@@ -100,12 +82,11 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function StatusChecker() {
-  const { csrfToken, hCaptchaEnabled, siteKey } = useLoaderData<typeof loader>();
-  const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
   const { t } = useTranslation(handle.i18nNamespaces);
+  const hCaptchaEnabled = useFeature('hcaptcha');
+  const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const { captchaRef } = useHCaptcha();
-
+  const fetcher = useEnhancedFetcher<typeof action>();
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, { checkFor: 'input-radio-status-check-option-0' });
 
@@ -192,8 +173,7 @@ export default function StatusChecker() {
       <p className="mb-4 italic">{t('status:form.complete-fields')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-        <input type="hidden" name="_csrf" value={csrfToken} />
-        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
+        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
         <InputRadios
           id="status-check-for"
           name="statusCheckFor"
@@ -211,7 +191,7 @@ export default function StatusChecker() {
           required
           errorMessage={errors?.checkFor}
         />
-        <LoadingButton variant="primary" id="submit" loading={isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+        <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
           {t('status:form.continue')}
         </LoadingButton>
       </fetcher.Form>
