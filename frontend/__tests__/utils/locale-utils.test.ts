@@ -43,12 +43,23 @@ describe('locale-utils', () => {
 
   describe('getLanguage', () => {
     it.each([
-      { pathname: '/en', expected: 'en' },
-      { pathname: '/en/foo', expected: 'en' },
-      { pathname: '/fr', expected: 'fr' },
-      { pathname: '/fr/foo', expected: 'fr' },
-    ])('should return $expected for pathname $pathname', ({ pathname, expected }) => {
-      expect(getLanguage(pathname)).toBe(expected);
+      // pathnames
+      { resource: '/en', expected: 'en' },
+      { resource: '/en/foo', expected: 'en' },
+      { resource: '/fr', expected: 'fr' },
+      { resource: '/fr/foo', expected: 'fr' },
+      // Requests
+      { resource: new Request('https://example.com/en'), expected: 'en' },
+      { resource: new Request('https://example.com/en/foo'), expected: 'en' },
+      { resource: new Request('https://example.com/fr'), expected: 'fr' },
+      { resource: new Request('https://example.com/fr/foo'), expected: 'fr' },
+      // URLs
+      { resource: new URL('https://example.com/en'), expected: 'en' },
+      { resource: new URL('https://example.com/en/foo'), expected: 'en' },
+      { resource: new URL('https://example.com/fr'), expected: 'fr' },
+      { resource: new URL('https://example.com/fr/foo'), expected: 'fr' },
+    ])('should return $expected for resource $resource', ({ resource, expected }) => {
+      expect(getLanguage(resource)).toBe(expected);
     });
 
     it('should throw an error for invalid pathname', () => {
