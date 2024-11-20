@@ -48,19 +48,41 @@ export function getAltLanguage(language: string): AppLocale {
 }
 
 /**
- * Extracts the language code from a given pathname.
+ * Extracts the language code from a given resource.
  *
- * @param pathname - The pathname to extract the language from.
+ * @param resource - The resource to extract the language from.
  * @returns The language code ('en' or 'fr') if found, otherwise undefined.
+ * @throws {Error} If the language code cannot be determined.
  */
-export function getLanguage(pathname: string): AppLocale {
+export function getLanguage(resource: Request | URL | string): AppLocale {
   switch (true) {
-    case pathname === '/en' || pathname.startsWith('/en/'):
+    case resource instanceof Request: {
+      return getLanguageFromPathname(new URL(resource.url).pathname);
+    }
+
+    case resource instanceof URL: {
+      return getLanguageFromPathname(resource.pathname);
+    }
+
+    default: {
+      return getLanguageFromPathname(resource);
+    }
+  }
+}
+
+function getLanguageFromPathname(pathname: string): AppLocale {
+  switch (true) {
+    case pathname === '/en' || pathname.startsWith('/en/'): {
       return 'en';
-    case pathname === '/fr' || pathname.startsWith('/fr/'):
+    }
+
+    case pathname === '/fr' || pathname.startsWith('/fr/'): {
       return 'fr';
-    default:
+    }
+
+    default: {
       throw new Error(`Could not determine language for pathname: ${pathname}.`);
+    }
   }
 }
 
