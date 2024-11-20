@@ -1,32 +1,45 @@
 import type { Session } from '@remix-run/node';
 
-import { beforeEach, describe, expect, it } from 'vitest';
-import { mock, mockReset } from 'vitest-mock-extended';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { MockProxy } from 'vitest-mock-extended';
+import { mock } from 'vitest-mock-extended';
 
+import type { ServerConfig } from '~/.server/configs';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
-import { CsrfTokenInvalidException, RaoidcSessionInvalidException } from '~/.server/web/exceptions';
+import { CsrfTokenInvalidException, HCaptchaInvalidException, RaoidcSessionInvalidException } from '~/.server/web/exceptions';
 import type { SessionService } from '~/.server/web/services';
-import type { CsrfTokenValidator, RaoidcSessionValidator } from '~/.server/web/validators';
-
-const mockLogFactory = mock<LogFactory>();
-const mockLogger = mock<Logger>();
-const mockSessionService = mock<SessionService>();
-const mockCsrfTokenValidator = mock<CsrfTokenValidator>();
-const mockRaoidcSessionValidator = mock<RaoidcSessionValidator>();
-
-mockLogFactory.createLogger.mockReturnValue(mockLogger);
+import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 
 describe('DefaultSecurityHandler', () => {
+  let mockLogFactory: MockProxy<LogFactory>;
+  let mockLogger: MockProxy<Logger>;
+  let mockSessionService: MockProxy<SessionService>;
+  let mockCsrfTokenValidator: MockProxy<CsrfTokenValidator>;
+  let mockHCaptchaValidator: MockProxy<HCaptchaValidator>;
+  let mockRaoidcSessionValidator: MockProxy<RaoidcSessionValidator>;
+  let mockServerConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>;
   let securityHandler: DefaultSecurityHandler;
 
   beforeEach(() => {
-    mockReset(mockLogger);
-    mockReset(mockSessionService);
-    mockReset(mockCsrfTokenValidator);
-    mockReset(mockRaoidcSessionValidator);
+    mockLogFactory = mock<LogFactory>();
+    mockLogger = mock<Logger>();
+    mockLogFactory.createLogger.mockReturnValue(mockLogger);
 
-    securityHandler = new DefaultSecurityHandler(mockLogFactory, mockCsrfTokenValidator, mockRaoidcSessionValidator, mockSessionService);
+    mockSessionService = mock<SessionService>();
+    mockCsrfTokenValidator = mock<CsrfTokenValidator>();
+    mockHCaptchaValidator = mock<HCaptchaValidator>();
+    mockRaoidcSessionValidator = mock<RaoidcSessionValidator>();
+
+    mockServerConfig = {
+      ENABLED_FEATURES: ['hcaptcha'],
+    };
+
+    securityHandler = new DefaultSecurityHandler(mockLogFactory, mockServerConfig, mockSessionService, mockCsrfTokenValidator, mockHCaptchaValidator, mockRaoidcSessionValidator);
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
   });
 
   describe('validateAuthSession', () => {
@@ -125,6 +138,65 @@ describe('DefaultSecurityHandler', () => {
       await expect(securityHandler.validateCsrfToken(request)).rejects.toThrowError(error);
 
       expect(mockLogger.debug).toHaveBeenCalledWith('CSRF token validation failed');
+    });
+  });
+
+  describe('validateHCaptchaResponse', () => {
+    it('should validate hCaptcha response successfully if feature is enabled', async () => {
+      const mockRequest = new Request('http://localhost');
+      const onInvalidHCaptcha = vi.fn();
+
+      vi.spyOn(mockServerConfig.ENABLED_FEATURES, 'includes').mockReturnValueOnce(true); // Ensure hCaptcha feature is enabled
+      mockHCaptchaValidator.validateHCaptchaResponse.mockResolvedValue(undefined); // Mock successful hCaptcha validation
+
+      await securityHandler.validateHCaptchaResponse(mockRequest, onInvalidHCaptcha);
+
+      expect(mockLogger.debug).toHaveBeenCalledWith('Validating hCaptcha response');
+      expect(mockLogger.debug).toHaveBeenCalledWith('hCaptcha response is valid');
+      expect(mockHCaptchaValidator.validateHCaptchaResponse).toHaveBeenCalledWith(mockRequest);
+      expect(onInvalidHCaptcha).not.toHaveBeenCalled(); // Ensure the invalid callback was not called
+    });
+
+    it('should call onInvalidHCaptcha if hCaptcha validation fails', async () => {
+      const mockRequest = new Request('http://localhost');
+      const onInvalidHCaptcha = vi.fn();
+
+      vi.spyOn(mockServerConfig.ENABLED_FEATURES, 'includes').mockReturnValueOnce(true); // Ensure hCaptcha feature is enabled
+      const error = new HCaptchaInvalidException('Unexpected error');
+      mockHCaptchaValidator.validateHCaptchaResponse.mockRejectedValue(error); // Mock failed validation
+
+      await securityHandler.validateHCaptchaResponse(mockRequest, onInvalidHCaptcha);
+
+      expect(mockLogger.debug).toHaveBeenCalledWith('Validating hCaptcha response');
+      expect(mockLogger.debug).toHaveBeenCalledWith('hCaptcha response is invalid; reason: %s', error.message);
+      expect(onInvalidHCaptcha).toHaveBeenCalled(); // Ensure the invalid callback is called
+    });
+
+    it('should skip hCaptcha validation if the feature is disabled', async () => {
+      const mockRequest = new Request('http://localhost');
+      const onInvalidHCaptcha = vi.fn();
+
+      vi.spyOn(mockServerConfig.ENABLED_FEATURES, 'includes').mockReturnValueOnce(false); // Ensure hCaptcha feature is disabled
+
+      await securityHandler.validateHCaptchaResponse(mockRequest, onInvalidHCaptcha);
+
+      expect(mockLogger.debug).toHaveBeenCalledWith('hCaptcha feature is disabled; skipping hCaptcha response validation');
+      expect(mockHCaptchaValidator.validateHCaptchaResponse).not.toHaveBeenCalled(); // Ensure hCaptcha validator was not called
+      expect(onInvalidHCaptcha).not.toHaveBeenCalled(); // Ensure the invalid callback was not called
+    });
+
+    it('should log error and proceed if hCaptcha validation fails unexpectedly', async () => {
+      const mockRequest = new Request('http://localhost');
+      const onInvalidHCaptcha = vi.fn();
+
+      vi.spyOn(mockServerConfig.ENABLED_FEATURES, 'includes').mockReturnValueOnce(true); // Ensure hCaptcha feature is enabled
+      const error = new Error('Unexpected error');
+      mockHCaptchaValidator.validateHCaptchaResponse.mockRejectedValue(error); // Mock unexpected error
+
+      await securityHandler.validateHCaptchaResponse(mockRequest, onInvalidHCaptcha);
+
+      expect(mockLogger.warn).toHaveBeenCalledWith('hCaptcha validation failed; proceeding with normal application flow; error: [%s]', error);
+      expect(onInvalidHCaptcha).not.toHaveBeenCalled(); // Ensure the invalid callback was not called
     });
   });
 });

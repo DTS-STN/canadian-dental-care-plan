@@ -10,15 +10,16 @@ describe('<ClientEnv>', () => {
     const nonce = 'https://open.spotify.com/artist/3BNDjSD67jJE4fhxX1b2OV?si=T1lAx_1fQe6axdydq43XEA';
 
     const env: ClientEnv = {
-      ENABLED_FEATURES: ['feature1', 'feature2'],
-      I18NEXT_DEBUG: true,
+      ADOBE_ANALYTICS_JQUERY_SRC: 'https://example.com/jquery.min.js',
       ECAS_BASE_URI: 'https://srv136.services.gc.ca/ecas-seca/rascl/SCL',
-      SCCH_BASE_URI: 'https://service.canada.ca',
+      ENABLED_FEATURES: ['feature1', 'feature2'],
+      HCAPTCHA_SITE_KEY: 'hcaptcha-site-key',
       HEADER_LOGO_URL_EN: 'https://canada.ca/en',
       HEADER_LOGO_URL_FR: 'https://canada.ca/fr',
-      SESSION_TIMEOUT_SECONDS: 120,
+      I18NEXT_DEBUG: true,
+      SCCH_BASE_URI: 'https://service.canada.ca',
       SESSION_TIMEOUT_PROMPT_SECONDS: 30,
-      ADOBE_ANALYTICS_JQUERY_SRC: 'https://example.com/jquery.min.js',
+      SESSION_TIMEOUT_SECONDS: 120,
     };
 
     const { container } = render(<ClientEnvComponent env={env} nonce={nonce} />);

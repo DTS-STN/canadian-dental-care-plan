@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -12,19 +12,19 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { getHCaptchaRouteHelpers } from '~/.server/routes/helpers/hcaptcha-route-helpers';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/.server/routes/helpers/status-route-helpers';
 import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
+import { useEnhancedFetcher } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import { useClientEnv, useFeature } from '~/root';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -45,23 +45,20 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.configs.ServerConfig);
-
-  const csrfToken = String(session.get('csrfToken'));
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('status:myself.page-title') }) };
-
-  return { csrfToken, hCaptchaEnabled, meta, siteKey: HCAPTCHA_SITE_KEY };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
-  const log = getLogger('status/myself/index');
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ServerConfig);
-  const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
+
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateCsrfToken(request);
+  await securityHandler.validateHCaptchaResponse(request, () => {
+    throw redirect(getPathById('public/unable-to-process-request', params));
+  });
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formDataSchema = z.object({
@@ -80,13 +77,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const formData = await request.formData();
-  const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData.get('_csrf'));
-
-  if (expectedCsrfToken !== submittedCsrfToken) {
-    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
-  }
 
   const data = {
     sin: formData.get('sin') ? String(formData.get('sin')) : undefined,
@@ -102,15 +92,6 @@ export async function action({ context: { appContainer, session }, params, reque
       },
       { status: 400 },
     );
-  }
-
-  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
-  if (hCaptchaEnabled) {
-    const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    const hCaptchaService = appContainer.get(TYPES.web.services.HCaptchaService);
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService, hCaptchaResponse, request }))) {
-      return redirect(getPathById('public/unable-to-process-request', params));
-    }
   }
 
   const { sin, code } = parsedDataResult.data;
@@ -133,13 +114,13 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function StatusCheckerMyself() {
-  const { csrfToken, hCaptchaEnabled, siteKey } = useLoaderData<typeof loader>();
-  const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
   const { t } = useTranslation(handle.i18nNamespaces);
+  const hCaptchaEnabled = useFeature('hcaptcha');
+  const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const { captchaRef } = useHCaptcha();
   const params = useParams();
 
+  const fetcher = useEnhancedFetcher<typeof action>();
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, { code: 'code', sin: 'sin' });
 
@@ -176,8 +157,7 @@ export default function StatusCheckerMyself() {
       <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-        <input type="hidden" name="_csrf" value={csrfToken} />
-        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
+        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
         <div className="mb-8 space-y-6">
           <InputPatternField
             id="code"
@@ -193,10 +173,10 @@ export default function StatusCheckerMyself() {
           <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
+          <ButtonLink id="back-button" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={fetcher.isSubmitting}>
             {t('status:myself.form.back-btn')}
           </ButtonLink>
-          <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+          <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
             {t('status:myself.form.submit')}
           </LoadingButton>
         </div>
