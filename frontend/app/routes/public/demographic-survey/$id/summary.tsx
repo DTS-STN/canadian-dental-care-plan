@@ -6,11 +6,11 @@ import { faChevronLeft, faChevronRight, faCircleCheck, faCircleXmark } from '@fo
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
+import { loadDemographicSurveyState } from '~/.server/routes/helpers/demographic-survey-route-helpers';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { loadDemographicSurveyState } from '~/route-helpers/demographic-survey-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';

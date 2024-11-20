@@ -5,8 +5,8 @@ import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/r
 
 import { z } from 'zod';
 
-import type { ApplyState, ChildState } from '~/route-helpers/apply-route-helpers.server';
-import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import type { ApplyState, ChildState } from '~/.server/routes/helpers/apply-route-helpers';
+import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 

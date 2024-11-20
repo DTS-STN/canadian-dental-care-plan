@@ -7,11 +7,11 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
+import { clearProtectedRenewState, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { clearProtectedRenewState, loadProtectedRenewState } from '~/route-helpers/protected-renew-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';

@@ -5,8 +5,8 @@ import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/r
 
 import { z } from 'zod';
 
-import type { ChildState, RenewState } from './renew-route-helpers.server';
-import { getChildrenState, isNewChildState, loadRenewState, saveRenewState } from './renew-route-helpers.server';
+import type { ChildState, RenewState } from './renew-route-helpers';
+import { getChildrenState, isNewChildState, loadRenewState, saveRenewState } from './renew-route-helpers';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 

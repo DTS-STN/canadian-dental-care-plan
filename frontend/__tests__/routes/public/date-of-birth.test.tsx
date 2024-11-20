@@ -4,7 +4,7 @@ import { createMemorySessionStorage, redirect } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
+import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 import { action, loader } from '~/routes/public/apply/$id/adult/date-of-birth';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 
@@ -12,14 +12,14 @@ vi.mock('date-fns');
 
 vi.mock('~/utils/date-utils');
 
-vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
+vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
     id: '123',
     dateOfBirth: '2000-01-01',
   }),
 }));
 
-vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
+vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
   getAgeCategoryFromDateString: vi.fn(),
   saveApplyState: vi.fn().mockReturnValue({
     headers: {

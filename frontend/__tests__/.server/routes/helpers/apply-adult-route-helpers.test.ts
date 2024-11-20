@@ -2,9 +2,9 @@ import type { Params } from '@remix-run/react';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { validateApplyAdultStateForReview } from '~/route-helpers/apply-adult-route-helpers.server';
-import type { ApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { applicantInformationStateHasPartner, getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
+import { validateApplyAdultStateForReview } from '~/.server/routes/helpers/apply-adult-route-helpers';
+import type { ApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { applicantInformationStateHasPartner, getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 
 vi.mock('@remix-run/node', () => ({
   redirect: vi.fn((to: string) => `MockedRedirect(${to})`),
@@ -14,12 +14,12 @@ vi.mock('~/utils/route-utils', () => ({
   getPathById: vi.fn((path: string, params: Params) => `MockedPath(${path}, ${JSON.stringify(params)})`),
 }));
 
-vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
+vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
   applicantInformationStateHasPartner: vi.fn(),
   getAgeCategoryFromDateString: vi.fn(),
 }));
 
-describe('apply-adult-route-helpers.server', () => {
+describe('apply-adult-route-helpers', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });

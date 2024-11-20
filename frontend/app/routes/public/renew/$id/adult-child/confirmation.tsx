@@ -7,6 +7,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
+import { getMemberInformationFromRenewState, startDemographicSurveyState } from '~/.server/routes/helpers/demographic-survey-route-helpers';
+import { loadRenewAdultChildState } from '~/.server/routes/helpers/renew-adult-child-route-helpers';
+import { clearRenewState, getChildrenState } from '~/.server/routes/helpers/renew-route-helpers';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -15,9 +18,6 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogT
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { getMemberInformationFromRenewState, startDemographicSurveyState } from '~/route-helpers/demographic-survey-route-helpers.server';
-import { loadRenewAdultChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
-import { clearRenewState, getChildrenState } from '~/route-helpers/renew-route-helpers.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';

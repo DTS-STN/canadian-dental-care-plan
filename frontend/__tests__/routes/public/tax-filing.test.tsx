@@ -6,14 +6,14 @@ import { mock } from 'vitest-mock-extended';
 
 import { action, loader } from '~/routes/public/apply/$id/adult/tax-filing';
 
-vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
+vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
     id: '123',
     taxFiling2023: true,
   }),
 }));
 
-vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
+vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
   saveApplyState: vi.fn().mockReturnValue({
     headers: {
       'Set-Cookie': 'some-set-cookie-header',

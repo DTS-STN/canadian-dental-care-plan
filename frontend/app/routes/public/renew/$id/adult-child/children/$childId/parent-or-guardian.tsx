@@ -7,10 +7,10 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
+import { loadRenewAdultSingleChildState } from '~/.server/routes/helpers/renew-adult-child-route-helpers';
 import { ButtonLink } from '~/components/buttons';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { loadRenewAdultSingleChildState } from '~/route-helpers/renew-adult-child-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
