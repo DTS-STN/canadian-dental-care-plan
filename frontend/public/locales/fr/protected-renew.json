@@ -112,6 +112,17 @@
     "return-btn": "Return to dashboard",
     "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   },
+  "member-selection": {
+    "page-title": "Renew your Canadian Dental Care Plan benefits",
+    "reviewed": "The following member(s) have already renewed:",
+    "form-instructions": "Below is a list of members who can renew. Choose the member you want to renew for.",
+    "continue-help": "After you've chosen all the members you want to renew, click 'Continue'.",
+    "completed": "Completed",
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save"
+  },
   "dental-insurance": {
     "title": "{{name}}\u00a0: Access to other dental insurance",
     "legend": "Do you have access to dental insurance or coverage:",

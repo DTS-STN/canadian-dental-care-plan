@@ -14,6 +14,14 @@ import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
 export interface ProtectedRenewState {
   readonly id: string;
   readonly editMode: boolean;
+  readonly applicantInformation?: {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    clientNumber: string;
+    externallyReviewed: boolean;
+    previouslyReviewed: boolean;
+  };
   readonly taxFiling?: boolean;
   readonly termsAndConditions?: {
     readonly acknowledgeTerms: boolean;
@@ -42,7 +50,10 @@ export interface ProtectedRenewState {
     readonly isParentOrLegalGuardian?: boolean;
     readonly dentalInsurance?: boolean;
     readonly firstName?: string;
+    readonly lastName?: string;
     readonly isSurveyCompleted?: boolean;
+    readonly externallyReviewed: boolean;
+    readonly previouslyReviewed: boolean;
     readonly demographicSurvey?: {
       readonly indigenousStatus?: string;
       readonly firstNations?: string[];
@@ -217,7 +228,7 @@ export function isNewChildState(child: ChildState) {
   return child.dentalInsurance === undefined;
 }
 
-export function getChildrenState<TState extends Pick<ProtectedRenewState, 'children'>>(state: TState, includesNewChildState: boolean = false) {
+export function getProtectedChildrenState<TState extends Pick<ProtectedRenewState, 'children'>>(state: TState, includesNewChildState: boolean = false) {
   // prettier-ignore
   return includesNewChildState
     ? state.children
@@ -328,7 +339,7 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
 
   // TODO: complete state validations when all screens are created
 
-  const children = getChildrenState(state).length > 0 ? validateProtectedChildrenStateForReview({ childrenState: state.children, params }) : [];
+  const children = getProtectedChildrenState(state).length > 0 ? validateProtectedChildrenStateForReview({ childrenState: state.children, params }) : [];
 
   return {
     maritalStatus,
@@ -349,7 +360,7 @@ interface ValidateProtectedChildrenStateForReviewArgs {
 }
 
 function validateProtectedChildrenStateForReview({ childrenState, params }: ValidateProtectedChildrenStateForReviewArgs) {
-  const children = getChildrenState({ children: childrenState });
+  const children = getProtectedChildrenState({ children: childrenState });
 
   if (children.length === 0) {
     throw redirect(getPathById('protected/renew/$id/member-selection', params));

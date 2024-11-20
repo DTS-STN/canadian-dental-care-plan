@@ -9,6 +9,7 @@ export const pageIds = {
       termsAndConditions: 'CDCP-PROT-RENW-0002',
       taxFiling: 'CDCP-PROT-RENW-0003',
       fileYourTaxes: 'CDCP-PROT-RENW-0004',
+      memberSelection: 'CDCP-PROT-RENW-0005',
       dentalInsurance: 'CDCP-PROT-RENW-0006',
       demographicSurvey: 'CDCP-PROT-RENW-0007',
       maritalStatus: 'CDCP-PROT-RENW-0008',

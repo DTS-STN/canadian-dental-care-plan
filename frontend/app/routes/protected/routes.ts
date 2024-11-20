@@ -53,6 +53,11 @@ export const routes = [
             paths: { en: '/:lang/protected/renew/:id/file-taxes', fr: '/:lang/protected/renew/:id/file-taxes' },
           },
           {
+            id: 'protected/renew/$id/member-selection',
+            file: 'routes/protected/renew/$id/member-selection.tsx',
+            paths: { en: '/:lang/protected/renew/:id/member-selection', fr: '/:lang/protected/renew/:id/member-selection' },
+          },
+          {
             id: 'protected/renew/$id/dental-insurance',
             file: 'routes/protected/renew/$id/dental-insurance.tsx',
             paths: { en: '/:lang/protected/renew/:id/dental-insurance', fr: '/:lang/protected/renew/:id/dental-insurance' },
