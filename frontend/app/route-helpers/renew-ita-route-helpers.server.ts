@@ -78,7 +78,7 @@ interface ValidateRenewItaStateForReviewArgs {
 }
 
 export function validateRenewItaStateForReview({ params, state }: ValidateRenewItaStateForReviewArgs) {
-  const { maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, addressInformation, applicantInformation, dentalBenefits, dentalInsurance, hasAddressChanged } = state;
+  const { maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, addressInformation, applicantInformation, clientApplication, dentalBenefits, dentalInsurance, hasAddressChanged } = state;
 
   if (typeOfRenewal === undefined) {
     throw redirect(getPathById('public/renew/$id/type-renewal', params));
@@ -96,12 +96,20 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     throw redirect(getPathById('public/renew/$id/applicant-information', params));
   }
 
+  if (clientApplication === undefined) {
+    throw redirect(getPathById('public/renew/$id/applicant-information', params));
+  }
+
   if (maritalStatus === undefined) {
     throw redirect(getPathById('public/renew/$id/ita/marital-status', params));
   }
 
   if (contactInformation === undefined) {
     throw redirect(getPathById('public/renew/$id/ita/confirm-email', params));
+  }
+
+  if (hasAddressChanged === undefined) {
+    throw redirect(getPathById('public/renew/$id/adult-child/confirm-address', params));
   }
 
   if (hasAddressChanged && addressInformation === undefined) {
@@ -122,6 +130,7 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     id,
     submissionInfo,
     typeOfRenewal,
+    clientApplication,
     contactInformation,
     applicantInformation,
     dentalBenefits,

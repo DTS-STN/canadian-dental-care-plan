@@ -2,7 +2,7 @@ import type { ReadonlyDeep } from 'type-fest';
 
 import type { BenefitApplicationDto } from './benefit-application.dto';
 
-export type BenefitRenewalDto = BenefitApplicationDto &
+export type BenefitRenewalAdultChildDto = BenefitApplicationDto &
   ReadonlyDeep<{
     changeIndicators: {
       hasAddressChanged: boolean;
@@ -11,6 +11,13 @@ export type BenefitRenewalDto = BenefitApplicationDto &
       hasPhoneChanged: boolean;
       hasFederalBenefitsChanged: boolean;
       hasProvincialTerritorialBenefitsChanged: boolean;
+    };
+  }>;
+
+export type BenefitRenewalItaDto = BenefitApplicationDto &
+  ReadonlyDeep<{
+    changeIndicators: {
+      hasAddressChanged: boolean;
     };
   }>;
 
