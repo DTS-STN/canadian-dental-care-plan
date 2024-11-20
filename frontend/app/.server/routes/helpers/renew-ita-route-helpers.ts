@@ -3,8 +3,8 @@ import { redirect } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/responses';
 
-import { loadRenewState, saveRenewState } from './renew-route-helpers.server';
-import type { RenewState } from './renew-route-helpers.server';
+import { loadRenewState, saveRenewState } from './renew-route-helpers';
+import type { RenewState } from './renew-route-helpers';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 

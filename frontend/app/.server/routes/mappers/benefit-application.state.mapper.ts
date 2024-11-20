@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 import validator from 'validator';
 
 import type { BenefitApplicationDto } from '~/.server/domain/dtos';
-import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
+import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 import type {
   ApplicantInformationState,
   ChildState,
@@ -13,7 +13,7 @@ import type {
   DentalProvincialTerritorialBenefitsState,
   PartnerInformationState,
   TypeOfApplicationState,
-} from '~/route-helpers/apply-route-helpers.server';
+} from '~/.server/routes/helpers/apply-route-helpers';
 
 export interface ApplyAdultState {
   applicantInformation: ApplicantInformationState;

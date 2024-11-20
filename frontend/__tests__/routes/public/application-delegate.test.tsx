@@ -6,7 +6,7 @@ import { mock } from 'vitest-mock-extended';
 
 import { loader } from '~/routes/public/apply/$id/application-delegate';
 
-vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
+vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
   loadApplyState: vi.fn().mockReturnValue({
     id: '123',
   }),

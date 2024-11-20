@@ -9,7 +9,7 @@ import { TYPES } from '~/.server/constants';
 import type { PreferredCommunicationMethodService, PreferredLanguageService } from '~/.server/domain/services';
 import { action, loader } from '~/routes/public/apply/$id/adult/communication-preference';
 
-vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
+vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
     id: '123',
   }),

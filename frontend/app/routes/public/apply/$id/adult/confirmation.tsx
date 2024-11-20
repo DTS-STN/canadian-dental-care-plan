@@ -6,6 +6,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
+import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
+import { clearApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -14,8 +16,6 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogT
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
 import { useFeature } from '~/root';
-import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';

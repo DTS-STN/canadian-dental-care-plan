@@ -10,7 +10,7 @@ import type {
   DentalProvincialTerritorialBenefitsState,
   PartnerInformationState,
   TypeOfRenewalState,
-} from '~/route-helpers/renew-route-helpers.server';
+} from '~/.server/routes/helpers/renew-route-helpers';
 import type { BenefitRenewalRequest } from '~/schemas/benefit-renewal-service-schemas.server';
 import { parseDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';

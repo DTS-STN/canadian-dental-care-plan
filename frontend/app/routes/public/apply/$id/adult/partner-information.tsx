@@ -6,6 +6,9 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
+import type { PartnerInformationState } from '~/.server/routes/helpers/apply-route-helpers';
+import { applicantInformationStateHasPartner, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -17,9 +20,6 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import type { PartnerInformationState } from '~/route-helpers/apply-route-helpers.server';
-import { applicantInformationStateHasPartner, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';

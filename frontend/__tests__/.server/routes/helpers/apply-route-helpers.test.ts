@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { ChildState } from '~/route-helpers/apply-route-helpers.server';
-import { applicantInformationStateHasPartner, getAgeCategoryFromAge, getChildrenState, isNewChildState } from '~/route-helpers/apply-route-helpers.server';
+import type { ChildState } from '~/.server/routes/helpers/apply-route-helpers';
+import { applicantInformationStateHasPartner, getAgeCategoryFromAge, getChildrenState, isNewChildState } from '~/.server/routes/helpers/apply-route-helpers';
 
 vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn(() => ({
@@ -10,7 +10,7 @@ vi.mock('~/utils/env-utils.server', () => ({
   })),
 }));
 
-describe('apply-route-helpers.server', () => {
+describe('apply-route-helpers', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });

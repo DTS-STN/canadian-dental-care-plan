@@ -6,7 +6,7 @@ import { mock } from 'vitest-mock-extended';
 
 import { loader } from '~/routes/public/apply/$id/adult/file-taxes';
 
-vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
+vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
     id: '123',
   }),

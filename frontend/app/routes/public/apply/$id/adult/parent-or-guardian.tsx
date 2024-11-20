@@ -8,11 +8,11 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
+import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
+import { clearApplyState, getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 import { ButtonLink } from '~/components/buttons';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { clearApplyState, getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';

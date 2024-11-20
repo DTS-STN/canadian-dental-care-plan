@@ -4,7 +4,7 @@ import { ReadonlyObjectDeep } from 'type-fest/source/readonly-deep';
 import validator from 'validator';
 
 import type { ApplicantInformationDto, BenefitRenewalAdultChildDto, BenefitRenewalItaDto, ClientApplicationDto, ClientChildDto, ContactInformationDto, PartnerInformationDto } from '~/.server/domain/dtos';
-import type { AddressInformationState, ChildState, ConfirmDentalBenefitsState, ContactInformationState, DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, PartnerInformationState } from '~/route-helpers/renew-route-helpers.server';
+import type { AddressInformationState, ChildState, ConfirmDentalBenefitsState, ContactInformationState, DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
 
 export interface RenewAdultChildState {
   addressInformation?: AddressInformationState;

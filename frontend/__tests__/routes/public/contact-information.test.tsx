@@ -9,7 +9,7 @@ import { TYPES } from '~/.server/constants';
 import type { CountryService, ProvinceTerritoryStateService } from '~/.server/domain/services';
 import { loader } from '~/routes/public/apply/$id/adult/contact-information';
 
-vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
+vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
     id: '123',
   }),

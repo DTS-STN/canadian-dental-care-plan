@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getHCaptchaRouteHelpers } from '~/route-helpers/hcaptcha-route-helpers.server';
+import { getHCaptchaRouteHelpers } from '~/.server/routes/helpers/hcaptcha-route-helpers';
 import { getLogger } from '~/utils/logging.server';
 
 vi.mock('~/utils/env-utils.server', () => ({
@@ -20,7 +20,7 @@ vi.mock('~/utils/logging.server', () => ({
   }),
 }));
 
-describe('hcaptcha-route-helpers.server', () => {
+describe('hcaptcha-route-helpers', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
