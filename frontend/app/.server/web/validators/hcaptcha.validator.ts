@@ -16,14 +16,14 @@ export interface ValidateHCaptchaResponseParams {
   hCaptchaResponse: string;
 
   /**
-   * The ID of the user attempting the request. Defaults to 'anonymous'.
-   */
-  userId?: string;
-
-  /**
    * The client's IP address (optional).
    */
   ipAddress?: string;
+
+  /**
+   * The ID of the user attempting the request. Defaults to 'anonymous'.
+   */
+  userId?: string;
 }
 
 /**
@@ -56,7 +56,7 @@ export class DefaultHCaptchaValidator implements HCaptchaValidator {
     this.log = logFactory.createLogger('DefaultHCaptchaValidator');
   }
 
-  async validateHCaptchaResponse({ hCaptchaResponse, userId = 'anonymous', ipAddress }: ValidateHCaptchaResponseParams): Promise<ValidateHCaptchaResponseResult> {
+  async validateHCaptchaResponse({ hCaptchaResponse, ipAddress, userId = 'anonymous' }: ValidateHCaptchaResponseParams): Promise<ValidateHCaptchaResponseResult> {
     this.log.debug('Starting hCaptcha response validation for user: %s, IP: %s', userId, ipAddress);
 
     if (!hCaptchaResponse) {
