@@ -1,328 +1,335 @@
-import { UTCDate } from '@date-fns/utc';
 import { formatISO } from 'date-fns';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import validator from 'validator';
 
-import type { BenefitRenewalRequestDto, BenefitRenewalResponseDto } from '~/.server/domain/dtos';
-import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '~/.server/domain/entities';
+import type { ServerConfig } from '~/.server/configs';
+import { TYPES } from '~/.server/constants';
 import type {
-  AddressInformationState,
-  ApplicantInformationState,
-  ContactInformationState,
-  DentalFederalBenefitsState,
-  DentalProvincialTerritorialBenefitsState,
-  PartnerInformationState,
-  TypeOfRenewalState,
-} from '~/.server/routes/helpers/renew-route-helpers';
+  AdultChildBenefitRenewalDto,
+  AdultChildChangeIndicators,
+  ApplicantInformationDto,
+  ChildDto,
+  CommunicationPreferencesDto,
+  ContactInformationDto,
+  ItaBenefitRenewalDto,
+  ItaChangeIndicators,
+  PartnerInformationDto,
+  TypeOfApplicationDto,
+} from '~/.server/domain/dtos';
+import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
 import { parseDateString } from '~/utils/date-utils';
-import { getEnv } from '~/utils/env-utils.server';
 
 export interface BenefitRenewalDtoMapper {
-  mapBenefitRenewalRequestDtoToBenefitRenewalRequestEntity(benefitRenewalRequestDto: BenefitRenewalRequestDto): BenefitRenewalRequestEntity;
+  mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity;
+  mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity;
+}
 
-  mapBenefitRenewalResponseEntityToBenefitRenewalResponseDto(benefitRenewalResponseEntity: BenefitRenewalResponseEntity): BenefitRenewalResponseDto;
+interface ToBenefitRenewalRequestEntityArgs {
+  applicantInformation: ApplicantInformationDto;
+  changedInformation: string[];
+  children: readonly ChildDto[];
+  communicationPreferences: CommunicationPreferencesDto;
+  contactInformation: ContactInformationDto;
+  dateOfBirth: string;
+  dentalBenefits: readonly string[];
+  dentalInsurance?: boolean;
+  disabilityTaxCredit?: boolean;
+  livingIndependently?: boolean;
+  partnerInformation?: PartnerInformationDto;
+  typeOfApplication: TypeOfApplicationDto;
+}
+
+interface ToAddressArgs {
+  address: string;
+  apartment?: string;
+  category: 'Mailing' | 'Home';
+  city: string;
+  country: string;
+  postalCode?: string;
+  province?: string;
+}
+
+interface ToEmailAddressArgs {
+  contactEmail?: string;
+  communicationEmail?: string;
 }
 
 @injectable()
 export class BenefitRenewalDtoMapperImpl implements BenefitRenewalDtoMapper {
-  mapBenefitRenewalRequestDtoToBenefitRenewalRequestEntity(benefitRenewalRequestDto: BenefitRenewalRequestDto): BenefitRenewalRequestEntity {
-    return toBenefitRenewalRequest(benefitRenewalRequestDto);
+  constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>) {}
+
+  mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity {
+    return this.toBenefitRenewalRequestEntity({
+      ...adultChildBenefitRenewalDto,
+      changedInformation: this.toAdultChildChangedInformation(adultChildBenefitRenewalDto.changeIndicators),
+    });
   }
 
-  mapBenefitRenewalResponseEntityToBenefitRenewalResponseDto(benefitRenewalResponseEntity: BenefitRenewalResponseEntity): BenefitRenewalResponseDto {
-    return {
-      confirmationCode: benefitRenewalResponseEntity.BenefitApplication.BenefitRenewalIdentification[0].IdentificationID,
-      submittedOn: new UTCDate().toISOString(),
-    };
+  private toAdultChildChangedInformation({ hasAddressChanged, hasEmailChanged, hasFederalBenefitsChanged, hasMaritalStatusChanged, hasPhoneChanged, hasProvincialTerritorialBenefitsChanged }: AdultChildChangeIndicators) {
+    const changedInformation = [];
+
+    // TODO these values are not finalized and should be configurable
+    if (hasAddressChanged) changedInformation.push('775170000');
+    if (hasEmailChanged) changedInformation.push('775170001');
+    if (hasFederalBenefitsChanged) changedInformation.push('775170002');
+    if (hasMaritalStatusChanged) changedInformation.push('775170003');
+    if (hasPhoneChanged) changedInformation.push('775170004');
+    if (hasProvincialTerritorialBenefitsChanged) changedInformation.push('775170005');
+
+    return changedInformation;
   }
-}
 
-export interface ToBenefitRenewalRequestFromRenewItaStateArgs {
-  applicantInformation: ApplicantInformationState;
-  dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
-  dentalInsurance: boolean;
-  partnerInformation: PartnerInformationState | undefined;
-  contactInformation?: ContactInformationState;
-  typeOfRenewal: Extract<TypeOfRenewalState, 'adult-child'>;
-  maritalStatus: string;
-  addressInformation?: AddressInformationState;
-}
+  mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity {
+    return this.toBenefitRenewalRequestEntity({
+      ...itaBenefitRenewalDto,
+      changedInformation: this.toItaChangedInformation(itaBenefitRenewalDto.changeIndicators),
+    });
+  }
 
-export function toBenefitRenewalRequestFromRenewItaState({ applicantInformation, dentalBenefits, dentalInsurance, partnerInformation, contactInformation, typeOfRenewal, maritalStatus, addressInformation }: ToBenefitRenewalRequestFromRenewItaStateArgs) {
-  return toBenefitRenewalRequest({
+  private toItaChangedInformation({ hasAddressChanged }: ItaChangeIndicators) {
+    const changedInformation = [];
+
+    // TODO these values are not finalized and should be configurable
+    if (hasAddressChanged) changedInformation.push('775170000');
+
+    return changedInformation;
+  }
+
+  private toBenefitRenewalRequestEntity({
     applicantInformation,
+    changedInformation,
+    children,
+    communicationPreferences,
+    contactInformation,
+    dateOfBirth,
     dentalBenefits,
     dentalInsurance,
+    disabilityTaxCredit,
+    livingIndependently,
     partnerInformation,
-    contactInformation,
-    typeOfRenewal,
-    maritalStatus,
-    addressInformation,
-  });
-}
-
-interface ToBenefitRenewalRequestArgs {
-  applicantInformation: ApplicantInformationState;
-  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
-  dentalInsurance?: boolean;
-  partnerInformation?: PartnerInformationState;
-  contactInformation?: ContactInformationState;
-  typeOfRenewal: TypeOfRenewalState;
-  maritalStatus?: string;
-  addressInformation?: AddressInformationState;
-}
-
-function toBenefitRenewalRequest({ applicantInformation, dentalBenefits, dentalInsurance, partnerInformation, contactInformation, typeOfRenewal, maritalStatus, addressInformation }: ToBenefitRenewalRequestArgs): BenefitRenewalRequestEntity {
-  return {
-    BenefitApplication: {
-      Applicant: {
-        ApplicantDetail: {
-          PrivateDentalInsuranceIndicator: dentalInsurance,
-          InsurancePlan: dentalBenefits && toInsurancePlan(dentalBenefits),
-        },
-        PersonBirthDate: toDate(applicantInformation.dateOfBirth),
-        PersonContactInformation: [
-          {
-            Address: addressInformation ? [toMailingAddress(addressInformation), toHomeAddress(addressInformation)] : [],
-            EmailAddress: toEmailAddress(contactInformation?.email),
-            TelephoneNumber: toTelephoneNumber(contactInformation ?? {}),
+    typeOfApplication,
+  }: ToBenefitRenewalRequestEntityArgs): BenefitRenewalRequestEntity {
+    return {
+      BenefitApplication: {
+        Applicant: {
+          ApplicantDetail: {
+            PrivateDentalInsuranceIndicator: dentalInsurance,
+            DisabilityTaxCreditIndicator: disabilityTaxCredit,
+            LivingIndependentlyIndicator: livingIndependently,
+            InsurancePlan: this.toInsurancePlan(dentalBenefits),
           },
-        ],
-        PersonMaritalStatus: {
-          StatusCode: {
-            ReferenceDataID: maritalStatus,
+          ChangedInformation: changedInformation,
+          PersonBirthDate: this.toDate(dateOfBirth),
+          PersonContactInformation: [
+            {
+              Address: [this.toMailingAddress(contactInformation), this.toHomeAddress(contactInformation)],
+              EmailAddress: this.toEmailAddress({ contactEmail: contactInformation.email, communicationEmail: communicationPreferences.email }),
+              TelephoneNumber: this.toTelephoneNumber(contactInformation),
+            },
+          ],
+          PersonLanguage: [
+            {
+              CommunicationCategoryCode: {
+                ReferenceDataID: communicationPreferences.preferredLanguage,
+              },
+              PreferredIndicator: true,
+            },
+          ],
+          PersonMaritalStatus: {
+            StatusCode: {
+              ReferenceDataID: applicantInformation.maritalStatus,
+            },
+          },
+          PersonName: [
+            {
+              PersonGivenName: [applicantInformation.firstName],
+              PersonSurName: applicantInformation.lastName,
+            },
+          ],
+          PersonSINIdentification: {
+            IdentificationID: applicantInformation.socialInsuranceNumber,
+          },
+          RelatedPerson: this.toRelatedPersons(partnerInformation, children),
+          MailingSameAsHomeIndicator: contactInformation.copyMailingAddress,
+          PreferredMethodCommunicationCode: {
+            ReferenceDataID: communicationPreferences.preferredMethod,
           },
         },
-        PersonName: [
-          {
-            PersonGivenName: [applicantInformation.firstName],
-            PersonSurName: applicantInformation.lastName,
-          },
-        ],
-        PersonClientIdentification: {
-          IdentificationID: applicantInformation.clientNumber,
+        BenefitApplicationCategoryCode: {
+          ReferenceDataID: this.toBenefitApplicationCategoryCode(typeOfApplication),
         },
-        RelatedPerson: toRelatedPersons({ partnerInformation }),
-        MailingSameAsHomeIndicator: addressInformation?.copyMailingAddress ?? false,
-        PreferredMethodCommunicationCode: {
-          ReferenceDataID: '777777777', // TODO use default value coming from client application service call
+        BenefitApplicationChannelCode: {
+          ReferenceDataID: '775170001', // PP's static value for "Online"
         },
       },
-      BenefitRenewalCategoryCode: {
-        ReferenceDataID: toBenefitRenewalCategoryCode(typeOfRenewal),
+    };
+  }
+
+  private toInsurancePlan(dentalBenefits: readonly string[]) {
+    return [
+      {
+        InsurancePlanIdentification: dentalBenefits.map((dentalBenefit) => ({
+          IdentificationID: dentalBenefit,
+        })),
       },
-      BenefitRenewalChannelCode: {
-        ReferenceDataID: '777777777', // todo update this value
-      },
-    },
-  };
-}
+    ];
+  }
 
-function toBenefitRenewalCategoryCode(typeOfRenewal: TypeOfRenewalState) {
-  const { APPLICANT_CATEGORY_CODE_FAMILY, APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY } = getEnv();
-  if (typeOfRenewal === 'adult-child') return APPLICANT_CATEGORY_CODE_FAMILY.toString();
-  if (typeOfRenewal === 'child') return APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY.toString();
-  throw Error(`TypeOfRenewal '${typeOfRenewal}' not supported.`);
-}
+  private toDate(date: string) {
+    return {
+      date: formatISO(parseDateString(date), { representation: 'date' }),
+    };
+  }
 
-function toDate(date: string) {
-  return {
-    date: formatISO(parseDateString(date), { representation: 'date' }),
-  };
-}
-
-interface ToAddressArgs {
-  apartment?: string;
-  category: 'Mailing' | 'Home';
-  city?: string;
-  country?: string;
-  postalCode?: string;
-  province?: string;
-  street?: string;
-}
-
-function toAddress({ apartment, category, city, country, postalCode, province, street }: ToAddressArgs) {
-  return {
-    AddressCategoryCode: {
-      ReferenceDataName: category,
-    },
-    AddressCityName: city ?? '',
-    AddressCountry: {
-      CountryCode: {
-        ReferenceDataID: country ?? '',
-      },
-    },
-    AddressPostalCode: postalCode ?? '',
-    AddressProvince: {
-      ProvinceCode: {
-        ReferenceDataID: province ?? '',
-      },
-    },
-    AddressSecondaryUnitText: apartment ?? '',
-    AddressStreet: {
-      StreetName: street ?? '',
-    },
-  };
-}
-
-interface ToMailingAddressArgs {
-  mailingAddress: string;
-  mailingApartment?: string;
-  mailingCity: string;
-  mailingCountry: string;
-  mailingPostalCode?: string;
-  mailingProvince?: string;
-}
-
-function toMailingAddress({ mailingAddress, mailingApartment, mailingCity, mailingCountry, mailingPostalCode, mailingProvince }: ToMailingAddressArgs) {
-  return toAddress({
-    apartment: mailingApartment,
-    category: 'Mailing',
-    city: mailingCity,
-    country: mailingCountry,
-    postalCode: mailingPostalCode,
-    province: mailingProvince,
-    street: mailingAddress,
-  });
-}
-
-interface ToHomeAddressArgs {
-  copyMailingAddress: boolean;
-  homeAddress?: string;
-  homeApartment?: string;
-  homeCity?: string;
-  homeCountry?: string;
-  homePostalCode?: string;
-  homeProvince?: string;
-  mailingAddress: string;
-  mailingApartment?: string;
-  mailingCity: string;
-  mailingCountry: string;
-  mailingPostalCode?: string;
-  mailingProvince?: string;
-}
-
-function toHomeAddress({ copyMailingAddress, homeAddress, homeApartment, homeCity, homeCountry, homePostalCode, homeProvince, mailingAddress, mailingApartment, mailingCity, mailingCountry, mailingPostalCode, mailingProvince }: ToHomeAddressArgs) {
-  if (copyMailingAddress) {
-    return toAddress({
+  private toMailingAddress({ mailingAddress, mailingApartment, mailingCity, mailingCountry, mailingPostalCode, mailingProvince }: ContactInformationDto) {
+    return this.toAddress({
+      address: mailingAddress,
       apartment: mailingApartment,
-      category: 'Home',
+      category: 'Mailing',
       city: mailingCity,
       country: mailingCountry,
       postalCode: mailingPostalCode,
       province: mailingProvince,
-      street: mailingAddress,
     });
   }
 
-  return toAddress({
-    apartment: homeApartment,
-    category: 'Home',
-    city: homeCity,
-    country: homeCountry,
-    postalCode: homePostalCode,
-    province: homeProvince,
-    street: homeAddress,
-  });
-}
-
-interface ToInsurancePlanArgs {
-  hasFederalBenefits: boolean;
-  federalSocialProgram?: string;
-  hasProvincialTerritorialBenefits: boolean;
-  provincialTerritorialSocialProgram?: string;
-}
-
-function toInsurancePlan({ hasFederalBenefits, federalSocialProgram, hasProvincialTerritorialBenefits, provincialTerritorialSocialProgram }: ToInsurancePlanArgs) {
-  const insurancePlanIdentification = [];
-
-  if (hasFederalBenefits && federalSocialProgram && !validator.isEmpty(federalSocialProgram)) {
-    insurancePlanIdentification.push({
-      IdentificationID: federalSocialProgram,
+  private toHomeAddress({ homeAddress, homeApartment, homeCity, homeCountry, homePostalCode, homeProvince }: ContactInformationDto) {
+    return this.toAddress({
+      address: homeAddress,
+      apartment: homeApartment,
+      category: 'Home',
+      city: homeCity,
+      country: homeCountry,
+      postalCode: homePostalCode,
+      province: homeProvince,
     });
   }
 
-  if (hasProvincialTerritorialBenefits && provincialTerritorialSocialProgram && !validator.isEmpty(provincialTerritorialSocialProgram)) {
-    insurancePlanIdentification.push({
-      IdentificationID: provincialTerritorialSocialProgram,
-    });
-  }
-
-  return [{ InsurancePlanIdentification: insurancePlanIdentification }];
-}
-
-interface ToRelatedPersonArgs {
-  partnerInformation: PartnerInformationState | undefined;
-}
-
-function toRelatedPersons({ partnerInformation }: ToRelatedPersonArgs) {
-  const relatedPersons = [];
-
-  if (partnerInformation) {
-    relatedPersons.push(toRelatedPersonSpouse(partnerInformation));
-  }
-
-  return relatedPersons;
-}
-
-interface ToRelatedPersonSpouseArgs {
-  confirm: boolean;
-  yearOfBirth: string;
-  socialInsuranceNumber: string;
-}
-
-function toRelatedPersonSpouse({ confirm, yearOfBirth, socialInsuranceNumber }: ToRelatedPersonSpouseArgs) {
-  return {
-    PersonBirthDate: { date: yearOfBirth },
-    PersonRelationshipCode: {
-      ReferenceDataName: 'Spouse' as const,
-    },
-    PersonSINIdentification: {
-      IdentificationID: socialInsuranceNumber,
-    },
-    ApplicantDetail: {
-      ConsentToSharePersonalInformationIndicator: confirm,
-    },
-  };
-}
-
-function toEmailAddress(contactEmail?: string) {
-  const emailAddress = [];
-
-  if (contactEmail && !validator.isEmpty(contactEmail)) {
-    emailAddress.push({
-      EmailAddressID: contactEmail,
-    });
-  }
-
-  return emailAddress;
-}
-
-interface ToTelephoneNumberArgs {
-  phoneNumber?: string;
-  phoneNumberAlt?: string;
-}
-
-function toTelephoneNumber({ phoneNumber, phoneNumberAlt }: ToTelephoneNumberArgs) {
-  const telephoneNumber = [];
-
-  if (phoneNumber && !validator.isEmpty(phoneNumber)) {
-    telephoneNumber.push({
-      TelephoneNumberCategoryCode: {
-        ReferenceDataID: phoneNumber,
-        ReferenceDataName: 'Primary',
+  private toAddress({ address, apartment, category, city, country, postalCode, province }: ToAddressArgs) {
+    return {
+      AddressCategoryCode: {
+        ReferenceDataName: category,
       },
-    });
-  }
-
-  if (phoneNumberAlt && !validator.isEmpty(phoneNumberAlt)) {
-    telephoneNumber.push({
-      TelephoneNumberCategoryCode: {
-        ReferenceDataID: phoneNumberAlt,
-        ReferenceDataName: 'Alternate',
+      AddressCityName: city,
+      AddressCountry: {
+        CountryCode: {
+          ReferenceDataID: country,
+        },
       },
-    });
+      AddressPostalCode: postalCode ?? '',
+      AddressProvince: {
+        ProvinceCode: {
+          ReferenceDataID: province ?? '',
+        },
+      },
+      AddressSecondaryUnitText: apartment ?? '',
+      AddressStreet: {
+        StreetName: address,
+      },
+    };
   }
 
-  return telephoneNumber;
+  private toEmailAddress({ contactEmail, communicationEmail }: ToEmailAddressArgs) {
+    const emailAddress = [];
+
+    if (contactEmail && !validator.isEmpty(contactEmail)) {
+      emailAddress.push({
+        EmailAddressID: contactEmail,
+      });
+    } else if (communicationEmail && !validator.isEmpty(communicationEmail)) {
+      emailAddress.push({
+        EmailAddressID: communicationEmail,
+      });
+    }
+
+    return emailAddress;
+  }
+
+  private toTelephoneNumber({ phoneNumber, phoneNumberAlt }: ContactInformationDto) {
+    const telephoneNumber = [];
+
+    if (phoneNumber && !validator.isEmpty(phoneNumber)) {
+      telephoneNumber.push({
+        TelephoneNumberCategoryCode: {
+          ReferenceDataID: phoneNumber,
+          ReferenceDataName: 'Primary',
+        },
+      });
+    }
+
+    if (phoneNumberAlt && !validator.isEmpty(phoneNumberAlt)) {
+      telephoneNumber.push({
+        TelephoneNumberCategoryCode: {
+          ReferenceDataID: phoneNumberAlt,
+          ReferenceDataName: 'Alternate',
+        },
+      });
+    }
+
+    return telephoneNumber;
+  }
+
+  private toRelatedPersons(partnerInformation: PartnerInformationDto | undefined, children: ReadonlyArray<ChildDto>) {
+    const relatedPersons = [];
+
+    if (partnerInformation) {
+      relatedPersons.push(this.toRelatedPersonSpouse(partnerInformation));
+    }
+    if (children.length !== 0) {
+      relatedPersons.push(...this.toRelatedPersonDependent(children));
+    }
+
+    return relatedPersons;
+  }
+
+  private toRelatedPersonSpouse({ confirm, dateOfBirth, firstName, lastName, socialInsuranceNumber }: PartnerInformationDto) {
+    return {
+      PersonBirthDate: this.toDate(dateOfBirth),
+      PersonName: [
+        {
+          PersonGivenName: [firstName],
+          PersonSurName: lastName,
+        },
+      ],
+      PersonRelationshipCode: {
+        ReferenceDataName: 'Spouse' as const,
+      },
+      PersonSINIdentification: {
+        IdentificationID: socialInsuranceNumber,
+      },
+      ApplicantDetail: {
+        ConsentToSharePersonalInformationIndicator: confirm,
+      },
+    };
+  }
+
+  private toRelatedPersonDependent(children: ReadonlyArray<ChildDto>) {
+    return children.map((child) => ({
+      PersonBirthDate: this.toDate(child.information.dateOfBirth),
+      PersonName: [
+        {
+          PersonGivenName: [child.information.firstName],
+          PersonSurName: child.information.lastName,
+        },
+      ],
+      PersonRelationshipCode: {
+        ReferenceDataName: 'Dependant' as const,
+      },
+      PersonSINIdentification: {
+        IdentificationID: child.information.socialInsuranceNumber ?? '',
+      },
+      ApplicantDetail: {
+        AttestParentOrGuardianIndicator: child.information.isParent,
+        PrivateDentalInsuranceIndicator: child.dentalInsurance,
+        InsurancePlan: this.toInsurancePlan(child.dentalBenefits),
+      },
+    }));
+  }
+
+  private toBenefitApplicationCategoryCode(typeOfApplication: TypeOfApplicationDto) {
+    const { APPLICANT_CATEGORY_CODE_INDIVIDUAL, APPLICANT_CATEGORY_CODE_FAMILY, APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY } = this.serverConfig;
+    if (typeOfApplication === 'adult') return APPLICANT_CATEGORY_CODE_INDIVIDUAL.toString();
+    if (typeOfApplication === 'adult-child') return APPLICANT_CATEGORY_CODE_FAMILY.toString();
+    return APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY.toString();
+  }
 }
