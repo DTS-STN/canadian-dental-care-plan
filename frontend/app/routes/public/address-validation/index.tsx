@@ -94,12 +94,13 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
   featureEnabled('address-validation');
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateCsrfToken(request);
-
   if (request.method !== 'POST') {
     return Response.json({ message: 'Method not allowed' }, { status: 405 });
   }
+
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const formData = await request.formData();
+  securityHandler.validateCsrfToken({ formData, session });
 
   const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
   const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
@@ -107,7 +108,6 @@ export async function action({ context: { appContainer, session }, request, para
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
   const locale = getLocale(request);
 
-  const formData = await request.formData();
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).create(locale);

@@ -41,7 +41,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewSingleChildState({ params, session });
   // TODO: get childName from state and pass to title and page heading
@@ -58,7 +58,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const log = getLogger('protected/renew/parent-or-guardian');
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewSingleChildState({ params, session });
   const protectedRenewState = loadProtectedRenewState({ params, session });

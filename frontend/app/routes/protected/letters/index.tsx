@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const instrumentationService = getInstrumentationService();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);

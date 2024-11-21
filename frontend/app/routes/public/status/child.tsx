@@ -64,8 +64,9 @@ export async function action({ context: { appContainer, session }, params, reque
   featureEnabled('status');
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateCsrfToken(request);
-  await securityHandler.validateHCaptchaResponse(request, () => {
+  const formData = await request.formData();
+  securityHandler.validateCsrfToken({ formData, session });
+  await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
@@ -144,7 +145,6 @@ export async function action({ context: { appContainer, session }, params, reque
       };
     });
 
-  const formData = await request.formData();
   const data = {
     code: String(formData.get('code') ?? ''),
     childHasSin: formData.get('childHasSin') ? formData.get('childHasSin') === ChildHasSin.Yes : undefined,
