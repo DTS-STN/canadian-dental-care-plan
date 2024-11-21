@@ -4,7 +4,7 @@ import { HCaptchaVerifyRequestDto } from '../dtos';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { HCaptchaInvalidException } from '~/.server/web/exceptions';
+import { HCaptchaInvalidException, HCaptchaResponseNotFoundException } from '~/.server/web/exceptions';
 import type { HCaptchaService } from '~/.server/web/services';
 import { getClientIpAddress } from '~/utils/ip-address-utils.server';
 
@@ -53,7 +53,7 @@ export class DefaultHCaptchaValidator implements HCaptchaValidator {
 
     if (!hCaptchaResponse) {
       this.log.warn('hCaptcha response not found in request from user: %s', userId);
-      throw new HCaptchaInvalidException('hCaptcha response validation failed; hCaptcha response not found.');
+      throw new HCaptchaResponseNotFoundException('hCaptcha response not found in request.');
     }
 
     const hCaptchaVerifyRequestDto: HCaptchaVerifyRequestDto = {
@@ -84,27 +84,38 @@ export class DefaultHCaptchaValidator implements HCaptchaValidator {
 
     // Try to extract the hCaptcha response from form data
     try {
+      this.log.debug('Extracting hCaptcha response from form data.');
       const formData = await request.clone().formData();
+
       if (formData.has(hCaptchaFieldName)) {
-        this.log.trace('hCaptcha response found in form data.');
+        this.log.debug('hCaptcha response found in form data.');
         return String(formData.get(hCaptchaFieldName));
       }
+
+      this.log.debug('hCaptcha response not found in form data.');
+      return null;
     } catch (error) {
-      this.log.warn('Error extracting hCaptcha response from form data; error: %s', error);
+      this.log.debug('Error extracting hCaptcha response from form data; error: %s', error);
     }
 
     // If not found in form data, try extracting from the JSON body
     try {
+      this.log.debug('Extracting hCaptcha response from JSON body.');
       const body = await request.clone().json();
+
       if (body[hCaptchaFieldName]) {
-        this.log.trace('hCaptcha response found in JSON body.');
+        this.log.debug('hCaptcha response found in JSON body.');
         return String(body[hCaptchaFieldName]);
       }
+
+      this.log.debug('hCaptcha response not found in JSON body.');
+      return null;
     } catch (error) {
-      this.log.warn('Error extracting hCaptcha response from JSON body; error: %s', error);
+      this.log.debug('Error extracting hCaptcha response from JSON body; error: %s', error);
     }
 
     // Return null if the hCaptcha response was not found
+    this.log.warn('hCaptcha response not found in request.');
     return null;
   }
 }
