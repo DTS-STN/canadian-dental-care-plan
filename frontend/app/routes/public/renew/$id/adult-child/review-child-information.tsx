@@ -5,6 +5,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
@@ -142,8 +143,10 @@ export async function action({ context: { appContainer, session }, params, reque
     }
   }
 
-  const submissionInfo = await appContainer.get(TYPES.domain.services.BenefitRenewalService).createBenefitRenewal(state);
+  const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state);
+  await appContainer.get(TYPES.domain.services.BenefitRenewalService).createAdultChildBenefitRenewal(benefitRenewalDto);
 
+  const submissionInfo = { submittedOn: new UTCDate().toISOString() };
   saveRenewState({ params, session, state: { submissionInfo } });
 
   return redirect(getPathById('public/renew/$id/adult-child/confirmation', params));
