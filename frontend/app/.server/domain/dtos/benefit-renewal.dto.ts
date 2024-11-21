@@ -1,25 +1,27 @@
-import type { ReadonlyDeep } from 'type-fest';
-
 import type { BenefitApplicationDto } from './benefit-application.dto';
 
-export type BenefitRenewalAdultChildDto = BenefitApplicationDto &
-  ReadonlyDeep<{
-    changeIndicators: {
-      hasAddressChanged: boolean;
-      hasEmailChanged: boolean;
-      hasMaritalStatusChanged: boolean;
-      hasPhoneChanged: boolean;
-      hasFederalBenefitsChanged: boolean;
-      hasProvincialTerritorialBenefitsChanged: boolean;
-    };
+export type AdultChildBenefitRenewalDto = BenefitApplicationDto &
+  Readonly<{
+    changeIndicators: AdultChildChangeIndicators;
   }>;
 
-export type BenefitRenewalItaDto = BenefitApplicationDto &
-  ReadonlyDeep<{
-    changeIndicators: {
-      hasAddressChanged: boolean;
-    };
+export type AdultChildChangeIndicators = Readonly<{
+  hasAddressChanged: boolean;
+  hasEmailChanged: boolean;
+  hasMaritalStatusChanged: boolean;
+  hasPhoneChanged: boolean;
+  hasFederalBenefitsChanged: boolean;
+  hasProvincialTerritorialBenefitsChanged: boolean;
+}>;
+
+export type ItaBenefitRenewalDto = BenefitApplicationDto &
+  Readonly<{
+    changeIndicators: ItaChangeIndicators;
   }>;
+
+export type ItaChangeIndicators = Readonly<{
+  hasAddressChanged: boolean;
+}>;
 
 // TODO remove this when mapping to BenefitRenewalDto is complete
 export type BenefitRenewalRequestDto = Readonly<{

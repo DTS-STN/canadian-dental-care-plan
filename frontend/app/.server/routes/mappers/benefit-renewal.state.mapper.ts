@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 import { ReadonlyObjectDeep } from 'type-fest/source/readonly-deep';
 import validator from 'validator';
 
-import type { ApplicantInformationDto, BenefitRenewalAdultChildDto, BenefitRenewalItaDto, ClientApplicationDto, ClientChildDto, ContactInformationDto, PartnerInformationDto } from '~/.server/domain/dtos';
+import type { AdultChildBenefitRenewalDto, ApplicantInformationDto, ClientApplicationDto, ClientChildDto, ContactInformationDto, ItaBenefitRenewalDto, PartnerInformationDto } from '~/.server/domain/dtos';
 import type { AddressInformationState, ChildState, ConfirmDentalBenefitsState, ContactInformationState, DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
 
 export interface RenewAdultChildState {
@@ -32,8 +32,8 @@ export interface RenewItaState {
 }
 
 export interface BenefitRenewalStateMapper {
-  mapRenewAdultChildStateToBenefitRenewalDto(renewAdultChildState: RenewAdultChildState): BenefitRenewalAdultChildDto;
-  mapRenewItaStateToBenefitRenewalDto(renewItaState: RenewItaState): BenefitRenewalItaDto;
+  mapRenewAdultChildStateToAdultChildBenefitRenewalDto(renewAdultChildState: RenewAdultChildState): AdultChildBenefitRenewalDto;
+  mapRenewItaStateToItaBenefitRenewalDto(renewItaState: RenewItaState): ItaBenefitRenewalDto;
 }
 
 interface ToApplicantInformationArgs {
@@ -71,7 +71,7 @@ interface ToPartnerInformationArgs {
 
 @injectable()
 export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper {
-  mapRenewAdultChildStateToBenefitRenewalDto({
+  mapRenewAdultChildStateToAdultChildBenefitRenewalDto({
     addressInformation,
     children,
     clientApplication,
@@ -83,7 +83,7 @@ export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper 
     hasMaritalStatusChanged,
     maritalStatus,
     partnerInformation,
-  }: RenewAdultChildState): BenefitRenewalAdultChildDto {
+  }: RenewAdultChildState): AdultChildBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
       throw Error('Expected hasEmailChanged to be defined');
@@ -141,7 +141,7 @@ export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper 
     };
   }
 
-  mapRenewItaStateToBenefitRenewalDto({ addressInformation, clientApplication, contactInformation, dentalBenefits, dentalInsurance, hasAddressChanged, maritalStatus, partnerInformation }: RenewItaState): BenefitRenewalItaDto {
+  mapRenewItaStateToItaBenefitRenewalDto({ addressInformation, clientApplication, contactInformation, dentalBenefits, dentalInsurance, hasAddressChanged, maritalStatus, partnerInformation }: RenewItaState): ItaBenefitRenewalDto {
     return {
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
