@@ -79,13 +79,6 @@ export interface ProtectedRenewState {
     mailingPostalCode?: string;
     mailingProvince?: string;
   };
-  readonly submissionInfo?: {
-    /**
-     * The UTC date and time when the application was submitted.
-     * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
-     */
-    submittedOn: string;
-  };
   // TODO Add remaining states
 }
 
@@ -303,7 +296,7 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
-  const { hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, addressInformation, dentalInsurance, demographicSurvey } = state;
+  const { hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, addressInformation, dentalInsurance, demographicSurvey } = state;
 
   if (maritalStatus === undefined) {
     throw redirect(getPathById('protected/renew/$id/marital-status', params));
@@ -341,7 +334,6 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
     maritalStatus,
     editMode,
     id,
-    submissionInfo,
     contactInformation,
     dentalInsurance,
     addressInformation,
