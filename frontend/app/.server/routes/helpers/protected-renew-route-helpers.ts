@@ -379,6 +379,7 @@ function validateProtectedChildrenStateForReview({ childrenState, params }: Vali
     return {
       id,
       dentalInsurance,
+      demographicSurvey,
     };
   });
 }
