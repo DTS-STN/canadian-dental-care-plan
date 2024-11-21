@@ -1,6 +1,7 @@
 import type { Session } from '@remix-run/node';
 import { redirect, redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
+import { isRedirectResponse, isResponse } from '@remix-run/react/dist/data';
 
 import { z } from 'zod';
 
@@ -216,13 +217,20 @@ export function isNewChildState(child: ChildState) {
   return child.dentalInsurance === undefined;
 }
 
+export function getChildrenState<TState extends Pick<ProtectedRenewState, 'children'>>(state: TState, includesNewChildState: boolean = false) {
+  // prettier-ignore
+  return includesNewChildState
+    ? state.children
+    : state.children.filter((child) => isNewChildState(child) === false);
+}
+
 interface LoadProtectedRenewSingleChildStateArgs {
   params: Params;
   session: Session;
 }
 
 /**
- * Loads single child state from renew adult child state.
+ * Loads single child state from renew state.
  * @param args - The arguments.
  * @returns The loaded child state.
  */
@@ -255,4 +263,115 @@ export function loadProtectedRenewSingleChildState({ params, session }: LoadProt
     editMode,
     isNew,
   };
+}
+
+interface LoadProtectedRenewStateForReviewArgs {
+  params: Params;
+  request: Request;
+  session: Session;
+}
+
+/**
+ * Loads the renewal state for the review page. It validates the state and throws a redirect if invalid.
+ * If a redirect exception is thrown, state.editMode is set to false.
+ * @param args - The arguments.
+ * @returns The validated adult state.
+ */
+export function loadProtectedRenewStateForReview({ params, request, session }: LoadProtectedRenewStateForReviewArgs) {
+  const state = loadProtectedRenewState({ params, session });
+
+  try {
+    return validateProtectedRenewStateForReview({ params, state });
+  } catch (err) {
+    if (isResponse(err) && isRedirectResponse(err)) {
+      saveProtectedRenewState({ params, session, state: { editMode: false } });
+    }
+    throw err;
+  }
+}
+
+interface ValidateProtectedRenewStateForReviewArgs {
+  params: Params;
+  state: ProtectedRenewState;
+}
+
+export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
+  const { hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, addressInformation, dentalInsurance, demographicSurvey } = state;
+
+  if (maritalStatus === undefined) {
+    throw redirect(getPathById('protected/renew/$id/marital-status', params));
+  }
+
+  if (hasAddressChanged === undefined) {
+    throw redirect(getPathById('protected/renew/$id/confirm-address', params));
+  }
+
+  if (hasAddressChanged && addressInformation === undefined) {
+    throw redirect(getPathById('protected/renew/$id/update-address', params));
+  }
+
+  if (contactInformation?.isNewOrUpdatedPhoneNumber === undefined) {
+    throw redirect(getPathById('protected/renew/$id/confirm-phone', params));
+  }
+
+  if (contactInformation.isNewOrUpdatedEmail === undefined) {
+    throw redirect(getPathById('protected/renew/$id/confirm-email', params));
+  }
+
+  if (dentalInsurance === undefined) {
+    throw redirect(getPathById('protected/renew/$id/dental-insurance', params));
+  }
+
+  if (demographicSurvey === undefined) {
+    throw redirect(getPathById('protected/renew/$id/demographic-survey', params));
+  }
+
+  // TODO: complete state validations when all screens are created
+
+  const children = getChildrenState(state).length > 0 ? validateProtectedChildrenStateForReview({ childrenState: state.children, params }) : [];
+
+  return {
+    maritalStatus,
+    editMode,
+    id,
+    contactInformation,
+    dentalInsurance,
+    addressInformation,
+    partnerInformation,
+    children,
+    hasAddressChanged,
+  };
+}
+
+interface ValidateProtectedChildrenStateForReviewArgs {
+  childrenState: ChildState[];
+  params: Params;
+}
+
+function validateProtectedChildrenStateForReview({ childrenState, params }: ValidateProtectedChildrenStateForReviewArgs) {
+  const children = getChildrenState({ children: childrenState });
+
+  if (children.length === 0) {
+    throw redirect(getPathById('protected/renew/$id/member-selection', params));
+  }
+
+  return children.map(({ id, dentalInsurance, demographicSurvey }) => {
+    const childId = id;
+
+    if (dentalInsurance === undefined) {
+      throw redirect(getPathById('protected/renew/$id/$childId/dental-insurance', { ...params, childId }));
+    }
+
+    if (demographicSurvey === undefined) {
+      throw redirect(getPathById('protected/renew/$id/$childId/demographic-survey', { ...params, childId }));
+    }
+
+    // TODO: complete state validations when all screens are created
+
+    return {
+      id,
+      dentalInsurance,
+      demographicSurvey,
+    };
+  });
 }
