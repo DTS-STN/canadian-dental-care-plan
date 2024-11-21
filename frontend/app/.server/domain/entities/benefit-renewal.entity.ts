@@ -1,125 +1,116 @@
-export type BenefitRenewalRequestEntity = Readonly<{
-  BenefitApplication: Readonly<{
-    Applicant: Readonly<{
-      ApplicantDetail: Readonly<{
+import type { ReadonlyDeep } from 'type-fest';
+
+export type BenefitRenewalRequestEntity = ReadonlyDeep<{
+  BenefitApplication: {
+    Applicant: {
+      ApplicantDetail: {
         PrivateDentalInsuranceIndicator?: boolean;
         DisabilityTaxCreditIndicator?: boolean;
         LivingIndependentlyIndicator?: boolean;
-        InsurancePlan?: ReadonlyArray<
-          Readonly<{
-            InsurancePlanIdentification?: ReadonlyArray<
-              Readonly<{
-                IdentificationID?: string;
-              }>
-            >;
-          }>
-        >;
-      }>;
-      PersonBirthDate: Readonly<{
+        InsurancePlan?: {
+          InsurancePlanIdentification?: {
+            IdentificationID?: string;
+          }[];
+        }[];
+      };
+      ChangedInformation: string[]; // TODO subject to change - specifications not yet provided
+      PersonBirthDate: {
         date: string;
-      }>;
-      PersonContactInformation: ReadonlyArray<
-        Readonly<{
-          Address: ReadonlyArray<
-            Readonly<{
-              AddressCategoryCode: Readonly<{
-                ReferenceDataName: string;
-              }>;
-              AddressCityName: string;
-              AddressCountry: Readonly<{
-                CountryCode: Readonly<{
-                  ReferenceDataID: string;
-                }>;
-              }>;
-              AddressPostalCode: string;
-              AddressProvince: Readonly<{
-                ProvinceCode: Readonly<{
-                  ReferenceDataID: string;
-                }>;
-              }>;
-              AddressSecondaryUnitText: string;
-              AddressStreet: Readonly<{
-                StreetName: string;
-              }>;
-            }>
-          >;
-          EmailAddress: ReadonlyArray<
-            Readonly<{
-              EmailAddressID: string;
-            }>
-          >;
-          TelephoneNumber: ReadonlyArray<
-            Readonly<{
-              TelephoneNumberCategoryCode: Readonly<{
-                ReferenceDataID: string;
-                ReferenceDataName: string;
-              }>;
-            }>
-          >;
-        }>
-      >;
-      PersonMaritalStatus: Readonly<{
-        StatusCode: Readonly<{
-          ReferenceDataID?: string;
-        }>;
-      }>;
-      PersonName: ReadonlyArray<
-        Readonly<{
-          PersonGivenName: ReadonlyArray<string>;
-          PersonSurName: string;
-        }>
-      >;
-      PersonClientIdentification: Readonly<{
-        IdentificationID: string;
-      }>;
-      RelatedPerson: ReadonlyArray<
-        Readonly<{
-          PersonBirthDate: Readonly<{
-            date: string;
-          }>;
-          PersonRelationshipCode: Readonly<{
+      };
+      PersonContactInformation: {
+        Address: {
+          AddressCategoryCode: {
             ReferenceDataName: string;
-          }>;
-          PersonSINIdentification: Readonly<{
-            IdentificationID: string;
-          }>;
-          ApplicantDetail: Readonly<{
-            ConsentToSharePersonalInformationIndicator?: boolean;
-            AttestParentOrGuardianIndicator?: boolean;
-            PrivateDentalInsuranceIndicator?: boolean;
-            InsurancePlan?: ReadonlyArray<
-              Readonly<{
-                InsurancePlanIdentification?: ReadonlyArray<
-                  Readonly<{
-                    IdentificationID?: string;
-                  }>
-                >;
-              }>
-            >;
-          }>;
-        }>
-      >;
+          };
+          AddressCityName: string;
+          AddressCountry: {
+            CountryCode: {
+              ReferenceDataID: string;
+            };
+          };
+          AddressPostalCode: string;
+          AddressProvince: {
+            ProvinceCode: {
+              ReferenceDataID: string;
+            };
+          };
+          AddressSecondaryUnitText: string;
+          AddressStreet: {
+            StreetName: string;
+          };
+        }[];
+        EmailAddress: {
+          EmailAddressID: string;
+        }[];
+        TelephoneNumber: {
+          TelephoneNumberCategoryCode: {
+            ReferenceDataID: string;
+            ReferenceDataName: string;
+          };
+        }[];
+      }[];
+      PersonLanguage: {
+        CommunicationCategoryCode: {
+          ReferenceDataID: string;
+        };
+        PreferredIndicator: boolean;
+      }[];
+      PersonMaritalStatus: {
+        StatusCode: {
+          ReferenceDataID: string;
+        };
+      };
+      PersonName: {
+        PersonGivenName: string[];
+        PersonSurName: string;
+      }[];
+      PersonSINIdentification: {
+        IdentificationID: string;
+      };
+      RelatedPerson: {
+        ApplicantDetail: {
+          PrivateDentalInsuranceIndicator?: boolean;
+          InsurancePlan?: {
+            InsurancePlanIdentification?: {
+              IdentificationID?: string;
+            }[];
+          }[];
+          ConsentToSharePersonalInformationIndicator?: boolean;
+          AttestParentOrGuardianIndicator?: boolean;
+        };
+        PersonBirthDate: {
+          date: string;
+        };
+        PersonName: {
+          PersonGivenName: string[];
+          PersonSurName: string;
+        }[];
+        PersonRelationshipCode: {
+          ReferenceDataName: string;
+        };
+        PersonSINIdentification: {
+          IdentificationID: string;
+        };
+      }[];
       MailingSameAsHomeIndicator: boolean;
-      PreferredMethodCommunicationCode?: Readonly<{
-        ReferenceDataID?: string;
-      }>;
-    }>;
-    BenefitRenewalCategoryCode: Readonly<{
+      PreferredMethodCommunicationCode: {
+        ReferenceDataID: string;
+      };
+    };
+    BenefitApplicationCategoryCode: {
       ReferenceDataID: string;
-    }>;
-    BenefitRenewalChannelCode: Readonly<{
+    };
+    BenefitApplicationChannelCode: {
       ReferenceDataID: string;
-    }>;
-  }>;
+    };
+  };
 }>;
 
-export type BenefitRenewalResponseEntity = Readonly<{
-  BenefitApplication: Readonly<{
-    BenefitRenewalIdentification: ReadonlyArray<
-      Readonly<{
-        IdentificationID: string;
-        IdentificationCategoryText: string;
-      }>
-    >;
-  }>;
+export type BenefitRenewalResponseEntity = ReadonlyDeep<{
+  BenefitApplication: {
+    BenefitApplicationIdentification: {
+      IdentificationID: string;
+      IdentificationCategoryText: string;
+    }[];
+  };
 }>;

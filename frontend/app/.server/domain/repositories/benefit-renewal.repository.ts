@@ -74,7 +74,7 @@ export class MockBenefitRenewalRepository implements BenefitRenewalRepository {
 
     const benefitRenewalResponseEntity: BenefitRenewalResponseEntity = {
       BenefitApplication: {
-        BenefitRenewalIdentification: [
+        BenefitApplicationIdentification: [
           {
             IdentificationID: '2476124092174',
             IdentificationCategoryText: 'Confirmation Number',
