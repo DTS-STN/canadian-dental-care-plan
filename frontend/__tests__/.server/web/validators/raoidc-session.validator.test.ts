@@ -1,88 +1,118 @@
 import type { Session } from '@remix-run/node';
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
 
-import type { ServerConfig } from '~/.server/configs';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { validateSession } from '~/.server/utils/raoidc.utils';
-import { DefaultRaoidcSessionValidator } from '~/.server/web/validators/raoidc-session.validator';
+import { DefaultRaoidcSessionValidator } from '~/.server/web/validators';
+import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
+import { validateSession } from '~/utils/raoidc-utils.server';
+
+vi.mock('~/utils/raoidc-utils.server');
+vi.mock('~/utils/fetch-utils.server');
 
 describe('DefaultRaoidcSessionValidator', () => {
-  let mockServerConfig: MockProxy<ServerConfig>;
   let mockLogFactory: MockProxy<LogFactory>;
   let mockLogger: MockProxy<Logger>;
   let mockSession: MockProxy<Session>;
+  let mockServerConfig;
+  let validator: DefaultRaoidcSessionValidator;
 
   beforeEach(() => {
-    mockServerConfig = mock<ServerConfig>();
     mockLogFactory = mock<LogFactory>();
     mockLogger = mock<Logger>();
-    mockSession = mock<Session>({ id: 'test-session-id' });
     mockLogFactory.createLogger.mockReturnValue(mockLogger);
-    vi.mock('~/.server/utils/fetch.utils');
-    vi.mock('~/.server/utils/raoidc.utils');
+
+    mockServerConfig = {
+      AUTH_RAOIDC_BASE_URL: 'https://auth.example.com',
+      AUTH_RAOIDC_CLIENT_ID: 'client-id',
+      HTTP_PROXY_URL: 'https://proxy.example.com',
+    };
+
+    mockSession = mock<Session>({ id: 'test-session-id' });
+
+    validator = new DefaultRaoidcSessionValidator(mockLogFactory, mockServerConfig);
   });
 
-  afterEach(() => {
-    vi.resetAllMocks();
+  describe('validateRaoidcSession', () => {
+    it('should return isValid: false if idToken is not found in session', async () => {
+      mockSession.has.calledWith('idToken').mockReturnValueOnce(false);
+
+      const result = await validator.validateRaoidcSession({ session: mockSession });
+
+      expect(result).toEqual({ isValid: false, errorMessage: 'RAOIDC session validation failed; idToken not found in session [test-session-id]' });
+      expect(mockLogger.debug).toHaveBeenCalledWith('idToken not found in session [%s]', 'test-session-id');
+    });
+
+    it('should return isValid: false if userInfoToken is not found in session', async () => {
+      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
+      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'session-id' } satisfies Pick<IdToken, 'sid'>);
+      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
+
+      const result = await validator.validateRaoidcSession({ session: mockSession });
+
+      expect(result).toEqual({ isValid: false, errorMessage: 'RAOIDC session validation failed; userInfoToken not found in session [test-session-id]' });
+      expect(mockLogger.debug).toHaveBeenCalledWith('userInfoToken not found in session [%s]', 'test-session-id');
+    });
+
+    it('should return isValid: true if session is mocked', async () => {
+      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
+      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'session-id' } satisfies Pick<IdToken, 'sid'>);
+      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
+      mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: true } satisfies Pick<UserinfoToken, 'mocked'>);
+
+      const result = await validator.validateRaoidcSession({ session: mockSession });
+
+      expect(result).toEqual({ isValid: true });
+      expect(mockLogger.debug).toHaveBeenCalledWith('Mocked user; skipping RAOIDC session [%s] validation', 'test-session-id');
+    });
+
+    it('should return isValid: false if session is expired', async () => {
+      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
+      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'session-id' } satisfies Pick<IdToken, 'sid'>);
+      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
+      mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: false } satisfies Pick<UserinfoToken, 'mocked'>);
+      vi.mocked(validateSession).mockResolvedValueOnce(false);
+
+      const result = await validator.validateRaoidcSession({ session: mockSession });
+
+      expect(result).toEqual({ isValid: false, errorMessage: 'RAOIDC session validation failed; session [test-session-id] has expired' });
+      expect(mockLogger.debug).toHaveBeenCalledWith('RAOIDC session [%s] has expired', 'test-session-id');
+    });
+
+    it('should return isValid: true if session is valid', async () => {
+      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
+      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'session-id' } satisfies Pick<IdToken, 'sid'>);
+      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
+      mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: false } satisfies Pick<UserinfoToken, 'mocked'>);
+      vi.mocked(validateSession).mockResolvedValueOnce(true);
+
+      const result = await validator.validateRaoidcSession({ session: mockSession });
+
+      expect(result).toEqual({ isValid: true });
+      expect(mockLogger.debug).toHaveBeenCalledWith('Authentication check passed for RAOIDC session [%s]', 'test-session-id');
+    });
   });
 
-  it('should validate a valid RAOIDC session', async () => {
-    mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-    mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'mock_sid' });
-    mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
-    mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: false });
-    vi.mocked(validateSession).mockResolvedValue(true);
+  describe('extractValueFromSession', () => {
+    it('should return value from session when it exists', () => {
+      mockSession.has.mockReturnValueOnce(true);
+      mockSession.get.mockReturnValueOnce('mocked-value');
 
-    const validator = new DefaultRaoidcSessionValidator(mockLogFactory, mockServerConfig);
-    await validator.validateRaoidcSession(mockSession);
+      const value = validator['extractValueFromSession'](mockSession, 'idToken');
 
-    expect(mockLogger.debug).toHaveBeenCalledWith('Performing RAOIDC session [%s] validation', 'test-session-id');
-    expect(mockLogger.debug).toHaveBeenCalledWith('Authentication check passed for RAOIDC session [%s]', 'test-session-id');
-  });
+      expect(value).toBe('mocked-value');
+      expect(mockLogger.trace).toHaveBeenCalledWith('Extracted value for name [%s] from session [%s]', 'idToken', 'test-session-id');
+    });
 
-  it('should throw error when session is invalid', async () => {
-    mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-    mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'mock_sid' });
-    mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
-    mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: false });
-    vi.mocked(validateSession).mockResolvedValue(false);
+    it('should return null when value does not exist in session', () => {
+      mockSession.has.mockReturnValueOnce(false);
 
-    const validator = new DefaultRaoidcSessionValidator(mockLogFactory, mockServerConfig);
-    await expect(validator.validateRaoidcSession(mockSession)).rejects.toThrowError('RAOIDC session validation failed');
-    expect(mockLogger.debug).toHaveBeenCalledWith('RAOIDC session [%s] has expired', 'test-session-id');
-  });
+      const value = validator['extractValueFromSession'](mockSession, 'idToken');
 
-  it('should throw error when idToken is missing', async () => {
-    mockSession.has.calledWith('idToken').mockReturnValueOnce(false);
-
-    const validator = new DefaultRaoidcSessionValidator(mockLogFactory, mockServerConfig);
-    await expect(validator.validateRaoidcSession(mockSession)).rejects.toThrowError('RAOIDC session validation failed');
-    expect(mockLogger.debug).toHaveBeenCalledWith('Performing RAOIDC session [%s] validation', 'test-session-id');
-  });
-
-  it('should throw error when userInfoToken is missing', async () => {
-    mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-    mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'mock_sid' });
-    mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(false);
-
-    const validator = new DefaultRaoidcSessionValidator(mockLogFactory, mockServerConfig);
-    await expect(validator.validateRaoidcSession(mockSession)).rejects.toThrowError('RAOIDC session validation failed');
-    expect(mockLogger.debug).toHaveBeenCalledWith('userInfoToken not found in session [%s]', 'test-session-id');
-  });
-
-  it('should skip validation for mocked user', async () => {
-    mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-    mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'mock_sid' });
-    mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
-    mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: true });
-
-    const validator = new DefaultRaoidcSessionValidator(mockLogFactory, mockServerConfig);
-    await validator.validateRaoidcSession(mockSession);
-
-    expect(validateSession).not.toHaveBeenCalled();
-    expect(mockLogger.debug).toHaveBeenCalledWith('Mocked user; skipping RAOIDC session [%s] validation', 'test-session-id');
+      expect(value).toBeNull();
+      expect(mockLogger.debug).toHaveBeenCalledWith('Value not found for name [%s] in session [%s]', 'idToken', 'test-session-id');
+    });
   });
 });

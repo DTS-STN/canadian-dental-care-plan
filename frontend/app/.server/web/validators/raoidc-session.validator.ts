@@ -5,25 +5,35 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { FetchFn, getFetchFn } from '~/.server/utils/fetch.utils';
-import { IdToken, UserinfoToken, validateSession } from '~/.server/utils/raoidc.utils';
-import { RaoidcSessionInvalidException } from '~/.server/web/exceptions';
+import { FetchFn, getFetchFn } from '~/utils/fetch-utils.server';
+import { IdToken, UserinfoToken, validateSession } from '~/utils/raoidc-utils.server';
+
+/**
+ * Parameters for RAOIDC session validation.
+ */
+export interface ValidateRaoidcSessionParams {
+  /**
+   * The session object to validate, containing RAOIDC tokens.
+   */
+  session: Session;
+}
+
+/**
+ * Result of RAOIDC session validation.
+ */
+export type ValidateRaoidcSessionResult = { isValid: true } | { isValid: false; errorMessage: string };
 
 /**
  * Provides functionality to validate RAOIDC sessions.
- *
- * RAOIDC sessions are validated using the `idToken` and `userInfoToken` stored in the session,
- * ensuring the session is active and not expired.
  */
 export interface RaoidcSessionValidator {
   /**
    * Validates the RAOIDC session by checking the presence and validity of session tokens.
    *
-   * @param session - The session object to validate, containing RAOIDC tokens.
-   * @throws {RaoidcSessionInvalidException} If the `idToken` or `userInfoToken` is missing, or if the RAOIDC session is expired.
-   * @returns {Promise<void>} A promise that resolves if the session is valid, or rejects with an exception otherwise.
+   * @param params - The session object to validate.
+   * @returns The result of the session validation.
    */
-  validateRaoidcSession(session: Session): Promise<void>;
+  validateRaoidcSession(params: ValidateRaoidcSessionParams): Promise<ValidateRaoidcSessionResult>;
 }
 
 @injectable()
@@ -39,25 +49,25 @@ export class DefaultRaoidcSessionValidator implements RaoidcSessionValidator {
     this.fetchFn = getFetchFn(serverConfig.HTTP_PROXY_URL);
   }
 
-  async validateRaoidcSession(session: Session): Promise<void> {
+  async validateRaoidcSession({ session }: ValidateRaoidcSessionParams): Promise<ValidateRaoidcSessionResult> {
     this.log.debug('Performing RAOIDC session [%s] validation', session.id);
     const { AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID } = this.serverConfig;
 
-    const idToken = this.getValueFromSession<IdToken>(session, 'idToken');
+    const idToken = this.extractValueFromSession<IdToken>(session, 'idToken');
     if (!idToken) {
       this.log.debug('idToken not found in session [%s]', session.id);
-      throw new RaoidcSessionInvalidException(`RAOIDC session validation failed; idToken not found in session [${session.id}]`);
+      return { isValid: false, errorMessage: `RAOIDC session validation failed; idToken not found in session [${session.id}]` };
     }
 
-    const userInfoToken = this.getValueFromSession<UserinfoToken>(session, 'userInfoToken');
+    const userInfoToken = this.extractValueFromSession<UserinfoToken>(session, 'userInfoToken');
     if (!userInfoToken) {
       this.log.debug('userInfoToken not found in session [%s]', session.id);
-      throw new RaoidcSessionInvalidException(`RAOIDC session validation failed; userInfoToken not found in session [${session.id}]`);
+      return { isValid: false, errorMessage: `RAOIDC session validation failed; userInfoToken not found in session [${session.id}]` };
     }
 
     if (userInfoToken.mocked) {
       this.log.debug('Mocked user; skipping RAOIDC session [%s] validation', session.id);
-      return;
+      return { isValid: true };
     }
 
     // idToken.sid is the RAOIDC session id
@@ -65,18 +75,30 @@ export class DefaultRaoidcSessionValidator implements RaoidcSessionValidator {
 
     if (!sessionValid) {
       this.log.debug('RAOIDC session [%s] has expired', session.id);
-      throw new RaoidcSessionInvalidException(`RAOIDC session validation failed; session [${session.id}] has expired`);
+      return { isValid: false, errorMessage: `RAOIDC session validation failed; session [${session.id}] has expired` };
     }
 
     this.log.debug('Authentication check passed for RAOIDC session [%s]', session.id);
+    return { isValid: true };
   }
 
-  protected getValueFromSession<T>(session: Session, name: string): T | null {
-    this.log.trace('Getting value from session [%s]; name: %s', session.id, name);
+  /**
+   * Extracts a value from the session.
+   *
+   * @param session - The session object to extract the value from.
+   * @param name - The name of the value to extract.
+   * @returns The extracted value or null if not found.
+   */
+  protected extractValueFromSession<T>(session: Session, name: string): T | null {
+    this.log.trace('Attempting to extract value from session [%s]; name: %s', session.id, name);
 
     if (!session.has(name)) {
+      this.log.debug('Value not found for name [%s] in session [%s]', name, session.id);
       return null;
     }
-    return session.get(name);
+
+    const value = session.get(name);
+    this.log.trace('Extracted value for name [%s] from session [%s]', name, session.id);
+    return value;
   }
 }
