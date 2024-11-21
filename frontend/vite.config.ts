@@ -9,10 +9,7 @@ import { coverageConfigDefaults } from 'vitest/config';
 
 export default defineConfig({
   build: {
-    //
-    // build target `esnext` is required for top-level awaits to work
-    //
-    target: 'esnext',
+    target: 'es2022',
   },
   css: {
     postcss: {
@@ -24,6 +21,9 @@ export default defineConfig({
     host: true,
   },
   optimizeDeps: {
+    esbuildOptions: {
+      target: 'es2022',
+    },
     // exclude the otlp-exporter-base package because it causes
     // issues with vite's dependency optimization
     // see: https://github.com/open-telemetry/opentelemetry-js/issues/4794
