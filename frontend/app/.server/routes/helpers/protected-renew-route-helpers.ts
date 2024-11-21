@@ -305,6 +305,10 @@ interface ValidateProtectedRenewStateForReviewArgs {
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
   const { hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, addressInformation, dentalInsurance, demographicSurvey } = state;
 
+  if (maritalStatus === undefined) {
+    throw redirect(getPathById('protected/renew/$id/marital-status', params));
+  }
+
   if (hasAddressChanged === undefined) {
     throw redirect(getPathById('protected/renew/$id/confirm-address', params));
   }
@@ -328,6 +332,8 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
   if (demographicSurvey === undefined) {
     throw redirect(getPathById('protected/renew/$id/demographic-survey', params));
   }
+
+  // TODO: complete state validations when all screens are created
 
   const children = getChildrenState(state).length > 0 ? validateProtectedChildrenStateForReview({ childrenState: state.children, params }) : [];
 
@@ -367,6 +373,8 @@ function validateProtectedChildrenStateForReview({ childrenState, params }: Vali
     if (demographicSurvey === undefined) {
       throw redirect(getPathById('protected/renew/$id/$childId/demographic-survey', { ...params, childId }));
     }
+
+    // TODO: complete state validations when all screens are created
 
     return {
       id,
