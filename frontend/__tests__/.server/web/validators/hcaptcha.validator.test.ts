@@ -4,7 +4,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { HCaptchaInvalidException } from '~/.server/web/exceptions';
+import { HCaptchaInvalidException, HCaptchaResponseNotFoundException } from '~/.server/web/exceptions';
 import type { HCaptchaService } from '~/.server/web/services';
 import { DefaultHCaptchaValidator } from '~/.server/web/validators';
 import { getClientIpAddress } from '~/utils/ip-address-utils.server';
@@ -59,14 +59,14 @@ describe('DefaultHCaptchaValidator', () => {
     });
   });
 
-  it('should throw HCaptchaInvalidException if hCaptcha response is not found in the request', async () => {
+  it('should throw HCaptchaResponseNotFoundException if hCaptcha response is not found in the request', async () => {
     // Mock request with no hCaptcha response
     mockRequest = new Request('https://example.com', {
       method: 'POST',
       body: JSON.stringify({}),
     });
 
-    await expect(validator.validateHCaptchaResponse(mockRequest, userId)).rejects.toThrow(new HCaptchaInvalidException('hCaptcha response validation failed; hCaptcha response not found.'));
+    await expect(validator.validateHCaptchaResponse(mockRequest, userId)).rejects.toThrow(new HCaptchaResponseNotFoundException('hCaptcha response not found in request.'));
   });
 
   it('should throw HCaptchaInvalidException if hCaptcha score exceeds the threshold', async () => {
