@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { LogFactoryImpl } from '~/.server/factories';
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 
-vi.mock('~/utils/logging.server', () => ({
+vi.mock('~/.server/utils/logging.utils', () => ({
   getLogger: vi.fn(),
 }));
 

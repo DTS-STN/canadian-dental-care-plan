@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
+import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/.server/utils/postal-zip-code.utils';
 
-vi.mock('~/utils/env-utils.server', () => ({
+vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn().mockReturnValue({
     CANADA_COUNTRY_ID: 'CA',
     USA_COUNTRY_ID: 'US',
@@ -22,7 +22,7 @@ vi.mock('~/utils/env-utils.server', () => ({
   }),
 }));
 
-describe('~/utils/postal-zip-code-utils.server.ts', () => {
+describe('~/.server/utils/postal-zip-code.utils.ts', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });

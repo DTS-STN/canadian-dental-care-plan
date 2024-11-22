@@ -3,8 +3,8 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { instrumentedFetch } from '~/.server/utils/fetch.utils';
 import type { HCaptchaVerifyRequestEntity, HCaptchaVerifyResponseEntity } from '~/.server/web/entities';
-import { instrumentedFetch } from '~/utils/fetch-utils.server';
 
 export interface HCaptchaRepository {
   /**

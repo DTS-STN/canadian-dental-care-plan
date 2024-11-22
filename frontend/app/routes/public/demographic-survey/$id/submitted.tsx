@@ -5,11 +5,11 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import { clearDemographicSurveyState } from '~/.server/routes/helpers/demographic-survey-route-helpers';
+import { getFixedT } from '~/.server/utils/locale.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';

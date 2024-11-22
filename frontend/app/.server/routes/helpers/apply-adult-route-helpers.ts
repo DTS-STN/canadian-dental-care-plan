@@ -5,7 +5,7 @@ import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/r
 
 import type { ApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadApplyAdultStateArgs {

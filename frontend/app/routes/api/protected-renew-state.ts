@@ -6,7 +6,7 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 import { z } from 'zod';
 
 import { saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 const API_PROTECTED_RENEW_STATE_ACTIONS = ['extend'] as const;
 export type ApiProtectedRenewStateAction = (typeof API_PROTECTED_RENEW_STATE_ACTIONS)[number];

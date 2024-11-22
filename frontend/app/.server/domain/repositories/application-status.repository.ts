@@ -5,7 +5,7 @@ import { TYPES } from '~/.server/constants';
 import type { ApplicationStatusBasicInfoRequestEntity, ApplicationStatusEntity, ApplicationStatusSinRequestEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import clientFriendlyStatusDataSource from '~/.server/resources/power-platform/client-friendly-status.json';
-import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
+import { getFetchFn, instrumentedFetch } from '~/.server/utils/fetch.utils';
 
 /**
  * A repository that provides access to application status data.

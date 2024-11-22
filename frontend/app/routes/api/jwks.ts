@@ -4,8 +4,8 @@ import { subtle } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
-import { getLogger } from '~/utils/logging.server';
+import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 /**
  * JsonWebKey with an additional `kid` (key id) property.

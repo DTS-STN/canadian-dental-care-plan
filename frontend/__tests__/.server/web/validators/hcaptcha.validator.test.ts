@@ -4,12 +4,12 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import { HCaptchaInvalidException, HCaptchaResponseNotFoundException } from '~/.server/web/exceptions';
 import type { HCaptchaService } from '~/.server/web/services';
 import { DefaultHCaptchaValidator } from '~/.server/web/validators';
-import { getClientIpAddress } from '~/utils/ip-address-utils.server';
 
-vi.mock('~/utils/ip-address-utils.server');
+vi.mock('~/.server/utils/ip-address.utils');
 
 describe('DefaultHCaptchaValidator', () => {
   let validator: DefaultHCaptchaValidator;

@@ -20,7 +20,7 @@ vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
   }),
 }));
 
-vi.mock('~/utils/locale-utils.server', () => ({
+vi.mock('~/.server/utils/locale.utils', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
   getLocale: vi.fn().mockReturnValue('en'),
 }));

@@ -1,7 +1,7 @@
+import { getEnv } from '~/.server/utils/env.utils';
+import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 import type { HCaptchaService } from '~/.server/web/services';
-import { getEnv } from '~/utils/env-utils.server';
-import { getClientIpAddress } from '~/utils/ip-address-utils.server';
-import { getLogger } from '~/utils/logging.server';
 
 interface VerifyHCaptchaResponseArgs {
   hCaptchaService: HCaptchaService;

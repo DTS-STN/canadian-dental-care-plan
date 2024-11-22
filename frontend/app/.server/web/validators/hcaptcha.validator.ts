@@ -4,9 +4,9 @@ import { HCaptchaVerifyRequestDto } from '../dtos';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import { HCaptchaInvalidException, HCaptchaResponseNotFoundException } from '~/.server/web/exceptions';
 import type { HCaptchaService } from '~/.server/web/services';
-import { getClientIpAddress } from '~/utils/ip-address-utils.server';
 
 /**
  * Interface for validating hCaptcha responses.

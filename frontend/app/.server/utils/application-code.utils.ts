@@ -1,4 +1,4 @@
-import { getEnv } from '~/utils/env-utils.server';
+import { getEnv } from '~/.server/utils/env.utils';
 
 export type ContextualAlertType = 'info' | 'success' | 'danger' | 'warning';
 

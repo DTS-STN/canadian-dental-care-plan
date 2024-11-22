@@ -1,11 +1,11 @@
 import { ProxyAgent } from 'undici';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { getEnv } from '~/.server/utils/env.utils';
+import { getFetchFn, instrumentedFetch } from '~/.server/utils/fetch.utils';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getEnv } from '~/utils/env-utils.server';
-import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 
-describe('fetch-utils.server', () => {
+describe('fetch.utils', () => {
   vi.stubGlobal('fetch', vi.fn());
 
   beforeEach(() => {
@@ -14,11 +14,11 @@ describe('fetch-utils.server', () => {
   });
 
   describe('getFetchFn', () => {
-    vi.mock('~/utils/env-utils.server', () => ({
+    vi.mock('~/.server/utils/env.utils', () => ({
       getEnv: vi.fn(),
     }));
 
-    vi.mock('~/utils/logging.server', () => ({
+    vi.mock('~/.server/utils/logging.utils', () => ({
       getLogger: () => ({
         debug: vi.fn(),
       }),

@@ -1,3 +1,3 @@
-import type { ServerEnv } from '~/utils/env-utils.server';
+import type { ServerEnv } from '~/.server/utils/env.utils';
 
 export type ServerConfig = ServerEnv;

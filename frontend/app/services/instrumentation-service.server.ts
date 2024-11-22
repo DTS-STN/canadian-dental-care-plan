@@ -36,9 +36,9 @@ import { SEMRESATTRS_DEPLOYMENT_ENVIRONMENT, SEMRESATTRS_SERVICE_NAME, SEMRESATT
 import moize from 'moize';
 import invariant from 'tiny-invariant';
 
+import { getEnv } from '~/.server/utils/env.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 import { getBuildInfoService } from '~/services/build-info-service.server';
-import { getEnv } from '~/utils/env-utils.server';
-import { getLogger } from '~/utils/logging.server';
 
 /**
  * Return a singleton instance (by means of memomization) of the instrumentation service.

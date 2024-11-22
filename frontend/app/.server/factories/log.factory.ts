@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 export type Logger = ReturnType<typeof getLogger>;
 

@@ -4,13 +4,13 @@ import { redirect } from '@remix-run/node';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
+import { mockEnabled } from '~/.server/utils/env.utils';
+import { getLocale } from '~/.server/utils/locale.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
+import { generateCallbackUri, generateRandomString } from '~/.server/utils/raoidc.utils';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { mockEnabled } from '~/utils/env-utils.server';
-import { getLocale } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
-import type { IdToken } from '~/utils/raoidc-utils.server';
-import { generateCallbackUri, generateRandomString } from '~/utils/raoidc-utils.server';
 
 const defaultProviderId = 'raoidc';
 

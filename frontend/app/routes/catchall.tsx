@@ -2,10 +2,10 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { useParams } from '@remix-run/react';
 
 import { TYPES } from '~/.server/constants';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import { BilingualNotFoundError, NotFoundError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import { pageIds } from '~/page-ids';
 import { isAppLocale } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';

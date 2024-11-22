@@ -1,7 +1,7 @@
 import { UTCDate } from '@date-fns/utc';
 import moize from 'moize';
 
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 export interface AuditDetails extends Record<string, unknown> {
   userId?: string;

@@ -5,10 +5,10 @@ import type { Params } from '@remix-run/react';
 import { z } from 'zod';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
-import { getEnv } from '~/utils/env-utils.server';
-import { getLocaleFromParams } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
-import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
+import { getEnv } from '~/.server/utils/env.utils';
+import { getLocaleFromParams } from '~/.server/utils/locale.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
+import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 
 export interface RenewState {
   readonly id: string;

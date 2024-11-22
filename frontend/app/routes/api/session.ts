@@ -7,9 +7,9 @@ import { redirectDocument } from '@remix-run/node';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { getApiSessionRedirectToUrl } from '~/utils/api-session-utils.server';
+import { getApiSessionRedirectToUrl } from '~/.server/utils/api-session.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 import { APP_LOCALES } from '~/utils/locale-utils';
-import { getLogger } from '~/utils/logging.server';
 
 const API_SESSION_ACTIONS = ['end', 'extend'] as const;
 export type ApiSessionAction = (typeof API_SESSION_ACTIONS)[number];

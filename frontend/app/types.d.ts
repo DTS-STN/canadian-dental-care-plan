@@ -19,7 +19,7 @@ import type stubLogin from '../public/locales/en/stub-login.json';
 import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
 import type { SecurityHandler } from './.server/routes/security';
 import type { AppContainerProvider } from '~/.server/app-container.provider';
-import type { ClientEnv } from '~/utils/env-utils.server';
+import type { ClientEnv } from '~/.server/utils/env.utils';
 import type { APP_LOCALES } from '~/utils/locale-utils';
 
 /**

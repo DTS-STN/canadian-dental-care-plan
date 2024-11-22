@@ -6,8 +6,8 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { validateSession } from '~/.server/utils/raoidc.utils';
 import { DefaultRaoidcSessionValidator } from '~/.server/web/validators/raoidc-session.validator';
-import { validateSession } from '~/utils/raoidc-utils.server';
 
 describe('DefaultRaoidcSessionValidator', () => {
   let mockServerConfig: MockProxy<ServerConfig>;
@@ -21,8 +21,8 @@ describe('DefaultRaoidcSessionValidator', () => {
     mockLogger = mock<Logger>();
     mockSession = mock<Session>({ id: 'test-session-id' });
     mockLogFactory.createLogger.mockReturnValue(mockLogger);
-    vi.mock('~/utils/fetch-utils.server');
-    vi.mock('~/utils/raoidc-utils.server');
+    vi.mock('~/.server/utils/fetch.utils');
+    vi.mock('~/.server/utils/raoidc.utils');
   });
 
   afterEach(() => {

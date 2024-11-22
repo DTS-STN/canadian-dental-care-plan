@@ -1,6 +1,6 @@
+import { getLogger } from '~/.server/utils/logging.utils';
+import { getCdcpWebsiteApplyUrl, getCdcpWebsiteStatusUrl, getCdcpWebsiteUrl } from '~/.server/utils/url.utils';
 import type { ApiSessionRedirectTo } from '~/routes/api/session';
-import { getLogger } from '~/utils/logging.server';
-import { getCdcpWebsiteApplyUrl, getCdcpWebsiteStatusUrl, getCdcpWebsiteUrl } from '~/utils/url-utils.server';
 
 /**
  * Returns the appropriate URL based on the `redirectTo` parameter and the locale.

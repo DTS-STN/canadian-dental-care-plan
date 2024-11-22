@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { getHCaptchaRouteHelpers } from '~/.server/routes/helpers/hcaptcha-route-helpers';
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 
-vi.mock('~/utils/env-utils.server', () => ({
+vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn().mockReturnValue({
     HCAPTCHA_MAX_SCORE: 0.5,
   }),
 }));
 
-vi.mock('~/utils/ip-address-utils.server', () => ({
+vi.mock('~/.server/utils/ip-address.utils', () => ({
   getClientIpAddress: vi.fn(),
 }));
 
-vi.mock('~/utils/logging.server', () => ({
+vi.mock('~/.server/utils/logging.utils', () => ({
   getLogger: vi.fn().mockReturnValue({
     info: vi.fn(),
     warn: vi.fn(),

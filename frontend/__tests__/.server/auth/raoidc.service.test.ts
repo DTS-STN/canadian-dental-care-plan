@@ -7,9 +7,9 @@ import { mock } from 'vitest-mock-extended';
 import { DefaultRaoidcService } from '~/.server/auth/raoidc.service';
 import type { ServerConfig } from '~/.server/configs';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
-import type { IdToken, JWKSet, ServerMetadata, UserinfoToken } from '~/utils/raoidc-utils.server';
-import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/utils/raoidc-utils.server';
+import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
+import type { IdToken, JWKSet, ServerMetadata, UserinfoToken } from '~/.server/utils/raoidc.utils';
+import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/.server/utils/raoidc.utils';
 import { expandTemplate } from '~/utils/string-utils';
 
 vi.mock('node:crypto', () => ({
@@ -24,9 +24,9 @@ vi.mock('@remix-run/node', () => ({
 }));
 
 vi.mock('moize');
-vi.mock('~/utils/crypto-utils.server');
-vi.mock('~/utils/fetch-utils.server');
-vi.mock('~/utils/raoidc-utils.server');
+vi.mock('~/.server/utils/crypto.utils');
+vi.mock('~/.server/utils/fetch.utils');
+vi.mock('~/.server/utils/raoidc.utils');
 vi.mock('~/utils/string-utils');
 
 describe('DefaultRaoidcService', () => {

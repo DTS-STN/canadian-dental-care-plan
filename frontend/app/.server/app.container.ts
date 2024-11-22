@@ -6,7 +6,7 @@ import type { AppContainerProvider } from '~/.server/app-container.provider';
 import { AppContainerProviderImpl } from '~/.server/app-container.provider';
 import { TYPES } from '~/.server/constants';
 import { authContainerModule, configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, routesContainerModule, servicesContainerModule, webContainerModule } from '~/.server/container-modules';
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 /**
  * This module bootstraps the application by creating an Inversion of Control (IoC) container.

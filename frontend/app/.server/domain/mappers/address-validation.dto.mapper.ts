@@ -4,7 +4,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { AddressCorrectionRequestDto, AddressCorrectionResultDto, AddressCorrectionStatus } from '~/.server/domain/dtos';
 import type { AddressCorrectionResultEntity } from '~/.server/domain/entities';
-import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
+import { formatPostalCode, isValidPostalCode } from '~/.server/utils/postal-zip-code.utils';
 
 export interface AddressValidationDtoMapper {
   mapAddressCorrectionResultEntityToAddressCorrectionResultDto(addressCorrectionResultEntity: AddressCorrectionResultEntity): AddressCorrectionResultDto;

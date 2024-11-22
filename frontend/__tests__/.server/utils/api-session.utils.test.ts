@@ -1,16 +1,16 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { getApiSessionRedirectToUrl } from '~/.server/utils/api-session.utils';
+import { getCdcpWebsiteApplyUrl, getCdcpWebsiteStatusUrl, getCdcpWebsiteUrl } from '~/.server/utils/url.utils';
 import type { ApiSessionRedirectTo } from '~/routes/api/session';
-import { getApiSessionRedirectToUrl } from '~/utils/api-session-utils.server';
-import { getCdcpWebsiteApplyUrl, getCdcpWebsiteStatusUrl, getCdcpWebsiteUrl } from '~/utils/url-utils.server';
 
-vi.mock('~/utils/url-utils.server', () => ({
+vi.mock('~/.server/utils/url.utils', () => ({
   getCdcpWebsiteApplyUrl: vi.fn(),
   getCdcpWebsiteStatusUrl: vi.fn(),
   getCdcpWebsiteUrl: vi.fn(),
 }));
 
-vi.mock('~/utils/logging.server', () => ({
+vi.mock('~/.server/utils/logging.utils', () => ({
   getLogger: vi.fn().mockReturnValue({
     debug: vi.fn(),
     info: vi.fn(),

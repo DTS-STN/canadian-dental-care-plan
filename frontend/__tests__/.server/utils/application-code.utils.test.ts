@@ -1,15 +1,15 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { getContextualAlertType } from '~/utils/application-code-utils.server';
+import { getContextualAlertType } from '~/.server/utils/application-code.utils';
 
-vi.mock('~/utils/env-utils.server', () => ({
+vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn().mockReturnValue({
     CLIENT_STATUS_SUCCESS_ID: '000',
     INVALID_CLIENT_FRIENDLY_STATUS: '111',
   }),
 }));
 
-describe('~/utils/application-code-utils.server.ts', () => {
+describe('~/.server/utils/application-code.utils', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();

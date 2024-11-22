@@ -28,8 +28,8 @@ import {
   ProvinceTerritoryStateRepositoryImpl,
   ProvincialGovernmentInsurancePlanRepositoryImpl,
 } from '~/.server/domain/repositories';
+import type { MockName } from '~/.server/utils/env.utils';
 import { HCaptchaRepositoryImpl } from '~/.server/web/repositories';
-import type { MockName } from '~/utils/env-utils.server';
 
 /**
  * Determines if a service implementation should be injected based on server configuration.

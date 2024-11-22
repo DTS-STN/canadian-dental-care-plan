@@ -2,7 +2,7 @@ import { HttpResponse, http } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { fetchServerMetadata, generateAuthorizationRequest, generateCallbackUri, generateCodeChallenge, generateRandomNonce, generateRandomState, generateRandomString, validateSession } from '~/utils/raoidc-utils.server';
+import { fetchServerMetadata, generateAuthorizationRequest, generateCallbackUri, generateCodeChallenge, generateRandomNonce, generateRandomState, generateRandomString, validateSession } from '~/.server/utils/raoidc.utils';
 
 const server = setupServer();
 
@@ -14,7 +14,7 @@ vi.mock('~/utils/logging.server', () => ({
   }),
 }));
 
-describe('raoidc-utils.server', () => {
+describe('raoidc.utils', () => {
   beforeAll(() => {
     server.listen({ onUnhandledRequest: 'bypass' });
   });
