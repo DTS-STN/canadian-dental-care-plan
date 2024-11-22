@@ -40,15 +40,15 @@ describe('DefaultHCaptchaValidator', () => {
     expect(mockLogger.debug).toHaveBeenCalledWith('Starting hCaptcha response validation for user: %s, IP: %s', 'test-user', '127.0.0.1');
   });
 
-  it('should return isValid: false when the hCaptcha response is missing', async () => {
+  it('should return isValid: true when the hCaptcha response is missing', async () => {
     const result = await validator.validateHCaptchaResponse({
       hCaptchaResponse: '',
       userId: 'test-user',
       ipAddress: '127.0.0.1',
     });
 
-    expect(result).toEqual({ isValid: false, errorMessage: 'hCaptcha response not found.' });
-    expect(mockLogger.warn).toHaveBeenCalledWith('hCaptcha response not found for user: %s', 'test-user');
+    expect(result).toEqual({ isValid: true });
+    expect(mockLogger.warn).toHaveBeenCalledWith('hCaptcha response not found for user: %s; gracefully passing validation', 'test-user');
   });
 
   it('should return isValid: false when the hCaptcha score exceeds the threshold', async () => {
