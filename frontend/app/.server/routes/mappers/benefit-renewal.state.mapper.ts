@@ -190,11 +190,14 @@ export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper 
   private toChildren({ existingChildren, renewedChildren }: ToChildrenArgs) {
     return renewedChildren.map((renewedChild) => {
       const existingChild = existingChildren.find((existingChild) => existingChild.information.clientNumber === renewedChild.information?.clientNumber);
-      invariant(existingChild, 'Expected existingChild to exist');
+      invariant(existingChild, 'Expected existingChild to be defined');
 
-      invariant(renewedChild.confirmDentalBenefits, 'Expected renewedChild.confirmDentalBenefits to exist');
-      invariant(renewedChild.dentalInsurance, 'Expected renewedChild.dentalInsurance to exist');
-      invariant(renewedChild.information, 'Expected renewedChild.information to exist');
+      invariant(renewedChild.confirmDentalBenefits, 'Expected renewedChild.confirmDentalBenefits to be defined');
+      invariant(renewedChild.information, 'Expected renewedChild.information to be defined');
+
+      if (renewedChild.dentalInsurance === undefined) {
+        throw new Error('Expected renewedChild.dentalInsurance to be defined');
+      }
 
       return {
         ...renewedChild,
