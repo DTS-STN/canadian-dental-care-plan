@@ -25,11 +25,9 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 enum FormAction {
-  Add = 'add',
   Continue = 'continue',
   Cancel = 'cancel',
   Save = 'save',
-  Remove = 'remove',
   Back = 'back',
 }
 
@@ -108,17 +106,16 @@ export default function ProtectedRenewMemberSelection() {
                   {applicantName}
                 </li>
               )}
-              {children.map((child, index) => {
-                if (child.externallyReviewed) {
+              {children
+                .filter((child) => child.externallyReviewed === true)
+                .map((child) => {
                   const childName = `${child.firstName} ${child.lastName}`;
                   return (
                     <li key={childName} className="mb-4">
                       {childName}
                     </li>
                   );
-                }
-                return <></>;
-              })}
+                })}
             </ul>
           </>
         )}
@@ -127,7 +124,7 @@ export default function ProtectedRenewMemberSelection() {
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mt-6 space-y-8">
             <CardLink key={applicantName} title={applicantName} previouslyReviewed={applicant?.previouslyReviewed} routeId="protected/renew/$id/dental-insurance" params={params} />
-            {children.map((child, index) => {
+            {children.map((child) => {
               const childName = `${child.firstName} ${child.lastName}`;
               return <CardLink key={childName} title={childName} previouslyReviewed={child.previouslyReviewed} routeId="protected/renew/$id/$childId/parent-or-guardian" params={{ ...params, childId: child.id }} />;
             })}
