@@ -39,7 +39,7 @@ export class ApplicationYearServiceImpl implements ApplicationYearService {
   }
 
   /**
-   * Retrieves a list of all countries.
+   * Retrieves a list of all possible application year(s).
    *
    * @returns An array of Application Year(s) DTOs.
    */
