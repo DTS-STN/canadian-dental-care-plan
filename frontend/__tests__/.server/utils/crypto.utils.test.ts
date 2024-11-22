@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
+import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
 
-describe('crypto-utils.server', () => {
+describe('crypto.utils', () => {
   it('should return a JWK ID for an empty JWK', () => {
     expect(generateJwkId({})).toEqual('d41d8cd98f00b204e9800998ecf8427e');
   });

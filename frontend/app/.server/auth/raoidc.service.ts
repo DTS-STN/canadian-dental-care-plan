@@ -5,10 +5,10 @@ import { subtle } from 'node:crypto';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
-import { FetchFn, getFetchFn } from '~/utils/fetch-utils.server';
-import type { ClientMetadata, IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
-import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/utils/raoidc-utils.server';
+import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
+import { FetchFn, getFetchFn } from '~/.server/utils/fetch.utils';
+import type { ClientMetadata, IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
+import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/.server/utils/raoidc.utils';
 import { expandTemplate } from '~/utils/string-utils';
 
 export interface RaoidcService {

@@ -5,7 +5,7 @@ import { TYPES } from '~/.server/constants';
 import { LetterEntity, PdfEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import getPdfByLetterIdJson from '~/.server/resources/cct/get-pdf-by-letter-id.json';
-import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
+import { getFetchFn, instrumentedFetch } from '~/.server/utils/fetch.utils';
 
 /**
  * A repository that provides access to letters.

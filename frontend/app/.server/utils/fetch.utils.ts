@@ -1,7 +1,7 @@
 import { ProxyAgent } from 'undici';
 
-import { getEnv } from './env-utils.server';
-import { getLogger } from './logging.server';
+import { getEnv } from './env.utils';
+import { getLogger } from './logging.utils';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 
 /**

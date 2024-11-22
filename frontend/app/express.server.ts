@@ -14,10 +14,10 @@ import invariant from 'tiny-invariant';
 import type { SetOptional } from 'type-fest';
 
 import { TYPES } from './.server/constants';
-import { getEnv } from './utils/env-utils.server';
+import { getEnv } from './.server/utils/env.utils';
 import { randomString } from './utils/string-utils';
 import { getAppContainerProvider } from '~/.server/app.container';
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 const { NODE_ENV } = getEnv();
 

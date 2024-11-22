@@ -1,4 +1,4 @@
-import { getEnv } from './env-utils.server';
+import { getEnv } from './env.utils';
 
 /**
  * Returns the URL for applying to the Canadian Dental Care Plan (CDCP) website

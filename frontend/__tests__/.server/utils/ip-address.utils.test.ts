@@ -1,13 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { getEnv } from '~/utils/env-utils.server';
-import { getClientIpAddress } from '~/utils/ip-address-utils.server';
+import { getEnv } from '~/.server/utils/env.utils';
+import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 
-vi.mock('~/utils/env-utils.server', () => ({
+vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(),
 }));
 
-describe('ip-address.server', () => {
+describe('ip-address.utils', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });

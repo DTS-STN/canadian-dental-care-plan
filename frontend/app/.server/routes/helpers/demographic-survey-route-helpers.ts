@@ -7,10 +7,10 @@ import { z } from 'zod';
 
 import type { RenewState } from './renew-route-helpers';
 import { getChildrenState } from './renew-route-helpers';
-import { getLocaleFromParams } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
+import { getLocaleFromParams } from '~/.server/utils/locale.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
+import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import { getPathById } from '~/utils/route-utils';
-import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
 
 export interface DemographicSurveyState {
   readonly id: string;

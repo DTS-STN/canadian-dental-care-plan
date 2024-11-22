@@ -13,6 +13,9 @@ import { TYPES } from '~/.server/constants';
 import { loadApplyChildState } from '~/.server/routes/helpers/apply-child-route-helpers';
 import type { ApplicantInformationState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
+import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -27,15 +30,12 @@ import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
-import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum FormAction {
   Continue = 'continue',

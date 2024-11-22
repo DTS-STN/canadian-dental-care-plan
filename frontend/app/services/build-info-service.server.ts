@@ -1,8 +1,8 @@
 import moize from 'moize';
 
-import type { BuildInfo } from '~/utils/build-info.server';
-import { readBuildInfo } from '~/utils/build-info.server';
-import { getLogger } from '~/utils/logging.server';
+import type { BuildInfo } from '~/.server/utils/build-info.utils';
+import { readBuildInfo } from '~/.server/utils/build-info.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 export const getBuildInfoService = moize(createBuildInfoService, {
   onCacheAdd: () => {

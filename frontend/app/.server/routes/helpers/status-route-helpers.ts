@@ -4,7 +4,7 @@ import type { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 import { getPathById } from '~/utils/route-utils';
 
 export interface StatusState {

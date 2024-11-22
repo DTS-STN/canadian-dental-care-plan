@@ -2,10 +2,10 @@ import { DiagLogLevel } from '@opentelemetry/api';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
-import { generateCryptoKey } from '~/utils/crypto-utils.server';
+import { generateCryptoKey } from '~/.server/utils/crypto.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 import type { FeatureName } from '~/utils/env-utils';
 import { clientEnvSchema } from '~/utils/env-utils';
-import { getLogger } from '~/utils/logging.server';
 
 // none, error, warn, info, debug, verbose, all
 const otelLogLevels = Object.keys(DiagLogLevel).map((key) => key.toLowerCase());

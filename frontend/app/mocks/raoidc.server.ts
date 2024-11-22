@@ -2,10 +2,10 @@ import { subtle } from 'crypto';
 import { CompactEncrypt, SignJWT } from 'jose';
 import { HttpResponse, http } from 'msw';
 
-import { generateCryptoKey } from '~/utils/crypto-utils.server';
-import { getEnv } from '~/utils/env-utils.server';
-import { getLogger } from '~/utils/logging.server';
-import type { JWKSet, ServerMetadata, TokenEndpointResponse, UserinfoResponse } from '~/utils/raoidc-utils.server';
+import { generateCryptoKey } from '~/.server/utils/crypto.utils';
+import { getEnv } from '~/.server/utils/env.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
+import type { JWKSet, ServerMetadata, TokenEndpointResponse, UserinfoResponse } from '~/.server/utils/raoidc.utils';
 
 /**
  * Server-side MSW mocks for the RAOIDC authentication service.

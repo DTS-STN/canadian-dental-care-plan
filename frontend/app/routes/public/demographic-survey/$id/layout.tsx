@@ -2,11 +2,11 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 import { Outlet, useLoaderData } from '@remix-run/react';
 
 import { TYPES } from '~/.server/constants';
+import { getLocale } from '~/.server/utils/locale.utils';
 import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { useApiSession } from '~/utils/api-session-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getLocale } from '~/utils/locale-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {

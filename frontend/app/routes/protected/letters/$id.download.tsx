@@ -5,10 +5,10 @@ import { sanitize } from 'sanitize-filename-ts';
 
 import { TYPES } from '~/.server/constants';
 import type { LetterDto } from '~/.server/domain/dtos';
+import { featureEnabled } from '~/.server/utils/env.utils';
+import { getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { featureEnabled } from '~/utils/env-utils.server';
-import { getLocale } from '~/utils/locale-utils.server';
-import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');

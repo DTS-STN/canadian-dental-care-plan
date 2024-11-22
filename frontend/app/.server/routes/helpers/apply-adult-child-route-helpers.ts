@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 import type { ApplyState, ChildState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadApplyAdultChildStateArgs {

@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { readBuildInfo } from '~/utils/build-info.server';
+import { readBuildInfo } from '~/.server/utils/build-info.utils';
 
 vi.mock('node:fs', () => ({
   existsSync: vi.fn(),

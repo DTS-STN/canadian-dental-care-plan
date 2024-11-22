@@ -18,7 +18,7 @@ vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
   }),
 }));
 
-vi.mock('~/utils/locale-utils.server', () => {
+vi.mock('~/.server/utils/locale.utils', () => {
   const tMockFn = vi.fn((key) => key);
   return {
     getFixedT: vi.fn().mockResolvedValue(tMockFn),

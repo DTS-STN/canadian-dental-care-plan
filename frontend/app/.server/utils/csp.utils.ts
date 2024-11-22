@@ -1,5 +1,5 @@
-import { getEnv } from '~/utils/env-utils.server';
-import { getLogger } from '~/utils/logging.server';
+import { getEnv } from '~/.server/utils/env.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 export const adobeAnalyticsCSP = {
   connectSrc: 'https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://*.omtrdc.net',

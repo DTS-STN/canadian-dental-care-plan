@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
+import { getFetchFn, instrumentedFetch } from '~/.server/utils/fetch.utils';
 
 export interface AddressValidationRepository {
   /**

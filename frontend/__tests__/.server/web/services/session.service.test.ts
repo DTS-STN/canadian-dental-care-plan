@@ -14,7 +14,7 @@ describe('FileSessionService', () => {
     vi.clearAllMocks();
   });
 
-  vi.mock('~/utils/session-utils.server', () => ({
+  vi.mock('~/.server/utils/session.utils', () => ({
     createFileSessionStorage: vi.fn().mockReturnValue({
       commitSession: vi.fn(),
       destroySession: vi.fn(),

@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
-import { getClientEnv, getEnv } from '~/utils/env-utils.server';
+import { getClientEnv, getEnv } from '~/.server/utils/env.utils';
 
 export interface ConfigFactory {
   createClientConfig(): ClientConfig;

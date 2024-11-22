@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { transformFlattenedError } from '~/utils/zod-utils.server';
+import { transformFlattenedError } from '~/.server/utils/zod.utils';
 
 describe('transformFlattenedError', () => {
   it('should transform a flattened error object with multiple fields and multiple error messages', () => {

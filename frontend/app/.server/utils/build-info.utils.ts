@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 export interface BuildInfo {
   buildDate: string;

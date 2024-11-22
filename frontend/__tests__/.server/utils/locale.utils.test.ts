@@ -1,19 +1,19 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { getEnv } from '~/utils/env-utils.server';
-import { getFixedT, getLocale, getLocaleFromParams, initI18n } from '~/utils/locale-utils.server';
+import { getEnv } from '~/.server/utils/env.utils';
+import { getFixedT, getLocale, getLocaleFromParams, initI18n } from '~/.server/utils/locale.utils';
 
-vi.mock('~/utils/env-utils.server', () => ({
+vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(),
 }));
 
-vi.mock('~/utils/logging.server', () => ({
+vi.mock('~/.server/utils/logging.utils', () => ({
   getLogger: () => ({
     debug: vi.fn(),
   }),
 }));
 
-describe('locale-utils.server', () => {
+describe('locale.utils', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });

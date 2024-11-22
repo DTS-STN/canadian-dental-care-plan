@@ -28,7 +28,7 @@ vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
   }),
 }));
 
-vi.mock('~/utils/locale-utils.server', () => {
+vi.mock('~/.server/utils/locale.utils', () => {
   return {
     getFixedT: vi.fn().mockResolvedValue(vi.fn()),
     redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/adult/applicant-information')).mockResolvedValueOnce(redirect('/en/apply/123/adult/dob-eligibility')),

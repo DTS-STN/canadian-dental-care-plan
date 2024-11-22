@@ -32,11 +32,11 @@ vi.mock('~/services/personal-information-service.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env-utils.server', () => ({
+vi.mock('~/.server/utils/env.utils', () => ({
   featureEnabled: vi.fn().mockReturnValue(true),
 }));
 
-vi.mock('~/utils/locale-utils.server', () => ({
+vi.mock('~/.server/utils/locale.utils', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
 }));
 

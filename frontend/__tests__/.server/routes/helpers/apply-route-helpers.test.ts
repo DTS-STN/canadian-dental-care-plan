@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { ChildState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromAge, getChildrenState, isNewChildState } from '~/.server/routes/helpers/apply-route-helpers';
 
-vi.mock('~/utils/env-utils.server', () => ({
+vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(() => ({
     MARITAL_STATUS_CODE_MARRIED: 1,
     MARITAL_STATUS_CODE_COMMONLAW: 2,

@@ -3,9 +3,9 @@ import { z } from 'zod';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { InvalidResult, ValidResult } from '~/.server/routes/validators/types.validator';
-import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
+import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/.server/utils/postal-zip-code.utils';
+import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
-import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 /**
  * Interface for Address input data.

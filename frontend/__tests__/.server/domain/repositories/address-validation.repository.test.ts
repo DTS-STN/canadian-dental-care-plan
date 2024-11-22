@@ -5,9 +5,9 @@ import type { ServerConfig } from '~/.server/configs';
 import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
 import { DefaultAddressValidationRepository, MockAddressValidationRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { instrumentedFetch } from '~/utils/fetch-utils.server';
+import { instrumentedFetch } from '~/.server/utils/fetch.utils';
 
-vi.mock('~/utils/fetch-utils.server', () => ({
+vi.mock('~/.server/utils/fetch.utils', () => ({
   getFetchFn: vi.fn(),
   instrumentedFetch: vi.fn(),
 }));

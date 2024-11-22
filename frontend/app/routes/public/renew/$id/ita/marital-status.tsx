@@ -13,6 +13,9 @@ import { TYPES } from '~/.server/constants';
 import { loadRenewItaState } from '~/.server/routes/helpers/renew-ita-route-helpers';
 import type { PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
 import { renewStateHasPartner, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
+import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -23,14 +26,11 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
-import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum FormAction {
   Continue = 'continue',

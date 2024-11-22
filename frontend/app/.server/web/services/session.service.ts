@@ -7,7 +7,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { RedisService } from '~/.server/data/services';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { createFileSessionStorage } from '~/utils/session-utils.server';
+import { createFileSessionStorage } from '~/.server/utils/session.utils';
 
 /**
  * SessionService is a service module responsible for managing user sessions.

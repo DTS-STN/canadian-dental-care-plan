@@ -9,6 +9,9 @@ import { z } from 'zod';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
 import type { PartnerInformationState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { getFixedT } from '~/.server/utils/locale.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
+import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -22,15 +25,12 @@ import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
-import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),

@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '~/.server/constants';
 import type { Address, AddressValidatorErrorMessages, AddressValidatorFactory } from '~/.server/routes/validators/';
 import type { InvalidResult, ValidResult } from '~/.server/routes/validators/types.validator';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/.server/utils/locale.utils';
 
 export class MailingAddressValidator implements MailingAddressValidator {
   constructor(

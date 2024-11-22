@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { ConfigFactoryImpl } from '~/.server/factories';
-import { getClientEnv, getEnv } from '~/utils/env-utils.server';
+import { getClientEnv, getEnv } from '~/.server/utils/env.utils';
 
-vi.mock('~/utils/env-utils.server', () => ({
+vi.mock('~/.server/utils/env.utils', () => ({
   getClientEnv: vi.fn(),
   getEnv: vi.fn(),
 }));

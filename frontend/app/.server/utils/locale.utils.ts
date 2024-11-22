@@ -7,9 +7,9 @@ import I18NexFsBackend from 'i18next-fs-backend';
 import { resolve } from 'node:path';
 import { initReactI18next } from 'react-i18next';
 
-import { APP_LOCALES } from './locale-utils';
-import { getEnv } from '~/utils/env-utils.server';
-import { getLogger } from '~/utils/logging.server';
+import { APP_LOCALES } from '../../utils/locale-utils';
+import { getEnv } from '~/.server/utils/env.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 /**
  * Returns a t function that defaults to the language resolved through the request.

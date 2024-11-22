@@ -4,13 +4,13 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 import { Outlet, useLoaderData, useNavigate, useParams } from '@remix-run/react';
 
 import { TYPES } from '~/.server/constants';
+import { getLocale } from '~/.server/utils/locale.utils';
 import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/apply-route-helpers';
 import { useApiApplyState } from '~/utils/api-apply-state-utils';
 import { useApiSession } from '~/utils/api-session-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getLocale } from '~/utils/locale-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 

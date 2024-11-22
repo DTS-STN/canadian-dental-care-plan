@@ -1,4 +1,4 @@
-import { getEnv } from './env-utils.server';
+import { getEnv } from './env.utils';
 
 /**
  * Attempts to retrieve the client's IP address from the "X-Forwarded-For" header of the HTTP request.

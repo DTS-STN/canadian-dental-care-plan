@@ -5,7 +5,7 @@ import { TYPES } from '~/.server/constants';
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import clientApplicationJsonDataSource from '~/.server/resources/power-platform/client-application.json';
-import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
+import { getFetchFn, instrumentedFetch } from '~/.server/utils/fetch.utils';
 
 /**
  * A repository that provides access to client application data.

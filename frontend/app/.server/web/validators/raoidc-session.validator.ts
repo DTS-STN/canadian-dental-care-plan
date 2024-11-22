@@ -5,9 +5,9 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { FetchFn, getFetchFn } from '~/.server/utils/fetch.utils';
+import { IdToken, UserinfoToken, validateSession } from '~/.server/utils/raoidc.utils';
 import { RaoidcSessionInvalidException } from '~/.server/web/exceptions';
-import { FetchFn, getFetchFn } from '~/utils/fetch-utils.server';
-import { IdToken, UserinfoToken, validateSession } from '~/utils/raoidc-utils.server';
 
 /**
  * Provides functionality to validate RAOIDC sessions.

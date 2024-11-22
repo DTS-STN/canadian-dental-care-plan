@@ -5,7 +5,7 @@ import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/r
 
 import { loadRenewState, saveRenewState } from './renew-route-helpers';
 import type { RenewState } from './renew-route-helpers';
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadRenewItaStateArgs {

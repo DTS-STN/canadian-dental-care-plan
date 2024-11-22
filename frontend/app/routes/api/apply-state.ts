@@ -6,7 +6,7 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 import { z } from 'zod';
 
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getLogger } from '~/utils/logging.server';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 const API_APPLY_STATE_ACTIONS = ['extend'] as const;
 export type ApiApplyStateAction = (typeof API_APPLY_STATE_ACTIONS)[number];

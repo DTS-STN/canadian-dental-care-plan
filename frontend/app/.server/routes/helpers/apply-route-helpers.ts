@@ -7,11 +7,11 @@ import { differenceInMinutes } from 'date-fns';
 import { omit } from 'moderndash';
 import { z } from 'zod';
 
+import { getEnv } from '~/.server/utils/env.utils';
+import { getLocaleFromParams } from '~/.server/utils/locale.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
+import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import { getAgeFromDateString } from '~/utils/date-utils';
-import { getEnv } from '~/utils/env-utils.server';
-import { getLocaleFromParams } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
-import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
 
 export interface ApplyState {
   readonly id: string;

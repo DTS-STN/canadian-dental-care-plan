@@ -6,9 +6,9 @@ import { useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import { randomUUID } from 'crypto';
 
 import { startApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';

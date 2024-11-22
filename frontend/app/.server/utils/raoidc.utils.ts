@@ -7,8 +7,8 @@ import { SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
 import invariant from 'tiny-invariant';
 
-import type { FetchFn } from './fetch-utils.server';
-import { getLogger } from '~/utils/logging.server';
+import type { FetchFn } from './fetch.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 /**
  * An OIDC ID token.

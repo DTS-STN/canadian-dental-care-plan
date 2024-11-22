@@ -5,11 +5,11 @@ import { isRedirectResponse, isResponse } from '@remix-run/react/dist/data';
 
 import { z } from 'zod';
 
-import { getEnv } from '~/utils/env-utils.server';
-import { getLocaleFromParams } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
+import { getEnv } from '~/.server/utils/env.utils';
+import { getLocaleFromParams } from '~/.server/utils/locale.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
+import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import { getPathById } from '~/utils/route-utils';
-import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
 
 export interface ProtectedRenewState {
   readonly id: string;

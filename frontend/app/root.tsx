@@ -10,6 +10,7 @@ import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css?
 import invariant from 'tiny-invariant';
 
 import { TYPES } from '~/.server/constants';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ClientEnv } from '~/components/client-env';
 import { InlineLink } from '~/components/inline-link';
 import { NonceContext } from '~/components/nonce-context';
@@ -21,7 +22,6 @@ import { getDynatraceService } from '~/services/dynatrace-service.server';
 import tailwindStyleSheet from '~/tailwind.css?url';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import type { FeatureName } from '~/utils/env-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { useI18nNamespaces, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
 
