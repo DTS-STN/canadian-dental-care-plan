@@ -5,12 +5,12 @@ import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
 
 import type { LogFactory, Logger } from '~/.server/factories';
+import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
+import { validateSession } from '~/.server/utils/raoidc.utils';
 import { DefaultRaoidcSessionValidator } from '~/.server/web/validators';
-import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
-import { validateSession } from '~/utils/raoidc-utils.server';
 
-vi.mock('~/utils/raoidc-utils.server');
-vi.mock('~/utils/fetch-utils.server');
+vi.mock('~/.server/utils/raoidc.utils');
+vi.mock('~/.server/utils/fetch.utils');
 
 describe('DefaultRaoidcSessionValidator', () => {
   let mockLogFactory: MockProxy<LogFactory>;

@@ -6,11 +6,11 @@ import { mock } from 'vitest-mock-extended';
 
 import type { LogFactory, Logger } from '~/.server/factories';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
+import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
-import { getClientIpAddress } from '~/utils/ip-address-utils.server';
 
 vi.mock('@remix-run/node');
-vi.mock('~/utils/ip-address-utils.server');
+vi.mock('~/.server/utils/ip-address.utils');
 
 describe('DefaultSecurityHandler', () => {
   let logFactory: MockProxy<LogFactory>;

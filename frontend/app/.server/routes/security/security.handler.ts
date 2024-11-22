@@ -5,8 +5,8 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
-import { getClientIpAddress } from '~/utils/ip-address-utils.server';
 
 /**
  * Parameters for validating the RAOIDC authentication session.
