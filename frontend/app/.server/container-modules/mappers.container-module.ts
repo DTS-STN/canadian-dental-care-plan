@@ -4,8 +4,8 @@ import { TYPES } from '~/.server/constants';
 import {
   ApplicantDtoMapperImpl,
   ApplicationStatusDtoMapperImpl,
-  BenefitApplicationDtoMapperImpl,
   ApplicationYearDtoMapperImpl,
+  BenefitApplicationDtoMapperImpl,
   BenefitRenewalDtoMapperImpl,
   ClientApplicationDtoMapperImpl,
   ClientFriendlyStatusDtoMapperImpl,

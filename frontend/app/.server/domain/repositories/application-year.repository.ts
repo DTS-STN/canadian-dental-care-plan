@@ -41,7 +41,7 @@ export class ApplicationYearRepositoryImpl implements ApplicationYearRepository 
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
     });
-   
+
     if (!response.ok) {
       this.log.error('%j', {
         message: 'Failed to fetch application year(s)',
@@ -74,15 +74,15 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
     const applicationYearResponseEntity: ApplicationYearResultEntity = {
       ApplicationYearCollection: [
         {
-          TaxYear: "2020",
-          ApplicationYearID: "AYR004",
+          TaxYear: '2020',
+          ApplicationYearID: 'AYR004',
         },
         {
           TaxYear: undefined,
-          ApplicationYearID: "AYR005",
+          ApplicationYearID: 'AYR005',
         },
         {
-          TaxYear: "2019",
+          TaxYear: '2019',
           ApplicationYearID: undefined,
         },
       ],

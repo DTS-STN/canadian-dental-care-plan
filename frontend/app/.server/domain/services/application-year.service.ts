@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
+import moize from 'moize';
 
-import { TYPES } from '~/.server/constants';
 import type { ServerConfig } from '~/.server/configs';
+import { TYPES } from '~/.server/constants';
 import type { ApplicationYearRequestDto, ApplicationYearResultDto } from '~/.server/domain/dtos';
 import type { ApplicationYearDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicationYearRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
-import moize from 'moize';
 
 export interface ApplicationYearService {
   /**
@@ -38,14 +38,14 @@ export class ApplicationYearServiceImpl implements ApplicationYearService {
     this.listApplicationYears.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_YEARS_CACHE_TTL_SECONDS;
   }
 
-    /**
+  /**
    * Retrieves a list of all countries.
    *
    * @returns An array of Application Year(s) DTOs.
    */
-    listApplicationYears = moize(this.listApplicationYearsImpl, {
-      onCacheAdd: () => this.log.info('Creating new listApplicationYears memo'),
-    });
+  listApplicationYears = moize(this.listApplicationYearsImpl, {
+    onCacheAdd: () => this.log.info('Creating new listApplicationYears memo'),
+  });
 
   async listApplicationYearsImpl(applicationYearRequestDto: ApplicationYearRequestDto): Promise<ReadonlyArray<ApplicationYearResultDto>> {
     this.log.trace('Getting possible application years results with applicationYearRequest: [%j]', applicationYearRequestDto);
