@@ -8,6 +8,7 @@ import { TYPES } from '~/.server/constants';
 import {
   ApplicantServiceImpl,
   ApplicationStatusServiceImpl,
+  ApplicationYearServiceImpl,
   AuditServiceImpl,
   BenefitApplicationServiceImpl,
   BenefitRenewalServiceImpl,
@@ -44,6 +45,7 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.services.AddressValidationService).to(DefaultAddressValidationService);
   bind(TYPES.domain.services.ApplicantService).to(ApplicantServiceImpl);
   bind(TYPES.domain.services.ApplicationStatusService).to(ApplicationStatusServiceImpl);
+  bind(TYPES.domain.services.ApplicationYearService).to(ApplicationYearServiceImpl);
   bind(TYPES.domain.services.AuditService).to(AuditServiceImpl);
   bind(TYPES.domain.services.BenefitApplicationService).to(BenefitApplicationServiceImpl);
   bind(TYPES.domain.services.BenefitRenewalService).to(BenefitRenewalServiceImpl);

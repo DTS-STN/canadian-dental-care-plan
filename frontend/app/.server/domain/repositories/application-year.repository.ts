@@ -41,7 +41,7 @@ export class ApplicationYearRepositoryImpl implements ApplicationYearRepository 
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
     });
-
+   
     if (!response.ok) {
       this.log.error('%j', {
         message: 'Failed to fetch application year(s)',
@@ -57,5 +57,39 @@ export class ApplicationYearRepositoryImpl implements ApplicationYearRepository 
     this.log.trace('Application year response: [%j]', applicationYearResults);
 
     return applicationYearResults;
+  }
+}
+
+@injectable()
+export class MockApplicationYearRepository implements ApplicationYearRepository {
+  private readonly log: Logger;
+
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
+    this.log = logFactory.createLogger('DefaultBenefitRenewalRepository');
+  }
+
+  listApplicationYears(applicationYearRequestEntity: ApplicationYearRequestEntity): Promise<ApplicationYearResultEntity> {
+    this.log.debug('Submiting benefit renewal for request [%j]', applicationYearRequestEntity);
+
+    const applicationYearResponseEntity: ApplicationYearResultEntity = {
+      ApplicationYearCollection: [
+        {
+          TaxYear: "2020",
+          ApplicationYearID: "AYR004",
+        },
+        {
+          TaxYear: undefined,
+          ApplicationYearID: "AYR005",
+        },
+        {
+          TaxYear: "2019",
+          ApplicationYearID: undefined,
+        },
+      ],
+    };
+
+    this.log.debug('Benefit renewal: [%j]', applicationYearResponseEntity);
+
+    return Promise.resolve(applicationYearResponseEntity);
   }
 }

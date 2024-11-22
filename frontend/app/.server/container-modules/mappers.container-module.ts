@@ -5,6 +5,7 @@ import {
   ApplicantDtoMapperImpl,
   ApplicationStatusDtoMapperImpl,
   BenefitApplicationDtoMapperImpl,
+  ApplicationYearDtoMapperImpl,
   BenefitRenewalDtoMapperImpl,
   ClientApplicationDtoMapperImpl,
   ClientFriendlyStatusDtoMapperImpl,
@@ -30,6 +31,7 @@ export const mappersContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.mappers.AddressValidationDtoMapper).to(DefaultAddressValidationDtoMapper);
   bind(TYPES.domain.mappers.ApplicantDtoMapper).to(ApplicantDtoMapperImpl);
   bind(TYPES.domain.mappers.ApplicationStatusDtoMapper).to(ApplicationStatusDtoMapperImpl);
+  bind(TYPES.domain.mappers.ApplicationYearDtoMapper).to(ApplicationYearDtoMapperImpl);
   bind(TYPES.domain.mappers.BenefitApplicationDtoMapper).to(BenefitApplicationDtoMapperImpl);
   bind(TYPES.domain.mappers.BenefitRenewalDtoMapper).to(BenefitRenewalDtoMapperImpl);
   bind(TYPES.domain.mappers.ClientApplicationDtoMapper).to(ClientApplicationDtoMapperImpl);
