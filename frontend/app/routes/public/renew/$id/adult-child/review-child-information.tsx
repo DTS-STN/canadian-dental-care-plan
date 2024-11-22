@@ -23,7 +23,6 @@ import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
-import { toBenefitRenewRequestFromRenewAdultChildState } from '~/mappers/benefit-renewal-service-mappers.server';
 import { pageIds } from '~/page-ids';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -66,7 +65,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:review-child-information.page-title') }) };
 
-  const payload = viewPayloadEnabled && toBenefitRenewRequestFromRenewAdultChildState(state);
+  // prettier-ignore
+  const payload =
+    viewPayloadEnabled &&
+    appContainer.get(TYPES.domain.mappers.BenefitRenewalDtoMapper).mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(
+      appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state)
+    );
 
   const children = state.children.map((child) => {
     const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram

@@ -23,7 +23,6 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
-import { toBenefitRenewRequestFromRenewAdultChildState } from '~/mappers/benefit-renewal-service-mappers.server';
 import { pageIds } from '~/page-ids';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
@@ -136,7 +135,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:review-adult-information.page-title') }) };
 
-  const payload = viewPayloadEnabled && toBenefitRenewRequestFromRenewAdultChildState(state);
+  // prettier-ignore
+  const payload =
+    viewPayloadEnabled &&
+    appContainer.get(TYPES.domain.mappers.BenefitRenewalDtoMapper).mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(
+      appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state)
+    );
 
   return {
     id: state.id,
