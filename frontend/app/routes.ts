@@ -1,4 +1,4 @@
-import type { RouteConfigEntry } from '@remix-run/route-config';
+import type { RouteConfig, RouteConfigEntry } from '@remix-run/route-config';
 import { index, layout, route } from '@remix-run/route-config';
 
 // note: because the routes are processed at build time by vite,
@@ -50,8 +50,8 @@ function toRouteConfigEntries(routes: I18nRoute[]): RouteConfigEntry[] {
 /**
  * see: https://reactrouter.com/dev/start/framework/routing
  */
-export const routes: RouteConfigEntry[] = [
+export default [
   index('routes/language-chooser.tsx'), //
   route('/:lang/*', 'routes/catchall.tsx'),
   ...toRouteConfigEntries(i18nRoutes),
-];
+] satisfies RouteConfig;
