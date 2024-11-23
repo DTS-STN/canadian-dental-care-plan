@@ -1,136 +1,56 @@
-import type { Session } from '@remix-run/node';
-
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
+import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
 
 import type { LogFactory, Logger } from '~/.server/factories';
-import { CsrfTokenInvalidException } from '~/.server/web/exceptions';
-import { CsrfTokenValidatorImpl } from '~/.server/web/validators';
+import { DefaultCsrfTokenValidator } from '~/.server/web/validators';
 
-describe('CsrfTokenValidatorImpl', () => {
-  const mockLogFactory = mock<LogFactory>();
-  const mockLogger = mock<Logger>();
-  mockLogFactory.createLogger.mockReturnValue(mockLogger);
+describe('DefaultCsrfTokenValidator', () => {
+  let logMock: MockProxy<Logger>;
+  let logFactoryMock: MockProxy<LogFactory>;
+  let csrfTokenValidator: DefaultCsrfTokenValidator;
 
-  it('should validate the CSRF token successfully with CSRF token in request form data', async () => {
-    const mockFormData = new FormData();
-    mockFormData.append('_csrf', 'test-csrf-token');
+  beforeEach(() => {
+    logMock = mock<Logger>();
+    logFactoryMock = mock<LogFactory>();
+    logFactoryMock.createLogger.mockReturnValue(logMock);
 
-    const mockRequest = {
-      clone: vi.fn(() => {
-        return {
-          json: vi.fn().mockResolvedValue({}),
-          formData: vi.fn().mockResolvedValue(mockFormData),
-        };
-      }),
-      headers: {
-        get: vi.fn().mockReturnValue('test-cookie-header'),
-      },
-    } as unknown as Request;
-
-    const mockSession = mock<Session>({
-      has: vi.fn().mockReturnValue(true),
-      get: vi.fn().mockReturnValue('test-csrf-token'),
-    });
-
-    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory);
-
-    await expect(csrfTokenValidator.validateCsrfToken(mockRequest, mockSession)).resolves.toBeUndefined();
-
-    expect(mockLogFactory.createLogger).toHaveBeenCalledWith('CsrfTokenValidatorImpl');
+    csrfTokenValidator = new DefaultCsrfTokenValidator(logFactoryMock);
   });
 
-  it('should validate the CSRF token successfully with CSRF token in request body', async () => {
-    const mockRequest = {
-      clone: vi.fn(() => {
-        return {
-          json: vi.fn().mockResolvedValue({ _csrf: 'test-csrf-token' }),
-          formData: vi.fn().mockResolvedValue(new FormData()),
-        };
-      }),
-      headers: {
-        get: vi.fn().mockReturnValue('test-cookie-header'),
-      },
-    } as unknown as Request;
-
-    const mockSession = mock<Session>({
-      has: vi.fn().mockReturnValue(true),
-      get: vi.fn().mockReturnValue('test-csrf-token'),
+  it('should return { isValid: true } when tokens match', () => {
+    const result = csrfTokenValidator.validateCsrfToken({
+      requestToken: 'valid-token',
+      sessionToken: 'valid-token',
     });
 
-    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory);
-
-    await expect(csrfTokenValidator.validateCsrfToken(mockRequest, mockSession)).resolves.toBeUndefined();
-
-    expect(mockLogFactory.createLogger).toHaveBeenCalledWith('CsrfTokenValidatorImpl');
+    expect(result).toEqual({ isValid: true });
+    expect(logMock.debug).toHaveBeenCalledWith('Starting CSRF token validation; requestToken: %s, sessionToken: %s', 'valid-token', 'valid-token');
+    expect(logMock.debug).toHaveBeenCalledWith('CSRF token validation successful; requestToken: [%s], sessionToken: [%s]', 'valid-token', 'valid-token');
   });
 
-  it('should throw an error if the CSRF token is not found in the request', async () => {
-    const mockRequest = {
-      clone: vi.fn(() => {
-        return {
-          json: vi.fn().mockResolvedValue({}),
-          formData: vi.fn().mockResolvedValue(new FormData()),
-        };
-      }),
-      headers: {
-        get: vi.fn().mockReturnValue('test-cookie-header'),
-      },
-    } as unknown as Request;
-
-    const mockSession = mock<Session>({
-      has: vi.fn().mockReturnValue(true),
-      get: vi.fn().mockReturnValue('test-csrf-token'),
+  it('should return { isValid: false, errorMessage: string } when tokens do not match', () => {
+    const result = csrfTokenValidator.validateCsrfToken({
+      requestToken: 'invalid-token',
+      sessionToken: 'valid-token',
     });
 
-    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory);
-
-    await expect(csrfTokenValidator.validateCsrfToken(mockRequest, mockSession)).rejects.toThrowError(CsrfTokenInvalidException);
+    expect(result).toEqual({
+      isValid: false,
+      errorMessage: 'CSRF token validation failed; Invalid CSRF token detected',
+    });
+    expect(logMock.debug).toHaveBeenCalledWith('Starting CSRF token validation; requestToken: %s, sessionToken: %s', 'invalid-token', 'valid-token');
+    expect(logMock.warn).toHaveBeenCalledWith('Invalid CSRF token detected; requestToken: [%s], sessionToken: [%s]', 'invalid-token', 'valid-token');
   });
 
-  it('should throw an error if the CSRF token is not found in the session', async () => {
-    const mockRequest = {
-      clone: vi.fn(() => {
-        return {
-          json: vi.fn().mockResolvedValue({ _csrf: 'test-csrf-token' }),
-          formData: vi.fn().mockResolvedValue(new FormData()),
-        };
-      }),
-      headers: {
-        get: vi.fn().mockReturnValue('test-cookie-header'),
-      },
-    } as unknown as Request;
-
-    const mockSession = mock<Session>({
-      has: vi.fn().mockReturnValue(false),
-      get: vi.fn(),
+  it('should log the validation process correctly', () => {
+    csrfTokenValidator.validateCsrfToken({
+      requestToken: 'test-token',
+      sessionToken: 'test-token',
     });
 
-    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory);
-
-    await expect(csrfTokenValidator.validateCsrfToken(mockRequest, mockSession)).rejects.toThrowError(CsrfTokenInvalidException);
-  });
-
-  it('should throw an error if the CSRF tokens do not match', async () => {
-    const mockRequest = {
-      clone: vi.fn(() => {
-        return {
-          json: vi.fn().mockResolvedValue({ _csrf: 'test-csrf-token' }),
-          formData: vi.fn().mockResolvedValue(new FormData()),
-        };
-      }),
-      headers: {
-        get: vi.fn().mockReturnValue('test-cookie-header'),
-      },
-    } as unknown as Request;
-
-    const mockSession = mock<Session>({
-      has: vi.fn().mockReturnValue(true),
-      get: vi.fn().mockReturnValue('different-csrf-token'),
-    });
-
-    const csrfTokenValidator = new CsrfTokenValidatorImpl(mockLogFactory);
-
-    await expect(csrfTokenValidator.validateCsrfToken(mockRequest, mockSession)).rejects.toThrowError(CsrfTokenInvalidException);
+    expect(logMock.debug).toHaveBeenCalledTimes(2);
+    expect(logMock.debug).toHaveBeenCalledWith('Starting CSRF token validation; requestToken: %s, sessionToken: %s', 'test-token', 'test-token');
+    expect(logMock.debug).toHaveBeenCalledWith('CSRF token validation successful; requestToken: [%s], sessionToken: [%s]', 'test-token', 'test-token');
   });
 });

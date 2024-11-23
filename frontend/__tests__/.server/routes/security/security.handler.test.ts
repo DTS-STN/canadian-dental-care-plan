@@ -4,38 +4,39 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
 
-import type { ServerConfig } from '~/.server/configs';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
-import { CsrfTokenInvalidException, HCaptchaInvalidException, RaoidcSessionInvalidException } from '~/.server/web/exceptions';
-import type { SessionService } from '~/.server/web/services';
+import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 
+vi.mock('@remix-run/node');
+vi.mock('~/.server/utils/ip-address.utils');
+
 describe('DefaultSecurityHandler', () => {
-  let mockLogFactory: MockProxy<LogFactory>;
-  let mockLogger: MockProxy<Logger>;
-  let mockSessionService: MockProxy<SessionService>;
-  let mockCsrfTokenValidator: MockProxy<CsrfTokenValidator>;
-  let mockHCaptchaValidator: MockProxy<HCaptchaValidator>;
-  let mockRaoidcSessionValidator: MockProxy<RaoidcSessionValidator>;
-  let mockServerConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>;
+  let logFactory: MockProxy<LogFactory>;
+  let logger: MockProxy<Logger>;
+  let csrfTokenValidator: MockProxy<CsrfTokenValidator>;
+  let hCaptchaValidator: MockProxy<HCaptchaValidator>;
+  let raoidcSessionValidator: MockProxy<RaoidcSessionValidator>;
   let securityHandler: DefaultSecurityHandler;
 
   beforeEach(() => {
-    mockLogFactory = mock<LogFactory>();
-    mockLogger = mock<Logger>();
-    mockLogFactory.createLogger.mockReturnValue(mockLogger);
+    // Mocking the dependencies
+    logFactory = mock<LogFactory>();
+    logger = mock<Logger>();
+    logFactory.createLogger.mockReturnValue(logger);
+    csrfTokenValidator = mock<CsrfTokenValidator>();
+    hCaptchaValidator = mock<HCaptchaValidator>();
+    raoidcSessionValidator = mock<RaoidcSessionValidator>();
 
-    mockSessionService = mock<SessionService>();
-    mockCsrfTokenValidator = mock<CsrfTokenValidator>();
-    mockHCaptchaValidator = mock<HCaptchaValidator>();
-    mockRaoidcSessionValidator = mock<RaoidcSessionValidator>();
-
-    mockServerConfig = {
-      ENABLED_FEATURES: ['hcaptcha'],
-    };
-
-    securityHandler = new DefaultSecurityHandler(mockLogFactory, mockServerConfig, mockSessionService, mockCsrfTokenValidator, mockHCaptchaValidator, mockRaoidcSessionValidator);
+    // Creating an instance of DefaultSecurityHandler with the mocked dependencies
+    securityHandler = new DefaultSecurityHandler(
+      logFactory,
+      { ENABLED_FEATURES: ['hcaptcha'] }, // Mocked server config
+      csrfTokenValidator,
+      hCaptchaValidator,
+      raoidcSessionValidator,
+    );
   });
 
   afterEach(() => {
@@ -43,160 +44,135 @@ describe('DefaultSecurityHandler', () => {
   });
 
   describe('validateAuthSession', () => {
-    it('should validate RAOIDC session successfully', async () => {
+    it('should throw a redirect response when the RAOIDC session is invalid', async () => {
+      // Mocking the result of the RAOIDC session validation
+      raoidcSessionValidator.validateRaoidcSession.mockResolvedValue({ isValid: false, errorMessage: 'Invalid session' });
+
       const mockSession = mock<Session>();
-      mockSessionService.getSession.mockResolvedValue(mockSession);
+      const mockRequest = mock<Request>({ url: 'https://localhost:3000/en/protected-page' });
 
-      await expect(securityHandler.validateAuthSession(new Request('http://localhost'))).resolves.not.toThrow();
-
-      expect(mockLogger.debug).toHaveBeenCalledWith('Validating RAOIDC session');
-      expect(mockLogger.debug).toHaveBeenCalledWith('RAOIDC session is valid');
-      expect(mockRaoidcSessionValidator.validateRaoidcSession).toHaveBeenCalledWith(mockSession);
+      // Expect a redirect to login page if session is invalid
+      await expect(securityHandler.validateAuthSession({ request: mockRequest, session: mockSession })).rejects.toThrowError('/auth/login?returnto=%2Fen%2Fprotected-page%3F');
     });
 
-    it('should redirect if RAOIDC session is invalid', async () => {
+    it('should not throw anything when the RAOIDC session is valid', async () => {
+      // Mocking the result of the RAOIDC session validation
+      raoidcSessionValidator.validateRaoidcSession.mockResolvedValue({ isValid: true });
+
       const mockSession = mock<Session>();
-      mockSessionService.getSession.mockResolvedValue(mockSession);
-      mockRaoidcSessionValidator.validateRaoidcSession.mockRejectedValue(new RaoidcSessionInvalidException('Session expired'));
+      const mockRequest = mock<Request>({ url: 'https://localhost:3000/en/protected-page' });
 
-      const request = new Request('http://localhost?test=1');
-
-      await expect(securityHandler.validateAuthSession(request)).rejects.toThrowError(Response);
-
-      try {
-        await securityHandler.validateAuthSession(request);
-      } catch (err) {
-        // Assert the error is a Response
-        expect(err).toBeInstanceOf(Response);
-
-        if (err instanceof Response) {
-          expect(err.status).toBe(302);
-          expect(err.headers.get('Location')).toBe('/auth/login?returnto=%2F%3Ftest%3D1');
-        }
-      }
-
-      expect(mockLogger.debug).toHaveBeenCalledWith('RAOIDC session is invalid; reason: %s', 'Session expired');
-    });
-
-    it('should log "RAOIDC session validation failed" and re-throw error when validation fails', async () => {
-      const mockSession = mock<Session>();
-      mockSessionService.getSession.mockResolvedValue(mockSession);
-
-      const error = new Error('Validation failed');
-      mockRaoidcSessionValidator.validateRaoidcSession.mockRejectedValue(error);
-
-      const request = new Request('http://localhost');
-
-      await expect(securityHandler.validateAuthSession(request)).rejects.toThrowError(error);
-
-      expect(mockLogger.debug).toHaveBeenCalledWith('RAOIDC session validation failed');
+      // Expect no error if session is valid
+      await expect(securityHandler.validateAuthSession({ request: mockRequest, session: mockSession })).resolves.not.toThrow();
     });
   });
 
   describe('validateCsrfToken', () => {
-    it('should validate CSRF token successfully', async () => {
+    it('should throw a 403 error if the CSRF token is invalid', () => {
+      // Mocking the CSRF token validation to return an invalid result
+      csrfTokenValidator.validateCsrfToken.mockReturnValue({ isValid: false, errorMessage: 'Invalid CSRF token' });
+
+      const mockFormData = mock<FormData>();
+      mockFormData.get.calledWith('_csrf').mockReturnValue('invalid-token');
+
       const mockSession = mock<Session>();
-      mockSessionService.getSession.mockResolvedValue(mockSession);
+      mockSession.get.calledWith('csrfToken').mockReturnValue('session-token');
 
-      await expect(securityHandler.validateCsrfToken(new Request('http://localhost'))).resolves.not.toThrow();
-
-      expect(mockLogger.debug).toHaveBeenCalledWith('Validating CSRF token');
-      expect(mockLogger.debug).toHaveBeenCalledWith('CSRF token is valid');
-      expect(mockCsrfTokenValidator.validateCsrfToken).toHaveBeenCalledWith(expect.any(Request), mockSession);
+      // Expect a 403 response if CSRF token is invalid
+      expect(() => securityHandler.validateCsrfToken({ formData: mockFormData, session: mockSession })).toThrowError(expect.objectContaining({ status: 403 }));
     });
 
-    it('should throw 403 response if CSRF token is invalid', async () => {
+    it('should not throw anything if the CSRF token is valid', () => {
+      // Mocking the CSRF token validation to return a valid result
+      csrfTokenValidator.validateCsrfToken.mockReturnValue({ isValid: true });
+
+      const mockFormData = mock<FormData>();
+      mockFormData.get.calledWith('_csrf').mockReturnValue('valid-token');
+
       const mockSession = mock<Session>();
-      mockSessionService.getSession.mockResolvedValue(mockSession);
-      mockCsrfTokenValidator.validateCsrfToken.mockRejectedValue(new CsrfTokenInvalidException('Token mismatch'));
+      mockSession.get.calledWith('csrfToken').mockReturnValue('valid-token');
 
-      await expect(securityHandler.validateCsrfToken(new Request('http://localhost'))).rejects.toThrowError(Response);
-
-      try {
-        await securityHandler.validateCsrfToken(new Request('http://localhost'));
-      } catch (err) {
-        expect(err).toBeInstanceOf(Response);
-
-        if (err instanceof Response) {
-          expect(err.status).toBe(403);
-          await expect(err.text()).resolves.toBe('Invalid CSRF token');
-        }
-      }
-
-      expect(mockLogger.debug).toHaveBeenCalledWith('CSRF token is invalid; reason: %s', 'Token mismatch');
-    });
-
-    it('should log "CSRF token validation failed" and re-throw error when CSRF validation fails', async () => {
-      const mockSession = mock<Session>();
-      mockSessionService.getSession.mockResolvedValue(mockSession);
-
-      const error = new Error('Validation failed');
-      mockCsrfTokenValidator.validateCsrfToken.mockRejectedValue(error);
-
-      const request = new Request('http://localhost');
-
-      await expect(securityHandler.validateCsrfToken(request)).rejects.toThrowError(error);
-
-      expect(mockLogger.debug).toHaveBeenCalledWith('CSRF token validation failed');
+      // Expect no error if CSRF token is valid
+      expect(() => securityHandler.validateCsrfToken({ formData: mockFormData, session: mockSession })).not.toThrow();
     });
   });
 
   describe('validateHCaptchaResponse', () => {
-    it('should validate hCaptcha response successfully if feature is enabled', async () => {
-      const mockRequest = new Request('http://localhost');
-      const onInvalidHCaptcha = vi.fn();
+    it('should call the onInvalidHCaptcha callback if the hCaptcha response is invalid', async () => {
+      // Mocking the hCaptcha validation to return an invalid result
+      hCaptchaValidator.validateHCaptchaResponse.mockResolvedValue({ isValid: false, errorMessage: 'Invalid hCaptcha' });
 
-      vi.spyOn(mockServerConfig.ENABLED_FEATURES, 'includes').mockReturnValueOnce(true); // Ensure hCaptcha feature is enabled
-      mockHCaptchaValidator.validateHCaptchaResponse.mockResolvedValue(undefined); // Mock successful hCaptcha validation
+      const mockFormData = mock<FormData>();
+      mockFormData.get.calledWith('h-captcha-response').mockReturnValue('invalid-response');
+      const mockRequest = mock<Request>();
+      const mockOnInvalidHCaptcha = vi.fn();
+      vi.mocked(getClientIpAddress).mockReturnValue('192.168.0.1');
 
-      await securityHandler.validateHCaptchaResponse(mockRequest, onInvalidHCaptcha);
+      const params = {
+        formData: mockFormData,
+        request: mockRequest,
+        userId: 'user-id',
+      };
 
-      expect(mockLogger.debug).toHaveBeenCalledWith('Validating hCaptcha response');
-      expect(mockLogger.debug).toHaveBeenCalledWith('hCaptcha response is valid');
-      expect(mockHCaptchaValidator.validateHCaptchaResponse).toHaveBeenCalledWith(mockRequest);
-      expect(onInvalidHCaptcha).not.toHaveBeenCalled(); // Ensure the invalid callback was not called
-    });
+      await securityHandler.validateHCaptchaResponse(params, mockOnInvalidHCaptcha);
 
-    it('should call onInvalidHCaptcha if hCaptcha validation fails', async () => {
-      const mockRequest = new Request('http://localhost');
-      const onInvalidHCaptcha = vi.fn();
-
-      vi.spyOn(mockServerConfig.ENABLED_FEATURES, 'includes').mockReturnValueOnce(true); // Ensure hCaptcha feature is enabled
-      const error = new HCaptchaInvalidException('Unexpected error');
-      mockHCaptchaValidator.validateHCaptchaResponse.mockRejectedValue(error); // Mock failed validation
-
-      await securityHandler.validateHCaptchaResponse(mockRequest, onInvalidHCaptcha);
-
-      expect(mockLogger.debug).toHaveBeenCalledWith('Validating hCaptcha response');
-      expect(mockLogger.debug).toHaveBeenCalledWith('hCaptcha response is invalid; reason: %s', error.message);
-      expect(onInvalidHCaptcha).toHaveBeenCalled(); // Ensure the invalid callback is called
+      expect(mockFormData.get).toBeCalledWith('h-captcha-response');
+      expect(getClientIpAddress).toHaveBeenCalledWith(mockRequest);
+      expect(mockOnInvalidHCaptcha).toHaveBeenCalled();
     });
 
     it('should skip hCaptcha validation if the feature is disabled', async () => {
-      const mockRequest = new Request('http://localhost');
-      const onInvalidHCaptcha = vi.fn();
+      // Mocking the server config to disable hCaptcha
+      securityHandler = new DefaultSecurityHandler(
+        logFactory,
+        { ENABLED_FEATURES: [] }, // hCaptcha feature is not enabled
+        csrfTokenValidator,
+        hCaptchaValidator,
+        raoidcSessionValidator,
+      );
 
-      vi.spyOn(mockServerConfig.ENABLED_FEATURES, 'includes').mockReturnValueOnce(false); // Ensure hCaptcha feature is disabled
+      const mockFormData = mock<FormData>();
+      mockFormData.get.calledWith('h-captcha-response').mockReturnValue('some-response');
+      const mockRequest = mock<Request>();
+      const mockOnInvalidHCaptcha = vi.fn();
+      vi.mocked(getClientIpAddress).mockReturnValue('192.168.0.1');
 
-      await securityHandler.validateHCaptchaResponse(mockRequest, onInvalidHCaptcha);
+      const params = {
+        formData: mockFormData,
+        request: mockRequest,
+        userId: 'user-id',
+      };
 
-      expect(mockLogger.debug).toHaveBeenCalledWith('hCaptcha feature is disabled; skipping hCaptcha response validation');
-      expect(mockHCaptchaValidator.validateHCaptchaResponse).not.toHaveBeenCalled(); // Ensure hCaptcha validator was not called
-      expect(onInvalidHCaptcha).not.toHaveBeenCalled(); // Ensure the invalid callback was not called
+      await securityHandler.validateHCaptchaResponse(params, mockOnInvalidHCaptcha);
+
+      // Expect the callback not to be called if hCaptcha feature is disabled
+      expect(mockFormData.get).not.toBeCalled();
+      expect(getClientIpAddress).not.toHaveBeenCalled();
+      expect(mockOnInvalidHCaptcha).not.toHaveBeenCalled();
     });
 
-    it('should log error and proceed if hCaptcha validation fails unexpectedly', async () => {
-      const mockRequest = new Request('http://localhost');
-      const onInvalidHCaptcha = vi.fn();
+    it('should not call the onInvalidHCaptcha callback if the hCaptcha response is valid', async () => {
+      // Mocking the hCaptcha validation to return a valid result
+      hCaptchaValidator.validateHCaptchaResponse.mockResolvedValue({ isValid: true });
 
-      vi.spyOn(mockServerConfig.ENABLED_FEATURES, 'includes').mockReturnValueOnce(true); // Ensure hCaptcha feature is enabled
-      const error = new Error('Unexpected error');
-      mockHCaptchaValidator.validateHCaptchaResponse.mockRejectedValue(error); // Mock unexpected error
+      const mockFormData = mock<FormData>();
+      mockFormData.get.calledWith('h-captcha-response').mockReturnValue('some-response');
+      const mockRequest = mock<Request>();
+      const mockOnInvalidHCaptcha = vi.fn();
+      vi.mocked(getClientIpAddress).mockReturnValue('192.168.0.1');
 
-      await securityHandler.validateHCaptchaResponse(mockRequest, onInvalidHCaptcha);
+      const params = {
+        formData: mockFormData,
+        request: mockRequest,
+        userId: 'user-id',
+      };
 
-      expect(mockLogger.warn).toHaveBeenCalledWith('hCaptcha validation failed; proceeding with normal application flow; error: [%s]', error);
-      expect(onInvalidHCaptcha).not.toHaveBeenCalled(); // Ensure the invalid callback was not called
+      await securityHandler.validateHCaptchaResponse(params, mockOnInvalidHCaptcha);
+
+      // Expect the callback not to be called if validation passes
+      expect(mockOnInvalidHCaptcha).not.toHaveBeenCalled();
+      expect(mockFormData.get).toBeCalledWith('h-captcha-response');
+      expect(getClientIpAddress).toHaveBeenCalledWith(mockRequest);
     });
   });
 });

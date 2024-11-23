@@ -40,7 +40,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, session });
   const csrfToken = String(session.get('csrfToken'));
@@ -56,7 +56,7 @@ export async function action({ context: { appContainer, session }, request, para
   const log = getLogger('protected-renew/terms-and-conditions');
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 

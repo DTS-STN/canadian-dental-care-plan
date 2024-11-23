@@ -27,7 +27,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('data-unavailable:page-title') }) };

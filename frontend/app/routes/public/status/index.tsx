@@ -53,14 +53,13 @@ export async function action({ context: { appContainer, session }, params, reque
   featureEnabled('status');
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateCsrfToken(request);
-  await securityHandler.validateHCaptchaResponse(request, () => {
+  const formData = await request.formData();
+  securityHandler.validateCsrfToken({ formData, session });
+  await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const formData = await request.formData();
   const formDataSchema = z.object({
     checkFor: z.nativeEnum(CheckFor, { errorMap: () => ({ message: t('status:form.error-message.selection-required') }) }),
   });

@@ -21,7 +21,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   // prevent users from entering any ID in the URL and seeing other users' letters
   const letters: ReadonlyArray<LetterDto> | undefined = session.get('letters');

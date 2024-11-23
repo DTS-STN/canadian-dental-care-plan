@@ -44,7 +44,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   const csrfToken = String(session.get('csrfToken'));
 
@@ -89,7 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const log = getLogger('protected/renew/demographic-survey');
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(TYPES.configs.ServerConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);

@@ -5,54 +5,99 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { CsrfTokenInvalidException, HCaptchaInvalidException, RaoidcSessionInvalidException } from '~/.server/web/exceptions';
-import type { SessionService } from '~/.server/web/services';
+import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 
+/**
+ * Parameters for validating the RAOIDC authentication session.
+ */
+export interface ValidateAuthSessionParams {
+  /**
+   * The incoming request to validate.
+   */
+  request: Request;
+
+  /**
+   * The session object to validate.
+   */
+  session: Session;
+}
+
+/**
+ * Parameters for validating the CSRF token.
+ */
+export interface ValidateCsrfTokenParams {
+  /**
+   * The CSRF token from the request form data.
+   */
+  formData: FormData;
+
+  /**
+   * The CSRF token from the session.
+   */
+  session: Session;
+}
+
+/**
+ * Parameters for validating the hCaptcha response.
+ */
+export interface ValidateHCaptchaResponseParams {
+  /**
+   * The hCaptcha response from the request form data.
+   */
+  formData: FormData;
+
+  /**
+   * The incoming request, used to extract the user's IP address.
+   */
+  request: Request;
+
+  /**
+   * The user ID performing the validation (defaults to 'anonymous' if not provided).
+   */
+  userId?: string;
+}
+
+/**
+ * Callback function to invoke if the hCaptcha validation fails.
+ */
+export type InvalidHCaptchaCallback = () => Promise<void> | void;
+
+/**
+ * Security handler interface that defines methods for validating authentication sessions, CSRF tokens, and hCaptcha responses.
+ */
 export interface SecurityHandler {
   /**
    * Validates the RAOIDC authentication session.
    *
-   * This method checks if the RAOIDC session is valid, typically by verifying the session
-   * tokens and performing a session validation with an external provider.
-   *
-   * @param request - The HTTP request that contains the session to validate.
-   * @throws {Response} If the session is invalid, it throws a redirect to the login page.
-   * @returns {Promise<void>} A promise that resolves if the session is valid.
+   * @param params - Parameters containing the session and request URL.
+   * @throws {Response} Throws a redirect response if the session is invalid.
+   * @returns {Promise<void>} Resolves if the session is valid.
    */
-  validateAuthSession(request: Request): Promise<void>;
+  validateAuthSession(params: ValidateAuthSessionParams): Promise<void>;
 
   /**
    * Validates the CSRF token in the request.
    *
-   * This method checks if the CSRF token in the request matches the token stored in the session,
-   * ensuring protection against Cross-Site Request Forgery attacks.
-   *
-   * @param request - The HTTP request containing the CSRF token to validate.
-   * @throws {Response} If the CSRF token is invalid, it returns a `403 Forbidden` response.
-   * @returns {Promise<void>} A promise that resolves if the CSRF token is valid.
+   * @param params - Parameters containing the CSRF token from the request and session.
+   * @throws {Response} Throws a 403 Forbidden response if the CSRF token is invalid.
+   * @returns {void} Resolves if the token is valid.
    */
-  validateCsrfToken(request: Request): Promise<void>;
+  validateCsrfToken(params: ValidateCsrfTokenParams): void;
 
   /**
-   * Validates the hCaptcha response from the request. If the hCaptcha feature is enabled and the validation fails,
-   * it invokes the provided callback to handle the invalid response.
+   * Validates the hCaptcha response in the request.
    *
-   * @param request - The incoming request containing the hCaptcha response to validate.
-   * @param onInvalidHCaptcha - A callback function that is invoked when the hCaptcha response is invalid. This
-   *    should handle actions like logging the invalid attempt or taking remedial steps.
-   * @returns A promise that resolves once the validation is completed, whether successful or not.
-   *
-   * @example
-   * // Example of using a simple invalid response callback
-   * validateHCaptchaResponse(req, async () => {
-   *   // Handle invalid hCaptcha response
-   *   console.log('hCaptcha response invalid');
-   * });
+   * @param params - Parameters containing the hCaptcha response and an optional callback for invalid responses.
+   * @param invalidHCaptchaCallback - Callback function invoked if hCaptcha validation fails.
+   * @returns {Promise<void>} Resolves after validation is complete.
    */
-  validateHCaptchaResponse(request: Request, onInvalidHCaptcha: () => Promise<void> | void): Promise<void>;
+  validateHCaptchaResponse(params: ValidateHCaptchaResponseParams, invalidHCaptchaCallback: InvalidHCaptchaCallback): Promise<void>;
 }
 
+/**
+ * Default implementation of the SecurityHandler interface.
+ */
 @injectable()
 export class DefaultSecurityHandler implements SecurityHandler {
   private readonly log: Logger;
@@ -60,7 +105,6 @@ export class DefaultSecurityHandler implements SecurityHandler {
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
-    @inject(TYPES.web.services.SessionService) private readonly sessionService: SessionService,
     @inject(TYPES.web.validators.CsrfTokenValidator) private readonly csrfTokenValidator: CsrfTokenValidator,
     @inject(TYPES.web.validators.HCaptchaValidator) private readonly hCaptchaValidator: HCaptchaValidator,
     @inject(TYPES.web.validators.RaoidcSessionValidator) private readonly raoidcSessionValidator: RaoidcSessionValidator,
@@ -68,83 +112,76 @@ export class DefaultSecurityHandler implements SecurityHandler {
     this.log = logFactory.createLogger('DefaultSecurityHandler');
   }
 
-  async validateAuthSession(request: Request): Promise<void> {
-    try {
-      this.log.debug('Validating RAOIDC session');
+  /**
+   * Validates the RAOIDC authentication session.
+   *
+   * @param params - The session and request to validate.
+   * @throws {Response} Redirects to the login page if the session is invalid.
+   * @returns {Promise<void>} Resolves if the session is valid.
+   */
+  async validateAuthSession({ request, session }: ValidateAuthSessionParams): Promise<void> {
+    this.log.debug('Validating RAOIDC session [%s]', session.id);
+    const result = await this.raoidcSessionValidator.validateRaoidcSession({ session });
 
-      const session = await this.getSession(request);
-      await this.raoidcSessionValidator.validateRaoidcSession(session);
-
-      this.log.debug('RAOIDC session is valid');
-    } catch (err) {
-      if (err instanceof RaoidcSessionInvalidException) {
-        this.log.debug('RAOIDC session is invalid; reason: %s', err.message);
-        const { pathname, searchParams } = new URL(request.url);
-        const returnTo = encodeURIComponent(`${pathname}?${searchParams}`);
-        throw redirectDocument(`/auth/login?returnto=${returnTo}`);
-      }
-      this.log.debug('RAOIDC session validation failed');
-      throw err;
+    if (!result.isValid) {
+      this.log.debug('RAOIDC session [%s] is invalid; errorMessage: %s', session.id, result.errorMessage);
+      const { pathname, searchParams } = new URL(request.url);
+      const returnTo = encodeURIComponent(`${pathname}?${searchParams}`);
+      throw redirectDocument(`/auth/login?returnto=${returnTo}`);
     }
-  }
 
-  async validateCsrfToken(request: Request): Promise<void> {
-    try {
-      this.log.debug('Validating CSRF token');
-
-      const session = await this.getSession(request);
-      await this.csrfTokenValidator.validateCsrfToken(request, session);
-
-      this.log.debug('CSRF token is valid');
-    } catch (err) {
-      if (err instanceof CsrfTokenInvalidException) {
-        this.log.debug('CSRF token is invalid; reason: %s', err.message);
-        throw new Response('Invalid CSRF token', { status: 403 });
-      }
-      this.log.debug('CSRF token validation failed');
-      throw err;
-    }
-  }
-
-  async validateHCaptchaResponse(request: Request, onInvalidHCaptcha: () => Promise<void> | void): Promise<void> {
-    try {
-      this.log.debug('Validating hCaptcha response');
-
-      const isHcaptchaEnabled = this.serverConfig.ENABLED_FEATURES.includes('hcaptcha');
-      if (!isHcaptchaEnabled) {
-        this.log.debug('hCaptcha feature is disabled; skipping hCaptcha response validation');
-        return;
-      }
-
-      await this.hCaptchaValidator.validateHCaptchaResponse(request);
-
-      this.log.debug('hCaptcha response is valid');
-    } catch (err) {
-      if (err instanceof HCaptchaInvalidException) {
-        this.log.debug('hCaptcha response is invalid; reason: %s', err.message);
-        await onInvalidHCaptcha(); // Call the invalid response handler
-        return;
-      }
-
-      this.log.warn('hCaptcha validation failed; proceeding with normal application flow; error: [%s]', err);
-    }
+    this.log.debug('RAOIDC session is valid');
   }
 
   /**
-   * Retrieves the session object from the incoming request.
-   * This function extracts the 'Cookie' header from the request, retrieves the session
-   * using the session service, and logs relevant session information.
+   * Validates the CSRF token.
    *
-   * @param request - The incoming request containing the 'Cookie' header used to fetch the session.
-   * @returns A promise that resolves with the session object.
+   * @param params - Contains the CSRF token from the request and session to validate.
+   * @throws {Response} Throws a 403 Forbidden response if the CSRF token is invalid.
+   * @returns {void} Resolves if the token is valid.
    */
-  protected async getSession(request: Request): Promise<Session> {
-    this.log.trace('Getting session from request');
+  validateCsrfToken({ formData, session }: ValidateCsrfTokenParams): void {
+    this.log.debug('Validating CSRF token');
 
-    const cookieHeader = request.headers.get('Cookie');
-    const session = await this.sessionService.getSession(cookieHeader);
+    const requestToken = String(formData.get('_csrf'));
+    const sessionToken = String(session.get('csrfToken'));
 
-    this.log.trace('Session retrieved; session.id: %s', session.id);
-    return session;
+    const result = this.csrfTokenValidator.validateCsrfToken({ requestToken, sessionToken });
+
+    if (!result.isValid) {
+      this.log.debug('CSRF token is invalid; errorMessage: %s', result.errorMessage);
+      throw new Response('Invalid CSRF token', { status: 403 });
+    }
+
+    this.log.debug('CSRF token is valid');
+  }
+
+  /**
+   * Validates the hCaptcha response.
+   *
+   * @param params - The hCaptcha response and the request to extract the IP address.
+   * @param invalidHCaptchaCallback - Callback function invoked if hCaptcha validation fails.
+   * @returns {Promise<void>} Resolves after validation is complete.
+   */
+  async validateHCaptchaResponse({ formData, request, userId = 'anonymous' }: ValidateHCaptchaResponseParams, invalidHCaptchaCallback: InvalidHCaptchaCallback): Promise<void> {
+    this.log.debug('Validating hCaptcha response');
+
+    const isHcaptchaEnabled = this.serverConfig.ENABLED_FEATURES.includes('hcaptcha');
+    if (!isHcaptchaEnabled) {
+      this.log.debug('hCaptcha feature is disabled; skipping hCaptcha validation');
+      return;
+    }
+
+    const hCaptchaResponse = String(formData.get('h-captcha-response'));
+    const ipAddress = getClientIpAddress(request) ?? undefined;
+
+    const result = await this.hCaptchaValidator.validateHCaptchaResponse({ hCaptchaResponse, ipAddress, userId });
+    if (!result.isValid) {
+      this.log.debug('hCaptcha response is invalid; errorMessage: %s', result.errorMessage);
+      await invalidHCaptchaCallback();
+      return;
+    }
+
+    this.log.debug('hCaptcha response is valid');
   }
 }

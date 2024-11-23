@@ -43,7 +43,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -61,7 +61,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const log = getLogger('protected/renew/member-selection');
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession(request);
+  await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, session });
 

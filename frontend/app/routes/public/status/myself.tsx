@@ -54,8 +54,9 @@ export async function action({ context: { appContainer, session }, params, reque
   featureEnabled('status');
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateCsrfToken(request);
-  await securityHandler.validateHCaptchaResponse(request, () => {
+  const formData = await request.formData();
+  securityHandler.validateCsrfToken({ formData, session });
+  await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
@@ -75,8 +76,6 @@ export async function action({ context: { appContainer, session }, params, reque
       .refine(isValidCodeOrNumber, t('status:myself.form.error-message.application-code-valid'))
       .transform((code) => extractDigits(code)),
   });
-
-  const formData = await request.formData();
 
   const data = {
     sin: formData.get('sin') ? String(formData.get('sin')) : undefined,
