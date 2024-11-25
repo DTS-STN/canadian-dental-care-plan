@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { data, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
@@ -61,16 +61,14 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formData = await request.formData();
 
-  const data = {
+  const parsedDataResult = stubLoginSchema.safeParse({
     sin: String(formData.get('sin') ?? ''),
     sid: String(formData.get('sid') ?? ''),
     sub: String(formData.get('sub') ?? ''),
-  };
-
-  const parsedDataResult = stubLoginSchema.safeParse(data);
+  });
 
   if (!parsedDataResult.success) {
-    return Response.json(
+    return data(
       {
         errors: transformFlattenedError(parsedDataResult.error.flatten()),
       },

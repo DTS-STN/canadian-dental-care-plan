@@ -2,7 +2,7 @@ import type { FormEvent } from 'react';
 import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { data, redirect } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -77,15 +77,13 @@ export async function action({ context: { appContainer, session }, params, reque
       .transform((code) => extractDigits(code)),
   });
 
-  const data = {
+  const parsedDataResult = formDataSchema.safeParse({
     sin: formData.get('sin') ? String(formData.get('sin')) : undefined,
     code: formData.get('code') ? String(formData.get('code')) : undefined,
-  };
-
-  const parsedDataResult = formDataSchema.safeParse(data);
+  });
 
   if (!parsedDataResult.success) {
-    return Response.json(
+    return data(
       {
         errors: transformFlattenedError(parsedDataResult.error.flatten()),
       },

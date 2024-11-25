@@ -1,3 +1,5 @@
+import { data } from '@remix-run/node';
+
 import { DiagLogLevel } from '@opentelemetry/api';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
@@ -231,7 +233,7 @@ export function featureEnabled(feature: FeatureName) {
   const { ENABLED_FEATURES } = getEnv();
   if (!ENABLED_FEATURES.includes(feature)) {
     log.warn('Feature [%s] is not enabled; returning 404 response', feature);
-    throw new Response(null, { status: 404 });
+    throw data(null, { status: 404 });
   }
 }
 

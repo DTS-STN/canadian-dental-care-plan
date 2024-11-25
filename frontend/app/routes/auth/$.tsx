@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { data, redirect } from '@remix-run/node';
 
 import { z } from 'zod';
 
@@ -40,7 +40,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     case 'authorize': {
       if (!mockEnabled('raoidc')) {
         log.warn('Call to mock authorize endpoint when mocks are not enabled');
-        return new Response(null, { status: 404 });
+        return data(null, { status: 404 });
       }
 
       return handleMockAuthorizeRequest({ context, params, request });
@@ -48,7 +48,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     default: {
       log.warn('Invalid authentication route requested: [%s]', slug);
       getInstrumentationService().createCounter('auth.unknown.requests').add(1);
-      return new Response(null, { status: 404 });
+      return data(null, { status: 404 });
     }
   }
 }
@@ -118,7 +118,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
     log.warn('Invalid return URL [%s]', returnUrl);
     getInstrumentationService().createCounter('auth.login.raoidc.requests.invalid-return-url').add(1);
 
-    return new Response(null, { status: 400 });
+    return data(null, { status: 400 });
   }
 
   const redirectUri = generateCallbackUri(origin, 'raoidc');
@@ -200,7 +200,7 @@ function handleMockAuthorizeRequest({ context: { appContainer }, request }: Load
     log.warn('Invalid authorize request [%j]', result.error.flatten().fieldErrors);
     getInstrumentationService().createCounter('auth.authorize.requests.invalid').add(1);
 
-    return new Response(JSON.stringify(result.error.flatten().fieldErrors), { status: 400 });
+    return data(JSON.stringify(result.error.flatten().fieldErrors), { status: 400 });
   }
 
   const redirectUri = new URL(result.data.redirectUri);

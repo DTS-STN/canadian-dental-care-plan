@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
+import { data } from '@remix-run/node';
 
 import type { HealthCheck, HealthCheckOptions } from '@dts-stn/health-checks';
 import { HealthCheckConfig, execute, getHttpStatusCode } from '@dts-stn/health-checks';
@@ -56,7 +57,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // execute the health checks
   const systemHealthSummary = await execute([redisHealthCheck], healthCheckOptions);
 
-  return Response.json(systemHealthSummary, {
+  return data(systemHealthSummary, {
     headers: { 'Content-Type': HealthCheckConfig.responses.contentType },
     status: getHttpStatusCode(systemHealthSummary.status),
   });

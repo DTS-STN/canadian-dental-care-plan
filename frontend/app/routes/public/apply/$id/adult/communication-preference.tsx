@@ -2,7 +2,7 @@ import type { ChangeEventHandler } from 'react';
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { data, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -52,7 +52,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
   if (!communicationMethodEmail) {
-    throw new Response('Expected communication method email not found!', { status: 500 });
+    throw data('Expected communication method email not found!', { status: 500 });
   }
 
   const csrfToken = String(session.get('csrfToken'));
@@ -115,19 +115,18 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
+    throw data('Invalid CSRF token', { status: 400 });
   }
 
-  const data = {
+  const parsedDataResult = formSchema.safeParse({
     confirmEmail: formData.get('confirmEmail') ? String(formData.get('confirmEmail') ?? '') : undefined,
     email: formData.get('email') ? String(formData.get('email') ?? '') : undefined,
     preferredLanguage: String(formData.get('preferredLanguage') ?? ''),
     preferredMethod: String(formData.get('preferredMethod') ?? ''),
-  };
-  const parsedDataResult = formSchema.safeParse(data);
+  });
 
   if (!parsedDataResult.success) {
-    return Response.json(
+    return data(
       {
         errors: transformFlattenedError(parsedDataResult.error.flatten()),
       },

@@ -64,9 +64,10 @@ export async function action({ context: { appContainer, session }, params, reque
     checkFor: z.nativeEnum(CheckFor, { errorMap: () => ({ message: t('status:form.error-message.selection-required') }) }),
   });
 
-  const data = { checkFor: formData.get('statusCheckFor') };
+  const parsedCheckFor = formDataSchema.safeParse({
+    checkFor: formData.get('statusCheckFor'),
+  });
 
-  const parsedCheckFor = formDataSchema.safeParse(data);
   if (!parsedCheckFor.success) {
     return {
       errors: transformFlattenedError(parsedCheckFor.error.flatten()),

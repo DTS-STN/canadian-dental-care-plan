@@ -9,7 +9,6 @@ import { DefaultSecurityHandler } from '~/.server/routes/security';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 
-vi.mock('@remix-run/node');
 vi.mock('~/.server/utils/ip-address.utils');
 
 describe('DefaultSecurityHandler', () => {
@@ -51,8 +50,21 @@ describe('DefaultSecurityHandler', () => {
       const mockSession = mock<Session>();
       const mockRequest = mock<Request>({ url: 'https://localhost:3000/en/protected-page' });
 
-      // Expect a redirect to login page if session is invalid
-      await expect(securityHandler.validateAuthSession({ request: mockRequest, session: mockSession })).rejects.toThrowError('/auth/login?returnto=%2Fen%2Fprotected-page%3F');
+      await expect(securityHandler.validateAuthSession({ request: mockRequest, session: mockSession })).rejects.toThrowError(Response);
+
+      try {
+        await securityHandler.validateAuthSession({ request: mockRequest, session: mockSession });
+      } catch (error) {
+        // Assert the error is a Response object
+        expect(error).toBeInstanceOf(Response);
+
+        // Assert status code
+        expect((error as Response).status).toBe(302);
+
+        // Assert headers
+        expect((error as Response).headers.get('Location')).toBe('/auth/login?returnto=%2Fen%2Fprotected-page%3F');
+        expect((error as Response).headers.get('X-Remix-Reload-Document')).toBe('true');
+      }
     });
 
     it('should not throw anything when the RAOIDC session is valid', async () => {
@@ -79,7 +91,13 @@ describe('DefaultSecurityHandler', () => {
       mockSession.get.calledWith('csrfToken').mockReturnValue('session-token');
 
       // Expect a 403 response if CSRF token is invalid
-      expect(() => securityHandler.validateCsrfToken({ formData: mockFormData, session: mockSession })).toThrowError(expect.objectContaining({ status: 403 }));
+      expect(() => securityHandler.validateCsrfToken({ formData: mockFormData, session: mockSession })).toThrowError(
+        expect.objectContaining({
+          data: 'Invalid CSRF token',
+          init: { status: 403 },
+          type: 'DataWithResponseInit',
+        }),
+      );
     });
 
     it('should not throw anything if the CSRF token is valid', () => {

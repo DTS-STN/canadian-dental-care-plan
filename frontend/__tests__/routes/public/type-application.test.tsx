@@ -1,5 +1,5 @@
 import type { AppLoadContext } from '@remix-run/node';
-import { createMemorySessionStorage, redirect } from '@remix-run/node';
+import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
@@ -18,13 +18,9 @@ vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
   }),
 }));
 
-vi.mock('~/.server/utils/locale.utils', () => {
-  const tMockFn = vi.fn((key) => key);
-  return {
-    getFixedT: vi.fn().mockResolvedValue(tMockFn),
-    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/application-delegate')).mockResolvedValueOnce(redirect('/en/apply/123/tax-filing')),
-  };
-});
+vi.mock('~/.server/utils/locale.utils', () => ({
+  getFixedT: vi.fn().mockResolvedValue(vi.fn((i18nKey) => i18nKey)),
+}));
 
 describe('_public.apply.id.type-of-application', () => {
   afterEach(() => {
@@ -64,11 +60,15 @@ describe('_public.apply.id.type-of-application', () => {
         params: {},
       });
 
-      expect(response).toBeInstanceOf(Response);
-      expect(response.status).toBe(400);
-
-      const data = await response.json();
-      expect(data.errors.typeOfApplication).toContain('apply:type-of-application.error-message.type-of-application-required');
+      expect(response).toEqual({
+        data: {
+          errors: {
+            typeOfApplication: 'apply:type-of-application.error-message.type-of-application-required',
+          },
+        },
+        init: { status: 400 },
+        type: 'DataWithResponseInit',
+      });
     });
 
     it('should redirect to error page if delegate is selected', async () => {
@@ -85,8 +85,9 @@ describe('_public.apply.id.type-of-application', () => {
         params: { lang: 'en', id: '123' },
       });
 
-      expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/application-delegate');
+      expect(response).toBeInstanceOf(Response);
+      expect((response as Response).status).toBe(302);
+      expect((response as Response).headers.get('location')).toBe('/en/apply/123/application-delegate');
     });
 
     it('should redirect to tax filing page if personal is selected', async () => {
@@ -103,8 +104,9 @@ describe('_public.apply.id.type-of-application', () => {
         params: { lang: 'en', id: '123' },
       });
 
-      expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/adult/tax-filing');
+      expect(response).toBeInstanceOf(Response);
+      expect((response as Response).status).toBe(302);
+      expect((response as Response).headers.get('location')).toBe('/en/apply/123/adult/tax-filing');
     });
   });
 });

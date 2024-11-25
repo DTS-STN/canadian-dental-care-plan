@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { data } from '@remix-run/node';
 import { redirect, useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -103,7 +104,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
+    throw data('Invalid CSRF token', { status: 400 });
   }
 
   const demographicSurveySchema = z
@@ -126,7 +127,7 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     });
 
-  const data = {
+  const parsedDataResult = demographicSurveySchema.safeParse({
     indigenousStatus: String(formData.get('indigenousStatus') ?? ''),
     firstNations: formData.getAll('firstNations'),
     disabilityStatus: String(formData.get('disabilityStatus') ?? ''),
@@ -134,11 +135,10 @@ export async function action({ context: { appContainer, session }, params, reque
     anotherEthnicGroup: String(formData.get('anotherEthnicGroup') ?? ''),
     locationBornStatus: String(formData.get('locationBornStatus') ?? ''),
     genderStatus: String(formData.get('genderStatus') ?? ''),
-  };
+  });
 
-  const parsedDataResult = demographicSurveySchema.safeParse(data);
   if (!parsedDataResult.success) {
-    return Response.json(
+    return data(
       {
         errors: transformFlattenedError(parsedDataResult.error.flatten()),
       },

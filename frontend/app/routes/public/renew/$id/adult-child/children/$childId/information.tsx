@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { data, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -82,7 +82,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
+    throw data('Invalid CSRF token', { status: 400 });
   }
 
   // Form action Continue & Save
@@ -157,7 +157,7 @@ export async function action({ context: { appContainer, session }, params, reque
       };
     });
 
-  const data = {
+  const parsedDataResult = childInformationSchema.safeParse({
     firstName: String(formData.get('firstName') ?? ''),
     lastName: String(formData.get('lastName') ?? ''),
     dateOfBirthYear: formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined,
@@ -166,11 +166,10 @@ export async function action({ context: { appContainer, session }, params, reque
     dateOfBirth: '',
     clientNumber: String(formData.get('clientNumber') ?? ''),
     isParent: formData.get('isParent') ? formData.get('isParent') === YesNoOption.Yes : undefined,
-  };
+  });
 
-  const parsedDataResult = childInformationSchema.safeParse(data);
   if (!parsedDataResult.success) {
-    return Response.json(
+    return data(
       {
         errors: transformFlattenedError(parsedDataResult.error.flatten()),
       },

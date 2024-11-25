@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
+import { data } from '@remix-run/node';
 import { Outlet, isRouteErrorResponse, useParams, useRouteError } from '@remix-run/react';
 
 import { TYPES } from '~/.server/constants';
@@ -11,7 +12,7 @@ export function loader({ context: { appContainer, session }, params, request }: 
 
   if (!isAppLocale(params.lang)) {
     log.warn('Invalid lang requested [%s]; responding with 404', params.lang);
-    throw new Response(null, { status: 404 });
+    throw data(null, { status: 404 });
   }
 
   return { lang: params.lang };

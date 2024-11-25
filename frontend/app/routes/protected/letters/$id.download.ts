@@ -1,3 +1,4 @@
+import { data } from '@remix-run/node';
 import type { LoaderFunctionArgs } from '@remix-run/node';
 
 import { Buffer } from 'node:buffer';
@@ -17,7 +18,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   if (!params.id) {
     instrumentationService.countHttpStatus('letters.download', 400);
-    throw new Response(null, { status: 400 });
+    throw data(null, { status: 400 });
   }
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -28,7 +29,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const letter = letters?.find((letter) => letter.id === params.id);
   if (!letter) {
     instrumentationService.countHttpStatus('letters.download', 404);
-    throw new Response(null, { status: 404 });
+    throw data(null, { status: 404 });
   }
 
   const locale = getLocale(request);
