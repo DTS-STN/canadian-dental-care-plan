@@ -1,5 +1,5 @@
 import type { AppLoadContext } from '@remix-run/node';
-import { createMemorySessionStorage, redirect } from '@remix-run/node';
+import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
@@ -30,8 +30,7 @@ vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
 
 vi.mock('~/.server/utils/locale.utils', () => {
   return {
-    getFixedT: vi.fn().mockResolvedValue(vi.fn()),
-    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/adult/applicant-information')).mockResolvedValueOnce(redirect('/en/apply/123/adult/dob-eligibility')),
+    getFixedT: vi.fn().mockResolvedValue(vi.fn((i18nKey) => i18nKey)),
   };
 });
 
@@ -75,12 +74,17 @@ describe('_public.apply.id.date-of-birth', () => {
         params: {},
       });
 
-      const data = await response.json();
-      expect(response.status).toBe(400);
-      expect(data.errors.dateOfBirth).toBeUndefined();
-      expect(data.errors.dateOfBirthYear).toBeDefined();
-      expect(data.errors.dateOfBirthMonth).toBeDefined();
-      expect(data.errors.dateOfBirthDay).toBeDefined();
+      expect(response).toEqual({
+        data: {
+          errors: {
+            dateOfBirthDay: 'apply-adult:eligibility.date-of-birth.error-message.date-of-birth-day-required',
+            dateOfBirthMonth: 'apply-adult:eligibility.date-of-birth.error-message.date-of-birth-month-required',
+            dateOfBirthYear: 'apply-adult:eligibility.date-of-birth.error-message.date-of-birth-year-required',
+          },
+        },
+        init: { status: 400 },
+        type: 'DataWithResponseInit',
+      });
     });
 
     it('should redirect to applicant information page if dob is 65 years or over', async () => {
@@ -106,8 +110,9 @@ describe('_public.apply.id.date-of-birth', () => {
         params: { lang: 'en', id: '123' },
       });
 
-      expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/adult/applicant-information');
+      expect(response).toBeInstanceOf(Response);
+      expect((response as Response).status).toBe(302);
+      expect((response as Response).headers.get('location')).toBe('/en/apply/123/adult/applicant-information');
     });
 
     it('should redirect to disability tax credit page if dob is under 65 years', async () => {
@@ -133,8 +138,9 @@ describe('_public.apply.id.date-of-birth', () => {
         params: { lang: 'en', id: '123' },
       });
 
-      expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/adult/disability-tax-credit');
+      expect(response).toBeInstanceOf(Response);
+      expect((response as Response).status).toBe(302);
+      expect((response as Response).headers.get('location')).toBe('/en/apply/123/adult/disability-tax-credit');
       expect(getAgeFromDateString).toBeCalled();
     });
   });

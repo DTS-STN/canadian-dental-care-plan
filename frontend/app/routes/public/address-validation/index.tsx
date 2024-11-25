@@ -2,7 +2,8 @@ import type { SyntheticEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect, useLoaderData } from '@remix-run/react';
+import { data, redirect } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 
 import { faCheck, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -56,6 +57,8 @@ interface AddressInvalidResponse {
   status: 'address-invalid';
 }
 
+type AddressResponse = AddressSuggestionResponse | AddressInvalidResponse;
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('address-validation', 'gcweb'),
   pageTitleI18nKey: 'address-validation:index.page-title',
@@ -95,7 +98,7 @@ export async function action({ context: { appContainer, session }, request, para
   featureEnabled('address-validation');
 
   if (request.method !== 'POST') {
-    return Response.json({ message: 'Method not allowed' }, { status: 405 });
+    throw data({ message: 'Method not allowed' }, { status: 405 });
   }
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -188,6 +191,15 @@ export async function action({ context: { appContainer, session }, request, para
   return redirect(getPathById('public/address-validation/review', params));
 }
 
+function isAddressResponse(data: unknown): data is AddressResponse {
+  return (
+    typeof data === 'object' && // Ensure it's an object
+    data !== null && // Ensure it's not null
+    'status' in data && // Ensure 'status' exists on data
+    typeof data.status === 'string' // Ensure status is a string
+  );
+}
+
 export default function AddressValidationIndexRoute() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, countries, defaultMailingAddress, provinceTerritoryStates, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
@@ -198,8 +210,7 @@ export default function AddressValidationIndexRoute() {
     return provinceTerritoryStates.filter(({ countryId }) => countryId === countryValue);
   }, [provinceTerritoryStates, countryValue]);
 
-  type AddressDialogContentState = AddressSuggestionResponse | AddressInvalidResponse | null;
-  const [addressDialogContent, setAddressDialogContent] = useState<AddressDialogContentState>(null);
+  const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
 
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
@@ -211,8 +222,8 @@ export default function AddressValidationIndexRoute() {
   });
 
   useEffect(() => {
-    setAddressDialogContent(fetcher.data && 'status' in fetcher.data ? fetcher.data : null);
-  }, [fetcher.data]);
+    setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
+  }, [fetcher, fetcher.data]);
 
   function onDialogOpenChangeHandler(open: boolean) {
     if (!open) {

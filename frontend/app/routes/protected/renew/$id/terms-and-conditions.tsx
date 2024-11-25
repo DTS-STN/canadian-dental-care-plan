@@ -1,5 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect, useFetcher, useLoaderData } from '@remix-run/react';
+import { data, redirect } from '@remix-run/node';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -66,7 +67,7 @@ export async function action({ context: { appContainer, session }, request, para
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
+    throw data('Invalid CSRF token', { status: 400 });
   }
 
   const consentSchema = z
@@ -87,16 +88,14 @@ export async function action({ context: { appContainer, session }, request, para
       shareData: val.shareData.valueOf() === CheckboxValue.Yes,
     }));
 
-  const data = {
+  const parsedDataResult = consentSchema.safeParse({
     acknowledgeTerms: formData.get('acknowledgeTerms'),
     acknowledgePrivacy: formData.get('acknowledgePrivacy'),
     shareData: formData.get('shareData'),
-  };
-
-  const parsedDataResult = consentSchema.safeParse(data);
+  });
 
   if (!parsedDataResult.success) {
-    return Response.json(
+    return data(
       {
         errors: transformFlattenedError(parsedDataResult.error.flatten()),
       },

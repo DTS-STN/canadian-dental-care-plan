@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { data, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -155,10 +155,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
+    throw data('Invalid CSRF token', { status: 400 });
   }
 
-  const data = {
+  const parsedDataResult = addressInformationSchema.safeParse({
     mailingAddress: String(formData.get('mailingAddress') ?? ''),
     mailingApartment: formData.get('mailingApartment') ? String(formData.get('mailingApartment')) : undefined,
     mailingCountry: String(formData.get('mailingCountry') ?? ''),
@@ -172,11 +172,10 @@ export async function action({ context: { appContainer, session }, params, reque
     homeProvince: formData.get('homeProvince') ? String(formData.get('homeProvince')) : undefined,
     homeCity: formData.get('homeCity') ? String(formData.get('homeCity')) : undefined,
     homePostalCode: formData.get('homePostalCode') ? String(formData.get('homePostalCode')) : undefined,
-  };
-  const parsedDataResult = addressInformationSchema.safeParse(data);
+  });
 
   if (!parsedDataResult.success) {
-    return Response.json(
+    return data(
       {
         errors: transformFlattenedError(parsedDataResult.error.flatten()),
       },

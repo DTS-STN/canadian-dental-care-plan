@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { data, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -136,19 +136,18 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
+    throw data('Invalid CSRF token', { status: 400 });
   }
 
-  const data = {
+  const parsedDataResult = emailSchema.safeParse({
     isNewOrUpdatedEmail: formData.get('isNewOrUpdatedEmail'),
     email: formData.get('email') ? String(formData.get('email')) : undefined,
     confirmEmail: formData.get('confirmEmail') ? String(formData.get('confirmEmail')) : undefined,
     shouldReceiveEmailCommunication: formData.get('shouldReceiveEmailCommunication') ? String(formData.get('shouldReceiveEmailCommunication')) : undefined,
-  };
-  const parsedDataResult = emailSchema.safeParse(data);
+  });
 
   if (!parsedDataResult.success) {
-    return Response.json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   saveProtectedRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });

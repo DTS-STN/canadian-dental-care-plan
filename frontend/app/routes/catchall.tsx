@@ -1,4 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { data } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
 
 import { TYPES } from '~/.server/constants';
@@ -25,17 +26,17 @@ export function action({ context: { appContainer, session }, params, request }: 
 
   if (!isAppLocale(params.lang)) {
     log.warn('Invalid lang requested [%s]; responding with 404', params.lang);
-    throw new Response(null, { status: 404, statusText: 'Not Found' });
+    throw data(null, { status: 404, statusText: 'Not Found' });
   }
 
   log.warn('Invalid method requested [%s]; responding with 405', request.method);
-  throw new Response(null, { status: 405, statusText: 'Method Not Allowed' });
+  throw data(null, { status: 405, statusText: 'Method Not Allowed' });
 }
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('gcweb:public-not-found.document-title') }) };
-  return Response.json({ meta }, { status: 404 });
+  return data({ meta }, { status: 404 });
 }
 
 export default function NotFound() {

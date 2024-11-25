@@ -1,5 +1,5 @@
 import type { AppLoadContext } from '@remix-run/node';
-import { createMemorySessionStorage, redirect } from '@remix-run/node';
+import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
@@ -21,12 +21,9 @@ vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
   }),
 }));
 
-vi.mock('~/.server/utils/locale.utils', () => {
-  return {
-    getFixedT: vi.fn().mockResolvedValue(vi.fn()),
-    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/adult/date-of-birth')).mockResolvedValueOnce(redirect('/en/apply/123/file-your-taxes')),
-  };
-});
+vi.mock('~/.server/utils/locale.utils', () => ({
+  getFixedT: vi.fn().mockResolvedValue(vi.fn((i18nKey) => i18nKey)),
+}));
 
 describe('_public.apply.id.tax-filing', () => {
   afterEach(() => {
@@ -66,9 +63,15 @@ describe('_public.apply.id.tax-filing', () => {
         params: {},
       });
 
-      const data = await response.json();
-      expect(response.status).toBe(400);
-      expect(data.errors.taxFiling2023).toBeUndefined();
+      expect(response).toEqual({
+        data: {
+          errors: {
+            taxFiling2023: 'apply-adult:eligibility.tax-filing.error-message.tax-filing-required',
+          },
+        },
+        init: { status: 400 },
+        type: 'DataWithResponseInit',
+      });
     });
 
     it('should redirect to date of birth page if tax filing is completed', async () => {
@@ -85,8 +88,9 @@ describe('_public.apply.id.tax-filing', () => {
         params: { lang: 'en', id: '123' },
       });
 
-      expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/adult/date-of-birth');
+      expect(response).toBeInstanceOf(Response);
+      expect((response as Response).status).toBe(302);
+      expect((response as Response).headers.get('location')).toBe('/en/apply/123/adult/date-of-birth');
     });
 
     it('should redirect to error page if tax filing is incompleted', async () => {
@@ -103,8 +107,9 @@ describe('_public.apply.id.tax-filing', () => {
         params: { lang: 'en', id: '123' },
       });
 
-      expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/adult/file-taxes');
+      expect(response).toBeInstanceOf(Response);
+      expect((response as Response).status).toBe(302);
+      expect((response as Response).headers.get('location')).toBe('/en/apply/123/adult/file-taxes');
     });
   });
 });

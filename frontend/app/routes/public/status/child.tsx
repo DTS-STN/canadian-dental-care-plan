@@ -145,26 +145,27 @@ export async function action({ context: { appContainer, session }, params, reque
       };
     });
 
-  const data = {
-    code: String(formData.get('code') ?? ''),
-    childHasSin: formData.get('childHasSin') ? formData.get('childHasSin') === ChildHasSin.Yes : undefined,
-    sin: String(formData.get('sin') ?? ''),
-    firstName: String(formData.get('firstName') ?? ''),
-    lastName: String(formData.get('lastName') ?? ''),
-    dateOfBirthYear: formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined,
-    dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
-    dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
-    dateOfBirth: '',
-  };
+  const parsedCodeResult = codeSchema.safeParse({ code: String(formData.get('code') ?? '') });
 
-  const parsedCodeResult = codeSchema.safeParse(data);
-  const parsedChildHasSinResult = childHasSinSchema.safeParse(data);
+  const parsedChildHasSinResult = childHasSinSchema.safeParse({
+    childHasSin: formData.get('childHasSin') ? formData.get('childHasSin') === ChildHasSin.Yes : undefined,
+  });
 
   // only validate if childHasSinSchema parsing is successful and parsed childHasSin is "true"
-  const parsedSinResult = parsedChildHasSinResult.success && parsedChildHasSinResult.data.childHasSin ? sinSchema.safeParse(data) : undefined;
+  const parsedSinResult = parsedChildHasSinResult.success && parsedChildHasSinResult.data.childHasSin ? sinSchema.safeParse({ sin: String(formData.get('sin') ?? '') }) : undefined;
 
   // only validate if childHasSinSchema parsing is successful and parsed childHasSin is "false"
-  const parsedChildInfoResult = parsedChildHasSinResult.success && !parsedChildHasSinResult.data.childHasSin ? childInfoSchema.safeParse(data) : undefined;
+  const parsedChildInfoResult =
+    parsedChildHasSinResult.success && !parsedChildHasSinResult.data.childHasSin
+      ? childInfoSchema.safeParse({
+          firstName: String(formData.get('firstName') ?? ''),
+          lastName: String(formData.get('lastName') ?? ''),
+          dateOfBirthYear: formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined,
+          dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
+          dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
+          dateOfBirth: '',
+        })
+      : undefined;
 
   if (!parsedCodeResult.success || !parsedChildHasSinResult.success || parsedSinResult?.success === false || parsedChildInfoResult?.success === false) {
     return {

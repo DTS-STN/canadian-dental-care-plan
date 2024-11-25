@@ -2,7 +2,7 @@
  * An API route that can be used to perform actions with user's server-side session.
  */
 import type { ActionFunctionArgs } from '@remix-run/node';
-import { redirectDocument } from '@remix-run/node';
+import { data, redirectDocument } from '@remix-run/node';
 
 import { z } from 'zod';
 
@@ -24,7 +24,7 @@ export async function action({ context: { appContainer, session }, request }: Ac
 
   if (request.method !== 'POST') {
     log.warn('Invalid method requested [%s]; responding with 405; sessionId: [%s]', request.method, sessionId);
-    throw Response.json({ message: 'Method not allowed' }, { status: 405 });
+    throw data({ message: 'Method not allowed' }, { status: 405 });
   }
 
   const bodySchema = z.object({
@@ -38,7 +38,7 @@ export async function action({ context: { appContainer, session }, request }: Ac
 
   if (!parsedBody.success) {
     log.debug('Invalid request body [%j]; sessionId: [%s]', requestBody, sessionId);
-    return Response.json({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
+    return data({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
   }
 
   const { action, locale = 'en', redirectTo } = parsedBody.data;
@@ -54,12 +54,12 @@ export async function action({ context: { appContainer, session }, request }: Ac
         return redirectDocument(redirectToUrl, { headers });
       }
 
-      return new Response(null, { headers, status: 204 });
+      return data(null, { headers, status: 204 });
     }
 
     case 'extend': {
       log.debug("Extending user's server-side session lifetime; sessionId: [%s]", sessionId);
-      return new Response(null, { status: 204 });
+      return data(null, { status: 204 });
     }
 
     default: {

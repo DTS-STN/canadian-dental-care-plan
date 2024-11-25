@@ -1,4 +1,4 @@
-import { Session, redirectDocument } from '@remix-run/node';
+import { Session, data, redirectDocument } from '@remix-run/node';
 
 import { inject, injectable } from 'inversify';
 
@@ -150,7 +150,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
 
     if (!result.isValid) {
       this.log.debug('CSRF token is invalid; errorMessage: %s', result.errorMessage);
-      throw new Response('Invalid CSRF token', { status: 403 });
+      throw data('Invalid CSRF token', { status: 403 });
     }
 
     this.log.debug('CSRF token is valid');

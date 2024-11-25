@@ -21,7 +21,7 @@ vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
 }));
 
 vi.mock('~/.server/utils/locale.utils', () => ({
-  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+  getFixedT: vi.fn().mockResolvedValue(vi.fn((i18nKey) => i18nKey)),
   getLocale: vi.fn().mockResolvedValue('en'),
 }));
 
@@ -101,9 +101,15 @@ describe('_public.apply.id.communication-preference', () => {
         params: {},
       });
 
-      const data = await response.json();
-      expect(response.status).toBe(400);
-      expect(data.errors).toHaveProperty('preferredMethod');
+      expect(response).toEqual({
+        data: {
+          errors: {
+            preferredMethod: 'apply-adult:communication-preference.error-message.preferred-method-required',
+          },
+        },
+        init: { status: 400 },
+        type: 'DataWithResponseInit',
+      });
     });
 
     it('should validate required email field', async () => {
@@ -127,9 +133,16 @@ describe('_public.apply.id.communication-preference', () => {
         params: {},
       });
 
-      const data = await response.json();
-      expect(response.status).toBe(400);
-      expect(data.errors).toHaveProperty('email');
+      expect(response).toEqual({
+        data: {
+          errors: {
+            confirmEmail: 'apply-adult:communication-preference.error-message.confirm-email-required',
+            email: 'apply-adult:communication-preference.error-message.email-required',
+          },
+        },
+        init: { status: 400 },
+        type: 'DataWithResponseInit',
+      });
     });
 
     it('should validate required mismatched email addresses', async () => {
@@ -154,9 +167,15 @@ describe('_public.apply.id.communication-preference', () => {
         params: {},
       });
 
-      const data = await response.json();
-      expect(response.status).toBe(400);
-      expect(data.errors).toHaveProperty('confirmEmail');
+      expect(response).toEqual({
+        data: {
+          errors: {
+            confirmEmail: 'apply-adult:communication-preference.error-message.email-match',
+          },
+        },
+        init: { status: 400 },
+        type: 'DataWithResponseInit',
+      });
     });
   });
 });

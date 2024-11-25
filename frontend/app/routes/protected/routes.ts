@@ -21,7 +21,7 @@ export const routes = [
       },
       {
         id: 'protected/letters/$id.download',
-        file: 'routes/protected/letters/$id.download.tsx',
+        file: 'routes/protected/letters/$id.download.ts',
         paths: { en: '/:lang/letters/:id/download', fr: '/:lang/lettres/:id/telecharger' },
       },
       {

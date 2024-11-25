@@ -2,7 +2,7 @@ import type { ChangeEventHandler } from 'react';
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { data, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -80,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
+    throw data('Invalid CSRF token', { status: 400 });
   }
 
   // Form action Continue & Save
@@ -172,20 +172,21 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     }) satisfies z.ZodType<ChildSinState>;
 
-  const data = {
+  const parsedDataResult = childInformationSchema.safeParse({
     firstName: String(formData.get('firstName') ?? ''),
     lastName: String(formData.get('lastName') ?? ''),
     dateOfBirthYear: formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined,
     dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
     dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
     dateOfBirth: '',
+    isParent: formData.get('isParent') ? formData.get('isParent') === YesNoOption.Yes : undefined,
+  });
+
+  const parsedSinDataResult = childSinSchema.safeParse({
     hasSocialInsuranceNumber: formData.get('hasSocialInsuranceNumber') ? formData.get('hasSocialInsuranceNumber') === YesNoOption.Yes : undefined,
     socialInsuranceNumber: formData.get('socialInsuranceNumber') ? String(formData.get('socialInsuranceNumber') ?? '') : undefined,
-    isParent: formData.get('isParent') ? formData.get('isParent') === YesNoOption.Yes : undefined,
-  };
+  });
 
-  const parsedDataResult = childInformationSchema.safeParse(data);
-  const parsedSinDataResult = childSinSchema.safeParse(data);
   if (!parsedDataResult.success || !parsedSinDataResult.success) {
     return {
       errors: {

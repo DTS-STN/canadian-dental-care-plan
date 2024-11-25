@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { data, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -71,7 +71,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
+    throw data('Invalid CSRF token', { status: 400 });
   }
 
   const parentOrGuardianSchema = z.object({
@@ -80,11 +80,12 @@ export async function action({ context: { appContainer, session }, params, reque
     }),
   });
 
-  const data = { parentOrGuardian: formData.get('parentOrGuardian') };
-  const parsedDataResult = parentOrGuardianSchema.safeParse(data);
+  const parsedDataResult = parentOrGuardianSchema.safeParse({
+    parentOrGuardian: formData.get('parentOrGuardian'),
+  });
 
   if (!parsedDataResult.success) {
-    return Response.json(
+    return data(
       {
         errors: transformFlattenedError(parsedDataResult.error.flatten()),
       },
@@ -117,7 +118,7 @@ export default function ProtectedRenewParentOrGuardian() {
   const isSubmitting = fetcher.state !== 'idle';
 
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { taxFiling: 'input-radio-parent-or-guardian-option-0' });
+  const errorSummary = useErrorSummary(errors, { parentOrGuardian: 'input-radio-parent-or-guardian-option-0' });
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -138,7 +139,7 @@ export default function ProtectedRenewParentOrGuardian() {
             { value: ParentOrGuardianOption.Yes, children: t('protected-renew:children.parent-or-guardian.radio-options.yes'), defaultChecked: defaultState === true },
             { value: ParentOrGuardianOption.No, children: t('protected-renew:children.parent-or-guardian.radio-options.no'), defaultChecked: defaultState === false },
           ]}
-          errorMessage={errors?.taxFiling}
+          errorMessage={errors?.parentOrGuardian}
           required
         />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">

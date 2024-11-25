@@ -1,4 +1,3 @@
-import { redirect } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
 import type { Namespace } from 'i18next';
@@ -110,9 +109,4 @@ export async function initI18n<N extends Namespace>(locale: string | undefined, 
 
   log.debug('i18next initialization complete');
   return i18n;
-}
-
-export function redirectWithLocale(request: Request, url: string, init?: number | ResponseInit) {
-  const locale = getLocale(request);
-  return redirect(`/${locale}${url}`, init);
 }
