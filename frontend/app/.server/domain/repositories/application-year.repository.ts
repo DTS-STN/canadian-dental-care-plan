@@ -65,11 +65,11 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultBenefitRenewalRepository');
+    this.log = logFactory.createLogger('MockApplicationYearRepository');
   }
 
   listApplicationYears(applicationYearRequestEntity: ApplicationYearRequestEntity): Promise<ApplicationYearResultEntity> {
-    this.log.debug('Submiting benefit renewal for request [%j]', applicationYearRequestEntity);
+    this.log.debug('Fetching all application years for request [%j]', applicationYearRequestEntity);
 
     const applicationYearResponseEntity: ApplicationYearResultEntity = {
       ApplicationYearCollection: [
@@ -88,7 +88,7 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
       ],
     };
 
-    this.log.debug('Benefit renewal: [%j]', applicationYearResponseEntity);
+    this.log.debug('Application years: [%j]', applicationYearResponseEntity);
 
     return Promise.resolve(applicationYearResponseEntity);
   }

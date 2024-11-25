@@ -34,7 +34,7 @@ export class ApplicationYearServiceImpl implements ApplicationYearService {
   ) {
     this.log = logFactory.createLogger('ApplicationYearServiceImpl');
 
-    // Configure caching for country operations
+    // Configure caching for application year operations
     this.listApplicationYears.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_YEARS_CACHE_TTL_SECONDS;
   }
 
