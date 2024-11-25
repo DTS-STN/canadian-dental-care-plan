@@ -2,7 +2,7 @@ import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { data, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -14,9 +14,7 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildStateForReview } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
 import { clearApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getHCaptchaRouteHelpers } from '~/.server/routes/helpers/hcaptcha-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -151,36 +149,19 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/adult-child/review-adult-information');
-
-  loadApplyAdultChildStateForReview({ params, request, session });
-
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ServerConfig);
-  const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
-
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   const formData = await request.formData();
-  const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData.get('_csrf'));
-
-  if (expectedCsrfToken !== submittedCsrfToken) {
-    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw data('Invalid CSRF token', { status: 400 });
-  }
+  securityHandler.validateCsrfToken({ formData, session });
+  await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
+    clearApplyState({ params, session });
+    throw redirect(getPathById('public/unable-to-process-request', params));
+  });
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Back) {
     saveApplyState({ params, session, state: { editMode: false } });
     return redirect(getPathById('public/apply/$id/adult-child/children/index', params));
-  }
-
-  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
-  if (hCaptchaEnabled) {
-    const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse({ hCaptchaService: appContainer.get(TYPES.web.services.HCaptchaService), hCaptchaResponse, request }))) {
-      clearApplyState({ params, session });
-      return redirect(getPathById('public/unable-to-process-request', params));
-    }
   }
 
   saveApplyState({ params, session, state: {} });
