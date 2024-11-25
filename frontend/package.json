@@ -57,7 +57,7 @@
     "jose": "^5.9.6",
     "libphonenumber-js": "^1.11.15",
     "markdown-to-jsx": "^7.7.0",
-    "moderndash": "^3.12.0",
+    "moderndash": "^4.0.0",
     "moize": "^6.1.6",
     "morgan": "^1.10.0",
     "msw": "^2.6.5",
