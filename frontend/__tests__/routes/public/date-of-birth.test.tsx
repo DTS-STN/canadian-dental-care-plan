@@ -1,10 +1,11 @@
 import type { AppLoadContext } from '@remix-run/node';
-import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
+import { mock, mockDeep } from 'vitest-mock-extended';
 
+import { TYPES } from '~/.server/constants';
 import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
+import type { SecurityHandler } from '~/.server/routes/security';
 import { action, loader } from '~/routes/public/apply/$id/adult/date-of-birth';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 
@@ -42,11 +43,11 @@ describe('_public.apply.id.date-of-birth', () => {
 
   describe('loader()', () => {
     it('should load id, and dob', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      const mockContext = mockDeep<AppLoadContext>();
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: mockContext,
         params: {},
       });
 
@@ -62,15 +63,12 @@ describe('_public.apply.id.date-of-birth', () => {
 
   describe('action()', () => {
     it('should validate missing day, month, and year selections', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
-      const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: new FormData() }),
+        context: mockContext,
         params: {},
       });
 
@@ -88,14 +86,13 @@ describe('_public.apply.id.date-of-birth', () => {
     });
 
     it('should redirect to applicant information page if dob is 65 years or over', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
       const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
       formData.append('dateOfBirthYear', '1959');
       formData.append('dateOfBirthMonth', '01');
       formData.append('dateOfBirthDay', '01');
+
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       vi.mocked(isValidDateString).mockReturnValueOnce(true);
       vi.mocked(isPastDateString).mockReturnValueOnce(true);
@@ -106,7 +103,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        context: mockContext,
         params: { lang: 'en', id: '123' },
       });
 
@@ -116,14 +113,13 @@ describe('_public.apply.id.date-of-birth', () => {
     });
 
     it('should redirect to disability tax credit page if dob is under 65 years', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
       const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
       formData.append('dateOfBirthYear', '2000');
       formData.append('dateOfBirthMonth', '01');
       formData.append('dateOfBirthDay', '01');
+
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       vi.mocked(isValidDateString).mockReturnValueOnce(true);
       vi.mocked(isPastDateString).mockReturnValueOnce(true);
@@ -134,7 +130,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        context: mockContext,
         params: { lang: 'en', id: '123' },
       });
 
