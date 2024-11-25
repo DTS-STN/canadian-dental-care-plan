@@ -3,6 +3,7 @@ import { ContainerModule } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import {
+  ApplicationYearRepositoryImpl,
   ClientFriendlyStatusRepositoryImpl,
   CountryRepositoryImpl,
   DefaultAddressValidationRepository,
@@ -19,6 +20,7 @@ import {
   MockAddressValidationRepository,
   MockApplicantRepository,
   MockApplicationStatusRepository,
+  MockApplicationYearRepository,
   MockBenefitApplicationRepository,
   MockBenefitRenewalRepository,
   MockClientApplicationRepository,
@@ -68,6 +70,9 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
 
   bind(TYPES.domain.repositories.ApplicationStatusRepository).to(DefaultApplicationStatusRepository).when(isMockEnabled('status-check', false));
   bind(TYPES.domain.repositories.ApplicationStatusRepository).to(MockApplicationStatusRepository).when(isMockEnabled('status-check', true));
+
+  bind(TYPES.domain.repositories.ApplicationYearRepository).to(ApplicationYearRepositoryImpl).when(isMockEnabled('power-platform', false));
+  bind(TYPES.domain.repositories.ApplicationYearRepository).to(MockApplicationYearRepository).when(isMockEnabled('power-platform', true));
 
   bind(TYPES.domain.repositories.BenefitApplicationRepository).to(DefaultBenefitApplicationRepository).when(isMockEnabled('power-platform', false));
   bind(TYPES.domain.repositories.BenefitApplicationRepository).to(MockBenefitApplicationRepository).when(isMockEnabled('power-platform', true));
