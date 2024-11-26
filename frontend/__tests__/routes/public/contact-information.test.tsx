@@ -20,10 +20,7 @@ vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
   }),
 }));
 
-vi.mock('~/.server/utils/locale.utils', () => ({
-  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
-  getLocale: vi.fn().mockReturnValue('en'),
-}));
+vi.mock('~/.server/utils/locale.utils');
 
 describe('_public.apply.id.contact-information', () => {
   afterEach(() => {

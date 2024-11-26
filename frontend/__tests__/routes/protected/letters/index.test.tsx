@@ -36,9 +36,7 @@ vi.mock('~/.server/utils/env.utils', () => ({
   featureEnabled: vi.fn().mockReturnValue(true),
 }));
 
-vi.mock('~/.server/utils/locale.utils', () => ({
-  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
-}));
+vi.mock('~/.server/utils/locale.utils');
 
 describe('Letters Page', () => {
   afterEach(() => {

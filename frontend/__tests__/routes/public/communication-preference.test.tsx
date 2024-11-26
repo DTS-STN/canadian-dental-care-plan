@@ -21,10 +21,7 @@ vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
   }),
 }));
 
-vi.mock('~/.server/utils/locale.utils', () => ({
-  getFixedT: vi.fn().mockResolvedValue(vi.fn((i18nKey) => i18nKey)),
-  getLocale: vi.fn().mockResolvedValue('en'),
-}));
+vi.mock('~/.server/utils/locale.utils');
 
 describe('_public.apply.id.communication-preference', () => {
   afterEach(() => {
