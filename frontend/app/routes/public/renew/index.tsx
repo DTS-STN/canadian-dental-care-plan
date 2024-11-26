@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect, useFetcher } from '@remix-run/react';
+import { redirect } from '@remix-run/node';
+import { useFetcher } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { randomUUID } from 'crypto';

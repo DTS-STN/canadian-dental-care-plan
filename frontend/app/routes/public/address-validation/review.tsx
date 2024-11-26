@@ -1,5 +1,6 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect, useLoaderData, useParams } from '@remix-run/react';
+import { redirect } from '@remix-run/node';
+import { useLoaderData, useParams } from '@remix-run/react';
 
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
