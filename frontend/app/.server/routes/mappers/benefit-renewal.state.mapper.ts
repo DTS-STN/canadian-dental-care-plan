@@ -1,9 +1,12 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import invariant from 'tiny-invariant';
 import { ReadonlyObjectDeep } from 'type-fest/source/readonly-deep';
 import validator from 'validator';
 
-import type { AdultChildBenefitRenewalDto, ApplicantInformationDto, ClientApplicationDto, ClientChildDto, ContactInformationDto, ItaBenefitRenewalDto, PartnerInformationDto } from '~/.server/domain/dtos';
+import type { ServerConfig } from '~/.server/configs';
+import { TYPES } from '~/.server/constants';
+import type { AdultChildBenefitRenewalDto, ApplicantInformationDto, ClientApplicationDto, ClientChildDto, CommunicationPreferencesDto, ContactInformationDto, ItaBenefitRenewalDto, PartnerInformationDto } from '~/.server/domain/dtos';
+import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
 import type { AddressInformationState, ChildState, ConfirmDentalBenefitsState, ContactInformationState, DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
 
 export interface RenewAdultChildState {
@@ -47,6 +50,13 @@ interface ToChildrenArgs {
   renewedChildren: ChildState[];
 }
 
+interface ToCommunicationPreferencesArgs {
+  existingCommunicationPreferences: ReadonlyObjectDeep<CommunicationPreferencesDto>;
+  hasEmailChanged: boolean;
+  renewedEmail?: string;
+  renewedReceiveEmailCommunication?: boolean;
+}
+
 interface ToContactInformationArgs {
   existingContactInformation: ReadonlyObjectDeep<ContactInformationDto>;
   hasAddressChanged: boolean;
@@ -71,6 +81,12 @@ interface ToPartnerInformationArgs {
 
 @injectable()
 export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper {
+  constructor(
+    @inject(TYPES.domain.services.FederalGovernmentInsurancePlanService) private readonly federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,
+    @inject(TYPES.domain.services.ProvincialGovernmentInsurancePlanService) private readonly provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'COMMUNICATION_METHOD_EMAIL_ID' | 'COMMUNICATION_METHOD_MAIL_ID'>,
+  ) {}
+
   mapRenewAdultChildStateToAdultChildBenefitRenewalDto({
     addressInformation,
     children,
@@ -116,6 +132,12 @@ export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper 
         hasFederalBenefitsChanged,
         hasProvincialTerritorialBenefitsChanged,
       },
+      communicationPreferences: this.toCommunicationPreferences({
+        existingCommunicationPreferences: clientApplication.communicationPreferences,
+        hasEmailChanged,
+        renewedEmail: contactInformation.email,
+        renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+      }),
       contactInformation: this.toContactInformation({
         renewedAddressInformation: addressInformation,
         renewedContactInformation: contactInformation,
@@ -160,6 +182,12 @@ export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper 
         hasEmailChanged: true,
         hasPhoneChanged: true,
       }),
+      communicationPreferences: this.toCommunicationPreferences({
+        existingCommunicationPreferences: clientApplication.communicationPreferences,
+        hasEmailChanged: true,
+        renewedEmail: contactInformation.email,
+        renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+      }),
       dentalBenefits: this.toDentalBenefits({
         existingDentalBenefits: clientApplication.dentalBenefits,
         hasFederalBenefitsChanged: true,
@@ -182,8 +210,10 @@ export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper 
     invariant(renewedMaritalStatus, 'Expected renewedMaritalStatus to be defined when hasMaritalStatusChanged is true');
 
     return {
-      ...existingApplicantInformation,
+      firstName: existingApplicantInformation.firstName,
+      lastName: existingApplicantInformation.lastName,
       maritalStatus: renewedMaritalStatus,
+      socialInsuranceNumber: existingApplicantInformation.socialInsuranceNumber,
     };
   }
 
@@ -200,18 +230,20 @@ export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper 
       }
 
       return {
-        ...renewedChild,
-        dentalInsurance: renewedChild.dentalInsurance,
-        information: {
-          ...renewedChild.information,
-          socialInsuranceNumber: existingChild.information.socialInsuranceNumber,
-        },
         dentalBenefits: this.toDentalBenefits({
           existingDentalBenefits: existingChild.dentalBenefits,
           hasFederalBenefitsChanged: renewedChild.confirmDentalBenefits.federalBenefitsChanged,
           hasProvincialTerritorialBenefitsChanged: renewedChild.confirmDentalBenefits.provincialTerritorialBenefitsChanged,
           renewedDentalBenefits: renewedChild.dentalBenefits,
         }),
+        dentalInsurance: renewedChild.dentalInsurance,
+        information: {
+          firstName: renewedChild.information.firstName,
+          lastName: renewedChild.information.lastName,
+          dateOfBirth: renewedChild.information.dateOfBirth,
+          isParent: renewedChild.information.isParent,
+          socialInsuranceNumber: existingChild.information.socialInsuranceNumber,
+        },
       };
     });
   }
@@ -271,21 +303,45 @@ export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper 
     };
   }
 
-  private toDentalBenefits({ hasFederalBenefitsChanged, hasProvincialTerritorialBenefitsChanged, existingDentalBenefits, renewedDentalBenefits: dentalBenefits }: ToDentalBenefitsArgs) {
+  private toCommunicationPreferences({ existingCommunicationPreferences, hasEmailChanged, renewedEmail, renewedReceiveEmailCommunication }: ToCommunicationPreferencesArgs) {
+    if (!hasEmailChanged) return existingCommunicationPreferences;
+
+    return {
+      email: renewedReceiveEmailCommunication ? renewedEmail : undefined,
+      preferredLanguage: existingCommunicationPreferences.preferredLanguage,
+      preferredMethod: renewedReceiveEmailCommunication ? this.serverConfig.COMMUNICATION_METHOD_EMAIL_ID : this.serverConfig.COMMUNICATION_METHOD_MAIL_ID,
+    };
+  }
+
+  private toDentalBenefits({ existingDentalBenefits, hasFederalBenefitsChanged, hasProvincialTerritorialBenefitsChanged, renewedDentalBenefits }: ToDentalBenefitsArgs) {
     if (!hasFederalBenefitsChanged && !hasProvincialTerritorialBenefitsChanged) return existingDentalBenefits;
-    if (!dentalBenefits) return [];
+    if (!renewedDentalBenefits) return [];
 
-    const dentalBenefitsDto = [];
+    const dentalBenefits = [];
 
-    if (dentalBenefits.hasFederalBenefits && dentalBenefits.federalSocialProgram && !validator.isEmpty(dentalBenefits.federalSocialProgram)) {
-      dentalBenefitsDto.push(dentalBenefits.federalSocialProgram);
+    if (!hasFederalBenefitsChanged) {
+      const federalGovernmentInsurancePlans = this.federalGovernmentInsurancePlanService.listFederalGovernmentInsurancePlans();
+      const existingFederalGovernmentInsurancePlan = federalGovernmentInsurancePlans
+        .filter((federalGovernmentInsurancePlan) => existingDentalBenefits.includes(federalGovernmentInsurancePlan.id))
+        .map((federalGovernmentInsurancePlan) => federalGovernmentInsurancePlan.id);
+
+      dentalBenefits.push(...existingFederalGovernmentInsurancePlan);
+    } else if (renewedDentalBenefits.hasFederalBenefits && renewedDentalBenefits.federalSocialProgram && !validator.isEmpty(renewedDentalBenefits.federalSocialProgram)) {
+      dentalBenefits.push(renewedDentalBenefits.federalSocialProgram);
     }
 
-    if (dentalBenefits.hasProvincialTerritorialBenefits && dentalBenefits.provincialTerritorialSocialProgram && !validator.isEmpty(dentalBenefits.provincialTerritorialSocialProgram)) {
-      dentalBenefitsDto.push(dentalBenefits.provincialTerritorialSocialProgram);
+    if (!hasProvincialTerritorialBenefitsChanged) {
+      const provincialGovernmentInsurancePlans = this.provincialGovernmentInsurancePlanService.listProvincialGovernmentInsurancePlans();
+      const existingProvincialGovernmentInsurancePlan = provincialGovernmentInsurancePlans
+        .filter((provincialGovernmentInsurancePlan) => existingDentalBenefits.includes(provincialGovernmentInsurancePlan.id))
+        .map((provincialGovernmentInsurancePlan) => provincialGovernmentInsurancePlan.id);
+
+      dentalBenefits.push(...existingProvincialGovernmentInsurancePlan);
+    } else if (renewedDentalBenefits.hasProvincialTerritorialBenefits && renewedDentalBenefits.provincialTerritorialSocialProgram && !validator.isEmpty(renewedDentalBenefits.provincialTerritorialSocialProgram)) {
+      dentalBenefits.push(renewedDentalBenefits.provincialTerritorialSocialProgram);
     }
 
-    return dentalBenefitsDto;
+    return dentalBenefits;
   }
 
   private toPartnerInformation({ existingPartnerInformation, hasMaritalStatusChanged, renewedPartnerInformation }: ToPartnerInformationArgs) {
