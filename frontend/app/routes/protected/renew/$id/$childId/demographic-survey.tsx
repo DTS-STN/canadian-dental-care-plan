@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { data } from '@remix-run/node';
-import { redirect, useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { data, redirect } from '@remix-run/node';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
