@@ -11,7 +11,7 @@ export interface ProvinceTerritoryStateDtoMapper {
 }
 
 @injectable()
-export class ProvinceTerritoryStateDtoMapperImpl implements ProvinceTerritoryStateDtoMapper {
+export class DefaultProvinceTerritoryStateDtoMapper implements ProvinceTerritoryStateDtoMapper {
   mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto(provinceTerritoryStateDto: ProvinceTerritoryStateDto, locale: AppLocale): ProvinceTerritoryStateLocalizedDto {
     const { nameEn, nameFr, ...rest } = provinceTerritoryStateDto;
     return {

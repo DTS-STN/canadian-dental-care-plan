@@ -28,7 +28,7 @@ export interface ClientApplicationService {
 }
 
 @injectable()
-export class ClientApplicationServiceImpl implements ClientApplicationService {
+export class DefaultClientApplicationService implements ClientApplicationService {
   private readonly log: Logger;
 
   constructor(
@@ -36,7 +36,7 @@ export class ClientApplicationServiceImpl implements ClientApplicationService {
     @inject(TYPES.domain.mappers.ClientApplicationDtoMapper) private readonly clientApplicationDtoMapper: ClientApplicationDtoMapper,
     @inject(TYPES.domain.repositories.ClientApplicationRepository) private readonly clientApplicationRepository: ClientApplicationRepository,
   ) {
-    this.log = logFactory.createLogger('ClientApplicationServiceImpl');
+    this.log = logFactory.createLogger('DefaultClientApplicationService');
   }
 
   async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): Promise<ClientApplicationDto | null> {

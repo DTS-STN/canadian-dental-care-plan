@@ -55,7 +55,7 @@ interface ToEmailAddressArgs {
 }
 
 @injectable()
-export class BenefitRenewalDtoMapperImpl implements BenefitRenewalDtoMapper {
+export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>) {}
 
   mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity {

@@ -21,11 +21,11 @@ export interface FederalGovernmentInsurancePlanRepository {
 }
 
 @injectable()
-export class FederalGovernmentInsurancePlanRepositoryImpl implements FederalGovernmentInsurancePlanRepository {
+export class DefaultFederalGovernmentInsurancePlanRepository implements FederalGovernmentInsurancePlanRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('FederalGovernmentInsurancePlanRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultFederalGovernmentInsurancePlanRepository');
   }
 
   listAllFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanEntity[] {

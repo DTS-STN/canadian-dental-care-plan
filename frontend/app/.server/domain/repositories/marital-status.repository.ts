@@ -21,11 +21,11 @@ export interface MaritalStatusRepository {
 }
 
 @injectable()
-export class MaritalStatusRepositoryImpl implements MaritalStatusRepository {
+export class DefaultMaritalStatusRepository implements MaritalStatusRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('MaritalStatusRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultMaritalStatusRepository');
   }
 
   listAllMaritalStatuses(): MaritalStatusEntity[] {

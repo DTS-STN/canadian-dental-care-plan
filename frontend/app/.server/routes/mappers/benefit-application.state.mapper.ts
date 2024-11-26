@@ -77,7 +77,7 @@ export interface BenefitApplicationStateMapper {
 }
 
 @injectable()
-export class BenefitApplicationStateMapperImpl implements BenefitApplicationStateMapper {
+export class DefaultBenefitApplicationStateMapper implements BenefitApplicationStateMapper {
   mapApplyAdultStateToBenefitApplicationDto(applyAdultState: ApplyAdultState): BenefitApplicationDto {
     const ageCategory = getAgeCategoryFromDateString(applyAdultState.dateOfBirth);
     if (ageCategory === 'adults' && applyAdultState.disabilityTaxCredit === undefined) {

@@ -6,12 +6,12 @@ import { CountryNotFoundException } from '~/.server/domain/exceptions';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories';
 import type { CountryServiceImpl_ServiceConfig } from '~/.server/domain/services';
-import { CountryServiceImpl } from '~/.server/domain/services';
+import { DefaultCountryService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 
-describe('CountryServiceImpl', () => {
+describe('DefaultCountryService', () => {
   const mockServerConfig: CountryServiceImpl_ServiceConfig = {
     CANADA_COUNTRY_ID: '1',
     LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS: 10,
@@ -26,7 +26,7 @@ describe('CountryServiceImpl', () => {
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
       const mockCountryRepository = mock<CountryRepository>();
 
-      const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig); // Act and Assert
+      const service = new DefaultCountryService(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig); // Act and Assert
 
       expect(service.listCountries.options.maxAge).toBe(10000); // 10 seconds in milliseconds
       expect(service.getCountryById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
@@ -59,7 +59,7 @@ describe('CountryServiceImpl', () => {
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
       mockCountryDtoMapper.mapCountryEntitiesToCountryDtos.mockReturnValueOnce(mockDtos);
 
-      const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
+      const service = new DefaultCountryService(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
       const dtos = service.listCountries();
 
@@ -85,7 +85,7 @@ describe('CountryServiceImpl', () => {
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
       mockCountryDtoMapper.mapCountryEntityToCountryDto.mockReturnValueOnce(mockDto);
 
-      const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
+      const service = new DefaultCountryService(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
       const dto = service.getCountryById(id);
 
@@ -101,7 +101,7 @@ describe('CountryServiceImpl', () => {
 
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
 
-      const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
+      const service = new DefaultCountryService(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
       expect(() => service.getCountryById(id)).toThrow(CountryNotFoundException);
       expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
@@ -148,7 +148,7 @@ describe('CountryServiceImpl', () => {
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
       mockCountryDtoMapper.mapCountryDtosToCountryLocalizedDtos.mockReturnValueOnce(mockMappedCountryLocalizedDtos);
 
-      const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
+      const service = new DefaultCountryService(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
       const dtos = service.listAndSortLocalizedCountries('en');
 
@@ -174,7 +174,7 @@ describe('CountryServiceImpl', () => {
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
       mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto.mockReturnValueOnce(mockDto);
 
-      const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
+      const service = new DefaultCountryService(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
       const dto = service.getLocalizedCountryById(id, 'en');
 
@@ -190,7 +190,7 @@ describe('CountryServiceImpl', () => {
 
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
 
-      const service = new CountryServiceImpl(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
+      const service = new DefaultCountryService(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
       expect(() => service.getLocalizedCountryById(id, 'en')).toThrow(CountryNotFoundException);
       expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();

@@ -32,12 +32,12 @@ export interface RedisService {
 }
 
 @injectable()
-export class RedisServiceImpl implements RedisService {
+export class DefaultRedisService implements RedisService {
   private readonly log: Logger;
   private readonly redisClient: Redis;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig) {
-    this.log = logFactory.createLogger('RedisServiceImpl');
+    this.log = logFactory.createLogger('DefaultRedisService');
     this.redisClient = serverConfig.REDIS_SENTINEL_NAME ? this.newSentinelClient(serverConfig) : this.newRedisClient(serverConfig);
   }
 

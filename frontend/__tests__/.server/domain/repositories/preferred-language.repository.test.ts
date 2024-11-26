@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { PreferredLanguageRepositoryImpl } from '~/.server/domain/repositories';
+import { DefaultPreferredLanguageRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 const dataSource = vi.hoisted(() => ({
@@ -37,7 +37,7 @@ const dataSource = vi.hoisted(() => ({
 
 vi.mock('~/.server/resources/power-platform/preferred-language.json', () => dataSource);
 
-describe('PreferredLanguageRepositoryImpl', () => {
+describe('DefaultPreferredLanguageRepository', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
@@ -47,7 +47,7 @@ describe('PreferredLanguageRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new PreferredLanguageRepositoryImpl(mockLogFactory);
+    const repository = new DefaultPreferredLanguageRepository(mockLogFactory);
 
     const preferredLanguages = repository.listAllPreferredLanguages();
 
@@ -81,7 +81,7 @@ describe('PreferredLanguageRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new PreferredLanguageRepositoryImpl(mockLogFactory);
+    const repository = new DefaultPreferredLanguageRepository(mockLogFactory);
 
     const preferredLanguages = repository.listAllPreferredLanguages();
 
@@ -92,7 +92,7 @@ describe('PreferredLanguageRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new PreferredLanguageRepositoryImpl(mockLogFactory);
+    const repository = new DefaultPreferredLanguageRepository(mockLogFactory);
 
     const preferredLanguage = repository.findPreferredLanguageById('1033');
 
@@ -117,7 +117,7 @@ describe('PreferredLanguageRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new PreferredLanguageRepositoryImpl(mockLogFactory);
+    const repository = new DefaultPreferredLanguageRepository(mockLogFactory);
 
     const preferredLanguage = repository.findPreferredLanguageById('non-existent-id');
 

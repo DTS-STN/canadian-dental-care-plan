@@ -18,7 +18,7 @@ export interface BenefitApplicationService {
 }
 
 @injectable()
-export class BenefitApplicationServiceImpl implements BenefitApplicationService {
+export class DefaultBenefitApplicationService implements BenefitApplicationService {
   private readonly log: Logger;
 
   constructor(
@@ -27,7 +27,7 @@ export class BenefitApplicationServiceImpl implements BenefitApplicationService 
     @inject(TYPES.domain.repositories.BenefitApplicationRepository) private readonly benefitApplicationRepository: BenefitApplicationRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('BenefitApplicationServiceImpl');
+    this.log = logFactory.createLogger('DefaultBenefitApplicationService');
   }
 
   async createBenefitApplication(benefitApplicationRequestDto: BenefitApplicationDto): Promise<string> {

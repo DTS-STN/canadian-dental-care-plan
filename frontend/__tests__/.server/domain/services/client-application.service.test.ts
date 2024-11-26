@@ -5,10 +5,10 @@ import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, Client
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { ClientApplicationRepository } from '~/.server/domain/repositories';
-import { ClientApplicationServiceImpl } from '~/.server/domain/services';
+import { DefaultClientApplicationService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
-describe('ClientApplicationServiceImpl', () => {
+describe('DefaultClientApplicationService', () => {
   const mockLogFactory = mock<LogFactory>();
   mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
@@ -217,7 +217,7 @@ describe('ClientApplicationServiceImpl', () => {
       mockClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto.mockReturnValue(mockClientApplicationDto);
       mockClientApplicationDtoMapper.mapClientApplicationSinRequestDtoToClientApplicationSinRequestEntity.mockReturnValue(mockClientApplicationSinRequestEntity);
 
-      const service = new ClientApplicationServiceImpl(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
+      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
 
       // Act
       const result = await service.findClientApplicationBySin(mockClientApplicationSinRequestDto);
@@ -239,7 +239,7 @@ describe('ClientApplicationServiceImpl', () => {
       const mockClientApplicationDtoMapper = mock<ClientApplicationDtoMapper>();
       mockClientApplicationDtoMapper.mapClientApplicationSinRequestDtoToClientApplicationSinRequestEntity.mockReturnValue(mockClientApplicationSinRequestEntity);
 
-      const service = new ClientApplicationServiceImpl(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
+      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
 
       // Act
       const result = await service.findClientApplicationBySin(mockClientApplicationSinRequestDto);
@@ -271,7 +271,7 @@ describe('ClientApplicationServiceImpl', () => {
       mockClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto.mockReturnValue(mockClientApplicationDto);
       mockClientApplicationDtoMapper.mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity.mockReturnValue(mockClientApplicationBasicInfoRequestEntity);
 
-      const service = new ClientApplicationServiceImpl(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
+      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
 
       // Act
       const result = await service.findClientApplicationByBasicInfo(mockClientApplicationBasicInfoRequestDto);
@@ -300,7 +300,7 @@ describe('ClientApplicationServiceImpl', () => {
       const mockClientApplicationDtoMapper = mock<ClientApplicationDtoMapper>();
       mockClientApplicationDtoMapper.mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity.mockReturnValue(mockClientApplicationBasicInfoRequestEntity);
 
-      const service = new ClientApplicationServiceImpl(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
+      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
 
       // Act
       const result = await service.findClientApplicationByBasicInfo(mockClientApplicationBasicInfoRequestDto);

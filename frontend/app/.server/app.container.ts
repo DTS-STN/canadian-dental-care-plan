@@ -3,7 +3,7 @@ import { Container } from 'inversify';
 import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
 
 import type { AppContainerProvider } from '~/.server/app-container.provider';
-import { AppContainerProviderImpl } from '~/.server/app-container.provider';
+import { DefaultAppContainerProvider } from '~/.server/app-container.provider';
 import { TYPES } from '~/.server/constants';
 import { authContainerModule, configsContainerModule, factoriesContainerModule, mappersContainerModule, repositoriesContainerModule, routesContainerModule, servicesContainerModule, webContainerModule } from '~/.server/container-modules';
 import { getLogger } from '~/.server/utils/logging.utils';
@@ -40,7 +40,7 @@ function getAppContainer(): interfaces.Container {
  * @returns The ContainerConfigProvider singleton instance.
  */
 export function getAppContainerProvider(): AppContainerProvider {
-  return (appContainerProviderInstance ??= new AppContainerProviderImpl(getAppContainer()));
+  return (appContainerProviderInstance ??= new DefaultAppContainerProvider(getAppContainer()));
 }
 
 /**

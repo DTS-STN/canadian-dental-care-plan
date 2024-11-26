@@ -8,7 +8,7 @@ export interface ApplicationYearDtoMapper {
 }
 
 @injectable()
-export class ApplicationYearDtoMapperImpl implements ApplicationYearDtoMapper {
+export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper {
   mapApplicationYearResultEntityToApplicationYearResultDto(applicationYearResultEntity: ApplicationYearResultEntity): ReadonlyArray<ApplicationYearResultDto> {
     const applicationYearData = applicationYearResultEntity['ApplicationYearCollection'];
 

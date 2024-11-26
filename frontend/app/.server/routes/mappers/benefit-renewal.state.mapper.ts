@@ -80,7 +80,7 @@ interface ToPartnerInformationArgs {
 }
 
 @injectable()
-export class BenefitRenewalStateMapperImpl implements BenefitRenewalStateMapper {
+export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapper {
   constructor(
     @inject(TYPES.domain.services.FederalGovernmentInsurancePlanService) private readonly federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,
     @inject(TYPES.domain.services.ProvincialGovernmentInsurancePlanService) private readonly provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService,

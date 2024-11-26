@@ -21,11 +21,11 @@ export interface ClientFriendlyStatusRepository {
 }
 
 @injectable()
-export class ClientFriendlyStatusRepositoryImpl implements ClientFriendlyStatusRepository {
+export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStatusRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('ClientFriendlyStatusRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultClientFriendlyStatusRepository');
   }
 
   listAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[] {

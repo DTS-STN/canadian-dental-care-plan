@@ -1,15 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { LogFactoryImpl } from '~/.server/factories';
+import { DefaultLogFactory } from '~/.server/factories';
 import { getLogger } from '~/.server/utils/logging.utils';
 
 vi.mock('~/.server/utils/logging.utils', () => ({
   getLogger: vi.fn(),
 }));
 
-describe('LogFactoryImpl', () => {
+describe('DefaultLogFactory', () => {
   it('should create a logger instance', () => {
-    const logFactory = new LogFactoryImpl();
+    const logFactory = new DefaultLogFactory();
     const logger = logFactory.createLogger('test-category');
 
     // Assuming getLogger returns a non-null value

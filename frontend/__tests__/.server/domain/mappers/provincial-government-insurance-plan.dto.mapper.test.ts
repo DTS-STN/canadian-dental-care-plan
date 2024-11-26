@@ -2,14 +2,14 @@ import { describe, expect, it } from 'vitest';
 
 import type { ProvincialGovernmentInsurancePlanDto, ProvincialGovernmentInsurancePlanLocalizedDto } from '~/.server/domain/dtos';
 import type { ProvincialGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
-import { ProvincialGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers';
+import { DefaultProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 
-describe('ProvincialGovernmentInsurancePlanDtoMapperImpl', () => {
+describe('DefaultProvincialGovernmentInsurancePlanDtoMapper', () => {
   describe('mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto', () => {
     it('should map a DTO to a localized DTO with the correct name based on the locale', () => {
       const dto: ProvincialGovernmentInsurancePlanDto = { id: '1', nameEn: 'English Name', nameFr: 'French Name', provinceTerritoryStateId: '2' };
 
-      const mapper = new ProvincialGovernmentInsurancePlanDtoMapperImpl();
+      const mapper = new DefaultProvincialGovernmentInsurancePlanDtoMapper();
 
       const localizedDtoEn = mapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto(dto, 'en');
       expect(localizedDtoEn).toEqual<ProvincialGovernmentInsurancePlanLocalizedDto>({ id: '1', name: 'English Name', provinceTerritoryStateId: '2' });
@@ -26,7 +26,7 @@ describe('ProvincialGovernmentInsurancePlanDtoMapperImpl', () => {
         { id: '2', nameEn: 'English Name 2', nameFr: 'French Name 2', provinceTerritoryStateId: '3' },
       ];
 
-      const mapper = new ProvincialGovernmentInsurancePlanDtoMapperImpl();
+      const mapper = new DefaultProvincialGovernmentInsurancePlanDtoMapper();
 
       const localizedDtosEn = mapper.mapProvincialGovernmentInsurancePlanDtosToProvincialGovernmentInsurancePlanLocalizedDtos(dtos, 'en');
       expect(localizedDtosEn).toEqual<ProvincialGovernmentInsurancePlanLocalizedDto[]>([
@@ -51,7 +51,7 @@ describe('ProvincialGovernmentInsurancePlanDtoMapperImpl', () => {
         _esdc_provinceterritorystateid_value: '10',
       };
 
-      const mapper = new ProvincialGovernmentInsurancePlanDtoMapperImpl();
+      const mapper = new DefaultProvincialGovernmentInsurancePlanDtoMapper();
 
       const dto = mapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(mockEntity);
 
@@ -81,7 +81,7 @@ describe('ProvincialGovernmentInsurancePlanDtoMapperImpl', () => {
         },
       ];
 
-      const mapper = new ProvincialGovernmentInsurancePlanDtoMapperImpl();
+      const mapper = new DefaultProvincialGovernmentInsurancePlanDtoMapper();
 
       const dtos = mapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(mockEntities);
 

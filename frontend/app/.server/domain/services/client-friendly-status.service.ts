@@ -43,11 +43,11 @@ export type ClientFriendlyStatusServiceImpl_ServerConfig = Pick<ServerConfig, 'L
  * database lookups. It integrates with a logging system to trace operations.
  */
 @injectable()
-export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusService {
+export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusService {
   private readonly log: Logger;
 
   /**
-   * Constructs a new ClientFriendlyStatusServiceImpl instance.
+   * Constructs a new DefaultClientFriendlyStatusService instance.
    *
    * @param logFactory - A factory for creating logger instances.
    * @param clientFriendlyStatusDtoMapper - The mapper responsible for transforming client friendly status entities into DTOs.
@@ -60,7 +60,7 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
     @inject(TYPES.domain.repositories.ClientFriendlyStatusRepository) private readonly clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
   ) {
-    this.log = logFactory.createLogger('ClientFriendlyStatusServiceImpl');
+    this.log = logFactory.createLogger('DefaultClientFriendlyStatusService');
 
     // Configure caching for client friendly status operations
     this.getClientFriendlyStatusById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS;
@@ -71,7 +71,7 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
    *
    * @returns An array of ClientFriendlyStatus DTOs.
    */
-  getClientFriendlyStatusById = moize(this.getClientFriendlyStatusByIdImpl, {
+  getClientFriendlyStatusById = moize(this.DefaultgetClientFriendlyStatusById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getClientFriendlyStatusById memo'),
   });
@@ -84,7 +84,7 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
     return clientFriendlyStatusLocalizedDto;
   }
 
-  private getClientFriendlyStatusByIdImpl(id: string): ClientFriendlyStatusDto {
+  private DefaultgetClientFriendlyStatusById(id: string): ClientFriendlyStatusDto {
     this.log.debug('Get client friendly status with id: [%s]', id);
     const clientFriendlyStatusEntity = this.clientFriendlyStatusRepository.findClientFriendlyStatusById(id);
 

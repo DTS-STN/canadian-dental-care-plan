@@ -3,20 +3,24 @@ import { ContainerModule } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import {
-  ApplicationYearRepositoryImpl,
-  ClientFriendlyStatusRepositoryImpl,
-  CountryRepositoryImpl,
   DefaultAddressValidationRepository,
   DefaultApplicantRepository,
   DefaultApplicationStatusRepository,
+  DefaultApplicationYearRepository,
   DefaultBenefitApplicationRepository,
   DefaultBenefitRenewalRepository,
   DefaultClientApplicationRepository,
+  DefaultClientFriendlyStatusRepository,
+  DefaultCountryRepository,
+  DefaultDemographicSurveyRepository,
+  DefaultFederalGovernmentInsurancePlanRepository,
   DefaultLetterRepository,
-  DemographicSurveyRepositoryImpl,
-  FederalGovernmentInsurancePlanRepositoryImpl,
-  LetterTypeRepositoryImpl,
-  MaritalStatusRepositoryImpl,
+  DefaultLetterTypeRepository,
+  DefaultMaritalStatusRepository,
+  DefaultPreferredCommunicationMethodRepository,
+  DefaultPreferredLanguageRepository,
+  DefaultProvinceTerritoryStateRepository,
+  DefaultProvincialGovernmentInsurancePlanRepository,
   MockAddressValidationRepository,
   MockApplicantRepository,
   MockApplicationStatusRepository,
@@ -25,13 +29,9 @@ import {
   MockBenefitRenewalRepository,
   MockClientApplicationRepository,
   MockLetterRepository,
-  PreferredCommunicationMethodRepositoryImpl,
-  PreferredLanguageRepositoryImpl,
-  ProvinceTerritoryStateRepositoryImpl,
-  ProvincialGovernmentInsurancePlanRepositoryImpl,
 } from '~/.server/domain/repositories';
 import type { MockName } from '~/.server/utils/env.utils';
-import { HCaptchaRepositoryImpl } from '~/.server/web/repositories';
+import { DefaultHCaptchaRepository } from '~/.server/web/repositories';
 
 /**
  * Determines if a service implementation should be injected based on server configuration.
@@ -71,7 +71,7 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.repositories.ApplicationStatusRepository).to(DefaultApplicationStatusRepository).when(isMockEnabled('status-check', false));
   bind(TYPES.domain.repositories.ApplicationStatusRepository).to(MockApplicationStatusRepository).when(isMockEnabled('status-check', true));
 
-  bind(TYPES.domain.repositories.ApplicationYearRepository).to(ApplicationYearRepositoryImpl).when(isMockEnabled('power-platform', false));
+  bind(TYPES.domain.repositories.ApplicationYearRepository).to(DefaultApplicationYearRepository).when(isMockEnabled('power-platform', false));
   bind(TYPES.domain.repositories.ApplicationYearRepository).to(MockApplicationYearRepository).when(isMockEnabled('power-platform', true));
 
   bind(TYPES.domain.repositories.BenefitApplicationRepository).to(DefaultBenefitApplicationRepository).when(isMockEnabled('power-platform', false));
@@ -83,19 +83,19 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.repositories.ClientApplicationRepository).to(DefaultClientApplicationRepository).when(isMockEnabled('power-platform', false));
   bind(TYPES.domain.repositories.ClientApplicationRepository).to(MockClientApplicationRepository).when(isMockEnabled('power-platform', true));
 
-  bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(ClientFriendlyStatusRepositoryImpl);
-  bind(TYPES.domain.repositories.CountryRepository).to(CountryRepositoryImpl);
-  bind(TYPES.domain.repositories.DemographicSurveyRepository).to(DemographicSurveyRepositoryImpl);
-  bind(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository).to(FederalGovernmentInsurancePlanRepositoryImpl);
+  bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(DefaultClientFriendlyStatusRepository);
+  bind(TYPES.domain.repositories.CountryRepository).to(DefaultCountryRepository);
+  bind(TYPES.domain.repositories.DemographicSurveyRepository).to(DefaultDemographicSurveyRepository);
+  bind(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository).to(DefaultFederalGovernmentInsurancePlanRepository);
 
   bind(TYPES.domain.repositories.LetterRepository).to(DefaultLetterRepository).when(isMockEnabled('cct', false));
   bind(TYPES.domain.repositories.LetterRepository).to(MockLetterRepository).when(isMockEnabled('cct', true));
 
-  bind(TYPES.domain.repositories.LetterTypeRepository).to(LetterTypeRepositoryImpl);
-  bind(TYPES.domain.repositories.MaritalStatusRepository).to(MaritalStatusRepositoryImpl);
-  bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(PreferredCommunicationMethodRepositoryImpl);
-  bind(TYPES.domain.repositories.PreferredLanguageRepository).to(PreferredLanguageRepositoryImpl);
-  bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(ProvinceTerritoryStateRepositoryImpl);
-  bind(TYPES.domain.repositories.ProvincialGovernmentInsurancePlanRepository).to(ProvincialGovernmentInsurancePlanRepositoryImpl);
-  bind(TYPES.web.repositories.HCaptchaRepository).to(HCaptchaRepositoryImpl);
+  bind(TYPES.domain.repositories.LetterTypeRepository).to(DefaultLetterTypeRepository);
+  bind(TYPES.domain.repositories.MaritalStatusRepository).to(DefaultMaritalStatusRepository);
+  bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(DefaultPreferredCommunicationMethodRepository);
+  bind(TYPES.domain.repositories.PreferredLanguageRepository).to(DefaultPreferredLanguageRepository);
+  bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(DefaultProvinceTerritoryStateRepository);
+  bind(TYPES.domain.repositories.ProvincialGovernmentInsurancePlanRepository).to(DefaultProvincialGovernmentInsurancePlanRepository);
+  bind(TYPES.web.repositories.HCaptchaRepository).to(DefaultHCaptchaRepository);
 });

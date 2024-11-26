@@ -29,7 +29,7 @@ interface ToEmailAddressArgs {
 }
 
 @injectable()
-export class BenefitApplicationDtoMapperImpl implements BenefitApplicationDtoMapper {
+export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDtoMapper {
   constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>) {}
 
   mapBenefitApplicationDtoToBenefitApplicationRequestEntity({

@@ -6,12 +6,12 @@ import type { FederalGovernmentInsurancePlanDto, FederalGovernmentInsurancePlanL
 import { FederalGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions';
 import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
-import { FederalGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services';
+import { DefaultFederalGovernmentInsurancePlanService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 
-describe('FederalGovernmentInsurancePlanServiceImpl', () => {
+describe('DefaultFederalGovernmentInsurancePlanService', () => {
   const mockServerConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'> = {
     LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS: 10,
     LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: 5,
@@ -25,7 +25,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
       const mockFederalGovernmentInsurancePlanDtoMapper = mock<FederalGovernmentInsurancePlanDtoMapper>();
       const mockFederalGovernmentInsurancePlanRepository = mock<FederalGovernmentInsurancePlanRepository>();
 
-      const service = new FederalGovernmentInsurancePlanServiceImpl(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
+      const service = new DefaultFederalGovernmentInsurancePlanService(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
 
       expect(service.listFederalGovernmentInsurancePlans.options.maxAge).toBe(10000); // 10 seconds in milliseconds
       expect(service.getFederalGovernmentInsurancePlanById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
@@ -64,7 +64,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
       const mockFederalGovernmentInsurancePlanDtoMapper = mock<FederalGovernmentInsurancePlanDtoMapper>();
       mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos.mockReturnValueOnce(mockDtos);
 
-      const service = new FederalGovernmentInsurancePlanServiceImpl(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultFederalGovernmentInsurancePlanService(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dtos = service.listFederalGovernmentInsurancePlans();
 
@@ -93,7 +93,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
       const mockFederalGovernmentInsurancePlanDtoMapper = mock<FederalGovernmentInsurancePlanDtoMapper>();
       mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
 
-      const service = new FederalGovernmentInsurancePlanServiceImpl(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultFederalGovernmentInsurancePlanService(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.getFederalGovernmentInsurancePlanById(id);
 
@@ -109,7 +109,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
 
       const mockFederalGovernmentInsurancePlanDtoMapper = mock<FederalGovernmentInsurancePlanDtoMapper>();
 
-      const service = new FederalGovernmentInsurancePlanServiceImpl(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultFederalGovernmentInsurancePlanService(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
 
       expect(() => service.getFederalGovernmentInsurancePlanById(id)).toThrow(FederalGovernmentInsurancePlanNotFoundException);
       expect(mockFederalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById).toHaveBeenCalledOnce();
@@ -147,7 +147,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
       mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos.mockReturnValueOnce(mockMappedFederalGovernmentInsurancePlanDtos);
       mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanDtosToFederalGovernmentInsurancePlanLocalizedDtos.mockReturnValueOnce(expectedFederalGovernmentInsurancePlanLocalizedDtos);
 
-      const service = new FederalGovernmentInsurancePlanServiceImpl(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultFederalGovernmentInsurancePlanService(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dtos = service.listAndSortLocalizedFederalGovernmentInsurancePlans('en');
 
@@ -175,7 +175,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
       mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
       mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
 
-      const service = new FederalGovernmentInsurancePlanServiceImpl(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultFederalGovernmentInsurancePlanService(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.getLocalizedFederalGovernmentInsurancePlanById(id, 'en');
 
@@ -192,7 +192,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
 
       const mockFederalGovernmentInsurancePlanDtoMapper = mock<FederalGovernmentInsurancePlanDtoMapper>();
 
-      const service = new FederalGovernmentInsurancePlanServiceImpl(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultFederalGovernmentInsurancePlanService(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
 
       expect(() => service.getLocalizedFederalGovernmentInsurancePlanById(id, 'en')).toThrow(FederalGovernmentInsurancePlanNotFoundException);
       expect(mockFederalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById).toHaveBeenCalledOnce();

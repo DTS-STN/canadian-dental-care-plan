@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
-import { ClientApplicationDtoMapperImpl } from '~/.server/domain/mappers';
+import { DefaultClientApplicationDtoMapper } from '~/.server/domain/mappers';
 
-describe('ClientApplicationDtoMapperImpl', () => {
-  const mapper = new ClientApplicationDtoMapperImpl();
+describe('DefaultClientApplicationDtoMapper', () => {
+  const mapper = new DefaultClientApplicationDtoMapper();
 
   describe('mapClientApplicationEntityToClientApplicationDto', () => {
     it('should map ClientApplicationEntity to ClientApplicationDto', () => {

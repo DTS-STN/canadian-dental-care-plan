@@ -49,7 +49,7 @@ export interface LetterTypeService {
 }
 
 @injectable()
-export class LetterTypeServiceImpl implements LetterTypeService {
+export class DefaultLetterTypeService implements LetterTypeService {
   private readonly log: Logger;
 
   constructor(
@@ -58,7 +58,7 @@ export class LetterTypeServiceImpl implements LetterTypeService {
     @inject(TYPES.domain.repositories.LetterTypeRepository) private readonly letterTypeRepository: LetterTypeRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('LetterTypeServiceImpl');
+    this.log = logFactory.createLogger('DefaultLetterTypeService');
 
     // Configure caching for letter type operations
     // TODO new config for getLetterTypeById?
@@ -66,11 +66,11 @@ export class LetterTypeServiceImpl implements LetterTypeService {
     this.getLetterTypeById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS;
   }
 
-  listLetterTypes = moize(this.listLetterTypesImpl, {
+  listLetterTypes = moize(this.DefaultlistLetterTypes, {
     onCacheAdd: () => this.log.info('Creating new listLetterTypes memo'),
   });
 
-  private listLetterTypesImpl(): ReadonlyArray<LetterTypeDto> {
+  private DefaultlistLetterTypes(): ReadonlyArray<LetterTypeDto> {
     this.log.trace('Getting all letter types');
     const letterTypeEntities = this.letterTypeRepository.listAllLetterTypes();
     const letterTypeDtos = this.letterTypeDtoMapper.mapLetterTypeEntitiesToLetterTypeDtos(letterTypeEntities);
@@ -78,12 +78,12 @@ export class LetterTypeServiceImpl implements LetterTypeService {
     return letterTypeDtos;
   }
 
-  getLetterTypeById = moize(this.getLetterTypeByIdImpl, {
+  getLetterTypeById = moize(this.DefaultgetLetterTypeById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getLetterTypeById memo'),
   });
 
-  private getLetterTypeByIdImpl(id: string): LetterTypeDto {
+  private DefaultgetLetterTypeById(id: string): LetterTypeDto {
     this.log.trace('Getting letter type with id: [%s]', id);
     const letterTypeEntity = this.letterTypeRepository.findLetterTypeById(id);
 

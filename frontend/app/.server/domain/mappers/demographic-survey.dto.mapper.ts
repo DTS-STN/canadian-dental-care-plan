@@ -53,7 +53,7 @@ export interface DemographicSurveyDtoMapper {
 export type DemographicSurveyDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>;
 
 @injectable()
-export class DemographicSurveyDtoMapperImpl implements DemographicSurveyDtoMapper {
+export class DefaultDemographicSurveyDtoMapper implements DemographicSurveyDtoMapper {
   constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: DemographicSurveyDtoMapperImpl_ServerConfig) {}
 
   // Indigenous status

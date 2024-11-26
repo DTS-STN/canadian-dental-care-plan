@@ -58,7 +58,7 @@ export interface MaritalStatusService {
  * database lookups. It integrates with a logging system to trace operations.
  */
 @injectable()
-export class MaritalStatusServiceImpl implements MaritalStatusService {
+export class DefaultMaritalStatusService implements MaritalStatusService {
   private readonly log: Logger;
 
   constructor(
@@ -67,18 +67,18 @@ export class MaritalStatusServiceImpl implements MaritalStatusService {
     @inject(TYPES.domain.repositories.MaritalStatusRepository) private readonly maritalStatusRepository: MaritalStatusRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('MaritalStatusServiceImpl');
+    this.log = logFactory.createLogger('DefaultMaritalStatusService');
 
     // Configure caching for marital status operations
     this.listMaritalStatuses.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS;
     this.getMaritalStatusById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS;
   }
 
-  listMaritalStatuses = moize(this.listMaritalStatusesImpl, {
+  listMaritalStatuses = moize(this.DefaultlistMaritalStatuses, {
     onCacheAdd: () => this.log.info('Creating new listMaritalStatuses memo'),
   });
 
-  getMaritalStatusById = moize(this.getMaritalStatusByIdImpl, {
+  getMaritalStatusById = moize(this.DefaultgetMaritalStatusById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getMaritalStatusById memo'),
   });
@@ -99,7 +99,7 @@ export class MaritalStatusServiceImpl implements MaritalStatusService {
     return localizedMaritalStatusDto;
   }
 
-  private listMaritalStatusesImpl(): ReadonlyArray<MaritalStatusDto> {
+  private DefaultlistMaritalStatuses(): ReadonlyArray<MaritalStatusDto> {
     this.log.debug('Get all marital statuses');
     const maritalStatusEntities = this.maritalStatusRepository.listAllMaritalStatuses();
     const maritalStatusDtos = this.maritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos(maritalStatusEntities);
@@ -107,7 +107,7 @@ export class MaritalStatusServiceImpl implements MaritalStatusService {
     return maritalStatusDtos;
   }
 
-  private getMaritalStatusByIdImpl(id: string): MaritalStatusDto {
+  private DefaultgetMaritalStatusById(id: string): MaritalStatusDto {
     this.log.debug('Get marital status with id: [%s]', id);
     const maritalStatusEntity = this.maritalStatusRepository.findMaritalStatusById(id);
 

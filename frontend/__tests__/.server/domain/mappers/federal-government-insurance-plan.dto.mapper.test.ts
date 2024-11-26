@@ -2,16 +2,16 @@ import { describe, expect, it } from 'vitest';
 
 import type { FederalGovernmentInsurancePlanDto, FederalGovernmentInsurancePlanLocalizedDto } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
-import { FederalGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers';
+import { DefaultFederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 
-describe('FederalGovernmentInsurancePlanDtoMapperImpl', () => {
+describe('DefaultFederalGovernmentInsurancePlanDtoMapper', () => {
   describe('mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto', () => {
     it('maps a FederalGovernmentInsurancePlanDto to FederalGovernmentInsurancePlanLocalizedDto', () => {
       const mockDto: FederalGovernmentInsurancePlanDto = { id: '1', nameEn: 'First Insurance Plan', nameFr: "Premier plan d'assurance" };
 
       const expectedDto: FederalGovernmentInsurancePlanLocalizedDto = { id: '1', name: 'First Insurance Plan' };
 
-      const mapper = new FederalGovernmentInsurancePlanDtoMapperImpl();
+      const mapper = new DefaultFederalGovernmentInsurancePlanDtoMapper();
 
       const dto = mapper.mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto(mockDto, 'en');
 
@@ -31,7 +31,7 @@ describe('FederalGovernmentInsurancePlanDtoMapperImpl', () => {
         { id: '2', name: 'Second Insurance Plan' },
       ];
 
-      const mapper = new FederalGovernmentInsurancePlanDtoMapperImpl();
+      const mapper = new DefaultFederalGovernmentInsurancePlanDtoMapper();
 
       const dtos = mapper.mapFederalGovernmentInsurancePlanDtosToFederalGovernmentInsurancePlanLocalizedDtos(mockEntities, 'en');
 
@@ -49,7 +49,7 @@ describe('FederalGovernmentInsurancePlanDtoMapperImpl', () => {
 
       const expectedDto: FederalGovernmentInsurancePlanDto = { id: '1', nameEn: 'First Insurance Plan', nameFr: "Premier plan d'assurance" };
 
-      const mapper = new FederalGovernmentInsurancePlanDtoMapperImpl();
+      const mapper = new DefaultFederalGovernmentInsurancePlanDtoMapper();
 
       const dto = mapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto(mockEntity);
 
@@ -77,7 +77,7 @@ describe('FederalGovernmentInsurancePlanDtoMapperImpl', () => {
         { id: '2', nameEn: 'Second Insurance Plan', nameFr: "Deuxième plan d'assurance" },
       ];
 
-      const mapper = new FederalGovernmentInsurancePlanDtoMapperImpl();
+      const mapper = new DefaultFederalGovernmentInsurancePlanDtoMapper();
 
       const dtos = mapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(mockEntities);
 

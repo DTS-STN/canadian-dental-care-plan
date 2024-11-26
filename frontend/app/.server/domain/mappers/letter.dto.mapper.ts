@@ -9,7 +9,7 @@ export interface LetterDtoMapper {
 }
 
 @injectable()
-export class LetterDtoMapperImpl implements LetterDtoMapper {
+export class DefaultLetterDtoMapper implements LetterDtoMapper {
   mapLetterEntitiesToLetterDtos(letterEntities: ReadonlyArray<LetterEntity>): ReadonlyArray<LetterDto> {
     return letterEntities.map((letterEntity) => this.mapLetterEntityToLetterDto(letterEntity));
   }

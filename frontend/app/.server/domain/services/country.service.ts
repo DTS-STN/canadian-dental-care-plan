@@ -60,11 +60,11 @@ export type CountryServiceImpl_ServiceConfig = Pick<ServerConfig, 'CANADA_COUNTR
  * database lookups. It integrates with a logging system to trace operations.
  */
 @injectable()
-export class CountryServiceImpl implements CountryService {
+export class DefaultCountryService implements CountryService {
   private readonly log: Logger;
 
   /**
-   * Constructs a new CountryServiceImpl instance.
+   * Constructs a new DefaultCountryService instance.
    *
    * @param logFactory - A factory for creating logger instances.
    * @param countryDtoMapper - The mapper responsible for transforming country entities into DTOs.
@@ -77,7 +77,7 @@ export class CountryServiceImpl implements CountryService {
     @inject(TYPES.domain.repositories.CountryRepository) private readonly countryRepository: CountryRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: CountryServiceImpl_ServiceConfig,
   ) {
-    this.log = logFactory.createLogger('CountryServiceImpl');
+    this.log = logFactory.createLogger('DefaultCountryService');
 
     // Configure caching for country operations
     this.listCountries.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS;
@@ -89,7 +89,7 @@ export class CountryServiceImpl implements CountryService {
    *
    * @returns An array of Country DTOs.
    */
-  listCountries = moize(this.listCountriesImpl, {
+  listCountries = moize(this.DefaultlistCountries, {
     onCacheAdd: () => this.log.info('Creating new listCountries memo'),
   });
 
@@ -100,7 +100,7 @@ export class CountryServiceImpl implements CountryService {
    * @returns The Country DTO corresponding to the specified ID.
    * @throws {CountryNotFoundException} If no country is found with the specified ID.
    */
-  getCountryById = moize(this.getCountryByIdImpl, {
+  getCountryById = moize(this.DefaultgetCountryById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getCountryById memo'),
   });
@@ -136,7 +136,7 @@ export class CountryServiceImpl implements CountryService {
     return localizedCountryDto;
   }
 
-  private listCountriesImpl(): ReadonlyArray<CountryDto> {
+  private DefaultlistCountries(): ReadonlyArray<CountryDto> {
     this.log.debug('Get all countries');
     const countryEntities = this.countryRepository.listAllCountries();
     const countryDtos = this.countryDtoMapper.mapCountryEntitiesToCountryDtos(countryEntities);
@@ -144,7 +144,7 @@ export class CountryServiceImpl implements CountryService {
     return countryDtos;
   }
 
-  private getCountryByIdImpl(id: string): CountryDto {
+  private DefaultgetCountryById(id: string): CountryDto {
     this.log.debug('Get country with id: [%s]', id);
     const countryEntity = this.countryRepository.findCountryById(id);
 

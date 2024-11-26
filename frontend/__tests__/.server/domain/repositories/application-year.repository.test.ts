@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
-import { ApplicationYearRepositoryImpl } from '~/.server/domain/repositories';
+import { DefaultApplicationYearRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { instrumentedFetch } from '~/.server/utils/fetch.utils';
 
@@ -12,7 +12,7 @@ vi.mock('~/.server/utils/fetch.utils', () => ({
   instrumentedFetch: vi.fn(),
 }));
 
-describe('ApplicationYearRepositoryImpl', () => {
+describe('DefaultApplicationYearRepository', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
@@ -44,7 +44,7 @@ describe('ApplicationYearRepositoryImpl', () => {
       const mockServerConfig = mock<ServerConfig>();
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
-      const repository = new ApplicationYearRepositoryImpl(mockLogFactory, mockServerConfig);
+      const repository = new DefaultApplicationYearRepository(mockLogFactory, mockServerConfig);
 
       const result = await repository.listApplicationYears({ date: '2024-11-13' });
       expect(result).toEqual(mockResponseData);
@@ -59,7 +59,7 @@ describe('ApplicationYearRepositoryImpl', () => {
       const mockServerConfig = mock<ServerConfig>();
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
-      const repository = new ApplicationYearRepositoryImpl(mockLogFactory, mockServerConfig);
+      const repository = new DefaultApplicationYearRepository(mockLogFactory, mockServerConfig);
       await expect(() => repository.listApplicationYears({ date: '2024-11-13' })).rejects.toThrowError();
     });
   });

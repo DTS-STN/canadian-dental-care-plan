@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { CountryRepositoryImpl } from '~/.server/domain/repositories';
+import { DefaultCountryRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 const dataSource = vi.hoisted(() => ({
@@ -25,7 +25,7 @@ const dataSource = vi.hoisted(() => ({
 
 vi.mock('~/.server/resources/power-platform/country.json', () => dataSource);
 
-describe('CountryRepositoryImpl', () => {
+describe('DefaultCountryRepository', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
@@ -35,7 +35,7 @@ describe('CountryRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new CountryRepositoryImpl(mockLogFactory);
+    const repository = new DefaultCountryRepository(mockLogFactory);
 
     const countries = repository.listAllCountries();
 
@@ -61,7 +61,7 @@ describe('CountryRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new CountryRepositoryImpl(mockLogFactory);
+    const repository = new DefaultCountryRepository(mockLogFactory);
 
     const countries = repository.listAllCountries();
 
@@ -72,7 +72,7 @@ describe('CountryRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new CountryRepositoryImpl(mockLogFactory);
+    const repository = new DefaultCountryRepository(mockLogFactory);
 
     const country = repository.findCountryById('1');
 
@@ -88,7 +88,7 @@ describe('CountryRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new CountryRepositoryImpl(mockLogFactory);
+    const repository = new DefaultCountryRepository(mockLogFactory);
 
     const country = repository.findCountryById('non-existent-id');
 

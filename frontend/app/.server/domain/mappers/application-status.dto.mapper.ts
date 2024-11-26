@@ -10,7 +10,7 @@ export interface ApplicationStatusDtoMapper {
 }
 
 @injectable()
-export class ApplicationStatusDtoMapperImpl implements ApplicationStatusDtoMapper {
+export class DefaultApplicationStatusDtoMapper implements ApplicationStatusDtoMapper {
   mapApplicationStatusEntityToApplicationStatusId(applicationStatusEntity: ApplicationStatusEntity): string | null {
     return applicationStatusEntity.BenefitApplication.BenefitApplicationStatus[0].ReferenceDataID ?? null;
   }

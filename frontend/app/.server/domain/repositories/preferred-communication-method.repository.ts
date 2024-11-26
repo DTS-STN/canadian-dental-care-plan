@@ -21,11 +21,11 @@ export interface PreferredCommunicationMethodRepository {
 }
 
 @injectable()
-export class PreferredCommunicationMethodRepositoryImpl implements PreferredCommunicationMethodRepository {
+export class DefaultPreferredCommunicationMethodRepository implements PreferredCommunicationMethodRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('PreferredCommunicationMethodRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultPreferredCommunicationMethodRepository');
   }
 
   listAllPreferredCommunicationMethods(): PreferredCommunicationMethodEntity[] {

@@ -13,7 +13,7 @@ export interface PreferredCommunicationMethodDtoMapper {
 }
 
 @injectable()
-export class PreferredCommunicationMethodDtoMapperImpl implements PreferredCommunicationMethodDtoMapper {
+export class DefaultPreferredCommunicationMethodDtoMapper implements PreferredCommunicationMethodDtoMapper {
   constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>) {}
 
   mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto(preferredCommunicationMethodDto: PreferredCommunicationMethodDto, locale: AppLocale): PreferredCommunicationMethodLocalizedDto {

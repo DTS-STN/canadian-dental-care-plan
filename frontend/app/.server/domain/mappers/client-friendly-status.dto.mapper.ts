@@ -9,7 +9,7 @@ export interface ClientFriendlyStatusDtoMapper {
 }
 
 @injectable()
-export class ClientFriendlyStatusDtoMapperImpl implements ClientFriendlyStatusDtoMapper {
+export class DefaultClientFriendlyStatusDtoMapper implements ClientFriendlyStatusDtoMapper {
   mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto(clientFriendlyStatusDto: ClientFriendlyStatusDto, locale: AppLocale): ClientFriendlyStatusLocalizedDto {
     const { nameEn, nameFr, ...rest } = clientFriendlyStatusDto;
     return {

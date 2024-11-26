@@ -17,14 +17,14 @@ export interface ApplicationYearRepository {
 }
 
 @injectable()
-export class ApplicationYearRepositoryImpl implements ApplicationYearRepository {
+export class DefaultApplicationYearRepository implements ApplicationYearRepository {
   private readonly log: Logger;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
   ) {
-    this.log = logFactory.createLogger('ApplicationYearRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultApplicationYearRepository');
   }
 
   async listApplicationYears(applicationYearRequestEntity: ApplicationYearRequestEntity): Promise<ApplicationYearResultEntity> {

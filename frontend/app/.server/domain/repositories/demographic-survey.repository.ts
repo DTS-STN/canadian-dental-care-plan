@@ -91,11 +91,11 @@ export interface DemographicSurveyRepository {
 }
 
 @injectable()
-export class DemographicSurveyRepositoryImpl implements DemographicSurveyRepository {
+export class DefaultDemographicSurveyRepository implements DemographicSurveyRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DemographicSurveyRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultDemographicSurveyRepository');
   }
 
   listAllIndigenousStatuses(): IndigenousStatusEntity[] {

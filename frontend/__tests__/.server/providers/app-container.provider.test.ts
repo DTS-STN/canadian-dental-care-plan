@@ -3,14 +3,14 @@ import { Container } from 'inversify';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { AppContainerProviderImpl } from '~/.server/app-container.provider';
+import { DefaultAppContainerProvider } from '~/.server/app-container.provider';
 import type { ServiceIdentifier } from '~/.server/constants';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 
-describe('AppContainerProviderImpl', () => {
+describe('DefaultAppContainerProvider', () => {
   let container: interfaces.Container;
-  let appContainerProvider: AppContainerProviderImpl;
+  let appContainerProvider: DefaultAppContainerProvider;
   const mockLogger = mock<Logger>();
   const mockLogFactory = mock<LogFactory>();
 
@@ -24,7 +24,7 @@ describe('AppContainerProviderImpl', () => {
     mockLogFactory.createLogger.mockReturnValue(mockLogger);
 
     container.bind(TYPES.factories.LogFactory).toConstantValue(mockLogFactory);
-    appContainerProvider = new AppContainerProviderImpl(container);
+    appContainerProvider = new DefaultAppContainerProvider(container);
   });
 
   describe('find', () => {

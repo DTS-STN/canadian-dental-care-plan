@@ -17,7 +17,7 @@ export interface PreferredCommunicationMethodService {
 }
 
 @injectable()
-export class PreferredCommunicationMethodServiceImpl implements PreferredCommunicationMethodService {
+export class DefaultPreferredCommunicationMethodService implements PreferredCommunicationMethodService {
   private readonly log: Logger;
 
   constructor(
@@ -26,18 +26,18 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
     @inject(TYPES.domain.repositories.PreferredCommunicationMethodRepository) private readonly preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('PreferredCommunicationMethodServiceImpl');
+    this.log = logFactory.createLogger('DefaultPreferredCommunicationMethodService');
 
     // set moize options
     this.listPreferredCommunicationMethods.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS;
     this.getPreferredCommunicationMethodById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS;
   }
 
-  listPreferredCommunicationMethods = moize(this.listPreferredCommunicationMethodsImpl, {
+  listPreferredCommunicationMethods = moize(this.DefaultlistPreferredCommunicationMethods, {
     onCacheAdd: () => this.log.info('Creating new listPreferredCommunicationMethods memo'),
   });
 
-  getPreferredCommunicationMethodById = moize(this.getPreferredCommunicationMethodByIdImpl, {
+  getPreferredCommunicationMethodById = moize(this.DefaultgetPreferredCommunicationMethodById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getPreferredCommunicationMethodById memo'),
   });
@@ -59,7 +59,7 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
     return localizedPreferredCommunicationMethodDto;
   }
 
-  private listPreferredCommunicationMethodsImpl(): PreferredCommunicationMethodDto[] {
+  private DefaultlistPreferredCommunicationMethods(): PreferredCommunicationMethodDto[] {
     this.log.debug('Get all preferred communication methods');
     const preferredCommunicationMethodEntities = this.preferredCommunicationMethodRepository.listAllPreferredCommunicationMethods();
     const preferredCommunicationMethodDtos = this.preferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos(preferredCommunicationMethodEntities);
@@ -67,7 +67,7 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
     return preferredCommunicationMethodDtos;
   }
 
-  private getPreferredCommunicationMethodByIdImpl(id: string): PreferredCommunicationMethodDto {
+  private DefaultgetPreferredCommunicationMethodById(id: string): PreferredCommunicationMethodDto {
     this.log.debug('Get preferred communication method with id: [%s]', id);
     const preferredCommunicationMethodEntity = this.preferredCommunicationMethodRepository.findPreferredCommunicationMethodById(id);
 

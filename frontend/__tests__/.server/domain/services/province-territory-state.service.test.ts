@@ -6,12 +6,12 @@ import type { ProvinceTerritoryStateDto, ProvinceTerritoryStateLocalizedDto } fr
 import { ProvinceTerritoryStateNotFoundException } from '~/.server/domain/exceptions';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
-import { ProvinceTerritoryStateServiceImpl } from '~/.server/domain/services';
+import { DefaultProvinceTerritoryStateService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 
-describe('ProvinceTerritoryStateServiceImpl', () => {
+describe('DefaultProvinceTerritoryStateService', () => {
   const mockServerConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'> = {
     LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS: 10,
     LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS: 5,
@@ -25,7 +25,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
 
-      const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig); // Act and Assert
+      const service = new DefaultProvinceTerritoryStateService(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig); // Act and Assert
 
       expect(service.listProvinceTerritoryStates.options.maxAge).toBe(10000); // 10 seconds in milliseconds
       expect(service.getProvinceTerritoryStateById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
@@ -60,7 +60,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
       mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos.mockReturnValueOnce(mockDtos);
 
-      const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
+      const service = new DefaultProvinceTerritoryStateService(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
       const dtos = service.listProvinceTerritoryStates();
 
@@ -87,7 +87,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
       mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto.mockReturnValueOnce(mockDto);
 
-      const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
+      const service = new DefaultProvinceTerritoryStateService(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
       const dto = service.getProvinceTerritoryStateById(id);
 
@@ -103,7 +103,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
 
       const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
 
-      const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
+      const service = new DefaultProvinceTerritoryStateService(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
       expect(() => service.getProvinceTerritoryStateById(id)).toThrow(ProvinceTerritoryStateNotFoundException);
       expect(mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById).toHaveBeenCalledOnce();
@@ -146,7 +146,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos.mockReturnValueOnce(mockDtos);
       mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
 
-      const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
+      const service = new DefaultProvinceTerritoryStateService(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
       const dtos = service.listAndSortLocalizedProvinceTerritoryStates(locale);
 
@@ -201,7 +201,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos.mockReturnValueOnce(mockDtos);
       mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
 
-      const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
+      const service = new DefaultProvinceTerritoryStateService(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
       const dtos = service.listAndSortLocalizedProvinceTerritoryStatesByCountryId(countryId, locale);
 
@@ -232,7 +232,7 @@ describe('ProvinceTerritoryStateServiceImpl', () => {
       mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto.mockReturnValueOnce(mockDto);
       mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
 
-      const service = new ProvinceTerritoryStateServiceImpl(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
+      const service = new DefaultProvinceTerritoryStateService(mockLogFactory, mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
       const dto = service.getLocalizedProvinceTerritoryStateById(id, locale);
 

@@ -49,7 +49,7 @@ export interface FederalGovernmentInsurancePlanService {
 }
 
 @injectable()
-export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernmentInsurancePlanService {
+export class DefaultFederalGovernmentInsurancePlanService implements FederalGovernmentInsurancePlanService {
   private readonly log: Logger;
 
   constructor(
@@ -58,23 +58,23 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
     @inject(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository) private readonly federalGovernmentInsurancePlanRepository: FederalGovernmentInsurancePlanRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('FederalGovernmentInsurancePlanServiceImpl');
+    this.log = logFactory.createLogger('DefaultFederalGovernmentInsurancePlanService');
 
     // set moize options
     this.listFederalGovernmentInsurancePlans.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS;
     this.getFederalGovernmentInsurancePlanById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS;
   }
 
-  listFederalGovernmentInsurancePlans = moize(this.listFederalGovernmentInsurancePlansImpl, {
+  listFederalGovernmentInsurancePlans = moize(this.DefaultlistFederalGovernmentInsurancePlans, {
     onCacheAdd: () => this.log.info('Creating new listFederalGovernmentInsurancePlans memo'),
   });
 
-  getFederalGovernmentInsurancePlanById = moize(this.getFederalGovernmentInsurancePlanByIdImpl, {
+  getFederalGovernmentInsurancePlanById = moize(this.DefaultgetFederalGovernmentInsurancePlanById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getFederalGovernmentInsurancePlanById memo'),
   });
 
-  private listFederalGovernmentInsurancePlansImpl(): ReadonlyArray<FederalGovernmentInsurancePlanDto> {
+  private DefaultlistFederalGovernmentInsurancePlans(): ReadonlyArray<FederalGovernmentInsurancePlanDto> {
     this.log.debug('Get all federal government insurance plans');
     const federalGovernmentInsurancePlanEntities = this.federalGovernmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans();
     const federalGovernmentInsurancePlanDtos = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(federalGovernmentInsurancePlanEntities);
@@ -82,7 +82,7 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
     return federalGovernmentInsurancePlanDtos;
   }
 
-  private getFederalGovernmentInsurancePlanByIdImpl(id: string): FederalGovernmentInsurancePlanDto {
+  private DefaultgetFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanDto {
     this.log.debug('Get federal government insurance plan with id: [%s]', id);
     const federalGovernmentInsurancePlanEntity = this.federalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById(id);
 

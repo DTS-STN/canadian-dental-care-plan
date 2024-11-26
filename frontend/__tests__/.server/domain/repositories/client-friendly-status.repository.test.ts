@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { ClientFriendlyStatusRepositoryImpl } from '~/.server/domain/repositories';
+import { DefaultClientFriendlyStatusRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 const dataSource = vi.hoisted(() => ({
@@ -23,7 +23,7 @@ const dataSource = vi.hoisted(() => ({
 
 vi.mock('~/.server/resources/power-platform/client-friendly-status.json', () => dataSource);
 
-describe('ClientFriendlyStatusRepositoryImpl', () => {
+describe('DefaultClientFriendlyStatusRepository', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
@@ -33,7 +33,7 @@ describe('ClientFriendlyStatusRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ClientFriendlyStatusRepositoryImpl(mockLogFactory);
+    const repository = new DefaultClientFriendlyStatusRepository(mockLogFactory);
 
     const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
 
@@ -57,7 +57,7 @@ describe('ClientFriendlyStatusRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ClientFriendlyStatusRepositoryImpl(mockLogFactory);
+    const repository = new DefaultClientFriendlyStatusRepository(mockLogFactory);
 
     const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
 
@@ -68,7 +68,7 @@ describe('ClientFriendlyStatusRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ClientFriendlyStatusRepositoryImpl(mockLogFactory);
+    const repository = new DefaultClientFriendlyStatusRepository(mockLogFactory);
 
     const clientFriendlyStatus = repository.findClientFriendlyStatusById('1');
 
@@ -83,7 +83,7 @@ describe('ClientFriendlyStatusRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ClientFriendlyStatusRepositoryImpl(mockLogFactory);
+    const repository = new DefaultClientFriendlyStatusRepository(mockLogFactory);
 
     const clientFriendlyStatus = repository.findClientFriendlyStatusById('non-existent-id');
 

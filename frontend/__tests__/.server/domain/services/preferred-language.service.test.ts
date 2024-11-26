@@ -6,12 +6,12 @@ import { PreferredLanguageNotFoundException } from '~/.server/domain/exceptions'
 import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories';
 import type { PreferredLanguageServiceImpl_ServerConfig } from '~/.server/domain/services';
-import { PreferredLanguageServiceImpl } from '~/.server/domain/services';
+import { DefaultPreferredLanguageService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 
-describe('PreferredLanguageServiceImpl', () => {
+describe('DefaultPreferredLanguageService', () => {
   const mockServerConfig: PreferredLanguageServiceImpl_ServerConfig = {
     ENGLISH_LANGUAGE_CODE: 1033,
     FRENCH_LANGUAGE_CODE: 1036,
@@ -27,7 +27,7 @@ describe('PreferredLanguageServiceImpl', () => {
       const mockPreferredLanguageDtoMapper = mock<PreferredLanguageDtoMapper>();
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
 
-      const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
+      const service = new DefaultPreferredLanguageService(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       // Act and Assert
       expect(service.listPreferredLanguages.options.maxAge).toBe(10000); // 10 seconds in milliseconds
@@ -67,7 +67,7 @@ describe('PreferredLanguageServiceImpl', () => {
       const mockPreferredLanguageDtoMapper = mock<PreferredLanguageDtoMapper>();
       mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos.mockReturnValueOnce(mockDtos);
 
-      const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
+      const service = new DefaultPreferredLanguageService(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       const dtos = service.listPreferredLanguages();
 
@@ -96,7 +96,7 @@ describe('PreferredLanguageServiceImpl', () => {
       const mockPreferredLanguageDtoMapper = mock<PreferredLanguageDtoMapper>();
       mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto.mockReturnValueOnce(mockDto);
 
-      const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
+      const service = new DefaultPreferredLanguageService(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       const dto = service.getPreferredLanguageById(id);
 
@@ -112,7 +112,7 @@ describe('PreferredLanguageServiceImpl', () => {
 
       const mockPreferredLanguageDtoMapper = mock<PreferredLanguageDtoMapper>();
 
-      const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
+      const service = new DefaultPreferredLanguageService(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       expect(() => service.getPreferredLanguageById(id)).toThrow(PreferredLanguageNotFoundException);
       expect(mockPreferredLanguageRepository.findPreferredLanguageById).toHaveBeenCalledOnce();
@@ -159,7 +159,7 @@ describe('PreferredLanguageServiceImpl', () => {
       mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos.mockReturnValueOnce(mockDtos);
       mockPreferredLanguageDtoMapper.mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
 
-      const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
+      const service = new DefaultPreferredLanguageService(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       const dtos = service.listAndSortLocalizedPreferredLanguages(locale);
 
@@ -192,7 +192,7 @@ describe('PreferredLanguageServiceImpl', () => {
       mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto.mockReturnValueOnce(mockDto);
       mockPreferredLanguageDtoMapper.mapPreferredLanguageDtoToPreferredLanguageLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
 
-      const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
+      const service = new DefaultPreferredLanguageService(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       const dto = service.getLocalizedPreferredLanguageById(id, locale);
 
