@@ -1,7 +1,6 @@
 /**
  * An API route that can be used to perform actions with user's protected renew state.
  */
-import { data } from '@remix-run/node';
 import type { ActionFunctionArgs } from '@remix-run/node';
 
 import { z } from 'zod';
@@ -19,7 +18,7 @@ export async function action({ context: { appContainer, session }, request }: Ac
 
   if (request.method !== 'POST') {
     log.warn('Invalid method requested [%s]; responding with 405; sessionId: [%s]', request.method, sessionId);
-    throw data({ message: 'Method not allowed' }, { status: 405 });
+    throw Response.json({ message: 'Method not allowed' }, { status: 405 });
   }
 
   const bodySchema = z.object({
@@ -32,7 +31,7 @@ export async function action({ context: { appContainer, session }, request }: Ac
 
   if (!parsedBody.success) {
     log.debug('Invalid request body [%j]; sessionId: [%s]', requestBody, sessionId);
-    return data({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
+    return Response.json({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
   }
 
   const params = { id: parsedBody.data.id };
@@ -42,7 +41,7 @@ export async function action({ context: { appContainer, session }, request }: Ac
     case 'extend': {
       log.debug("Extending user's protected renew state; id: [%s], sessionId: [%s]", params.id, sessionId);
       saveProtectedRenewState({ params, session, state: {} });
-      return data(null, { status: 204 });
+      return Response.json(null, { status: 204 });
     }
 
     default: {

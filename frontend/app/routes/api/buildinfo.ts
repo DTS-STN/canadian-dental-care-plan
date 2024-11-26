@@ -9,5 +9,5 @@ export function loader({ context, params, request }: LoaderFunctionArgs) {
   const buildInfo = getBuildInfoService().getBuildInfo();
   const imageTag = `${buildInfo.buildVersion}-${buildInfo.buildRevision}-${buildInfo.buildId}`;
 
-  return { ...buildInfo, imageTag };
+  return Response.json({ ...buildInfo, imageTag });
 }
