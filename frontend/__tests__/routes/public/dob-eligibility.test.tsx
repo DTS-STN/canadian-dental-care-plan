@@ -11,9 +11,7 @@ vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
   }),
 }));
 
-vi.mock('~/.server/utils/locale.utils', () => ({
-  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
-}));
+vi.mock('~/.server/utils/locale.utils');
 
 describe('_public.apply.id.dob-eligibility', () => {
   afterEach(() => {
@@ -31,7 +29,7 @@ describe('_public.apply.id.dob-eligibility', () => {
 
       expect(response).toEqual({
         id: '123',
-        meta: {},
+        meta: { title: 'gcweb:meta.title.template' },
       });
     });
   });

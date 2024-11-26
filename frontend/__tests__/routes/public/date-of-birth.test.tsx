@@ -29,11 +29,7 @@ vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
   }),
 }));
 
-vi.mock('~/.server/utils/locale.utils', () => {
-  return {
-    getFixedT: vi.fn().mockResolvedValue(vi.fn((i18nKey) => i18nKey)),
-  };
-});
+vi.mock('~/.server/utils/locale.utils');
 
 describe('_public.apply.id.date-of-birth', () => {
   afterEach(() => {
