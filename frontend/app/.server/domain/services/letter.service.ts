@@ -27,7 +27,7 @@ export interface LetterService {
 }
 
 @injectable()
-export class LetterServiceImpl implements LetterService {
+export class DefaultLetterService implements LetterService {
   private readonly log: Logger;
 
   constructor(
@@ -36,7 +36,7 @@ export class LetterServiceImpl implements LetterService {
     @inject(TYPES.domain.repositories.LetterRepository) private readonly letterRepository: LetterRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('LetterServiceImpl');
+    this.log = logFactory.createLogger('DefaultLetterService');
   }
 
   async findLettersByClientId({ clientId, userId, sortOrder = 'desc' }: LettersRequestDto): Promise<ReadonlyArray<LetterDto>> {

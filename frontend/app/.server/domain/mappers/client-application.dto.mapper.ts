@@ -11,7 +11,7 @@ export interface ClientApplicationDtoMapper {
 }
 
 @injectable()
-export class ClientApplicationDtoMapperImpl implements ClientApplicationDtoMapper {
+export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMapper {
   mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto) {
     return {
       Applicant: {

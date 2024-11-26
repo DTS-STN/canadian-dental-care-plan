@@ -9,7 +9,7 @@ export interface HCaptchaDtoMapper {
 }
 
 @injectable()
-export class HCaptchaDtoMapperImpl implements HCaptchaDtoMapper {
+export class DefaultHCaptchaDtoMapper implements HCaptchaDtoMapper {
   mapHCaptchaVerifyRequestDtoToHCaptchaVerifyRequestEntity({ hCaptchaResponse, ipAddress }: HCaptchaVerifyRequestDto): HCaptchaVerifyRequestEntity {
     return { hCaptchaResponse, ipAddress };
   }

@@ -16,11 +16,11 @@ export interface AuditService {
 }
 
 @injectable()
-export class AuditServiceImpl implements AuditService {
+export class DefaultAuditService implements AuditService {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('AuditServiceImpl');
+    this.log = logFactory.createLogger('DefaultAuditService');
   }
 
   createAudit(eventId: string, auditDetails?: AuditDetails): void {

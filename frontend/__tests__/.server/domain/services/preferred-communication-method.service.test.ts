@@ -6,12 +6,12 @@ import type { PreferredCommunicationMethodDto, PreferredCommunicationMethodLocal
 import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
-import { PreferredCommunicationMethodServiceImpl } from '~/.server/domain/services';
+import { DefaultPreferredCommunicationMethodService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 
-describe('PreferredCommunicationMethodServiceImpl', () => {
+describe('DefaultPreferredCommunicationMethodService', () => {
   const mockServerConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'> = {
     LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS: 10,
     LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS: 5,
@@ -25,7 +25,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
 
-      const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig); // Act and Assert
+      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig); // Act and Assert
 
       expect(service.listPreferredCommunicationMethods.options.maxAge).toBe(10000); // 10 seconds in milliseconds
       expect(service.getPreferredCommunicationMethodById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
@@ -64,7 +64,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos.mockReturnValueOnce(mockDtos);
 
-      const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       const dtos = service.listPreferredCommunicationMethods();
 
@@ -93,7 +93,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto.mockReturnValueOnce(mockDto);
 
-      const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       const dto = service.getPreferredCommunicationMethodById(id);
 
@@ -109,7 +109,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
 
       const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
 
-      const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       expect(() => service.getPreferredCommunicationMethodById(id)).toThrow(PreferredCommunicationMethodNotFoundException);
       expect(mockPreferredCommunicationMethodRepository.findPreferredCommunicationMethodById).toHaveBeenCalledOnce();
@@ -156,7 +156,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos.mockReturnValueOnce(mockDtos);
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
 
-      const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       const dtos = service.listAndSortLocalizedPreferredCommunicationMethods(locale);
 
@@ -189,7 +189,7 @@ describe('PreferredCommunicationMethodServiceImpl', () => {
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto.mockReturnValueOnce(mockDto);
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
 
-      const service = new PreferredCommunicationMethodServiceImpl(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       const dto = service.getLocalizedPreferredCommunicationMethodById(id, locale);
 

@@ -15,7 +15,7 @@ export interface MaritalStatusDtoMapper {
 export type MaritalStatusDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>;
 
 @injectable()
-export class MaritalStatusDtoMapperImpl implements MaritalStatusDtoMapper {
+export class DefaultMaritalStatusDtoMapper implements MaritalStatusDtoMapper {
   constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: MaritalStatusDtoMapperImpl_ServerConfig) {}
 
   mapMaritalStatusDtoToMaritalStatusLocalizedDto(maritalStatusDto: MaritalStatusDto, locale: AppLocale): MaritalStatusLocalizedDto {

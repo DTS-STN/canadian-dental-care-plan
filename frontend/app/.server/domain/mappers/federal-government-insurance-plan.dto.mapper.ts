@@ -11,7 +11,7 @@ export interface FederalGovernmentInsurancePlanDtoMapper {
 }
 
 @injectable()
-export class FederalGovernmentInsurancePlanDtoMapperImpl implements FederalGovernmentInsurancePlanDtoMapper {
+export class DefaultFederalGovernmentInsurancePlanDtoMapper implements FederalGovernmentInsurancePlanDtoMapper {
   mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto(federalGovernmentInsuranceDto: FederalGovernmentInsurancePlanDto, locale: AppLocale): FederalGovernmentInsurancePlanLocalizedDto {
     const { nameEn, nameFr, ...rest } = federalGovernmentInsuranceDto;
     return {

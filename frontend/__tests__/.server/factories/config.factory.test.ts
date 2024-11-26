@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { ConfigFactoryImpl } from '~/.server/factories';
+import { DefaultConfigFactory } from '~/.server/factories';
 import { getClientEnv, getEnv } from '~/.server/utils/env.utils';
 
 vi.mock('~/.server/utils/env.utils', () => ({
@@ -8,9 +8,9 @@ vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(),
 }));
 
-describe('ConfigFactoryImpl', () => {
+describe('DefaultConfigFactory', () => {
   it('should create a client config', () => {
-    const configFactory = new ConfigFactoryImpl();
+    const configFactory = new DefaultConfigFactory();
     const clientConfig = configFactory.createClientConfig();
 
     expect(clientConfig).not.toBeNull();
@@ -18,7 +18,7 @@ describe('ConfigFactoryImpl', () => {
   });
 
   it('should create a server config', () => {
-    const configFactory = new ConfigFactoryImpl();
+    const configFactory = new DefaultConfigFactory();
     const serverConfig = configFactory.createServerConfig();
 
     expect(serverConfig).not.toBeNull();

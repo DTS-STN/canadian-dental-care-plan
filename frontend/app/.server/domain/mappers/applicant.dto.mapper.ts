@@ -8,7 +8,7 @@ export interface ApplicantDtoMapper {
 }
 
 @injectable()
-export class ApplicantDtoMapperImpl implements ApplicantDtoMapper {
+export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
   mapSinToApplicantRequestEntity(sin: string): ApplicantRequestEntity {
     return {
       Applicant: {

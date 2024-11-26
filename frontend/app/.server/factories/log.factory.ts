@@ -9,7 +9,7 @@ export interface LogFactory {
 }
 
 @injectable()
-export class LogFactoryImpl implements LogFactory {
+export class DefaultLogFactory implements LogFactory {
   createLogger(category: string) {
     return getLogger(category);
   }

@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import { RedisServiceImpl } from '~/.server/data/services';
+import { DefaultRedisService } from '~/.server/data/services';
 import type { LogFactory } from '~/.server/factories';
 
 vi.mock('ioredis', () => {
@@ -18,18 +18,18 @@ vi.mock('ioredis', () => {
   };
 });
 
-describe('RedisServiceImpl', () => {
+describe('DefaultRedisService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   const mockRedisClient = new Redis();
 
-  const redisService = new RedisServiceImpl(mock<LogFactory>(), mock<ServerConfig>());
+  const redisService = new DefaultRedisService(mock<LogFactory>(), mock<ServerConfig>());
 
   describe('constructor', () => {
     it('should create a standalone client when not using a sentinel', () => {
-      new RedisServiceImpl(
+      new DefaultRedisService(
         mock<LogFactory>(),
         mock<ServerConfig>({
           REDIS_SENTINEL_NAME: undefined,
@@ -52,7 +52,7 @@ describe('RedisServiceImpl', () => {
     });
 
     it('should create a sentinel client when using a sentinel', () => {
-      new RedisServiceImpl(
+      new DefaultRedisService(
         mock<LogFactory>(),
         mock<ServerConfig>({
           REDIS_SENTINEL_NAME: 'sentinel',

@@ -6,12 +6,12 @@ import { ClientFriendlyStatusNotFoundException } from '~/.server/domain/exceptio
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories';
 import type { ClientFriendlyStatusServiceImpl_ServerConfig } from '~/.server/domain/services';
-import { ClientFriendlyStatusServiceImpl } from '~/.server/domain/services';
+import { DefaultClientFriendlyStatusService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('moize');
 
-describe('ClientFriendlyStatusServiceImpl', () => {
+describe('DefaultClientFriendlyStatusService', () => {
   const mockServerConfig: ClientFriendlyStatusServiceImpl_ServerConfig = {
     LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS: 5,
   };
@@ -24,7 +24,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
       const mockClientFriendlyStatusDtoMapper = mock<ClientFriendlyStatusDtoMapper>();
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
 
-      const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig); // Act and Assert
+      const service = new DefaultClientFriendlyStatusService(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig); // Act and Assert
 
       expect(service.getClientFriendlyStatusById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
@@ -49,7 +49,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
       const mockClientFriendlyStatusDtoMapper = mock<ClientFriendlyStatusDtoMapper>();
       mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto.mockReturnValueOnce(mockDto);
 
-      const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
+      const service = new DefaultClientFriendlyStatusService(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
       const dto = service.getClientFriendlyStatusById(id);
 
@@ -65,7 +65,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
 
       const mockClientFriendlyStatusDtoMapper = mock<ClientFriendlyStatusDtoMapper>();
 
-      const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
+      const service = new DefaultClientFriendlyStatusService(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
       expect(() => service.getClientFriendlyStatusById(id)).toThrow(ClientFriendlyStatusNotFoundException);
       expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
@@ -88,7 +88,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
       const mockClientFriendlyStatusDtoMapper = mock<ClientFriendlyStatusDtoMapper>();
       mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto.mockReturnValueOnce(mockDto);
 
-      const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
+      const service = new DefaultClientFriendlyStatusService(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
       const dto = service.getLocalizedClientFriendlyStatusById(id, 'en');
 
@@ -104,7 +104,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
 
       const mockClientFriendlyStatusDtoMapper = mock<ClientFriendlyStatusDtoMapper>();
 
-      const service = new ClientFriendlyStatusServiceImpl(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
+      const service = new DefaultClientFriendlyStatusService(mockLogFactory, mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
       expect(() => service.getClientFriendlyStatusById(id)).toThrow(ClientFriendlyStatusNotFoundException);
       expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();

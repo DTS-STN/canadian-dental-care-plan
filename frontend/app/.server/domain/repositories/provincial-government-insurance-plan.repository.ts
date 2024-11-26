@@ -21,11 +21,11 @@ export interface ProvincialGovernmentInsurancePlanRepository {
 }
 
 @injectable()
-export class ProvincialGovernmentInsurancePlanRepositoryImpl implements ProvincialGovernmentInsurancePlanRepository {
+export class DefaultProvincialGovernmentInsurancePlanRepository implements ProvincialGovernmentInsurancePlanRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('ProvincialGovernmentInsurancePlanRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultProvincialGovernmentInsurancePlanRepository');
   }
 
   listAllProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanEntity[] {

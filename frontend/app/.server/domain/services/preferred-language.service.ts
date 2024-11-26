@@ -36,7 +36,7 @@ export interface PreferredLanguageService {
 export type PreferredLanguageServiceImpl_ServerConfig = Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE' | 'LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS'>;
 
 @injectable()
-export class PreferredLanguageServiceImpl implements PreferredLanguageService {
+export class DefaultPreferredLanguageService implements PreferredLanguageService {
   private readonly log: Logger;
 
   constructor(
@@ -45,18 +45,18 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
     @inject(TYPES.domain.repositories.PreferredLanguageRepository) private readonly preferredLanguageRepository: PreferredLanguageRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: PreferredLanguageServiceImpl_ServerConfig,
   ) {
-    this.log = logFactory.createLogger('PreferredLanguageServiceImpl');
+    this.log = logFactory.createLogger('DefaultPreferredLanguageService');
 
     // set moize options
     this.listPreferredLanguages.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS;
     this.getPreferredLanguageById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS;
   }
 
-  listPreferredLanguages = moize(this.listPreferredLanguagesImpl, {
+  listPreferredLanguages = moize(this.DefaultlistPreferredLanguages, {
     onCacheAdd: () => this.log.info('Creating new listPreferredLanguages memo'),
   });
 
-  getPreferredLanguageById = moize(this.getPreferredLanguageByIdImpl, {
+  getPreferredLanguageById = moize(this.DefaultgetPreferredLanguageById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getPreferredLanguageById memo'),
   });
@@ -78,7 +78,7 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
     return preferredLanguageLocalizedDto;
   }
 
-  private listPreferredLanguagesImpl(): ReadonlyArray<PreferredLanguageDto> {
+  private DefaultlistPreferredLanguages(): ReadonlyArray<PreferredLanguageDto> {
     this.log.debug('Get all preferred languages');
     const preferredLanguageEntities = this.preferredLanguageRepository.listAllPreferredLanguages();
     const preferredLanguageDtos = this.preferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities);
@@ -86,7 +86,7 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
     return preferredLanguageDtos;
   }
 
-  private getPreferredLanguageByIdImpl(id: string): PreferredLanguageDto {
+  private DefaultgetPreferredLanguageById(id: string): PreferredLanguageDto {
     this.log.debug('Get preferred language with id: [%s]', id);
     const preferredLanguageEntity = this.preferredLanguageRepository.findPreferredLanguageById(id);
 

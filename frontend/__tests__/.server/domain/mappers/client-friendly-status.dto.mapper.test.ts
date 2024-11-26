@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import type { ClientFriendlyStatusDto, ClientFriendlyStatusLocalizedDto } from '~/.server/domain/dtos';
 import type { ClientFriendlyStatusEntity } from '~/.server/domain/entities';
-import { ClientFriendlyStatusDtoMapperImpl } from '~/.server/domain/mappers';
+import { DefaultClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 
-describe('ClientFriendlyStatusDtoMapperImpl', () => {
+describe('DefaultClientFriendlyStatusDtoMapper', () => {
   describe('mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto', () => {
     it('maps a ClientFriendlyStatusDto with both English and French labels to a ClientFriendlyStatusLocalizedDto', () => {
       const mockDto: ClientFriendlyStatusDto = {
@@ -18,7 +18,7 @@ describe('ClientFriendlyStatusDtoMapperImpl', () => {
         name: 'You have qualified for the Canadian Dental Care Plan.',
       };
 
-      const mapper = new ClientFriendlyStatusDtoMapperImpl();
+      const mapper = new DefaultClientFriendlyStatusDtoMapper();
 
       const localizedDto = mapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto(mockDto, 'en');
 
@@ -40,7 +40,7 @@ describe('ClientFriendlyStatusDtoMapperImpl', () => {
         nameFr: 'Vous êtes admissible au Régime canadien de soins dentaires.',
       };
 
-      const mapper = new ClientFriendlyStatusDtoMapperImpl();
+      const mapper = new DefaultClientFriendlyStatusDtoMapper();
 
       const dto = mapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto(mockEntity);
 

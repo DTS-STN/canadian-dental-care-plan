@@ -29,7 +29,7 @@ export interface ApplicationStatusService {
 }
 
 @injectable()
-export class ApplicationStatusServiceImpl implements ApplicationStatusService {
+export class DefaultApplicationStatusService implements ApplicationStatusService {
   private readonly log: Logger;
 
   constructor(
@@ -38,7 +38,7 @@ export class ApplicationStatusServiceImpl implements ApplicationStatusService {
     @inject(TYPES.domain.repositories.ApplicationStatusRepository) private readonly applicationStatusRepository: ApplicationStatusRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('ApplicationStatusServiceImpl');
+    this.log = logFactory.createLogger('DefaultApplicationStatusService');
   }
 
   async findApplicationStatusIdByBasicInfo(applicationStatusBasicInfoRequestDto: ApplicationStatusBasicInfoRequestDto): Promise<string | null> {

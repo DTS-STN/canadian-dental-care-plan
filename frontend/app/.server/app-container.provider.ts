@@ -23,12 +23,12 @@ export interface AppContainerProvider {
   get<T>(serviceIdentifier: ServiceIdentifier<T>): T;
 }
 
-export class AppContainerProviderImpl implements AppContainerProvider {
+export class DefaultAppContainerProvider implements AppContainerProvider {
   private readonly log: Logger;
 
   constructor(private readonly container: interfaces.Container) {
     const logFactory = container.get(TYPES.factories.LogFactory);
-    this.log = logFactory.createLogger('AppContainerProviderImpl');
+    this.log = logFactory.createLogger('DefaultAppContainerProvider');
   }
 
   find<T>(serviceIdentifier: ServiceIdentifier<T>): T | undefined {

@@ -77,7 +77,7 @@ export interface ProvinceTerritoryStateService {
 }
 
 @injectable()
-export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryStateService {
+export class DefaultProvinceTerritoryStateService implements ProvinceTerritoryStateService {
   private readonly log: Logger;
 
   constructor(
@@ -86,7 +86,7 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
     @inject(TYPES.domain.repositories.ProvinceTerritoryStateRepository) private readonly provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('ProvinceTerritoryStateServiceImpl');
+    this.log = logFactory.createLogger('DefaultProvinceTerritoryStateService');
 
     // set moize options
     this.listProvinceTerritoryStates.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS;
@@ -94,16 +94,16 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
     this.getProvinceTerritoryStateByCode.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS;
   }
 
-  listProvinceTerritoryStates = moize(this.listProvinceTerritoryStatesImpl, {
+  listProvinceTerritoryStates = moize(this.DefaultlistProvinceTerritoryStates, {
     onCacheAdd: () => this.log.info('Creating new listProvinceTerritoryStates memo'),
   });
 
-  getProvinceTerritoryStateById = moize(this.getProvinceTerritoryStateByIdImpl, {
+  getProvinceTerritoryStateById = moize(this.DefaultgetProvinceTerritoryStateById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateById memo'),
   });
 
-  getProvinceTerritoryStateByCode = moize(this.getProvinceTerritoryStateByCodeImpl, {
+  getProvinceTerritoryStateByCode = moize(this.DefaultgetProvinceTerritoryStateByCode, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateByCode memo'),
   });
@@ -143,7 +143,7 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
     return localizedProvinceTerritoryStateDto;
   }
 
-  private listProvinceTerritoryStatesImpl(): ReadonlyArray<ProvinceTerritoryStateDto> {
+  private DefaultlistProvinceTerritoryStates(): ReadonlyArray<ProvinceTerritoryStateDto> {
     this.log.debug('Get all province territory states');
     const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.listAllProvinceTerritoryStates();
     const provinceTerritoryStateDtos = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(provinceTerritoryStateEntities);
@@ -151,7 +151,7 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
     return provinceTerritoryStateDtos;
   }
 
-  private getProvinceTerritoryStateByIdImpl(id: string): ProvinceTerritoryStateDto {
+  private DefaultgetProvinceTerritoryStateById(id: string): ProvinceTerritoryStateDto {
     this.log.debug('Get province territory state with id: [%s]', id);
     const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateById(id);
 
@@ -164,7 +164,7 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
     return provinceTerritoryStateDto;
   }
 
-  private getProvinceTerritoryStateByCodeImpl(code: string): ProvinceTerritoryStateDto {
+  private DefaultgetProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateDto {
     this.log.debug('Get province territory state with code: [%s]', code);
     const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateByCode(code);
 

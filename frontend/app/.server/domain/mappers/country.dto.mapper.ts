@@ -43,7 +43,7 @@ export interface CountryDtoMapper {
 }
 
 @injectable()
-export class CountryDtoMapperImpl implements CountryDtoMapper {
+export class DefaultCountryDtoMapper implements CountryDtoMapper {
   mapCountryDtoToCountryLocalizedDto(countryDto: CountryDto, locale: AppLocale): CountryLocalizedDto {
     const { nameEn, nameFr, ...rest } = countryDto;
     return {

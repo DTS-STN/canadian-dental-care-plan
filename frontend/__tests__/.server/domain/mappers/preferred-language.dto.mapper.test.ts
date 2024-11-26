@@ -3,9 +3,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { ServerConfig } from '~/.server/configs';
 import type { PreferredLanguageDto, PreferredLanguageLocalizedDto } from '~/.server/domain/dtos';
 import type { PreferredLanguageEntity } from '~/.server/domain/entities';
-import { PreferredLanguageDtoMapperImpl } from '~/.server/domain/mappers';
+import { DefaultPreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 
-describe('PreferredLanguageDtoMapperImpl', () => {
+describe('DefaultPreferredLanguageDtoMapper', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
@@ -27,7 +27,7 @@ describe('PreferredLanguageDtoMapperImpl', () => {
 
       const expectedDto: PreferredLanguageDto = { id: '1033', nameEn: 'English', nameFr: 'Anglais' };
 
-      const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
+      const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);
 
       const dto = mapper.mapPreferredLanguageEntityToPreferredLanguageDto(mockEntity);
 
@@ -42,7 +42,7 @@ describe('PreferredLanguageDtoMapperImpl', () => {
         },
       };
 
-      const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
+      const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);
 
       expect(() => mapper.mapPreferredLanguageEntityToPreferredLanguageDto(mockEntity)).toThrowError(`Preferred language missing English or French name; id: [1033]`);
     });
@@ -55,7 +55,7 @@ describe('PreferredLanguageDtoMapperImpl', () => {
         },
       };
 
-      const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
+      const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);
 
       expect(() => mapper.mapPreferredLanguageEntityToPreferredLanguageDto(mockEntity)).toThrowError(`Preferred language missing English or French name; id: [1033]`);
     });
@@ -89,7 +89,7 @@ describe('PreferredLanguageDtoMapperImpl', () => {
         { id: '1036', nameEn: 'French', nameFr: 'Français' },
       ];
 
-      const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
+      const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);
 
       const dtos = mapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos(mockEntities);
 
@@ -105,7 +105,7 @@ describe('PreferredLanguageDtoMapperImpl', () => {
       const mockDto: PreferredLanguageDto = { id: '1', nameEn: 'English', nameFr: 'Français' };
       const expectedDto: PreferredLanguageLocalizedDto = { id: '1', name: expectedLocalizedName };
 
-      const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
+      const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);
       const dto = mapper.mapPreferredLanguageDtoToPreferredLanguageLocalizedDto(mockDto, locale);
 
       expect(dto).toEqual(expectedDto);
@@ -127,7 +127,7 @@ describe('PreferredLanguageDtoMapperImpl', () => {
         { id: '2', name: expectedSecondLocalizedName },
       ];
 
-      const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
+      const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);
       const dtos = mapper.mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos(preferredLanguageDtos, locale);
 
       expect(dtos).toEqual(expectedDtos);
@@ -137,7 +137,7 @@ describe('PreferredLanguageDtoMapperImpl', () => {
       const preferredLanguageDtos: PreferredLanguageDto[] = [];
       const expectedDtos: PreferredLanguageLocalizedDto[] = [];
 
-      const mapper = new PreferredLanguageDtoMapperImpl(mockServerConfig);
+      const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);
       const dtos = mapper.mapPreferredLanguageDtosToPreferredLanguageLocalizedDtos(preferredLanguageDtos, 'en');
 
       expect(dtos).toEqual(expectedDtos);

@@ -21,11 +21,11 @@ export interface LetterTypeRepository {
 }
 
 @injectable()
-export class LetterTypeRepositoryImpl implements LetterTypeRepository {
+export class DefaultLetterTypeRepository implements LetterTypeRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('LetterTypeRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultLetterTypeRepository');
   }
 
   listAllLetterTypes(): ReadonlyArray<LetterTypeEntity> {

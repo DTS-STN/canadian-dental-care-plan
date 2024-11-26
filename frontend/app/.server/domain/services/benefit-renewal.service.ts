@@ -24,7 +24,7 @@ export interface BenefitRenewalService {
 }
 
 @injectable()
-export class BenefitRenewalServiceImpl implements BenefitRenewalService {
+export class DefaultBenefitRenewalService implements BenefitRenewalService {
   private readonly log: Logger;
 
   constructor(
@@ -33,7 +33,7 @@ export class BenefitRenewalServiceImpl implements BenefitRenewalService {
     @inject(TYPES.domain.repositories.BenefitRenewalRepository) private readonly benefitRenewalRepository: BenefitRenewalRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('BenefitRenewalServiceImpl');
+    this.log = logFactory.createLogger('DefaultBenefitRenewalService');
   }
 
   async createAdultChildBenefitRenewal(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): Promise<void> {

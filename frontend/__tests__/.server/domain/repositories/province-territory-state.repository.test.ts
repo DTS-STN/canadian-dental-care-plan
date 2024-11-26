@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { ProvinceTerritoryStateRepositoryImpl } from '~/.server/domain/repositories';
+import { DefaultProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 const dataSource = vi.hoisted(() => ({
@@ -27,7 +27,7 @@ const dataSource = vi.hoisted(() => ({
 
 vi.mock('~/.server/resources/power-platform/province-territory-state.json', () => dataSource);
 
-describe('ProvinceTerritoryStateRepositoryImpl', () => {
+describe('DefaultProvinceTerritoryStateRepository', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
@@ -37,7 +37,7 @@ describe('ProvinceTerritoryStateRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ProvinceTerritoryStateRepositoryImpl(mockLogFactory);
+    const repository = new DefaultProvinceTerritoryStateRepository(mockLogFactory);
 
     const provinceTerritoryStates = repository.listAllProvinceTerritoryStates();
 
@@ -65,7 +65,7 @@ describe('ProvinceTerritoryStateRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ProvinceTerritoryStateRepositoryImpl(mockLogFactory);
+    const repository = new DefaultProvinceTerritoryStateRepository(mockLogFactory);
 
     const provinceTerritoryStates = repository.listAllProvinceTerritoryStates();
 
@@ -76,7 +76,7 @@ describe('ProvinceTerritoryStateRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ProvinceTerritoryStateRepositoryImpl(mockLogFactory);
+    const repository = new DefaultProvinceTerritoryStateRepository(mockLogFactory);
 
     const provinceTerritoryState = repository.findProvinceTerritoryStateById('1');
 
@@ -93,7 +93,7 @@ describe('ProvinceTerritoryStateRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ProvinceTerritoryStateRepositoryImpl(mockLogFactory);
+    const repository = new DefaultProvinceTerritoryStateRepository(mockLogFactory);
 
     const provinceTerritoryState = repository.findProvinceTerritoryStateById('non-existent-id');
 

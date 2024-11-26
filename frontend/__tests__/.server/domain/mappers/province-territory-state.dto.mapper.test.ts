@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import type { ProvinceTerritoryStateDto, ProvinceTerritoryStateLocalizedDto } from '~/.server/domain/dtos';
 import type { ProvinceTerritoryStateEntity } from '~/.server/domain/entities';
-import { ProvinceTerritoryStateDtoMapperImpl } from '~/.server/domain/mappers';
+import { DefaultProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 
-describe('ProvinceTerritoryStateDtoMapperImpl', () => {
+describe('DefaultProvinceTerritoryStateDtoMapper', () => {
   describe('mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto', () => {
     it.each([
       ['en' as const, 'English'],
@@ -13,7 +13,7 @@ describe('ProvinceTerritoryStateDtoMapperImpl', () => {
       const mockDto: ProvinceTerritoryStateDto = { id: '1', countryId: '1', nameEn: 'English', nameFr: 'Français', abbr: 'EN' };
       const expectedDto: ProvinceTerritoryStateLocalizedDto = { id: '1', countryId: '1', name: expectedLocalizedName, abbr: 'EN' };
 
-      const mapper = new ProvinceTerritoryStateDtoMapperImpl();
+      const mapper = new DefaultProvinceTerritoryStateDtoMapper();
       const dto = mapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto(mockDto, locale);
 
       expect(dto).toEqual(expectedDto);
@@ -35,7 +35,7 @@ describe('ProvinceTerritoryStateDtoMapperImpl', () => {
         { id: '2', countryId: '2', name: expectedSecondLocalizedName, abbr: 'FR' },
       ];
 
-      const mapper = new ProvinceTerritoryStateDtoMapperImpl();
+      const mapper = new DefaultProvinceTerritoryStateDtoMapper();
       const dtos = mapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos(provinceTerritoryStateDtos, locale);
 
       expect(dtos).toEqual(expectedDtos);
@@ -45,7 +45,7 @@ describe('ProvinceTerritoryStateDtoMapperImpl', () => {
       const provinceTerritoryStateDtos: ProvinceTerritoryStateDto[] = [];
       const expectedDtos: ProvinceTerritoryStateLocalizedDto[] = [];
 
-      const mapper = new ProvinceTerritoryStateDtoMapperImpl();
+      const mapper = new DefaultProvinceTerritoryStateDtoMapper();
       const dtos = mapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos(provinceTerritoryStateDtos, 'en');
 
       expect(dtos).toEqual(expectedDtos);
@@ -64,7 +64,7 @@ describe('ProvinceTerritoryStateDtoMapperImpl', () => {
 
       const expectedDto: ProvinceTerritoryStateDto = { id: '1', countryId: '10', nameEn: 'Alabama EN', nameFr: 'Alabama FR', abbr: 'AL' };
 
-      const mapper = new ProvinceTerritoryStateDtoMapperImpl();
+      const mapper = new DefaultProvinceTerritoryStateDtoMapper();
 
       const dto = mapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(mockEntity);
 
@@ -96,7 +96,7 @@ describe('ProvinceTerritoryStateDtoMapperImpl', () => {
         { id: '2', countryId: '10', nameEn: 'Alaska EN', nameFr: 'Alaska FR', abbr: 'AK' },
       ];
 
-      const mapper = new ProvinceTerritoryStateDtoMapperImpl();
+      const mapper = new DefaultProvinceTerritoryStateDtoMapper();
 
       const dtos = mapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(mockEntities);
 

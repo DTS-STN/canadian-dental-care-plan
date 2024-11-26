@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { ProvincialGovernmentInsurancePlanRepositoryImpl } from '~/.server/domain/repositories';
+import { DefaultProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 const dataSource = vi.hoisted(() => ({
@@ -25,7 +25,7 @@ const dataSource = vi.hoisted(() => ({
 
 vi.mock('~/.server/resources/power-platform/provincial-government-insurance-plan.json', () => dataSource);
 
-describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
+describe('DefaultProvincialGovernmentInsurancePlanRepository', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
@@ -35,7 +35,7 @@ describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ProvincialGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
+    const repository = new DefaultProvincialGovernmentInsurancePlanRepository(mockLogFactory);
 
     const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
 
@@ -61,7 +61,7 @@ describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ProvincialGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
+    const repository = new DefaultProvincialGovernmentInsurancePlanRepository(mockLogFactory);
 
     const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
 
@@ -72,7 +72,7 @@ describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ProvincialGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
+    const repository = new DefaultProvincialGovernmentInsurancePlanRepository(mockLogFactory);
 
     const provincialGovernmentInsurancePlans = repository.findProvincialGovernmentInsurancePlanById('1');
 
@@ -88,7 +88,7 @@ describe('ProvincialGovernmentInsurancePlanRepositoryImpl', () => {
     const mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
 
-    const repository = new ProvincialGovernmentInsurancePlanRepositoryImpl(mockLogFactory);
+    const repository = new DefaultProvincialGovernmentInsurancePlanRepository(mockLogFactory);
 
     const provincialGovernmentInsurancePlans = repository.findProvincialGovernmentInsurancePlanById('non-existent-id');
 

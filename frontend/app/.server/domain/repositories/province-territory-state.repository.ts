@@ -28,11 +28,11 @@ export interface ProvinceTerritoryStateRepository {
 }
 
 @injectable()
-export class ProvinceTerritoryStateRepositoryImpl implements ProvinceTerritoryStateRepository {
+export class DefaultProvinceTerritoryStateRepository implements ProvinceTerritoryStateRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('ProvinceTerritoryStateRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultProvinceTerritoryStateRepository');
   }
 
   listAllProvinceTerritoryStates(): ProvinceTerritoryStateEntity[] {

@@ -4,10 +4,10 @@ import { mock } from 'vitest-mock-extended';
 import type { ServerConfig } from '~/.server/configs';
 import type { AdultChildBenefitRenewalDto, ClientApplicationDto } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
-import { BenefitRenewalStateMapperImpl } from '~/.server/routes/mappers';
+import { DefaultBenefitRenewalStateMapper } from '~/.server/routes/mappers';
 import type { RenewAdultChildState } from '~/.server/routes/mappers';
 
-describe('BenefitRenewalStateMapperImpl', () => {
+describe('DefaultBenefitRenewalStateMapper', () => {
   const mockFederalGovernmentInsurancePlanService = mock<FederalGovernmentInsurancePlanService>();
   mockFederalGovernmentInsurancePlanService.listFederalGovernmentInsurancePlans.mockReturnValue([
     {
@@ -43,7 +43,7 @@ describe('BenefitRenewalStateMapperImpl', () => {
   mockServerConfig.COMMUNICATION_METHOD_EMAIL_ID = 'Email';
   mockServerConfig.COMMUNICATION_METHOD_MAIL_ID = 'Mail';
 
-  const mapper = new BenefitRenewalStateMapperImpl(mockFederalGovernmentInsurancePlanService, mockProvincialGovernmentInsurancePlanService, mockServerConfig);
+  const mapper = new DefaultBenefitRenewalStateMapper(mockFederalGovernmentInsurancePlanService, mockProvincialGovernmentInsurancePlanService, mockServerConfig);
 
   const mockClientApplication: ClientApplicationDto = {
     applicantInformation: {

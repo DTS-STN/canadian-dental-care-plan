@@ -22,7 +22,7 @@ export interface ApplicationYearService {
 export type ApplicationYearImpl_ServiceConfig = Pick<ServerConfig, 'LOOKUP_SVC_ALL_YEARS_CACHE_TTL_SECONDS'>;
 
 @injectable()
-export class ApplicationYearServiceImpl implements ApplicationYearService {
+export class DefaultApplicationYearService implements ApplicationYearService {
   private readonly log: Logger;
 
   constructor(
@@ -32,7 +32,7 @@ export class ApplicationYearServiceImpl implements ApplicationYearService {
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: ApplicationYearImpl_ServiceConfig,
   ) {
-    this.log = logFactory.createLogger('ApplicationYearServiceImpl');
+    this.log = logFactory.createLogger('DefaultApplicationYearService');
 
     // Configure caching for application year operations
     this.listApplicationYears.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_YEARS_CACHE_TTL_SECONDS;
@@ -43,11 +43,11 @@ export class ApplicationYearServiceImpl implements ApplicationYearService {
    *
    * @returns An array of Application Year(s) DTOs.
    */
-  listApplicationYears = moize(this.listApplicationYearsImpl, {
+  listApplicationYears = moize(this.DefaultlistApplicationYears, {
     onCacheAdd: () => this.log.info('Creating new listApplicationYears memo'),
   });
 
-  async listApplicationYearsImpl(applicationYearRequestDto: ApplicationYearRequestDto): Promise<ReadonlyArray<ApplicationYearResultDto>> {
+  async DefaultlistApplicationYears(applicationYearRequestDto: ApplicationYearRequestDto): Promise<ReadonlyArray<ApplicationYearResultDto>> {
     this.log.trace('Getting possible application years results with applicationYearRequest: [%j]', applicationYearRequestDto);
 
     this.auditService.createAudit('application-year.get-application-year-result', { userId: applicationYearRequestDto.userId });

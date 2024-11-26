@@ -21,11 +21,11 @@ export interface PreferredLanguageRepository {
 }
 
 @injectable()
-export class PreferredLanguageRepositoryImpl implements PreferredLanguageRepository {
+export class DefaultPreferredLanguageRepository implements PreferredLanguageRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('PreferredLanguageRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultPreferredLanguageRepository');
   }
 
   listAllPreferredLanguages(): PreferredLanguageEntity[] {

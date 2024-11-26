@@ -21,7 +21,7 @@ export interface ApplicantService {
 }
 
 @injectable()
-export class ApplicantServiceImpl implements ApplicantService {
+export class DefaultApplicantService implements ApplicantService {
   private readonly log: Logger;
 
   constructor(
@@ -30,7 +30,7 @@ export class ApplicantServiceImpl implements ApplicantService {
     @inject(TYPES.domain.repositories.ApplicantRepository) private readonly applicantRepository: ApplicantRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('ApplicantServiceImpl');
+    this.log = logFactory.createLogger('DefaultApplicantService');
   }
 
   async findClientNumberBySin({ sin, userId }: ApplicantRequestDto): Promise<string | null> {

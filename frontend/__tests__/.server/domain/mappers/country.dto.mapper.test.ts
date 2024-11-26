@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import type { CountryDto, CountryLocalizedDto } from '~/.server/domain/dtos';
 import type { CountryEntity } from '~/.server/domain/entities';
-import { CountryDtoMapperImpl } from '~/.server/domain/mappers';
+import { DefaultCountryDtoMapper } from '~/.server/domain/mappers';
 
-describe('CountryDtoMapperImpl', () => {
+describe('DefaultCountryDtoMapper', () => {
   describe('mapCountryDtoToCountryLocalizedDto', () => {
     it.each([
       ['en' as const, 'Canada (English)'],
@@ -13,7 +13,7 @@ describe('CountryDtoMapperImpl', () => {
       const mockDto: CountryDto = { id: '1', nameEn: 'Canada (English)', nameFr: 'Canada (French)' };
       const expectedDto: CountryLocalizedDto = { id: '1', name: expectedLocalizedName };
 
-      const mapper = new CountryDtoMapperImpl();
+      const mapper = new DefaultCountryDtoMapper();
       const dto = mapper.mapCountryDtoToCountryLocalizedDto(mockDto, locale);
 
       expect(dto).toEqual(expectedDto);
@@ -35,7 +35,7 @@ describe('CountryDtoMapperImpl', () => {
         { id: '2', name: expectedSecondLocalizedName },
       ];
 
-      const mapper = new CountryDtoMapperImpl();
+      const mapper = new DefaultCountryDtoMapper();
       const dtos = mapper.mapCountryDtosToCountryLocalizedDtos(countryDtos, locale);
 
       expect(dtos).toEqual(expectedDtos);
@@ -45,7 +45,7 @@ describe('CountryDtoMapperImpl', () => {
       const countryDtos: CountryDto[] = [];
       const expectedDtos: CountryLocalizedDto[] = [];
 
-      const mapper = new CountryDtoMapperImpl();
+      const mapper = new DefaultCountryDtoMapper();
       const dtos = mapper.mapCountryDtosToCountryLocalizedDtos(countryDtos, 'en');
 
       expect(dtos).toEqual(expectedDtos);
@@ -63,7 +63,7 @@ describe('CountryDtoMapperImpl', () => {
 
       const expectedDto: CountryDto = { id: '1', nameEn: 'Canada English', nameFr: 'Canada Français' };
 
-      const mapper = new CountryDtoMapperImpl();
+      const mapper = new DefaultCountryDtoMapper();
       const dto = mapper.mapCountryEntityToCountryDto(mockEntity);
 
       expect(dto).toEqual(expectedDto);
@@ -92,7 +92,7 @@ describe('CountryDtoMapperImpl', () => {
         { id: '2', nameEn: 'United States English', nameFr: 'États-Unis Français' },
       ];
 
-      const mapper = new CountryDtoMapperImpl();
+      const mapper = new DefaultCountryDtoMapper();
       const dtos = mapper.mapCountryEntitiesToCountryDtos(mockEntities);
 
       expect(dtos).toEqual(expectedDtos);
@@ -102,7 +102,7 @@ describe('CountryDtoMapperImpl', () => {
       const mockEntities: CountryEntity[] = [];
       const expectedDtos: CountryDto[] = [];
 
-      const mapper = new CountryDtoMapperImpl();
+      const mapper = new DefaultCountryDtoMapper();
       const dtos = mapper.mapCountryEntitiesToCountryDtos(mockEntities);
 
       expect(dtos).toEqual(expectedDtos);

@@ -18,14 +18,14 @@ export interface HCaptchaRepository {
 }
 
 @injectable()
-export class HCaptchaRepositoryImpl implements HCaptchaRepository {
+export class DefaultHCaptchaRepository implements HCaptchaRepository {
   private readonly log: Logger;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL'>,
   ) {
-    this.log = logFactory.createLogger('HCaptchaRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultHCaptchaRepository');
   }
 
   async verifyHCaptchaResponse({ hCaptchaResponse, ipAddress }: HCaptchaVerifyRequestEntity): Promise<HCaptchaVerifyResponseEntity> {

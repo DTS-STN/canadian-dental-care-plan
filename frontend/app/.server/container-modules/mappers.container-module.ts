@@ -2,51 +2,51 @@ import { ContainerModule } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import {
-  ApplicantDtoMapperImpl,
-  ApplicationStatusDtoMapperImpl,
-  ApplicationYearDtoMapperImpl,
-  BenefitApplicationDtoMapperImpl,
-  BenefitRenewalDtoMapperImpl,
-  ClientApplicationDtoMapperImpl,
-  ClientFriendlyStatusDtoMapperImpl,
-  CountryDtoMapperImpl,
   DefaultAddressValidationDtoMapper,
-  DemographicSurveyDtoMapperImpl,
-  FederalGovernmentInsurancePlanDtoMapperImpl,
-  LetterDtoMapperImpl,
-  LetterTypeDtoMapperImpl,
-  MaritalStatusDtoMapperImpl,
-  PreferredCommunicationMethodDtoMapperImpl,
-  PreferredLanguageDtoMapperImpl,
-  ProvinceTerritoryStateDtoMapperImpl,
-  ProvincialGovernmentInsurancePlanDtoMapperImpl,
+  DefaultApplicantDtoMapper,
+  DefaultApplicationStatusDtoMapper,
+  DefaultApplicationYearDtoMapper,
+  DefaultBenefitApplicationDtoMapper,
+  DefaultBenefitRenewalDtoMapper,
+  DefaultClientApplicationDtoMapper,
+  DefaultClientFriendlyStatusDtoMapper,
+  DefaultCountryDtoMapper,
+  DefaultDemographicSurveyDtoMapper,
+  DefaultFederalGovernmentInsurancePlanDtoMapper,
+  DefaultLetterDtoMapper,
+  DefaultLetterTypeDtoMapper,
+  DefaultMaritalStatusDtoMapper,
+  DefaultPreferredCommunicationMethodDtoMapper,
+  DefaultPreferredLanguageDtoMapper,
+  DefaultProvinceTerritoryStateDtoMapper,
+  DefaultProvincialGovernmentInsurancePlanDtoMapper,
 } from '~/.server/domain/mappers';
-import { BenefitApplicationStateMapperImpl, BenefitRenewalStateMapperImpl } from '~/.server/routes/mappers';
-import { HCaptchaDtoMapperImpl } from '~/.server/web/mappers';
+import { DefaultBenefitApplicationStateMapper, DefaultBenefitRenewalStateMapper } from '~/.server/routes/mappers';
+import { DefaultHCaptchaDtoMapper } from '~/.server/web/mappers';
 
 /**
  * Container module for mappers.
  */
 export const mappersContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.mappers.AddressValidationDtoMapper).to(DefaultAddressValidationDtoMapper);
-  bind(TYPES.domain.mappers.ApplicantDtoMapper).to(ApplicantDtoMapperImpl);
-  bind(TYPES.domain.mappers.ApplicationStatusDtoMapper).to(ApplicationStatusDtoMapperImpl);
-  bind(TYPES.domain.mappers.ApplicationYearDtoMapper).to(ApplicationYearDtoMapperImpl);
-  bind(TYPES.domain.mappers.BenefitApplicationDtoMapper).to(BenefitApplicationDtoMapperImpl);
-  bind(TYPES.domain.mappers.BenefitRenewalDtoMapper).to(BenefitRenewalDtoMapperImpl);
-  bind(TYPES.domain.mappers.ClientApplicationDtoMapper).to(ClientApplicationDtoMapperImpl);
-  bind(TYPES.domain.mappers.ClientFriendlyStatusDtoMapper).to(ClientFriendlyStatusDtoMapperImpl);
-  bind(TYPES.domain.mappers.CountryDtoMapper).to(CountryDtoMapperImpl);
-  bind(TYPES.domain.mappers.DemographicSurveyDtoMapper).to(DemographicSurveyDtoMapperImpl);
-  bind(TYPES.domain.mappers.FederalGovernmentInsurancePlanDtoMapper).to(FederalGovernmentInsurancePlanDtoMapperImpl);
-  bind(TYPES.domain.mappers.LetterDtoMapper).to(LetterDtoMapperImpl);
-  bind(TYPES.domain.mappers.LetterTypeDtoMapper).to(LetterTypeDtoMapperImpl);
-  bind(TYPES.domain.mappers.MaritalStatusDtoMapper).to(MaritalStatusDtoMapperImpl);
-  bind(TYPES.domain.mappers.PreferredCommunicationMethodDtoMapper).to(PreferredCommunicationMethodDtoMapperImpl);
-  bind(TYPES.domain.mappers.PreferredLanguageDtoMapper).to(PreferredLanguageDtoMapperImpl);
-  bind(TYPES.domain.mappers.ProvinceTerritoryStateDtoMapper).to(ProvinceTerritoryStateDtoMapperImpl);
-  bind(TYPES.domain.mappers.ProvincialGovernmentInsurancePlanDtoMapper).to(ProvincialGovernmentInsurancePlanDtoMapperImpl);
-  bind(TYPES.routes.mappers.BenefitRenewalStateMapper).to(BenefitRenewalStateMapperImpl);
-  bind(TYPES.routes.mappers.BenefitApplicationStateMapper).to(BenefitApplicationStateMapperImpl);
-  bind(TYPES.web.mappers.HCaptchaDtoMapper).to(HCaptchaDtoMapperImpl);
+  bind(TYPES.domain.mappers.ApplicantDtoMapper).to(DefaultApplicantDtoMapper);
+  bind(TYPES.domain.mappers.ApplicationStatusDtoMapper).to(DefaultApplicationStatusDtoMapper);
+  bind(TYPES.domain.mappers.ApplicationYearDtoMapper).to(DefaultApplicationYearDtoMapper);
+  bind(TYPES.domain.mappers.BenefitApplicationDtoMapper).to(DefaultBenefitApplicationDtoMapper);
+  bind(TYPES.domain.mappers.BenefitRenewalDtoMapper).to(DefaultBenefitRenewalDtoMapper);
+  bind(TYPES.domain.mappers.ClientApplicationDtoMapper).to(DefaultClientApplicationDtoMapper);
+  bind(TYPES.domain.mappers.ClientFriendlyStatusDtoMapper).to(DefaultClientFriendlyStatusDtoMapper);
+  bind(TYPES.domain.mappers.CountryDtoMapper).to(DefaultCountryDtoMapper);
+  bind(TYPES.domain.mappers.DemographicSurveyDtoMapper).to(DefaultDemographicSurveyDtoMapper);
+  bind(TYPES.domain.mappers.FederalGovernmentInsurancePlanDtoMapper).to(DefaultFederalGovernmentInsurancePlanDtoMapper);
+  bind(TYPES.domain.mappers.LetterDtoMapper).to(DefaultLetterDtoMapper);
+  bind(TYPES.domain.mappers.LetterTypeDtoMapper).to(DefaultLetterTypeDtoMapper);
+  bind(TYPES.domain.mappers.MaritalStatusDtoMapper).to(DefaultMaritalStatusDtoMapper);
+  bind(TYPES.domain.mappers.PreferredCommunicationMethodDtoMapper).to(DefaultPreferredCommunicationMethodDtoMapper);
+  bind(TYPES.domain.mappers.PreferredLanguageDtoMapper).to(DefaultPreferredLanguageDtoMapper);
+  bind(TYPES.domain.mappers.ProvinceTerritoryStateDtoMapper).to(DefaultProvinceTerritoryStateDtoMapper);
+  bind(TYPES.domain.mappers.ProvincialGovernmentInsurancePlanDtoMapper).to(DefaultProvincialGovernmentInsurancePlanDtoMapper);
+  bind(TYPES.routes.mappers.BenefitRenewalStateMapper).to(DefaultBenefitRenewalStateMapper);
+  bind(TYPES.routes.mappers.BenefitApplicationStateMapper).to(DefaultBenefitApplicationStateMapper);
+  bind(TYPES.web.mappers.HCaptchaDtoMapper).to(DefaultHCaptchaDtoMapper);
 });

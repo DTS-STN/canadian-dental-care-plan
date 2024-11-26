@@ -9,7 +9,7 @@ export interface ConfigFactory {
 }
 
 @injectable()
-export class ConfigFactoryImpl implements ConfigFactory {
+export class DefaultConfigFactory implements ConfigFactory {
   createClientConfig(): ClientConfig {
     return getClientEnv();
   }

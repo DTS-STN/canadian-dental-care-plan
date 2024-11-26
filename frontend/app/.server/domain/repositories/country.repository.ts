@@ -21,11 +21,11 @@ export interface CountryRepository {
 }
 
 @injectable()
-export class CountryRepositoryImpl implements CountryRepository {
+export class DefaultCountryRepository implements CountryRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('CountryRepositoryImpl');
+    this.log = logFactory.createLogger('DefaultCountryRepository');
   }
 
   listAllCountries(): ReadonlyArray<CountryEntity> {
