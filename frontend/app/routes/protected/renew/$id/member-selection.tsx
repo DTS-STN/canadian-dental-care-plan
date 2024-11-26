@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { data, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import { TYPES } from '~/.server/constants';
 import { getProtectedChildrenState, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -58,21 +57,13 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('protected/renew/member-selection');
+  const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
+  securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadProtectedRenewState({ params, session });
-
-  const formData = await request.formData();
-  const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData.get('_csrf'));
-
-  if (expectedCsrfToken !== submittedCsrfToken) {
-    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw data('Invalid CSRF token', { status: 400 });
-  }
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/member-selection', params)); //TODO: Update to 'review and submit' when page is added

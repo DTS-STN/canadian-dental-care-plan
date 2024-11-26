@@ -2,8 +2,10 @@ import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
+import { mock, mockDeep } from 'vitest-mock-extended';
 
+import { TYPES } from '~/.server/constants';
+import type { SecurityHandler } from '~/.server/routes/security';
 import { action, loader } from '~/routes/public/apply/$id/adult/tax-filing';
 
 vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
@@ -51,15 +53,12 @@ describe('_public.apply.id.tax-filing', () => {
 
   describe('action()', () => {
     it('should validate missing tax filing selection', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
-      const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/adult/tax-filing', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        request: new Request('http://localhost:3000/en/apply/123/adult/tax-filing', { method: 'POST', body: new FormData() }),
+        context: mockContext,
         params: {},
       });
 
@@ -75,16 +74,15 @@ describe('_public.apply.id.tax-filing', () => {
     });
 
     it('should redirect to date of birth page if tax filing is completed', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
       const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
       formData.append('taxFiling2023', 'yes');
+
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/tax-filing', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        context: mockContext,
         params: { lang: 'en', id: '123' },
       });
 
@@ -94,16 +92,15 @@ describe('_public.apply.id.tax-filing', () => {
     });
 
     it('should redirect to error page if tax filing is incompleted', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
       const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
       formData.append('taxFiling2023', 'no');
+
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/tax-filing', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        context: mockContext,
         params: { lang: 'en', id: '123' },
       });
 

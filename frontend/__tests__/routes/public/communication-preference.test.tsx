@@ -2,11 +2,12 @@ import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mockDeep } from 'vitest-mock-extended';
+import { mock, mockDeep } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { PreferredCommunicationMethodService, PreferredLanguageService } from '~/.server/domain/services';
+import type { SecurityHandler } from '~/.server/routes/security';
 import { action, loader } from '~/routes/public/apply/$id/adult/communication-preference';
 
 vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({
@@ -83,21 +84,18 @@ describe('_public.apply.id.communication-preference', () => {
     });
 
     it('should validate required preferred method', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
       const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
       formData.append('preferredLanguage', 'fr');
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ServerConfig).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
       } satisfies Partial<ServerConfig>);
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { ...mockAppLoadContext, session },
+        context: mockAppLoadContext,
         params: {},
       });
 
@@ -113,23 +111,20 @@ describe('_public.apply.id.communication-preference', () => {
     });
 
     it('should validate required email field', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
       const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
       formData.append('preferredMethod', 'email');
       formData.append('email', '');
       formData.append('preferredLanguage', 'fr');
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ServerConfig).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
       } satisfies Partial<ServerConfig>);
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { ...mockAppLoadContext, session },
+        context: mockAppLoadContext,
         params: {},
       });
 
@@ -146,24 +141,21 @@ describe('_public.apply.id.communication-preference', () => {
     });
 
     it('should validate required mismatched email addresses', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
       const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
       formData.append('preferredMethod', 'email');
       formData.append('email', 'john@example.com');
       formData.append('confirmEmail', 'johndoe@example.com');
       formData.append('preferredLanguage', 'fr');
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ServerConfig).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
       } satisfies Partial<ServerConfig>);
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { ...mockAppLoadContext, session },
+        context: mockAppLoadContext,
         params: {},
       });
 

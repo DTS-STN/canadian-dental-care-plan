@@ -6,10 +6,10 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
@@ -49,7 +49,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/adult/tax-filing');
+  const formData = await request.formData();
+
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -59,26 +62,12 @@ export async function action({ context: { appContainer, session }, params, reque
     }),
   });
 
-  const formData = await request.formData();
-  const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData.get('_csrf'));
-
-  if (expectedCsrfToken !== submittedCsrfToken) {
-    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw data('Invalid CSRF token', { status: 400 });
-  }
-
   const parsedDataResult = taxFilingSchema.safeParse({
     taxFiling2023: formData.get('taxFiling2023'),
   });
 
   if (!parsedDataResult.success) {
-    return data(
-      {
-        errors: transformFlattenedError(parsedDataResult.error.flatten()),
-      },
-      { status: 400 },
-    );
+    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   saveApplyState({ params, session, state: { taxFiling2023: parsedDataResult.data.taxFiling2023 === TaxFilingOption.Yes } });

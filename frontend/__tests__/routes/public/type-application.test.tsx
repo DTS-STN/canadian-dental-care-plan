@@ -2,8 +2,10 @@ import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
+import { mock, mockDeep } from 'vitest-mock-extended';
 
+import { TYPES } from '~/.server/constants';
+import type { SecurityHandler } from '~/.server/routes/security';
 import { action, loader } from '~/routes/public/apply/$id/type-application';
 
 vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
@@ -48,15 +50,12 @@ describe('_public.apply.id.type-of-application', () => {
 
   describe('action()', () => {
     it('should validate missing applcation type selection', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
-      const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: new FormData() }),
+        context: mockContext,
         params: {},
       });
 
@@ -72,16 +71,15 @@ describe('_public.apply.id.type-of-application', () => {
     });
 
     it('should redirect to error page if delegate is selected', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
       const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
       formData.append('typeOfApplication', 'delegate');
+
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        context: mockContext,
         params: { lang: 'en', id: '123' },
       });
 
@@ -91,16 +89,15 @@ describe('_public.apply.id.type-of-application', () => {
     });
 
     it('should redirect to tax filing page if personal is selected', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
       const formData = new FormData();
-      formData.append('_csrf', 'csrfToken');
       formData.append('typeOfApplication', 'adult');
+
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
-        context: { ...mock<AppLoadContext>(), session },
+        context: mockContext,
         params: { lang: 'en', id: '123' },
       });
 

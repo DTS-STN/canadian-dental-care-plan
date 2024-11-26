@@ -10,7 +10,6 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT } from '~/.server/utils/locale.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -54,21 +53,13 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
-  const log = getLogger('protected-renew/terms-and-conditions');
+  const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
+  securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const formData = await request.formData();
-  const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData.get('_csrf'));
-
-  if (expectedCsrfToken !== submittedCsrfToken) {
-    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw data('Invalid CSRF token', { status: 400 });
-  }
 
   const consentSchema = z
     .object({
@@ -95,12 +86,7 @@ export async function action({ context: { appContainer, session }, request, para
   });
 
   if (!parsedDataResult.success) {
-    return data(
-      {
-        errors: transformFlattenedError(parsedDataResult.error.flatten()),
-      },
-      { status: 400 },
-    );
+    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   saveProtectedRenewState({ params, session, state: { termsAndConditions: parsedDataResult.data } });
