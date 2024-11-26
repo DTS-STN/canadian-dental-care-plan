@@ -16,6 +16,7 @@ import { loadApplyChildStateForReview } from '~/.server/routes/helpers/apply-chi
 import { clearApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
@@ -58,7 +59,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:review-child-information.page-title') }) };
 
   const children = state.children.map((child) => {
@@ -95,7 +95,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     id: state.id,
     children,
-    csrfToken,
+
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
@@ -126,7 +126,7 @@ export default function ReviewInformation() {
   const { currentLanguage } = useCurrentLanguage();
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { children, csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
+  const { children, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -241,7 +241,7 @@ export default function ReviewInformation() {
           })}
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} className="mt-6 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <LoadingButton
             variant="primary"

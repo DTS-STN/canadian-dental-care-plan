@@ -16,6 +16,7 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
@@ -48,10 +49,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:applicant-information.page-title') }) };
 
-  return { id: state.id, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode };
+  return { id: state.id, meta, defaultState: state.applicantInformation, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -161,7 +161,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewApplicationInformation() {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode, csrfToken } = useLoaderData<typeof loader>();
+  const { defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -191,7 +191,7 @@ export default function RenewApplicationInformation() {
         <p className="mb-6">{t('renew:applicant-information.required-information')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="space-y-6">
             <Collapsible id="name-instructions" summary={t('renew:applicant-information.single-legal-name')}>
               <p>{t('renew:applicant-information.name-instructions')}</p>

@@ -17,6 +17,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -47,8 +48,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const locale = getLocale(request);
 
-  const csrfToken = String(session.get('csrfToken'));
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('status:result.page-title') }) };
 
@@ -58,7 +57,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     statusResult: { alertType, clientFriendlyStatus },
-    csrfToken,
+
     meta,
   };
 }
@@ -86,10 +85,10 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function StatusCheckerResult() {
-  const { statusResult, csrfToken } = useLoaderData<typeof loader>();
+  const { statusResult } = useLoaderData<typeof loader>();
+  const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const { t } = useTranslation(handle.i18nNamespaces);
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
@@ -106,7 +105,7 @@ export default function StatusCheckerResult() {
 
   return (
     <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-      <input type="hidden" name="_csrf" value={csrfToken} />
+      <CsrfTokenInput />
       <div className="max-w-prose">
         {statusResult.clientFriendlyStatus ? (
           <ContextualAlert type={statusResult.alertType}>

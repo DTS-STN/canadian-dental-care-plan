@@ -13,6 +13,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -43,13 +44,12 @@ export async function loader({ context: { appContainer, session }, request, para
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, session });
-  const csrfToken = String(session.get('csrfToken'));
 
   const { SCCH_BASE_URI } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:terms-and-conditions.page-title') }) };
 
-  return { csrfToken, meta, defaultState: state.termsAndConditions, SCCH_BASE_URI };
+  return { meta, defaultState: state.termsAndConditions, SCCH_BASE_URI };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -96,7 +96,7 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function RenewTermsAndConditions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, SCCH_BASE_URI } = useLoaderData<typeof loader>();
+  const { defaultState, SCCH_BASE_URI } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -214,7 +214,7 @@ export default function RenewTermsAndConditions() {
         <InputCheckbox id="share-data" name="shareData" value={CheckboxValue.Yes} defaultChecked={defaultState?.shareData} errorMessage={errors?.shareData} required>
           {t('protected-renew:terms-and-conditions.checkboxes.share-data')}
         </InputCheckbox>
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
             aria-describedby="application-consent"

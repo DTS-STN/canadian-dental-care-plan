@@ -12,6 +12,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -42,13 +43,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
   const childName = state.firstName ?? childNumber;
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('protected-renew:children.dental-insurance.title', { childName }) }),
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-renew:children.dental-insurance.title', { childName: childNumber }) }),
   };
 
-  return { csrfToken, meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } };
+  return { meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -94,7 +94,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewChildrenDentalInsurance() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, childName, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, childName, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -135,7 +135,7 @@ export default function ProtectedRenewChildrenDentalInsurance() {
       <div className="max-w-prose">
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="my-6">
             <InputRadios
               id="dental-insurance"

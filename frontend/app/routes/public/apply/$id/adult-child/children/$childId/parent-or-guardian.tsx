@@ -2,7 +2,7 @@ import type { FormEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ import { loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-a
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -34,10 +35,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   loadApplyAdultSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.parent-or-guardian.page-title') }) };
 
-  return { csrfToken, meta };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -55,7 +55,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowParentOrGuardian() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -73,7 +73,7 @@ export default function ApplyFlowParentOrGuardian() {
         <p>{t('apply-adult-child:children.parent-or-guardian.unable-to-apply')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <ButtonLink
           id="back-button"
           routeId="public/apply/$id/adult-child/children/$childId/information"

@@ -17,6 +17,7 @@ import { clearApplyState, saveApplyState } from '~/.server/routes/helpers/apply-
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
@@ -129,7 +130,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:review-adult-information.page-title') }) };
 
   return {
@@ -141,7 +141,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     mailingAddressInfo,
     dentalInsurance,
     dentalBenefit,
-    csrfToken,
+
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
@@ -172,7 +172,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ReviewInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -406,7 +406,7 @@ export default function ReviewInformation() {
           </section>
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} className="mt-6 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <LoadingButton
             variant="primary"

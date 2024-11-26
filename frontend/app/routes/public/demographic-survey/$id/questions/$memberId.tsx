@@ -13,6 +13,7 @@ import { loadDemographicSurveySingleMemberState, loadDemographicSurveyState, sav
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputCheckboxesProps } from '~/components/input-checkboxes';
 import { InputCheckboxes } from '~/components/input-checkboxes';
@@ -38,8 +39,6 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
-  const csrfToken = String(session.get('csrfToken'));
-
   const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(TYPES.configs.ServerConfig);
 
   const member = loadDemographicSurveySingleMemberState({ params, session });
@@ -57,7 +56,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const locationBornStatuses = demographicSurveyService.listLocalizedLocationBornStatuses(locale);
   const genderStatuses = demographicSurveyService.listLocalizedGenderStatuses(locale);
 
-  return { csrfToken, meta, memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState: member.questions, IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION };
+  return { meta, memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState: member.questions, IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -121,7 +120,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function DemographicSurveyQuestions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState, IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = useLoaderData<typeof loader>();
+  const { memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState, IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const params = useParams();
@@ -191,7 +190,7 @@ export default function DemographicSurveyQuestions() {
         <p className="mb-4 italic">{t('demographic-survey:questions.optional')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="mb-8 space-y-6">
             <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('demographic-survey:questions.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
             <InputRadios id="disability-status" name="disabilityStatus" legend={t('demographic-survey:questions.disability-status')} options={disabilityStatusOptions} errorMessage={errors?.disabilityStatus} required />

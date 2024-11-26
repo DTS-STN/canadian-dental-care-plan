@@ -10,6 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -34,14 +35,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const { id } = loadProtectedRenewState({ params, session });
 
-  const csrfToken = String(session.get('csrfToken'));
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:file-your-taxes.page-title') }) };
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
-  return { id, csrfToken, meta, SCCH_BASE_URI };
+  return { id, meta, SCCH_BASE_URI };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -59,7 +58,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewFileYourTaxes() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, SCCH_BASE_URI } = useLoaderData<typeof loader>();
+  const { SCCH_BASE_URI } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -83,7 +82,7 @@ export default function ProtectedRenewFileYourTaxes() {
         <p>{t('protected-renew:file-your-taxes.renew-after')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
           {t('protected-renew:file-your-taxes.back-btn')}
         </ButtonLink>

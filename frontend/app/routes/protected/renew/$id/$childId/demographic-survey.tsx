@@ -13,6 +13,7 @@ import { loadProtectedRenewSingleChildState, loadProtectedRenewState, saveProtec
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputCheckboxesProps } from '~/components/input-checkboxes';
 import { InputCheckboxes } from '~/components/input-checkboxes';
@@ -46,8 +47,6 @@ export async function loader({ context: { appContainer, session }, request, para
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const csrfToken = String(session.get('csrfToken'));
-
   const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(TYPES.configs.ServerConfig);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -69,7 +68,6 @@ export async function loader({ context: { appContainer, session }, request, para
   const genderStatuses = demographicSurveyService.listLocalizedGenderStatuses(locale);
 
   return {
-    csrfToken,
     meta,
     memberName,
     indigenousStatuses,
@@ -148,8 +146,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedChildrenDemographicSurveyQuestions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState, editMode, IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } =
-    useLoaderData<typeof loader>();
+  const { memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState, editMode, IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const params = useParams();
@@ -219,7 +216,7 @@ export default function ProtectedChildrenDemographicSurveyQuestions() {
         <p className="mb-4 italic">{t('protected-renew:demographic-survey.optional')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="mb-8 space-y-6">
             <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('protected-renew:demographic-survey.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
             <InputRadios id="disability-status" name="disabilityStatus" legend={t('protected-renew:demographic-survey.disability-status')} options={disabilityStatusOptions} errorMessage={errors?.disabilityStatus} required />

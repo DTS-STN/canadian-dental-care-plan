@@ -13,6 +13,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
@@ -47,11 +48,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.date-of-birth.page-title') }) };
 
   const { dateOfBirth, allChildrenUnder18 } = state;
-  return { id: state.id, csrfToken, meta, defaultState: { dateOfBirth, allChildrenUnder18 }, editMode: state.editMode };
+  return { id: state.id, meta, defaultState: { dateOfBirth, allChildrenUnder18 }, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -174,7 +174,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowDateOfBirth() {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -201,7 +201,7 @@ export default function ApplyFlowDateOfBirth() {
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="mb-6 space-y-6">
             <fieldset className="space-y-4">
               <legend className="font-lato text-2xl font-bold">{t('apply-adult-child:eligibility.date-of-birth.age-heading')}</legend>

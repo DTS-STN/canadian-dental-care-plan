@@ -12,6 +12,7 @@ import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -42,10 +43,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:eligibility.tax-filing.page-title') }) };
 
-  return { id: state.id, csrfToken, meta, defaultState: state.taxFiling2023 };
+  return { id: state.id, meta, defaultState: state.taxFiling2023 };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -81,7 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowTaxFiling() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { defaultState } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -98,7 +98,7 @@ export default function ApplyFlowTaxFiling() {
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <InputRadios
             id="tax-filing-2023"
             name="taxFiling2023"

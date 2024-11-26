@@ -10,6 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { loadDemographicSurveyState } from '~/.server/routes/helpers/demographic-survey-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -34,14 +35,12 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
-  const csrfToken = String(session.get('csrfToken'));
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('demographic-survey:summary.page-title') }) };
 
   const state = loadDemographicSurveyState({ params, session });
 
-  return { csrfToken, meta, members: state.memberInformation };
+  return { meta, members: state.memberInformation };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -55,7 +54,7 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function DemographicSurveySummary() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, members } = useLoaderData<typeof loader>();
+  const { members } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const params = useParams();
   const isSubmitting = fetcher.state !== 'idle';
@@ -91,7 +90,7 @@ export default function DemographicSurveySummary() {
         <p>{t('demographic-survey:summary.when-you-have-finished')}</p>
       </div>
       <fetcher.Form method="post" noValidate>
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="green" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Continue - Summary click">
             {t('demographic-survey:summary.continue-btn')}

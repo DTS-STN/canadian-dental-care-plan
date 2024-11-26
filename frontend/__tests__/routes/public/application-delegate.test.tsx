@@ -1,5 +1,4 @@
 import type { AppLoadContext } from '@remix-run/node';
-import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
@@ -24,18 +23,14 @@ describe('_public.apply.id.application-delegate', () => {
 
   describe('loader()', () => {
     it('should load id', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('csrfToken', 'csrfToken');
-
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/application-delegate'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: mock<AppLoadContext>(),
         params: {},
       });
 
       expect(response).toEqual({
         id: '123',
-        csrfToken: 'csrfToken',
         meta: {},
       });
     });

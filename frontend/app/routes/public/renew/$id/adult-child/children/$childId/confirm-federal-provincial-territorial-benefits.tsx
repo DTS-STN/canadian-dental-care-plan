@@ -15,6 +15,7 @@ import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { AppPageTitle } from '~/components/layouts/public-layout';
@@ -53,14 +54,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childNumber = t('renew-adult-child:children.child-number', { childNumber: state.childNumber });
   const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.confirm-dental-benefits.title', { childName }) }),
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.information.page-title', { childName: childNumber }) }),
   };
 
   return {
-    csrfToken,
     defaultState: state.confirmDentalBenefits,
     childName,
     editMode: state.editMode,
@@ -124,7 +123,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefits() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, childName, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, childName, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -157,7 +156,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
         <p className="mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-adult-child:children.confirm-dental-benefits.federal-benefits.title')}</legend>
             <InputRadios

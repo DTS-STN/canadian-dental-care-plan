@@ -12,6 +12,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -44,10 +45,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:type-of-application.page-title') }) };
 
-  return { id: state.id, csrfToken, meta, defaultState: state.typeOfApplication };
+  return { id: state.id, meta, defaultState: state.typeOfApplication };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -101,7 +101,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowTypeOfApplication() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { defaultState } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -144,7 +144,7 @@ export default function ApplyFlowTypeOfApplication() {
         <p className="mb-4 mt-8 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <InputRadios
             id="type-of-application"
             name="typeOfApplication"

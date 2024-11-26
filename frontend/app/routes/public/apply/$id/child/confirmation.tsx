@@ -12,6 +12,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
@@ -139,12 +140,11 @@ export async function loader({ context: { appContainer, session }, params, reque
     };
   });
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:confirm.page-title') }) };
 
   return {
     children,
-    csrfToken,
+
     homeAddressInfo,
     mailingAddressInfo,
     meta,
@@ -171,7 +171,7 @@ export default function ApplyFlowConfirm() {
   const viewLettersEnabled = useFeature('view-letters-online-application');
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
+  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo } = useLoaderData<typeof loader>();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const mscaLinkChecker = <InlineLink to={t('confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
@@ -397,7 +397,7 @@ export default function ApplyFlowConfirm() {
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
-              <input type="hidden" name="_csrf" value={csrfToken} />
+              <CsrfTokenInput />
               <Button
                 id="confirm-modal-close"
                 variant="primary"

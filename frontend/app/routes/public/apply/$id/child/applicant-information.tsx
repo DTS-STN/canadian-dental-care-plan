@@ -17,6 +17,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
@@ -58,10 +59,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
   const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:applicant-information.page-title') }) };
 
-  return { id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, dateOfBirth: state.dateOfBirth, editMode: state.editMode };
+  return { id: state.id, maritalStatuses, meta, defaultState: state.applicantInformation, dateOfBirth: state.dateOfBirth, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -232,7 +232,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowApplicationInformation() {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, dateOfBirth, maritalStatuses, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, dateOfBirth, maritalStatuses, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -264,7 +264,7 @@ export default function ApplyFlowApplicationInformation() {
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="mb-8 space-y-6">
             <Collapsible id="name-instructions" summary={t('applicant-information.single-legal-name')}>
               <p>{t('applicant-information.name-instructions')}</p>
