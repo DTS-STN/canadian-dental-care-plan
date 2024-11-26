@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useParams } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { loadRenewAdultChildState } from '~/.server/routes/helpers/renew-adult-c
 import { clearRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -30,12 +31,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const { id } = loadRenewAdultChildState({ params, request, session });
 
-  const csrfToken = String(session.get('csrfToken'));
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:exit-application.page-title') }) };
 
-  return { id, csrfToken, meta };
+  return { id, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -52,7 +51,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewAdultChildExitApplication() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -64,7 +63,7 @@ export default function RenewAdultChildExitApplication() {
         <p>{t('renew-adult-child:exit-application.click-back')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <ButtonLink
           id="back-button"
           routeId="public/renew/$id/adult-child/review-child-information"

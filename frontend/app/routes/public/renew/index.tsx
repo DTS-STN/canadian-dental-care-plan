@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect, useFetcher, useLoaderData } from '@remix-run/react';
+import { redirect, useFetcher } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { randomUUID } from 'crypto';
@@ -11,6 +11,7 @@ import { TYPES } from '~/.server/constants';
 import { startRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -33,11 +34,9 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const csrfToken = String(session.get('csrfToken'));
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:index.page-title') }) };
 
-  return { locale, meta, csrfToken };
+  return { locale, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -54,7 +53,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewIndex() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -82,7 +81,7 @@ export default function RenewIndex() {
         </section>
       </div>
       <fetcher.Form method="post" noValidate>
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton aria-describedby="application-consent" variant="green" id="continue-button" loading={isSubmitting} endIcon={faChevronRight}>
             {t('renew:index.start-button')}

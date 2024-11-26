@@ -17,6 +17,7 @@ import { loadApplyAdultChildStateForReview } from '~/.server/routes/helpers/appl
 import { clearApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
@@ -61,7 +62,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:review-child-information.page-title') }) };
 
   // prettier-ignore
@@ -105,7 +105,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     id: state.id,
     children,
-    csrfToken,
+
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
@@ -142,7 +142,7 @@ export default function ReviewInformation() {
   const { currentLanguage } = useCurrentLanguage();
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { children, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { children, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -263,7 +263,7 @@ export default function ReviewInformation() {
           </section>
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton

@@ -15,6 +15,7 @@ import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -49,11 +50,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:confirm-dental-benefits.title') }) };
 
   return {
-    csrfToken,
     defaultState: state.confirmDentalBenefits,
     editMode: state.editMode,
     meta,
@@ -114,7 +113,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefits() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -146,7 +145,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
         <p className="mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-adult-child:confirm-dental-benefits.federal-benefits.title')}</legend>
             <InputRadios

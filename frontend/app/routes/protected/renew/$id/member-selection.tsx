@@ -14,6 +14,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
@@ -47,13 +48,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:member-selection.page-title') }) };
 
   const applicant = state.applicantInformation;
   const children = getProtectedChildrenState(state);
 
-  return { csrfToken, meta, applicant, children, editMode: state.editMode };
+  return { meta, applicant, children, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -73,7 +73,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewMemberSelection() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, applicant, children, editMode } = useLoaderData<typeof loader>();
+  const { applicant, children, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -112,7 +112,7 @@ export default function ProtectedRenewMemberSelection() {
         )}
         <p className="mb-4">{t('protected-renew:member-selection.form-instructions')}</p>
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="mt-6 space-y-8">
             <CardLink key={applicantName} title={applicantName} previouslyReviewed={applicant?.previouslyReviewed} routeId="protected/renew/$id/dental-insurance" params={params} />
             {children.map((child) => {

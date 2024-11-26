@@ -16,6 +16,7 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
@@ -60,13 +61,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const childName = t('renew-adult-child:children.child-number', { childNumber: state.childNumber });
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.information.page-title', { childName }) }),
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.information.page-title', { childName }) }),
   };
 
-  return { csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode };
+  return { meta, defaultState: state.information, childName, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -204,7 +204,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewFlowChildInformation() {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, childName, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, childName, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -231,7 +231,7 @@ export default function RenewFlowChildInformation() {
         <p className="mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="mb-8 space-y-6">
             <Collapsible id="name-instructions" summary={t('renew-adult-child:children.information.single-legal-name')}>
               <p>{t('renew-adult-child:children.information.name-instructions')}</p>

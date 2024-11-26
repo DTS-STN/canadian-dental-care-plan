@@ -14,6 +14,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
@@ -151,12 +152,11 @@ export async function loader({ context: { appContainer, session }, params, reque
     };
   });
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:confirm.page-title') }) };
 
   return {
     children,
-    csrfToken,
+
     dentalInsurance,
     homeAddressInfo,
     mailingAddressInfo,
@@ -193,7 +193,7 @@ export default function RenewAdultChildConfirm() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, csrfToken } = useLoaderData<typeof loader>();
+  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
 
   const cdcpLink = <InlineLink to={t('renew-adult-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
@@ -227,7 +227,7 @@ export default function RenewAdultChildConfirm() {
           <p>{t('renew-adult-child:confirm.alert.survey')}</p>
           <p>{t('renew-adult-child:confirm.alert.answers')}</p>
           <fetcher.Form method="post" noValidate>
-            <input type="hidden" name="_csrf" value={csrfToken} />
+            <CsrfTokenInput />
             <LoadingButton
               id="start-survey-button"
               name="_action"
@@ -407,7 +407,7 @@ export default function RenewAdultChildConfirm() {
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
-              <input type="hidden" name="_csrf" value={csrfToken} />
+              <CsrfTokenInput />
               <Button
                 id="confirm-modal-close"
                 variant="primary"

@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -27,12 +28,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
-  const csrfToken = String(session.get('csrfToken'));
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('demographic-survey:terms-and-conditions.page-title') }) };
 
-  return { csrfToken, meta };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -46,7 +45,7 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function DemographicSurveyTermsAndConditions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -82,7 +81,7 @@ export default function DemographicSurveyTermsAndConditions() {
       </div>
       <p className="my-8">{t('demographic-survey:terms-and-conditions.take-survey.application-participation')}</p>
       <fetcher.Form method="post" noValidate>
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <LoadingButton
           aria-describedby="application-consent"
           variant="primary"

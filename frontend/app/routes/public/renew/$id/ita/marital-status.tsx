@@ -16,6 +16,7 @@ import { renewStateHasPartner, saveRenewState } from '~/.server/routes/helpers/r
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputPatternField } from '~/components/input-pattern-field';
@@ -54,10 +55,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(TYPES.configs.ServerConfig);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:marital-status.page-title') }) };
 
-  return { csrfToken, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED };
+  return { defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -125,7 +125,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewItaMaritalStatus() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, editMode, maritalStatuses, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useLoaderData<typeof loader>();
+  const { defaultState, editMode, maritalStatuses, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -157,7 +157,7 @@ export default function RenewItaMaritalStatus() {
         <p className="mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="mb-8 space-y-6">
             <InputRadios id="marital-status" name="maritalStatus" legend={t('renew-ita:marital-status.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required />
 

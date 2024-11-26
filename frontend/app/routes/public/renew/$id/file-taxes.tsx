@@ -2,7 +2,7 @@ import type { FormEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useParams } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import { TYPES } from '~/.server/constants';
 import { clearRenewState, loadRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -32,12 +33,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const { id } = loadRenewState({ params, session });
 
-  const csrfToken = String(session.get('csrfToken'));
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:file-your-taxes.page-title') }) };
 
-  return { id, csrfToken, meta };
+  return { id, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -54,7 +53,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewFileYourTaxes() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -79,7 +78,7 @@ export default function RenewFileYourTaxes() {
         <p>{t('renew:file-your-taxes.renew-after')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <ButtonLink id="back-button" routeId="public/renew/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - File your taxes click">
           {t('renew:file-your-taxes.back-btn')}
         </ButtonLink>

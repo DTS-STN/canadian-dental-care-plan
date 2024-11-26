@@ -18,6 +18,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/.server/utils/postal-zip-code.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
@@ -54,12 +55,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:contact-information.page-title') }) };
 
   return {
     id: state.id,
-    csrfToken,
+
     meta,
     defaultState: state.contactInformation,
     maritalStatus: state.applicantInformation?.maritalStatus,
@@ -242,7 +242,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowPersonalInformation() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -320,7 +320,7 @@ export default function ApplyFlowPersonalInformation() {
         <p className="mb-4 italic">{t('apply:optional-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-child:contact-information.phone-header')}</legend>
             <p className="mb-4" id="adding-phone">

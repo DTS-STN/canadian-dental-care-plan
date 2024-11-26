@@ -16,6 +16,7 @@ import { loadApplyChildState } from '~/.server/routes/helpers/apply-child-route-
 import { getChildrenState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { LoadingButton } from '~/components/loading-button';
@@ -53,7 +54,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:children.index.page-title') }) };
 
   const children = getChildrenState(state).map((child) => {
@@ -75,7 +75,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     };
   });
 
-  return { csrfToken, meta, children, editMode: state.editMode };
+  return { meta, children, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -107,7 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowChildSummary() {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, children, editMode } = useLoaderData<typeof loader>();
+  const { children, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -201,7 +201,7 @@ export default function ApplyFlowChildSummary() {
                             </Button>
                           </DialogClose>
                           <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-                            <input type="hidden" name="_csrf" value={csrfToken} />
+                            <CsrfTokenInput />
                             <input type="hidden" name="childId" value={child.id} />
                             <Button
                               id="remove-child"
@@ -226,7 +226,7 @@ export default function ApplyFlowChildSummary() {
         )}
 
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Child(ren) application click">
             {children.length === 0 ? t('apply-child:children.index.add-child') : t('apply-child:children.index.add-another-child')}
           </Button>

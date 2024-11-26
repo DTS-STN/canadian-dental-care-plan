@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-r
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -31,12 +32,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   loadApplyState({ params, session });
-  const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:terms-and-conditions.page-title') }) };
 
-  return { csrfToken, meta };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -52,7 +52,7 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function ApplyIndex() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -153,7 +153,7 @@ export default function ApplyIndex() {
         {t('apply:terms-and-conditions.apply.application-consent')}
       </p>
       <fetcher.Form method="post" noValidate>
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
             aria-describedby="application-consent"

@@ -17,6 +17,7 @@ import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import type { InputRadiosProps } from '~/components/input-radios';
@@ -55,13 +56,12 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw data('Expected communication method email not found!', { status: 500 });
   }
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:communication-preference.page-title') }) };
 
   return {
     communicationMethodEmail,
     id: state.id,
-    csrfToken,
+
     meta,
     preferredCommunicationMethods,
     preferredLanguages,
@@ -134,7 +134,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowCommunicationPreferencePage() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode, isReadOnlyEmail } = useLoaderData<typeof loader>();
+  const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode, isReadOnlyEmail } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -214,7 +214,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="mb-8 space-y-6">
             {preferredLanguages.length > 0 && (
               <InputRadios

@@ -14,6 +14,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -50,10 +51,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:partner-information.page-title') }) };
 
-  return { id: state.id, csrfToken, meta, defaultState: state.partnerInformation, editMode: state.editMode };
+  return { id: state.id, meta, defaultState: state.partnerInformation, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -158,7 +158,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowApplicationInformation() {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode, csrfToken } = useLoaderData<typeof loader>();
+  const { defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -186,7 +186,7 @@ export default function ApplyFlowApplicationInformation() {
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="space-y-6">
             <Collapsible id="name-instructions" summary={t('partner-information.single-legal-name')}>
               <p>{t('partner-information.name-instructions')}</p>

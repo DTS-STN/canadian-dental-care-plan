@@ -16,6 +16,7 @@ import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
@@ -59,12 +60,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provincialTerritorialSocialPrograms = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
   const regions = allRegions.filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
 
-  const csrfToken = String(session.get('csrfToken'));
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-benefits.title') }) };
 
   return {
-    csrfToken,
     defaultState: state.dentalBenefits,
     editMode: state.editMode,
     federalSocialPrograms,
@@ -167,7 +165,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function AccessToDentalInsuranceQuestion() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -218,7 +216,7 @@ export default function AccessToDentalInsuranceQuestion() {
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:dental-benefits.federal-benefits.title')}</legend>
             <InputRadios

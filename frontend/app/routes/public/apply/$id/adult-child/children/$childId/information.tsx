@@ -17,6 +17,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
@@ -58,13 +59,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childNumber = t('apply-adult-child:children.child-number', { childNumber: state.childNumber });
   const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.information.page-title', { childName }) }),
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.information.page-title', { childName: childNumber }) }),
   };
 
-  return { csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode, isNew: state.isNew };
+  return { meta, defaultState: state.information, childName, editMode: state.editMode, isNew: state.isNew };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -225,7 +225,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowChildInformation() {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, childName, editMode, isNew } = useLoaderData<typeof loader>();
+  const { defaultState, childName, editMode, isNew } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -285,7 +285,7 @@ export default function ApplyFlowChildInformation() {
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="mb-8 space-y-6">
             <Collapsible id="name-instructions" summary={t('apply-adult-child:children.information.single-legal-name')}>
               <p>{t('apply-adult-child:children.information.name-instructions')}</p>

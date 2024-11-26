@@ -13,6 +13,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -44,10 +45,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:dental-insurance.title') }) };
 
-  return { id: state, csrfToken, meta, defaultState: state.dentalInsurance, editMode: state.editMode };
+  return { id: state, meta, defaultState: state.dentalInsurance, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -91,7 +91,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewAdultChildAccessToDentalInsuranceQuestion() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -136,7 +136,7 @@ export default function RenewAdultChildAccessToDentalInsuranceQuestion() {
         <p className="mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="my-6">
             <InputRadios
               id="dental-insurance"

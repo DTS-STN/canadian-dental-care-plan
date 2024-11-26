@@ -18,6 +18,7 @@ import { clearApplyState, saveApplyState } from '~/.server/routes/helpers/apply-
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
@@ -110,7 +111,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:review-adult-information.page-title') }) };
 
   // prettier-ignore
@@ -127,7 +127,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     preferredLanguage: preferredLanguage.name,
     homeAddressInfo,
     mailingAddressInfo,
-    csrfToken,
+
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
@@ -162,7 +162,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ReviewInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -364,7 +364,7 @@ export default function ReviewInformation() {
         <p className="mb-4">{t('apply-child:review-adult-information.submit-p-false-info')}</p>
         <p className="mb-4">{t('apply-child:review-adult-information.submit-p-repayment')}</p>
         <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton

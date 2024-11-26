@@ -11,6 +11,7 @@ import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/rout
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -41,12 +42,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
   const preferredLanguages = appContainer.get(TYPES.domain.services.PreferredLanguageService).listAndSortLocalizedPreferredLanguages(locale);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:communication-preference.page-title') }) };
 
   return {
     id: state.id,
-    csrfToken,
+
     meta,
     preferredLanguages,
     defaultState: { preferredLanguage: state.preferredLanguage },
@@ -82,7 +82,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewCommunicationPreferencePage() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, preferredLanguages, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { preferredLanguages, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -97,7 +97,7 @@ export default function ProtectedRenewCommunicationPreferencePage() {
       <div className="max-w-prose">
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <CsrfTokenInput />
           <div className="mb-8 space-y-6">
             {preferredLanguages.length > 0 && (
               <InputRadios

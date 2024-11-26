@@ -13,6 +13,7 @@ import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-
 import { clearApplyState, getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -35,7 +36,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:parent-or-guardian.page-title') }) };
 
   invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
@@ -45,7 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/date-of-birth', params));
   }
 
-  return { ageCategory, csrfToken, defaultState: state.disabilityTaxCredit, id: state.id, meta };
+  return { ageCategory, defaultState: state.disabilityTaxCredit, id: state.id, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -62,7 +62,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowParentOrGuardian() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { ageCategory, csrfToken } = useLoaderData<typeof loader>();
+  const { ageCategory } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -92,7 +92,7 @@ export default function ApplyFlowParentOrGuardian() {
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <ButtonLink
           id="back-button"
           routeId={getBackButtonRouteId()}

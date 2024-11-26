@@ -12,6 +12,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -39,12 +40,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   const state = loadRenewState({ params, session });
-  const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:terms-and-conditions.page-title') }) };
 
-  return { csrfToken, meta, defaultState: state.termsAndConditions };
+  return { meta, defaultState: state.termsAndConditions };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -89,7 +89,7 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function RenewTermsAndConditions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { defaultState } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -207,7 +207,7 @@ export default function RenewTermsAndConditions() {
         <InputCheckbox id="share-data" name="shareData" value={CheckboxValue.Yes} defaultChecked={defaultState?.shareData} errorMessage={errors?.shareData} required>
           {t('renew:terms-and-conditions.checkboxes.share-data')}
         </InputCheckbox>
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <CsrfTokenInput />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
             aria-describedby="application-consent"
