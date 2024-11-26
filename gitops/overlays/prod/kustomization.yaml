@@ -18,10 +18,13 @@ resources:
   # Note: to enable maintenance mode:
   #
   #   1. comment ./ingresses.yaml
-  #   2. uncomment ./ingresses-maintenance.yaml
+  #   2. uncomment the appropriate maintenance mode file:
+  #      - for full application maintenance, uncomment ./ingresses-maintenance.yaml
+  #      - for online application maintenance, uncomment ./ingresses-apply-maintenance.yaml
   #
-  - ./ingresses.yaml
+  # - ./ingresses.yaml
   # - ./ingresses-maintenance.yaml
+  - ./ingresses-apply-maintenance.yaml
 patches:
   - path: ./patches/deployments-frontend.yaml
   - path: ./patches/deployments-maintenance.yaml
