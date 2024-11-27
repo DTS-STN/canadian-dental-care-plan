@@ -4,7 +4,7 @@ import { createMemorySessionStorage } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
 
-import type { ServerConfig } from '~/.server/configs';
+import type { ClientConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { PreferredCommunicationMethodService, PreferredLanguageService } from '~/.server/domain/services';
 import type { SecurityHandler } from '~/.server/routes/security';
@@ -33,9 +33,9 @@ describe('_public.apply.id.communication-preference', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ServerConfig).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
-      } satisfies Partial<ServerConfig>);
+      } satisfies Partial<ClientConfig>);
       mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.PreferredCommunicationMethodService).mockReturnValueOnce({
         listAndSortLocalizedPreferredCommunicationMethods: () => [
           { id: 'email', name: 'Email' },
@@ -86,9 +86,9 @@ describe('_public.apply.id.communication-preference', () => {
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ServerConfig).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
-      } satisfies Partial<ServerConfig>);
+      } satisfies Partial<ClientConfig>);
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
@@ -115,9 +115,9 @@ describe('_public.apply.id.communication-preference', () => {
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ServerConfig).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
-      } satisfies Partial<ServerConfig>);
+      } satisfies Partial<ClientConfig>);
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
@@ -146,9 +146,9 @@ describe('_public.apply.id.communication-preference', () => {
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ServerConfig).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
-      } satisfies Partial<ServerConfig>);
+      } satisfies Partial<ClientConfig>);
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),

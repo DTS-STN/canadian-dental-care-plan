@@ -51,7 +51,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplySingleChildState({ params, request, session });
 
-  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ServerConfig);
+  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 

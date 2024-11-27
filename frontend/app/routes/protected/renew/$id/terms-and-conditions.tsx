@@ -8,7 +8,6 @@ import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -19,6 +18,7 @@ import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
+import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -45,11 +45,10 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const state = loadProtectedRenewState({ params, session });
 
-  const { SCCH_BASE_URI } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:terms-and-conditions.page-title') }) };
 
-  return { meta, defaultState: state.termsAndConditions, SCCH_BASE_URI };
+  return { meta, defaultState: state.termsAndConditions };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -96,7 +95,8 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function RenewTermsAndConditions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, SCCH_BASE_URI } = useLoaderData<typeof loader>();
+  const { defaultState } = useLoaderData<typeof loader>();
+  const { SCCH_BASE_URI } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 

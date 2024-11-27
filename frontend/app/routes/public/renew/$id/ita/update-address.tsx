@@ -26,6 +26,7 @@ import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
+import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -47,7 +48,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.configs.ServerConfig);
 
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
@@ -56,13 +56,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     id: state.id,
-
     meta,
     defaultState: state.addressInformation,
     countryList,
     regionList,
-    CANADA_COUNTRY_ID,
-    USA_COUNTRY_ID,
     editMode: state.editMode,
   };
 }
@@ -75,7 +72,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.configs.ServerConfig);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   const addressInformationSchema = z
     .object({
@@ -193,7 +190,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewItaUpdateAddress() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, countryList, regionList, editMode } = useLoaderData<typeof loader>();
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';

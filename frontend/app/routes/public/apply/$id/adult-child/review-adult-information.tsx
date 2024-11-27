@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   // apply state is valid then edit mode can be set to true
   saveApplyState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.configs.ServerConfig);
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.configs.ClientConfig);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
