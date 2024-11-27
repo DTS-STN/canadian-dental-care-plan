@@ -268,11 +268,11 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
   }
 
   // Indigenous status
-  listIndigenousStatuses = moize(this.DefaultlistIndigenousStatuses, {
+  listIndigenousStatuses = moize(this.defaultListIndigenousStatuses, {
     onCacheAdd: () => this.log.info('Creating new listIndigenousStatuses memo'),
   });
 
-  getIndigenousStatusById = moize(this.DefaultgetIndigenousStatusById, {
+  getIndigenousStatusById = moize(this.defaultGetIndigenousStatusById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getIndigenousStatusById memo'),
   });
@@ -293,7 +293,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return localizedIndigenousStatusDto;
   }
 
-  private DefaultlistIndigenousStatuses(): ReadonlyArray<IndigenousStatusDto> {
+  private defaultListIndigenousStatuses(): ReadonlyArray<IndigenousStatusDto> {
     this.log.debug('Get all inidigenous statuses');
     const indigenousStatusEntities = this.DemographicSurveyRepository.listAllIndigenousStatuses();
     const indigenousStatusDtos = this.DemographicSurveyDtoMapper.mapIndigenousStatusEntitiesToIndigenousStatusDtos(indigenousStatusEntities);
@@ -301,7 +301,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return indigenousStatusDtos;
   }
 
-  private DefaultgetIndigenousStatusById(id: string): IndigenousStatusDto {
+  private defaultGetIndigenousStatusById(id: string): IndigenousStatusDto {
     this.log.debug('Get inidigenous status with id: [%s]', id);
     const indigenousStatusEntity = this.DemographicSurveyRepository.findIndigenousStatusById(id);
 
@@ -316,11 +316,11 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
   }
 
   // First Nations
-  listFirstNations = moize(this.DefaultlistFirstNations, {
+  listFirstNations = moize(this.defaultListFirstNations, {
     onCacheAdd: () => this.log.info('Creating new listFirstNations memo'),
   });
 
-  getFirstNationsById = moize(this.DefaultgetFirstNationsById, {
+  getFirstNationsById = moize(this.defaultGetFirstNationsById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getFirstNationsById memo'),
   });
@@ -341,7 +341,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return localizedFirstNationsDto;
   }
 
-  private DefaultlistFirstNations(): ReadonlyArray<FirstNationsDto> {
+  private defaultListFirstNations(): ReadonlyArray<FirstNationsDto> {
     this.log.debug('Get all First Nations');
     const firstNationsEntities = this.DemographicSurveyRepository.listAllFirstNations();
     const firstNationsDtos = this.DemographicSurveyDtoMapper.mapFirstNationsEntitiesToFirstNationsDtos(firstNationsEntities);
@@ -349,7 +349,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return firstNationsDtos;
   }
 
-  private DefaultgetFirstNationsById(id: string): FirstNationsDto {
+  private defaultGetFirstNationsById(id: string): FirstNationsDto {
     this.log.debug('Get First Nation with id: [%s]', id);
     const firstNationsEntity = this.DemographicSurveyRepository.findFirstNationsById(id);
 
@@ -364,11 +364,11 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
   }
 
   // Disability status
-  listDisabilityStatuses = moize(this.DefaultlistDisabilityStatuses, {
+  listDisabilityStatuses = moize(this.defaultListDisabilityStatuses, {
     onCacheAdd: () => this.log.info('Creating new listDisabilityStatuses memo'),
   });
 
-  getDisabilityStatusById = moize(this.DefaultgetDisabilityStatusById, {
+  getDisabilityStatusById = moize(this.defaultGetDisabilityStatusById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getDisabilityStatusById memo'),
   });
@@ -389,7 +389,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return localizedDisabilityStatusDto;
   }
 
-  private DefaultlistDisabilityStatuses(): ReadonlyArray<DisabilityStatusDto> {
+  private defaultListDisabilityStatuses(): ReadonlyArray<DisabilityStatusDto> {
     this.log.debug('Get all disability statuses');
     const disabilityStatusEntities = this.DemographicSurveyRepository.listAllDisabilityStatuses();
     const disabilityStatusDtos = this.DemographicSurveyDtoMapper.mapDisabilityStatusEntitiesToDisabilityStatusDtos(disabilityStatusEntities);
@@ -397,7 +397,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return disabilityStatusDtos;
   }
 
-  private DefaultgetDisabilityStatusById(id: string): DisabilityStatusDto {
+  private defaultGetDisabilityStatusById(id: string): DisabilityStatusDto {
     this.log.debug('Get disability status with id: [%s]', id);
     const disabilityStatusEntity = this.DemographicSurveyRepository.findDisabilityStatusById(id);
 
@@ -412,11 +412,11 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
   }
 
   // Ethnic group
-  listEthnicGroups = moize(this.DefaultlistEthnicGroups, {
+  listEthnicGroups = moize(this.defaultListEthnicGroups, {
     onCacheAdd: () => this.log.info('Creating new listEthnicGroups memo'),
   });
 
-  getEthnicGroupById = moize(this.DefaultgetEthnicGroupById, {
+  getEthnicGroupById = moize(this.defaultGetEthnicGroupById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getEthnicGroupById memo'),
   });
@@ -437,7 +437,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return localizedEthnicGroupDto;
   }
 
-  private DefaultlistEthnicGroups(): ReadonlyArray<EthnicGroupDto> {
+  private defaultListEthnicGroups(): ReadonlyArray<EthnicGroupDto> {
     this.log.debug('Get all ethnic groups');
     const ethnicGroupEntities = this.DemographicSurveyRepository.listAllEthnicGroups();
     const ethnicGroupDtos = this.DemographicSurveyDtoMapper.mapEthnicGroupEntitiesToEthnicGroupDtos(ethnicGroupEntities);
@@ -445,7 +445,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return ethnicGroupDtos;
   }
 
-  private DefaultgetEthnicGroupById(id: string): EthnicGroupDto {
+  private defaultGetEthnicGroupById(id: string): EthnicGroupDto {
     this.log.debug('Get ethnic group with id: [%s]', id);
     const ethnicGroupEntity = this.DemographicSurveyRepository.findEthnicGroupById(id);
 
@@ -460,11 +460,11 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
   }
 
   // Location born status
-  listLocationBornStatuses = moize(this.DefaultlistLocationBornStatuses, {
+  listLocationBornStatuses = moize(this.defaultListLocationBornStatuses, {
     onCacheAdd: () => this.log.info('Creating new listLocationBornStatuses memo'),
   });
 
-  getLocationBornStatusById = moize(this.DefaultgetLocationBornStatusById, {
+  getLocationBornStatusById = moize(this.defaultGetLocationBornStatusById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getLocationBornStatusById memo'),
   });
@@ -485,7 +485,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return localizedLocationBornStatusDto;
   }
 
-  private DefaultlistLocationBornStatuses(): ReadonlyArray<LocationBornStatusDto> {
+  private defaultListLocationBornStatuses(): ReadonlyArray<LocationBornStatusDto> {
     this.log.debug('Get all location born statuses');
     const locationBornStatusEntities = this.DemographicSurveyRepository.listAllLocationBornStatuses();
     const locationBornStatusDtos = this.DemographicSurveyDtoMapper.mapLocationBornStatusEntitiesToLocationBornStatusDtos(locationBornStatusEntities);
@@ -493,7 +493,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return locationBornStatusDtos;
   }
 
-  private DefaultgetLocationBornStatusById(id: string): LocationBornStatusDto {
+  private defaultGetLocationBornStatusById(id: string): LocationBornStatusDto {
     this.log.debug('Get location born status with id: [%s]', id);
     const locationBornStatusEntity = this.DemographicSurveyRepository.findLocationBornStatusById(id);
 
@@ -508,11 +508,11 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
   }
 
   // Gender status
-  listGenderStatuses = moize(this.DefaultlistGenderStatuses, {
+  listGenderStatuses = moize(this.defaultListGenderStatuses, {
     onCacheAdd: () => this.log.info('Creating new listGenderStatuses memo'),
   });
 
-  getGenderStatusById = moize(this.DefaultgetGenderStatusById, {
+  getGenderStatusById = moize(this.defaultGetGenderStatusById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getGenderStatusById memo'),
   });
@@ -533,7 +533,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return localizedGenderStatusDto;
   }
 
-  private DefaultlistGenderStatuses(): ReadonlyArray<GenderStatusDto> {
+  private defaultListGenderStatuses(): ReadonlyArray<GenderStatusDto> {
     this.log.debug('Get all gender statuses');
     const genderStatusEntities = this.DemographicSurveyRepository.listAllGenderStatuses();
     const genderStatusDtos = this.DemographicSurveyDtoMapper.mapGenderStatusEntitiesToGenderStatusDtos(genderStatusEntities);
@@ -541,7 +541,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     return genderStatusDtos;
   }
 
-  private DefaultgetGenderStatusById(id: string): GenderStatusDto {
+  private defaultGetGenderStatusById(id: string): GenderStatusDto {
     this.log.debug('Get gender status with id: [%s]', id);
     const genderStatusEntity = this.DemographicSurveyRepository.findGenderStatusById(id);
 

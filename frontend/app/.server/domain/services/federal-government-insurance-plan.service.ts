@@ -65,16 +65,16 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
     this.getFederalGovernmentInsurancePlanById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS;
   }
 
-  listFederalGovernmentInsurancePlans = moize(this.DefaultlistFederalGovernmentInsurancePlans, {
+  listFederalGovernmentInsurancePlans = moize(this.defaultListFederalGovernmentInsurancePlans, {
     onCacheAdd: () => this.log.info('Creating new listFederalGovernmentInsurancePlans memo'),
   });
 
-  getFederalGovernmentInsurancePlanById = moize(this.DefaultgetFederalGovernmentInsurancePlanById, {
+  getFederalGovernmentInsurancePlanById = moize(this.defaultGetFederalGovernmentInsurancePlanById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getFederalGovernmentInsurancePlanById memo'),
   });
 
-  private DefaultlistFederalGovernmentInsurancePlans(): ReadonlyArray<FederalGovernmentInsurancePlanDto> {
+  private defaultListFederalGovernmentInsurancePlans(): ReadonlyArray<FederalGovernmentInsurancePlanDto> {
     this.log.debug('Get all federal government insurance plans');
     const federalGovernmentInsurancePlanEntities = this.federalGovernmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans();
     const federalGovernmentInsurancePlanDtos = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(federalGovernmentInsurancePlanEntities);
@@ -82,7 +82,7 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
     return federalGovernmentInsurancePlanDtos;
   }
 
-  private DefaultgetFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanDto {
+  private defaultGetFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanDto {
     this.log.debug('Get federal government insurance plan with id: [%s]', id);
     const federalGovernmentInsurancePlanEntity = this.federalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById(id);
 

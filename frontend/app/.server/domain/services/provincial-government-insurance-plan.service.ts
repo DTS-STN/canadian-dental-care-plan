@@ -33,11 +33,11 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     this.getProvincialGovernmentInsurancePlanById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS;
   }
 
-  listProvincialGovernmentInsurancePlans = moize(this.DefaultlistProvincialGovernmentInsurancePlans, {
+  listProvincialGovernmentInsurancePlans = moize(this.defaultListProvincialGovernmentInsurancePlans, {
     onCacheAdd: () => this.log.info('Creating new listProvincialGovernmentInsurancePlans memo'),
   });
 
-  getProvincialGovernmentInsurancePlanById = moize(this.DefaultgetProvincialGovernmentInsurancePlanById, {
+  getProvincialGovernmentInsurancePlanById = moize(this.defaultGetProvincialGovernmentInsurancePlanById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getProvincialGovernmentInsurancePlanById memo'),
   });
@@ -59,7 +59,7 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     return provincialGovernmentInsurancePlanLocalizedDto;
   }
 
-  private DefaultlistProvincialGovernmentInsurancePlans(): ReadonlyArray<ProvincialGovernmentInsurancePlanDto> {
+  private defaultListProvincialGovernmentInsurancePlans(): ReadonlyArray<ProvincialGovernmentInsurancePlanDto> {
     this.log.debug('Get all provincial government insurance plans');
     const provincialGovernmentInsurancePlanEntities = this.provincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans();
     const provincialGovernmentInsurancePlanDtos = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities);
@@ -67,7 +67,7 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     return provincialGovernmentInsurancePlanDtos;
   }
 
-  private DefaultgetProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto {
+  private defaultGetProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto {
     this.log.debug('Get provincial government insurance plan with id: [%s]', id);
     const provincialGovernmentInsurancePlanEntity = this.provincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById(id);
 
