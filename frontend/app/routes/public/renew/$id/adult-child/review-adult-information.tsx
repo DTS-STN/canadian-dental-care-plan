@@ -15,7 +15,6 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { loadRenewAdultChildStateForReview } from '~/.server/routes/helpers/renew-adult-child-route-helpers';
 import { clearRenewState, getChildrenState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
-import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
@@ -26,6 +25,7 @@ import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
+import { useClientEnv, useFeature } from '~/root';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   // renew state is valid then edit mode can be set to true
   saveRenewState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -128,17 +128,12 @@ export async function loader({ context: { appContainer, session }, params, reque
     },
   };
 
-  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
-  const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:review-adult-information.page-title') }) };
 
-  // prettier-ignore
-  const payload =
-    viewPayloadEnabled &&
-    appContainer.get(TYPES.domain.mappers.BenefitRenewalDtoMapper).mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(
-      appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state)
-    );
+  const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
+  const benefitRenewalDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitRenewalDtoMapper);
+  const benefitRenewalStateMapper = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper);
+  const payload = viewPayloadEnabled && benefitRenewalDtoMapper.mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalStateMapper.mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state));
 
   return {
     id: state.id,
@@ -148,10 +143,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     mailingAddressInfo,
     dentalInsurance,
     dentalBenefit,
-
     meta,
-    siteKey: HCAPTCHA_SITE_KEY,
-    hCaptchaEnabled,
     payload,
     hasChildren: state.children.length > 0,
   };
@@ -191,7 +183,9 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewAdultChildReviewAdultInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, hasChildren, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, hasChildren, payload } = useLoaderData<typeof loader>();
+  const { HCAPTCHA_SITE_KEY } = useClientEnv();
+  const hCaptchaEnabled = useFeature('hcaptcha');
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -410,7 +404,7 @@ export default function RenewAdultChildReviewAdultInformation() {
           )}
           {!hasChildren && (
             <>
-              {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
+              {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
               <LoadingButton
                 id="confirm-button"
                 name="_action"

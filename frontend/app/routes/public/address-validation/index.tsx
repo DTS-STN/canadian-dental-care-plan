@@ -24,6 +24,7 @@ import { InputSelect } from '~/components/input-select';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { useEnhancedFetcher } from '~/hooks';
+import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -70,8 +71,6 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   featureEnabled('address-validation');
-  const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = serverConfig;
 
   const locale = getLocale(request);
   const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).create(locale);
@@ -84,14 +83,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('address-validation:index.page-title') }) };
 
-  return {
-    CANADA_COUNTRY_ID,
-    countries,
-    defaultMailingAddress,
-    meta,
-    provinceTerritoryStates,
-    USA_COUNTRY_ID,
-  };
+  return { countries, defaultMailingAddress, meta, provinceTerritoryStates };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -105,7 +97,7 @@ export async function action({ context: { appContainer, session }, request, para
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
 
-  const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
+  const clientConfig = appContainer.get(TYPES.configs.ClientConfig);
   const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
   const countryService = appContainer.get(TYPES.domain.services.CountryService);
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
@@ -128,7 +120,7 @@ export async function action({ context: { appContainer, session }, request, para
 
   const validatedMailingAddress = validatedResult.data;
 
-  const isNotCanada = validatedMailingAddress.countryId !== serverConfig.CANADA_COUNTRY_ID;
+  const isNotCanada = validatedMailingAddress.countryId !== clientConfig.CANADA_COUNTRY_ID;
   const isUseInvalidAddressAction = formAction === 'use-invalid-address';
   const isUseSelectedAddressAction = formAction === 'use-selected-address';
   const canProceedToReview = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
@@ -202,7 +194,8 @@ function isAddressResponse(data: unknown): data is AddressResponse {
 
 export default function AddressValidationIndexRoute() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, countries, defaultMailingAddress, provinceTerritoryStates, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
+  const { countries, defaultMailingAddress, provinceTerritoryStates } = useLoaderData<typeof loader>();
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
   const fetcher = useEnhancedFetcher<typeof action>();
 
   const [countryValue, setCountryValue] = useState(CANADA_COUNTRY_ID);

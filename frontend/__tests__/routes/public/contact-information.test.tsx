@@ -4,7 +4,6 @@ import { createMemorySessionStorage } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mockDeep } from 'vitest-mock-extended';
 
-import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { CountryService, ProvinceTerritoryStateService } from '~/.server/domain/services';
 import { loader } from '~/routes/public/apply/$id/adult/contact-information';
@@ -32,12 +31,6 @@ describe('_public.apply.id.contact-information', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ServerConfig).mockReturnValueOnce({
-        MARITAL_STATUS_CODE_COMMONLAW: 1,
-        MARITAL_STATUS_CODE_MARRIED: 2,
-        CANADA_COUNTRY_ID: 'CAN',
-        USA_COUNTRY_ID: 'USA',
-      } satisfies Partial<ServerConfig>);
       mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.CountryService).mockReturnValueOnce({
         listCountries: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
         listAndSortLocalizedCountries: () => [{ id: '1', name: 'super country' }],
@@ -56,8 +49,6 @@ describe('_public.apply.id.contact-information', () => {
         id: '123',
         countryList: [{ id: '1', name: 'super country' }],
         regionList: [{ id: 'SP', countryId: 'CAN', name: 'sample', abbr: 'SP' }],
-        CANADA_COUNTRY_ID: 'CAN',
-        USA_COUNTRY_ID: 'USA',
       });
     });
   });

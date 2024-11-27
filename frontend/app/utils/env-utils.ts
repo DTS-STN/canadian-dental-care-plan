@@ -39,6 +39,22 @@ export const clientEnvSchema = z.object({
 
   SESSION_TIMEOUT_SECONDS: z.coerce.number().min(0).default(19 * 60),
   SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce.number().min(0).default(5 * 60),
+
+  // demographic survey codes
+  IS_APPLICANT_FIRST_NATIONS_YES_OPTION: z.coerce.number().default(775170000),
+  ANOTHER_ETHNIC_GROUP_OPTION: z.coerce.number().default(775170009),
+
+  // marital status codes
+  MARITAL_STATUS_CODE_MARRIED: z.coerce.number().default(775170001),
+  MARITAL_STATUS_CODE_COMMONLAW:z.coerce.number().default(775170002),
+
+  // lookup identifiers
+  CANADA_COUNTRY_ID: z.string().trim().min(1).default('0cf5389e-97ae-eb11-8236-000d3af4bfc3'),
+  USA_COUNTRY_ID: z.string().trim().min(1).default('fcf7389e-97ae-eb11-8236-000d3af4bfc3'),
+  COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('775170000'),
+  COMMUNICATION_METHOD_MAIL_ID: z.string().trim().min(1).default('775170002'),
+  CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1).default('51af5170-614e-ee11-be6f-000d3a09d640'),
+  INVALID_CLIENT_FRIENDLY_STATUS: z.string().trim().min(1).default('504fba6e-604e-ee11-be6f-000d3a09d640'),
 });
 
 export type ClientEnv = z.infer<typeof clientEnvSchema>;

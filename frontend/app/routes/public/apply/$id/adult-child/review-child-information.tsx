@@ -25,6 +25,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import { useClientEnv, useFeature } from '~/root';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -55,29 +56,30 @@ export async function loader({ context: { appContainer, session }, params, reque
   // apply state is valid then edit mode can be set to true
   saveApplyState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.configs.ServerConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
-  const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:review-child-information.page-title') }) };
 
-  // prettier-ignore
-  const payload =
-    viewPayloadEnabled &&
-    appContainer.get(TYPES.domain.mappers.BenefitApplicationDtoMapper).mapBenefitApplicationDtoToBenefitApplicationRequestEntity(
-      appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyAdultChildStateToBenefitApplicationDto(state)
-    );
+  const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
+  const benefitApplicationStateMapper = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper);
+  const benefitApplicationDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitApplicationDtoMapper);
+  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyAdultChildStateToBenefitApplicationDto(state));
+
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
 
   const children = state.children.map((child) => {
+    // prettier-ignore
     const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram
-      ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      ? federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
+    // prettier-ignore
     const selectedProvincialBenefit = child.dentalBenefits.provincialTerritorialSocialProgram
-      ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      ? provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
     return {
@@ -102,15 +104,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     };
   });
 
-  return {
-    id: state.id,
-    children,
-
-    meta,
-    siteKey: HCAPTCHA_SITE_KEY,
-    hCaptchaEnabled,
-    payload,
-  };
+  return { id: state.id, children, meta, payload };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -142,7 +136,9 @@ export default function ReviewInformation() {
   const { currentLanguage } = useCurrentLanguage();
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { children, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { children, payload } = useLoaderData<typeof loader>();
+  const hCaptchaEnabled = useFeature('hcaptcha');
+  const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -264,7 +260,7 @@ export default function ReviewInformation() {
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <CsrfTokenInput />
-          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
+          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton
               id="confirm-button"

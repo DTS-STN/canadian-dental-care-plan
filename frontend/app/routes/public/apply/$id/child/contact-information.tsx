@@ -29,6 +29,7 @@ import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
+import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -50,7 +51,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = appContainer.get(TYPES.configs.ServerConfig);
 
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
@@ -59,16 +59,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     id: state.id,
-
     meta,
     defaultState: state.contactInformation,
     maritalStatus: state.applicantInformation?.maritalStatus,
     countryList,
     regionList,
-    CANADA_COUNTRY_ID,
-    USA_COUNTRY_ID,
-    MARITAL_STATUS_CODE_COMMONLAW,
-    MARITAL_STATUS_CODE_MARRIED,
     editMode: state.editMode,
   };
 }
@@ -81,7 +76,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ServerConfig);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   const personalInformationSchema = z
     .object({
@@ -242,7 +237,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowPersonalInformation() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, countryList, maritalStatus, regionList, editMode } = useLoaderData<typeof loader>();
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
