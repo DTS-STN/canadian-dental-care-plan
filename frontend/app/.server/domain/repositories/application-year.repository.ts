@@ -31,7 +31,7 @@ export class DefaultApplicationYearRepository implements ApplicationYearReposito
     this.log.trace('Getting possible application year dates given applicationYearRequest: [%j]', applicationYearRequestEntity);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/dts/v1/application-years`);
-    url.searchParams.set('currentDate', applicationYearRequestEntity.date);
+    url.searchParams.set('currentDate', applicationYearRequestEntity.currentDate);
 
     const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.application-year.gets', url, {
       method: 'GET',

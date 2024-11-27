@@ -1,5 +1,5 @@
 export type ApplicationYearRequestEntity = Readonly<{
-  date: string;
+  currentDate: string;
 }>;
 
 export type ApplicationYearResultEntity = Readonly<{
