@@ -33,11 +33,11 @@ export class DefaultPreferredCommunicationMethodService implements PreferredComm
     this.getPreferredCommunicationMethodById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS;
   }
 
-  listPreferredCommunicationMethods = moize(this.DefaultlistPreferredCommunicationMethods, {
+  listPreferredCommunicationMethods = moize(this.defaultListPreferredCommunicationMethods, {
     onCacheAdd: () => this.log.info('Creating new listPreferredCommunicationMethods memo'),
   });
 
-  getPreferredCommunicationMethodById = moize(this.DefaultgetPreferredCommunicationMethodById, {
+  getPreferredCommunicationMethodById = moize(this.defaultGetPreferredCommunicationMethodById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getPreferredCommunicationMethodById memo'),
   });
@@ -59,7 +59,7 @@ export class DefaultPreferredCommunicationMethodService implements PreferredComm
     return localizedPreferredCommunicationMethodDto;
   }
 
-  private DefaultlistPreferredCommunicationMethods(): PreferredCommunicationMethodDto[] {
+  private defaultListPreferredCommunicationMethods(): PreferredCommunicationMethodDto[] {
     this.log.debug('Get all preferred communication methods');
     const preferredCommunicationMethodEntities = this.preferredCommunicationMethodRepository.listAllPreferredCommunicationMethods();
     const preferredCommunicationMethodDtos = this.preferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos(preferredCommunicationMethodEntities);
@@ -67,7 +67,7 @@ export class DefaultPreferredCommunicationMethodService implements PreferredComm
     return preferredCommunicationMethodDtos;
   }
 
-  private DefaultgetPreferredCommunicationMethodById(id: string): PreferredCommunicationMethodDto {
+  private defaultGetPreferredCommunicationMethodById(id: string): PreferredCommunicationMethodDto {
     this.log.debug('Get preferred communication method with id: [%s]', id);
     const preferredCommunicationMethodEntity = this.preferredCommunicationMethodRepository.findPreferredCommunicationMethodById(id);
 

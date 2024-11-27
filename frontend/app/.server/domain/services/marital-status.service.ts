@@ -74,11 +74,11 @@ export class DefaultMaritalStatusService implements MaritalStatusService {
     this.getMaritalStatusById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS;
   }
 
-  listMaritalStatuses = moize(this.DefaultlistMaritalStatuses, {
+  listMaritalStatuses = moize(this.defaultListMaritalStatuses, {
     onCacheAdd: () => this.log.info('Creating new listMaritalStatuses memo'),
   });
 
-  getMaritalStatusById = moize(this.DefaultgetMaritalStatusById, {
+  getMaritalStatusById = moize(this.defaultGetMaritalStatusById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getMaritalStatusById memo'),
   });
@@ -99,7 +99,7 @@ export class DefaultMaritalStatusService implements MaritalStatusService {
     return localizedMaritalStatusDto;
   }
 
-  private DefaultlistMaritalStatuses(): ReadonlyArray<MaritalStatusDto> {
+  private defaultListMaritalStatuses(): ReadonlyArray<MaritalStatusDto> {
     this.log.debug('Get all marital statuses');
     const maritalStatusEntities = this.maritalStatusRepository.listAllMaritalStatuses();
     const maritalStatusDtos = this.maritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos(maritalStatusEntities);
@@ -107,7 +107,7 @@ export class DefaultMaritalStatusService implements MaritalStatusService {
     return maritalStatusDtos;
   }
 
-  private DefaultgetMaritalStatusById(id: string): MaritalStatusDto {
+  private defaultGetMaritalStatusById(id: string): MaritalStatusDto {
     this.log.debug('Get marital status with id: [%s]', id);
     const maritalStatusEntity = this.maritalStatusRepository.findMaritalStatusById(id);
 

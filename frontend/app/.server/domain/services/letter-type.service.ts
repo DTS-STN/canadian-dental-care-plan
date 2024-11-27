@@ -66,11 +66,11 @@ export class DefaultLetterTypeService implements LetterTypeService {
     this.getLetterTypeById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS;
   }
 
-  listLetterTypes = moize(this.DefaultlistLetterTypes, {
+  listLetterTypes = moize(this.defaultListLetterTypes, {
     onCacheAdd: () => this.log.info('Creating new listLetterTypes memo'),
   });
 
-  private DefaultlistLetterTypes(): ReadonlyArray<LetterTypeDto> {
+  private defaultListLetterTypes(): ReadonlyArray<LetterTypeDto> {
     this.log.trace('Getting all letter types');
     const letterTypeEntities = this.letterTypeRepository.listAllLetterTypes();
     const letterTypeDtos = this.letterTypeDtoMapper.mapLetterTypeEntitiesToLetterTypeDtos(letterTypeEntities);
@@ -78,12 +78,12 @@ export class DefaultLetterTypeService implements LetterTypeService {
     return letterTypeDtos;
   }
 
-  getLetterTypeById = moize(this.DefaultgetLetterTypeById, {
+  getLetterTypeById = moize(this.defaultGetLetterTypeById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getLetterTypeById memo'),
   });
 
-  private DefaultgetLetterTypeById(id: string): LetterTypeDto {
+  private defaultGetLetterTypeById(id: string): LetterTypeDto {
     this.log.trace('Getting letter type with id: [%s]', id);
     const letterTypeEntity = this.letterTypeRepository.findLetterTypeById(id);
 

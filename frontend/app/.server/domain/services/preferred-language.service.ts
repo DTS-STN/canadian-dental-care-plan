@@ -52,11 +52,11 @@ export class DefaultPreferredLanguageService implements PreferredLanguageService
     this.getPreferredLanguageById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS;
   }
 
-  listPreferredLanguages = moize(this.DefaultlistPreferredLanguages, {
+  listPreferredLanguages = moize(this.defaultListPreferredLanguages, {
     onCacheAdd: () => this.log.info('Creating new listPreferredLanguages memo'),
   });
 
-  getPreferredLanguageById = moize(this.DefaultgetPreferredLanguageById, {
+  getPreferredLanguageById = moize(this.defaultGetPreferredLanguageById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getPreferredLanguageById memo'),
   });
@@ -78,7 +78,7 @@ export class DefaultPreferredLanguageService implements PreferredLanguageService
     return preferredLanguageLocalizedDto;
   }
 
-  private DefaultlistPreferredLanguages(): ReadonlyArray<PreferredLanguageDto> {
+  private defaultListPreferredLanguages(): ReadonlyArray<PreferredLanguageDto> {
     this.log.debug('Get all preferred languages');
     const preferredLanguageEntities = this.preferredLanguageRepository.listAllPreferredLanguages();
     const preferredLanguageDtos = this.preferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities);
@@ -86,7 +86,7 @@ export class DefaultPreferredLanguageService implements PreferredLanguageService
     return preferredLanguageDtos;
   }
 
-  private DefaultgetPreferredLanguageById(id: string): PreferredLanguageDto {
+  private defaultGetPreferredLanguageById(id: string): PreferredLanguageDto {
     this.log.debug('Get preferred language with id: [%s]', id);
     const preferredLanguageEntity = this.preferredLanguageRepository.findPreferredLanguageById(id);
 

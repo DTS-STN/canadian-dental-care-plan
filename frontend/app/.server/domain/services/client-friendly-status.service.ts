@@ -71,7 +71,7 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
    *
    * @returns An array of ClientFriendlyStatus DTOs.
    */
-  getClientFriendlyStatusById = moize(this.DefaultgetClientFriendlyStatusById, {
+  getClientFriendlyStatusById = moize(this.defaultGetClientFriendlyStatusById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getClientFriendlyStatusById memo'),
   });
@@ -84,7 +84,7 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
     return clientFriendlyStatusLocalizedDto;
   }
 
-  private DefaultgetClientFriendlyStatusById(id: string): ClientFriendlyStatusDto {
+  private defaultGetClientFriendlyStatusById(id: string): ClientFriendlyStatusDto {
     this.log.debug('Get client friendly status with id: [%s]', id);
     const clientFriendlyStatusEntity = this.clientFriendlyStatusRepository.findClientFriendlyStatusById(id);
 

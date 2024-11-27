@@ -43,11 +43,11 @@ export class DefaultApplicationYearService implements ApplicationYearService {
    *
    * @returns An array of Application Year(s) DTOs.
    */
-  listApplicationYears = moize(this.DefaultlistApplicationYears, {
+  listApplicationYears = moize(this.defaultListApplicationYears, {
     onCacheAdd: () => this.log.info('Creating new listApplicationYears memo'),
   });
 
-  async DefaultlistApplicationYears(applicationYearRequestDto: ApplicationYearRequestDto): Promise<ReadonlyArray<ApplicationYearResultDto>> {
+  private async defaultListApplicationYears(applicationYearRequestDto: ApplicationYearRequestDto): Promise<ReadonlyArray<ApplicationYearResultDto>> {
     this.log.trace('Getting possible application years results with applicationYearRequest: [%j]', applicationYearRequestDto);
 
     this.auditService.createAudit('application-year.get-application-year-result', { userId: applicationYearRequestDto.userId });

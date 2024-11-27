@@ -89,7 +89,7 @@ export class DefaultCountryService implements CountryService {
    *
    * @returns An array of Country DTOs.
    */
-  listCountries = moize(this.DefaultlistCountries, {
+  listCountries = moize(this.defaultListCountries, {
     onCacheAdd: () => this.log.info('Creating new listCountries memo'),
   });
 
@@ -100,7 +100,7 @@ export class DefaultCountryService implements CountryService {
    * @returns The Country DTO corresponding to the specified ID.
    * @throws {CountryNotFoundException} If no country is found with the specified ID.
    */
-  getCountryById = moize(this.DefaultgetCountryById, {
+  getCountryById = moize(this.defaultGetCountryById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getCountryById memo'),
   });
@@ -136,7 +136,7 @@ export class DefaultCountryService implements CountryService {
     return localizedCountryDto;
   }
 
-  private DefaultlistCountries(): ReadonlyArray<CountryDto> {
+  private defaultListCountries(): ReadonlyArray<CountryDto> {
     this.log.debug('Get all countries');
     const countryEntities = this.countryRepository.listAllCountries();
     const countryDtos = this.countryDtoMapper.mapCountryEntitiesToCountryDtos(countryEntities);
@@ -144,7 +144,7 @@ export class DefaultCountryService implements CountryService {
     return countryDtos;
   }
 
-  private DefaultgetCountryById(id: string): CountryDto {
+  private defaultGetCountryById(id: string): CountryDto {
     this.log.debug('Get country with id: [%s]', id);
     const countryEntity = this.countryRepository.findCountryById(id);
 

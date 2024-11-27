@@ -94,16 +94,16 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     this.getProvinceTerritoryStateByCode.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS;
   }
 
-  listProvinceTerritoryStates = moize(this.DefaultlistProvinceTerritoryStates, {
+  listProvinceTerritoryStates = moize(this.defaultListProvinceTerritoryStates, {
     onCacheAdd: () => this.log.info('Creating new listProvinceTerritoryStates memo'),
   });
 
-  getProvinceTerritoryStateById = moize(this.DefaultgetProvinceTerritoryStateById, {
+  getProvinceTerritoryStateById = moize(this.defaultGetProvinceTerritoryStateById, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateById memo'),
   });
 
-  getProvinceTerritoryStateByCode = moize(this.DefaultgetProvinceTerritoryStateByCode, {
+  getProvinceTerritoryStateByCode = moize(this.defaultGetProvinceTerritoryStateByCode, {
     maxSize: Infinity,
     onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateByCode memo'),
   });
@@ -143,7 +143,7 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     return localizedProvinceTerritoryStateDto;
   }
 
-  private DefaultlistProvinceTerritoryStates(): ReadonlyArray<ProvinceTerritoryStateDto> {
+  private defaultListProvinceTerritoryStates(): ReadonlyArray<ProvinceTerritoryStateDto> {
     this.log.debug('Get all province territory states');
     const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.listAllProvinceTerritoryStates();
     const provinceTerritoryStateDtos = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(provinceTerritoryStateEntities);
@@ -151,7 +151,7 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     return provinceTerritoryStateDtos;
   }
 
-  private DefaultgetProvinceTerritoryStateById(id: string): ProvinceTerritoryStateDto {
+  private defaultGetProvinceTerritoryStateById(id: string): ProvinceTerritoryStateDto {
     this.log.debug('Get province territory state with id: [%s]', id);
     const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateById(id);
 
@@ -164,7 +164,7 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     return provinceTerritoryStateDto;
   }
 
-  private DefaultgetProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateDto {
+  private defaultGetProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateDto {
     this.log.debug('Get province territory state with code: [%s]', code);
     const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateByCode(code);
 
