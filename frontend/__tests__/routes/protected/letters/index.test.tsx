@@ -32,10 +32,6 @@ vi.mock('~/services/personal-information-service.server', () => ({
   }),
 }));
 
-vi.mock('~/.server/utils/env.utils', () => ({
-  featureEnabled: vi.fn().mockReturnValue(true),
-}));
-
 vi.mock('~/.server/utils/locale.utils');
 
 describe('Letters Page', () => {

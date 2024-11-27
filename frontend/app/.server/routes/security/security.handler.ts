@@ -7,6 +7,7 @@ import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
+import type { FeatureName } from '~/utils/env-utils';
 
 /**
  * Parameters for validating the RAOIDC authentication session.
@@ -86,6 +87,15 @@ export interface SecurityHandler {
   validateCsrfToken(params: ValidateCsrfTokenParams): void;
 
   /**
+   * Validates that a given feature is enabled.
+   *
+   * @param feature - The feature to validate.
+   * @throws {Response} Throws a 404 Not Found response if the feature is not enabled.
+   * @returns {void} Resolves if the feature is enabled.
+   */
+  validateFeatureEnabled(feature: FeatureName): void;
+
+  /**
    * Validates the hCaptcha response in the request.
    *
    * @param params - Parameters containing the hCaptcha response and an optional callback for invalid responses.
@@ -154,6 +164,24 @@ export class DefaultSecurityHandler implements SecurityHandler {
     }
 
     this.log.debug('CSRF token is valid');
+  }
+
+  /**
+   * Validates that a given feature is enabled.
+   *
+   * @param feature - The feature to validate.
+   * @throws {Response} Throws a 404 Not Found response if the feature is not enabled.
+   * @returns {void} Resolves if the feature is enabled.
+   */
+  validateFeatureEnabled(feature: FeatureName): void {
+    this.log.debug('Validating feature [%s]', feature);
+
+    if (!this.serverConfig.ENABLED_FEATURES.includes(feature)) {
+      this.log.warn('Feature [%s] is not enabled; returning 404 response', feature);
+      throw data(null, { status: 404 });
+    }
+
+    this.log.debug('Feature [%s] is enabled', feature);
   }
 
   /**

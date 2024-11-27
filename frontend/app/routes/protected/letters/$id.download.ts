@@ -6,13 +6,14 @@ import { sanitize } from 'sanitize-filename-ts';
 
 import { TYPES } from '~/.server/constants';
 import type { LetterDto } from '~/.server/domain/dtos';
-import { featureEnabled } from '~/.server/utils/env.utils';
 import { getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  featureEnabled('view-letters');
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateFeatureEnabled('view-letters');
+  await securityHandler.validateAuthSession({ request, session });
 
   const instrumentationService = getInstrumentationService();
 
@@ -20,9 +21,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     instrumentationService.countHttpStatus('letters.download', 400);
     throw data(null, { status: 400 });
   }
-
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession({ request, session });
 
   // prevent users from entering any ID in the URL and seeing other users' letters
   const letters: ReadonlyArray<LetterDto> | undefined = session.get('letters');

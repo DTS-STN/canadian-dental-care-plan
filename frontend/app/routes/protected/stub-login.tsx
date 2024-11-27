@@ -6,7 +6,7 @@ import { UTCDate } from '@date-fns/utc';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { featureEnabled } from '~/.server/utils/env.utils';
+import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -31,7 +31,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
-  featureEnabled('stub-login');
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateFeatureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('stub-login:index.page-title') }) };
@@ -49,7 +50,8 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
-  featureEnabled('stub-login');
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateFeatureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 

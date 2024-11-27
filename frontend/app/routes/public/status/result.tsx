@@ -12,7 +12,6 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { clearStatusState, getStatusStateIdFromUrl, loadStatusState } from '~/.server/routes/helpers/status-route-helpers';
 import { getContextualAlertType } from '~/.server/utils/application-code.utils';
-import { featureEnabled } from '~/.server/utils/env.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
@@ -41,7 +40,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  featureEnabled('status');
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateFeatureEnabled('status');
 
   const statusStateId = getStatusStateIdFromUrl(request.url);
   const { statusCheckResult } = loadStatusState({ id: statusStateId, params, session });
@@ -66,8 +66,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateFeatureEnabled('status');
   securityHandler.validateCsrfToken({ formData, session });
-  featureEnabled('status');
 
   const statusStateId = getStatusStateIdFromUrl(request.url);
   const { id } = loadStatusState({ id: statusStateId, params, session });

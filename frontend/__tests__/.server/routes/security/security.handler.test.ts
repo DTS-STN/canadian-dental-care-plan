@@ -8,6 +8,7 @@ import type { LogFactory, Logger } from '~/.server/factories';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
+import type { FeatureName } from '~/utils/env-utils';
 
 vi.mock('~/.server/utils/ip-address.utils');
 
@@ -112,6 +113,42 @@ describe('DefaultSecurityHandler', () => {
 
       // Expect no error if CSRF token is valid
       expect(() => securityHandler.validateCsrfToken({ formData: mockFormData, session: mockSession })).not.toThrow();
+    });
+  });
+
+  describe('validateFeatureEnabled', () => {
+    it('should throw 404 if feature is not enabled', () => {
+      const feature: FeatureName = 'status';
+
+      const securityHandler = new DefaultSecurityHandler(
+        logFactory,
+        { ENABLED_FEATURES: ['hcaptcha'] }, // Mocked server config
+        csrfTokenValidator,
+        hCaptchaValidator,
+        raoidcSessionValidator,
+      );
+
+      expect(() => securityHandler.validateFeatureEnabled(feature)).toThrow(
+        expect.objectContaining({
+          data: null,
+          init: { status: 404 },
+          type: 'DataWithResponseInit',
+        }),
+      );
+    });
+
+    it('should not throw if feature is enabled', () => {
+      const feature: FeatureName = 'hcaptcha';
+
+      const securityHandler = new DefaultSecurityHandler(
+        logFactory,
+        { ENABLED_FEATURES: ['hcaptcha'] }, // Mocked server config
+        csrfTokenValidator,
+        hCaptchaValidator,
+        raoidcSessionValidator,
+      );
+
+      expect(() => securityHandler.validateFeatureEnabled(feature)).not.toThrow();
     });
   });
 

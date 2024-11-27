@@ -9,7 +9,6 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { featureEnabled } from '~/.server/utils/env.utils';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -40,13 +39,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 const orderEnumSchema = z.enum(['asc', 'desc']);
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  featureEnabled('view-letters');
-
-  const instrumentationService = getInstrumentationService();
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateFeatureEnabled('view-letters');
   await securityHandler.validateAuthSession({ request, session });
 
+  const instrumentationService = getInstrumentationService();
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
 
