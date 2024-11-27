@@ -18,7 +18,6 @@ import { PageTitle } from '~/components/page-title';
 import fontLatoStyleSheet from '~/fonts/lato.css?url';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css?url';
 import { getBuildInfoService } from '~/services/build-info-service.server';
-import { getDynatraceService } from '~/services/dynatrace-service.server';
 import tailwindStyleSheet from '~/tailwind.css?url';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import type { FeatureName } from '~/utils/env-utils';
@@ -63,13 +62,13 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
-  const dynatraceService = getDynatraceService();
+  const dynatraceService = appContainer.get(TYPES.web.services.DynatraceService);
   const requestUrl = new URL(request.url);
   const locale = getLocale(request);
   const t = await getFixedT(request, ['gcweb']);
 
   const buildInfo = buildInfoService.getBuildInfo();
-  const dynatraceRumScript = await dynatraceService.retrieveRumScript();
+  const dynatraceRumScript = await dynatraceService.findDynatraceRumScript();
   const env = appContainer.get(TYPES.configs.ClientConfig);
   const meta = {
     author: t('gcweb:meta.author'),

@@ -26,7 +26,7 @@ import {
   DefaultProvinceTerritoryStateService,
   DefaultProvincialGovernmentInsurancePlanService,
 } from '~/.server/domain/services';
-import { DefaultHCaptchaService, FileSessionService, RedisSessionService } from '~/.server/web/services';
+import { DefaultDynatraceService, DefaultHCaptchaService, FileSessionService, RedisSessionService } from '~/.server/web/services';
 
 function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
   return ({ parentContext }: interfaces.Request) => {
@@ -61,6 +61,7 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.services.PreferredLanguageService).to(DefaultPreferredLanguageService);
   bind(TYPES.domain.services.ProvinceTerritoryStateService).to(DefaultProvinceTerritoryStateService);
   bind(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).to(DefaultProvincialGovernmentInsurancePlanService);
+  bind(TYPES.web.services.DynatraceService).to(DefaultDynatraceService);
   bind(TYPES.web.services.HCaptchaService).to(DefaultHCaptchaService);
   // SessionService bindings depend on the SESSION_STORAGE_TYPE configuration string
   bind(TYPES.web.services.SessionService).to(FileSessionService).when(sessionTypeIs('file'));

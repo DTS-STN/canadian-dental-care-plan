@@ -31,7 +31,7 @@ import {
   MockLetterRepository,
 } from '~/.server/domain/repositories';
 import type { MockName } from '~/.server/utils/env.utils';
-import { DefaultHCaptchaRepository } from '~/.server/web/repositories';
+import { DefaultDynatraceRepository, DefaultHCaptchaRepository } from '~/.server/web/repositories';
 
 /**
  * Determines if a service implementation should be injected based on server configuration.
@@ -97,5 +97,7 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.repositories.PreferredLanguageRepository).to(DefaultPreferredLanguageRepository);
   bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(DefaultProvinceTerritoryStateRepository);
   bind(TYPES.domain.repositories.ProvincialGovernmentInsurancePlanRepository).to(DefaultProvincialGovernmentInsurancePlanRepository);
+
+  bind(TYPES.web.repositories.DynatraceRepository).to(DefaultDynatraceRepository);
   bind(TYPES.web.repositories.HCaptchaRepository).to(DefaultHCaptchaRepository);
 });
