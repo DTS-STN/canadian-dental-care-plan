@@ -11,7 +11,6 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { featureEnabled } from '~/.server/utils/env.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
@@ -70,7 +69,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
-  featureEnabled('address-validation');
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateFeatureEnabled('address-validation');
 
   const locale = getLocale(request);
   const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).create(locale);
@@ -87,15 +87,15 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
-  featureEnabled('address-validation');
+  const formData = await request.formData();
+
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateFeatureEnabled('address-validation');
+  securityHandler.validateCsrfToken({ formData, session });
 
   if (request.method !== 'POST') {
     throw data({ message: 'Method not allowed' }, { status: 405 });
   }
-
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  const formData = await request.formData();
-  securityHandler.validateCsrfToken({ formData, session });
 
   const clientConfig = appContainer.get(TYPES.configs.ClientConfig);
   const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);

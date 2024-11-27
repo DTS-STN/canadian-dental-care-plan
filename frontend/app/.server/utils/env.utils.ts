@@ -1,12 +1,8 @@
-import { data } from '@remix-run/node';
-
 import { DiagLogLevel } from '@opentelemetry/api';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
 import { generateCryptoKey } from '~/.server/utils/crypto.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
-import type { FeatureName } from '~/utils/env-utils';
 import { clientEnvSchema } from '~/utils/env-utils';
 
 // none, error, warn, info, debug, verbose, all
@@ -207,19 +203,6 @@ export function getClientEnv() {
   }
 
   return result.data;
-}
-
-/**
- * A helper function to be used in actions and loaders that checks if a feature
- * is enabled. If the feature is not enabled, a 404 response will be thrown.
- */
-export function featureEnabled(feature: FeatureName) {
-  const log = getLogger('env-utils.server/featureEnabled');
-  const { ENABLED_FEATURES } = getEnv();
-  if (!ENABLED_FEATURES.includes(feature)) {
-    log.warn('Feature [%s] is not enabled; returning 404 response', feature);
-    throw data(null, { status: 404 });
-  }
 }
 
 /**
