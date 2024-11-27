@@ -4,6 +4,7 @@ import { useFetcher } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
@@ -32,6 +33,19 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   loadApplyState({ params, session });
+
+  const applicationYears = await appContainer.get(TYPES.domain.services.ApplicationYearService).listApplicationYears({ date: '2020-01-01', userId: 'test' });
+
+  const applicationYearsSchema = z
+    .object({
+      taxYear: z.string().trim().optional(),
+      applicationYearId: z.string().trim().optional(),
+    })
+    .array();
+
+  const parsedData = applicationYearsSchema.safeParse(applicationYears);
+
+  saveApplyState({ params, session, state: { applicationYears: parsedData.data } });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:terms-and-conditions.page-title') }) };
