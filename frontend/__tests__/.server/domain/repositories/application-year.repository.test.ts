@@ -46,7 +46,7 @@ describe('DefaultApplicationYearRepository', () => {
 
       const repository = new DefaultApplicationYearRepository(mockLogFactory, mockServerConfig);
 
-      const result = await repository.listApplicationYears({ date: '2024-11-13' });
+      const result = await repository.listApplicationYears({ currentDate: '2024-11-13' });
       expect(result).toEqual(mockResponseData);
     });
 
@@ -60,7 +60,7 @@ describe('DefaultApplicationYearRepository', () => {
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
       const repository = new DefaultApplicationYearRepository(mockLogFactory, mockServerConfig);
-      await expect(() => repository.listApplicationYears({ date: '2024-11-13' })).rejects.toThrowError();
+      await expect(() => repository.listApplicationYears({ currentDate: '2024-11-13' })).rejects.toThrowError();
     });
   });
 });
