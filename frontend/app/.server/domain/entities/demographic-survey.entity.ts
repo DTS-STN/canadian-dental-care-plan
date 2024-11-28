@@ -1,70 +1,61 @@
-export type IndigenousStatusEntity = Readonly<{
+import type { ReadonlyDeep } from 'type-fest';
+
+export type IndigenousStatusEntity = ReadonlyDeep<{
   Value: number;
-  Label: Readonly<{
-    LocalizedLabels: ReadonlyArray<
-      Readonly<{
-        LanguageCode: number;
-        Label: string;
-      }>
-    >;
-  }>;
+  Label: {
+    LocalizedLabels: Array<{
+      LanguageCode: number;
+      Label: string;
+    }>;
+  };
 }>;
 
-export type FirstNationsEntity = Readonly<{
+export type FirstNationsEntity = ReadonlyDeep<{
   Value: number;
-  Label: Readonly<{
-    LocalizedLabels: ReadonlyArray<
-      Readonly<{
-        LanguageCode: number;
-        Label: string;
-      }>
-    >;
-  }>;
+  Label: {
+    LocalizedLabels: Array<{
+      LanguageCode: number;
+      Label: string;
+    }>;
+  };
 }>;
 
-export type DisabilityStatusEntity = Readonly<{
+export type DisabilityStatusEntity = ReadonlyDeep<{
   Value: number;
-  Label: Readonly<{
-    LocalizedLabels: ReadonlyArray<
-      Readonly<{
-        LanguageCode: number;
-        Label: string;
-      }>
-    >;
-  }>;
+  Label: {
+    LocalizedLabels: Array<{
+      LanguageCode: number;
+      Label: string;
+    }>;
+  };
 }>;
 
-export type EthnicGroupEntity = Readonly<{
+export type EthnicGroupEntity = ReadonlyDeep<{
   Value: number;
-  Label: Readonly<{
-    LocalizedLabels: ReadonlyArray<
-      Readonly<{
-        LanguageCode: number;
-        Label: string;
-      }>
-    >;
-  }>;
+  Label: {
+    LocalizedLabels: Array<{
+      LanguageCode: number;
+      Label: string;
+    }>;
+  };
 }>;
 
-export type LocationBornStatusEntity = Readonly<{
+export type LocationBornStatusEntity = ReadonlyDeep<{
   Value: number;
-  Label: Readonly<{
-    LocalizedLabels: ReadonlyArray<
-      Readonly<{
-        LanguageCode: number;
-        Label: string;
-      }>
-    >;
-  }>;
+  Label: {
+    LocalizedLabels: Array<{
+      LanguageCode: number;
+      Label: string;
+    }>;
+  };
 }>;
-export type GenderStatusEntity = Readonly<{
+
+export type GenderStatusEntity = ReadonlyDeep<{
   Value: number;
-  Label: Readonly<{
-    LocalizedLabels: ReadonlyArray<
-      Readonly<{
-        LanguageCode: number;
-        Label: string;
-      }>
-    >;
-  }>;
+  Label: {
+    LocalizedLabels: Array<{
+      LanguageCode: number;
+      Label: string;
+    }>;
+  };
 }>;

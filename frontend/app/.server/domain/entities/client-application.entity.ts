@@ -1,207 +1,172 @@
-export type ClientApplicationEntity = Readonly<{
-  BenefitApplication: Readonly<{
-    Applicant: Readonly<{
-      PersonBirthDate: Readonly<{
+import type { ReadonlyDeep } from 'type-fest';
+
+export type ClientApplicationEntity = ReadonlyDeep<{
+  BenefitApplication: {
+    Applicant: {
+      PersonBirthDate: {
         date: string;
         dateTime?: string;
         DayDate?: string;
         MonthDate?: string;
         YearDate?: string;
-      }>;
-      PersonContactInformation: ReadonlyArray<
-        Readonly<{
-          Address: ReadonlyArray<
-            Readonly<{
-              AddressCategoryCode: Readonly<{
-                ReferenceDataName: string;
-              }>;
-              AddressCityName: string;
-              AddressCountry: Readonly<{
-                CountryCode: Readonly<{
-                  ReferenceDataID: string;
-                  ReferenceDataName?: string;
-                }>;
-              }>;
-              AddressPostalCode: string;
-              AddressProvince: Readonly<{
-                ProvinceCode: Readonly<{
-                  ReferenceDataID: string;
-                  ReferenceDataName?: string;
-                }>;
-              }>;
-              AddressSecondaryUnitText: string;
-              AddressStreet: Readonly<{
-                StreetName: string;
-              }>;
-            }>
-          >;
-          EmailAddress: ReadonlyArray<
-            Readonly<{
-              EmailAddressID: string;
-            }>
-          >;
-          TelephoneNumber: ReadonlyArray<
-            Readonly<{
-              FullTelephoneNumber: Readonly<{
-                TelephoneNumberFullID: string;
-              }>;
-              TelephoneNumberCategoryCode: Readonly<{
-                ReferenceDataName: string;
-              }>;
-            }>
-          >;
-        }>
-      >;
-      PersonLanguage: ReadonlyArray<
-        Readonly<{
-          CommunicationCategoryCode: Readonly<{
-            ReferenceDataID: string;
-          }>;
-          PreferredIndicator: boolean;
-        }>
-      >;
-      PersonMaritalStatus: Readonly<{
-        StatusCode: Readonly<{
-          ReferenceDataID: string;
+      };
+      PersonContactInformation: Array<{
+        Address: Array<{
+          AddressCategoryCode: {
+            ReferenceDataName: string;
+          };
+          AddressCityName: string;
+          AddressCountry: {
+            CountryCode: {
+              ReferenceDataID: string;
+              ReferenceDataName?: string;
+            };
+          };
+          AddressPostalCode: string;
+          AddressProvince: {
+            ProvinceCode: {
+              ReferenceDataID: string;
+              ReferenceDataName?: string;
+            };
+          };
+          AddressSecondaryUnitText: string;
+          AddressStreet: {
+            StreetName: string;
+          };
+        }>;
+        EmailAddress: Array<{
+          EmailAddressID: string;
+        }>;
+        TelephoneNumber: Array<{
+          FullTelephoneNumber: {
+            TelephoneNumberFullID: string;
+          };
+          TelephoneNumberCategoryCode: {
+            ReferenceDataName: string;
+          };
         }>;
       }>;
-      PersonName: ReadonlyArray<
-        Readonly<{
-          PersonGivenName: ReadonlyArray<string>;
-          PersonSurName: string;
-        }>
-      >;
-      PersonSINIdentification: Readonly<{
+      PersonLanguage: Array<{
+        CommunicationCategoryCode: {
+          ReferenceDataID: string;
+        };
+        PreferredIndicator: boolean;
+      }>;
+      PersonMaritalStatus: {
+        StatusCode: {
+          ReferenceDataID: string;
+        };
+      };
+      PersonName: Array<{
+        PersonGivenName: Array<string>;
+        PersonSurName: string;
+      }>;
+      PersonSINIdentification: {
         IdentificationID: string;
         IdentificationCategoryText?: string;
-      }>;
+      };
       MailingSameAsHomeIndicator: boolean;
-      PreferredMethodCommunicationCode: Readonly<{
+      PreferredMethodCommunicationCode: {
         ReferenceDataID: string;
-      }>;
-      ApplicantDetail: Readonly<{
+      };
+      ApplicantDetail: {
         AttestParentOrGuardianIndicator: boolean;
         ConsentToSharePersonalInformationIndicator: boolean;
         DisabilityTaxCreditIndicator: boolean;
         FederalDentalCoverageIndicator: boolean;
-        InsurancePlan?: ReadonlyArray<
-          Readonly<{
-            InsurancePlanIdentification: ReadonlyArray<
-              Readonly<{
-                IdentificationID: string;
-                IdentificationCategoryText?: string;
-              }>
-            >;
-          }>
-        >;
-        LivingIndependentlyIndicator: boolean;
-        PrivateDentalInsuranceIndicator: boolean;
-        ProvincialDentalCoverageIndicator: boolean;
-      }>;
-      ClientIdentification: ReadonlyArray<
-        Readonly<{
-          IdentificationID: string;
-          IdentificationCategoryText?: string;
-        }>
-      >;
-      Flags: ReadonlyArray<
-        Readonly<{
-          Flag: boolean;
-          FlagCategoryText: string;
-        }>
-      >;
-      RelatedPerson: ReadonlyArray<
-        Readonly<{
-          PersonBirthDate: Readonly<{
-            date: string;
-            dateTime?: string;
-            DayDate?: string;
-            MonthDate?: string;
-            YearDate?: string;
-          }>;
-          PersonName: ReadonlyArray<
-            Readonly<{
-              PersonGivenName: ReadonlyArray<string>;
-              PersonSurName: string;
-            }>
-          >;
-          PersonRelationshipCode: Readonly<{
-            ReferenceDataName: string;
-          }>;
-          PersonSINIdentification: Readonly<{
+        InsurancePlan?: Array<{
+          InsurancePlanIdentification: Array<{
             IdentificationID: string;
             IdentificationCategoryText?: string;
           }>;
-          ApplicantDetail: Readonly<{
-            PrivateDentalInsuranceIndicator: boolean;
-            InsurancePlan?: ReadonlyArray<
-              Readonly<{
-                InsurancePlanIdentification: ReadonlyArray<
-                  Readonly<{
-                    IdentificationID: string;
-                    IdentificationCategoryText?: string;
-                  }>
-                >;
-              }>
-            >;
-            ConsentToSharePersonalInformationIndicator: boolean;
-            AttestParentOrGuardianIndicator: boolean;
-          }>;
-          ClientIdentification: ReadonlyArray<
-            Readonly<{
-              IdentificationID: string;
-              IdentificationCategoryText?: string;
-            }>
-          >;
-        }>
-      >;
-    }>;
-    BenefitApplicationChannelCode: Readonly<{
-      ReferenceDataID: string;
-    }>;
-    BenefitApplicationCategoryCode: Readonly<{
-      ReferenceDataID: string;
-    }>;
-    BenefitApplicationIdentification: ReadonlyArray<
-      Readonly<{
+        }>;
+        LivingIndependentlyIndicator: boolean;
+        PrivateDentalInsuranceIndicator: boolean;
+        ProvincialDentalCoverageIndicator: boolean;
+      };
+      ClientIdentification: Array<{
         IdentificationID: string;
         IdentificationCategoryText?: string;
-      }>
-    >;
-    BenefitApplicationYear: Readonly<{
-      BenefitApplicationYearIdentification: ReadonlyArray<
-        Readonly<{
+      }>;
+      Flags: Array<{
+        Flag: boolean;
+        FlagCategoryText: string;
+      }>;
+      RelatedPerson: Array<{
+        PersonBirthDate: {
+          date: string;
+          dateTime?: string;
+          DayDate?: string;
+          MonthDate?: string;
+          YearDate?: string;
+        };
+        PersonName: Array<{
+          PersonGivenName: Array<string>;
+          PersonSurName: string;
+        }>;
+        PersonRelationshipCode: {
+          ReferenceDataName: string;
+        };
+        PersonSINIdentification: {
           IdentificationID: string;
           IdentificationCategoryText?: string;
-        }>
-      >;
+        };
+        ApplicantDetail: {
+          PrivateDentalInsuranceIndicator: boolean;
+          InsurancePlan?: Array<{
+            InsurancePlanIdentification: Array<{
+              IdentificationID: string;
+              IdentificationCategoryText?: string;
+            }>;
+          }>;
+          ConsentToSharePersonalInformationIndicator: boolean;
+          AttestParentOrGuardianIndicator: boolean;
+        };
+        ClientIdentification: Array<{
+          IdentificationID: string;
+          IdentificationCategoryText?: string;
+        }>;
+      }>;
+    };
+    BenefitApplicationChannelCode: {
+      ReferenceDataID: string;
+    };
+    BenefitApplicationCategoryCode: {
+      ReferenceDataID: string;
+    };
+    BenefitApplicationIdentification: Array<{
+      IdentificationID: string;
+      IdentificationCategoryText?: string;
     }>;
-  }>;
-}>;
-
-export type ClientApplicationBasicInfoRequestEntity = Readonly<{
-  Applicant: Readonly<{
-    PersonName: ReadonlyArray<
-      Readonly<{
-        PersonGivenName: ReadonlyArray<string>;
-        PersonSurName: string;
-      }>
-    >;
-    PersonBirthDate: Readonly<{
-      date: string;
-    }>;
-    ClientIdentification: ReadonlyArray<
-      Readonly<{
+    BenefitApplicationYear: {
+      BenefitApplicationYearIdentification: Array<{
         IdentificationID: string;
-      }>
-    >;
-  }>;
+        IdentificationCategoryText?: string;
+      }>;
+    };
+  };
 }>;
 
-export type ClientApplicationSinRequestEntity = Readonly<{
-  Applicant: Readonly<{
-    PersonSINIdentification: Readonly<{
+export type ClientApplicationBasicInfoRequestEntity = ReadonlyDeep<{
+  Applicant: {
+    PersonName: Array<{
+      PersonGivenName: Array<string>;
+      PersonSurName: string;
+    }>;
+
+    PersonBirthDate: {
+      date: string;
+    };
+    ClientIdentification: Array<{
       IdentificationID: string;
     }>;
-  }>;
+  };
+}>;
+
+export type ClientApplicationSinRequestEntity = ReadonlyDeep<{
+  Applicant: {
+    PersonSINIdentification: {
+      IdentificationID: string;
+    };
+  };
 }>;

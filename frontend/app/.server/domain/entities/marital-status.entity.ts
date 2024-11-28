@@ -1,11 +1,11 @@
-export type MaritalStatusEntity = Readonly<{
+import type { ReadonlyDeep } from 'type-fest';
+
+export type MaritalStatusEntity = ReadonlyDeep<{
   Value: number;
-  Label: Readonly<{
-    LocalizedLabels: ReadonlyArray<
-      Readonly<{
-        LanguageCode: number;
-        Label: string;
-      }>
-    >;
-  }>;
+  Label: {
+    LocalizedLabels: Array<{
+      LanguageCode: number;
+      Label: string;
+    }>;
+  };
 }>;

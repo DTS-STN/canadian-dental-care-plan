@@ -1,46 +1,40 @@
-export type ApplicationStatusEntity = Readonly<{
-  BenefitApplication: Readonly<{
-    BenefitApplicationStatus: ReadonlyArray<
-      Readonly<{
-        ReferenceDataID?: string;
-        ReferenceDataName: string;
-      }>
-    >;
-  }>;
-}>;
+import type { ReadonlyDeep } from 'type-fest';
 
-export type ApplicationStatusBasicInfoRequestEntity = Readonly<{
-  BenefitApplication: Readonly<{
-    Applicant: Readonly<{
-      PersonName: ReadonlyArray<
-        Readonly<{
-          PersonGivenName: ReadonlyArray<string>;
-          PersonSurName: string;
-        }>
-      >;
-      PersonBirthDate: Readonly<{
-        date: string;
-      }>;
-      ClientIdentification: ReadonlyArray<
-        Readonly<{
-          IdentificationID: string;
-        }>
-      >;
+export type ApplicationStatusEntity = ReadonlyDeep<{
+  BenefitApplication: {
+    BenefitApplicationStatus: Array<{
+      ReferenceDataID?: string;
+      ReferenceDataName: string;
     }>;
-  }>;
+  };
 }>;
 
-export type ApplicationStatusSinRequestEntity = Readonly<{
-  BenefitApplication: Readonly<{
-    Applicant: Readonly<{
-      PersonSINIdentification: Readonly<{
+export type ApplicationStatusBasicInfoRequestEntity = ReadonlyDeep<{
+  BenefitApplication: {
+    Applicant: {
+      PersonName: Array<{
+        PersonGivenName: Array<string>;
+        PersonSurName: string;
+      }>;
+      PersonBirthDate: {
+        date: string;
+      };
+      ClientIdentification: Array<{
         IdentificationID: string;
       }>;
-      ClientIdentification: ReadonlyArray<
-        Readonly<{
-          IdentificationID: string;
-        }>
-      >;
-    }>;
-  }>;
+    };
+  };
+}>;
+
+export type ApplicationStatusSinRequestEntity = ReadonlyDeep<{
+  BenefitApplication: {
+    Applicant: {
+      PersonSINIdentification: {
+        IdentificationID: string;
+      };
+      ClientIdentification: Array<{
+        IdentificationID: string;
+      }>;
+    };
+  };
 }>;

@@ -1,4 +1,6 @@
-export interface PreferredLanguageEntity {
+import type { ReadonlyDeep } from 'type-fest';
+
+export type PreferredLanguageEntity = ReadonlyDeep<{
   Value: number;
   Label: {
     LocalizedLabels: {
@@ -6,4 +8,4 @@ export interface PreferredLanguageEntity {
       Label: string;
     }[];
   };
-}
+}>;
