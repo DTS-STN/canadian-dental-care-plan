@@ -1,4 +1,6 @@
-export interface PreferredCommunicationMethodEntity {
+import type { ReadonlyDeep } from 'type-fest';
+
+export type PreferredCommunicationMethodEntity = ReadonlyDeep<{
   Value: number;
   Label: {
     LocalizedLabels: {
@@ -6,4 +8,4 @@ export interface PreferredCommunicationMethodEntity {
       Label: string;
     }[];
   };
-}
+}>;

@@ -1,11 +1,11 @@
-export type LetterTypeEntity = Readonly<{
+import type { ReadonlyDeep } from 'type-fest';
+
+export type LetterTypeEntity = ReadonlyDeep<{
   Value: string;
-  Label: Readonly<{
-    LocalizedLabels: ReadonlyArray<
-      Readonly<{
-        LanguageCode: number;
-        Label: string;
-      }>
-    >;
-  }>;
+  Label: {
+    LocalizedLabels: Array<{
+      LanguageCode: number;
+      Label: string;
+    }>;
+  };
 }>;
