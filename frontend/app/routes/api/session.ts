@@ -18,14 +18,12 @@ const API_SESSION_REDIRECT_TO_OPTIONS = ['cdcp-website', 'cdcp-website-apply', '
 export type ApiSessionRedirectTo = (typeof API_SESSION_REDIRECT_TO_OPTIONS)[number];
 
 export async function action({ context: { appContainer, session }, request }: ActionFunctionArgs) {
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
+
   const log = getLogger('routes/api/session');
   const sessionId = session.id;
   log.debug("Action with user's server-side session; sessionId: [%s]", sessionId);
-
-  if (request.method !== 'POST') {
-    log.warn('Invalid method requested [%s]; responding with 405; sessionId: [%s]', request.method, sessionId);
-    throw Response.json({ message: 'Method not allowed' }, { status: 405 });
-  }
 
   const bodySchema = z.object({
     action: z.enum(API_SESSION_ACTIONS),

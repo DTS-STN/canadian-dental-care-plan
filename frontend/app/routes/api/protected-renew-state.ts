@@ -5,6 +5,7 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 
 import { z } from 'zod';
 
+import { TYPES } from '~/.server/constants';
 import { saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
 
@@ -12,14 +13,12 @@ const API_PROTECTED_RENEW_STATE_ACTIONS = ['extend'] as const;
 export type ApiProtectedRenewStateAction = (typeof API_PROTECTED_RENEW_STATE_ACTIONS)[number];
 
 export async function action({ context: { appContainer, session }, request }: ActionFunctionArgs) {
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
+
   const log = getLogger('routes/api/protected-renew-state');
   const sessionId = session.id;
   log.debug("Action with with user's protected renew state; sessionId: [%s]", sessionId);
-
-  if (request.method !== 'POST') {
-    log.warn('Invalid method requested [%s]; responding with 405; sessionId: [%s]', request.method, sessionId);
-    throw Response.json({ message: 'Method not allowed' }, { status: 405 });
-  }
 
   const bodySchema = z.object({
     action: z.enum(API_PROTECTED_RENEW_STATE_ACTIONS),

@@ -13,14 +13,10 @@ import type { FeatureName } from '~/utils/env-utils';
  * Parameters for validating the RAOIDC authentication session.
  */
 export interface ValidateAuthSessionParams {
-  /**
-   * The incoming request to validate.
-   */
+  /**  The incoming request to validate. */
   request: Request;
 
-  /**
-   * The session object to validate.
-   */
+  /**  The session object to validate.*/
   session: Session;
 }
 
@@ -28,14 +24,10 @@ export interface ValidateAuthSessionParams {
  * Parameters for validating the CSRF token.
  */
 export interface ValidateCsrfTokenParams {
-  /**
-   * The CSRF token from the request form data.
-   */
+  /** The CSRF token from the request form data. */
   formData: FormData;
 
-  /**
-   * The CSRF token from the session.
-   */
+  /** The CSRF token from the session. */
   session: Session;
 }
 
@@ -43,19 +35,13 @@ export interface ValidateCsrfTokenParams {
  * Parameters for validating the hCaptcha response.
  */
 export interface ValidateHCaptchaResponseParams {
-  /**
-   * The hCaptcha response from the request form data.
-   */
+  /** The hCaptcha response from the request form data. */
   formData: FormData;
 
-  /**
-   * The incoming request, used to extract the user's IP address.
-   */
+  /** The incoming request, used to extract the user's IP address. */
   request: Request;
 
-  /**
-   * The user ID performing the validation (defaults to 'anonymous' if not provided).
-   */
+  /** The user ID performing the validation (defaults to 'anonymous' if not provided). */
   userId?: string;
 }
 
@@ -63,6 +49,17 @@ export interface ValidateHCaptchaResponseParams {
  * Callback function to invoke if the hCaptcha validation fails.
  */
 export type InvalidHCaptchaCallback = () => Promise<void> | void;
+
+/**
+ * Parameters for validating the request method.
+ */
+export interface ValidateRequestMethodParams {
+  /** The list of allowed HTTP methods. */
+  allowedMethods: Array<'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'>;
+
+  /** The incoming request. */
+  request: Request;
+}
 
 /**
  * Security handler interface that defines methods for validating authentication sessions, CSRF tokens, and hCaptcha responses.
@@ -103,6 +100,15 @@ export interface SecurityHandler {
    * @returns {Promise<void>} Resolves after validation is complete.
    */
   validateHCaptchaResponse(params: ValidateHCaptchaResponseParams, invalidHCaptchaCallback: InvalidHCaptchaCallback): Promise<void>;
+
+  /**
+   * Validates the request method against a list of allowed methods.
+   *
+   * @param params - Parameters containing the allowed methods and the incoming request.
+   * @throws {Response} Throws a 405 Method Not Allowed response if the request method is not allowed.
+   * @returns {void} Resolves if the request method is allowed.
+   */
+  validateRequestMethod(params: ValidateRequestMethodParams): void;
 }
 
 /**
@@ -211,5 +217,20 @@ export class DefaultSecurityHandler implements SecurityHandler {
     }
 
     this.log.debug('hCaptcha response is valid');
+  }
+
+  validateRequestMethod({ allowedMethods, request }: ValidateRequestMethodParams): void {
+    type AllowedMethods = ValidateRequestMethodParams['allowedMethods'][number];
+    const { pathname } = new URL(request.url);
+    const { method } = request;
+
+    this.log.debug('Validating request method [%s] for path [%s] with allowed methods [%s]', method, pathname, allowedMethods);
+
+    if (!allowedMethods.includes(method as AllowedMethods)) {
+      this.log.warn('Request method [%s] is not allowed for path [%s] with allowed methods [%s]; returning 405 response', method, pathname, allowedMethods);
+      throw data({ message: `Method ${method} not allowed` }, { status: 405 });
+    }
+
+    this.log.debug('Request method [%s] is allowed for path [%s] with allowed methods [%s]', method, pathname, allowedMethods);
   }
 }
