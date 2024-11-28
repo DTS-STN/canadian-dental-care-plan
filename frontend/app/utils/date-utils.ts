@@ -218,10 +218,6 @@ export function useMonths(locale: string, format: 'numeric' | '2-digit' | 'long'
  * Custom function that returns the current date formatted ex.: 2020-12-30.
  * @returns the current date as a string.
  */
-export function getCurrentDate(): string {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-  const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+export function getCurrentDateString(locale: AppLocale = 'en'): string {
+  return new UTCDate().toLocaleDateString(`${locale}-CA`);
 }

@@ -7,14 +7,14 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { getCurrentDate } from '~/utils/date-utils';
+import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -33,8 +33,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   loadApplyState({ params, session });
-
-  const applicationYears = await appContainer.get(TYPES.domain.services.ApplicationYearService).listApplicationYears({ currentDate: getCurrentDate(), userId: 'anonymous' });
+  const locale = getLocale(request);
+  const applicationYears = await appContainer.get(TYPES.domain.services.ApplicationYearService).listApplicationYears({ currentDate: getCurrentDateString(locale), userId: 'anonymous' });
 
   saveApplyState({ params, session, state: { applicationYears: [...applicationYears] } });
 
