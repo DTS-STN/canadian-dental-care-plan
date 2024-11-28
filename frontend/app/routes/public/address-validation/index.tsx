@@ -2,7 +2,7 @@ import type { SyntheticEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { data, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
 import { faCheck, faRefresh } from '@fortawesome/free-solid-svg-icons';
@@ -91,11 +91,8 @@ export async function action({ context: { appContainer, session }, request, para
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateFeatureEnabled('address-validation');
+  securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
   securityHandler.validateCsrfToken({ formData, session });
-
-  if (request.method !== 'POST') {
-    throw data({ message: 'Method not allowed' }, { status: 405 });
-  }
 
   const clientConfig = appContainer.get(TYPES.configs.ClientConfig);
   const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
