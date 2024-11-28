@@ -22,7 +22,7 @@ import {
   DefaultProvincialGovernmentInsurancePlanDtoMapper,
 } from '~/.server/domain/mappers';
 import { DefaultBenefitApplicationStateMapper, DefaultBenefitRenewalStateMapper } from '~/.server/routes/mappers';
-import { DefaultHCaptchaDtoMapper } from '~/.server/web/mappers';
+import { DefaultDynatraceDtoMapper, DefaultHCaptchaDtoMapper } from '~/.server/web/mappers';
 
 /**
  * Container module for mappers.
@@ -48,5 +48,6 @@ export const mappersContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.mappers.ProvincialGovernmentInsurancePlanDtoMapper).to(DefaultProvincialGovernmentInsurancePlanDtoMapper);
   bind(TYPES.routes.mappers.BenefitRenewalStateMapper).to(DefaultBenefitRenewalStateMapper);
   bind(TYPES.routes.mappers.BenefitApplicationStateMapper).to(DefaultBenefitApplicationStateMapper);
+  bind(TYPES.web.mappers.DynatraceDtoMapper).to(DefaultDynatraceDtoMapper);
   bind(TYPES.web.mappers.HCaptchaDtoMapper).to(DefaultHCaptchaDtoMapper);
 });
