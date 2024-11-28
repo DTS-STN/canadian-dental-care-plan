@@ -3,7 +3,7 @@
  */
 export type ApplicationYearRequestDto = Readonly<{
   /** The current date sent to get the application year(s). */
-  date: string;
+  currentDate: string;
 
   /** A unique identifier for the user making the request - used for auditing */
   userId: string;

@@ -18,6 +18,10 @@ export interface ApplyState {
   readonly editMode: boolean;
   readonly lastUpdatedOn: string;
   readonly allChildrenUnder18?: boolean;
+  readonly applicationYears?: {
+    taxYear?: string;
+    applicationYearId?: string;
+  }[];
   readonly applicantInformation?: {
     firstName: string;
     lastName: string;
