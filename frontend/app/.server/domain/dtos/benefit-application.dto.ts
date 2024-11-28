@@ -11,7 +11,7 @@ export type BenefitApplicationDto = ReadonlyDeep<{
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationDto;
-  typeOfApplication: TypeOfApplicationDto;
+  typeOfApplication?: TypeOfApplicationDto;
 
   /** A unique identifier for the user making the request - used for auditing */
   userId: string;
@@ -69,4 +69,4 @@ export type PartnerInformationDto = ReadonlyDeep<{
   socialInsuranceNumber: string;
 }>;
 
-export type TypeOfApplicationDto = 'adult' | 'adult-child' | 'child';
+export type TypeOfApplicationDto = 'adult' | 'adult-child' | 'child' | undefined;

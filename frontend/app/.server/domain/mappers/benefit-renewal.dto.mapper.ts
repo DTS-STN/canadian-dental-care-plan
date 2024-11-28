@@ -14,6 +14,8 @@ import type {
   ItaBenefitRenewalDto,
   ItaChangeIndicators,
   PartnerInformationDto,
+  ProtectedBenefitRenewalDto,
+  ProtectedRenewChangeIndicators,
   TypeOfApplicationDto,
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
@@ -22,6 +24,7 @@ import { parseDateString } from '~/utils/date-utils';
 export interface BenefitRenewalDtoMapper {
   mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity;
   mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity;
+  mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedRenewDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity;
 }
 
 interface ToBenefitRenewalRequestEntityArgs {
@@ -36,7 +39,7 @@ interface ToBenefitRenewalRequestEntityArgs {
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationDto;
-  typeOfApplication: TypeOfApplicationDto;
+  typeOfApplication?: TypeOfApplicationDto;
 }
 
 interface ToAddressArgs {
@@ -91,6 +94,23 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
 
     // TODO these values are not finalized and should be configurable
     if (hasAddressChanged) changedInformation.push('775170000');
+
+    return changedInformation;
+  }
+
+  mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity {
+    return this.toBenefitRenewalRequestEntity({
+      ...protectedBenefitRenewalDto,
+      changedInformation: this.toProtectedChangedInformation(protectedBenefitRenewalDto.changeIndicators),
+    });
+  }
+
+  private toProtectedChangedInformation({ hasAddressChanged, hasEmailChanged, hasPhoneChanged }: ProtectedRenewChangeIndicators) {
+    const changedInformation = [];
+
+    if (hasAddressChanged) changedInformation.push('775170000');
+    if (hasEmailChanged) changedInformation.push('775170001');
+    if (hasPhoneChanged) changedInformation.push('775170004');
 
     return changedInformation;
   }
