@@ -9,7 +9,6 @@ import { getLocale } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { generateCallbackUri, generateRandomString } from '~/.server/utils/raoidc.utils';
-import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 
 const defaultProviderId = 'raoidc';
@@ -93,7 +92,8 @@ async function handleLogoutRequest({ context: { appContainer, session }, request
   const signoutUrl = raoidcService.generateSignoutRequest({ sessionId: idToken.sid, locale });
 
   log.debug('Destroying CDCP application session session and redirecting to downstream logout handler: [%s]', signoutUrl);
-  getAuditService().audit('auth.session-destroyed', { userId: idToken.sub });
+  const auditService = appContainer.get(TYPES.domain.services.AuditService);
+  auditService.createAudit('auth.session-destroyed', { userId: idToken.sub });
 
   return redirect(signoutUrl, {
     headers: { 'Set-Cookie': await sessionService.destroySession(session) },
@@ -156,7 +156,8 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
   session.set('userInfoToken', userInfoToken);
 
   log.debug('RAOIDC login successful; redirecting to [%s]', returnUrl);
-  getAuditService().audit('auth.session-created', { userId: idToken.sub });
+  const auditService = appContainer.get(TYPES.domain.services.AuditService);
+  auditService.createAudit('auth.session-created', { userId: idToken.sub });
 
   return redirect(returnUrl);
 }
