@@ -5,9 +5,11 @@ import { useLoaderData, useNavigate, useParams } from '@remix-run/react';
 
 import { randomUUID } from 'crypto';
 
+import { TYPES } from '~/.server/constants';
 import { startApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { pageIds } from '~/page-ids';
+import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -29,7 +31,10 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const locale = getLocale(request);
 
   const id = randomUUID().toString();
-  const state = startApplyState({ id, session });
+  const currentDate = getCurrentDateString(locale);
+  const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
+  const applicationYears = await applicationYearService.listApplicationYears({ currentDate, userId: 'anonymous' });
+  const state = startApplyState({ id, session, applicationYears });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:index.page-title') }) };
 

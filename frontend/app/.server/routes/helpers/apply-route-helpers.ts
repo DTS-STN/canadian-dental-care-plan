@@ -5,6 +5,7 @@ import type { Params } from '@remix-run/react';
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
 import { omit } from 'moderndash';
+import type { ReadonlyDeep } from 'type-fest';
 import { z } from 'zod';
 
 import { getEnv } from '~/.server/utils/env.utils';
@@ -13,32 +14,32 @@ import { getLogger } from '~/.server/utils/logging.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import { getAgeFromDateString } from '~/utils/date-utils';
 
-export interface ApplyState {
-  readonly id: string;
-  readonly editMode: boolean;
-  readonly lastUpdatedOn: string;
-  readonly allChildrenUnder18?: boolean;
-  readonly applicationYears?: {
+export type ApplyState = ReadonlyDeep<{
+  id: string;
+  editMode: boolean;
+  lastUpdatedOn: string;
+  allChildrenUnder18?: boolean;
+  applicationYears: {
     taxYear?: string;
     applicationYearId?: string;
   }[];
-  readonly applicantInformation?: {
+  applicantInformation?: {
     firstName: string;
     lastName: string;
     maritalStatus: string;
     socialInsuranceNumber: string;
   };
-  readonly children: {
-    readonly id: string;
-    readonly dentalBenefits?: {
+  children: {
+    id: string;
+    dentalBenefits?: {
       hasFederalBenefits: boolean;
       federalSocialProgram?: string;
       hasProvincialTerritorialBenefits: boolean;
       provincialTerritorialSocialProgram?: string;
       province?: string;
     };
-    readonly dentalInsurance?: boolean;
-    readonly information?: {
+    dentalInsurance?: boolean;
+    information?: {
       firstName: string;
       lastName: string;
       dateOfBirth: string;
@@ -47,30 +48,30 @@ export interface ApplyState {
       socialInsuranceNumber?: string;
     };
   }[];
-  readonly communicationPreferences?: {
+  communicationPreferences?: {
     email?: string;
     preferredLanguage: string;
     preferredMethod: string;
   };
-  readonly dateOfBirth?: string;
-  readonly dentalBenefits?: {
+  dateOfBirth?: string;
+  dentalBenefits?: {
     hasFederalBenefits: boolean;
     federalSocialProgram?: string;
     hasProvincialTerritorialBenefits: boolean;
     provincialTerritorialSocialProgram?: string;
     province?: string;
   };
-  readonly dentalInsurance?: boolean;
-  readonly disabilityTaxCredit?: boolean;
-  readonly livingIndependently?: boolean;
-  readonly partnerInformation?: {
+  dentalInsurance?: boolean;
+  disabilityTaxCredit?: boolean;
+  livingIndependently?: boolean;
+  partnerInformation?: {
     confirm: boolean;
     dateOfBirth: string;
     firstName: string;
     lastName: string;
     socialInsuranceNumber: string;
   };
-  readonly contactInformation?: {
+  contactInformation?: {
     copyMailingAddress: boolean;
     homeAddress?: string;
     homeApartment?: string;
@@ -88,7 +89,7 @@ export interface ApplyState {
     phoneNumberAlt?: string;
     email?: string;
   };
-  readonly submissionInfo?: {
+  submissionInfo?: {
     /**
      * The confirmation code associated with the application submission.
      */
@@ -100,12 +101,14 @@ export interface ApplyState {
      */
     submittedOn: string;
   };
-  readonly taxFiling2023?: boolean;
-  readonly typeOfApplication?: 'adult' | 'adult-child' | 'child' | 'delegate';
-}
+  taxFiling2023?: boolean;
+  typeOfApplication?: 'adult' | 'adult-child' | 'child' | 'delegate';
+}>;
 
 export type ApplicantInformationState = NonNullable<ApplyState['applicantInformation']>;
-export type ChildState = ApplyState['children'][number];
+export type ApplicationYearsState = ApplyState['applicationYears'];
+export type ChildrenState = ApplyState['children'];
+export type ChildState = ChildrenState[number];
 export type ChildDentalBenefitsState = NonNullable<ChildState['dentalBenefits']>;
 export type ChildDentalInsuranceState = NonNullable<ChildState['dentalInsurance']>;
 export type ChildInformationState = NonNullable<ChildState['information']>;
@@ -181,8 +184,8 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 interface SaveStateArgs {
   params: Params;
   session: Session;
-  state: Partial<OmitStrict<ApplyState, 'id' | 'lastUpdatedOn'>>;
-  remove?: keyof OmitStrict<ApplyState, 'children' | 'editMode' | 'id' | 'lastUpdatedOn'>;
+  state: Partial<OmitStrict<ApplyState, 'id' | 'lastUpdatedOn' | 'applicationYears'>>;
+  remove?: keyof OmitStrict<ApplyState, 'children' | 'editMode' | 'id' | 'lastUpdatedOn' | 'applicationYears'>;
 }
 
 /**
@@ -229,6 +232,7 @@ export function clearApplyState({ params, session }: ClearStateArgs) {
 }
 
 interface StartArgs {
+  applicationYears: ApplicationYearsState;
   id: string;
   session: Session;
 }
@@ -238,7 +242,7 @@ interface StartArgs {
  * @param args - The arguments.
  * @returns The initial apply state.
  */
-export function startApplyState({ id, session }: StartArgs) {
+export function startApplyState({ applicationYears, id, session }: StartArgs) {
   const log = getLogger('apply-route-helpers.server/startApplyState');
   const parsedId = idSchema.parse(id);
 
@@ -246,6 +250,7 @@ export function startApplyState({ id, session }: StartArgs) {
     id: parsedId,
     editMode: false,
     lastUpdatedOn: new UTCDate().toISOString(),
+    applicationYears,
     children: [],
   };
 

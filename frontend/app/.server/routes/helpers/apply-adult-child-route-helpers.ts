@@ -5,7 +5,7 @@ import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/r
 
 import { z } from 'zod';
 
-import type { ApplyState, ChildState } from '~/.server/routes/helpers/apply-route-helpers';
+import type { ApplyState, ChildrenState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { getPathById } from '~/utils/route-utils';
@@ -256,7 +256,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
 }
 
 interface ValidateChildrenStateForReviewArgs {
-  childrenState: ChildState[];
+  childrenState: ChildrenState;
   params: Params;
 }
 
