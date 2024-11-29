@@ -3,8 +3,12 @@ import { redirect, redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 import { isRedirectResponse, isResponse } from '@remix-run/react/dist/data';
 
+import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
+import type { AppContainerProvider } from '~/.server/app-container.provider';
+import { TYPES } from '~/.server/constants';
+import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
@@ -14,14 +18,9 @@ import { getPathById } from '~/utils/route-utils';
 export interface ProtectedRenewState {
   readonly id: string;
   readonly editMode: boolean;
-  readonly applicantInformation?: {
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    clientNumber: string;
-    externallyReviewed: boolean;
-    previouslyReviewed: boolean;
-  };
+  readonly clientApplication: ClientApplicationDto;
+  externallyReviewed?: boolean;
+  previouslyReviewed?: boolean;
   readonly taxFiling?: boolean;
   readonly termsAndConditions?: {
     readonly acknowledgeTerms: boolean;
@@ -52,8 +51,8 @@ export interface ProtectedRenewState {
     readonly firstName?: string;
     readonly lastName?: string;
     readonly isSurveyCompleted?: boolean;
-    readonly externallyReviewed: boolean;
-    readonly previouslyReviewed: boolean;
+    readonly externallyReviewed?: boolean;
+    readonly previouslyReviewed?: boolean;
     readonly demographicSurvey?: {
       readonly indigenousStatus?: string;
       readonly firstNations?: string[];
@@ -203,6 +202,7 @@ export function clearProtectedRenewState({ params, session }: ClearStateArgs) {
 interface StartArgs {
   id: string;
   session: Session;
+  appContainer: AppContainerProvider;
 }
 
 /**
@@ -210,17 +210,25 @@ interface StartArgs {
  * @param args - The arguments.
  * @returns The initial protected renew state.
  */
-export function startProtectedRenewState({ id, session }: StartArgs) {
+export async function startProtectedRenewState({ id, session, appContainer }: StartArgs) {
   const log = getLogger('protected-renew-route-helpers.server/startProtectedRenewState');
   const parsedId = idSchema.parse(id);
+  const sessionName = getSessionName(parsedId);
 
+  const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
+  const clientApplication = await clientApplicationService.findClientApplicationBySin(session.get('userInfoToken').sin);
+  if (!clientApplication) {
+    throw redirect(getPathById('protected/data-unavailable'));
+  }
+
+  // TODO: create a mapper function from clientApplication to initialState?
   const initialState: ProtectedRenewState = {
     id: parsedId,
     editMode: false,
-    children: [],
+    clientApplication,
+    children: clientApplication.children.map((child) => ({ id: randomUUID(), ...child, ...child.information })),
   };
 
-  const sessionName = getSessionName(parsedId);
   session.set(sessionName, initialState);
   log.info('Protected renew session state started; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
   return initialState;
