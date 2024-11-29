@@ -73,7 +73,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   securityHandler.validateFeatureEnabled('address-validation');
 
   const locale = getLocale(request);
-  const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).create(locale);
+  const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validationResult = await mailingAddressValidator.validateMailingAddress(session.get('route.address-validation'));
   const defaultMailingAddress = validationResult.success ? validationResult.data : undefined;
 
@@ -102,7 +102,7 @@ export async function action({ context: { appContainer, session }, request, para
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
-  const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).create(locale);
+  const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: formData.get('address') ? String(formData.get('address')) : undefined,
     city: formData.get('city') ? String(formData.get('city')) : undefined,

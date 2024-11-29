@@ -1,23 +1,32 @@
-import { inject, injectable } from 'inversify';
-
-import { TYPES } from '~/.server/constants';
 import type { Address, AddressValidatorErrorMessages, AddressValidatorFactory } from '~/.server/routes/validators/';
 import type { InvalidResult, ValidResult } from '~/.server/routes/validators/types.validator';
 import { getFixedT } from '~/.server/utils/locale.utils';
 
-export class MailingAddressValidator implements MailingAddressValidator {
+/**
+ * Interface for a mailing address validator.
+ */
+export interface MailingAddressValidator {
+  /**
+   * Validates a mailing address.
+   * @param data The address data to validate.
+   * @returns A promise that resolves to either a valid or invalid result.
+   */
+  validateMailingAddress(data: Partial<Address>): Promise<InvalidResult<Address> | ValidResult<Address>>;
+}
+
+export class DefaultMailingAddressValidator implements MailingAddressValidator {
   constructor(
     private readonly locale: AppLocale,
     private readonly addressValidatorFactory: AddressValidatorFactory,
   ) {}
 
   async validateMailingAddress(data: Partial<Address>): Promise<InvalidResult<Address> | ValidResult<Address>> {
-    const errorMessages = await this.getMailingAddressSchemaErrorMessages();
+    const errorMessages = await this.buildMailingAddressSchemaErrorMessages();
     const addressValidator = this.addressValidatorFactory.createAddressValidator(errorMessages);
     return addressValidator.validateAddress(data);
   }
 
-  private async getMailingAddressSchemaErrorMessages(): Promise<AddressValidatorErrorMessages> {
+  private async buildMailingAddressSchemaErrorMessages(): Promise<AddressValidatorErrorMessages> {
     const t = await getFixedT(this.locale, ['address-validation']);
     return {
       address: {
@@ -43,17 +52,5 @@ export class MailingAddressValidator implements MailingAddressValidator {
         required: t('address-validation:index.error-message.postal-zip-code-required'),
       },
     };
-  }
-}
-
-@injectable()
-/**
- * Factory for creating MailingAddressValidator instances.
- */
-export class MailingAddressValidatorFactory {
-  constructor(@inject(TYPES.routes.validators.AddressValidatorFactory) private readonly addressValidatorFactory: AddressValidatorFactory) {}
-
-  create(locale: AppLocale): MailingAddressValidator {
-    return new MailingAddressValidator(locale, this.addressValidatorFactory);
   }
 }

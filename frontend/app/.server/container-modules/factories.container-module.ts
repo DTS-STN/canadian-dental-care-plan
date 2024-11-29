@@ -1,9 +1,9 @@
 import { ContainerModule } from 'inversify';
 
-import { MailingAddressValidatorFactory } from '../routes/public/address-validation';
-import { AddressValidatorFactory } from '../routes/validators';
 import { TYPES } from '~/.server/constants';
 import { DefaultConfigFactory, DefaultLogFactory } from '~/.server/factories';
+import { DefaultMailingAddressValidatorFactory } from '~/.server/routes/public/address-validation/mailing-address.validator.factory';
+import { DefaultAddressValidatorFactory } from '~/.server/routes/validators';
 
 /**
  * Container module for factories.
@@ -11,6 +11,6 @@ import { DefaultConfigFactory, DefaultLogFactory } from '~/.server/factories';
 export const factoriesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.services.ConfigFactory).to(DefaultConfigFactory);
   bind(TYPES.factories.LogFactory).to(DefaultLogFactory);
-  bind(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).to(MailingAddressValidatorFactory);
-  bind(TYPES.routes.validators.AddressValidatorFactory).to(AddressValidatorFactory);
+  bind(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).to(DefaultMailingAddressValidatorFactory);
+  bind(TYPES.routes.validators.AddressValidatorFactory).to(DefaultAddressValidatorFactory);
 });
