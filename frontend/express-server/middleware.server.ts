@@ -60,7 +60,7 @@ export function logging(isProduction: boolean): RequestHandler {
   const logFormat = isProduction ? 'tiny' : 'dev';
 
   const middleware = morganMiddleware(logFormat, {
-    stream: { write: (msg) => log.audit(msg.trim()) },
+    stream: { write: (msg) => log.info(msg.trim()) },
   });
 
   return (request, response, next) => {
