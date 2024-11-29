@@ -5,8 +5,10 @@ import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
 
 import { DefaultRaoidcService } from '~/.server/auth/raoidc.service';
+import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ServerConfig } from '~/.server/configs';
 import type { LogFactory, Logger } from '~/.server/factories';
+import type { FetchService } from '~/.server/http';
 import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
 import type { IdToken, JWKSet, ServerMetadata, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/.server/utils/raoidc.utils';
@@ -25,7 +27,6 @@ vi.mock('@remix-run/node', () => ({
 
 vi.mock('moize');
 vi.mock('~/.server/utils/crypto.utils');
-vi.mock('~/.server/utils/fetch.utils');
 vi.mock('~/.server/utils/raoidc.utils');
 vi.mock('~/utils/string-utils');
 
@@ -41,11 +42,16 @@ describe('DefaultRaoidcService', () => {
 
   let mockLogFactory: MockProxy<LogFactory>;
   let mockLogger: MockProxy<Logger>;
+  let mockFetchService: MockProxy<FetchService>;
+  let service: RaoidcService;
 
   beforeEach(() => {
     mockLogger = mock<Logger>();
     mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mockLogger);
+    mockFetchService = mock<FetchService>();
+
+    service = new DefaultRaoidcService(mockLogFactory, mockServerConfig, mockFetchService);
   });
 
   afterEach(() => {
@@ -58,10 +64,10 @@ describe('DefaultRaoidcService', () => {
         public readonly fetchServerMetadataTest = this.fetchServerMetadata;
       }
 
-      const service = new DefaultRaoidcServiceTest(mockLogFactory, mockServerConfig);
+      const serviceTest = new DefaultRaoidcServiceTest(mockLogFactory, mockServerConfig, mockFetchService);
 
       // Act and Assert
-      expect(service.fetchServerMetadataTest.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect(serviceTest.fetchServerMetadataTest.options.maxAge).toBe(10000); // 10 seconds in milliseconds
     });
   });
 
@@ -80,7 +86,7 @@ describe('DefaultRaoidcService', () => {
       vi.mocked(generateAuthorizationRequest).mockReturnValue(mockAuthUrl);
 
       const redirectUri = 'mock_redirect_uri';
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
+
       const result = await service.generateSigninRequest(redirectUri);
 
       expect(result).toEqual({ authUrl: mockAuthUrl, codeVerifier: mockCodeVerifier, state: mockState });
@@ -95,8 +101,8 @@ describe('DefaultRaoidcService', () => {
 
       vi.mocked(expandTemplate).mockReturnValue(expectedSignoutUrl);
 
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
       const signoutUrl = service.generateSignoutRequest({ sessionId, locale });
+
       expect(signoutUrl).toBe(expectedSignoutUrl);
     });
   });
@@ -129,7 +135,6 @@ describe('DefaultRaoidcService', () => {
       vi.mocked(fetchAccessToken).mockResolvedValue({ accessToken: mockAccessToken, idToken: mockIdToken });
       vi.mocked(fetchUserInfo).mockResolvedValue(mockUserInfoToken);
 
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
       const result = await service.handleCallback({ request: mockRequest, codeVerifier, expectedState, redirectUri });
 
       expect(result).toEqual({ accessToken: mockAccessToken, idToken: mockIdToken, userInfoToken: mockUserInfoToken });
@@ -141,7 +146,6 @@ describe('DefaultRaoidcService', () => {
       const expectedState = 'mock_state';
       const redirectUri = 'mock_redirect_uri';
 
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
       await expect(service.handleCallback({ request: mockRequest, codeVerifier, expectedState, redirectUri })).rejects.toThrowError('Unexpected error: mock_error');
     });
 
@@ -151,7 +155,6 @@ describe('DefaultRaoidcService', () => {
       const expectedState = 'mock_state';
       const redirectUri = 'mock_redirect_uri';
 
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
       await expect(service.handleCallback({ request: mockRequest, codeVerifier, expectedState, redirectUri })).rejects.toThrowError('Missing authorization code in response');
     });
 
@@ -161,7 +164,6 @@ describe('DefaultRaoidcService', () => {
       const expectedState = 'mock_state';
       const redirectUri = 'mock_redirect_uri';
 
-      const service = new DefaultRaoidcService(mockLogFactory, mockServerConfig);
       await expect(service.handleCallback({ request: mockRequest, codeVerifier, expectedState, redirectUri })).rejects.toThrowError('CSRF error: incoming state [wrong_state] does not match expected state [mock_state]');
     });
   });
