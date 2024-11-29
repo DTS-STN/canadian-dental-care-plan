@@ -18,16 +18,8 @@
 # 	      --build-arg BUILD_REVISION="$(git rev-parse --short=8 HEAD)" \
 # 	      --build-arg BUILD_VERSION="1.0.0"
 # 	$ docker inspect canadian-dental-care-plan
-# 	$ docker run --init --interactive --tty --rm --publish 3000:3000 --name canadian-dental-care-plan canadian-dental-care-plan
+# 	$ docker run --init --interactive --tty --rm --publish 3000:3000 --env-file .env --name canadian-dental-care-plan canadian-dental-care-plan
 #
-# A local .env file can be sourced to run the final image by
-# using the following bash commands:
-#
-# 	$ set -o allexport
-# 	$ source .env
-# 	$ set +o allexport
-#
-# When using podman, you can simply use the --env-file parameter.
 
 
 
@@ -39,8 +31,8 @@ ENV NODE_ENV production
 
 
 # Stage: Dependencies
-# This stage installs all project dependencies, including both production and development packages.
-# It sets up the environment needed for subsequent build and production stages.
+# This stage installs all project dependencies, including both runtime and development packages.
+# It sets up the environment needed for subsequent build stages.
 FROM base as deps
 
 WORKDIR /home/node
@@ -52,10 +44,10 @@ RUN npm clean-install --include dev
 
 
 
-# Stage: Production Dependencies
-# This stage removes unnecessary development dependencies, retaining only production packages.
+# Stage: Runtime dependencies
+# This stage removes unnecessary development dependencies, retaining only runtime packages.
 # It creates a more streamlined environment, reducing the final image size and enhancing security.
-FROM base as prod-deps
+FROM base as runtime-deps
 
 WORKDIR /home/node
 COPY --from=deps --chown=node:node /home/node/node_modules/ ./node_modules/
@@ -68,14 +60,22 @@ RUN npm prune --omit dev
 
 # Stage: Build
 # This stage compiles the application, generating the final build artifacts.
-# The compiled output can then be used in the final production image.
+# The compiled output can then be used in the final runtime image.
 FROM base as build
 
 RUN apt-get update && apt-get install jq=1.6-2.1 --yes --no-install-recommends
 
 WORKDIR /home/node
 COPY --from=deps --chown=node:node /home/node/node_modules/ ./node_modules/
-COPY --chown=node:node ./ ./
+COPY --from=deps --chown=node:node /home/node/package.json ./package.json
+COPY --from=deps --chown=node:node /home/node/package-lock.json ./package-lock.json
+COPY --chown=node:node ./app/ ./app/
+COPY --chown=node:node ./public/ ./public/
+COPY --chown=node:node ./express-server/ ./express-server/
+COPY --chown=node:node ./tailwind.config.ts ./tailwind.config.ts
+COPY --chown=node:node ./tsconfig.json ./tsconfig.json
+COPY --chown=node:node ./vite.config.ts ./vite.config.ts
+COPY --chown=node:node ./vite.server.config.ts ./vite.server.config.ts
 
 USER node
 RUN npm run build
@@ -86,7 +86,7 @@ ARG BUILD_ID="0000"
 ARG BUILD_REVISION="00000000"
 ARG BUILD_VERSION="0.0.0"
 
-RUN jq --null-input '{ buildDate: env.BUILD_DATE, buildId: env.BUILD_ID, buildRevision: env.BUILD_REVISION, buildVersion: env.BUILD_VERSION }' > build-info.json
+RUN jq --null-input '{ buildDate: env.BUILD_DATE, buildId: env.BUILD_ID, buildRevision: env.BUILD_REVISION, buildVersion: env.BUILD_VERSION }' > ./build-info.json
 
 
 
@@ -98,10 +98,8 @@ FROM base as final
 WORKDIR /home/node
 
 # COPY files in order of least → most likely to change to maximize layer caching
-COPY --from=prod-deps --chown=node:node /home/node/package.json /home/node/package-lock.json ./
-COPY --from=prod-deps --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --from=runtime-deps --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=build --chown=node:node /home/node/build/ ./build/
-COPY --from=build --chown=node:node /home/node/public/ ./public/
 COPY --from=build --chown=node:node /home/node/build-info.json ./
 
 # Add labels for OCI compliance, describing the build details and image metadata
@@ -129,4 +127,4 @@ LABEL org.opencontainers.image.vendor=${IMAGE_VENDOR}
 
 USER node
 ENV PORT=3000
-CMD ["npm", "run", "start"]
+CMD ["node", "./build/express.server.mjs", "./server/index.js"]

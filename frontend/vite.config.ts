@@ -1,7 +1,6 @@
 import { vitePlugin as remix } from '@remix-run/dev';
 
 import react from '@vitejs/plugin-react';
-import { expressDevServer } from 'remix-express-dev-server';
 import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -34,7 +33,6 @@ export default defineConfig({
     exclude: ['@opentelemetry/otlp-exporter-base'],
   },
   plugins: [
-    expressDevServer(),
     tsconfigPaths(),
     //
     // see https://github.com/remix-run/remix/issues/9871
