@@ -4,8 +4,8 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import { LetterEntity, PdfEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
+import type { FetchService } from '~/.server/http';
 import getPdfByLetterIdJson from '~/.server/resources/cct/get-pdf-by-letter-id.json';
-import { getFetchFn, instrumentedFetch } from '~/.server/utils/fetch.utils';
 
 /**
  * A repository that provides access to letters.
@@ -36,6 +36,7 @@ export class DefaultLetterRepository implements LetterRepository {
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
     private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_BASE_URI' | 'INTEROP_CCT_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_COMMUNITY'>,
+    @inject(TYPES.http.FetchService) private readonly fetchService: FetchService,
   ) {
     this.log = logFactory.createLogger('DefaultLetterRepository');
   }
@@ -46,7 +47,8 @@ export class DefaultLetterRepository implements LetterRepository {
     const url = new URL(`${this.serverConfig.INTEROP_CCT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`);
     url.searchParams.set('clientid', clientId);
 
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.get-doc-info-by-client-id.gets', url, {
+    const response = await this.fetchService.instrumentedFetch('http.client.interop-api.get-doc-info-by-client-id.gets', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       headers: {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_CCT_API_SUBSCRIPTION_KEY ?? this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
@@ -77,7 +79,8 @@ export class DefaultLetterRepository implements LetterRepository {
     const url = new URL(`${this.serverConfig.INTEROP_CCT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
     url.searchParams.set('id', letterId);
 
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.get-pdf-by-client-id.gets', url, {
+    const response = await this.fetchService.instrumentedFetch('http.client.interop-api.get-pdf-by-client-id.gets', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       headers: {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_CCT_API_SUBSCRIPTION_KEY ?? this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,

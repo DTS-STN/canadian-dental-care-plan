@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { getFetchFn, instrumentedFetch } from '~/.server/utils/fetch.utils';
+import type { FetchService } from '~/.server/http';
 
 export interface AddressValidationRepository {
   /**
@@ -24,6 +24,7 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
+    @inject(TYPES.http.FetchService) private readonly fetchService: FetchService,
   ) {
     this.log = logFactory.createLogger('DefaultAddressValidationRepository');
   }
@@ -38,7 +39,8 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
     url.searchParams.set('AddressPostalCode', postalCode);
     url.searchParams.set('ProvinceCode', provinceCode);
 
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.address-validation-correct.gets', url, {
+    const response = await this.fetchService.instrumentedFetch('http.client.interop-api.address-validation-correct.gets', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'GET',
       headers: {
         'Accept-Language': 'en-CA',

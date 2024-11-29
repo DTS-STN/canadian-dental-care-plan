@@ -4,7 +4,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { BenefitApplicationRequestEntity, BenefitApplicationResponseEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { getFetchFn, instrumentedFetch } from '~/.server/utils/fetch.utils';
+import type { FetchService } from '~/.server/http';
 
 export interface BenefitApplicationRepository {
   /**
@@ -24,6 +24,7 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
     private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_BENEFIT_APPLICATION_API_BASE_URI' | 'INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY'>,
+    @inject(TYPES.http.FetchService) private readonly fetchService: FetchService,
   ) {
     this.log = logFactory.createLogger('DefaultBenefitApplicationRepository');
   }
@@ -32,7 +33,8 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
     this.log.trace('Creating benefit application for request [%j]', benefitApplicationRequestEntity);
 
     const url = `${this.serverConfig.INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`;
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.benefit-application.posts', url, {
+    const response = await this.fetchService.instrumentedFetch('http.client.interop-api.benefit-application.posts', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
