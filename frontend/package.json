@@ -60,6 +60,7 @@
     "jose": "^5.9.6",
     "libphonenumber-js": "^1.11.15",
     "markdown-to-jsx": "^7.7.0",
+    "minimatch": "^10.0.1",
     "moderndash": "^4.0.0",
     "moize": "^6.1.6",
     "morgan": "^1.10.0",
