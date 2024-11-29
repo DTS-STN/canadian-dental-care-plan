@@ -124,7 +124,7 @@
     "save-btn": "Save"
   },
   "dental-insurance": {
-    "title": "{{name}}: Access to other dental insurance",
+    "page-title": "{{memberName}}: Access to other dental insurance",
     "legend": "Do you have access to dental insurance or coverage:",
     "list": {
       "employment": "Through your employment benefits or a family member's employment benefits, including health and wellness accounts",

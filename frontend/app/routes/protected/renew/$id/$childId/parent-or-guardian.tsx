@@ -44,13 +44,15 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewSingleChildState({ params, session });
-  // TODO: get childName from state and pass to title and page heading
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:children.parent-or-guardian.page-title') }) };
+  const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
+  const childName = state.firstName ?? childNumber;
 
-  return { meta, defaultState: state.isParentOrLegalGuardian };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:children.parent-or-guardian.page-title', { childName }) }) };
+
+  return { meta, defaultState: state.isParentOrLegalGuardian, i18nOptions: { childName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
