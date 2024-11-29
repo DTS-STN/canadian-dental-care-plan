@@ -32,13 +32,7 @@ export interface FetchOptions {
 /**
  * Extended options for instrumented fetch calls.
  */
-export interface InstrumentedFetchOptions extends FetchOptions {
-  /**
-   * The initialization options for the fetch request.
-   * These options align with the `RequestInit` interface.
-   */
-  init?: RequestInit;
-}
+export type InstrumentedFetchOptions = RequestInit & FetchOptions;
 
 /**
  * Service interface for managing HTTP requests with optional instrumentation and proxy support.
@@ -96,7 +90,7 @@ export class DefaultFetchService implements FetchService {
 
   async instrumentedFetch(metricPrefix: string, input: RequestInfo | URL, options: InstrumentedFetchOptions = {}): Promise<Response> {
     this.log.debug('Executing instumented fetch function; metricPrefix: [%s], input: [%s], options: [%j]', metricPrefix, input, options);
-    const { init, proxyUrl, timeout } = options;
+    const { proxyUrl, timeout, ...init } = options;
     const fetchFn = this.getFetchFn({ proxyUrl, timeout });
     try {
       const response = await fetchFn(input, init);

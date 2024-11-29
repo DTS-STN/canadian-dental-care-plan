@@ -4,8 +4,8 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicationStatusBasicInfoRequestEntity, ApplicationStatusEntity, ApplicationStatusSinRequestEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
+import type { FetchService } from '~/.server/http';
 import clientFriendlyStatusDataSource from '~/.server/resources/power-platform/client-friendly-status.json';
-import { getFetchFn, instrumentedFetch } from '~/.server/utils/fetch.utils';
 
 /**
  * A repository that provides access to application status data.
@@ -35,6 +35,7 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_STATUS_CHECK_API_BASE_URI' | 'INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY'>,
+    @inject(TYPES.http.FetchService) private readonly fetchService: FetchService,
   ) {
     this.log = logFactory.createLogger('DefaultApplicationStatusRepository');
   }
@@ -43,7 +44,8 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
     this.log.trace('Fetching application status for basic info [%j]', applicationStatusBasicInfoRequestEntity);
 
     const url = `${this.serverConfig.INTEROP_STATUS_CHECK_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/status-check/v1/status_fnlndob`;
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.status-fnlndob.posts', url, {
+    const response = await this.fetchService.instrumentedFetch('http.client.interop-api.status-fnlndob.posts', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +74,8 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
     this.log.trace('Fetching application status for sin [%j]', applicationStatusSinRequestEntity);
 
     const url = `${this.serverConfig.INTEROP_STATUS_CHECK_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/status-check/v1/status`;
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.status.posts', url, {
+    const response = await this.fetchService.instrumentedFetch('http.client.interop-api.status.posts', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

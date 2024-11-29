@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { getFetchFn, instrumentedFetch } from '~/.server/utils/fetch.utils';
+import type { FetchService } from '~/.server/http';
 import { expandTemplate } from '~/utils/string-utils';
 
 export interface DynatraceRepository {
@@ -22,6 +22,7 @@ export class DefaultDynatraceRepository implements DynatraceRepository {
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'DYNATRACE_API_RUM_SCRIPT_TOKEN' | 'DYNATRACE_API_RUM_SCRIPT_URI'>,
+    @inject(TYPES.http.FetchService) private readonly fetchService: FetchService,
   ) {
     this.log = logFactory.createLogger('DefaultDynatraceRepository');
   }
@@ -37,7 +38,7 @@ export class DefaultDynatraceRepository implements DynatraceRepository {
     const retrieveRumScriptUrl = new URL(expandTemplate(this.serverConfig.DYNATRACE_API_RUM_SCRIPT_URI, { token: this.serverConfig.DYNATRACE_API_RUM_SCRIPT_TOKEN ?? '' }));
     this.log.debug('Retrieve RUM Script url is generated; url: [%s]', retrieveRumScriptUrl);
 
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.dynatrace-api.retrieve-rum-script.gets', retrieveRumScriptUrl);
+    const response = await this.fetchService.instrumentedFetch('http.client.dynatrace-api.retrieve-rum-script.gets', retrieveRumScriptUrl, { proxyUrl: this.serverConfig.HTTP_PROXY_URL });
 
     if (!response.ok) {
       this.log.error('%j', {
