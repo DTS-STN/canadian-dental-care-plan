@@ -9,7 +9,6 @@ import { getLocale } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { generateCallbackUri, generateRandomString } from '~/.server/utils/raoidc.utils';
-import { getInstrumentationService } from '~/services/instrumentation-service.server';
 
 const defaultProviderId = 'raoidc';
 
@@ -19,6 +18,7 @@ const defaultProviderId = 'raoidc';
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/loader');
   const { '*': slug } = params;
+  const instrumentationService = context.appContainer.get(TYPES.observability.InstrumentationService);
 
   switch (slug) {
     case 'login': {
@@ -46,7 +46,8 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     }
     default: {
       log.warn('Invalid authentication route requested: [%s]', slug);
-      getInstrumentationService().createCounter('auth.unknown.requests').add(1);
+
+      instrumentationService.createCounter('auth.unknown.requests').add(1);
       return Response.json(null, { status: 404 });
     }
   }
@@ -55,10 +56,11 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 /**
  * Handler for /auth/login requests
  */
-function handleLoginRequest({ request }: LoaderFunctionArgs) {
+function handleLoginRequest({ context: { appContainer }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleLoginRequest');
   log.debug('Handling login request');
-  getInstrumentationService().createCounter('auth.login.requests').add(1);
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  instrumentationService.createCounter('auth.login.requests').add(1);
 
   const url = new URL(`/auth/login/${defaultProviderId}`, request.url);
   url.search = new URL(request.url).search;
@@ -73,7 +75,8 @@ function handleLoginRequest({ request }: LoaderFunctionArgs) {
 async function handleLogoutRequest({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleLogoutRequest');
   log.debug('Handling RAOIDC logout request');
-  getInstrumentationService().createCounter('auth.logout.requests').add(1);
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  instrumentationService.createCounter('auth.logout.requests').add(1);
 
   const { AUTH_RASCL_LOGOUT_URL } = appContainer.get(TYPES.configs.ServerConfig);
 
@@ -81,7 +84,7 @@ async function handleLogoutRequest({ context: { appContainer, session }, request
 
   if (!session.has('idToken')) {
     log.debug(`User has not authenticated; bypassing RAOIDC logout and redirecting to RASCL logout`);
-    getInstrumentationService().createCounter('auth.logout.requests.unauthenticated').add(1);
+    instrumentationService.createCounter('auth.logout.requests.unauthenticated').add(1);
     throw redirectDocument(AUTH_RASCL_LOGOUT_URL);
   }
 
@@ -106,7 +109,8 @@ async function handleLogoutRequest({ context: { appContainer, session }, request
 async function handleRaoidcLoginRequest({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleRaoidcLoginRequest');
   log.debug('Handling RAOIDC login request');
-  getInstrumentationService().createCounter('auth.login.raoidc.requests').add(1);
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  instrumentationService.createCounter('auth.login.raoidc.requests').add(1);
 
   const sessionService = appContainer.get(TYPES.web.services.SessionService);
   await sessionService.destroySession(session);
@@ -116,7 +120,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
 
   if (returnUrl && !returnUrl.startsWith('/')) {
     log.warn('Invalid return URL [%s]', returnUrl);
-    getInstrumentationService().createCounter('auth.login.raoidc.requests.invalid-return-url').add(1);
+    instrumentationService.createCounter('auth.login.raoidc.requests.invalid-return-url').add(1);
 
     return Response.json(null, { status: 400 });
   }
@@ -141,7 +145,8 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
 async function handleRaoidcCallbackRequest({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleRaoidcCallbackRequest');
   log.debug('Handling RAOIDC callback request');
-  getInstrumentationService().createCounter('auth.callback.raoidc.requests').add(1);
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  instrumentationService.createCounter('auth.callback.raoidc.requests').add(1);
 
   const raoidcService = appContainer.get(TYPES.auth.RaoidcService);
   const codeVerifier = session.get('codeVerifier');
@@ -168,7 +173,8 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
 function handleMockAuthorizeRequest({ context: { appContainer }, request }: LoaderFunctionArgs) {
   const log = getLogger('auth.$/handleMockAuthorizeRequest');
   log.debug('Handling (mock) RAOIDC authorize request');
-  getInstrumentationService().createCounter('auth.authorize.requests').add(1);
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  instrumentationService.createCounter('auth.authorize.requests').add(1);
 
   const { MOCK_AUTH_ALLOWED_REDIRECTS } = appContainer.get(TYPES.configs.ServerConfig);
   const isValidRedirectUri = (val: string): boolean => MOCK_AUTH_ALLOWED_REDIRECTS.includes(val);
@@ -199,7 +205,7 @@ function handleMockAuthorizeRequest({ context: { appContainer }, request }: Load
 
   if (!result.success) {
     log.warn('Invalid authorize request [%j]', result.error.flatten().fieldErrors);
-    getInstrumentationService().createCounter('auth.authorize.requests.invalid').add(1);
+    instrumentationService.createCounter('auth.authorize.requests.invalid').add(1);
 
     return Response.json(JSON.stringify(result.error.flatten().fieldErrors), { status: 400 });
   }

@@ -1,4 +1,4 @@
-import type { ActionFunctionArgs, EntryContext, LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, AppLoadContext, EntryContext, LoaderFunctionArgs } from '@remix-run/node';
 import { createReadableStreamFromReadable } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
 
@@ -7,16 +7,15 @@ import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
 import { I18nextProvider } from 'react-i18next';
 
+import { TYPES } from '~/.server/constants';
 import { generateContentSecurityPolicy } from '~/.server/utils/csp.utils';
 import { getLocale, initI18n } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { NonceProvider } from '~/components/nonce-context';
-import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getNamespaces } from '~/utils/locale-utils';
 import { randomHexString } from '~/utils/string-utils';
 
 const abortDelay = 5_000;
-const instrumentationService = getInstrumentationService();
 
 /**
  * We need to extend the server-side session lifetime whenever a client-side
@@ -30,9 +29,10 @@ const instrumentationService = getInstrumentationService();
  * @see https://remix.run/docs/en/main/file-conventions/entry.server#handledatarequest
  */
 // eslint-disable-next-line @typescript-eslint/require-await
-export async function handleDataRequest(response: Response, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
+export async function handleDataRequest(response: Response, { context: { appContainer }, request }: LoaderFunctionArgs | ActionFunctionArgs) {
   const log = getLogger('entry.server/handleDataRequest');
   log.debug('Touching session to extend its lifetime');
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
   instrumentationService.createCounter('http.server.requests').add(1);
 
   return response;
@@ -43,7 +43,7 @@ export async function handleDataRequest(response: Response, { request }: LoaderF
  *
  * @see https://remix.run/docs/en/main/file-conventions/entry.server#handleerror
  */
-export function handleError(error: unknown, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
+export function handleError(error: unknown, { context: { appContainer }, request }: LoaderFunctionArgs | ActionFunctionArgs) {
   // note that you generally want to avoid logging when the request was aborted, since remix's
   // cancellation and race-condition handling can cause a lot of requests to be aborted
   const log = getLogger('entry.server/handleError');
@@ -54,14 +54,16 @@ export function handleError(error: unknown, { request }: LoaderFunctionArgs | Ac
       log.error('Unexpected server error: [%j]', error);
     }
 
+    const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
     instrumentationService.createCounter('http.server.requests.failed').add(1);
   }
 }
 
-export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
+export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext, { appContainer }: AppLoadContext) {
   const log = getLogger('entry.server/handleRequest');
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
   instrumentationService.createCounter('http.server.requests').add(1);
 
   const locale = getLocale(request);

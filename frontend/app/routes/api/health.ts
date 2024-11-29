@@ -7,7 +7,6 @@ import moize from 'moize';
 
 import { getAppContainerProvider } from '~/.server/app.container';
 import { TYPES } from '~/.server/constants';
-import { getBuildInfoService } from '~/services/build-info-service.server';
 
 const appContainerProvider = getAppContainerProvider();
 
@@ -21,9 +20,11 @@ const redisService = appContainerProvider.find(TYPES.data.services.RedisService)
 // for memoization to work, the call to moize must be done in module scope, so it only ever happens once
 const redisCheck = moize.promise(async () => void (await redisService?.ping()), { maxAge: serverConfig.HEALTH_CACHE_TTL, transformArgs: () => [] });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer }, request }: LoaderFunctionArgs) {
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
-  const { buildRevision: buildId, buildVersion: version } = getBuildInfoService().getBuildInfo();
+
+  const buildInfoService = appContainer.get(TYPES.core.BuildInfoService);
+  const { buildRevision: buildId, buildVersion: version } = buildInfoService.getBuildInfo();
 
   const healthCheckOptions: HealthCheckOptions = {
     excludeComponents: toArray(exclude),

@@ -7,30 +7,9 @@ import { mock, mockDeep } from 'vitest-mock-extended';
 import type { ClientConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantService, AuditService, LetterService, LetterTypeService } from '~/.server/domain/services';
+import type { InstrumentationService } from '~/.server/observability';
 import type { SecurityHandler } from '~/.server/routes/security';
 import { loader } from '~/routes/protected/letters/index';
-
-vi.mock('~/services/instrumentation-service.server', () => ({
-  getInstrumentationService: () => ({
-    countHttpStatus: vi.fn(),
-  }),
-}));
-
-vi.mock('~/services/session-service.server', () => ({
-  getSessionService: vi.fn().mockResolvedValue({
-    getSession: vi.fn().mockResolvedValue({
-      get: vi.fn(),
-    }),
-  }),
-}));
-
-vi.mock('~/services/personal-information-service.server', () => ({
-  getPersonalInformationService: vi.fn().mockReturnValue({
-    getPersonalInformation: vi.fn().mockResolvedValue({
-      clientNumber: '999999999',
-    }),
-  }),
-}));
 
 vi.mock('~/.server/utils/locale.utils');
 
@@ -47,6 +26,7 @@ describe('Letters Page', () => {
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         SCCH_BASE_URI: 'https://api.example.com',
       } satisfies Partial<ClientConfig>);
@@ -92,6 +72,7 @@ describe('Letters Page', () => {
 
     const mockAppLoadContext = mockDeep<AppLoadContext>();
     mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
     mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValue({
       SCCH_BASE_URI: 'https://api.example.com',
     } satisfies Partial<ClientConfig>);
