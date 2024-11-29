@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const locale = getLocale(request);
 
   const id = randomUUID().toString();
-  const state = startProtectedRenewState({ id, session });
+  const state = await startProtectedRenewState({ id, session, appContainer });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:index.page-title') }) };
 

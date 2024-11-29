@@ -133,12 +133,12 @@ export async function action({ context: { appContainer, session }, params, reque
     state: {
       children: protectedRenewState.children.map((child) => {
         if (child.id !== state.id) return child;
-        return { ...child, isSurveyCompleted: true, demographicSurvey: parsedDataResult.data };
+        return { ...child, isSurveyCompleted: true, previouslyReviewed: true, demographicSurvey: parsedDataResult.data };
       }),
     },
   });
 
-  return redirect(getPathById('protected/renew/$id/review-child-information', params));
+  return redirect(getPathById('protected/renew/$id/member-selection', params));
 }
 
 export default function ProtectedChildrenDemographicSurveyQuestions() {

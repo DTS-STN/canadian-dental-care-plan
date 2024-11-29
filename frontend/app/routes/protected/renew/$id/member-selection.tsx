@@ -16,7 +16,6 @@ import { AppLink } from '~/components/app-link';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
-import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -50,10 +49,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:member-selection.page-title') }) };
 
-  const applicant = state.applicantInformation;
   const children = getProtectedChildrenState(state);
 
-  return { meta, applicant, children, editMode: state.editMode };
+  return { meta, externallyReviewed: state.externallyReviewed, previouslyReviewed: state.previouslyReviewed, clientApplication: state.clientApplication, children, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -73,26 +71,23 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewMemberSelection() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { applicant, children, editMode } = useLoaderData<typeof loader>();
+  const { externallyReviewed, previouslyReviewed, clientApplication, children, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const applicantName = `${applicant?.firstName} ${applicant?.lastName}`;
+  const applicantName = `${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`;
 
-  const hasExternalReviews = applicant?.externallyReviewed ?? children.filter((child) => child.externallyReviewed === true).length > 0;
+  const hasExternalReviews = externallyReviewed ?? children.filter((child) => child.externallyReviewed === true).length > 0;
 
   return (
     <>
-      <div className="my-6 sm:my-8">
-        <Progress value={81} size="lg" label={t('renew:progress.label')} />
-      </div>
       <div className="max-w-prose">
         {hasExternalReviews && (
           <>
             <p className="mb-4">{t('protected-renew:member-selection.reviewed')}</p>
             <ul className="list-disc space-y-2 pl-10">
-              {applicant?.externallyReviewed && (
+              {externallyReviewed && (
                 <li key={applicantName} className="mb-4">
                   {applicantName}
                 </li>
@@ -114,7 +109,7 @@ export default function ProtectedRenewMemberSelection() {
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mt-6 space-y-8">
-            <CardLink key={applicantName} title={applicantName} previouslyReviewed={applicant?.previouslyReviewed} routeId="protected/renew/$id/dental-insurance" params={params} />
+            <CardLink key={applicantName} title={applicantName} previouslyReviewed={previouslyReviewed} routeId="protected/renew/$id/dental-insurance" params={params} />
             {children.map((child) => {
               const childName = `${child.firstName} ${child.lastName}`;
               return <CardLink key={childName} title={childName} previouslyReviewed={child.previouslyReviewed} routeId="protected/renew/$id/$childId/parent-or-guardian" params={{ ...params, childId: child.id }} />;
@@ -170,7 +165,7 @@ interface CardLinkProps extends OmitStrict<AppLinkProps, 'className' | 'title'> 
 function CardLink({ routeId, title, previouslyReviewed, ...props }: CardLinkProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   return (
-    <AppLink className="flex flex-row gap-4 rounded-xl border border-slate-300 bg-slate-50 p-6 hover:shadow-md" routeId={routeId} {...props}>
+    <AppLink className="flex flex-row items-center gap-4 rounded-xl border border-slate-300 bg-slate-50 p-6 hover:shadow-md" routeId={routeId} {...props}>
       <h2 className="font-lato text-2xl font-semibold leading-8 text-blue-600 underline">{title}</h2>
       {previouslyReviewed && (
         <>
