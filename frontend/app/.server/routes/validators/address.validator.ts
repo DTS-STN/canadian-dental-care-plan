@@ -51,10 +51,11 @@ export interface AddressValidatorErrorMessages {
   };
 }
 
-/**
- * Validates address input data against specific country and format requirements.
- */
-export class AddressValidator {
+export interface AddressValidator {
+  validateAddress(data: Partial<Address>): InvalidResult<Address> | ValidResult<Address>;
+}
+
+export class DefaultAddressValidator {
   constructor(
     private readonly errorMessages: AddressValidatorErrorMessages,
     private readonly serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID' | 'USA_COUNTRY_ID'>,
@@ -65,7 +66,7 @@ export class AddressValidator {
    * @param data - Partial address input data to validate.
    */
   validateAddress(data: Partial<Address>): InvalidResult<Address> | ValidResult<Address> {
-    const addressSchema = this.getAddressSchema();
+    const addressSchema = this.buildAddressSchema();
     const parsedDataResult = addressSchema.safeParse(data);
 
     if (parsedDataResult.success) {
@@ -81,15 +82,40 @@ export class AddressValidator {
    * Returns a Zod schema for validating Address input data.
    * This schema validates required fields and specific country-based requirements.
    */
-  private getAddressSchema(): z.ZodType<Address> {
+  private buildAddressSchema(): z.ZodType<Address> {
     const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = this.serverConfig;
 
     return z
       .object({
-        address: z.string().trim().min(1, this.errorMessages.address.required).max(30).refine(isAllValidInputCharacters, this.errorMessages.address.invalidCharacters),
-        countryId: z.string().trim().min(1, this.errorMessages.country.required),
-        provinceStateId: z.string().trim().min(1, this.errorMessages.provinceState.required).optional(),
-        city: z.string().trim().min(1, this.errorMessages.city.required).max(100).refine(isAllValidInputCharacters, this.errorMessages.city.invalidCharacters),
+        address: z
+          .string({
+            required_error: this.errorMessages.address.required,
+          })
+          .trim()
+          .min(1, this.errorMessages.address.required)
+          .max(30)
+          .refine(isAllValidInputCharacters, this.errorMessages.address.invalidCharacters),
+        countryId: z
+          .string({
+            required_error: this.errorMessages.country.required,
+          })
+          .trim()
+          .min(1, this.errorMessages.country.required),
+        provinceStateId: z
+          .string({
+            required_error: this.errorMessages.provinceState.required,
+          })
+          .trim()
+          .min(1, this.errorMessages.provinceState.required)
+          .optional(),
+        city: z
+          .string({
+            required_error: this.errorMessages.city.required,
+          })
+          .trim()
+          .min(1, this.errorMessages.city.required)
+          .max(100)
+          .refine(isAllValidInputCharacters, this.errorMessages.city.invalidCharacters),
         postalZipCode: z.string().trim().max(100).refine(isAllValidInputCharacters, this.errorMessages.postalZipCode.invalidCharacters).optional(),
       })
       .superRefine((val, ctx) => {
