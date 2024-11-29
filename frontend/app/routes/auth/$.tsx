@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { data, redirect } from '@remix-run/node';
+import { redirectDocument } from '@remix-run/node';
 
 import { z } from 'zod';
 
@@ -39,7 +39,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     case 'authorize': {
       if (!mockEnabled('raoidc')) {
         log.warn('Call to mock authorize endpoint when mocks are not enabled');
-        return data(null, { status: 404 });
+        return Response.json(null, { status: 404 });
       }
 
       return handleMockAuthorizeRequest({ context, params, request });
@@ -47,7 +47,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     default: {
       log.warn('Invalid authentication route requested: [%s]', slug);
       getInstrumentationService().createCounter('auth.unknown.requests').add(1);
-      return data(null, { status: 404 });
+      return Response.json(null, { status: 404 });
     }
   }
 }
@@ -64,7 +64,7 @@ function handleLoginRequest({ request }: LoaderFunctionArgs) {
   url.search = new URL(request.url).search;
 
   log.debug('Redirecting to default provider handler: [%s]', url);
-  return redirect(url.toString());
+  return redirectDocument(url.toString());
 }
 
 /**
@@ -82,7 +82,7 @@ async function handleLogoutRequest({ context: { appContainer, session }, request
   if (!session.has('idToken')) {
     log.debug(`User has not authenticated; bypassing RAOIDC logout and redirecting to RASCL logout`);
     getInstrumentationService().createCounter('auth.logout.requests.unauthenticated').add(1);
-    throw redirect(AUTH_RASCL_LOGOUT_URL);
+    throw redirectDocument(AUTH_RASCL_LOGOUT_URL);
   }
 
   const idToken: IdToken = session.get('idToken');
@@ -95,7 +95,7 @@ async function handleLogoutRequest({ context: { appContainer, session }, request
   const auditService = appContainer.get(TYPES.domain.services.AuditService);
   auditService.createAudit('auth.session-destroyed', { userId: idToken.sub });
 
-  return redirect(signoutUrl, {
+  return redirectDocument(signoutUrl, {
     headers: { 'Set-Cookie': await sessionService.destroySession(session) },
   });
 }
@@ -118,7 +118,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
     log.warn('Invalid return URL [%s]', returnUrl);
     getInstrumentationService().createCounter('auth.login.raoidc.requests.invalid-return-url').add(1);
 
-    return data(null, { status: 400 });
+    return Response.json(null, { status: 400 });
   }
 
   const redirectUri = generateCallbackUri(origin, 'raoidc');
@@ -132,7 +132,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
   session.set('state', state);
 
   log.debug('Redirecting to RAOIDC signin URL [%s]', authUrl.href);
-  return redirect(authUrl.href);
+  return redirectDocument(authUrl.href);
 }
 
 /**
@@ -159,7 +159,7 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
   const auditService = appContainer.get(TYPES.domain.services.AuditService);
   auditService.createAudit('auth.session-created', { userId: idToken.sub });
 
-  return redirect(returnUrl);
+  return redirectDocument(returnUrl);
 }
 
 /**
@@ -201,7 +201,7 @@ function handleMockAuthorizeRequest({ context: { appContainer }, request }: Load
     log.warn('Invalid authorize request [%j]', result.error.flatten().fieldErrors);
     getInstrumentationService().createCounter('auth.authorize.requests.invalid').add(1);
 
-    return data(JSON.stringify(result.error.flatten().fieldErrors), { status: 400 });
+    return Response.json(JSON.stringify(result.error.flatten().fieldErrors), { status: 400 });
   }
 
   const redirectUri = new URL(result.data.redirectUri);
@@ -209,5 +209,5 @@ function handleMockAuthorizeRequest({ context: { appContainer }, request }: Load
   redirectUri.searchParams.set('state', result.data.state);
 
   log.debug('Mock login successful; redirecting to [%s]', redirectUri.toString());
-  return redirect(redirectUri.toString());
+  return redirectDocument(redirectUri.toString());
 }
