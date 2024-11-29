@@ -1,12 +1,12 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 
-import { getBuildInfoService } from '~/services/build-info-service.server';
+import { TYPES } from '~/.server/constants';
 
 /**
  * An API endpoint that returns the build info.
  */
-export function loader({ context, params, request }: LoaderFunctionArgs) {
-  const buildInfo = getBuildInfoService().getBuildInfo();
+export function loader({ context: { appContainer }, params, request }: LoaderFunctionArgs) {
+  const buildInfo = appContainer.get(TYPES.core.BuildInfoService).getBuildInfo();
   const imageTag = `${buildInfo.buildVersion}-${buildInfo.buildRevision}-${buildInfo.buildId}`;
 
   return Response.json({ ...buildInfo, imageTag });

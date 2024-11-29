@@ -17,7 +17,6 @@ import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -43,7 +42,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   securityHandler.validateFeatureEnabled('view-letters');
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = getInstrumentationService();
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
 

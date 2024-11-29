@@ -8,14 +8,13 @@ import { TYPES } from '~/.server/constants';
 import type { LetterDto } from '~/.server/domain/dtos';
 import { getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
-import { getInstrumentationService } from '~/services/instrumentation-service.server';
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateFeatureEnabled('view-letters');
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = getInstrumentationService();
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   if (!params.id) {
     instrumentationService.countHttpStatus('letters.download', 400);
