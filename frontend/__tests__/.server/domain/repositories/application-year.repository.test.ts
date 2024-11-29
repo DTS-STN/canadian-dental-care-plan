@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs';
 import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
 import { DefaultApplicationYearRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
-import type { FetchService } from '~/.server/http';
+import type { HttpClient } from '~/.server/http';
 
 describe('DefaultApplicationYearRepository', () => {
   afterEach(() => {
@@ -38,10 +38,10 @@ describe('DefaultApplicationYearRepository', () => {
       const mockServerConfig = mock<ServerConfig>();
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
-      const mockFetchService = mock<FetchService>();
-      mockFetchService.instrumentedFetch.mockResolvedValue(Response.json(mockResponseData));
+      const mockHttpClient = mock<HttpClient>();
+      mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(mockResponseData));
 
-      const repository = new DefaultApplicationYearRepository(mockLogFactory, mockServerConfig, mockFetchService);
+      const repository = new DefaultApplicationYearRepository(mockLogFactory, mockServerConfig, mockHttpClient);
 
       const result = await repository.listApplicationYears({ currentDate: '2024-11-13' });
       expect(result).toEqual(mockResponseData);
@@ -54,10 +54,10 @@ describe('DefaultApplicationYearRepository', () => {
       const mockServerConfig = mock<ServerConfig>();
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
-      const mockFetchService = mock<FetchService>();
-      mockFetchService.instrumentedFetch.mockResolvedValue(Response.json(null, { status: 500 }));
+      const mockHttpClient = mock<HttpClient>();
+      mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(null, { status: 500 }));
 
-      const repository = new DefaultApplicationYearRepository(mockLogFactory, mockServerConfig, mockFetchService);
+      const repository = new DefaultApplicationYearRepository(mockLogFactory, mockServerConfig, mockHttpClient);
       await expect(() => repository.listApplicationYears({ currentDate: '2024-11-13' })).rejects.toThrowError();
     });
   });

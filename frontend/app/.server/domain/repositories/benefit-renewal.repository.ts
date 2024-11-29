@@ -4,7 +4,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
-import type { FetchService } from '~/.server/http';
+import type { HttpClient } from '~/.server/http';
 
 export interface BenefitRenewalRepository {
   /**
@@ -23,7 +23,7 @@ export class DefaultBenefitRenewalRepository implements BenefitRenewalRepository
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
-    @inject(TYPES.http.FetchService) private readonly fetchService: FetchService,
+    @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultBenefitRenewalRepository');
   }
@@ -34,7 +34,7 @@ export class DefaultBenefitRenewalRepository implements BenefitRenewalRepository
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`);
     url.searchParams.set('scenario', 'RENEWAL');
 
-    const response = await this.fetchService.instrumentedFetch('http.client.interop-api.benefit-application-renewal.posts', url, {
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.benefit-application-renewal.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
       headers: {

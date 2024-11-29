@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs';
 import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
 import { DefaultAddressValidationRepository, MockAddressValidationRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
-import type { FetchService } from '~/.server/http';
+import type { HttpClient } from '~/.server/http';
 
 describe('DefaultAddressValidationRepository', () => {
   afterEach(() => {
@@ -33,10 +33,10 @@ describe('DefaultAddressValidationRepository', () => {
       const mockServerConfig = mock<ServerConfig>();
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
-      const mockFetchService = mock<FetchService>();
-      mockFetchService.instrumentedFetch.mockResolvedValue(Response.json(mockResponseData));
+      const mockHttpClient = mock<HttpClient>();
+      mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(mockResponseData));
 
-      const repository = new DefaultAddressValidationRepository(mockLogFactory, mockServerConfig, mockFetchService);
+      const repository = new DefaultAddressValidationRepository(mockLogFactory, mockServerConfig, mockHttpClient);
 
       const result = await repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' });
       expect(result).toEqual(mockResponseData);
@@ -49,10 +49,10 @@ describe('DefaultAddressValidationRepository', () => {
       const mockServerConfig = mock<ServerConfig>();
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
-      const mockFetchService = mock<FetchService>();
-      mockFetchService.instrumentedFetch.mockResolvedValue(Response.json(null, { status: 500 }));
+      const mockHttpClient = mock<HttpClient>();
+      mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(null, { status: 500 }));
 
-      const repository = new DefaultAddressValidationRepository(mockLogFactory, mockServerConfig, mockFetchService);
+      const repository = new DefaultAddressValidationRepository(mockLogFactory, mockServerConfig, mockHttpClient);
       await expect(() => repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' })).rejects.toThrowError();
     });
   });

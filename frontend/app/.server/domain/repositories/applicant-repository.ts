@@ -4,7 +4,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantRequestEntity, ApplicantResponseEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
-import type { FetchService } from '~/.server/http';
+import type { HttpClient } from '~/.server/http';
 
 /**
  * A repository that provides access to applicant data.
@@ -26,7 +26,7 @@ export class DefaultApplicantRepository implements ApplicantRepository {
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_APPLICANT_API_BASE_URI' | 'INTEROP_APPLICANT_API_SUBSCRIPTION_KEY'>,
-    @inject(TYPES.http.FetchService) private readonly fetchService: FetchService,
+    @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultApplicantRepository');
   }
@@ -35,7 +35,7 @@ export class DefaultApplicantRepository implements ApplicantRepository {
     this.log.trace('Fetching applicant for sin [%j]', applicantRequestEntity);
 
     const url = `${this.serverConfig.INTEROP_APPLICANT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant`;
-    const response = await this.fetchService.instrumentedFetch('http.client.interop-api.client-application_by-sin.posts', url, {
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.client-application_by-sin.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
       headers: {

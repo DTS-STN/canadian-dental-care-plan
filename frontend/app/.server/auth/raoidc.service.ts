@@ -5,7 +5,7 @@ import { subtle } from 'node:crypto';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
-import type { FetchFn, FetchService } from '~/.server/http';
+import type { FetchFn, HttpClient } from '~/.server/http';
 import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
 import type { ClientMetadata, IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/.server/utils/raoidc.utils';
@@ -103,10 +103,10 @@ export class DefaultRaoidcService implements RaoidcService {
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS' | 'AUTH_JWT_PRIVATE_KEY' | 'AUTH_LOGOUT_REDIRECT_URL' | 'HTTP_PROXY_URL'>,
-    @inject(TYPES.http.FetchService) fetchService: FetchService,
+    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultRaoidcService');
-    this.fetchFn = fetchService.getFetchFn({ proxyUrl: serverConfig.HTTP_PROXY_URL });
+    this.fetchFn = httpClient.getFetchFn({ proxyUrl: serverConfig.HTTP_PROXY_URL });
 
     // Configure caching for raoidc operations
     this.fetchServerMetadata.options.maxAge = 1000 * serverConfig.AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS;

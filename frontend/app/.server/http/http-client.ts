@@ -37,7 +37,7 @@ export type InstrumentedFetchOptions = RequestInit & FetchOptions;
 /**
  * Service interface for managing HTTP requests with optional instrumentation and proxy support.
  */
-export interface FetchService {
+export interface HttpClient {
   /**
    * Creates a custom fetch function based on the provided options.
    *
@@ -58,14 +58,14 @@ export interface FetchService {
   instrumentedFetch(metricPrefix: string, input: RequestInfo | URL, options?: InstrumentedFetchOptions): Promise<Response>;
 }
 
-export class DefaultFetchService implements FetchService {
+export class DefaultHttpClient implements HttpClient {
   private readonly log: Logger;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.observability.InstrumentationService) private readonly instrumentationService: InstrumentationService,
   ) {
-    this.log = logFactory.createLogger(DefaultFetchService.name);
+    this.log = logFactory.createLogger(DefaultHttpClient.name);
   }
 
   getFetchFn(options: FetchOptions): FetchFn {
