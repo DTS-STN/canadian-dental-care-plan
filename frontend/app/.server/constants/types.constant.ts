@@ -67,6 +67,7 @@ import type {
   ProvincialGovernmentInsurancePlanService,
 } from '~/.server/domain/services';
 import type { ConfigFactory, LogFactory } from '~/.server/factories';
+import type { FetchService } from '~/.server/http';
 import type { InstrumentationService } from '~/.server/observability';
 import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
 import type { MailingAddressValidatorFactory } from '~/.server/routes/public/address-validation';
@@ -207,6 +208,9 @@ export const TYPES = assignServiceIdentifiers({
   },
   factories: {
     LogFactory: serviceId<LogFactory>(),
+  },
+  http: {
+    FetchService: serviceId<FetchService>,
   },
   observability: {
     InstrumentationService: serviceId<InstrumentationService>(),

@@ -27,6 +27,7 @@ import {
   DefaultProvinceTerritoryStateService,
   DefaultProvincialGovernmentInsurancePlanService,
 } from '~/.server/domain/services';
+import { DefaultFetchService } from '~/.server/http';
 import { DefaultInstrumentationService } from '~/.server/observability';
 import { DefaultDynatraceService, DefaultHCaptchaService, FileSessionService, RedisSessionService } from '~/.server/web/services';
 
@@ -64,6 +65,7 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.services.PreferredLanguageService).to(DefaultPreferredLanguageService);
   bind(TYPES.domain.services.ProvinceTerritoryStateService).to(DefaultProvinceTerritoryStateService);
   bind(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).to(DefaultProvincialGovernmentInsurancePlanService);
+  bind(TYPES.http.FetchService).to(DefaultFetchService);
   bind(TYPES.observability.InstrumentationService).to(DefaultInstrumentationService);
   bind(TYPES.web.services.DynatraceService).to(DefaultDynatraceService);
   bind(TYPES.web.services.HCaptchaService).to(DefaultHCaptchaService);
