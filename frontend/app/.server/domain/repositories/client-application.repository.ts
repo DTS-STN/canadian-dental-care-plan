@@ -42,8 +42,8 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
   async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null> {
     this.log.trace('Fetching client application for basic info [%j]', clientApplicationBasicInfoRequestEntity);
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET`);
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.client-application_by-basic-info.posts', url, {
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/retrieve-benefit-application`);
+    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.retrieve-benefit-application_by-basic-info.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -58,26 +58,26 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
       return data;
     }
 
-    if (response.status === 404) {
+    if (response.status === 204) {
       this.log.trace('Client application not found for basic info [%j]', clientApplicationBasicInfoRequestEntity);
       return null;
     }
 
     this.log.error('%j', {
-      message: "Failed to 'POST' for client application data",
+      message: "Failed to 'POST' for client application data by basic info",
       status: response.status,
       statusText: response.statusText,
       url: url,
       responseBody: await response.text(),
     });
-    throw new Error(`Failed to 'POST' for client application data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    throw new Error(`Failed to 'POST' for client application data by basic info. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
   async findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<ClientApplicationEntity | null> {
     this.log.trace('Fetching client application for sin [%j]', clientApplicationSinRequestEntity);
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application?action=GET`);
-    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.client-application_by-sin.posts', url, {
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/retrieve-benefit-application`);
+    const response = await instrumentedFetch(getFetchFn(this.serverConfig.HTTP_PROXY_URL), 'http.client.interop-api.retrieve-benefit-application_by-sin.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,22 +86,25 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
       body: JSON.stringify(clientApplicationSinRequestEntity),
     });
 
-    if (!response.ok) {
-      this.log.error('%j', {
-        message: "Failed to 'POST' for client application data",
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-
-      throw new Error(`Failed to 'POST' for client application data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    if (response.ok) {
+      const data = await response.json();
+      this.log.trace('Client application [%j]', data);
+      return data;
     }
 
-    const data = await response.json();
-    this.log.trace('Client application [%j]', data);
+    if (response.status === 204) {
+      this.log.trace('Client application not found for sin [%j]', clientApplicationSinRequestEntity);
+      return null;
+    }
 
-    return data;
+    this.log.error('%j', {
+      message: "Failed to 'POST' for client application data by sin",
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+    throw new Error(`Failed to 'POST' for client application data by sin. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 }
 
