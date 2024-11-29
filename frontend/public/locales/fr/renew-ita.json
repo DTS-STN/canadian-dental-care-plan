@@ -68,7 +68,7 @@
   },
   "confirm-address": {
     "page-title": "Adresse",
-    "have-you-moved": "Avez-vous déménagé ou changé d'adresse postale depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
+    "update-mailing-address": "Souhaitez-vous mettre à jour votre adresse postale?",
     "is-home-address-same-as-mailing-address": "L'adresse de votre domicile est-elle la même que votre adresse postale?",
     "radio-options": {
       "yes": "Oui",
@@ -76,7 +76,7 @@
     },
     "help-message": "L'adresse que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
     "error-message": {
-      "has-address-changed-required": "Sélectionnez si vous avez déménagé ou changé d'adresse postale",
+      "update-mailing-address-required": "Sélectionnez si vous souhaitez ou non modifier votre adresse postale",
       "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
     },
     "back-btn": "Retour",

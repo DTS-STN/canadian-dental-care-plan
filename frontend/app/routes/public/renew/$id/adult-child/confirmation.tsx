@@ -291,8 +291,8 @@ export default function RenewAdultChildConfirm() {
               {mailingAddressInfo ? (
                 <Address
                   address={{
-                    address: mailingAddressInfo.address,
-                    city: mailingAddressInfo.city,
+                    address: mailingAddressInfo.address ?? '',
+                    city: mailingAddressInfo.city ?? '',
                     provinceState: mailingAddressInfo.province,
                     postalZipCode: mailingAddressInfo.postalCode,
                     country: mailingAddressInfo.country,

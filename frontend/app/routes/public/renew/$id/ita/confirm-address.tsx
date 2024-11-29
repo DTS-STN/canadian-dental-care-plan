@@ -99,7 +99,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
   }
 
-  return redirect(getPathById('public/renew/$id/ita/update-address', params));
+  return redirect(getPathById('public/renew/$id/ita/update-mailing-address', params));
 }
 
 export default function RenewItaConfirmAddress() {

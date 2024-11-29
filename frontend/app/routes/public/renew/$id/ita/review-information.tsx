@@ -295,8 +295,8 @@ export default function RenewItaReviewInformation() {
                 {mailingAddressInfo ? (
                   <Address
                     address={{
-                      address: mailingAddressInfo.address,
-                      city: mailingAddressInfo.city,
+                      address: mailingAddressInfo.address ?? '',
+                      city: mailingAddressInfo.city ?? '',
                       provinceState: mailingAddressInfo.province,
                       postalZipCode: mailingAddressInfo.postalCode,
                       country: mailingAddressInfo.country?.name ?? '',
@@ -307,7 +307,7 @@ export default function RenewItaReviewInformation() {
                   t('renew-ita:review-information.no-change')
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="public/renew/$id/ita/update-address" params={params}>
+                  <InlineLink id="change-mailing-address" routeId="public/renew/$id/ita/update-mailing-address" params={params}>
                     {t('renew-ita:review-information.mailing-change')}
                   </InlineLink>
                 </div>
@@ -328,7 +328,7 @@ export default function RenewItaReviewInformation() {
                   t('renew-ita:review-information.no-change')
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-home-address" routeId="public/renew/$id/ita/update-address" params={params}>
+                  <InlineLink id="change-home-address" routeId="public/renew/$id/ita/update-home-address" params={params}>
                     {t('renew-ita:review-information.home-change')}
                   </InlineLink>
                 </div>
