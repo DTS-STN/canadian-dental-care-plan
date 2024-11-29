@@ -37,11 +37,10 @@ import { inject, injectable } from 'inversify';
 import moize from 'moize';
 import invariant from 'tiny-invariant';
 
-import type { ServerConfig } from '../configs';
-import { TYPES } from '../constants';
-import type { LogFactory, Logger } from '../factories';
-import { getBuildInfoService } from '~/services/build-info-service.server';
-import type { BuildInfo } from '~/utils/route-utils';
+import type { ServerConfig } from '~/.server/configs';
+import { TYPES } from '~/.server/constants';
+import type { BuildInfo, BuildInfoService } from '~/.server/core';
+import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface InstrumentationService {
   /**
@@ -91,15 +90,15 @@ export type DefaultInstrumentationServiceServerConfig = Pick<
 @injectable()
 export class DefaultInstrumentationService implements InstrumentationService {
   private readonly log: Logger;
-  private readonly buildInfoService = getBuildInfoService();
   private readonly buildInfo: BuildInfo;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: DefaultInstrumentationServiceServerConfig,
+    @inject(TYPES.core.BuildInfoService) buildInfoService: BuildInfoService,
   ) {
     this.log = logFactory.createLogger(DefaultInstrumentationService.name);
-    this.buildInfo = this.buildInfoService.getBuildInfo();
+    this.buildInfo = buildInfoService.getBuildInfo();
   }
 
   /**

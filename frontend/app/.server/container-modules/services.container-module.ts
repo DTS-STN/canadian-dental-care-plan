@@ -4,6 +4,7 @@ import { ContainerModule } from 'inversify';
 import { DefaultRaoidcService } from '~/.server/auth/raoidc.service';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
+import { DefaultBuildInfoService } from '~/.server/core';
 import { DefaultRedisService } from '~/.server/data/services';
 import {
   DefaultAddressValidationService,
@@ -26,6 +27,7 @@ import {
   DefaultProvinceTerritoryStateService,
   DefaultProvincialGovernmentInsurancePlanService,
 } from '~/.server/domain/services';
+import { DefaultInstrumentationService } from '~/.server/observability';
 import { DefaultDynatraceService, DefaultHCaptchaService, FileSessionService, RedisSessionService } from '~/.server/web/services';
 
 function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
@@ -40,6 +42,7 @@ function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
  */
 export const servicesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.auth.RaoidcService).to(DefaultRaoidcService);
+  bind(TYPES.core.BuildInfoService).to(DefaultBuildInfoService);
   // RedisService bindings depend on the SESSION_STORAGE_TYPE configuration string
   bind(TYPES.data.services.RedisService).to(DefaultRedisService).when(sessionTypeIs('redis'));
   bind(TYPES.domain.services.AddressValidationService).to(DefaultAddressValidationService);
@@ -61,6 +64,7 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.services.PreferredLanguageService).to(DefaultPreferredLanguageService);
   bind(TYPES.domain.services.ProvinceTerritoryStateService).to(DefaultProvinceTerritoryStateService);
   bind(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).to(DefaultProvincialGovernmentInsurancePlanService);
+  bind(TYPES.observability.InstrumentationService).to(DefaultInstrumentationService);
   bind(TYPES.web.services.DynatraceService).to(DefaultDynatraceService);
   bind(TYPES.web.services.HCaptchaService).to(DefaultHCaptchaService);
   // SessionService bindings depend on the SESSION_STORAGE_TYPE configuration string
