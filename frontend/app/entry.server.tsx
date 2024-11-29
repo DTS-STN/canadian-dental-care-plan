@@ -8,32 +8,15 @@ import { renderToPipeableStream } from 'react-dom/server';
 import { I18nextProvider } from 'react-i18next';
 
 import { generateContentSecurityPolicy } from '~/.server/utils/csp.utils';
-import { getEnv } from '~/.server/utils/env.utils';
 import { getLocale, initI18n } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { NonceProvider } from '~/components/nonce-context';
-import { server } from '~/mocks/node';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getNamespaces } from '~/utils/locale-utils';
 import { randomHexString } from '~/utils/string-utils';
 
-// The express server must be exported so remix-express-vite-plugin can correctly handle it.
-// see: https://github.com/kiliman/remix-express-vite-plugin/blob/main/packages/remix-create-express-app/README.md#configuration
-export { expressApp as app } from '~/express.server';
-
 const abortDelay = 5_000;
-
-// instrumentation needs to be started as early as possible to ensure proper initialization
 const instrumentationService = getInstrumentationService();
-instrumentationService.startInstrumentation();
-
-const { ENABLED_MOCKS } = getEnv();
-
-if (ENABLED_MOCKS.length > 0) {
-  const log = getLogger('entry.server');
-  server.listen({ onUnhandledRequest: 'bypass' });
-  log.info('‼️ Mock Service Worker has been enabled with the following mocks: %s', ENABLED_MOCKS);
-}
 
 /**
  * We need to extend the server-side session lifetime whenever a client-side
