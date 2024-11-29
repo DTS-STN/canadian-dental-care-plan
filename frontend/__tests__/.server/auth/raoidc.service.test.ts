@@ -8,7 +8,7 @@ import { DefaultRaoidcService } from '~/.server/auth/raoidc.service';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ServerConfig } from '~/.server/configs';
 import type { LogFactory, Logger } from '~/.server/factories';
-import type { FetchService } from '~/.server/http';
+import type { HttpClient } from '~/.server/http';
 import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
 import type { IdToken, JWKSet, ServerMetadata, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/.server/utils/raoidc.utils';
@@ -42,16 +42,16 @@ describe('DefaultRaoidcService', () => {
 
   let mockLogFactory: MockProxy<LogFactory>;
   let mockLogger: MockProxy<Logger>;
-  let mockFetchService: MockProxy<FetchService>;
+  let mockHttpClient: MockProxy<HttpClient>;
   let service: RaoidcService;
 
   beforeEach(() => {
     mockLogger = mock<Logger>();
     mockLogFactory = mock<LogFactory>();
     mockLogFactory.createLogger.mockReturnValue(mockLogger);
-    mockFetchService = mock<FetchService>();
+    mockHttpClient = mock<HttpClient>();
 
-    service = new DefaultRaoidcService(mockLogFactory, mockServerConfig, mockFetchService);
+    service = new DefaultRaoidcService(mockLogFactory, mockServerConfig, mockHttpClient);
   });
 
   afterEach(() => {
@@ -64,7 +64,7 @@ describe('DefaultRaoidcService', () => {
         public readonly fetchServerMetadataTest = this.fetchServerMetadata;
       }
 
-      const serviceTest = new DefaultRaoidcServiceTest(mockLogFactory, mockServerConfig, mockFetchService);
+      const serviceTest = new DefaultRaoidcServiceTest(mockLogFactory, mockServerConfig, mockHttpClient);
 
       // Act and Assert
       expect(serviceTest.fetchServerMetadataTest.options.maxAge).toBe(10000); // 10 seconds in milliseconds

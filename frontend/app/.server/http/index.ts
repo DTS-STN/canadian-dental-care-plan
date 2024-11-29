@@ -1,1 +1,1 @@
-export * from './fetch.service';
+export * from './http-client';

@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
-import type { FetchService } from '~/.server/http';
+import type { HttpClient } from '~/.server/http';
 import type { HCaptchaVerifyRequestEntity, HCaptchaVerifyResponseEntity } from '~/.server/web/entities';
 
 export interface HCaptchaRepository {
@@ -24,7 +24,7 @@ export class DefaultHCaptchaRepository implements HCaptchaRepository {
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL'>,
-    @inject(TYPES.http.FetchService) private readonly fetchService: FetchService,
+    @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultHCaptchaRepository');
   }
@@ -39,7 +39,7 @@ export class DefaultHCaptchaRepository implements HCaptchaRepository {
       url.searchParams.set('remoteip', ipAddress);
     }
 
-    const response = await this.fetchService.instrumentedFetch('http.client.hcaptcha.posts', url, { method: 'POST' });
+    const response = await this.httpClient.instrumentedFetch('http.client.hcaptcha.posts', url, { method: 'POST' });
 
     if (!response.ok) {
       this.log.error('%j', {
