@@ -210,7 +210,7 @@ export const TYPES = assignServiceIdentifiers({
     LogFactory: serviceId<LogFactory>(),
   },
   http: {
-    FetchService: serviceId<FetchService>,
+    FetchService: serviceId<FetchService>(),
   },
   observability: {
     InstrumentationService: serviceId<InstrumentationService>(),
