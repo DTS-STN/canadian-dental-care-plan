@@ -61,7 +61,7 @@ export interface ProtectedRenewState {
 export interface BenefitRenewalStateMapper {
   mapRenewAdultChildStateToAdultChildBenefitRenewalDto(renewAdultChildState: RenewAdultChildState): AdultChildBenefitRenewalDto;
   mapRenewItaStateToItaBenefitRenewalDto(renewItaState: RenewItaState): ItaBenefitRenewalDto;
-  mapProtectedRenewStateToProtectedBenefitRenewalDto(protectedRenewSTate: ProtectedRenewState): ProtectedBenefitRenewalDto;
+  mapProtectedRenewStateToProtectedBenefitRenewalDto(protectedRenewSTate: ProtectedRenewState, userId: string): ProtectedBenefitRenewalDto;
 }
 
 interface ToApplicantInformationArgs {
@@ -230,19 +230,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  mapProtectedRenewStateToProtectedBenefitRenewalDto({
-    addressInformation,
-    children,
-    confirmDentalBenefits,
-    contactInformation,
-    dentalBenefits,
-    dentalInsurance,
-    hasAddressChanged,
-    hasMaritalStatusChanged,
-    maritalStatus,
-    partnerInformation,
-    clientApplication,
-  }: ProtectedRenewState): ProtectedBenefitRenewalDto {
+  mapProtectedRenewStateToProtectedBenefitRenewalDto(
+    { addressInformation, children, confirmDentalBenefits, contactInformation, dentalBenefits, dentalInsurance, hasAddressChanged, hasMaritalStatusChanged, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
+    userId: string,
+  ): ProtectedBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
       throw Error('Expected hasEmailChanged to be defined');
@@ -267,14 +258,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         existingChildren: clientApplication.children,
         renewedChildren: children,
       }),
-      changeIndicators: {
-        hasAddressChanged,
-        hasEmailChanged,
-        hasMaritalStatusChanged,
-        hasPhoneChanged,
-        hasFederalBenefitsChanged,
-        hasProvincialTerritorialBenefitsChanged,
-      },
       communicationPreferences: this.toCommunicationPreferences({
         existingCommunicationPreferences: clientApplication.communicationPreferences,
         hasEmailChanged,
@@ -301,7 +284,8 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedPartnerInformation: partnerInformation,
       }),
-      userId: 'anonymous',
+      userId,
+      typeOfApplication: 'adult-child',
     };
   }
 

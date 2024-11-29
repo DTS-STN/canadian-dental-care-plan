@@ -15,7 +15,6 @@ import type {
   ItaChangeIndicators,
   PartnerInformationDto,
   ProtectedBenefitRenewalDto,
-  ProtectedRenewChangeIndicators,
   TypeOfApplicationDto,
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
@@ -29,7 +28,7 @@ export interface BenefitRenewalDtoMapper {
 
 interface ToBenefitRenewalRequestEntityArgs {
   applicantInformation: ApplicantInformationDto;
-  changedInformation: string[];
+  changedInformation?: string[];
   children: readonly ChildDto[];
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
@@ -39,7 +38,7 @@ interface ToBenefitRenewalRequestEntityArgs {
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationDto;
-  typeOfApplication?: TypeOfApplicationDto;
+  typeOfApplication: TypeOfApplicationDto;
 }
 
 interface ToAddressArgs {
@@ -99,20 +98,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   }
 
   mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity({
-      ...protectedBenefitRenewalDto,
-      changedInformation: this.toProtectedChangedInformation(protectedBenefitRenewalDto.changeIndicators),
-    });
-  }
-
-  private toProtectedChangedInformation({ hasAddressChanged, hasEmailChanged, hasPhoneChanged }: ProtectedRenewChangeIndicators) {
-    const changedInformation = [];
-
-    if (hasAddressChanged) changedInformation.push('775170000');
-    if (hasEmailChanged) changedInformation.push('775170001');
-    if (hasPhoneChanged) changedInformation.push('775170004');
-
-    return changedInformation;
+    return this.toBenefitRenewalRequestEntity(protectedBenefitRenewalDto);
   }
 
   private toBenefitRenewalRequestEntity({

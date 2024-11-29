@@ -13,7 +13,7 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
           }[];
         }[];
       };
-      ChangedInformation: string[]; // TODO subject to change - specifications not yet provided
+      ChangedInformation?: string[]; // TODO subject to change - specifications not yet provided
       PersonBirthDate: {
         date: string;
       };
