@@ -5,7 +5,7 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { FetchFn, getFetchFn } from '~/.server/utils/fetch.utils';
+import type { FetchFn, FetchService } from '~/.server/http';
 import { IdToken, UserinfoToken, validateSession } from '~/.server/utils/raoidc.utils';
 
 /**
@@ -44,9 +44,10 @@ export class DefaultRaoidcSessionValidator implements RaoidcSessionValidator {
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'HTTP_PROXY_URL'>,
+    @inject(TYPES.http.FetchService) fetchService: FetchService,
   ) {
     this.log = logFactory.createLogger('DefaultRaoidcSessionValidator');
-    this.fetchFn = getFetchFn(serverConfig.HTTP_PROXY_URL);
+    this.fetchFn = fetchService.getFetchFn({ proxyUrl: serverConfig.HTTP_PROXY_URL });
   }
 
   async validateRaoidcSession({ session }: ValidateRaoidcSessionParams): Promise<ValidateRaoidcSessionResult> {
