@@ -5,7 +5,7 @@ import { Buffer, atob } from 'node:buffer';
 import type { webcrypto } from 'node:crypto';
 import { createHash, subtle } from 'node:crypto';
 
-import { getLogger } from './logging.utils';
+import { getLogger } from '~/.server/utils/logging.utils';
 
 export type CryptoKeyAlgorithm = 'encrypt' | 'decrypt' | 'sign' | 'verify';
 

@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
 
-import { HCaptchaVerifyRequestDto } from '../dtos';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { HCaptchaVerifyRequestDto } from '~/.server/web/dtos';
 import type { HCaptchaService } from '~/.server/web/services';
 
 /**

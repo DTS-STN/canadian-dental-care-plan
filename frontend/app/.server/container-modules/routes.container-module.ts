@@ -1,7 +1,7 @@
 import { ContainerModule } from 'inversify';
 
-import { DefaultSecurityHandler } from '../routes/security';
 import { TYPES } from '~/.server/constants';
+import { DefaultSecurityHandler } from '~/.server/routes/security';
 
 /**
  * Container module for routes.

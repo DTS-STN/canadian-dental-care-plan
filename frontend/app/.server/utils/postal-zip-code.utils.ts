@@ -1,4 +1,4 @@
-import { getEnv } from './env.utils';
+import { getEnv } from '~/.server/utils/env.utils';
 
 export const postalCodeRegex = /^[ABCEGHJKLMNPRSTVXY]\d[A-Z]\s?\d[A-Z]\d$/i;
 export const zipCodeRegex = /^\d{5}$|^\d{5}-?\d{4}$/;

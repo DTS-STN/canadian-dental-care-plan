@@ -5,8 +5,8 @@ import type { Params } from '@remix-run/react';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
-import type { RenewState } from './renew-route-helpers';
-import { getChildrenState } from './renew-route-helpers';
+import type { RenewState } from '~/.server/routes/helpers/renew-route-helpers';
+import { getChildrenState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
