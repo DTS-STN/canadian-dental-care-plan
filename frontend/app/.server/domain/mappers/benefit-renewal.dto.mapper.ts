@@ -14,6 +14,7 @@ import type {
   ItaBenefitRenewalDto,
   ItaChangeIndicators,
   PartnerInformationDto,
+  ProtectedBenefitRenewalDto,
   TypeOfApplicationDto,
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
@@ -22,6 +23,7 @@ import { parseDateString } from '~/utils/date-utils';
 export interface BenefitRenewalDtoMapper {
   mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity;
   mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity;
+  mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedRenewDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity;
 }
 
 interface ToBenefitRenewalRequestEntityArgs {
@@ -93,6 +95,10 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     if (hasAddressChanged) changedInformation.push('775170000');
 
     return changedInformation;
+  }
+
+  mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity {
+    return this.toBenefitRenewalRequestEntity({ ...protectedBenefitRenewalDto, changedInformation: [] });
   }
 
   private toBenefitRenewalRequestEntity({

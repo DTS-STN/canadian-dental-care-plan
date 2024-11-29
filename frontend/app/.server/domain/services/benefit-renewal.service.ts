@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import { AdultChildBenefitRenewalDto, ItaBenefitRenewalDto } from '~/.server/domain/dtos';
+import { AdultChildBenefitRenewalDto, ItaBenefitRenewalDto, ProtectedBenefitRenewalDto } from '~/.server/domain/dtos';
 import type { BenefitRenewalDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitRenewalRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -21,6 +21,13 @@ export interface BenefitRenewalService {
    * @param adultChildBenefitRenewalDto The adult child benefit renewal request dto
    */
   createItaBenefitRenewal(itaBenefitRenewalDto: ItaBenefitRenewalDto): Promise<void>;
+
+  /**
+   * Submits benefit renewal request for protected route.
+   *
+   * @param protectedBenefitRenewalDto The protected route benefit renewal request dto
+   */
+  createProtectedBenefitRenewal(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): Promise<void>;
 }
 
 @injectable()
@@ -56,5 +63,16 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
 
     this.log.trace('Successfully created ITA benefit renewal for request [%j]', itaBenefitRenewalDto);
+  }
+
+  async createProtectedBenefitRenewal(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): Promise<void> {
+    this.log.trace('Creating protected benefit renewal for request [%j]', protectedBenefitRenewalDto);
+
+    this.auditService.createAudit('protected-renewal-submit.post', { userId: protectedBenefitRenewalDto.userId });
+
+    const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto);
+    await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+
+    this.log.trace('Successfully created protected benefit renewal for request [%j]', protectedBenefitRenewalDto);
   }
 }

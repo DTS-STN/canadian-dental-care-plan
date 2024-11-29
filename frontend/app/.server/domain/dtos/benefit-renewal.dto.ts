@@ -22,3 +22,5 @@ export type ItaBenefitRenewalDto = BenefitApplicationDto &
 export type ItaChangeIndicators = Readonly<{
   hasAddressChanged: boolean;
 }>;
+
+export type ProtectedBenefitRenewalDto = BenefitApplicationDto;

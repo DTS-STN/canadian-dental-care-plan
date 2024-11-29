@@ -90,6 +90,13 @@ export interface ProtectedRenewState {
     mailingPostalCode?: string;
     mailingProvince?: string;
   };
+  readonly submissionInfo?: {
+    /**
+     * The UTC date and time when the application was submitted.
+     * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
+     */
+    submittedOn: string;
+  };
   // TODO Add remaining states
 }
 
