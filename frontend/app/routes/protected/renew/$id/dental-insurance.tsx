@@ -29,8 +29,8 @@ enum FormAction {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
+  pageTitleI18nKey: 'protected-renew:dental-insurance.page-title',
   pageIdentifier: pageIds.protected.renew.dentalInsurance,
-  pageTitleI18nKey: 'protected-renew:dental-insurance.title',
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -44,11 +44,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  // TODO: get name of primary applicant from state and pass it into the page title and heading
+  const memberName = `${state.applicantInformation?.firstName} ${state.applicantInformation?.lastName}`;
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:dental-insurance.title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:dental-insurance.page-title', { memberName }) }) };
 
-  return { id: state, meta, defaultState: state.dentalInsurance, hasAddressChanged: state.hasAddressChanged, editMode: state.editMode };
+  return { id: state, meta, defaultState: state.dentalInsurance, hasAddressChanged: state.hasAddressChanged, editMode: state.editMode, i18nOptions: { memberName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {

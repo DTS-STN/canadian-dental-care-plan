@@ -20,7 +20,6 @@ import { InputCheckboxes } from '~/components/input-checkboxes';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
-import { AppPageTitle } from '~/components/layouts/protected-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
@@ -37,6 +36,7 @@ enum FormAction {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
+  pageTitleI18nKey: 'protected-renew:demographic-survey.page-title',
   pageIdentifier: pageIds.protected.renew.demographicSurvey,
 } as const satisfies RouteHandleData;
 
@@ -50,9 +50,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const state = loadProtectedRenewState({ params, session });
 
-  // TODO: get memberName from state to pass to page title and heading
-  // const memberName = `${state.applicantInformation.firstName} ${state.applicantInformation.lastName}`;
-  const memberName = 'todo';
+  const memberName = `${state.applicantInformation?.firstName} ${state.applicantInformation?.lastName}`;
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -68,7 +66,6 @@ export async function loader({ context: { appContainer, session }, request, para
 
   return {
     meta,
-    memberName,
     indigenousStatuses,
     firstNations,
     disabilityStatuses,
@@ -77,6 +74,7 @@ export async function loader({ context: { appContainer, session }, request, para
     genderStatuses,
     defaultState: state.demographicSurvey,
     editMode: state.editMode,
+    i18nOptions: { memberName },
   };
 }
 
@@ -138,7 +136,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedDemographicSurveyQuestions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { memberName, indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState, editMode } = useLoaderData<typeof loader>();
   const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -204,7 +202,6 @@ export default function ProtectedDemographicSurveyQuestions() {
 
   return (
     <>
-      <AppPageTitle>{t('protected-renew:demographic-survey.page-title', { memberName })}</AppPageTitle>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('protected-renew:demographic-survey.optional')}</p>
         <errorSummary.ErrorSummary />
