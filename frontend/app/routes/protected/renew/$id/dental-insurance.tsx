@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const memberName = `${state.applicantInformation?.firstName} ${state.applicantInformation?.lastName}`;
+  const memberName = `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`;
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:dental-insurance.page-title', { memberName }) }) };
 

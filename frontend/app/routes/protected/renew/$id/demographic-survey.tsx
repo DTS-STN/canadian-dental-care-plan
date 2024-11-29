@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const state = loadProtectedRenewState({ params, session });
 
-  const memberName = `${state.applicantInformation?.firstName} ${state.applicantInformation?.lastName}`;
+  const memberName = `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`;
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
