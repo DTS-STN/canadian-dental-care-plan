@@ -285,7 +285,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedPartnerInformation: partnerInformation,
       }),
       userId,
-      typeOfApplication: 'adult-child',
+      typeOfApplication: children.length === 0 ? 'adult' : 'adult-child',
     };
   }
 

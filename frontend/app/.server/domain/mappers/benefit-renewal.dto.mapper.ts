@@ -28,7 +28,7 @@ export interface BenefitRenewalDtoMapper {
 
 interface ToBenefitRenewalRequestEntityArgs {
   applicantInformation: ApplicantInformationDto;
-  changedInformation?: string[];
+  changedInformation: string[];
   children: readonly ChildDto[];
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
@@ -98,7 +98,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   }
 
   mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(protectedBenefitRenewalDto);
+    return this.toBenefitRenewalRequestEntity({ ...protectedBenefitRenewalDto, changedInformation: [] });
   }
 
   private toBenefitRenewalRequestEntity({
