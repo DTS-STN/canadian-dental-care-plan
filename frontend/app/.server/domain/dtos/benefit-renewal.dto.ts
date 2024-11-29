@@ -1,4 +1,4 @@
-import type { BenefitApplicationDto } from './benefit-application.dto';
+import type { BenefitApplicationDto } from '~/.server/domain/dtos/benefit-application.dto';
 
 export type AdultChildBenefitRenewalDto = BenefitApplicationDto &
   Readonly<{

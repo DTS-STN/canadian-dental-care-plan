@@ -1,6 +1,6 @@
 import type { ReadonlyDeep } from 'type-fest';
 
-import type { ApplicantInformationDto, ChildDto, CommunicationPreferencesDto, ContactInformationDto, PartnerInformationDto } from './benefit-application.dto';
+import type { ApplicantInformationDto, ChildDto, CommunicationPreferencesDto, ContactInformationDto, PartnerInformationDto } from '~/.server/domain/dtos/benefit-application.dto';
 
 export type ClientApplicationDto = ReadonlyDeep<{
   applicantInformation: ApplicantInformationDto & { clientNumber?: string };

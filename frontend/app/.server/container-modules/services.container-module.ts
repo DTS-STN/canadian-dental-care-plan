@@ -1,10 +1,10 @@
 import type { interfaces } from 'inversify';
 import { ContainerModule } from 'inversify';
 
-import { DefaultRedisService } from '../data/services';
 import { DefaultRaoidcService } from '~/.server/auth/raoidc.service';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
+import { DefaultRedisService } from '~/.server/data/services';
 import {
   DefaultAddressValidationService,
   DefaultApplicantService,

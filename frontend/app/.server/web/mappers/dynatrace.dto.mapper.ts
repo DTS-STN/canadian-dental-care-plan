@@ -2,9 +2,9 @@ import { XMLParser } from 'fast-xml-parser';
 import { inject, injectable } from 'inversify';
 import { z } from 'zod';
 
-import { DynatraceRumScriptDto } from '../dtos';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { DynatraceRumScriptDto } from '~/.server/web/dtos';
 
 export interface DynatraceDtoMapper {
   /**

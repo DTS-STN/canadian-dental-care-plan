@@ -1,6 +1,5 @@
 import type { interfaces } from 'inversify';
 
-import type { DynatraceDtoMapper } from '../web/mappers/dynatrace.dto.mapper';
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
@@ -73,6 +72,7 @@ import type { SecurityHandler } from '~/.server/routes/security';
 import type { AddressValidatorFactory } from '~/.server/routes/validators';
 import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.server/utils/service-identifier.utils';
 import type { HCaptchaDtoMapper } from '~/.server/web/mappers';
+import type { DynatraceDtoMapper } from '~/.server/web/mappers/dynatrace.dto.mapper';
 import type { DynatraceRepository, HCaptchaRepository } from '~/.server/web/repositories';
 import type { DynatraceService, HCaptchaService, SessionService } from '~/.server/web/services';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
