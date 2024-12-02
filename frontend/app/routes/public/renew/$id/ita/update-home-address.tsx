@@ -36,7 +36,7 @@ import { isAllValidInputCharacters } from '~/utils/string-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.ita.updateAddress,
-  pageTitleI18nKey: 'renew-ita:update-address.page-title',
+  pageTitleI18nKey: 'renew-ita:update-address.home-address.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:update-address.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:update-address.home-address.page-title') }) };
 
   return {
     id: state.id,
@@ -76,7 +76,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const addressInformationSchema = z
     .object({
       homeAddress: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
-      homeApartment: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
       homeCountry: z.string().trim().optional(),
       homeProvince: z.string().trim().optional(),
       homeCity: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
@@ -120,7 +119,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedDataResult = addressInformationSchema.safeParse({
     homeAddress: formData.get('homeAddress') ? String(formData.get('homeAddress')) : undefined,
-    homeApartment: formData.get('homeApartment') ? String(formData.get('homeApartment')) : undefined,
     homeCountry: formData.get('homeCountry') ? String(formData.get('homeCountry')) : undefined,
     homeProvince: formData.get('homeProvince') ? String(formData.get('homeProvince')) : undefined,
     homeCity: formData.get('homeCity') ? String(formData.get('homeCity')) : undefined,
@@ -153,7 +151,6 @@ export default function RenewItaUpdateAddress() {
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     homeAddress: 'home-address',
-    homeApartment: 'home-apartment',
     homeProvince: 'home-province',
     homeCountry: 'home-country',
     homeCity: 'home-city',
@@ -208,40 +205,6 @@ export default function RenewItaUpdateAddress() {
                   errorMessage={errors?.homeAddress}
                   required
                 />
-                <InputSanitizeField
-                  id="home-apartment"
-                  name="homeApartment"
-                  className="w-full"
-                  label={t('renew-ita:update-address.address-field.apartment')}
-                  maxLength={30}
-                  autoComplete="address-line2"
-                  defaultValue={defaultState.addressInformation?.homeApartment ?? ''}
-                  errorMessage={errors?.homeApartment}
-                />
-                <InputSelect
-                  id="home-country"
-                  name="homeCountry"
-                  className="w-full sm:w-1/2"
-                  label={t('renew-ita:update-address.address-field.country')}
-                  autoComplete="country"
-                  defaultValue={defaultState.addressInformation?.homeCountry ?? ''}
-                  errorMessage={errors?.homeCountry}
-                  options={countries}
-                  onChange={homeCountryChangeHandler}
-                  required
-                />
-                {homeRegions.length > 0 && (
-                  <InputSelect
-                    id="home-province"
-                    name="homeProvince"
-                    className="w-full sm:w-1/2"
-                    label={t('renew-ita:update-address.address-field.province')}
-                    defaultValue={defaultState.addressInformation?.homeProvince ?? ''}
-                    errorMessage={errors?.homeProvince}
-                    options={[dummyOption, ...homeRegions]}
-                    required
-                  />
-                )}
                 <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
                   <InputSanitizeField
                     id="home-city"
@@ -266,6 +229,30 @@ export default function RenewItaUpdateAddress() {
                     required={homePostalCodeRequired}
                   />
                 </div>
+                <InputSelect
+                  id="home-country"
+                  name="homeCountry"
+                  className="w-full sm:w-1/2"
+                  label={t('renew-ita:update-address.address-field.country')}
+                  autoComplete="country"
+                  defaultValue={defaultState.addressInformation?.homeCountry ?? ''}
+                  errorMessage={errors?.homeCountry}
+                  options={countries}
+                  onChange={homeCountryChangeHandler}
+                  required
+                />
+                {homeRegions.length > 0 && (
+                  <InputSelect
+                    id="home-province"
+                    name="homeProvince"
+                    className="w-full sm:w-1/2"
+                    label={t('renew-ita:update-address.address-field.province')}
+                    defaultValue={defaultState.addressInformation?.homeProvince ?? ''}
+                    errorMessage={errors?.homeProvince}
+                    options={[dummyOption, ...homeRegions]}
+                    required
+                  />
+                )}
               </>
             </div>
           </fieldset>
