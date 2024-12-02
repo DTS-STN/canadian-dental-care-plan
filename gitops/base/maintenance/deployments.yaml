@@ -13,6 +13,23 @@ spec:
       labels:
         app.kubernetes.io/name: maintenance
     spec:
+      initContainers:
+        - name: preprocess-html
+          # Note: image tag should be pinned to a specific version in overlays
+          image: docker.io/library/alpine:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              cp /tmp/original/503.html /tmp/processed/503.html
+              sed --in-place "s|{{startTimeEn}}|$(cat /tmp/original/startTimeEn)|g" /tmp/processed/503.html
+              sed --in-place "s|{{startTimeFr}}|$(cat /tmp/original/startTimeFr)|g" /tmp/processed/503.html
+              sed --in-place "s|{{endTimeEn}}|$(cat /tmp/original/endTimeEn)|g"     /tmp/processed/503.html
+              sed --in-place "s|{{endTimeFr}}|$(cat /tmp/original/endTimeFr)|g"     /tmp/processed/503.html
+          volumeMounts:
+            - name: maintenance-conf
+              mountPath: /tmp/original
+            - name: processed-html
+              mountPath: /tmp/processed
       containers:
         - name: nginx
           # Note: image tag should be pinned to a specific version in overlays
@@ -33,10 +50,12 @@ spec:
             - name: maintenance-conf
               mountPath: /etc/nginx/conf.d/default.conf
               subPath: config.conf
-            - name: maintenance-conf
+            - name: processed-html
               mountPath: /usr/share/nginx/html/503.html
               subPath: 503.html
       volumes:
         - name: maintenance-conf
           configMap:
             name: maintenance
+        - name: processed-html
+          emptyDir: {}

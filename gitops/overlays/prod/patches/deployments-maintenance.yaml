@@ -8,6 +8,9 @@ spec:
       app.kubernetes.io/name: maintenance
   template:
     spec:
+      initContainers:
+        - name: preprocess-html
+          image: docker.io/library/alpine:3.20.3
       containers:
         - name: nginx
           image: docker.io/nginx:1.27.0
