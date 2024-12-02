@@ -8,7 +8,7 @@
     "build": "npm run build:application && npm run build:server",
     "build:application": "remix vite:build",
     "build:server": "vite build --config ./vite.server.config.ts",
-    "dev": "cross-env NODE_ENV=development nodemon --env-file .env --watch .env --ext ts --watch './express-server/**/*.ts' --exec tsx ./express-server/express.server.ts",
+    "dev": "cross-env NODE_ENV=development nodemon --env-file .env --watch .env --ext ts --watch './app/.server/express-server/**/*.ts' --exec tsx ./app/.server/express-server/express.server.ts",
     "start": "cross-env NODE_ENV=production node ./build/express.server.mjs",
     "check:all": "npm run format:check && npm run lint && npm run typecheck",
     "format:check": "prettier --check .",
