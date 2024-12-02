@@ -61,9 +61,6 @@ export interface RenewState {
   readonly hasAddressChanged?: boolean;
   readonly isHomeAddressSameAsMailingAddress?: boolean;
   readonly addressInformation?: {
-    // All properties made optional since we are potentially saving mailing and home from two different pages (update-mailing-address/update-home-address).
-    // Refactoring solution: split addressInformation into two: homeAddress, and mailingAddress.
-    // Following Figma, after implementation, 'copyMailingAddress' might be useless.
     copyMailingAddress?: boolean;
     homeAddress?: string;
     homeApartment?: string;

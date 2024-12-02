@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     id: state.id,
     meta,
-    defaultState: state.addressInformation,
+    defaultState: state,
     countryList,
     regionList,
     editMode: state.editMode,
@@ -147,7 +147,7 @@ export default function RenewItaUpdateAddress() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState?.homeCountry ?? CANADA_COUNTRY_ID);
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.addressInformation?.homeCountry ?? CANADA_COUNTRY_ID);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
 
   const errors = fetcher.data?.errors;
@@ -204,7 +204,7 @@ export default function RenewItaUpdateAddress() {
                   helpMessagePrimaryClassName="text-black"
                   maxLength={30}
                   autoComplete="address-line1"
-                  defaultValue={defaultState?.homeAddress ?? ''}
+                  defaultValue={defaultState.addressInformation?.homeAddress ?? ''}
                   errorMessage={errors?.homeAddress}
                   required
                 />
@@ -215,7 +215,7 @@ export default function RenewItaUpdateAddress() {
                   label={t('renew-ita:update-address.address-field.apartment')}
                   maxLength={30}
                   autoComplete="address-line2"
-                  defaultValue={defaultState?.homeApartment ?? ''}
+                  defaultValue={defaultState.addressInformation?.homeApartment ?? ''}
                   errorMessage={errors?.homeApartment}
                 />
                 <InputSelect
@@ -224,7 +224,7 @@ export default function RenewItaUpdateAddress() {
                   className="w-full sm:w-1/2"
                   label={t('renew-ita:update-address.address-field.country')}
                   autoComplete="country"
-                  defaultValue={defaultState?.homeCountry ?? ''}
+                  defaultValue={defaultState.addressInformation?.homeCountry ?? ''}
                   errorMessage={errors?.homeCountry}
                   options={countries}
                   onChange={homeCountryChangeHandler}
@@ -236,7 +236,7 @@ export default function RenewItaUpdateAddress() {
                     name="homeProvince"
                     className="w-full sm:w-1/2"
                     label={t('renew-ita:update-address.address-field.province')}
-                    defaultValue={defaultState?.homeProvince ?? ''}
+                    defaultValue={defaultState.addressInformation?.homeProvince ?? ''}
                     errorMessage={errors?.homeProvince}
                     options={[dummyOption, ...homeRegions]}
                     required
@@ -250,7 +250,7 @@ export default function RenewItaUpdateAddress() {
                     label={t('renew-ita:update-address.address-field.city')}
                     maxLength={100}
                     autoComplete="address-level2"
-                    defaultValue={defaultState?.homeCity ?? ''}
+                    defaultValue={defaultState.addressInformation?.homeCity ?? ''}
                     errorMessage={errors?.homeCity}
                     required
                   />
@@ -261,7 +261,7 @@ export default function RenewItaUpdateAddress() {
                     label={homePostalCodeRequired ? t('renew-ita:update-address.address-field.postal-code') : t('renew-ita:update-address.address-field.postal-code-optional')}
                     maxLength={100}
                     autoComplete="postal-code"
-                    defaultValue={defaultState?.homePostalCode ?? ''}
+                    defaultValue={defaultState.addressInformation?.homePostalCode ?? ''}
                     errorMessage={errors?.homePostalCode}
                     required={homePostalCodeRequired}
                   />
@@ -285,7 +285,7 @@ export default function RenewItaUpdateAddress() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/ita/update-mailing-address"
+                routeId={defaultState.hasAddressChanged ? `public/renew/$id/ita/update-mailing-address` : `public/renew/$id/ita/confirm-address`}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
