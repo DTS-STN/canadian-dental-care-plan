@@ -99,6 +99,7 @@ WORKDIR /home/node
 # COPY files in order of least → most likely to change to maximize layer caching
 COPY --from=runtime-deps --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=build --chown=node:node /home/node/build/ ./build/
+COPY --from=build --chown=node:node /home/node/public/ ./public/
 COPY --from=build --chown=node:node /home/node/build-info.json ./
 
 # Add labels for OCI compliance, describing the build details and image metadata
