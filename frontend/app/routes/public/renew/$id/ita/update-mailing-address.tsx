@@ -19,6 +19,7 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
+import { InputCheckbox } from '~/components/input-checkbox';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
@@ -32,7 +33,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
-import { InputCheckbox } from '~/components/input-checkbox';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
@@ -115,7 +115,7 @@ export async function action({ context: { appContainer, session }, params, reque
     mailingProvince: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
     mailingCity: String(formData.get('mailingCity') ?? ''),
     mailingPostalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
-    copyMailingAddress: formData.get('copyMailingAddress') === 'copy'
+    copyMailingAddress: formData.get('copyMailingAddress') === 'copy',
   });
 
   if (!parsedDataResult.success) {
@@ -162,11 +162,11 @@ export default function RenewItaUpdateAddress() {
     mailingCountry: 'mailing-country',
     mailingCity: 'mailing-city',
     mailingPostalCode: 'mailing-postal-code',
-    copyMailingAddress: 'copy-mailing-address'
+    copyMailingAddress: 'copy-mailing-address',
   });
   const checkHandler = () => {
-  setCopyAddressChecked((curState) => !curState);  
-};
+    setCopyAddressChecked((curState) => !curState);
+  };
   useEffect(() => {
     const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedMailingCountry);
     setMailingCountryRegions(filteredProvinceTerritoryStates);

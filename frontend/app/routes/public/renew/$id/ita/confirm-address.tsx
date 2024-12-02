@@ -146,7 +146,7 @@ export default function RenewItaConfirmAddress() {
               errorMessage={errors?.hasAddressChanged}
               required
             />
-            {!hasAddressChangedRadioValue && (
+            {hasAddressChangedRadioValue === false && (
               <InputRadios
                 id="is-home-address-same-as-mailing-address"
                 name="isHomeAddressSameAsMailingAddress"
