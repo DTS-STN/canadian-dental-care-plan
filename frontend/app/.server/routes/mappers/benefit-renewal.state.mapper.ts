@@ -17,6 +17,15 @@ import type {
   ProtectedBenefitRenewalDto,
 } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
+import type {
+  ProtectedAddressInformationState,
+  ProtectedChildState,
+  ProtectedConfirmDentalBenefitsState,
+  ProtectedContactInformationState,
+  ProtectedDentalFederalBenefitsState,
+  ProtectedDentalProvincialTerritorialBenefitsState,
+  ProtectedPartnerInformationState,
+} from '~/.server/routes/helpers/protected-renew-route-helpers';
 import type { AddressInformationState, ChildState, ConfirmDentalBenefitsState, ContactInformationState, DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
 
 export interface RenewAdultChildState {
@@ -45,17 +54,17 @@ export interface RenewItaState {
 }
 
 export interface ProtectedRenewState {
-  addressInformation?: AddressInformationState;
+  addressInformation?: ProtectedAddressInformationState;
   clientApplication: ClientApplicationDto;
-  children: ChildState[];
-  confirmDentalBenefits: ConfirmDentalBenefitsState;
-  contactInformation: ContactInformationState;
-  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  children: ProtectedChildState[];
+  confirmDentalBenefits: ProtectedConfirmDentalBenefitsState;
+  contactInformation: ProtectedContactInformationState;
+  dentalBenefits?: ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   hasAddressChanged: boolean;
   hasMaritalStatusChanged: boolean;
   maritalStatus?: string;
-  partnerInformation?: PartnerInformationState;
+  partnerInformation?: ProtectedPartnerInformationState;
 }
 
 export interface BenefitRenewalStateMapper {

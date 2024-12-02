@@ -16,6 +16,7 @@ import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, getProtectedChildrenState, loadProtectedRenewStateForReview, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { DebugPayload } from '~/components/debug-payload';
@@ -65,12 +66,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined;
 
   const userInfo = {
-    firstName: state.applicantInformation.firstName,
-    lastName: state.applicantInformation.lastName,
-    sin: state.applicantInformation.sin,
+    firstName: state.clientApplication.applicantInformation.firstName,
+    lastName: state.clientApplication.applicantInformation.lastName,
+    sin: state.clientApplication.applicantInformation.socialInsuranceNumber,
     phoneNumber: state.contactInformation.phoneNumber,
     altPhoneNumber: state.contactInformation.phoneNumberAlt,
-    birthday: toLocaleDateString(parseDateString(state.applicantInformation?.dateOfBirth), locale),
+    birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
     maritalStatus: maritalStatus ? maritalStatus.name : undefined,
     contactInformationEmail: state.contactInformation.email,
   };
@@ -133,12 +134,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-adult-information.page-title') }) };
 
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
   // prettier-ignore
   const payload =
-    viewPayloadEnabled &&
-    appContainer.get(TYPES.domain.mappers.BenefitRenewalDtoMapper).mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(
-      appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state)
-    );
+    viewPayloadEnabled && appContainer.get(TYPES.domain.mappers.BenefitRenewalDtoMapper).mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub));
 
   return {
     id: state.id,
@@ -173,11 +174,14 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/member-selection', params));
   }
 
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
   const state = loadProtectedRenewStateForReview({ params, request, session });
 
   if (getProtectedChildrenState(state).length === 0) {
-    const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state);
-    await appContainer.get(TYPES.domain.services.BenefitRenewalService).createAdultChildBenefitRenewal(benefitRenewalDto);
+    const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub);
+    await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
 
     const submissionInfo = { submittedOn: new UTCDate().toISOString() };
     saveProtectedRenewState({ params, session, state: { submissionInfo } });
@@ -191,7 +195,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedRenewReviewAdultInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenifits, hasChildren, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, hasChildren, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();

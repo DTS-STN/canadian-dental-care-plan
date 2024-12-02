@@ -28,13 +28,6 @@ export interface ProtectedRenewState {
     readonly shareData: boolean;
   };
   readonly dentalInsurance?: boolean;
-  readonly dentalBenefits?: {
-    hasFederalBenefits: boolean;
-    federalSocialProgram?: string;
-    hasProvincialTerritorialBenefits: boolean;
-    provincialTerritorialSocialProgram?: string;
-    province?: string;
-  };
   readonly isSurveyCompleted?: boolean;
   readonly demographicSurvey?: {
     readonly indigenousStatus?: string;
@@ -46,6 +39,7 @@ export interface ProtectedRenewState {
     readonly genderStatus?: string;
   };
   readonly maritalStatus?: string;
+  readonly hasMaritalStatusChanged?: boolean;
   readonly partnerInformation?: {
     confirm: boolean;
     yearOfBirth: string;
@@ -55,6 +49,10 @@ export interface ProtectedRenewState {
     readonly id: string;
     readonly isParentOrLegalGuardian?: boolean;
     readonly dentalInsurance?: boolean;
+    readonly confirmDentalBenefits?: {
+      federalBenefitsChanged: boolean;
+      provincialTerritorialBenefitsChanged: boolean;
+    };
     readonly firstName?: string;
     readonly lastName?: string;
     readonly isSurveyCompleted?: boolean;
@@ -103,6 +101,11 @@ export interface ProtectedRenewState {
     provincialTerritorialSocialProgram?: string;
     province?: string;
   };
+  readonly confirmDentalBenefits?: {
+    federalBenefitsChanged: boolean;
+    provincialTerritorialBenefitsChanged: boolean;
+  };
+
   readonly submissionInfo?: {
     /**
      * The UTC date and time when the application was submitted.
@@ -113,11 +116,14 @@ export interface ProtectedRenewState {
   // TODO Add remaining states
 }
 
-export type PartnerInformationState = NonNullable<ProtectedRenewState['partnerInformation']>;
-export type ChildState = ProtectedRenewState['children'][number];
-export type AddressInformationState = NonNullable<ProtectedRenewState['addressInformation']>;
-export type DentalFederalBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
-export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type ProtectedPartnerInformationState = NonNullable<ProtectedRenewState['partnerInformation']>;
+export type ProtectedChildState = ProtectedRenewState['children'][number];
+export type ProtectedAddressInformationState = NonNullable<ProtectedRenewState['addressInformation']>;
+export type ProtectedClientApplicationState = NonNullable<ProtectedRenewState['clientApplication']>;
+export type ProtectedDentalFederalBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
+export type ProtectedDentalProvincialTerritorialBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type ProtectedConfirmDentalBenefitsState = NonNullable<ProtectedRenewState['confirmDentalBenefits']>;
+export type ProtectedContactInformationState = NonNullable<ProtectedRenewState['contactInformation']>;
 
 /**
  * Schema for validating UUID.
@@ -255,7 +261,7 @@ export function renewStateHasPartner(maritalStatus: string) {
   return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
 }
 
-export function isNewChildState(child: ChildState) {
+export function isNewChildState(child: ProtectedChildState) {
   return child.dentalInsurance === undefined;
 }
 
@@ -338,10 +344,14 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
-  const { applicantInformation, hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, addressInformation, dentalInsurance, demographicSurvey } = state;
+  const { clientApplication, hasAddressChanged, hasMaritalStatusChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, addressInformation, dentalBenefits, confirmDentalBenefits, dentalInsurance, demographicSurvey } = state;
 
-  if (maritalStatus === undefined) {
-    throw redirect(getPathById('protected/renew/$id/marital-status', params));
+  if (hasMaritalStatusChanged === undefined) {
+    throw redirect(getPathById('protected/renew/$id/confirm-marital-status', params));
+  }
+
+  if (hasMaritalStatusChanged && maritalStatus === undefined) {
+    throw redirect(getPathById('protected/renew/$id/confirm-marital-status', params));
   }
 
   if (hasAddressChanged === undefined) {
@@ -364,6 +374,14 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
     throw redirect(getPathById('protected/renew/$id/dental-insurance', params));
   }
 
+  if (confirmDentalBenefits === undefined) {
+    throw redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
+  }
+
+  if ((confirmDentalBenefits.federalBenefitsChanged || confirmDentalBenefits.provincialTerritorialBenefitsChanged) && dentalBenefits === undefined) {
+    throw redirect(getPathById('protected/renew/$id/update-federal-provincial-territorial-benefits', params));
+  }
+
   if (demographicSurvey === undefined) {
     throw redirect(getPathById('protected/renew/$id/demographic-survey', params));
   }
@@ -373,8 +391,9 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
   const children = getProtectedChildrenState(state).length > 0 ? validateProtectedChildrenStateForReview({ childrenState: state.children, params }) : [];
 
   return {
-    applicantInformation,
+    clientApplication,
     maritalStatus,
+    hasMaritalStatusChanged,
     editMode,
     id,
     contactInformation,
@@ -383,11 +402,13 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
     partnerInformation,
     children,
     hasAddressChanged,
+    dentalBenefits,
+    confirmDentalBenefits,
   };
 }
 
 interface ValidateProtectedChildrenStateForReviewArgs {
-  childrenState: ChildState[];
+  childrenState: ProtectedChildState[];
   params: Params;
 }
 
