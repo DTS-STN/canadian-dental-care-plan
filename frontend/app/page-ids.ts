@@ -126,12 +126,15 @@ export const pageIds = {
         dentalInsurance: 'CDCP-RENW-ADCH-0007',
         confirmFederalProvincialTerritorialBenefits: 'CDCP-RENW-ADCH-0008',
         updateFederalProvincialTerritorialBenefits: 'CDCP-RENW-ADCH-0009',
-        childInformation: 'CDCP-RENW-ADCH-00010',
+        childInformation: 'CDCP-RENW-ADCH-0010',
         parentOrGuardian: 'CDCP-RENW-ADCH-0011',
         reviewChildInformation: 'CDCP-RENW-ADCH-0012',
         exitApplication: 'CDCP-RENW-ADCH-0013',
         confirmation: 'CDCP-RENW-ADCH-0014',
         reviewAdultInformation: 'CDCP-APPL-ADCH-0015',
+      },
+      child: {
+        childInformation: 'CDCP-RENW-CHLD-0001',
       },
     },
     demographicSurvey: {
