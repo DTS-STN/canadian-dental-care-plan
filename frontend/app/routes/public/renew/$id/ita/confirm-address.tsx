@@ -66,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
       isHomeAddressSameAsMailingAddress: z.nativeEnum(AddressRadioOptions).or(z.literal('')).optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.hasAddressChanged === AddressRadioOptions.Yes) {
+      if (val.hasAddressChanged === AddressRadioOptions.No) {
         if (!val.isHomeAddressSameAsMailingAddress) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-address.error-message.is-home-address-same-as-mailing-address-required'), path: ['isHomeAddressSameAsMailingAddress'] });
         }
@@ -91,15 +91,18 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasAddressChanged: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes,
-      isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes ? parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes : undefined,
+      isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No ? parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes : undefined,
     },
   });
 
   if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No) {
+    if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.No) {
+      return redirect(getPathById('public/renew/$id/ita/update-home-address', params));
+    }
     return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
   }
 
-  return redirect(getPathById('public/renew/$id/ita/update-address', params));
+  return redirect(getPathById('public/renew/$id/ita/update-mailing-address', params));
 }
 
 export default function RenewItaConfirmAddress() {
@@ -143,7 +146,7 @@ export default function RenewItaConfirmAddress() {
               errorMessage={errors?.hasAddressChanged}
               required
             />
-            {hasAddressChangedRadioValue && (
+            {hasAddressChangedRadioValue === false && (
               <InputRadios
                 id="is-home-address-same-as-mailing-address"
                 name="isHomeAddressSameAsMailingAddress"

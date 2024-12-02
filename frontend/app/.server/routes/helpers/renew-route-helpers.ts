@@ -2,6 +2,7 @@ import type { Session } from '@remix-run/node';
 import { redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
+import { merge } from 'moderndash';
 import { z } from 'zod';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
@@ -60,17 +61,17 @@ export interface RenewState {
   readonly hasAddressChanged?: boolean;
   readonly isHomeAddressSameAsMailingAddress?: boolean;
   readonly addressInformation?: {
-    copyMailingAddress: boolean;
+    copyMailingAddress?: boolean;
     homeAddress?: string;
     homeApartment?: string;
     homeCity?: string;
     homeCountry?: string;
     homePostalCode?: string;
     homeProvince?: string;
-    mailingAddress: string;
+    mailingAddress?: string;
     mailingApartment?: string;
-    mailingCity: string;
-    mailingCountry: string;
+    mailingCity?: string;
+    mailingCountry?: string;
     mailingPostalCode?: string;
     mailingProvince?: string;
   };
@@ -181,10 +182,9 @@ export function saveRenewState({ params, session, state }: SaveStateArgs) {
   const log = getLogger('renew-route-helpers.server/saveRenewState');
   const currentState = loadRenewState({ params, session });
 
-  const newState = {
-    ...currentState,
-    ...state,
-  } satisfies RenewState;
+  // https://moderndash.io/docs/merge
+  // Merges two objects without overwriting any unmentioned properties
+  const newState = merge({}, currentState, state) satisfies RenewState;
 
   const sessionName = getSessionName(currentState.id);
   session.set(sessionName, newState);

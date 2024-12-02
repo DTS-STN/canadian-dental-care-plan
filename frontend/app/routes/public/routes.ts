@@ -428,9 +428,14 @@ export const routes = [
             paths: { en: '/:lang/renew/:id/ita/confirm-address', fr: '/:lang/renew/:id/ita/confirmer-adresse' },
           },
           {
-            id: 'public/renew/$id/ita/update-address',
-            file: 'routes/public/renew/$id/ita/update-address.tsx',
-            paths: { en: '/:lang/renew/:id/ita/update-address', fr: '/:lang/renew/:id/ita/mise-a-jour-adresse' },
+            id: 'public/renew/$id/ita/update-mailing-address',
+            file: 'routes/public/renew/$id/ita/update-mailing-address.tsx',
+            paths: { en: '/:lang/renew/:id/ita/update-mailing-address', fr: '/:lang/renew/:id/ita/mise-a-jour-adresse-postale' },
+          },
+          {
+            id: 'public/renew/$id/ita/update-home-address',
+            file: 'routes/public/renew/$id/ita/update-home-address.tsx',
+            paths: { en: '/:lang/renew/:id/ita/update-home-address', fr: '/:lang/renew/:id/ita/mise-a-jour-adresse-domicile' },
           },
           {
             id: 'public/renew/$id/ita/dental-insurance',

@@ -113,7 +113,7 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
   }
 
   if (hasAddressChanged && addressInformation === undefined) {
-    throw redirect(getPathById('public/renew/$id/ita/update-address', params));
+    throw redirect(getPathById('public/renew/$id/ita/update-mailing-address', params));
   }
 
   if (dentalInsurance === undefined) {

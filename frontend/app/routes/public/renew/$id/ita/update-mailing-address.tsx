@@ -82,13 +82,7 @@ export async function action({ context: { appContainer, session }, params, reque
       mailingProvince: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.province-required')).optional(),
       mailingCity: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.city-required')).max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')),
       mailingPostalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
-      copyMailingAddress: z.boolean(),
-      homeAddress: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
-      homeApartment: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
-      homeCountry: z.string().trim().optional(),
-      homeProvince: z.string().trim().optional(),
-      homeCity: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
-      homePostalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
+      copyMailingAddress: z.boolean().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) {
@@ -108,42 +102,9 @@ export async function action({ context: { appContainer, session }, params, reque
       if (val.mailingCountry && val.mailingCountry !== CANADA_COUNTRY_ID && val.mailingPostalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.mailingPostalCode)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.mailing-address.invalid-postal-code-for-country'), path: ['mailingCountry'] });
       }
-
-      if (val.copyMailingAddress === false) {
-        if (!val.homeAddress || validator.isEmpty(val.homeAddress)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.home-address.address-required'), path: ['homeAddress'] });
-        }
-
-        if (!val.homeCountry || validator.isEmpty(val.homeCountry)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.home-address.country-required'), path: ['homeCountry'] });
-        }
-
-        if (!val.homeCity || validator.isEmpty(val.homeCity)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.home-address.city-required'), path: ['homeCity'] });
-        }
-
-        if (val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) {
-          if (!val.homeProvince || validator.isEmpty(val.homeProvince)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.home-address.province-required'), path: ['homeProvince'] });
-          }
-          if (!val.homePostalCode || validator.isEmpty(val.homePostalCode)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.home-address.postal-code-required'), path: ['homePostalCode'] });
-          } else if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
-            const message = val.homeCountry === CANADA_COUNTRY_ID ? t('renew-ita:update-address.error-message.home-address.postal-code-valid') : t('renew-ita:update-address.error-message.home-address.zip-code-valid');
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['homePostalCode'] });
-          } else if (val.homeCountry === CANADA_COUNTRY_ID && val.homeProvince && !isValidCanadianPostalCode(val.homeProvince, val.homePostalCode)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.home-address.invalid-postal-code-for-province'), path: ['homePostalCode'] });
-          }
-        }
-
-        if (val.homeCountry && val.homeCountry !== CANADA_COUNTRY_ID && val.homePostalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.homePostalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.home-address.invalid-postal-code-for-country'), path: ['homeCountry'] });
-        }
-      }
     })
     .transform((val) => ({
       ...val,
-      homePostalCode: val.homeCountry && val.homePostalCode ? formatPostalCode(val.homeCountry, val.homePostalCode) : val.homePostalCode,
       mailingPostalCode: val.mailingCountry && val.mailingPostalCode ? formatPostalCode(val.mailingCountry, val.mailingPostalCode) : val.mailingPostalCode,
     })) satisfies z.ZodType<AddressInformationState>;
 
@@ -155,37 +116,31 @@ export async function action({ context: { appContainer, session }, params, reque
     mailingCity: String(formData.get('mailingCity') ?? ''),
     mailingPostalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
     copyMailingAddress: formData.get('copyMailingAddress') === 'copy',
-    homeAddress: formData.get('homeAddress') ? String(formData.get('homeAddress')) : undefined,
-    homeApartment: formData.get('homeApartment') ? String(formData.get('homeApartment')) : undefined,
-    homeCountry: formData.get('homeCountry') ? String(formData.get('homeCountry')) : undefined,
-    homeProvince: formData.get('homeProvince') ? String(formData.get('homeProvince')) : undefined,
-    homeCity: formData.get('homeCity') ? String(formData.get('homeCity')) : undefined,
-    homePostalCode: formData.get('homePostalCode') ? String(formData.get('homePostalCode')) : undefined,
   });
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  const updatedData = parsedDataResult.data.copyMailingAddress
-    ? {
-        ...parsedDataResult.data,
-        homeAddress: parsedDataResult.data.mailingAddress,
-        homeApartment: parsedDataResult.data.mailingApartment,
-        homeCountry: parsedDataResult.data.mailingCountry,
-        homeProvince: parsedDataResult.data.mailingProvince,
-        homeCity: parsedDataResult.data.mailingCity,
-        homePostalCode: parsedDataResult.data.mailingPostalCode,
-      }
-    : parsedDataResult.data;
+  // If home address is the same as mailing address, populate home related properties.
+  const updatedAddressInfo = {
+    ...parsedDataResult.data,
+    ...(parsedDataResult.data.copyMailingAddress && {
+      homeAddress: parsedDataResult.data.mailingAddress,
+      homeApartment: parsedDataResult.data.mailingApartment,
+      homeCountry: parsedDataResult.data.mailingCountry,
+      homeProvince: parsedDataResult.data.mailingProvince,
+      homeCity: parsedDataResult.data.mailingCity,
+      homePostalCode: parsedDataResult.data.mailingPostalCode,
+    }),
+  };
 
-  saveRenewState({ params, session, state: { addressInformation: updatedData } });
+  saveRenewState({ params, session, state: { addressInformation: updatedAddressInfo } });
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/ita/review-information', params));
   }
-
-  return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
+  return redirect(parsedDataResult.data.copyMailingAddress ? getPathById('public/renew/$id/ita/dental-insurance', params) : getPathById('public/renew/$id/ita/update-home-address', params));
 }
 
 export default function RenewItaUpdateAddress() {
@@ -198,15 +153,9 @@ export default function RenewItaUpdateAddress() {
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry ?? CANADA_COUNTRY_ID);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState?.copyMailingAddress === true);
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState?.homeCountry ?? CANADA_COUNTRY_ID);
-  const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
-    phoneNumber: 'phone-number',
-    phoneNumberAlt: 'phone-number-alt',
-    email: 'email',
-    confirmEmail: 'confirm-email',
     mailingAddress: 'mailing-address',
     mailingApartment: 'mailing-apartment',
     mailingProvince: 'mailing-province',
@@ -214,18 +163,10 @@ export default function RenewItaUpdateAddress() {
     mailingCity: 'mailing-city',
     mailingPostalCode: 'mailing-postal-code',
     copyMailingAddress: 'copy-mailing-address',
-    homeAddress: 'home-address',
-    homeApartment: 'home-apartment',
-    homeProvince: 'home-province',
-    homeCountry: 'home-country',
-    homeCity: 'home-city',
-    homePostalCode: 'home-postal-code',
   });
-
   const checkHandler = () => {
     setCopyAddressChecked((curState) => !curState);
   };
-
   useEffect(() => {
     const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedMailingCountry);
     setMailingCountryRegions(filteredProvinceTerritoryStates);
@@ -242,23 +183,10 @@ export default function RenewItaUpdateAddress() {
   // populate mailing region/province/state list with selected country or current address country
   const mailingRegions: InputOptionProps[] = mailingCountryRegions.map(({ id, name }) => ({ children: name, value: id }));
 
-  useEffect(() => {
-    const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedHomeCountry);
-    setHomeCountryRegions(filteredProvinceTerritoryStates);
-  }, [selectedHomeCountry, regionList]);
-
-  const homeCountryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
-    setSelectedHomeCountry(event.currentTarget.value);
-  };
-
-  // populate home region/province/state list with selected country or current address country
-  const homeRegions: InputOptionProps[] = homeCountryRegions.map(({ id, name }) => ({ children: name, value: id }));
-
   const dummyOption: InputOptionProps = { children: t('renew-ita:update-address.address-field.select-one'), value: '' };
 
   const postalCodeRequiredContries = [CANADA_COUNTRY_ID, USA_COUNTRY_ID];
   const mailingPostalCodeRequired = postalCodeRequiredContries.includes(selectedMailingCountry);
-  const homePostalCodeRequired = postalCodeRequiredContries.includes(selectedHomeCountry);
 
   return (
     <>
@@ -344,89 +272,9 @@ export default function RenewItaUpdateAddress() {
                   required={mailingPostalCodeRequired}
                 />
               </div>
-            </div>
-          </fieldset>
-          <fieldset className="mb-8">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-ita:update-address.home-address.header')}</legend>
-            <div className="space-y-6">
               <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
                 {t('renew-ita:update-address.home-address.use-mailing-address')}
               </InputCheckbox>
-              {!copyAddressChecked && (
-                <>
-                  <InputSanitizeField
-                    id="home-address"
-                    name="homeAddress"
-                    className="w-full"
-                    label={t('renew-ita:update-address.address-field.address')}
-                    helpMessagePrimary={t('renew-ita:update-address.address-field.address-note')}
-                    helpMessagePrimaryClassName="text-black"
-                    maxLength={30}
-                    autoComplete="address-line1"
-                    defaultValue={defaultState?.homeAddress ?? ''}
-                    errorMessage={errors?.homeAddress}
-                    required
-                  />
-                  <InputSanitizeField
-                    id="home-apartment"
-                    name="homeApartment"
-                    className="w-full"
-                    label={t('renew-ita:update-address.address-field.apartment')}
-                    maxLength={30}
-                    autoComplete="address-line2"
-                    defaultValue={defaultState?.homeApartment ?? ''}
-                    errorMessage={errors?.homeApartment}
-                  />
-                  <InputSelect
-                    id="home-country"
-                    name="homeCountry"
-                    className="w-full sm:w-1/2"
-                    label={t('renew-ita:update-address.address-field.country')}
-                    autoComplete="country"
-                    defaultValue={defaultState?.homeCountry ?? ''}
-                    errorMessage={errors?.homeCountry}
-                    options={countries}
-                    onChange={homeCountryChangeHandler}
-                    required
-                  />
-                  {homeRegions.length > 0 && (
-                    <InputSelect
-                      id="home-province"
-                      name="homeProvince"
-                      className="w-full sm:w-1/2"
-                      label={t('renew-ita:update-address.address-field.province')}
-                      defaultValue={defaultState?.homeProvince ?? ''}
-                      errorMessage={errors?.homeProvince}
-                      options={[dummyOption, ...homeRegions]}
-                      required
-                    />
-                  )}
-                  <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
-                    <InputSanitizeField
-                      id="home-city"
-                      name="homeCity"
-                      className="w-full"
-                      label={t('renew-ita:update-address.address-field.city')}
-                      maxLength={100}
-                      autoComplete="address-level2"
-                      defaultValue={defaultState?.homeCity ?? ''}
-                      errorMessage={errors?.homeCity}
-                      required
-                    />
-                    <InputSanitizeField
-                      id="home-postal-code"
-                      name="homePostalCode"
-                      className="w-full"
-                      label={homePostalCodeRequired ? t('renew-ita:update-address.address-field.postal-code') : t('renew-ita:update-address.address-field.postal-code-optional')}
-                      maxLength={100}
-                      autoComplete="postal-code"
-                      defaultValue={defaultState?.homePostalCode ?? ''}
-                      errorMessage={errors?.homePostalCode}
-                      required={homePostalCodeRequired}
-                    />
-                  </div>
-                </>
-              )}
             </div>
           </fieldset>
           {editMode ? (
@@ -449,7 +297,7 @@ export default function RenewItaUpdateAddress() {
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Update address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Update mailing address click"
               >
                 {t('renew-ita:update-address.back')}
               </ButtonLink>
