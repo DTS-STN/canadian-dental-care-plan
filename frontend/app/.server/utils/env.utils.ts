@@ -177,7 +177,7 @@ const serverEnv = clientEnvSchema.extend({
 
   // health check configuration
   HEALTH_CACHE_TTL: z.coerce.number().default(10 * 1000),
-  HEALTH_AUTH_JWKS_URI: z.string().url().optional(),
+  HEALTH_AUTH_JWKS_URI: z.string().optional(),
   HEALTH_AUTH_ROLE: z.string().default('HealthCheck.ViewDetails'),
   HEALTH_AUTH_TOKEN_AUDIENCE: z.string().default('00000000-0000-0000-0000-000000000000'), // intentional default to enforce an audience check when verifying JWTs
   HEALTH_AUTH_TOKEN_ISSUER: z.string().default('https://auth.example.com/'), // intentional default to enforce an issuer check when verifying JWTs

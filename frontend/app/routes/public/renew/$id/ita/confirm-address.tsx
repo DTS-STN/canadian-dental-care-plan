@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { data, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -56,18 +58,28 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const confirmAddressSchema = z.object({
-    hasAddressChanged: z.nativeEnum(AddressRadioOptions, {
-      errorMap: () => ({ message: t('renew-ita:confirm-address.error-message.has-address-changed-required') }),
-    }),
-    isHomeAddressSameAsMailingAddress: z.nativeEnum(AddressRadioOptions, {
-      errorMap: () => ({ message: t('renew-ita:confirm-address.error-message.is-home-address-same-as-mailing-address-required') }),
-    }),
-  });
+  const confirmAddressSchema = z
+    .object({
+      hasAddressChanged: z.nativeEnum(AddressRadioOptions, {
+        errorMap: () => ({ message: t('renew-ita:confirm-address.error-message.has-address-changed-required') }),
+      }),
+      isHomeAddressSameAsMailingAddress: z.nativeEnum(AddressRadioOptions).or(z.literal('')).optional(),
+    })
+    .superRefine((val, ctx) => {
+      if (val.hasAddressChanged === AddressRadioOptions.No) {
+        if (!val.isHomeAddressSameAsMailingAddress) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-address.error-message.is-home-address-same-as-mailing-address-required'), path: ['isHomeAddressSameAsMailingAddress'] });
+        }
+      }
+    })
+    .transform((val) => ({
+      ...val,
+      isHomeAddressSameAsMailingAddress: val.isHomeAddressSameAsMailingAddress ? val.isHomeAddressSameAsMailingAddress : undefined,
+    }));
 
   const parsedDataResult = confirmAddressSchema.safeParse({
     hasAddressChanged: formData.get('hasAddressChanged'),
-    isHomeAddressSameAsMailingAddress: formData.get('isHomeAddressSameAsMailingAddress'),
+    isHomeAddressSameAsMailingAddress: formData.get('isHomeAddressSameAsMailingAddress') ?? '',
   });
 
   if (!parsedDataResult.success) {
@@ -79,7 +91,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasAddressChanged: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes,
-      isHomeAddressSameAsMailingAddress: parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes,
+      isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No ? parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes : undefined,
     },
   });
 
@@ -105,6 +117,12 @@ export default function RenewItaConfirmAddress() {
     isHomeAddressSameAsMailingAddress: 'input-radio-is-home-address-same-as-mailing-address-option-0',
   });
 
+  const [hasAddressChangedRadioValue, setHasAddressChangeRadioValue] = useState(defaultState.hasAddressChanged);
+
+  function handleHasAddressChanged(e: React.ChangeEvent<HTMLInputElement>) {
+    setHasAddressChangeRadioValue(e.target.value === AddressRadioOptions.Yes);
+  }
+
   return (
     <>
       <div className="my-6 sm:my-8">
@@ -121,24 +139,26 @@ export default function RenewItaConfirmAddress() {
               name="hasAddressChanged"
               legend={t('renew-ita:confirm-address.have-you-moved')}
               options={[
-                { value: AddressRadioOptions.Yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState.hasAddressChanged === true },
-                { value: AddressRadioOptions.No, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState.hasAddressChanged === false },
+                { value: AddressRadioOptions.Yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState.hasAddressChanged === true, onChange: handleHasAddressChanged },
+                { value: AddressRadioOptions.No, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState.hasAddressChanged === false, onChange: handleHasAddressChanged },
               ]}
               helpMessagePrimary={t('renew-ita:confirm-address.help-message')}
               errorMessage={errors?.hasAddressChanged}
               required
             />
-            <InputRadios
-              id="is-home-address-same-as-mailing-address"
-              name="isHomeAddressSameAsMailingAddress"
-              legend={t('renew-ita:confirm-address.is-home-address-same-as-mailing-address')}
-              options={[
-                { value: AddressRadioOptions.Yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === true },
-                { value: AddressRadioOptions.No, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === false },
-              ]}
-              errorMessage={errors?.isHomeAddressSameAsMailingAddress}
-              required
-            />
+            {!hasAddressChangedRadioValue && (
+              <InputRadios
+                id="is-home-address-same-as-mailing-address"
+                name="isHomeAddressSameAsMailingAddress"
+                legend={t('renew-ita:confirm-address.is-home-address-same-as-mailing-address')}
+                options={[
+                  { value: AddressRadioOptions.Yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === true },
+                  { value: AddressRadioOptions.No, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === false },
+                ]}
+                errorMessage={errors?.isHomeAddressSameAsMailingAddress}
+                required
+              />
+            )}
           </div>
 
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">

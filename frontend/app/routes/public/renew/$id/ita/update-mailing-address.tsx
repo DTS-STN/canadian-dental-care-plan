@@ -32,6 +32,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
+import { InputCheckbox } from '~/components/input-checkbox';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
@@ -81,6 +82,7 @@ export async function action({ context: { appContainer, session }, params, reque
       mailingProvince: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.province-required')).optional(),
       mailingCity: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.city-required')).max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')),
       mailingPostalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
+      copyMailingAddress: z.boolean().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) {
@@ -113,6 +115,7 @@ export async function action({ context: { appContainer, session }, params, reque
     mailingProvince: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
     mailingCity: String(formData.get('mailingCity') ?? ''),
     mailingPostalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
+    copyMailingAddress: formData.get('copyMailingAddress') === 'copy'
   });
 
   if (!parsedDataResult.success) {
@@ -122,7 +125,7 @@ export async function action({ context: { appContainer, session }, params, reque
   // If home address is the same as mailing address, populate home related properties.
   const updatedAddressInfo = {
     ...parsedDataResult.data,
-    ...(state.isHomeAddressSameAsMailingAddress && {
+    ...(parsedDataResult.data.copyMailingAddress && {
       homeAddress: parsedDataResult.data.mailingAddress,
       homeApartment: parsedDataResult.data.mailingApartment,
       homeCountry: parsedDataResult.data.mailingCountry,
@@ -137,7 +140,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/ita/review-information', params));
   }
-  return redirect(state.isHomeAddressSameAsMailingAddress ? getPathById('public/renew/$id/ita/dental-insurance', params) : getPathById('public/renew/$id/ita/update-home-address', params));
+  return redirect(parsedDataResult.data.copyMailingAddress ? getPathById('public/renew/$id/ita/dental-insurance', params) : getPathById('public/renew/$id/ita/update-home-address', params));
 }
 
 export default function RenewItaUpdateAddress() {
@@ -149,6 +152,7 @@ export default function RenewItaUpdateAddress() {
   const isSubmitting = fetcher.state !== 'idle';
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry ?? CANADA_COUNTRY_ID);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
+  const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState?.copyMailingAddress === true);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -158,8 +162,11 @@ export default function RenewItaUpdateAddress() {
     mailingCountry: 'mailing-country',
     mailingCity: 'mailing-city',
     mailingPostalCode: 'mailing-postal-code',
+    copyMailingAddress: 'copy-mailing-address'
   });
-
+  const checkHandler = () => {
+  setCopyAddressChecked((curState) => !curState);  
+};
   useEffect(() => {
     const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedMailingCountry);
     setMailingCountryRegions(filteredProvinceTerritoryStates);
@@ -264,6 +271,9 @@ export default function RenewItaUpdateAddress() {
                   errorMessage={errors?.mailingPostalCode}
                   required={mailingPostalCodeRequired}
                 />
+                <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
+                  {t('renew-ita:update-address.home-address.use-mailing-address')}
+                </InputCheckbox>
               </div>
             </div>
           </fieldset>
