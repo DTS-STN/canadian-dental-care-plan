@@ -218,6 +218,13 @@
         "parent-or-guardian-required": "Select whether you are the parent or legal guardian of this child"
       }
     },
+    "parent-or-guardian-required": {
+      "page-title": "You must be a parent or legal guardian",
+      "must-be": "You must be a parent or legal guardian.",
+      "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
+      "back-btn": "Back",
+      "continue-btn": "Continue to next member"
+    },
     "dental-insurance": {
       "title": "{{childName}}\u00a0: access to other dental insurance",
       "legend": "Does {{childName}} have access to dental insurance or coverage\u00a0:",

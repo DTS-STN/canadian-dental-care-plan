@@ -1,5 +1,3 @@
-import type { FormEvent } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { data, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -95,6 +93,10 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
+  if (parsedDataResult.data.parentOrGuardian === ParentOrGuardianOption.No) {
+    return redirect(getPathById('protected/renew/$id/$childId/parent-or-guardian-required', params));
+  }
+
   return redirect(getPathById('protected/renew/$id/$childId/dental-insurance', params));
 }
 
@@ -108,16 +110,10 @@ export default function ProtectedRenewParentOrGuardian() {
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, { parentOrGuardian: 'input-radio-parent-or-guardian-option-0' });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    fetcher.submit(event.currentTarget, { method: 'POST' });
-    sessionStorage.removeItem('protected.renew.state');
-  }
-
   return (
     <>
       <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+      <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
         <InputRadios
           id="parent-or-guardian"
@@ -136,9 +132,7 @@ export default function ProtectedRenewParentOrGuardian() {
           </LoadingButton>
           <ButtonLink
             id="back-button"
-            // TODO: replace with proper route (needs a valid route otherwise will error)
-            // routeId="protected/renew/$id/member-selection"
-            routeId="protected/renew/$id/tax-filing"
+            routeId="protected/renew/$id/member-selection"
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}
