@@ -229,18 +229,6 @@ export default function RenewItaUpdateAddress() {
                     required={homePostalCodeRequired}
                   />
                 </div>
-                <InputSelect
-                  id="home-country"
-                  name="homeCountry"
-                  className="w-full sm:w-1/2"
-                  label={t('renew-ita:update-address.address-field.country')}
-                  autoComplete="country"
-                  defaultValue={defaultState.addressInformation?.homeCountry ?? ''}
-                  errorMessage={errors?.homeCountry}
-                  options={countries}
-                  onChange={homeCountryChangeHandler}
-                  required
-                />
                 {homeRegions.length > 0 && (
                   <InputSelect
                     id="home-province"
@@ -253,6 +241,18 @@ export default function RenewItaUpdateAddress() {
                     required
                   />
                 )}
+                <InputSelect
+                  id="home-country"
+                  name="homeCountry"
+                  className="w-full sm:w-1/2"
+                  label={t('renew-ita:update-address.address-field.country')}
+                  autoComplete="country"
+                  defaultValue={defaultState.addressInformation?.homeCountry ?? ''}
+                  errorMessage={errors?.homeCountry}
+                  options={countries}
+                  onChange={homeCountryChangeHandler}
+                  required
+                />
               </>
             </div>
           </fieldset>
