@@ -270,11 +270,11 @@ export default function RenewItaUpdateAddress() {
                   defaultValue={defaultState?.mailingPostalCode ?? ''}
                   errorMessage={errors?.mailingPostalCode}
                   required={mailingPostalCodeRequired}
-                />
-                <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
+                />               
+              </div>
+              <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
                   {t('renew-ita:update-address.home-address.use-mailing-address')}
                 </InputCheckbox>
-              </div>
             </div>
           </fieldset>
           {editMode ? (
