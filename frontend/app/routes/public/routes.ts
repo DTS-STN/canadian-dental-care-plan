@@ -557,6 +557,26 @@ export const routes = [
             file: 'routes/public/renew/$id/adult-child/exit-application.tsx',
             paths: { en: '/:lang/renew/:id/adult-child/exit-application', fr: '/:lang/renew/:id/adulte-enfant/quitter-demande' },
           },
+          {
+            id: 'public/renew/$id/child/children/index',
+            file: 'routes/public/renew/$id/child/children/index.tsx',
+            paths: { en: '/:lang/renew/:id/child/children', fr: '/:lang/renew/:id/enfant/enfant' },
+          },
+          {
+            id: 'public/renew/$id/child/review-child-information',
+            file: 'routes/public/renew/$id/child/review-child-information.tsx',
+            paths: { en: '/:lang/renew/:id/child/review-child-information', fr: '/:lang/renew/:id/enfant/revue-renseignements-enfant' },
+          },
+          {
+            id: 'public/renew/$id/child/confirmation',
+            file: 'routes/public/renew/$id/child/confirmation.tsx',
+            paths: { en: '/:lang/renew/:id/child/confirmation', fr: '/:lang/renew/:id/enfant/confirmation' },
+          },
+          {
+            id: 'public/renew/$id/child/exit-application',
+            file: 'routes/public/renew/$id/child/exit-application.tsx',
+            paths: { en: '/:lang/renew/:id/child/exit-application', fr: '/:lang/renew/:id/enfant/quitter-demande' },
+          },
         ],
       },
       {

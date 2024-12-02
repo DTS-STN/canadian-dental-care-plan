@@ -12,6 +12,7 @@ import type index from '../public/locales/en/index.json';
 import type letters from '../public/locales/en/letters.json';
 import type protectedRenew from '../public/locales/en/protected-renew.json';
 import type renewAdultChild from '../public/locales/en/renew-adult-child.json';
+import type renewChild from '../public/locales/en/renew-child.json';
 import type renewIta from '../public/locales/en/renew-ita.json';
 import type renew from '../public/locales/en/renew.json';
 import type status from '../public/locales/en/status.json';
@@ -75,6 +76,7 @@ declare module 'i18next' {
       status: typeof status;
       renew: typeof renew;
       'renew-ita': typeof renewIta;
+      'renew-child': typeof renewChild;
       'renew-adult-child': typeof renewAdultChild;
       'demographic-survey': typeof demographicSurvey;
       'stub-login': typeof stubLogin;
