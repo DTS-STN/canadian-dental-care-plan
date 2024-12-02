@@ -37,7 +37,7 @@ import { isAllValidInputCharacters } from '~/utils/string-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.ita.updateAddress,
-  pageTitleI18nKey: 'renew-ita:update-address.page-title',
+  pageTitleI18nKey: 'renew-ita:update-address.mailing-address.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -52,7 +52,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:update-address.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:update-address.mailing-address.page-title') }) };
 
   return {
     id: state.id,
@@ -77,7 +77,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const addressInformationSchema = z
     .object({
       mailingAddress: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.address-required')).max(30).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')),
-      mailingApartment: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
       mailingCountry: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.country-required')),
       mailingProvince: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.province-required')).optional(),
       mailingCity: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.city-required')).max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')),
@@ -110,7 +109,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedDataResult = addressInformationSchema.safeParse({
     mailingAddress: String(formData.get('mailingAddress') ?? ''),
-    mailingApartment: formData.get('mailingApartment') ? String(formData.get('mailingApartment')) : undefined,
     mailingCountry: String(formData.get('mailingCountry') ?? ''),
     mailingProvince: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
     mailingCity: String(formData.get('mailingCity') ?? ''),
@@ -127,7 +125,6 @@ export async function action({ context: { appContainer, session }, params, reque
     ...parsedDataResult.data,
     ...(parsedDataResult.data.copyMailingAddress && {
       homeAddress: parsedDataResult.data.mailingAddress,
-      homeApartment: parsedDataResult.data.mailingApartment,
       homeCountry: parsedDataResult.data.mailingCountry,
       homeProvince: parsedDataResult.data.mailingProvince,
       homeCity: parsedDataResult.data.mailingCity,
@@ -157,7 +154,6 @@ export default function RenewItaUpdateAddress() {
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     mailingAddress: 'mailing-address',
-    mailingApartment: 'mailing-apartment',
     mailingProvince: 'mailing-province',
     mailingCountry: 'mailing-country',
     mailingCity: 'mailing-city',
@@ -214,40 +210,6 @@ export default function RenewItaUpdateAddress() {
                 errorMessage={errors?.mailingAddress}
                 required
               />
-              <InputSanitizeField
-                id="mailing-apartment"
-                name="mailingApartment"
-                className="w-full"
-                label={t('renew-ita:update-address.address-field.apartment')}
-                maxLength={30}
-                autoComplete="address-line2"
-                defaultValue={defaultState?.mailingApartment ?? ''}
-                errorMessage={errors?.mailingApartment}
-              />
-              <InputSelect
-                id="mailing-country"
-                name="mailingCountry"
-                className="w-full sm:w-1/2"
-                label={t('renew-ita:update-address.address-field.country')}
-                autoComplete="country"
-                defaultValue={defaultState?.mailingCountry ?? ''}
-                errorMessage={errors?.mailingCountry}
-                options={countries}
-                onChange={mailingCountryChangeHandler}
-                required
-              />
-              {mailingRegions.length > 0 && (
-                <InputSelect
-                  id="mailing-province"
-                  name="mailingProvince"
-                  className="w-full sm:w-1/2"
-                  label={t('renew-ita:update-address.address-field.province')}
-                  defaultValue={defaultState?.mailingProvince ?? ''}
-                  errorMessage={errors?.mailingProvince}
-                  options={[dummyOption, ...mailingRegions]}
-                  required
-                />
-              )}
               <div className="grid items-end gap-6 md:grid-cols-2">
                 <InputSanitizeField
                   id="mailing-city"
@@ -272,6 +234,30 @@ export default function RenewItaUpdateAddress() {
                   required={mailingPostalCodeRequired}
                 />
               </div>
+              {mailingRegions.length > 0 && (
+                <InputSelect
+                  id="mailing-province"
+                  name="mailingProvince"
+                  className="w-full sm:w-1/2"
+                  label={t('renew-ita:update-address.address-field.province')}
+                  defaultValue={defaultState?.mailingProvince ?? ''}
+                  errorMessage={errors?.mailingProvince}
+                  options={[dummyOption, ...mailingRegions]}
+                  required
+                />
+              )}
+              <InputSelect
+                id="mailing-country"
+                name="mailingCountry"
+                className="w-full sm:w-1/2"
+                label={t('renew-ita:update-address.address-field.country')}
+                autoComplete="country"
+                defaultValue={defaultState?.mailingCountry ?? ''}
+                errorMessage={errors?.mailingCountry}
+                options={countries}
+                onChange={mailingCountryChangeHandler}
+                required
+              />
               <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
                 {t('renew-ita:update-address.home-address.use-mailing-address')}
               </InputCheckbox>
