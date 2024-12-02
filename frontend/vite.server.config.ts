@@ -6,7 +6,7 @@ export default defineConfig({
     emptyOutDir: false,
     rollupOptions: {
       plugins: [tsconfigPaths()],
-      input: './express-server/express.server.ts',
+      input: './app/.server/express-server/express.server.ts',
       output: {
         dir: './build/',
         entryFileNames: 'express.server.mjs',

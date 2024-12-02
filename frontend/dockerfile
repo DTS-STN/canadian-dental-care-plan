@@ -71,7 +71,6 @@ COPY --from=deps --chown=node:node /home/node/package.json ./package.json
 COPY --from=deps --chown=node:node /home/node/package-lock.json ./package-lock.json
 COPY --chown=node:node ./app/ ./app/
 COPY --chown=node:node ./public/ ./public/
-COPY --chown=node:node ./express-server/ ./express-server/
 COPY --chown=node:node ./tailwind.config.ts ./tailwind.config.ts
 COPY --chown=node:node ./tsconfig.json ./tsconfig.json
 COPY --chown=node:node ./vite.config.ts ./vite.config.ts
@@ -127,4 +126,4 @@ LABEL org.opencontainers.image.vendor=${IMAGE_VENDOR}
 
 USER node
 ENV PORT=3000
-CMD ["node", "./build/express.server.mjs", "./server/index.js"]
+CMD ["node", "./build/express.server.mjs"]

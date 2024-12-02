@@ -21,7 +21,7 @@ export function globalErrorHandler(isProduction: boolean): ErrorRequestHandler {
       return next(error);
     }
 
-    const rootDir = isProduction ? './client/' : '../public/';
+    const rootDir = isProduction ? './client/' : '../../../public/';
 
     const errorFile =
       response.statusCode === 403 //
