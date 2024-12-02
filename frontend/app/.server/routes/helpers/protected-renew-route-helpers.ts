@@ -28,6 +28,13 @@ export interface ProtectedRenewState {
     readonly shareData: boolean;
   };
   readonly dentalInsurance?: boolean;
+  readonly dentalBenefits?: {
+    hasFederalBenefits: boolean;
+    federalSocialProgram?: string;
+    hasProvincialTerritorialBenefits: boolean;
+    provincialTerritorialSocialProgram?: string;
+    province?: string;
+  };
   readonly isSurveyCompleted?: boolean;
   readonly demographicSurvey?: {
     readonly indigenousStatus?: string;
@@ -331,7 +338,7 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
-  const { hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, addressInformation, dentalInsurance, demographicSurvey } = state;
+  const { applicantInformation, hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, addressInformation, dentalInsurance, demographicSurvey } = state;
 
   if (maritalStatus === undefined) {
     throw redirect(getPathById('protected/renew/$id/marital-status', params));
@@ -366,6 +373,7 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
   const children = getProtectedChildrenState(state).length > 0 ? validateProtectedChildrenStateForReview({ childrenState: state.children, params }) : [];
 
   return {
+    applicantInformation,
     maritalStatus,
     editMode,
     id,
