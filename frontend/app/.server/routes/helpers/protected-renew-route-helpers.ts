@@ -89,6 +89,13 @@ export interface ProtectedRenewState {
     mailingPostalCode?: string;
     mailingProvince?: string;
   };
+  readonly dentalBenefits?: {
+    hasFederalBenefits: boolean;
+    federalSocialProgram?: string;
+    hasProvincialTerritorialBenefits: boolean;
+    provincialTerritorialSocialProgram?: string;
+    province?: string;
+  };
   readonly submissionInfo?: {
     /**
      * The UTC date and time when the application was submitted.
@@ -102,6 +109,8 @@ export interface ProtectedRenewState {
 export type PartnerInformationState = NonNullable<ProtectedRenewState['partnerInformation']>;
 export type ChildState = ProtectedRenewState['children'][number];
 export type AddressInformationState = NonNullable<ProtectedRenewState['addressInformation']>;
+export type DentalFederalBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
+export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 
 /**
  * Schema for validating UUID.
