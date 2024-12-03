@@ -74,7 +74,24 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveProtectedRenewState({ params, session, state: { dentalInsurance: parsedDataResult.data.dentalInsurance } });
+  saveProtectedRenewState({
+    params,
+    session,
+    state: {
+      dentalInsurance: parsedDataResult.data.dentalInsurance,
+      dentalBenefits: {
+        hasFederalBenefits: false,
+        federalSocialProgram: '',
+        hasProvincialTerritorialBenefits: false,
+        provincialTerritorialSocialProgram: '',
+        province: '',
+      },
+      confirmDentalBenefits: {
+        federalBenefitsChanged: true,
+        provincialTerritorialBenefitsChanged: true,
+      },
+    },
+  });
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));

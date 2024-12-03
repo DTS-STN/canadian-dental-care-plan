@@ -28,6 +28,17 @@ export interface ProtectedRenewState {
     readonly shareData: boolean;
   };
   readonly dentalInsurance?: boolean;
+  readonly dentalBenefits?: {
+    hasFederalBenefits: boolean;
+    federalSocialProgram?: string;
+    hasProvincialTerritorialBenefits: boolean;
+    provincialTerritorialSocialProgram?: string;
+    province?: string;
+  };
+  readonly confirmDentalBenefits?: {
+    federalBenefitsChanged: boolean;
+    provincialTerritorialBenefitsChanged: boolean;
+  };
   readonly isSurveyCompleted?: boolean;
   readonly demographicSurvey?: {
     readonly indigenousStatus?: string;
@@ -39,7 +50,6 @@ export interface ProtectedRenewState {
     readonly genderStatus?: string;
   };
   readonly maritalStatus?: string;
-  readonly hasMaritalStatusChanged?: boolean;
   readonly partnerInformation?: {
     confirm: boolean;
     yearOfBirth: string;
@@ -49,10 +59,6 @@ export interface ProtectedRenewState {
     readonly id: string;
     readonly isParentOrLegalGuardian?: boolean;
     readonly dentalInsurance?: boolean;
-    readonly confirmDentalBenefits?: {
-      federalBenefitsChanged: boolean;
-      provincialTerritorialBenefitsChanged: boolean;
-    };
     readonly firstName?: string;
     readonly lastName?: string;
     readonly isSurveyCompleted?: boolean;
@@ -94,18 +100,6 @@ export interface ProtectedRenewState {
     mailingPostalCode?: string;
     mailingProvince?: string;
   };
-  readonly dentalBenefits?: {
-    hasFederalBenefits: boolean;
-    federalSocialProgram?: string;
-    hasProvincialTerritorialBenefits: boolean;
-    provincialTerritorialSocialProgram?: string;
-    province?: string;
-  };
-  readonly confirmDentalBenefits?: {
-    federalBenefitsChanged: boolean;
-    provincialTerritorialBenefitsChanged: boolean;
-  };
-
   readonly submissionInfo?: {
     /**
      * The UTC date and time when the application was submitted.
@@ -122,7 +116,6 @@ export type ProtectedAddressInformationState = NonNullable<ProtectedRenewState['
 export type ProtectedClientApplicationState = NonNullable<ProtectedRenewState['clientApplication']>;
 export type ProtectedDentalFederalBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type ProtectedDentalProvincialTerritorialBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
-export type ProtectedConfirmDentalBenefitsState = NonNullable<ProtectedRenewState['confirmDentalBenefits']>;
 export type ProtectedContactInformationState = NonNullable<ProtectedRenewState['contactInformation']>;
 
 /**
@@ -344,14 +337,10 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
-  const { clientApplication, hasAddressChanged, hasMaritalStatusChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, addressInformation, dentalBenefits, confirmDentalBenefits, dentalInsurance, demographicSurvey } = state;
+  const { clientApplication, hasAddressChanged, maritalStatus, partnerInformation, contactInformation, confirmDentalBenefits, editMode, id, addressInformation, dentalBenefits, dentalInsurance, demographicSurvey } = state;
 
-  if (hasMaritalStatusChanged === undefined) {
-    throw redirect(getPathById('protected/renew/$id/confirm-marital-status', params));
-  }
-
-  if (hasMaritalStatusChanged && maritalStatus === undefined) {
-    throw redirect(getPathById('protected/renew/$id/confirm-marital-status', params));
+  if (maritalStatus === undefined) {
+    throw redirect(getPathById('protected/renew/$id/marital-status', params));
   }
 
   if (hasAddressChanged === undefined) {
@@ -374,14 +363,6 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
     throw redirect(getPathById('protected/renew/$id/dental-insurance', params));
   }
 
-  if (confirmDentalBenefits === undefined) {
-    throw redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
-  }
-
-  if ((confirmDentalBenefits.federalBenefitsChanged || confirmDentalBenefits.provincialTerritorialBenefitsChanged) && dentalBenefits === undefined) {
-    throw redirect(getPathById('protected/renew/$id/update-federal-provincial-territorial-benefits', params));
-  }
-
   if (demographicSurvey === undefined) {
     throw redirect(getPathById('protected/renew/$id/demographic-survey', params));
   }
@@ -393,7 +374,6 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
   return {
     clientApplication,
     maritalStatus,
-    hasMaritalStatusChanged,
     editMode,
     id,
     contactInformation,

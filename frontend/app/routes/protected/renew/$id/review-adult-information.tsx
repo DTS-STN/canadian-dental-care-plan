@@ -41,7 +41,7 @@ enum FormAction {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adultChild.reviewAdultInformation,
+  pageIdentifier: pageIds.protected.renew.reviewAdultInformation,
   pageTitleI18nKey: 'protected-renew:review-adult-information.page-title',
 } as const satisfies RouteHandleData;
 
@@ -186,7 +186,7 @@ export async function action({ context: { appContainer, session }, params, reque
     const submissionInfo = { submittedOn: new UTCDate().toISOString() };
     saveProtectedRenewState({ params, session, state: { submissionInfo } });
 
-    return redirect(getPathById('public/renew/$id/adult-child/confirmation', params));
+    return redirect(getPathById('protected/renew/$id/confirmation', params));
   }
 
   return redirect(getPathById('protected/renew/$id/review-child-information', params));

@@ -20,7 +20,11 @@ export const pageIds = {
       confirmAddress: 'CDCP-PROT-RENW-0013',
       updateAddress: 'CDCP-PROT-RENW-0014',
       communicationPreference: 'CDCP-PROT-RENW-0015',
+<<<<<<< HEAD
       confirmFederalProvincialTerritorialBenefits: 'CDCP-PROT-RENW-0016',
+=======
+      reviewAdultInformation: 'CDCP-PROT-RENW-0016',
+>>>>>>> 8a6d4e5b (review adult update)
     },
     dataUnavailable: 'CDCP-PROT-0099',
   },
