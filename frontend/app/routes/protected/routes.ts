@@ -122,6 +122,11 @@ export const routes = [
             file: 'routes/protected/renew/$id/update-address.tsx',
             paths: { en: '/:lang/protected/renew/:id/update-address', fr: '/:lang/protected/renew/:id/mise-a-jour-adresse' },
           },
+          {
+            id: 'protected/renew/$id/confirm-federal-provincial-territorial-benefits',
+            file: 'routes/protected/renew/$id/confirm-federal-provincial-territorial-benefits.tsx',
+            paths: { en: '/:lang/protected/renew/:id/confirm-federal-provincial-territorial-benefits', fr: '/:lang/protected/renew/:id/confirm-federal-provincial-territorial-benefits' },
+          },
         ],
       },
     ],
