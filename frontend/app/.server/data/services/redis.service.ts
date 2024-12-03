@@ -38,7 +38,17 @@ export class DefaultRedisService implements RedisService {
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig) {
     this.log = logFactory.createLogger('DefaultRedisService');
-    this.redisClient = serverConfig.REDIS_SENTINEL_NAME ? this.newSentinelClient(serverConfig) : this.newRedisClient(serverConfig);
+    this.redisClient = new Redis(this.getRedisConfig(serverConfig));
+
+    const redisUrl = serverConfig.REDIS_SENTINEL_NAME //
+      ? `sentinel://${serverConfig.REDIS_SENTINEL_HOST}:${serverConfig.REDIS_SENTINEL_PORT}`
+      : `redis://${serverConfig.REDIS_STANDALONE_HOST}:${serverConfig.REDIS_STANDALONE_PORT}`;
+
+    this.redisClient
+      .on('connect', () => this.log.info(`Redis client initiating connection to [${redisUrl}]`))
+      .on('ready', () => this.log.info('Redis client is ready to use'))
+      .on('reconnecting', () => this.log.info(`Redis client is reconnecting to [${redisUrl}]`))
+      .on('error', (error: Error) => this.log.error(`Redis client error connecting to [${redisUrl}]: ${error.message}`));
   }
 
   async get<T>(key: string): Promise<T | null> {
@@ -58,50 +68,40 @@ export class DefaultRedisService implements RedisService {
     return await this.redisClient.ping();
   }
 
-  private newRedisClient(serverConfig: ServerConfig): Redis {
-    const redisClient = new Redis({
-      lazyConnect: true,
+  private getRedisConfig(serverConfig: ServerConfig) {
+    const retryStrategy = (times: number): number => {
+      // exponential backoff starting at 250ms to a maximum of 5s
+      const retryIn = Math.min(250 * Math.pow(2, times - 1), 5000);
+      this.log.error('Could not connect to Redis (attempt #%s); retry in %s ms', times, retryIn);
+      return retryIn;
+    };
+
+    if (serverConfig.REDIS_SENTINEL_NAME) {
+      this.log.debug('      configuring Redis client in sentinel mode');
+
+      return {
+        name: serverConfig.REDIS_SENTINEL_NAME,
+        sentinels: [
+          {
+            host: serverConfig.REDIS_SENTINEL_HOST,
+            port: serverConfig.REDIS_SENTINEL_PORT,
+          },
+        ],
+        username: serverConfig.REDIS_USERNAME,
+        password: serverConfig.REDIS_PASSWORD,
+        commandTimeout: serverConfig.REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
+        retryStrategy,
+      };
+    }
+
+    this.log.debug('      configuring Redis client in standalone mode');
+    return {
       host: serverConfig.REDIS_STANDALONE_HOST,
       port: serverConfig.REDIS_STANDALONE_PORT,
       username: serverConfig.REDIS_USERNAME,
       password: serverConfig.REDIS_PASSWORD,
-      maxRetriesPerRequest: serverConfig.REDIS_MAX_RETRIES_PER_REQUEST,
-    });
-
-    const redisUrl = `redis://${serverConfig.REDIS_STANDALONE_HOST}:${serverConfig.REDIS_STANDALONE_PORT}`;
-
-    redisClient
-      .on('connect', () => this.log.info(`Redis client initiating connection to [${redisUrl}]`))
-      .on('ready', () => this.log.info('Redis client is ready to use'))
-      .on('reconnecting', () => this.log.info(`Redis client is reconnecting to [${redisUrl}]`))
-      .on('error', (error: Error) => this.log.error(`Redis client error connecting to [${redisUrl}]: ${error.message}`));
-
-    return redisClient;
-  }
-
-  private newSentinelClient(serverConfig: ServerConfig): Redis {
-    const sentinelAddress = {
-      host: serverConfig.REDIS_SENTINEL_HOST,
-      port: serverConfig.REDIS_SENTINEL_PORT,
+      commandTimeout: serverConfig.REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
+      retryStrategy,
     };
-
-    const redisClient = new Redis({
-      lazyConnect: true,
-      sentinels: [sentinelAddress],
-      name: serverConfig.REDIS_SENTINEL_NAME,
-      username: serverConfig.REDIS_USERNAME,
-      password: serverConfig.REDIS_PASSWORD,
-      maxRetriesPerRequest: serverConfig.REDIS_MAX_RETRIES_PER_REQUEST,
-    });
-
-    const redisUrl = `sentinel://${serverConfig.REDIS_SENTINEL_HOST}:${serverConfig.REDIS_SENTINEL_PORT}`;
-
-    redisClient
-      .on('connect', () => this.log.info(`Redis client initiating connection to [${redisUrl}]`))
-      .on('ready', () => this.log.info('Redis client is ready to use'))
-      .on('reconnecting', () => this.log.info(`Redis client is reconnecting to [${redisUrl}]`))
-      .on('error', (error: Error) => this.log.error(`Redis client error connecting to [${redisUrl}]: ${error.message}`));
-
-    return redisClient;
   }
 }
