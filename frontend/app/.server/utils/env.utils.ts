@@ -113,7 +113,7 @@ const serverEnv = clientEnvSchema.extend({
   REDIS_STANDALONE_PORT: z.coerce.number().default(6379),
   REDIS_USERNAME: z.string().trim().min(1).optional(),
   REDIS_PASSWORD: z.string().trim().min(1).optional(),
-  REDIS_MAX_RETRIES_PER_REQUEST: z.coerce.number().default(3),
+  REDIS_COMMAND_TIMEOUT_SECONDS: z.coerce.number().default(1),
 
   // mocks settings
   ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(''),

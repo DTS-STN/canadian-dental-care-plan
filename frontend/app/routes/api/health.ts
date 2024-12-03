@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer }, request }: LoaderFunct
       REDIS_SENTINEL_NAME: serverConfig.REDIS_SENTINEL_NAME ?? '',
       REDIS_SENTINEL_HOST: serverConfig.REDIS_SENTINEL_HOST ?? '',
       REDIS_SENTINEL_PORT: (serverConfig.REDIS_SENTINEL_PORT ?? '').toString(),
-      REDIS_MAX_RETRIES_PER_REQUEST: serverConfig.REDIS_MAX_RETRIES_PER_REQUEST.toString(),
+      REDIS_COMMAND_TIMEOUT_SECONDS: serverConfig.REDIS_COMMAND_TIMEOUT_SECONDS.toString(),
     },
   };
 
