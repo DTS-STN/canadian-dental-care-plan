@@ -431,5 +431,15 @@
       "provincial-benefit-required": "Sélectionnez si vous avez des prestations dentaires provinciales ou territoriales",
       "provincial-territorial-required": "Sélectionnez une province ou un territoire"
     }
+  },
+  "review-submit": {
+    "page-title": "Vérifiez vos renseignements",
+    "form-instructions": "Vous soumettez une demande de renouvellement pour les personnes suivantes :",
+    "submit-renewal-title": "Soumettre votre demande de renouvellement",
+    "submit-p-proceed": "En transmettant votre demande, vous consentez à attester de la véracité des informations fournies.",
+    "submit-p-false-info": "Si vous fournissez de fausses informations sur votre demande, vous et les autres personnes pour lesquelles vous avez postulé pourriez être exclus du régime.",
+    "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles, vous ou les membres de votre famille pourriez devoir rembourser le coût total des soins reçus dans le cadre du régime canadien de soins dentaires.",
+    "back-button": "Retour",
+    "submit-button": "Présenter la demande de renouvellement"
   }
 }

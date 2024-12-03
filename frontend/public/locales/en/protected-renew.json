@@ -431,5 +431,15 @@
       "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
       "provincial-territorial-required": "Select a province or territory"
     }
+  },
+  "review-submit": {
+    "page-title": "Review your information",
+    "form-instructions": "You are submitting a renewal application for the following people:",
+    "submit-renewal-title": "Submit your renewal application",
+    "submit-p-proceed": "By proceeding with this application, you are agreeing to attest truthfully to the information provided.",
+    "submit-p-false-info": "If you provide false information on your application, you and others you applied for may be removed from the plan.",
+    "submit-p-repayment": "If you or your family members were not eligible to apply, you or your family member may have to repay the full cost of care received through the Canadian Dental Care Plan.",
+    "back-button": "Back",
+    "submit-button": "Submit Application"
   }
 }
