@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { ClientEnv as ClientEnvComponent } from '~/components/client-env';
-import type { ClientEnv } from '~/utils/env-utils';
+import type { ClientEnv, FeatureName } from '~/utils/env-utils';
 
 describe('<ClientEnv>', () => {
   it('should render the script tag with the correct innerHTML', () => {
@@ -17,7 +17,7 @@ describe('<ClientEnv>', () => {
       COMMUNICATION_METHOD_EMAIL_ID: 'EMAIL',
       COMMUNICATION_METHOD_MAIL_ID: 'MAIL',
       ECAS_BASE_URI: 'https://srv136.services.gc.ca/ecas-seca/rascl/SCL',
-      ENABLED_FEATURES: ['feature1', 'feature2'],
+      ENABLED_FEATURES: ['feature1', 'feature2'] as unknown as FeatureName[],
       HCAPTCHA_SITE_KEY: 'hcaptcha-site-key',
       HEADER_LOGO_URL_EN: 'https://canada.ca/en',
       HEADER_LOGO_URL_FR: 'https://canada.ca/fr',

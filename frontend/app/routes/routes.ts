@@ -9,6 +9,7 @@
 //       we cannot use aliased imports (ie: ~/) here
 import { routes as apiRoutes } from './api/routes';
 import { routes as authRoutes } from './auth/routes';
+import { routes as oidcRoutes } from './oidc/routes';
 import { routes as protectedRoutes } from './protected/routes';
 import { routes as publicRoutes } from './public/routes';
 
@@ -41,6 +42,7 @@ export function isI18nPageRoute(obj: unknown): obj is I18nPageRoute {
 export const routes = [
   ...apiRoutes, //
   ...authRoutes,
+  ...oidcRoutes,
   ...publicRoutes,
   ...protectedRoutes,
 ] as const satisfies I18nRoute[];
