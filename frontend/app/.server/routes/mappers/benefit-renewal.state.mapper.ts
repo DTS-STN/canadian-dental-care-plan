@@ -56,10 +56,9 @@ export interface ProtectedRenewState {
   addressInformation?: ProtectedAddressInformationState;
   clientApplication: ClientApplicationDto;
   children: ProtectedChildState[];
-  contactInformation: ProtectedContactInformationState;
+  contactInformation?: ProtectedContactInformationState;
   dentalBenefits?: ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
-  hasAddressChanged: boolean;
   maritalStatus?: string;
   partnerInformation?: ProtectedPartnerInformationState;
 }
@@ -67,7 +66,7 @@ export interface ProtectedRenewState {
 export interface BenefitRenewalStateMapper {
   mapRenewAdultChildStateToAdultChildBenefitRenewalDto(renewAdultChildState: RenewAdultChildState): AdultChildBenefitRenewalDto;
   mapRenewItaStateToItaBenefitRenewalDto(renewItaState: RenewItaState): ItaBenefitRenewalDto;
-  mapProtectedRenewStateToProtectedBenefitRenewalDto(protectedRenewSTate: ProtectedRenewState, userId: string): ProtectedBenefitRenewalDto;
+  mapProtectedRenewStateToProtectedBenefitRenewalDto(protectedRenewState: ProtectedRenewState, userId: string): ProtectedBenefitRenewalDto;
 }
 
 interface ToApplicantInformationArgs {
@@ -94,7 +93,7 @@ interface ToContactInformationArgs {
   hasEmailChanged: boolean;
   hasPhoneChanged: boolean;
   renewedAddressInformation?: AddressInformationState;
-  renewedContactInformation: ContactInformationState;
+  renewedContactInformation?: ContactInformationState;
 }
 
 interface ToDentalBenefitsArgs {
@@ -237,19 +236,9 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }
 
   mapProtectedRenewStateToProtectedBenefitRenewalDto(
-    { addressInformation, children, contactInformation, dentalBenefits, dentalInsurance, hasAddressChanged, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
+    { addressInformation, children, contactInformation, dentalBenefits, dentalInsurance, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
     userId: string,
   ): ProtectedBenefitRenewalDto {
-    const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
-    if (hasEmailChanged === undefined) {
-      throw Error('Expected hasEmailChanged to be defined');
-    }
-
-    const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
-    if (hasPhoneChanged === undefined) {
-      throw Error('Expected hasPhoneChanged to be defined');
-    }
-
     return {
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
@@ -263,17 +252,17 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       communicationPreferences: this.toCommunicationPreferences({
         existingCommunicationPreferences: clientApplication.communicationPreferences,
-        hasEmailChanged,
-        renewedEmail: contactInformation.email,
-        renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+        hasEmailChanged: false,
+        renewedEmail: contactInformation?.email,
+        renewedReceiveEmailCommunication: contactInformation?.shouldReceiveEmailCommunication,
       }),
       contactInformation: this.toContactInformation({
         renewedAddressInformation: addressInformation,
         renewedContactInformation: contactInformation,
         existingContactInformation: clientApplication.contactInformation,
-        hasAddressChanged,
-        hasEmailChanged,
-        hasPhoneChanged,
+        hasAddressChanged: false,
+        hasEmailChanged: false,
+        hasPhoneChanged: false,
       }),
       dentalBenefits: this.toDentalBenefits({
         existingDentalBenefits: clientApplication.dentalBenefits,
@@ -352,13 +341,13 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         : {}),
       ...(hasPhoneChanged
         ? {
-            phoneNumber: renewedContactInformation.phoneNumber,
-            phoneNumberAlt: renewedContactInformation.phoneNumberAlt,
+            phoneNumber: renewedContactInformation?.phoneNumber,
+            phoneNumberAlt: renewedContactInformation?.phoneNumberAlt,
           }
         : {}),
       ...(hasEmailChanged
         ? {
-            email: renewedContactInformation.email,
+            email: renewedContactInformation?.email,
           }
         : {}),
     };

@@ -10,7 +10,7 @@ import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import type { ProtectedDentalFederalBenefitsState, ProtectedDentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -98,7 +98,7 @@ export async function action({ context: { appContainer, session }, params, reque
         ...val,
         federalSocialProgram: val.hasFederalBenefits ? val.federalSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<DentalFederalBenefitsState>;
+    }) satisfies z.ZodType<ProtectedDentalFederalBenefitsState>;
 
   const provincialTerritorialBenefitsSchema = z
     .object({
@@ -121,7 +121,7 @@ export async function action({ context: { appContainer, session }, params, reque
         province: val.hasProvincialTerritorialBenefits ? val.province : undefined,
         provincialTerritorialSocialProgram: val.hasProvincialTerritorialBenefits ? val.provincialTerritorialSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<DentalProvincialTerritorialBenefitsState>;
+    }) satisfies z.ZodType<ProtectedDentalProvincialTerritorialBenefitsState>;
 
   const dentalFederalBenefits = {
     hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes : undefined,

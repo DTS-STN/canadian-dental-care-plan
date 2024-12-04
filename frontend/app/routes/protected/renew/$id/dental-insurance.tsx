@@ -79,17 +79,6 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       dentalInsurance: parsedDataResult.data.dentalInsurance,
-      dentalBenefits: {
-        hasFederalBenefits: false,
-        federalSocialProgram: '',
-        hasProvincialTerritorialBenefits: false,
-        provincialTerritorialSocialProgram: '',
-        province: '',
-      },
-      confirmDentalBenefits: {
-        federalBenefitsChanged: true,
-        provincialTerritorialBenefitsChanged: true,
-      },
     },
   });
 
@@ -97,7 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
-  return redirect(getPathById('protected/renew/$id/demographic-survey', params));
+  return redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
 }
 
 export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion() {

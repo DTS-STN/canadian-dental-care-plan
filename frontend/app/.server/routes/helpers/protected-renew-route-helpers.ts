@@ -337,53 +337,35 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
-  const { clientApplication, hasAddressChanged, maritalStatus, partnerInformation, contactInformation, confirmDentalBenefits, editMode, id, addressInformation, dentalBenefits, dentalInsurance, demographicSurvey } = state;
-
-  if (maritalStatus === undefined) {
-    throw redirect(getPathById('protected/renew/$id/marital-status', params));
-  }
-
-  if (hasAddressChanged === undefined) {
-    throw redirect(getPathById('protected/renew/$id/confirm-address', params));
-  }
-
-  if (hasAddressChanged && addressInformation === undefined) {
-    throw redirect(getPathById('protected/renew/$id/update-address', params));
-  }
-
-  if (contactInformation?.isNewOrUpdatedPhoneNumber === undefined) {
-    throw redirect(getPathById('protected/renew/$id/confirm-phone', params));
-  }
-
-  if (contactInformation.isNewOrUpdatedEmail === undefined) {
-    throw redirect(getPathById('protected/renew/$id/confirm-email', params));
-  }
+  const { maritalStatus, partnerInformation, addressInformation, clientApplication, contactInformation, confirmDentalBenefits, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
 
   if (dentalInsurance === undefined) {
     throw redirect(getPathById('protected/renew/$id/dental-insurance', params));
+  }
+
+  if (dentalBenefits === undefined) {
+    throw redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
   }
 
   if (demographicSurvey === undefined) {
     throw redirect(getPathById('protected/renew/$id/demographic-survey', params));
   }
 
-  // TODO: complete state validations when all screens are created
-
   const children = getProtectedChildrenState(state).length > 0 ? validateProtectedChildrenStateForReview({ childrenState: state.children, params }) : [];
 
   return {
-    clientApplication,
     maritalStatus,
+    partnerInformation,
+    addressInformation,
+    clientApplication,
+    contactInformation,
     editMode,
     id,
-    contactInformation,
     dentalInsurance,
-    addressInformation,
-    partnerInformation,
     children,
-    hasAddressChanged,
     dentalBenefits,
     confirmDentalBenefits,
+    demographicSurvey,
   };
 }
 
