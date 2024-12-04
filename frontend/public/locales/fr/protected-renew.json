@@ -263,6 +263,44 @@
       "error-message": {
         "dental-insurance-required": "Select whether the child has access to dental insurance"
       }
+    },
+    "update-dental-benefits": {
+      "title": "{{childName}}\u00a0: accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
+      "access-to-dental": "L'accès à des prestations dentaires dans le cadre d'un programme social n'aura aucune incidence sur l'admissibilité de l'enfant au Régime canadien de soins dentaires.",
+      "select-one": "Sélectionnez une option",
+      "eligibility-criteria": "Si l'enfant répond à tous les critères d'admissibilité, sa couverture doit être coordonnée entre les régimes afin qu'il n'y ait pas de dédoublement ou de lacunes dans la couverture.",
+      "federal-benefits": {
+        "title": "Prestations fédérales",
+        "legend": "L'accès de {{childName}} aux prestations fédérales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
+        "option-yes": "<strong>Oui</strong>, les prestations fédérales de cet enfant ont changé",
+        "option-no": "<strong>Non</strong>, les prestations fédérales de cet enfant n'ont pas changé",
+        "social-programs": {
+          "legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
+        }
+      },
+      "provincial-territorial-benefits": {
+        "title": "Prestations provinciales ou territoriales",
+        "legend": "L'accès de {{childName}} aux prestations provinciales ou territoriales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
+        "option-yes": "<strong>Oui</strong, les prestations provinciales ou territoriales de cet enfant ont changé",
+        "option-no": "<strong>Non</strong, les prestations provinciales ou territoriales de cet enfant n'ont pas changé",
+        "social-programs": {
+          "input-legend": "Par l'entremise de quelle province ou de quel territoire?",
+          "radio-legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
+        }
+      },
+      "button": {
+        "back": "Retour",
+        "continue": "Continuer",
+        "cancel-btn": "Annuler",
+        "save-btn": "Sauvegarder"
+      },
+      "error-message": {
+        "federal-benefit-program-required": "Sélectionnez le programme fédéral dont relève votre enfant",
+        "federal-benefit-required": "Sélectionnez si votre enfant bénéficie de prestations dentaires fédérales",
+        "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial dont relève votre enfant",
+        "provincial-benefit-required": "Sélectionnez si votre enfant bénéficie d'une assurance dentaire provinciale ou territoriale",
+        "provincial-territorial-required": "Sélectionnez une province ou un territoire"
+      }
     }
   },
   "confirm-phone": {
