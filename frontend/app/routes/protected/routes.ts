@@ -95,6 +95,11 @@ export const routes = [
                 file: 'routes/protected/renew/$id/$childId/demographic-survey.tsx',
                 paths: { en: '/:lang/protected/renew/:id/:childId/demographic-survey', fr: '/:lang/protected/renew/:id/:childId/demographic-survey' },
               },
+              {
+                id: 'protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits',
+                file: 'routes/protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits.tsx',
+                paths: { en: '/:lang/protected/renew/:id/:childId/confirm-federal-provincial-territorial-benefits', fr: '/:lang/protected/renew/:id/:childId/confirm-federal-provincial-territorial-benefits' },
+              },
             ],
           },
           {
