@@ -152,11 +152,10 @@ export async function action({ context: { appContainer, session }, params, reque
         ...parsedFederalBenefitsResult.data,
         ...parsedProvincialTerritorialBenefitsResult.data,
       },
-      editMode: true, // last step in the flow
     },
   });
 
-  return redirect(getPathById('public/renew/$id/ita/review-information', params));
+  return redirect(getPathById('public/renew/$id/ita/demographic-survey', params));
 }
 
 export default function RenewItaFederalProvincialTerritorialBenefits() {

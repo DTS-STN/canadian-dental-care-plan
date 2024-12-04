@@ -243,6 +243,10 @@
     "dental-benefit-title": "Access to government dental benefits",
     "dental-benefit-change": "Change answer to government dental benefits",
     "dental-benefit-has-access": "Has access to the following benefits:",
+    "demographic-survey-title": "Demographics questions",
+    "demographic-survey-heading": "Voluntary demographic questions",
+    "demographic-survey-responded": "Responded",
+    "demographic-survey-change": "Change answers to demographic questions",
     "submit-app-title": "Submit your renewal application",
     "submit-p-proceed": "By proceeding with this renewal, you are agreeing to attest truthfully to the information provided.",
     "submit-p-false-info": "If you provide false information on your renewal, you and others you applied for may be removed from the plan.",
@@ -312,6 +316,23 @@
       "are-you-sure": "Are you sure you want to close the application?",
       "back-btn": "Back",
       "close-btn": "Close application"
+    }
+  },
+  "demographic-survey": {
+    "page-title": "Voluntary demographic questions for {{memberName}}",
+    "optional": "All questions are optional.",
+    "indigenous-status": "Is this person First Nations, Métis or Inuk (Inuit)?",
+    "disability-status": "Does this person have a disability?",
+    "ethnic-groups": "To which ethnic group(s) does this person belong? Please select all that apply.",
+    "location-born-status": "Where was this person born?",
+    "gender-status": "What is this person's gender?",
+    "continue-btn": "Continue",
+    "back-btn": "Back",
+    "save-btn": "Save",
+    "cancel-btn": "Cancel",
+    "error-message": {
+      "first-nations-required": "Please select if this person is First Nations, Métis or Inuk (Inuit)",
+      "another-ethnic-group-required": "Please specify the ethnic group"
     }
   }
 }

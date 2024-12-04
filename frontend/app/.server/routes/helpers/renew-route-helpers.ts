@@ -101,6 +101,15 @@ export interface RenewState {
     acknowledgePrivacy: boolean;
     shareData: boolean;
   };
+  readonly demographicSurvey?: {
+    readonly indigenousStatus?: string;
+    readonly firstNations?: string[];
+    readonly disabilityStatus?: string;
+    readonly ethnicGroups?: string[];
+    readonly anotherEthnicGroup?: string;
+    readonly locationBornStatus?: string;
+    readonly genderStatus?: string;
+  };
   // TODO Add remaining states
 }
 
