@@ -21,6 +21,13 @@ export interface AppContainerProvider {
    * @returns The instance of the requested service.
    */
   get<T>(serviceIdentifier: ServiceIdentifier<T>): T;
+
+  /**
+   * Retrieves all instances of a service from the container. Throws an error if the service is not found.
+   * @param serviceIdentifier - The service identifier for the requested service.
+   * @returns An array of instances of the requested service.
+   */
+  getAll<T>(serviceIdentifier: ServiceIdentifier<T>): T[];
 }
 
 export class DefaultAppContainerProvider implements AppContainerProvider {
@@ -44,5 +51,10 @@ export class DefaultAppContainerProvider implements AppContainerProvider {
   get<T>(serviceIdentifier: ServiceIdentifier<T>): T {
     this.log.trace('Get service for service identifier: %s', serviceIdentifier);
     return this.container.get(serviceIdentifier);
+  }
+
+  getAll<T>(serviceIdentifier: ServiceIdentifier<T>): T[] {
+    this.log.trace('Getting all services for service identifier: %s', serviceIdentifier);
+    return this.container.getAll(serviceIdentifier);
   }
 }

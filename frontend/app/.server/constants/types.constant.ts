@@ -1,3 +1,4 @@
+import type { HealthCheck } from '@dts-stn/health-checks';
 import type { interfaces } from 'inversify';
 
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
@@ -208,6 +209,9 @@ export const TYPES = assignServiceIdentifiers({
   },
   factories: {
     LogFactory: serviceId<LogFactory>(),
+  },
+  health: {
+    HealthCheck: serviceId<HealthCheck>(),
   },
   http: {
     HttpClient: serviceId<HttpClient>(),
