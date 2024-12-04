@@ -11,7 +11,7 @@ import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewItaState } from '~/.server/routes/helpers/renew-ita-route-helpers';
-import type { AddressInformationState } from '~/.server/routes/helpers/renew-route-helpers';
+import type { MailingAddressState } from '~/.server/routes/helpers/renew-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/.server/utils/postal-zip-code.utils';
@@ -57,7 +57,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     id: state.id,
     meta,
-    defaultState: state.addressInformation,
+    defaultState: state,
     countryList,
     regionList,
     editMode: state.editMode,
@@ -74,45 +74,45 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
-  const addressInformationSchema = z
+  const mailingAddressSchema = z
     .object({
-      mailingAddress: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.address-required')).max(30).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')),
-      mailingCountry: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.country-required')),
-      mailingProvince: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.province-required')).optional(),
-      mailingCity: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.city-required')).max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')),
-      mailingPostalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
+      address: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.address-required')).max(30).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')),
+      country: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.country-required')),
+      province: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.province-required')).optional(),
+      city: z.string().trim().min(1, t('renew-ita:update-address.error-message.mailing-address.city-required')).max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')),
+      postalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-ita:update-address.error-message.characters-valid')).optional(),
       copyMailingAddress: z.boolean().optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) {
-        if (!val.mailingProvince || validator.isEmpty(val.mailingProvince)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.mailing-address.province-required'), path: ['mailingProvince'] });
+      if (val.country === CANADA_COUNTRY_ID || val.country === USA_COUNTRY_ID) {
+        if (!val.province || validator.isEmpty(val.province)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.mailing-address.province-required'), path: ['province'] });
         }
-        if (!val.mailingPostalCode || validator.isEmpty(val.mailingPostalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.mailing-address.postal-code-required'), path: ['mailingPostalCode'] });
-        } else if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
-          const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('renew-ita:update-address.error-message.mailing-address.postal-code-valid') : t('renew-ita:update-address.error-message.mailing-address.zip-code-valid');
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['mailingPostalCode'] });
-        } else if (val.mailingCountry === CANADA_COUNTRY_ID && val.mailingProvince && !isValidCanadianPostalCode(val.mailingProvince, val.mailingPostalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.mailing-address.invalid-postal-code-for-province'), path: ['mailingPostalCode'] });
+        if (!val.postalCode || validator.isEmpty(val.postalCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.mailing-address.postal-code-required'), path: ['postalCode'] });
+        } else if (!isValidPostalCode(val.country, val.postalCode)) {
+          const message = val.country === CANADA_COUNTRY_ID ? t('renew-ita:update-address.error-message.mailing-address.postal-code-valid') : t('renew-ita:update-address.error-message.mailing-address.zip-code-valid');
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['postalCode'] });
+        } else if (val.country === CANADA_COUNTRY_ID && val.province && !isValidCanadianPostalCode(val.province, val.postalCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.mailing-address.invalid-postal-code-for-province'), path: ['postalCode'] });
         }
       }
 
-      if (val.mailingCountry && val.mailingCountry !== CANADA_COUNTRY_ID && val.mailingPostalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.mailingPostalCode)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.mailing-address.invalid-postal-code-for-country'), path: ['mailingCountry'] });
+      if (val.country && val.country !== CANADA_COUNTRY_ID && val.postalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.postalCode)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:update-address.error-message.mailing-address.invalid-postal-code-for-country'), path: ['country'] });
       }
     })
     .transform((val) => ({
       ...val,
-      mailingPostalCode: val.mailingCountry && val.mailingPostalCode ? formatPostalCode(val.mailingCountry, val.mailingPostalCode) : val.mailingPostalCode,
-    })) satisfies z.ZodType<AddressInformationState>;
+      mailingPostalCode: val.country && val.postalCode ? formatPostalCode(val.country, val.postalCode) : val.postalCode,
+    })) satisfies z.ZodType<MailingAddressState>;
 
-  const parsedDataResult = addressInformationSchema.safeParse({
-    mailingAddress: String(formData.get('mailingAddress') ?? ''),
-    mailingCountry: String(formData.get('mailingCountry') ?? ''),
-    mailingProvince: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
-    mailingCity: String(formData.get('mailingCity') ?? ''),
-    mailingPostalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
+  const parsedDataResult = mailingAddressSchema.safeParse({
+    address: String(formData.get('mailingAddress')),
+    country: String(formData.get('mailingCountry')),
+    province: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : '',
+    city: String(formData.get('mailingCity')),
+    postalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : '',
     copyMailingAddress: formData.get('copyMailingAddress') === 'copy',
   });
 
@@ -120,19 +120,33 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  // If home address is the same as mailing address, populate home related properties.
-  const updatedAddressInfo = {
-    ...parsedDataResult.data,
-    ...(parsedDataResult.data.copyMailingAddress && {
-      homeAddress: parsedDataResult.data.mailingAddress,
-      homeCountry: parsedDataResult.data.mailingCountry,
-      homeProvince: parsedDataResult.data.mailingProvince,
-      homeCity: parsedDataResult.data.mailingCity,
-      homePostalCode: parsedDataResult.data.mailingPostalCode,
-    }),
+  const mailingAddress = {
+    address: parsedDataResult.data.address,
+    city: parsedDataResult.data.city,
+    country: parsedDataResult.data.country,
+    postalCode: parsedDataResult.data.postalCode,
+    province: parsedDataResult.data.province,
   };
 
-  saveRenewState({ params, session, state: { addressInformation: updatedAddressInfo } });
+  const homeAddress = parsedDataResult.data.copyMailingAddress
+    ? {
+        address: parsedDataResult.data.address,
+        city: parsedDataResult.data.city,
+        country: parsedDataResult.data.country,
+        postalCode: parsedDataResult.data.postalCode,
+        province: parsedDataResult.data.province,
+      }
+    : undefined;
+
+  saveRenewState({
+    params,
+    session,
+    state: {
+      mailingAddress,
+      isHomeAddressSameAsMailingAddress: parsedDataResult.data.copyMailingAddress,
+      ...(homeAddress && { homeAddress }), // Only include if homeAddress is defined
+    },
+  });
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/ita/review-information', params));
@@ -147,17 +161,17 @@ export default function RenewItaUpdateAddress() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry ?? CANADA_COUNTRY_ID);
+  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.mailingAddress?.country ?? CANADA_COUNTRY_ID);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
-  const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState?.copyMailingAddress === true);
+  const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.isHomeAddressSameAsMailingAddress === true);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
-    mailingAddress: 'mailing-address',
-    mailingProvince: 'mailing-province',
-    mailingCountry: 'mailing-country',
-    mailingCity: 'mailing-city',
-    mailingPostalCode: 'mailing-postal-code',
+    address: 'mailing-address',
+    province: 'mailing-province',
+    country: 'mailing-country',
+    city: 'mailing-city',
+    postalCode: 'mailing-postal-code',
     copyMailingAddress: 'copy-mailing-address',
   });
   const checkHandler = () => {
@@ -206,8 +220,8 @@ export default function RenewItaUpdateAddress() {
                 helpMessagePrimary={t('renew-ita:update-address.address-field.address-note')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"
-                defaultValue={defaultState?.mailingAddress ?? ''}
-                errorMessage={errors?.mailingAddress}
+                defaultValue={defaultState.mailingAddress?.address}
+                errorMessage={errors?.address}
                 required
               />
               <div className="grid items-end gap-6 md:grid-cols-2">
@@ -218,8 +232,8 @@ export default function RenewItaUpdateAddress() {
                   label={t('renew-ita:update-address.address-field.city')}
                   maxLength={100}
                   autoComplete="address-level2"
-                  defaultValue={defaultState?.mailingCity ?? ''}
-                  errorMessage={errors?.mailingCity}
+                  defaultValue={defaultState.mailingAddress?.city}
+                  errorMessage={errors?.city}
                   required
                 />
                 <InputSanitizeField
@@ -229,8 +243,8 @@ export default function RenewItaUpdateAddress() {
                   label={mailingPostalCodeRequired ? t('renew-ita:update-address.address-field.postal-code') : t('renew-ita:update-address.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
-                  defaultValue={defaultState?.mailingPostalCode ?? ''}
-                  errorMessage={errors?.mailingPostalCode}
+                  defaultValue={defaultState.mailingAddress?.postalCode}
+                  errorMessage={errors?.postalCode}
                   required={mailingPostalCodeRequired}
                 />
               </div>
@@ -240,8 +254,8 @@ export default function RenewItaUpdateAddress() {
                   name="mailingProvince"
                   className="w-full sm:w-1/2"
                   label={t('renew-ita:update-address.address-field.province')}
-                  defaultValue={defaultState?.mailingProvince ?? ''}
-                  errorMessage={errors?.mailingProvince}
+                  defaultValue={defaultState.mailingAddress?.province}
+                  errorMessage={errors?.province}
                   options={[dummyOption, ...mailingRegions]}
                   required
                 />
@@ -252,8 +266,8 @@ export default function RenewItaUpdateAddress() {
                 className="w-full sm:w-1/2"
                 label={t('renew-ita:update-address.address-field.country')}
                 autoComplete="country"
-                defaultValue={defaultState?.mailingCountry ?? ''}
-                errorMessage={errors?.mailingCountry}
+                defaultValue={defaultState.mailingAddress?.country}
+                errorMessage={errors?.country}
                 options={countries}
                 onChange={mailingCountryChangeHandler}
                 required

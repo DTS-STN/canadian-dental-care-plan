@@ -75,6 +75,22 @@ export interface RenewState {
     mailingPostalCode?: string;
     mailingProvince?: string;
   };
+  readonly mailingAddress?: {
+    address: string;
+    apartment?: string;
+    city: string;
+    country: string;
+    postalCode?: string;
+    province?: string;
+  };
+  readonly homeAddress?: {
+    address: string;
+    apartment?: string;
+    city: string;
+    country: string;
+    postalCode?: string;
+    province?: string;
+  };
   readonly dentalInsurance?: boolean;
   readonly dentalBenefits?: {
     hasFederalBenefits: boolean;
@@ -118,6 +134,8 @@ export type ApplicantInformationState = NonNullable<RenewState['applicantInforma
 export type TypeOfRenewalState = NonNullable<RenewState['typeOfRenewal']>;
 export type PartnerInformationState = NonNullable<RenewState['partnerInformation']>;
 export type AddressInformationState = NonNullable<RenewState['addressInformation']>;
+export type MailingAddressState = NonNullable<RenewState['mailingAddress']>;
+export type HomeAddressState = NonNullable<RenewState['homeAddress']>;
 export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ConfirmDentalBenefitsState = NonNullable<RenewState['confirmDentalBenefits']>;

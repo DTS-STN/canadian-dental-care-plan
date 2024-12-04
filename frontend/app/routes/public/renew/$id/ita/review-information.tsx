@@ -62,10 +62,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
-  const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
-  const countryHome = state.addressInformation?.homeCountry ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
+  const countryMailing = state.mailingAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
+  const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
   const maritalStatus = appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale);
 
   const userInfo = {
@@ -85,25 +85,25 @@ export async function loader({ context: { appContainer, session }, params, reque
     consent: state.partnerInformation.confirm,
   };
 
-  const mailingAddressInfo = state.addressInformation
+  const mailingAddressInfo = state.mailingAddress
     ? {
-        address: state.addressInformation.mailingAddress,
-        city: state.addressInformation.mailingCity,
+        address: state.mailingAddress.address,
+        city: state.mailingAddress.city,
         province: mailingProvinceTerritoryStateAbbr,
-        postalCode: state.addressInformation.mailingPostalCode,
+        postalCode: state.mailingAddress.postalCode,
         country: countryMailing,
-        apartment: state.addressInformation.mailingApartment,
+        apartment: state.mailingAddress.apartment,
       }
     : null;
 
-  const homeAddressInfo = state.addressInformation
+  const homeAddressInfo = state.homeAddress
     ? {
-        address: state.addressInformation.homeAddress,
-        city: state.addressInformation.homeCity,
+        address: state.homeAddress.address,
+        city: state.homeAddress.city,
         province: homeProvinceTerritoryStateAbbr,
-        postalCode: state.addressInformation.homePostalCode,
+        postalCode: state.homeAddress.postalCode,
         country: countryHome,
-        apartment: state.addressInformation.homeApartment,
+        apartment: state.homeAddress.apartment,
       }
     : null;
 
@@ -298,8 +298,8 @@ export default function RenewItaReviewInformation() {
                 {mailingAddressInfo ? (
                   <Address
                     address={{
-                      address: mailingAddressInfo.address ?? '',
-                      city: mailingAddressInfo.city ?? '',
+                      address: mailingAddressInfo.address,
+                      city: mailingAddressInfo.city,
                       provinceState: mailingAddressInfo.province,
                       postalZipCode: mailingAddressInfo.postalCode,
                       country: mailingAddressInfo.country?.name ?? '',
@@ -319,8 +319,8 @@ export default function RenewItaReviewInformation() {
                 {homeAddressInfo ? (
                   <Address
                     address={{
-                      address: homeAddressInfo.address ?? '',
-                      city: homeAddressInfo.city ?? '',
+                      address: homeAddressInfo.address,
+                      city: homeAddressInfo.city,
                       provinceState: homeAddressInfo.province,
                       postalZipCode: homeAddressInfo.postalCode,
                       country: homeAddressInfo.country?.name ?? '',
