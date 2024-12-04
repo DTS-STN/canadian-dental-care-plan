@@ -141,7 +141,6 @@
     "singleQuote": true,
     "printWidth": 256,
     "importOrder": [
-      "reflect-metadata",
       "^react$",
       "^@testing-library/(.*)$",
       "^@remix(.*)$",

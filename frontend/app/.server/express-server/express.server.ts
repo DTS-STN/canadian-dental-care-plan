@@ -1,6 +1,3 @@
-// require by inversify to be the first import
-import 'reflect-metadata';
-
 import compression from 'compression';
 import express from 'express';
 import sourceMapSupport from 'source-map-support';
