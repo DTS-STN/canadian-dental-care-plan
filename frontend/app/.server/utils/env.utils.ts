@@ -21,7 +21,7 @@ const validMockNames = ['cct', 'power-platform', 'raoidc', 'status-check', 'wsad
 export type MockName = (typeof validMockNames)[number];
 
 // refiners
-const areValidMockNames = (arr: Array<string>) => arr.every((mockName) => validMockNames.includes(mockName as MockName));
+const areValidMockNames = (arr: Array<string>): arr is Array<MockName> => arr.every((mockName) => validMockNames.includes(mockName as MockName));
 const isValidPublicKey = (val: string) => tryOrElseFalse(() => generateCryptoKey(val, 'verify'));
 const isValidPrivateKey = (val: string) => tryOrElseFalse(() => generateCryptoKey(val, 'sign'));
 

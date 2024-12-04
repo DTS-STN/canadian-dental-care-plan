@@ -12,7 +12,8 @@ import { getAppContainerProvider } from '~/.server/app.container';
 import { TYPES } from '~/.server/constants';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
-import { server } from '~/mocks/node';
+
+// import { server } from '~/mocks/node';
 
 console.log('Starting Canadian Dental Care Plan server...');
 const log = getLogger('express.server');
@@ -27,10 +28,10 @@ const appContainer = getAppContainerProvider();
 const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 instrumentationService.startInstrumentation();
 
-if (environment.ENABLED_MOCKS.length > 0) {
-  server.listen({ onUnhandledRequest: 'bypass' });
-  log.info('‼️ Mock Service Worker has been enabled with the following mocks: %s', environment.ENABLED_MOCKS);
-}
+// if (environment.ENABLED_MOCKS.length > 0) {
+//   server.listen({ onUnhandledRequest: 'bypass' });
+//   log.info('‼️ Mock Service Worker has been enabled with the following mocks: %s', environment.ENABLED_MOCKS);
+// }
 
 const isProduction = environment.NODE_ENV === 'production';
 const port = process.env.PORT ?? '3000'; // TODO :: add this to env schema
