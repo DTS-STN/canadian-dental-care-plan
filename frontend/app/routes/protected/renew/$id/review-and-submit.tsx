@@ -85,13 +85,13 @@ export default function ProtectedRenewReviewSubmit() {
     <div className="max-w-prose">
       <p className="mb-4">{t('protected-renew:review-submit.form-instructions')}</p>
       <div className="my-6 space-y-2">
-        <li>{applicantName} </li>
+        <li>{applicantName}</li>
         {children.map((child) => {
           const childName = `${child.firstName} ${child.lastName}`;
           return <li key={childName}>{childName}</li>;
         })}
       </div>
-      <h2 className="font-lato text-lg font-bold"> {t('protected-renew:review-submit.submit-renewal-title')}</h2>
+      <h2 className="font-lato text-lg font-bold">{t('protected-renew:review-submit.submit-renewal-title')}</h2>
       <p className="mb-4">{t('protected-renew:review-submit.submit-p-proceed')}</p>
       <p className="mb-4">{t('protected-renew:review-submit.submit-p-false-info')}</p>
       <p className="mb-4">{t('protected-renew:review-submit.submit-p-repayment')}</p>
