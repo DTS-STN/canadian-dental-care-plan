@@ -118,6 +118,7 @@ export const pageIds = {
         reviewInformation: 'CDCP-RENW-ITA-0008',
         confirmation: 'CDCP-RENW-ITA-0009',
         exitApplication: 'CDCP-RENw-ITA-0010',
+        demographicSurvey: 'CDCP-RENw-ITA-0011',
       },
       adultChild: {
         confirmMaritalStatus: 'CDCP-RENW-ADCH-001',
