@@ -35,8 +35,10 @@ inputs = {
   application_web_redirect_uris = [
     "http://localhost:3000/auth/callback",
     "http://localhost:3000/auth/callback/azure",
+    "http://localhost:3000/auth/callback/azuread",
     "http://localhost:3000/oauth/callback",
     "http://localhost:3000/oauth/callback/azure",
+    "http://localhost:3000/oauth/callback/azuread",
 
     "https://cdcp-dev.dev-dp.dts-stn.com/oauth/callback",
     "https://cdcp-dev.dev-dp-internal.dts-stn.com/oauth/callback",

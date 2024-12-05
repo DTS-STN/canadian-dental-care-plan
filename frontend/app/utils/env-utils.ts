@@ -5,7 +5,7 @@ const validFeatureNames = ['address-validation', 'doc-upload', 'hcaptcha', 'show
 export type FeatureName = (typeof validFeatureNames)[number];
 
 // refiners
-const areValidFeatureNames = (arr: Array<string>) => arr.every((featureName) => validFeatureNames.includes(featureName as FeatureName));
+const areValidFeatureNames = (arr: Array<string>): arr is FeatureName[] => arr.every((featureName) => validFeatureNames.includes(featureName as FeatureName));
 
 // transformers
 const csvToArray = (csv?: string) => csv?.split(',').map((str) => str.trim()) ?? [];

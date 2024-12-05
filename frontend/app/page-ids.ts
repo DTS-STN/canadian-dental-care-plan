@@ -22,6 +22,7 @@ export const pageIds = {
       communicationPreference: 'CDCP-PROT-RENW-0015',
       confirmFederalProvincialTerritorialBenefits: 'CDCP-PROT-RENW-0016',
       reviewAdultInformation: 'CDCP-PROT-RENW-0017',
+      reviewSubmit: 'CDCP-PROT-RENW-0018',
     },
     dataUnavailable: 'CDCP-PROT-0099',
   },
@@ -118,6 +119,7 @@ export const pageIds = {
         reviewInformation: 'CDCP-RENW-ITA-0008',
         confirmation: 'CDCP-RENW-ITA-0009',
         exitApplication: 'CDCP-RENw-ITA-0010',
+        demographicSurvey: 'CDCP-RENw-ITA-0011',
       },
       adultChild: {
         confirmMaritalStatus: 'CDCP-RENW-ADCH-001',

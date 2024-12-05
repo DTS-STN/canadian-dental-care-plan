@@ -73,6 +73,13 @@ export interface ProtectedRenewState {
       readonly locationBornStatus?: string;
       readonly genderStatus?: string;
     };
+    readonly dentalBenefits?: {
+      hasFederalBenefits?: boolean;
+      federalSocialProgram?: string;
+      hasProvincialTerritorialBenefits?: boolean;
+      provincialTerritorialSocialProgram?: string;
+      province?: string;
+    };
   }[];
   readonly contactInformation?: {
     isNewOrUpdatedPhoneNumber?: boolean;
@@ -241,7 +248,7 @@ export async function startProtectedRenewState({ id, session, appContainer }: St
     id: parsedId,
     editMode: false,
     clientApplication,
-    children: clientApplication.children.map((child) => ({ id: randomUUID(), ...child, ...child.information })),
+    children: clientApplication.children.map((child) => ({ id: randomUUID(), ...child.information })),
   };
 
   session.set(sessionName, initialState);

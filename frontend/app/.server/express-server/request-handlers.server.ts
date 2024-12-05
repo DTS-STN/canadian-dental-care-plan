@@ -61,25 +61,25 @@ export function remixRequestHandler(mode: string, viteDevServer?: ViteDevServer)
     : () => import(remixServerBuild);
 
   return async (request, response, next) => {
-    const session = await sessionService.getSession(request.headers.cookie);
+    try {
+      const session = await sessionService.getSession(request.headers.cookie);
 
-    if (!shouldSkipSessionHandling(request)) {
-      log.debug('Initializing server session...');
+      if (!shouldSkipSessionHandling(request)) {
+        log.debug('Initializing server session...');
 
-      // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
-      // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
-      if (!session.has('csrfToken')) {
-        const csrfToken = randomString(32);
-        log.debug('Adding CSRF token [%s] to session', csrfToken);
-        session.set('csrfToken', csrfToken);
+        // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
+        // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
+        if (!session.has('csrfToken')) {
+          const csrfToken = randomString(32);
+          log.debug('Adding CSRF token [%s] to session', csrfToken);
+          session.set('csrfToken', csrfToken);
+        }
+
+        const lastAccessTime = new UTCDate().toISOString();
+        log.debug('Setting session.lastAccessTime to [%s]', lastAccessTime);
+        session.set('lastAccessTime', lastAccessTime);
       }
 
-      const lastAccessTime = new UTCDate().toISOString();
-      log.debug('Setting session.lastAccessTime to [%s]', lastAccessTime);
-      session.set('lastAccessTime', lastAccessTime);
-    }
-
-    try {
       const remixRequest = createRemixRequest(request, response);
       const remixRequestHandler = createRequestHandler(build, mode);
       const remixResponse = await remixRequestHandler(remixRequest, { appContainer, securityHandler, session });

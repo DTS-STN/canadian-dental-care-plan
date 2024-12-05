@@ -1,14 +1,11 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { redirectDocument } from '@remix-run/node';
 
-import { z } from 'zod';
-
 import { TYPES } from '~/.server/constants';
-import { mockEnabled } from '~/.server/utils/env.utils';
 import { getLocale } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
-import { generateCallbackUri, generateRandomString } from '~/.server/utils/raoidc.utils';
+import { generateCallbackUri } from '~/.server/utils/raoidc.utils';
 
 const defaultProviderId = 'raoidc';
 
@@ -32,17 +29,6 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     }
     case 'callback/raoidc': {
       return await handleRaoidcCallbackRequest({ context, params, request });
-    }
-    //
-    // A mock authorize route for testing purposes
-    //
-    case 'authorize': {
-      if (!mockEnabled('raoidc')) {
-        log.warn('Call to mock authorize endpoint when mocks are not enabled');
-        return Response.json(null, { status: 404 });
-      }
-
-      return handleMockAuthorizeRequest({ context, params, request });
     }
     default: {
       log.warn('Invalid authentication route requested: [%s]', slug);
@@ -165,55 +151,4 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
   auditService.createAudit('auth.session-created', { userId: idToken.sub });
 
   return redirectDocument(returnUrl);
-}
-
-/**
- * @see https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint
- */
-function handleMockAuthorizeRequest({ context: { appContainer }, request }: LoaderFunctionArgs) {
-  const log = getLogger('auth.$/handleMockAuthorizeRequest');
-  log.debug('Handling (mock) RAOIDC authorize request');
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-  instrumentationService.createCounter('auth.authorize.requests').add(1);
-
-  const { MOCK_AUTH_ALLOWED_REDIRECTS } = appContainer.get(TYPES.configs.ServerConfig);
-  const isValidRedirectUri = (val: string): boolean => MOCK_AUTH_ALLOWED_REDIRECTS.includes(val);
-
-  const searchParamsSchema = z.object({
-    clientId: z.string().min(1).max(64),
-    codeChallenge: z.string().min(43).max(128),
-    codeChallengeMethod: z.enum(['S256']),
-    nonce: z.string().min(8).max(64),
-    redirectUri: z.string().refine(isValidRedirectUri),
-    responseType: z.enum(['code']),
-    scope: z.enum(['openid profile']),
-    state: z.string().min(8).max(256),
-  });
-
-  const searchParams = new URL(request.url).searchParams;
-
-  const result = searchParamsSchema.safeParse({
-    clientId: searchParams.get('client_id'),
-    codeChallenge: searchParams.get('code_challenge'),
-    codeChallengeMethod: searchParams.get('code_challenge_method'),
-    nonce: searchParams.get('nonce'),
-    redirectUri: searchParams.get('redirect_uri'),
-    responseType: searchParams.get('response_type'),
-    scope: searchParams.get('scope'),
-    state: searchParams.get('state'),
-  });
-
-  if (!result.success) {
-    log.warn('Invalid authorize request [%j]', result.error.flatten().fieldErrors);
-    instrumentationService.createCounter('auth.authorize.requests.invalid').add(1);
-
-    return Response.json(JSON.stringify(result.error.flatten().fieldErrors), { status: 400 });
-  }
-
-  const redirectUri = new URL(result.data.redirectUri);
-  redirectUri.searchParams.set('code', generateRandomString(16));
-  redirectUri.searchParams.set('state', result.data.state);
-
-  log.debug('Mock login successful; redirecting to [%s]', redirectUri.toString());
-  return redirectDocument(redirectUri.toString());
 }

@@ -1,6 +1,3 @@
-// require by inversify to be the first import
-import 'reflect-metadata';
-
 import compression from 'compression';
 import express from 'express';
 import sourceMapSupport from 'source-map-support';
@@ -12,7 +9,6 @@ import { getAppContainerProvider } from '~/.server/app.container';
 import { TYPES } from '~/.server/constants';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
-import { server } from '~/mocks/node';
 
 console.log('Starting Canadian Dental Care Plan server...');
 const log = getLogger('express.server');
@@ -26,11 +22,6 @@ log.info('Initializing instrumentation');
 const appContainer = getAppContainerProvider();
 const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 instrumentationService.startInstrumentation();
-
-if (environment.ENABLED_MOCKS.length > 0) {
-  server.listen({ onUnhandledRequest: 'bypass' });
-  log.info('‼️ Mock Service Worker has been enabled with the following mocks: %s', environment.ENABLED_MOCKS);
-}
 
 const isProduction = environment.NODE_ENV === 'production';
 const port = process.env.PORT ?? '3000'; // TODO :: add this to env schema

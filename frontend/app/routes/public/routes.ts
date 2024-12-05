@@ -463,6 +463,11 @@ export const routes = [
             paths: { en: '/:lang/renew/:id/ita/exit-application', fr: '/:lang/renew/:id/ita/quitter-demande' },
           },
           {
+            id: 'public/renew/$id/ita/demographic-survey',
+            file: 'routes/public/renew/$id/ita/demographic-survey.tsx',
+            paths: { en: '/:lang/renew/:id/ita/demographic-survey', fr: '/:lang/renew/:id/ita/demographic-survey' },
+          },
+          {
             id: 'public/renew/$id/adult-child/confirm-marital-status',
             file: 'routes/public/renew/$id/adult-child/confirm-marital-status.tsx',
             paths: { en: '/:lang/renew/:id/adult-child/confirm-marital-status', fr: '/:lang/renew/:id/adulte-enfant/confirmer-etat-civil' },

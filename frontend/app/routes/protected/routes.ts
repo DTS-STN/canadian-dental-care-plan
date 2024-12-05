@@ -95,6 +95,11 @@ export const routes = [
                 file: 'routes/protected/renew/$id/$childId/demographic-survey.tsx',
                 paths: { en: '/:lang/protected/renew/:id/:childId/demographic-survey', fr: '/:lang/protected/renew/:id/:childId/demographic-survey' },
               },
+              {
+                id: 'protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits',
+                file: 'routes/protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits.tsx',
+                paths: { en: '/:lang/protected/renew/:id/:childId/confirm-federal-provincial-territorial-benefits', fr: '/:lang/protected/renew/:id/:childId/confirm-federal-provincial-territorial-benefits' },
+              },
             ],
           },
           {
@@ -131,6 +136,11 @@ export const routes = [
             id: 'protected/renew/$id/review-adult-information',
             file: 'routes/protected/renew/$id/review-adult-information.tsx',
             paths: { en: '/:lang/protected/renew/:id/review-adult-information', fr: '/:lang/protected/renew/:id/revue-renseignements-adulte' },
+          },
+          {
+            id: 'protected/renew/$id/review-and-submit',
+            file: 'routes/protected/renew/$id/review-and-submit.tsx',
+            paths: { en: '/:lang/protected/renew/:id/review-and-submit', fr: '/:lang/protected/renew/:id/review-and-submit' },
           },
         ],
       },
