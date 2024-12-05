@@ -53,7 +53,7 @@
     "i18next": "^24.0.5",
     "i18next-fs-backend": "^2.6.0",
     "i18next-http-backend": "^3.0.1",
-    "inversify": "^6.1.6",
+    "inversify": "^6.2.0-beta.1",
     "inversify-logger-middleware": "^3.1.0",
     "ioredis": "^5.4.1",
     "isbot": "^5.1.17",

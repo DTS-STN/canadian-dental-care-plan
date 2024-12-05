@@ -42,7 +42,6 @@ describe('DefaultAppContainerProvider', () => {
 
       expect(result).toBeUndefined();
       expect(mockLogger.trace).toHaveBeenCalledWith('Finding service for service identifier: %s', mockServiceIdentifier);
-      expect(mockLogger.trace).toHaveBeenCalledWith('Service not found for service identifier: %s; returning undefined. Error: %o', mockServiceIdentifier, expect.any(Error));
     });
   });
 
@@ -59,6 +58,44 @@ describe('DefaultAppContainerProvider', () => {
     it('should throw an error if service is not found', () => {
       expect(() => appContainerProvider.get(mockServiceIdentifier)).toThrowError();
       expect(mockLogger.trace).toHaveBeenCalledWith('Get service for service identifier: %s', mockServiceIdentifier);
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return all instances of the service if found', () => {
+      const mockServiceInstances = [{ name: 'MockService1' }, { name: 'MockService2' }];
+      container.bind(mockServiceIdentifier).toConstantValue(mockServiceInstances[0]);
+      container.bind(mockServiceIdentifier).toConstantValue(mockServiceInstances[1]);
+
+      const result = appContainerProvider.findAll(mockServiceIdentifier);
+
+      expect(result).toEqual(mockServiceInstances);
+      expect(mockLogger.trace).toHaveBeenCalledWith('Finding service for service identifier: %s', mockServiceIdentifier);
+    });
+
+    it('should return an empty array if no instances are found', () => {
+      const result = appContainerProvider.findAll(mockServiceIdentifier);
+
+      expect(result).toEqual([]);
+      expect(mockLogger.trace).toHaveBeenCalledWith('Finding service for service identifier: %s', mockServiceIdentifier);
+    });
+  });
+
+  describe('getAll', () => {
+    it('should return all instances of the service if found', () => {
+      const mockServiceInstances = [{ name: 'MockService1' }, { name: 'MockService2' }];
+      container.bind(mockServiceIdentifier).toConstantValue(mockServiceInstances[0]);
+      container.bind(mockServiceIdentifier).toConstantValue(mockServiceInstances[1]);
+
+      const result = appContainerProvider.getAll(mockServiceIdentifier);
+
+      expect(result).toEqual(mockServiceInstances);
+      expect(mockLogger.trace).toHaveBeenCalledWith('Getting all services for service identifier: %s', mockServiceIdentifier);
+    });
+
+    it('should throw an error if no instances are found', () => {
+      expect(() => appContainerProvider.getAll(mockServiceIdentifier)).toThrowError();
+      expect(mockLogger.trace).toHaveBeenCalledWith('Getting all services for service identifier: %s', mockServiceIdentifier);
     });
   });
 });

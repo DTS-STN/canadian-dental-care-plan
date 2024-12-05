@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import Redis from 'ioredis';
+import type { RedisOptions } from 'ioredis';
 import type { Logger } from 'winston';
 
 import type { ServerConfig } from '~/.server/configs';
@@ -68,7 +69,7 @@ export class DefaultRedisService implements RedisService {
     return await this.redisClient.ping();
   }
 
-  private getRedisConfig(serverConfig: ServerConfig) {
+  private getRedisConfig(serverConfig: ServerConfig): RedisOptions {
     const retryStrategy = (times: number): number => {
       // exponential backoff starting at 250ms to a maximum of 5s
       const retryIn = Math.min(250 * Math.pow(2, times - 1), 5000);
