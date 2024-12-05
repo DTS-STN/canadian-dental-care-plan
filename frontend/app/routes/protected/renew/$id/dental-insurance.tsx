@@ -74,10 +74,20 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveProtectedRenewState({ params, session, state: { dentalInsurance: parsedDataResult.data.dentalInsurance } });
+  saveProtectedRenewState({
+    params,
+    session,
+    state: {
+      dentalInsurance: parsedDataResult.data.dentalInsurance,
+    },
+  });
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  }
+
+  if (state.clientApplication.isInvitationToApplyClient) {
+    return redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
   }
 
   return redirect(getPathById('protected/renew/$id/demographic-survey', params));

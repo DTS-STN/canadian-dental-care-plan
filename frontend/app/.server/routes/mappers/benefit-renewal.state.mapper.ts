@@ -17,6 +17,14 @@ import type {
   ProtectedBenefitRenewalDto,
 } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
+import type {
+  ProtectedAddressInformationState,
+  ProtectedChildState,
+  ProtectedContactInformationState,
+  ProtectedDentalFederalBenefitsState,
+  ProtectedDentalProvincialTerritorialBenefitsState,
+  ProtectedPartnerInformationState,
+} from '~/.server/routes/helpers/protected-renew-route-helpers';
 import type { AddressInformationState, ChildState, ConfirmDentalBenefitsState, ContactInformationState, DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
 
 export interface RenewAdultChildState {
@@ -45,23 +53,20 @@ export interface RenewItaState {
 }
 
 export interface ProtectedRenewState {
-  addressInformation?: AddressInformationState;
+  addressInformation?: ProtectedAddressInformationState;
   clientApplication: ClientApplicationDto;
-  children: ChildState[];
-  confirmDentalBenefits: ConfirmDentalBenefitsState;
-  contactInformation: ContactInformationState;
-  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  children: ProtectedChildState[];
+  contactInformation?: ProtectedContactInformationState;
+  dentalBenefits?: ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
-  hasAddressChanged: boolean;
-  hasMaritalStatusChanged: boolean;
   maritalStatus?: string;
-  partnerInformation?: PartnerInformationState;
+  partnerInformation?: ProtectedPartnerInformationState;
 }
 
 export interface BenefitRenewalStateMapper {
   mapRenewAdultChildStateToAdultChildBenefitRenewalDto(renewAdultChildState: RenewAdultChildState): AdultChildBenefitRenewalDto;
   mapRenewItaStateToItaBenefitRenewalDto(renewItaState: RenewItaState): ItaBenefitRenewalDto;
-  mapProtectedRenewStateToProtectedBenefitRenewalDto(protectedRenewSTate: ProtectedRenewState, userId: string): ProtectedBenefitRenewalDto;
+  mapProtectedRenewStateToProtectedBenefitRenewalDto(protectedRenewState: ProtectedRenewState, userId: string): ProtectedBenefitRenewalDto;
 }
 
 interface ToApplicantInformationArgs {
@@ -88,7 +93,7 @@ interface ToContactInformationArgs {
   hasEmailChanged: boolean;
   hasPhoneChanged: boolean;
   renewedAddressInformation?: AddressInformationState;
-  renewedContactInformation: ContactInformationState;
+  renewedContactInformation?: ContactInformationState;
 }
 
 interface ToDentalBenefitsArgs {
@@ -231,27 +236,14 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }
 
   mapProtectedRenewStateToProtectedBenefitRenewalDto(
-    { addressInformation, children, confirmDentalBenefits, contactInformation, dentalBenefits, dentalInsurance, hasAddressChanged, hasMaritalStatusChanged, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
+    { addressInformation, children, contactInformation, dentalBenefits, dentalInsurance, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
     userId: string,
   ): ProtectedBenefitRenewalDto {
-    const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
-    if (hasEmailChanged === undefined) {
-      throw Error('Expected hasEmailChanged to be defined');
-    }
-
-    const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
-    if (hasPhoneChanged === undefined) {
-      throw Error('Expected hasPhoneChanged to be defined');
-    }
-
-    const hasFederalBenefitsChanged = confirmDentalBenefits.federalBenefitsChanged;
-    const hasProvincialTerritorialBenefitsChanged = confirmDentalBenefits.provincialTerritorialBenefitsChanged;
-
     return {
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
         existingApplicantInformation: clientApplication.applicantInformation,
-        hasMaritalStatusChanged,
+        hasMaritalStatusChanged: maritalStatus ? true : false,
         renewedMaritalStatus: maritalStatus,
       }),
       children: this.toChildren({
@@ -260,28 +252,28 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       communicationPreferences: this.toCommunicationPreferences({
         existingCommunicationPreferences: clientApplication.communicationPreferences,
-        hasEmailChanged,
-        renewedEmail: contactInformation.email,
-        renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+        hasEmailChanged: contactInformation?.email ? true : false,
+        renewedEmail: contactInformation?.email,
+        renewedReceiveEmailCommunication: contactInformation?.shouldReceiveEmailCommunication,
       }),
       contactInformation: this.toContactInformation({
         renewedAddressInformation: addressInformation,
         renewedContactInformation: contactInformation,
         existingContactInformation: clientApplication.contactInformation,
-        hasAddressChanged,
-        hasEmailChanged,
-        hasPhoneChanged,
+        hasAddressChanged: addressInformation ? true : false,
+        hasEmailChanged: contactInformation?.email ? true : false,
+        hasPhoneChanged: contactInformation?.phoneNumber ? true : false,
       }),
       dentalBenefits: this.toDentalBenefits({
         existingDentalBenefits: clientApplication.dentalBenefits,
-        hasFederalBenefitsChanged,
-        hasProvincialTerritorialBenefitsChanged,
+        hasFederalBenefitsChanged: dentalBenefits ? true : false,
+        hasProvincialTerritorialBenefitsChanged: dentalBenefits ? true : false,
         renewedDentalBenefits: dentalBenefits,
       }),
       dentalInsurance,
       partnerInformation: this.toPartnerInformation({
         existingPartnerInformation: clientApplication.partnerInformation,
-        hasMaritalStatusChanged,
+        hasMaritalStatusChanged: maritalStatus ? true : false,
         renewedPartnerInformation: partnerInformation,
       }),
       userId,
@@ -349,13 +341,13 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         : {}),
       ...(hasPhoneChanged
         ? {
-            phoneNumber: renewedContactInformation.phoneNumber,
-            phoneNumberAlt: renewedContactInformation.phoneNumberAlt,
+            phoneNumber: renewedContactInformation?.phoneNumber,
+            phoneNumberAlt: renewedContactInformation?.phoneNumberAlt,
           }
         : {}),
       ...(hasEmailChanged
         ? {
-            email: renewedContactInformation.email,
+            email: renewedContactInformation?.email,
           }
         : {}),
     };

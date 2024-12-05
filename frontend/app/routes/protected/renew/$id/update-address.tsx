@@ -11,7 +11,7 @@ import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import type { AddressInformationState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import type { ProtectedAddressInformationState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/.server/utils/postal-zip-code.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -146,7 +146,7 @@ export async function action({ context: { appContainer, session }, params, reque
       ...val,
       homePostalCode: val.homeCountry && val.homePostalCode ? formatPostalCode(val.homeCountry, val.homePostalCode) : val.homePostalCode,
       mailingPostalCode: val.mailingCountry && val.mailingPostalCode ? formatPostalCode(val.mailingCountry, val.mailingPostalCode) : val.mailingPostalCode,
-    })) satisfies z.ZodType<AddressInformationState>;
+    })) satisfies z.ZodType<ProtectedAddressInformationState>;
 
   const parsedDataResult = addressInformationSchema.safeParse({
     mailingAddress: String(formData.get('mailingAddress') ?? ''),

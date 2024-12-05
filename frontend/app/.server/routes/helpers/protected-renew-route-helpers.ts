@@ -28,6 +28,13 @@ export interface ProtectedRenewState {
     readonly shareData: boolean;
   };
   readonly dentalInsurance?: boolean;
+  readonly dentalBenefits?: {
+    hasFederalBenefits: boolean;
+    federalSocialProgram?: string;
+    hasProvincialTerritorialBenefits: boolean;
+    provincialTerritorialSocialProgram?: string;
+    province?: string;
+  };
   readonly isSurveyCompleted?: boolean;
   readonly demographicSurvey?: {
     readonly indigenousStatus?: string;
@@ -63,9 +70,9 @@ export interface ProtectedRenewState {
       readonly genderStatus?: string;
     };
     readonly dentalBenefits?: {
-      hasFederalBenefits?: boolean;
+      hasFederalBenefits: boolean;
       federalSocialProgram?: string;
-      hasProvincialTerritorialBenefits?: boolean;
+      hasProvincialTerritorialBenefits: boolean;
       provincialTerritorialSocialProgram?: string;
       province?: string;
     };
@@ -96,13 +103,6 @@ export interface ProtectedRenewState {
     mailingPostalCode?: string;
     mailingProvince?: string;
   };
-  readonly dentalBenefits?: {
-    hasFederalBenefits: boolean;
-    federalSocialProgram?: string;
-    hasProvincialTerritorialBenefits: boolean;
-    provincialTerritorialSocialProgram?: string;
-    province?: string;
-  };
   readonly submissionInfo?: {
     /**
      * The UTC date and time when the application was submitted.
@@ -113,11 +113,13 @@ export interface ProtectedRenewState {
   // TODO Add remaining states
 }
 
-export type PartnerInformationState = NonNullable<ProtectedRenewState['partnerInformation']>;
-export type ChildState = ProtectedRenewState['children'][number];
-export type AddressInformationState = NonNullable<ProtectedRenewState['addressInformation']>;
-export type DentalFederalBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
-export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type ProtectedPartnerInformationState = NonNullable<ProtectedRenewState['partnerInformation']>;
+export type ProtectedChildState = ProtectedRenewState['children'][number];
+export type ProtectedAddressInformationState = NonNullable<ProtectedRenewState['addressInformation']>;
+export type ProtectedClientApplicationState = NonNullable<ProtectedRenewState['clientApplication']>;
+export type ProtectedDentalFederalBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
+export type ProtectedDentalProvincialTerritorialBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type ProtectedContactInformationState = NonNullable<ProtectedRenewState['contactInformation']>;
 
 /**
  * Schema for validating UUID.
@@ -255,7 +257,7 @@ export function renewStateHasPartner(maritalStatus: string) {
   return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
 }
 
-export function isNewChildState(child: ChildState) {
+export function isNewChildState(child: ProtectedChildState) {
   return child.dentalInsurance === undefined;
 }
 
@@ -338,55 +340,39 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
-  const { hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, addressInformation, dentalInsurance, demographicSurvey } = state;
-
-  if (maritalStatus === undefined) {
-    throw redirect(getPathById('protected/renew/$id/marital-status', params));
-  }
-
-  if (hasAddressChanged === undefined) {
-    throw redirect(getPathById('protected/renew/$id/confirm-address', params));
-  }
-
-  if (hasAddressChanged && addressInformation === undefined) {
-    throw redirect(getPathById('protected/renew/$id/update-address', params));
-  }
-
-  if (contactInformation?.isNewOrUpdatedPhoneNumber === undefined) {
-    throw redirect(getPathById('protected/renew/$id/confirm-phone', params));
-  }
-
-  if (contactInformation.isNewOrUpdatedEmail === undefined) {
-    throw redirect(getPathById('protected/renew/$id/confirm-email', params));
-  }
+  const { maritalStatus, partnerInformation, addressInformation, clientApplication, contactInformation, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
 
   if (dentalInsurance === undefined) {
     throw redirect(getPathById('protected/renew/$id/dental-insurance', params));
+  }
+
+  if (dentalBenefits === undefined) {
+    throw redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
   }
 
   if (demographicSurvey === undefined) {
     throw redirect(getPathById('protected/renew/$id/demographic-survey', params));
   }
 
-  // TODO: complete state validations when all screens are created
-
   const children = getProtectedChildrenState(state).length > 0 ? validateProtectedChildrenStateForReview({ childrenState: state.children, params }) : [];
 
   return {
     maritalStatus,
+    partnerInformation,
+    addressInformation,
+    clientApplication,
+    contactInformation,
     editMode,
     id,
-    contactInformation,
     dentalInsurance,
-    addressInformation,
-    partnerInformation,
     children,
-    hasAddressChanged,
+    dentalBenefits,
+    demographicSurvey,
   };
 }
 
 interface ValidateProtectedChildrenStateForReviewArgs {
-  childrenState: ChildState[];
+  childrenState: ProtectedChildState[];
   params: Params;
 }
 
