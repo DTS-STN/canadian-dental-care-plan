@@ -16,6 +16,13 @@ export interface AppContainerProvider {
   find<T>(serviceIdentifier: ServiceIdentifier<T>): T | undefined;
 
   /**
+   * Retrieves all instances of a service from the container without throwing an error if the service is not found.
+   * @param serviceIdentifier - The service identifier for the requested service.
+   * @returns An array of instances of the requested service.
+   */
+  findAll<T>(serviceIdentifier: ServiceIdentifier<T>): T[];
+
+  /**
    * Retrieves a service from the container. Throws an error if the service is not found.
    * @param serviceIdentifier - The service identifier for the requested service.
    * @returns The instance of the requested service.
@@ -40,12 +47,12 @@ export class DefaultAppContainerProvider implements AppContainerProvider {
 
   find<T>(serviceIdentifier: ServiceIdentifier<T>): T | undefined {
     this.log.trace('Finding service for service identifier: %s', serviceIdentifier);
-    try {
-      return this.container.get(serviceIdentifier);
-    } catch (error) {
-      this.log.trace('Service not found for service identifier: %s; returning undefined. Error: %o', serviceIdentifier, error);
-      return undefined;
-    }
+    return this.container.tryGet(serviceIdentifier);
+  }
+
+  findAll<T>(serviceIdentifier: ServiceIdentifier<T>): T[] {
+    this.log.trace('Finding service for service identifier: %s', serviceIdentifier);
+    return this.container.tryGetAll(serviceIdentifier);
   }
 
   get<T>(serviceIdentifier: ServiceIdentifier<T>): T {

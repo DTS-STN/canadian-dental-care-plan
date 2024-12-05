@@ -4,26 +4,19 @@ import type { HealthCheckOptions } from '@dts-stn/health-checks';
 import { HealthCheckConfig, execute, getHttpStatusCode } from '@dts-stn/health-checks';
 import { isEmpty } from 'moderndash';
 
-import { getAppContainerProvider } from '~/.server/app.container';
 import { TYPES } from '~/.server/constants';
 
-const appContainerProvider = getAppContainerProvider();
-
-const bearerTokenResolver = appContainerProvider.get(TYPES.auth.BearerTokenResolver);
-const serverConfig = appContainerProvider.get(TYPES.configs.ServerConfig);
-const tokenRolesExtractor = appContainerProvider.get(TYPES.auth.HealthTokenRolesExtractor);
-const allHealthChecks = appContainerProvider.getAll(TYPES.health.HealthCheck);
-
-export async function loader({ context: { appContainer }, request }: LoaderFunctionArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
 
-  const buildInfoService = appContainer.get(TYPES.core.BuildInfoService);
+  const allHealthChecks = context.appContainer.findAll(TYPES.health.HealthCheck);
+  const buildInfoService = context.appContainer.get(TYPES.core.BuildInfoService);
   const { buildRevision: buildId, buildVersion: version } = buildInfoService.getBuildInfo();
 
   const healthCheckOptions: HealthCheckOptions = {
     excludeComponents: toArray(exclude),
     includeComponents: toArray(include),
-    includeDetails: await isAuthorized(request),
+    includeDetails: await isAuthorized({ context, request }),
     metadata: { buildId, version },
     timeoutMs: toNumber(timeout),
   };
@@ -40,7 +33,10 @@ export async function loader({ context: { appContainer }, request }: LoaderFunct
 /**
  * Returns true if the incoming request is authorized to view detailed responses.
  */
-async function isAuthorized(request: Request): Promise<boolean> {
+async function isAuthorized({ context, request }: Omit<LoaderFunctionArgs, 'params'>): Promise<boolean> {
+  const bearerTokenResolver = context.appContainer.get(TYPES.auth.BearerTokenResolver);
+  const serverConfig = context.appContainer.get(TYPES.configs.ServerConfig);
+  const tokenRolesExtractor = context.appContainer.get(TYPES.auth.HealthTokenRolesExtractor);
   const token = bearerTokenResolver.resolve(request);
   const roles = await tokenRolesExtractor.extract(token);
   return roles.includes(serverConfig.HEALTH_AUTH_ROLE);
