@@ -555,6 +555,11 @@ export const routes = [
                 file: 'routes/public/renew/$id/adult-child/children/$childId/update-federal-provincial-territorial-benefits.tsx',
                 paths: { en: '/:lang/renew/:id/adult-child/children/:childId/update-federal-provincial-territorial-benefits', fr: '/:lang/renew/:id/adulte-enfant/enfant/:childId/mise-a-jour-prestations-dentaires-federales-provinciales-territoriales' },
               },
+              {
+                id: 'public/renew/$id/adult-child/children/$childId/demographic-survey',
+                file: 'routes/public/renew/$id/adult-child/children/$childId/demographic-survey.tsx',
+                paths: { en: '/:lang/renew/:id/adult-child/children/$childId/demographic-survey', fr: '/:lang/renew/:id/adult-child/children/$childId/demographic-survey' },
+              },
             ],
           },
           {

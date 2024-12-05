@@ -42,6 +42,15 @@ export interface RenewState {
       isParent: boolean;
       clientNumber?: string;
     };
+    readonly demographicSurvey?: {
+      readonly indigenousStatus?: string;
+      readonly firstNations?: string[];
+      readonly disabilityStatus?: string;
+      readonly ethnicGroups?: string[];
+      readonly anotherEthnicGroup?: string;
+      readonly locationBornStatus?: string;
+      readonly genderStatus?: string;
+    };
   }[];
   readonly partnerInformation?: {
     confirm: boolean;
