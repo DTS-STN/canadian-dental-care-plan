@@ -52,7 +52,7 @@ export class DefaultAppContainerProvider implements AppContainerProvider {
 
   findAll<T>(serviceIdentifier: ServiceIdentifier<T>): T[] {
     this.log.trace('Finding service for service identifier: %s', serviceIdentifier);
-    return this.container.tryGetAll(serviceIdentifier);
+    return this.container.tryGetAll(serviceIdentifier, { enforceBindingConstraints: true });
   }
 
   get<T>(serviceIdentifier: ServiceIdentifier<T>): T {
@@ -62,6 +62,6 @@ export class DefaultAppContainerProvider implements AppContainerProvider {
 
   getAll<T>(serviceIdentifier: ServiceIdentifier<T>): T[] {
     this.log.trace('Getting all services for service identifier: %s', serviceIdentifier);
-    return this.container.getAll(serviceIdentifier);
+    return this.container.getAll(serviceIdentifier, { enforceBindingConstraints: true });
   }
 }
