@@ -2,30 +2,24 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
-import { randomUUID } from 'crypto';
 import { Trans, useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { getMemberInformationFromRenewState, startDemographicSurveyState } from '~/.server/routes/helpers/demographic-survey-route-helpers';
 import { loadRenewItaState } from '~/.server/routes/helpers/renew-ita-route-helpers';
 import { clearRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
-import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
-import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
-import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
@@ -142,17 +136,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
-  const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-  if (formAction === FormAction.Submit) {
-    const id = randomUUID().toString();
-    const memberInformation = getMemberInformationFromRenewState(state);
-    const demographicSurveyState = startDemographicSurveyState({ id, session, memberInformation });
-    clearRenewState({ params, session });
-    return redirect(getPathById('public/demographic-survey/$id/terms-and-conditions', { ...params, id: demographicSurveyState.id }));
-  }
 
   clearRenewState({ params, session });
   return redirect(t('confirm.exit-link'));
@@ -161,7 +145,6 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewFlowConfirm() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
 
   const cdcpLink = <InlineLink to={t('renew-ita:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -189,28 +172,6 @@ export default function RenewFlowConfirm() {
           {t('confirm.print-btn')}
         </Button>
       </section>
-
-      <ContextualAlert type="comment">
-        <div className="space-y-5">
-          <h3 className="font-lato text-2xl font-bold">{t('renew-ita:confirm.alert.title')}</h3>
-          <p>{t('renew-ita:confirm.alert.survey')}</p>
-          <p>{t('renew-ita:confirm.alert.answers')}</p>
-          <fetcher.Form method="post" noValidate>
-            <CsrfTokenInput />
-            <LoadingButton
-              id="start-survey-button"
-              name="_action"
-              value={FormAction.Submit}
-              variant="primary"
-              disabled={isSubmitting}
-              loading={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Start survey - Confirmation click"
-            >
-              {t('renew-ita:confirm.alert.btn')}
-            </LoadingButton>
-          </fetcher.Form>
-        </div>
-      </ContextualAlert>
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>

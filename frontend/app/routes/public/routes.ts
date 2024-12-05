@@ -600,31 +600,6 @@ export const routes = [
         ],
       },
       {
-        file: 'routes/public/demographic-survey/$id/layout.tsx',
-        children: [
-          {
-            id: 'public/demographic-survey/$id/terms-and-conditions',
-            file: 'routes/public/demographic-survey/$id/terms-and-conditions.tsx',
-            paths: { en: '/:lang/demographic-survey/:id/terms-and-conditions', fr: '/:lang/demographic-survey/:id/conditions-utilisation' },
-          },
-          {
-            id: 'public/demographic-survey/$id/summary',
-            file: 'routes/public/demographic-survey/$id/summary.tsx',
-            paths: { en: '/:lang/demographic-survey/:id/summary', fr: '/:lang/demographic-survey/:id/sommaire' },
-          },
-          {
-            id: 'public/demographic-survey/$id/questions/$memberId',
-            file: 'routes/public/demographic-survey/$id/questions/$memberId.tsx',
-            paths: { en: '/:lang/demographic-survey/:id/questions/:memberId', fr: '/:lang/demographic-survey/:id/questions/:memberId' },
-          },
-          {
-            id: 'public/demographic-survey/$id/submitted',
-            file: 'routes/public/demographic-survey/$id/submitted.tsx',
-            paths: { en: '/:lang/demographic-survey/:id/submitted', fr: '/:lang/demographic-survey/:id/soumis' },
-          },
-        ],
-      },
-      {
         id: 'public/unable-to-process-request',
         file: 'routes/public/unable-to-process-request.tsx',
         paths: { en: '/:lang/unable-to-process-request', fr: '/:lang/impossible-de-traiter-la-demande' },
