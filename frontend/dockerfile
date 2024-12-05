@@ -127,4 +127,4 @@ LABEL org.opencontainers.image.vendor=${IMAGE_VENDOR}
 
 USER node
 ENV PORT=3000
-CMD ["node", "./build/express.server.mjs"]
+CMD ["node", "./build/server/server.js"]

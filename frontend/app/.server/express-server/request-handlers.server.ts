@@ -21,12 +21,10 @@ export function globalErrorHandler(isProduction: boolean): ErrorRequestHandler {
       return next(error);
     }
 
-    const rootDir = isProduction ? './client/' : '../../../public/';
-
     const errorFile =
       response.statusCode === 403 //
-        ? rootDir + 'errors/403.html'
-        : rootDir + 'errors/500.html';
+        ? './assets/403.html'
+        : './assets/500.html';
 
     const errorFilePath = path.join(import.meta.dirname, errorFile);
 
@@ -50,7 +48,7 @@ export function remixRequestHandler(mode: string, viteDevServer?: ViteDevServer)
   }
 
   // dynamically declare the path to avoid static analysis errors 💩
-  const remixServerBuild = './server/index.js';
+  const remixServerBuild = './app.js';
 
   const appContainer = getAppContainerProvider();
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
