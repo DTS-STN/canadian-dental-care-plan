@@ -128,6 +128,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     },
   };
 
+  const demographicSurvey = state.demographicSurvey;
+
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:review-adult-information.page-title') }) };
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
@@ -143,6 +145,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     mailingAddressInfo,
     dentalInsurance,
     dentalBenefit,
+    demographicSurvey,
     meta,
     payload,
     hasChildren: state.children.length > 0,
@@ -183,7 +186,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewAdultChildReviewAdultInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, hasChildren, payload } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, demographicSurvey, hasChildren, payload } = useLoaderData<typeof loader>();
   const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const hCaptchaEnabled = useFeature('hcaptcha');
   const fetcher = useFetcher<typeof action>();
@@ -372,6 +375,19 @@ export default function RenewAdultChildReviewAdultInformation() {
                 <div className="mt-4">
                   <InlineLink id="change-dental-benefits" routeId="public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits" params={params}>
                     {t('renew-adult-child:review-adult-information.dental-benefit-change')}
+                  </InlineLink>
+                </div>
+              </DescriptionListItem>
+            </dl>
+          </section>
+          <section className="space-y-6">
+            <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-adult-information.demographic-survey-title')}</h2>
+            <dl className="divide-y border-y">
+              <DescriptionListItem term={t('renew-adult-child:review-adult-information.demographic-survey-title')}>
+                <p>{demographicSurvey ? t('renew-adult-child:review-adult-information.demographic-survey-responded') : t('renew-adult-child:review-adult-information.no')}</p>
+                <div className="mt-4">
+                  <InlineLink id="change-demographic-survey" routeId="public/renew/$id/adult-child/demographic-survey" params={params}>
+                    {t('renew-adult-child:review-adult-information.demographic-survey-change')}
                   </InlineLink>
                 </div>
               </DescriptionListItem>

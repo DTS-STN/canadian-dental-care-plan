@@ -138,6 +138,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     dentalBenefits,
     confirmDentalBenefits,
     dentalInsurance,
+    demographicSurvey,
   } = state;
 
   if (typeOfRenewal === undefined) {
@@ -215,6 +216,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     partnerInformation,
     children,
     hasAddressChanged,
+    demographicSurvey,
   };
 }
 

@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { loadRenewItaState } from '~/.server/routes/helpers/renew-ita-route-helpers';
+import { loadRenewAdultChildState } from '~/.server/routes/helpers/renew-adult-child-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -36,9 +36,9 @@ enum FormAction {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'gcweb'),
-  pageTitleI18nKey: 'renew-ita:demographic-survey.page-title',
-  pageIdentifier: pageIds.public.renew.ita.demographicSurvey,
+  i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'gcweb'),
+  pageTitleI18nKey: 'renew-adult-child:demographic-survey.page-title',
+  pageIdentifier: pageIds.public.renew.adultChild.demographicSurvey,
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -46,13 +46,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
-  const state = loadRenewItaState({ params, request, session });
+  const state = loadRenewAdultChildState({ params, request, session });
 
   const memberName = `${state.applicantInformation?.firstName} ${state.applicantInformation?.lastName}`;
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:demographic-survey.page-title', { memberName }) }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:demographic-survey.page-title', { memberName }) }) };
 
   const demographicSurveyService = appContainer.get(TYPES.domain.services.DemographicSurveyService);
   const indigenousStatuses = demographicSurveyService.listLocalizedIndigenousStatuses(locale);
@@ -97,11 +97,11 @@ export async function action({ context: { appContainer, session }, params, reque
     })
     .superRefine((val, ctx) => {
       if (val.indigenousStatus === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && !val.firstNations.length) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:demographic-survey.error-message.first-nations-required'), path: ['firstNations'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:demographic-survey.error-message.first-nations-required'), path: ['firstNations'] });
       }
 
       if (val.ethnicGroups.includes(ANOTHER_ETHNIC_GROUP_OPTION.toString()) && !val.anotherEthnicGroup) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:demographic-survey.error-message.another-ethnic-group-required'), path: ['anotherEthnicGroup'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:demographic-survey.error-message.another-ethnic-group-required'), path: ['anotherEthnicGroup'] });
       }
     });
 
@@ -124,14 +124,13 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       demographicSurvey: parsedDataResult.data,
-      editMode: true, // last step in the flow
     },
   });
 
-  return redirect(getPathById('public/renew/$id/ita/review-information', params));
+  return redirect(getPathById('public/renew/$id/adult-child/children/index', params));
 }
 
-export default function RenewItaDemographicSurveyQuestions() {
+export default function RenewAdultChildDemographicSurveyQuestions() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState, editMode } = useLoaderData<typeof loader>();
   const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = useClientEnv();
@@ -171,7 +170,7 @@ export default function RenewItaDemographicSurveyQuestions() {
     value: status.id,
     onChange: handleOnIsIndigenousStatusChanged,
     append: status.id === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && isIndigenousStatusValue && (
-      <InputCheckboxes id="first-nations" name="firstNations" legend={t('renew-ita:demographic-survey.indigenous-status')} options={firstNationsOptions} errorMessage={errors?.firstNations} required />
+      <InputCheckboxes id="first-nations" name="firstNations" legend={t('renew-adult-child:demographic-survey.indigenous-status')} options={firstNationsOptions} errorMessage={errors?.firstNations} required />
     ),
   }));
 
@@ -185,7 +184,7 @@ export default function RenewItaDemographicSurveyQuestions() {
     value: status.id,
     onChange: status.id === ANOTHER_ETHNIC_GROUP_OPTION.toString() ? handleOnIsAnotherEthnicGroupChanged : undefined,
     append: status.id === ANOTHER_ETHNIC_GROUP_OPTION.toString() && isAnotherEthnicGroupValue && (
-      <InputSanitizeField id="another-ethnic-group" name="anotherEthnicGroup" label={t('renew-ita:demographic-survey.ethnic-groups')} defaultValue={defaultState?.anotherEthnicGroup ?? ''} errorMessage={errors?.anotherEthnicGroup} required />
+      <InputSanitizeField id="another-ethnic-group" name="anotherEthnicGroup" label={t('renew-adult-child:demographic-survey.ethnic-groups')} defaultValue={defaultState?.anotherEthnicGroup ?? ''} errorMessage={errors?.anotherEthnicGroup} required />
     ),
   }));
 
@@ -200,47 +199,47 @@ export default function RenewItaDemographicSurveyQuestions() {
   return (
     <>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew-ita:demographic-survey.optional')}</p>
+        <p className="mb-4 italic">{t('renew-adult-child:demographic-survey.optional')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('renew-ita:demographic-survey.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
-            <InputRadios id="disability-status" name="disabilityStatus" legend={t('renew-ita:demographic-survey.disability-status')} options={disabilityStatusOptions} errorMessage={errors?.disabilityStatus} required />
-            <InputCheckboxes id="ethnic-groups" name="ethnicGroups" legend={t('renew-ita:demographic-survey.ethnic-groups')} options={ethnicGroupOptions} errorMessage={errors?.ethnicGroups} required />
-            <InputRadios id="location-born-status" name="locationBornStatus" legend={t('renew-ita:demographic-survey.location-born-status')} options={locationBornStatusOptions} errorMessage={errors?.locationBornStatus} required />
-            <InputRadios id="gender-status" name="genderStatus" legend={t('renew-ita:demographic-survey.gender-status')} options={genderStatusOptions} errorMessage={errors?.genderStatus} required />
+            <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('renew-adult-child:demographic-survey.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
+            <InputRadios id="disability-status" name="disabilityStatus" legend={t('renew-adult-child:demographic-survey.disability-status')} options={disabilityStatusOptions} errorMessage={errors?.disabilityStatus} required />
+            <InputCheckboxes id="ethnic-groups" name="ethnicGroups" legend={t('renew-adult-child:demographic-survey.ethnic-groups')} options={ethnicGroupOptions} errorMessage={errors?.ethnicGroups} required />
+            <InputRadios id="location-born-status" name="locationBornStatus" legend={t('renew-adult-child:demographic-survey.location-born-status')} options={locationBornStatusOptions} errorMessage={errors?.locationBornStatus} required />
+            <InputRadios id="gender-status" name="genderStatus" legend={t('renew-adult-child:demographic-survey.gender-status')} options={genderStatusOptions} errorMessage={errors?.genderStatus} required />
           </div>
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
-                {t('renew-ita:demographic-survey.save-btn')}
+                {t('renew-adult-child:demographic-survey.save-btn')}
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/ita/review-information"
+                routeId="public/renew/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental insurance click"
               >
-                {t('renew-ita:demographic-survey.cancel-btn')}
+                {t('renew-adult-child:demographic-survey.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
-                {t('renew-ita:demographic-survey.continue-btn')}
+                {t('renew-adult-child:demographic-survey.continue-btn')}
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/ita/federal-provincial-territorial-benefits"
+                routeId="public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Cancel - Questions click"
               >
-                {t('renew-ita:demographic-survey.back-btn')}
+                {t('renew-adult-child:demographic-survey.back-btn')}
               </ButtonLink>
             </div>
           )}

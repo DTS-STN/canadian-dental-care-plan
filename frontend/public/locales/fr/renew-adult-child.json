@@ -577,6 +577,10 @@
     "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
     "dental-benefit-change": "Modifier la réponse à «\u00a0soins dentaires gouvernementaux\u00a0»",
     "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
+    "demographic-survey-title": "Demographics questions",
+    "demographic-survey-heading": "Voluntary demographic questions",
+    "demographic-survey-responded": "Responded",
+    "demographic-survey-change": "Change answers to demographic questions",
     "no-change": "Aucun changement",
     "submit-button": "Soumettre la demande",
     "exit-button": "Quitter la demande",
@@ -589,5 +593,22 @@
     "submit-p-false-info": "Si vous fournissez de faux renseignements dans votre demande de renouvellement, vous et les autres personnes pour lesquelles vous avez présenté une demande pourriez être exclus du régime.",
     "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles au renouvellement, vous pourriez avoir à rembourser la totalité des frais pour les soins reçus par l'intermédiaire du Régime canadien de soins dentaires.",
     "no-update": "Pas de mise à jour"
+  },
+  "demographic-survey": {
+    "page-title": "Voluntary demographic questions for {{memberName}}",
+    "optional": "All questions are optional.",
+    "indigenous-status": "Is this person First Nations, Métis or Inuk (Inuit)?",
+    "disability-status": "Does this person have a disability?",
+    "ethnic-groups": "To which ethnic group(s) does this person belong? Please select all that apply.",
+    "location-born-status": "Where was this person born?",
+    "gender-status": "What is this person's gender?",
+    "continue-btn": "Continue",
+    "back-btn": "Back",
+    "save-btn": "Save",
+    "cancel-btn": "Cancel",
+    "error-message": {
+      "first-nations-required": "Please select if this person is First Nations, Métis or Inuk (Inuit)",
+      "another-ethnic-group-required": "Please specify the ethnic group"
+    }
   }
 }
