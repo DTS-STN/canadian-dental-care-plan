@@ -16,8 +16,6 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
-    host: true,
     hmr: {
       port: 3001,
     },
@@ -57,6 +55,7 @@ export default defineConfig({
             v3_singleFetch: true,
             v3_throwAbortReason: true,
           },
+          serverBuildFile: 'app.js',
         }),
   ],
   ssr: {
