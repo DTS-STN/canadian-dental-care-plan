@@ -273,7 +273,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       dentalInsurance,
       partnerInformation: this.toPartnerInformation({
         existingPartnerInformation: clientApplication.partnerInformation,
-        hasMaritalStatusChanged: partnerInformation ? true : false,
+        hasMaritalStatusChanged: maritalStatus ? true : false,
         renewedPartnerInformation: partnerInformation,
       }),
       userId,
