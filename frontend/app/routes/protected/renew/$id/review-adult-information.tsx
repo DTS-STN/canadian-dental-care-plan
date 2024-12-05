@@ -59,44 +59,49 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
+  const communicationPreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethod, locale);
+  const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : state.clientApplication.applicantInformation.maritalStatus;
+  const preferredLanguage = state.preferredLanguage
+    ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.preferredLanguage, locale).name
+    : state.clientApplication.communicationPreferences.preferredLanguage;
+
   const userInfo = {
     firstName: state.clientApplication.applicantInformation.firstName,
     lastName: state.clientApplication.applicantInformation.lastName,
     sin: state.clientApplication.applicantInformation.socialInsuranceNumber,
     clientNumber: state.clientApplication.applicantInformation.clientNumber,
-    phoneNumber: state.contactInformation?.phoneNumber ? state.contactInformation.phoneNumber : state.clientApplication.contactInformation.phoneNumber,
-    altPhoneNumber: state.contactInformation?.phoneNumberAlt ? state.contactInformation.phoneNumberAlt : state.clientApplication.contactInformation.phoneNumberAlt,
+    phoneNumber: state.contactInformation?.phoneNumber ?? state.clientApplication.contactInformation.phoneNumber,
+    altPhoneNumber: state.contactInformation?.phoneNumberAlt ?? state.clientApplication.contactInformation.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
-    maritalStatus: state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus,
-    contactInformationEmail: state.contactInformation?.email ? state.contactInformation.email : state.clientApplication.contactInformation.email,
-    communicationPreference: state.clientApplication.communicationPreferences.preferredMethod,
-    preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage,
+    maritalStatus: maritalStatus,
+    contactInformationEmail: state.contactInformation?.email ?? state.clientApplication.contactInformation.email,
+    communicationPreference: communicationPreference.name,
+    preferredLanguage: preferredLanguage,
     communicationPreferenceEmail: state.clientApplication.communicationPreferences.email,
   };
 
-  // TODO: Display information from the state instead of clientApplication when user updated information
-  const spouseInfo = state.clientApplication.partnerInformation && {
-    yearOfBirth: state.clientApplication.partnerInformation.dateOfBirth,
-    sin: state.clientApplication.partnerInformation.socialInsuranceNumber,
-    consent: state.clientApplication.partnerInformation.confirm,
+  const spouseInfo = (state.clientApplication.partnerInformation ?? state.partnerInformation) && {
+    yearOfBirth: state.partnerInformation?.yearOfBirth ?? state.clientApplication.partnerInformation?.dateOfBirth,
+    sin: state.partnerInformation?.socialInsuranceNumber ?? state.clientApplication.partnerInformation?.socialInsuranceNumber,
+    consent: state.partnerInformation?.confirm ?? state.clientApplication.partnerInformation?.confirm,
   };
 
   const mailingAddressInfo = {
-    address: state.clientApplication.contactInformation.mailingAddress,
-    city: state.clientApplication.contactInformation.mailingCity,
-    province: state.clientApplication.contactInformation.mailingProvince,
-    postalCode: state.clientApplication.contactInformation.mailingPostalCode,
-    country: state.clientApplication.contactInformation.mailingCountry,
-    apartment: state.clientApplication.contactInformation.mailingApartment,
+    address: state.addressInformation?.mailingAddress ?? state.clientApplication.contactInformation.mailingAddress,
+    city: state.addressInformation?.mailingCity ?? state.clientApplication.contactInformation.mailingCity,
+    province: state.addressInformation?.mailingProvince ?? state.clientApplication.contactInformation.mailingProvince,
+    postalCode: state.addressInformation?.mailingPostalCode ?? state.clientApplication.contactInformation.mailingPostalCode,
+    country: state.addressInformation?.mailingCountry ?? state.clientApplication.contactInformation.mailingCountry,
+    apartment: state.addressInformation?.mailingApartment ?? state.clientApplication.contactInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.clientApplication.contactInformation.homeAddress,
-    city: state.clientApplication.contactInformation.homeCity,
-    province: state.clientApplication.contactInformation.homeProvince,
-    postalCode: state.clientApplication.contactInformation.homePostalCode,
-    country: state.clientApplication.contactInformation.homeCountry,
-    apartment: state.clientApplication.contactInformation.homeApartment,
+    address: state.addressInformation?.homeAddress ?? state.clientApplication.contactInformation.homeAddress,
+    city: state.addressInformation?.homeCity ?? state.clientApplication.contactInformation.homeCity,
+    province: state.addressInformation?.homeProvince ?? state.clientApplication.contactInformation.homeProvince,
+    postalCode: state.addressInformation?.homePostalCode ?? state.clientApplication.contactInformation.homePostalCode,
+    country: state.addressInformation?.homeCountry ?? state.clientApplication.contactInformation.homeCountry,
+    apartment: state.addressInformation?.homeApartment ?? state.clientApplication.contactInformation.homeApartment,
   };
 
   const dentalInsurance = state.dentalInsurance;
@@ -260,7 +265,7 @@ export default function ProtectedRenewReviewAdultInformation() {
               <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.spouse-title')}</h2>
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('protected-renew:review-adult-information.sin-title')}>
-                  <p>{formatSin(spouseInfo.sin)}</p>
+                  {spouseInfo.sin && <p>{formatSin(spouseInfo.sin)}</p>}
                   <div className="mt-4">
                     <InlineLink id="change-spouse-sin" routeId="protected/renew/$id/marital-status" params={params}>
                       {t('protected-renew:review-adult-information.sin-change')}
@@ -343,6 +348,7 @@ export default function ProtectedRenewReviewAdultInformation() {
               </DescriptionListItem>
             </dl>
           </section>
+          {/*TODO: Communication screen only has the option to change preferred language, update the page to have the option to change preferred communication method*/}
           <section className="space-y-6">
             <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.comm-title')}</h2>
             <dl className="divide-y border-y">

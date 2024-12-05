@@ -119,7 +119,7 @@ export default function ProtectedRenewCommunicationPreferencePage() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Communication click">
                 {t('protected-renew:communication-preference.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="protected/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Communication click">
+              <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Communication click">
                 {t('protected-renew:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>
@@ -130,7 +130,7 @@ export default function ProtectedRenewCommunicationPreferencePage() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="protected/renew/$id/adult/review-adult-information"
+                routeId="protected/renew/$id/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
