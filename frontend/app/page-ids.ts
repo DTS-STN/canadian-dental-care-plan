@@ -117,8 +117,8 @@ export const pageIds = {
         federalProvincialTerritorialBenefits: 'CDCP-RENW-ITA-0007',
         reviewInformation: 'CDCP-RENW-ITA-0008',
         confirmation: 'CDCP-RENW-ITA-0009',
-        exitApplication: 'CDCP-RENw-ITA-0010',
-        demographicSurvey: 'CDCP-RENw-ITA-0011',
+        exitApplication: 'CDCP-RENW-ITA-0010',
+        demographicSurvey: 'CDCP-RENW-ITA-0011',
       },
       adultChild: {
         confirmMaritalStatus: 'CDCP-RENW-ADCH-001',
@@ -136,6 +136,7 @@ export const pageIds = {
         exitApplication: 'CDCP-RENW-ADCH-0013',
         confirmation: 'CDCP-RENW-ADCH-0014',
         reviewAdultInformation: 'CDCP-APPL-ADCH-0015',
+        demographicSurvey: 'CDCP-RENw-ITA-0016',
       },
       child: {
         childInformation: 'CDCP-RENW-CHLD-0001',

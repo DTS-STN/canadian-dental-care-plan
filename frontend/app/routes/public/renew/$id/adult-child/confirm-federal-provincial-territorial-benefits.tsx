@@ -108,7 +108,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/adult-child/children/index', params));
+  return redirect(getPathById('public/renew/$id/adult-child/demographic-survey', params));
 }
 
 export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefits() {

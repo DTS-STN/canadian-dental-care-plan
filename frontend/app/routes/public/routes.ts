@@ -518,6 +518,11 @@ export const routes = [
             paths: { en: '/:lang/renew/:id/adult-child/update-federal-provincial-territorial-benefits', fr: '/:lang/renew/:id/adulte-enfant/mise-a-jour-prestations-dentaires-federales-provinciales-territoriales' },
           },
           {
+            id: 'public/renew/$id/adult-child/demographic-survey',
+            file: 'routes/public/renew/$id/adult-child/demographic-survey.tsx',
+            paths: { en: '/:lang/renew/:id/adult-child/demographic-survey', fr: '/:lang/renew/:id/adult-child/demographic-survey' },
+          },
+          {
             id: 'public/renew/$id/adult-child/children/index',
             file: 'routes/public/renew/$id/adult-child/children/index.tsx',
             paths: { en: '/:lang/renew/:id/adult-child/children', fr: '/:lang/renew/:id/adulte-enfant/enfant' },
