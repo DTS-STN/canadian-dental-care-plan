@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import Redis from 'ioredis';
+import type { RedisOptions } from 'ioredis';
 import type { Logger } from 'winston';
 
 import type { ServerConfig } from '~/.server/configs';
@@ -68,7 +69,7 @@ export class DefaultRedisService implements RedisService {
     return await this.redisClient.ping();
   }
 
-  private getRedisConfig(serverConfig: ServerConfig) {
+  private getRedisConfig(serverConfig: ServerConfig): RedisOptions {
     const retryStrategy = (times: number): number => {
       // exponential backoff starting at 250ms to a maximum of 5s
       const retryIn = Math.min(250 * Math.pow(2, times - 1), 5000);
@@ -80,6 +81,7 @@ export class DefaultRedisService implements RedisService {
       this.log.debug('      configuring Redis client in sentinel mode');
 
       return {
+        lazyConnect: true,
         name: serverConfig.REDIS_SENTINEL_NAME,
         sentinels: [
           {
@@ -96,6 +98,7 @@ export class DefaultRedisService implements RedisService {
 
     this.log.debug('      configuring Redis client in standalone mode');
     return {
+      lazyConnect: true,
       host: serverConfig.REDIS_STANDALONE_HOST,
       port: serverConfig.REDIS_STANDALONE_PORT,
       username: serverConfig.REDIS_USERNAME,

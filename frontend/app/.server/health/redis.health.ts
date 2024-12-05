@@ -12,7 +12,7 @@ export class RedisHealthCheck implements HealthCheck {
   private readonly log: Logger;
 
   readonly name: string;
-  readonly check: (signal?: AbortSignal) => Promise<void> | void;
+
   readonly metadata?: Record<string, string>;
 
   constructor(
@@ -24,7 +24,6 @@ export class RedisHealthCheck implements HealthCheck {
     this.log = logFactory.createLogger('RedisHealthCheck');
 
     this.name = 'redis';
-    this.check = this.redisCheckFn();
     this.metadata = {
       REDIS_USERNAME: this.serverConfig.REDIS_USERNAME ?? '',
       REDIS_STANDALONE_HOST: this.serverConfig.REDIS_STANDALONE_HOST,
@@ -34,19 +33,18 @@ export class RedisHealthCheck implements HealthCheck {
       REDIS_SENTINEL_PORT: (this.serverConfig.REDIS_SENTINEL_PORT ?? '').toString(),
       REDIS_COMMAND_TIMEOUT_SECONDS: this.serverConfig.REDIS_COMMAND_TIMEOUT_SECONDS.toString(),
     };
+
+    this.check.maxAge = this.serverConfig.HEALTH_CACHE_TTL;
   }
 
-  private redisCheckFn(): (signal?: AbortSignal) => Promise<void> {
-    return moize.promise(
-      async () => {
-        this.log.trace('Performing Redis health check');
-        void (await this.redisService.ping());
-      },
-      {
-        transformArgs: () => [],
-        onCacheAdd: () => this.log.info('Creating new redisCheckFn memo'),
-        maxAge: this.serverConfig.HEALTH_CACHE_TTL,
-      },
-    );
-  }
+  check = moize.promise(
+    async (signal?: AbortSignal): Promise<void> => {
+      this.log.trace('Performing Redis health check');
+      void (await this.redisService.ping());
+    },
+    {
+      transformArgs: () => [],
+      onCacheAdd: () => this.log.info('Creating new redisCheckFn memo'),
+    },
+  );
 }
