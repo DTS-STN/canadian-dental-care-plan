@@ -99,6 +99,7 @@ export async function loader({ context: { appContainer, session }, params, reque
           benefit: selectedProvincialBenefit?.name,
         },
       },
+      demographicSurvey: child.demographicSurvey,
     };
   });
 
@@ -225,6 +226,19 @@ export default function RenewAdultChildReviewChildInformation() {
                           {t('renew-adult-child:review-child-information.dental-benefit-change')}
                         </InlineLink>
                       </p>
+                    </DescriptionListItem>
+                  </dl>
+                </section>
+                <section className="space-y-6">
+                  <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-child-information.demographic-survey-title')}</h2>
+                  <dl className="divide-y border-y">
+                    <DescriptionListItem term={t('renew-adult-child:review-child-information.demographic-survey-title')}>
+                      <p>{child.demographicSurvey ? t('renew-adult-child:review-child-information.demographic-survey-responded') : t('renew-adult-child:review-child-information.no')}</p>
+                      <div className="mt-4">
+                        <InlineLink id="change-demographic-survey" routeId="public/renew/$id/adult-child/$childId/demographic-survey" params={childParams}>
+                          {t('renew-adult-child:review-child-information.demographic-survey-change')}
+                        </InlineLink>
+                      </div>
                     </DescriptionListItem>
                   </dl>
                 </section>
