@@ -86,7 +86,11 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
-  return redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
+  if (state.clientApplication.isInvitationToApplyClient) {
+    return redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
+  }
+
+  return redirect(getPathById('protected/renew/$id/demographic-survey', params));
 }
 
 export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion() {

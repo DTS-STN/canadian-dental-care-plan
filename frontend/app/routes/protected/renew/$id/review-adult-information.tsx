@@ -74,6 +74,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationPreferenceEmail: state.clientApplication.communicationPreferences.email,
   };
 
+  // TODO: Display information from the state instead of clientApplication when user updated information
   const spouseInfo = state.clientApplication.partnerInformation && {
     yearOfBirth: state.clientApplication.partnerInformation.dateOfBirth,
     sin: state.clientApplication.partnerInformation.socialInsuranceNumber,

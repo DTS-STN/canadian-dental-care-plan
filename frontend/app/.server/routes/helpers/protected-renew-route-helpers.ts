@@ -35,10 +35,6 @@ export interface ProtectedRenewState {
     provincialTerritorialSocialProgram?: string;
     province?: string;
   };
-  readonly confirmDentalBenefits?: {
-    federalBenefitsChanged: boolean;
-    provincialTerritorialBenefitsChanged: boolean;
-  };
   readonly isSurveyCompleted?: boolean;
   readonly demographicSurvey?: {
     readonly indigenousStatus?: string;
@@ -74,9 +70,9 @@ export interface ProtectedRenewState {
       readonly genderStatus?: string;
     };
     readonly dentalBenefits?: {
-      hasFederalBenefits?: boolean;
+      hasFederalBenefits: boolean;
       federalSocialProgram?: string;
-      hasProvincialTerritorialBenefits?: boolean;
+      hasProvincialTerritorialBenefits: boolean;
       provincialTerritorialSocialProgram?: string;
       province?: string;
     };
@@ -344,7 +340,7 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
-  const { maritalStatus, partnerInformation, addressInformation, clientApplication, contactInformation, confirmDentalBenefits, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
+  const { maritalStatus, partnerInformation, addressInformation, clientApplication, contactInformation, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
 
   if (dentalInsurance === undefined) {
     throw redirect(getPathById('protected/renew/$id/dental-insurance', params));
@@ -371,7 +367,6 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
     dentalInsurance,
     children,
     dentalBenefits,
-    confirmDentalBenefits,
     demographicSurvey,
   };
 }
