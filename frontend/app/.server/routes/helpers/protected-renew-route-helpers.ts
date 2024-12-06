@@ -346,10 +346,6 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
     throw redirect(getPathById('protected/renew/$id/dental-insurance', params));
   }
 
-  if (dentalBenefits === undefined) {
-    throw redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
-  }
-
   if (demographicSurvey === undefined) {
     throw redirect(getPathById('protected/renew/$id/demographic-survey', params));
   }
