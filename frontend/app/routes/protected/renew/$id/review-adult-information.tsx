@@ -60,10 +60,30 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
 
   const communicationPreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethod, locale);
-  const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : state.clientApplication.applicantInformation.maritalStatus;
+  const maritalStatus = state.maritalStatus
+    ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name
+    : appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.clientApplication.applicantInformation.maritalStatus, locale).name;
   const preferredLanguage = state.preferredLanguage
     ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.preferredLanguage, locale).name
-    : state.clientApplication.communicationPreferences.preferredLanguage;
+    : state.clientApplication.communicationPreferences.preferredLanguage
+      ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name
+      : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince
+    ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr
+    : state.clientApplication.contactInformation.mailingProvince
+      ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince).abbr
+      : undefined;
+  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince
+    ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr
+    : state.clientApplication.contactInformation.homeProvince
+      ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince).abbr
+      : undefined;
+  const mailingCountryAbbr = state.addressInformation?.mailingCountry
+    ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.mailingCountry, locale).name
+    : appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.mailingCountry, locale).name;
+  const homeCountryAbbr = state.addressInformation?.homeCountry
+    ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.homeCountry, locale).name
+    : appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale).name;
 
   const userInfo = {
     firstName: state.clientApplication.applicantInformation.firstName,
@@ -89,18 +109,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   const mailingAddressInfo = {
     address: state.addressInformation?.mailingAddress ?? state.clientApplication.contactInformation.mailingAddress,
     city: state.addressInformation?.mailingCity ?? state.clientApplication.contactInformation.mailingCity,
-    province: state.addressInformation?.mailingProvince ?? state.clientApplication.contactInformation.mailingProvince,
+    province: mailingProvinceTerritoryStateAbbr,
     postalCode: state.addressInformation?.mailingPostalCode ?? state.clientApplication.contactInformation.mailingPostalCode,
-    country: state.addressInformation?.mailingCountry ?? state.clientApplication.contactInformation.mailingCountry,
+    country: mailingCountryAbbr,
     apartment: state.addressInformation?.mailingApartment ?? state.clientApplication.contactInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
     address: state.addressInformation?.homeAddress ?? state.clientApplication.contactInformation.homeAddress,
     city: state.addressInformation?.homeCity ?? state.clientApplication.contactInformation.homeCity,
-    province: state.addressInformation?.homeProvince ?? state.clientApplication.contactInformation.homeProvince,
+    province: homeProvinceTerritoryStateAbbr,
     postalCode: state.addressInformation?.homePostalCode ?? state.clientApplication.contactInformation.homePostalCode,
-    country: state.addressInformation?.homeCountry ?? state.clientApplication.contactInformation.homeCountry,
+    country: homeCountryAbbr,
     apartment: state.addressInformation?.homeApartment ?? state.clientApplication.contactInformation.homeApartment,
   };
 
@@ -264,14 +284,16 @@ export default function ProtectedRenewReviewAdultInformation() {
             <section className="space-y-6">
               <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.spouse-title')}</h2>
               <dl className="divide-y border-y">
-                <DescriptionListItem term={t('protected-renew:review-adult-information.sin-title')}>
-                  {spouseInfo.sin && <p>{formatSin(spouseInfo.sin)}</p>}
-                  <div className="mt-4">
-                    <InlineLink id="change-spouse-sin" routeId="protected/renew/$id/marital-status" params={params}>
-                      {t('protected-renew:review-adult-information.sin-change')}
-                    </InlineLink>
-                  </div>
-                </DescriptionListItem>
+                {spouseInfo.sin && (
+                  <DescriptionListItem term={t('protected-renew:review-adult-information.sin-title')}>
+                    <p>{formatSin(spouseInfo.sin)}</p>
+                    <div className="mt-4">
+                      <InlineLink id="change-spouse-sin" routeId="protected/renew/$id/marital-status" params={params}>
+                        {t('protected-renew:review-adult-information.sin-change')}
+                      </InlineLink>
+                    </div>
+                  </DescriptionListItem>
+                )}
                 <DescriptionListItem term={t('protected-renew:review-adult-information.year-of-birth')}>
                   <p>{spouseInfo.yearOfBirth}</p>
                   <div className="mt-4">
