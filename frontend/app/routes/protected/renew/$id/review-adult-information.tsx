@@ -59,67 +59,92 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
+  const communicationPreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethod, locale);
+  const maritalStatus = state.maritalStatus
+    ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name
+    : appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.clientApplication.applicantInformation.maritalStatus, locale).name;
+  const preferredLanguage = state.preferredLanguage
+    ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.preferredLanguage, locale).name
+    : appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
+  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince
+    ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr
+    : state.clientApplication.contactInformation.mailingProvince
+      ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince).abbr
+      : undefined;
+  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince
+    ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr
+    : state.clientApplication.contactInformation.homeProvince
+      ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince).abbr
+      : undefined;
+  const mailingCountryAbbr = state.addressInformation?.mailingCountry
+    ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.mailingCountry, locale).name
+    : appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.mailingCountry, locale).name;
+  const homeCountryAbbr = state.addressInformation?.homeCountry
+    ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.homeCountry, locale).name
+    : appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale).name;
+
   const userInfo = {
     firstName: state.clientApplication.applicantInformation.firstName,
     lastName: state.clientApplication.applicantInformation.lastName,
     sin: state.clientApplication.applicantInformation.socialInsuranceNumber,
     clientNumber: state.clientApplication.applicantInformation.clientNumber,
-    phoneNumber: state.contactInformation?.phoneNumber ? state.contactInformation.phoneNumber : state.clientApplication.contactInformation.phoneNumber,
-    altPhoneNumber: state.contactInformation?.phoneNumberAlt ? state.contactInformation.phoneNumberAlt : state.clientApplication.contactInformation.phoneNumberAlt,
+    phoneNumber: state.contactInformation?.phoneNumber ?? state.clientApplication.contactInformation.phoneNumber,
+    altPhoneNumber: state.contactInformation?.phoneNumberAlt ?? state.clientApplication.contactInformation.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
-    maritalStatus: state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus,
-    contactInformationEmail: state.contactInformation?.email ? state.contactInformation.email : state.clientApplication.contactInformation.email,
-    communicationPreference: state.clientApplication.communicationPreferences.preferredMethod,
-    preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage,
+    maritalStatus: maritalStatus,
+    contactInformationEmail: state.contactInformation?.email ?? state.clientApplication.contactInformation.email,
+    communicationPreference: communicationPreference.name,
+    preferredLanguage: preferredLanguage,
     communicationPreferenceEmail: state.clientApplication.communicationPreferences.email,
   };
 
-  // TODO: Display information from the state instead of clientApplication when user updated information
-  const spouseInfo = state.clientApplication.partnerInformation && {
-    yearOfBirth: state.clientApplication.partnerInformation.dateOfBirth,
-    sin: state.clientApplication.partnerInformation.socialInsuranceNumber,
-    consent: state.clientApplication.partnerInformation.confirm,
+  const spouseInfo = (state.clientApplication.partnerInformation ?? state.partnerInformation) && {
+    yearOfBirth: state.partnerInformation?.yearOfBirth ?? state.clientApplication.partnerInformation?.dateOfBirth,
+    sin: state.partnerInformation?.socialInsuranceNumber ?? state.clientApplication.partnerInformation?.socialInsuranceNumber,
+    consent: state.partnerInformation?.confirm ?? state.clientApplication.partnerInformation?.confirm,
   };
 
   const mailingAddressInfo = {
-    address: state.clientApplication.contactInformation.mailingAddress,
-    city: state.clientApplication.contactInformation.mailingCity,
-    province: state.clientApplication.contactInformation.mailingProvince,
-    postalCode: state.clientApplication.contactInformation.mailingPostalCode,
-    country: state.clientApplication.contactInformation.mailingCountry,
-    apartment: state.clientApplication.contactInformation.mailingApartment,
+    address: state.addressInformation?.mailingAddress ?? state.clientApplication.contactInformation.mailingAddress,
+    city: state.addressInformation?.mailingCity ?? state.clientApplication.contactInformation.mailingCity,
+    province: mailingProvinceTerritoryStateAbbr,
+    postalCode: state.addressInformation?.mailingPostalCode ?? state.clientApplication.contactInformation.mailingPostalCode,
+    country: mailingCountryAbbr,
+    apartment: state.addressInformation?.mailingApartment ?? state.clientApplication.contactInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.clientApplication.contactInformation.homeAddress,
-    city: state.clientApplication.contactInformation.homeCity,
-    province: state.clientApplication.contactInformation.homeProvince,
-    postalCode: state.clientApplication.contactInformation.homePostalCode,
-    country: state.clientApplication.contactInformation.homeCountry,
-    apartment: state.clientApplication.contactInformation.homeApartment,
+    address: state.addressInformation?.homeAddress ?? state.clientApplication.contactInformation.homeAddress,
+    city: state.addressInformation?.homeCity ?? state.clientApplication.contactInformation.homeCity,
+    province: homeProvinceTerritoryStateAbbr,
+    postalCode: state.addressInformation?.homePostalCode ?? state.clientApplication.contactInformation.homePostalCode,
+    country: homeCountryAbbr,
+    apartment: state.addressInformation?.homeApartment ?? state.clientApplication.contactInformation.homeApartment,
   };
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
     ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
     : undefined;
 
-  const selectedProvincialBenefit = state.dentalBenefits.provincialTerritorialSocialProgram
+  const selectedProvincialBenefit = state.dentalBenefits?.provincialTerritorialSocialProgram
     ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const dentalBenefit = {
-    federalBenefit: {
-      access: state.dentalBenefits.hasFederalBenefits,
-      benefit: selectedFederalGovernmentInsurancePlan?.name,
-    },
-    provTerrBenefit: {
-      access: state.dentalBenefits.hasProvincialTerritorialBenefits,
-      province: state.dentalBenefits.province,
-      benefit: selectedProvincialBenefit?.name,
-    },
-  };
+  const clientDentalBenefits = state.clientApplication.dentalBenefits.map((id) => {
+    try {
+      const federalBenefit = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(id, locale);
+      return federalBenefit.name;
+    } catch {
+      const provincialBenefit = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(id, locale);
+      return provincialBenefit.name;
+    }
+  });
+
+  const dentalBenefits = state.dentalBenefits
+    ? [state.dentalBenefits.hasFederalBenefits && selectedFederalGovernmentInsurancePlan?.name, state.dentalBenefits.hasProvincialTerritorialBenefits && selectedProvincialBenefit?.name].filter(Boolean)
+    : clientDentalBenefits;
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
@@ -144,7 +169,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     homeAddressInfo,
     mailingAddressInfo,
     dentalInsurance,
-    dentalBenefit,
+    dentalBenefits,
     csrfToken,
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
@@ -191,7 +216,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedRenewReviewAdultInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, hasChildren, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefits, hasChildren, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -259,14 +284,16 @@ export default function ProtectedRenewReviewAdultInformation() {
             <section className="space-y-6">
               <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.spouse-title')}</h2>
               <dl className="divide-y border-y">
-                <DescriptionListItem term={t('protected-renew:review-adult-information.sin-title')}>
-                  <p>{formatSin(spouseInfo.sin)}</p>
-                  <div className="mt-4">
-                    <InlineLink id="change-spouse-sin" routeId="protected/renew/$id/marital-status" params={params}>
-                      {t('protected-renew:review-adult-information.sin-change')}
-                    </InlineLink>
-                  </div>
-                </DescriptionListItem>
+                {spouseInfo.sin && (
+                  <DescriptionListItem term={t('protected-renew:review-adult-information.sin-title')}>
+                    <p>{formatSin(spouseInfo.sin)}</p>
+                    <div className="mt-4">
+                      <InlineLink id="change-spouse-sin" routeId="protected/renew/$id/marital-status" params={params}>
+                        {t('protected-renew:review-adult-information.sin-change')}
+                      </InlineLink>
+                    </div>
+                  </DescriptionListItem>
+                )}
                 <DescriptionListItem term={t('protected-renew:review-adult-information.year-of-birth')}>
                   <p>{spouseInfo.yearOfBirth}</p>
                   <div className="mt-4">
@@ -343,6 +370,7 @@ export default function ProtectedRenewReviewAdultInformation() {
               </DescriptionListItem>
             </dl>
           </section>
+          {/*TODO: Communication screen only has the option to change preferred language, update the page to have the option to change preferred communication method*/}
           <section className="space-y-6">
             <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.comm-title')}</h2>
             <dl className="divide-y border-y">
@@ -377,25 +405,35 @@ export default function ProtectedRenewReviewAdultInformation() {
                   </InlineLink>
                 </div>
               </DescriptionListItem>
-              <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
-                {dentalBenefit.federalBenefit.access || dentalBenefit.provTerrBenefit.access ? (
+              {dentalBenefits.length > 0 && (
+                <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
                   <>
                     <p>{t('protected-renew:review-adult-information.yes')}</p>
                     <p>{t('protected-renew:review-adult-information.dental-benefit-has-access')}</p>
                     <ul className="ml-6 list-disc">
-                      {dentalBenefit.federalBenefit.access && <li>{dentalBenefit.federalBenefit.benefit}</li>}
-                      {dentalBenefit.provTerrBenefit.access && <li>{dentalBenefit.provTerrBenefit.benefit}</li>}
+                      {dentalBenefits.map((benefit, index) => (
+                        <li key={index}>{benefit}</li>
+                      ))}
                     </ul>
                   </>
-                ) : (
+                  <div className="mt-4">
+                    <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/confirm-federal-provincial-territorial-benefits" params={params}>
+                      {t('protected-renew:review-adult-information.dental-benefit-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              )}
+
+              {dentalBenefits.length === 0 && (
+                <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
                   <p>{t('protected-renew:review-adult-information.no')}</p>
-                )}
-                <div className="mt-4">
-                  <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/confirm-federal-provincial-territorial-benefits" params={params}>
-                    {t('protected-renew:review-adult-information.dental-benefit-change')}
-                  </InlineLink>
-                </div>
-              </DescriptionListItem>
+                  <div className="mt-4">
+                    <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/confirm-federal-provincial-territorial-benefits" params={params}>
+                      {t('protected-renew:review-adult-information.dental-benefit-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              )}
             </dl>
           </section>
           <section className="space-y-6">
