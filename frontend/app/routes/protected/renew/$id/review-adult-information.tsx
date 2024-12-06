@@ -65,9 +65,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     : appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.clientApplication.applicantInformation.maritalStatus, locale).name;
   const preferredLanguage = state.preferredLanguage
     ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.preferredLanguage, locale).name
-    : state.clientApplication.communicationPreferences.preferredLanguage
-      ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name
-      : undefined;
+    : appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
   const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince
     ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr
     : state.clientApplication.contactInformation.mailingProvince
