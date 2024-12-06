@@ -5,10 +5,6 @@ export type ClientApplicationEntity = ReadonlyDeep<{
     Applicant: {
       PersonBirthDate: {
         date: string;
-        dateTime?: string;
-        DayDate?: string;
-        MonthDate?: string;
-        YearDate?: string;
       };
       PersonContactInformation: Array<{
         Address: Array<{
@@ -19,14 +15,12 @@ export type ClientApplicationEntity = ReadonlyDeep<{
           AddressCountry: {
             CountryCode: {
               ReferenceDataID: string;
-              ReferenceDataName?: string;
             };
           };
           AddressPostalCode: string;
           AddressProvince: {
             ProvinceCode: {
               ReferenceDataID: string;
-              ReferenceDataName?: string;
             };
           };
           AddressSecondaryUnitText: string;
@@ -38,10 +32,8 @@ export type ClientApplicationEntity = ReadonlyDeep<{
           EmailAddressID: string;
         }>;
         TelephoneNumber: Array<{
-          FullTelephoneNumber: {
-            TelephoneNumberFullID: string;
-          };
           TelephoneNumberCategoryCode: {
+            ReferenceDataID: string;
             ReferenceDataName: string;
           };
         }>;
@@ -63,42 +55,32 @@ export type ClientApplicationEntity = ReadonlyDeep<{
       }>;
       PersonSINIdentification: {
         IdentificationID: string;
-        IdentificationCategoryText?: string;
       };
       MailingSameAsHomeIndicator: boolean;
       PreferredMethodCommunicationCode: {
         ReferenceDataID: string;
       };
       ApplicantDetail: {
-        AttestParentOrGuardianIndicator: boolean;
-        ConsentToSharePersonalInformationIndicator: boolean;
         DisabilityTaxCreditIndicator: boolean;
-        FederalDentalCoverageIndicator: boolean;
         InsurancePlan?: Array<{
           InsurancePlanIdentification: Array<{
             IdentificationID: string;
             IdentificationCategoryText?: string;
           }>;
         }>;
+        ItaIndicator: boolean; // TODO to be renamed not yet exposed by Interop
         LivingIndependentlyIndicator: boolean;
+        PreviousApplicationIndicator: boolean;
+        PreviousTaxesFiledIndicator: boolean;
         PrivateDentalInsuranceIndicator: boolean;
-        ProvincialDentalCoverageIndicator: boolean;
       };
       ClientIdentification: Array<{
         IdentificationID: string;
         IdentificationCategoryText?: string;
       }>;
-      Flags: Array<{
-        Flag: boolean;
-        FlagCategoryText: string;
-      }>;
       RelatedPerson: Array<{
         PersonBirthDate: {
           date: string;
-          dateTime?: string;
-          DayDate?: string;
-          MonthDate?: string;
-          YearDate?: string;
         };
         PersonName: Array<{
           PersonGivenName: Array<string>;
@@ -109,18 +91,17 @@ export type ClientApplicationEntity = ReadonlyDeep<{
         };
         PersonSINIdentification: {
           IdentificationID: string;
-          IdentificationCategoryText?: string;
         };
         ApplicantDetail: {
-          PrivateDentalInsuranceIndicator: boolean;
+          PrivateDentalInsuranceIndicator?: boolean;
           InsurancePlan?: Array<{
             InsurancePlanIdentification: Array<{
               IdentificationID: string;
               IdentificationCategoryText?: string;
             }>;
           }>;
-          ConsentToSharePersonalInformationIndicator: boolean;
-          AttestParentOrGuardianIndicator: boolean;
+          ConsentToSharePersonalInformationIndicator?: boolean;
+          AttestParentOrGuardianIndicator?: boolean;
         };
         ClientIdentification: Array<{
           IdentificationID: string;
@@ -134,14 +115,9 @@ export type ClientApplicationEntity = ReadonlyDeep<{
     BenefitApplicationCategoryCode: {
       ReferenceDataID: string;
     };
-    BenefitApplicationIdentification: Array<{
-      IdentificationID: string;
-      IdentificationCategoryText?: string;
-    }>;
     BenefitApplicationYear: {
       BenefitApplicationYearIdentification: Array<{
         IdentificationID: string;
-        IdentificationCategoryText?: string;
       }>;
     };
   };
@@ -153,7 +129,6 @@ export type ClientApplicationBasicInfoRequestEntity = ReadonlyDeep<{
       PersonGivenName: Array<string>;
       PersonSurName: string;
     }>;
-
     PersonBirthDate: {
       date: string;
     };
