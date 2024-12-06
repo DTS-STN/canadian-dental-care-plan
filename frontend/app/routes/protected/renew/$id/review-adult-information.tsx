@@ -132,13 +132,15 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const clientDentalBenefits = state.clientApplication.dentalBenefits
-    .map((id) => {
-      const provincialBenefit = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(id, locale);
+  const clientDentalBenefits = state.clientApplication.dentalBenefits.map((id) => {
+    try {
       const federalBenefit = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(id, locale);
-      return provincialBenefit ? provincialBenefit : federalBenefit;
-    })
-    .filter(Boolean);
+      return federalBenefit.name;
+    } catch {
+      const provincialBenefit = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(id, locale);
+      return provincialBenefit.name;
+    }
+  });
 
   const dentalBenefits = state.dentalBenefits
     ? [state.dentalBenefits.hasFederalBenefits && selectedFederalGovernmentInsurancePlan?.name, state.dentalBenefits.hasProvincialTerritorialBenefits && selectedProvincialBenefit?.name].filter(Boolean)
