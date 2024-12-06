@@ -134,17 +134,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const dentalBenefit = {
-    federalBenefit: {
-      access: state.dentalBenefits?.hasFederalBenefits,
-      benefit: selectedFederalGovernmentInsurancePlan?.name,
-    },
-    provTerrBenefit: {
-      access: state.dentalBenefits?.hasProvincialTerritorialBenefits,
-      province: state.dentalBenefits?.province,
-      benefit: selectedProvincialBenefit?.name,
-    },
-  };
+  const dentalBenefits = state.dentalBenefits
+    ? [state.dentalBenefits.hasFederalBenefits && selectedFederalGovernmentInsurancePlan?.name, state.dentalBenefits.hasProvincialTerritorialBenefits && selectedProvincialBenefit?.name].filter(Boolean)
+    : state.clientApplication.dentalBenefits;
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
@@ -169,7 +161,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     homeAddressInfo,
     mailingAddressInfo,
     dentalInsurance,
-    dentalBenefit,
+    dentalBenefits,
     csrfToken,
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
@@ -216,7 +208,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedRenewReviewAdultInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, hasChildren, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefits, hasChildren, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -405,25 +397,35 @@ export default function ProtectedRenewReviewAdultInformation() {
                   </InlineLink>
                 </div>
               </DescriptionListItem>
-              <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
-                {dentalBenefit.federalBenefit.access || dentalBenefit.provTerrBenefit.access ? (
+              {dentalBenefits.length > 0 && (
+                <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
                   <>
                     <p>{t('protected-renew:review-adult-information.yes')}</p>
                     <p>{t('protected-renew:review-adult-information.dental-benefit-has-access')}</p>
                     <ul className="ml-6 list-disc">
-                      {dentalBenefit.federalBenefit.access && <li>{dentalBenefit.federalBenefit.benefit}</li>}
-                      {dentalBenefit.provTerrBenefit.access && <li>{dentalBenefit.provTerrBenefit.benefit}</li>}
+                      {dentalBenefits.map((benefit, index) => (
+                        <li key={index}>{benefit}</li>
+                      ))}
                     </ul>
                   </>
-                ) : (
+                  <div className="mt-4">
+                    <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/confirm-federal-provincial-territorial-benefits" params={params}>
+                      {t('protected-renew:review-adult-information.dental-benefit-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              )}
+
+              {dentalBenefits.length === 0 && (
+                <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
                   <p>{t('protected-renew:review-adult-information.no')}</p>
-                )}
-                <div className="mt-4">
-                  <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/confirm-federal-provincial-territorial-benefits" params={params}>
-                    {t('protected-renew:review-adult-information.dental-benefit-change')}
-                  </InlineLink>
-                </div>
-              </DescriptionListItem>
+                  <div className="mt-4">
+                    <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/confirm-federal-provincial-territorial-benefits" params={params}>
+                      {t('protected-renew:review-adult-information.dental-benefit-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              )}
             </dl>
           </section>
           <section className="space-y-6">
