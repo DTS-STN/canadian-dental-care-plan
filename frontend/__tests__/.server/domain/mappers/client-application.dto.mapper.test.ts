@@ -27,14 +27,12 @@ describe('DefaultClientApplicationDtoMapper', () => {
                     AddressCountry: {
                       CountryCode: {
                         ReferenceDataID: 'CAN',
-                        ReferenceDataName: 'Canada',
                       },
                     },
                     AddressPostalCode: 'H0H 0H0',
                     AddressProvince: {
                       ProvinceCode: {
                         ReferenceDataID: 'ON',
-                        ReferenceDataName: 'Ontario',
                       },
                     },
                     AddressSecondaryUnitText: 'Unit 101',
@@ -50,14 +48,12 @@ describe('DefaultClientApplicationDtoMapper', () => {
                     AddressCountry: {
                       CountryCode: {
                         ReferenceDataID: 'USA',
-                        ReferenceDataName: 'United States',
                       },
                     },
                     AddressPostalCode: '90210',
                     AddressProvince: {
                       ProvinceCode: {
                         ReferenceDataID: 'LA',
-                        ReferenceDataName: 'Los Angeles',
                       },
                     },
                     AddressSecondaryUnitText: 'Unit 102',
@@ -73,19 +69,15 @@ describe('DefaultClientApplicationDtoMapper', () => {
                 ],
                 TelephoneNumber: [
                   {
-                    FullTelephoneNumber: {
-                      TelephoneNumberFullID: '555-555-5555',
-                    },
                     TelephoneNumberCategoryCode: {
                       ReferenceDataName: 'Primary',
+                      ReferenceDataID: '555-555-5555',
                     },
                   },
                   {
-                    FullTelephoneNumber: {
-                      TelephoneNumberFullID: '555-555-5556',
-                    },
                     TelephoneNumberCategoryCode: {
                       ReferenceDataName: 'Alternate',
+                      ReferenceDataID: '555-555-5556',
                     },
                   },
                 ],
@@ -118,10 +110,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
               ReferenceDataID: 'EMAIL',
             },
             ApplicantDetail: {
-              AttestParentOrGuardianIndicator: false,
-              ConsentToSharePersonalInformationIndicator: true,
               DisabilityTaxCreditIndicator: true,
-              FederalDentalCoverageIndicator: true,
               InsurancePlan: [
                 {
                   InsurancePlanIdentification: [
@@ -131,19 +120,17 @@ describe('DefaultClientApplicationDtoMapper', () => {
                   ],
                 },
               ],
+              ItaIndicator: false,
               LivingIndependentlyIndicator: true,
+              PreviousApplicationIndicator: false,
+              PreviousTaxesFiledIndicator: true,
               PrivateDentalInsuranceIndicator: true,
-              ProvincialDentalCoverageIndicator: true,
             },
             ClientIdentification: [
               {
                 IdentificationID: '00000000000',
                 IdentificationCategoryText: 'Client Number',
               },
-            ],
-            Flags: [
-              { Flag: true, FlagCategoryText: 'isCraAssessed' },
-              { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
             ],
             RelatedPerson: [
               {
@@ -183,17 +170,10 @@ describe('DefaultClientApplicationDtoMapper', () => {
           BenefitApplicationCategoryCode: {
             ReferenceDataID: 'DENTAL',
           },
-          BenefitApplicationIdentification: [
-            {
-              IdentificationID: '41d42b4e-0263-ee11-8df0-000d3a09dca9',
-              IdentificationCategoryText: 'Dental Application ID',
-            },
-          ],
           BenefitApplicationYear: {
             BenefitApplicationYearIdentification: [
               {
-                IdentificationID: '1',
-                IdentificationCategoryText: '2024',
+                IdentificationID: '2024',
               },
             ],
           },

@@ -113,36 +113,36 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
 
 @injectable()
 export class MockClientApplicationRepository implements ClientApplicationRepository {
-  private readonly mockApplicantFlags: ReadonlyMap<string, ReadonlyArray<{ Flag: boolean; FlagCategoryText: string }>> = new Map([
+  private readonly mockApplicantFlags: ReadonlyMap<string, Readonly<{ ItaIndicator: boolean; PreviousTaxesFiledIndicator: boolean }>> = new Map([
     // by basic info
     [
       '10000000001',
-      [
-        { Flag: false, FlagCategoryText: 'isCraAssessed' },
-        { Flag: true, FlagCategoryText: 'appliedBeforeApril302024' },
-      ],
+      {
+        ItaIndicator: true,
+        PreviousTaxesFiledIndicator: false,
+      },
     ],
     [
       '10000000002',
-      [
-        { Flag: true, FlagCategoryText: 'isCraAssessed' },
-        { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
-      ],
+      {
+        ItaIndicator: false,
+        PreviousTaxesFiledIndicator: true,
+      },
     ],
     // by sin
     [
       '800000002',
-      [
-        { Flag: true, FlagCategoryText: 'isCraAssessed' },
-        { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
-      ],
+      {
+        ItaIndicator: false,
+        PreviousTaxesFiledIndicator: true,
+      },
     ],
     [
       '700000003',
-      [
-        { Flag: true, FlagCategoryText: 'isCraAssessed' },
-        { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
-      ],
+      {
+        ItaIndicator: false,
+        PreviousTaxesFiledIndicator: true,
+      },
     ],
   ]);
 
@@ -167,7 +167,10 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     }
 
     // Otherwise, return specific flags or the default
-    const clientApplicationFlags = this.mockApplicantFlags.get(identificationId) ?? clientApplicationJsonDataSource.BenefitApplication.Applicant.Flags;
+    const clientApplicationFlags = this.mockApplicantFlags.get(identificationId) ?? {
+      ItaIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.ItaIndicator,
+      PreviousTaxesFiledIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
+    };
 
     const clientApplicationEntity: ClientApplicationEntity = {
       ...clientApplicationJsonDataSource,
@@ -184,7 +187,10 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
           PersonBirthDate: {
             date: personBirthDate,
           },
-          Flags: clientApplicationFlags,
+          ApplicantDetail: {
+            ...clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail,
+            ...clientApplicationFlags,
+          },
         },
       },
     };
@@ -205,7 +211,10 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     }
 
     // Otherwise, return specific flags or the default
-    const clientApplicationFlags = this.mockApplicantFlags.get(personSINIdentification) ?? clientApplicationJsonDataSource.BenefitApplication.Applicant.Flags;
+    const clientApplicationFlags = this.mockApplicantFlags.get(personSINIdentification) ?? {
+      ItaIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.ItaIndicator,
+      PreviousTaxesFiledIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
+    };
 
     const clientApplicationEntity: ClientApplicationEntity = {
       ...clientApplicationJsonDataSource,
@@ -213,7 +222,13 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
         ...clientApplicationJsonDataSource.BenefitApplication,
         Applicant: {
           ...clientApplicationJsonDataSource.BenefitApplication.Applicant,
-          Flags: clientApplicationFlags,
+          PersonSINIdentification: {
+            IdentificationID: personSINIdentification,
+          },
+          ApplicantDetail: {
+            ...clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail,
+            ...clientApplicationFlags,
+          },
         },
       },
     };

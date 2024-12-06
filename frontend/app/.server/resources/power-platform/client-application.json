@@ -2,11 +2,7 @@
   "BenefitApplication": {
     "Applicant": {
       "PersonBirthDate": {
-        "date": "1983-07-17",
-        "dateTime": "",
-        "DayDate": "",
-        "MonthDate": "",
-        "YearDate": ""
+        "date": "1983-07-17"
       },
       "PersonContactInformation": [
         {
@@ -56,24 +52,20 @@
           ],
           "EmailAddress": [
             {
-              "EmailAddressID": "myEmail50@domain.ca"
+              "EmailAddressID": "test@example.com"
             }
           ],
           "TelephoneNumber": [
             {
-              "FullTelephoneNumber": {
-                "TelephoneNumberFullID": "555-555-5555"
-              },
               "TelephoneNumberCategoryCode": {
-                "ReferenceDataName": "Primary"
+                "ReferenceDataName": "Primary",
+                "ReferenceDataID": "555-555-5555"
               }
             },
             {
-              "FullTelephoneNumber": {
-                "TelephoneNumberFullID": "555-555-5555"
-              },
               "TelephoneNumberCategoryCode": {
-                "ReferenceDataName": "Alternate"
+                "ReferenceDataName": "Alternate",
+                "ReferenceDataID": "555-555-5556"
               }
             }
           ]
@@ -82,7 +74,7 @@
       "PersonLanguage": [
         {
           "CommunicationCategoryCode": {
-            "ReferenceDataID": ""
+            "ReferenceDataID": "1033"
           },
           "PreferredIndicator": true
         }
@@ -99,8 +91,7 @@
         }
       ],
       "PersonSINIdentification": {
-        "IdentificationID": "999999999",
-        "IdentificationCategoryText": "some text"
+        "IdentificationID": "999999999"
       },
       "MailingSameAsHomeIndicator": true,
       "PreferredMethodCommunicationCode": {
@@ -115,29 +106,18 @@
           {
             "InsurancePlanIdentification": [
               {
-                "IdentificationID": "",
-                "IdentificationCategoryText": ""
+                "IdentificationID": "b5f25fea-a7a9-ee11-a569-000d3af4f898"
               },
               {
-                "IdentificationID": "",
-                "IdentificationCategoryText": ""
-              }
-            ]
-          },
-          {
-            "InsurancePlanIdentification": [
-              {
-                "IdentificationID": "",
-                "IdentificationCategoryText": ""
-              },
-              {
-                "IdentificationID": "",
-                "IdentificationCategoryText": ""
+                "IdentificationID": "1788f1db-25c5-ee11-9079-000d3a09d640"
               }
             ]
           }
         ],
+        "ItaIndicator": false,
         "LivingIndependentlyIndicator": true,
+        "PreviousApplicationIndicator": false,
+        "PreviousTaxesFiledIndicator": false,
         "PrivateDentalInsuranceIndicator": true,
         "ProvincialDentalCoverageIndicator": true
       },
@@ -155,24 +135,49 @@
           "IdentificationCategoryText": "Client Number"
         }
       ],
-      "Flags": [
-        {
-          "Flag": false,
-          "FlagCategoryText": "isCraAssessed"
-        },
-        {
-          "Flag": false,
-          "FlagCategoryText": "appliedBeforeApril302024"
-        }
-      ],
       "RelatedPerson": [
         {
           "PersonBirthDate": {
-            "date": "2020-01-01",
-            "dateTime": "2020-01-01",
-            "DayDate": "1",
-            "MonthDate": "1",
-            "YearDate": "2020"
+            "date": "2020-01-01"
+          },
+          "PersonName": [
+            {
+              "PersonGivenName": ["John Jr."],
+              "PersonSurName": "Doe"
+            }
+          ],
+          "PersonRelationshipCode": {
+            "ReferenceDataName": "Dependant"
+          },
+          "PersonSINIdentification": {
+            "IdentificationID": "100000009"
+          },
+          "ApplicantDetail": {
+            "PrivateDentalInsuranceIndicator": false,
+            "InsurancePlan": [
+              {
+                "InsurancePlanIdentification": [
+                  {
+                    "IdentificationID": "b5f25fea-a7a9-ee11-a569-000d3af4f898"
+                  },
+                  {
+                    "IdentificationID": "1788f1db-25c5-ee11-9079-000d3a09d640"
+                  }
+                ]
+              }
+            ],
+            "AttestParentOrGuardianIndicator": true
+          },
+          "ClientIdentification": [
+            {
+              "IdentificationID": "10000000003",
+              "IdentificationCategoryText": "Client Number"
+            }
+          ]
+        },
+        {
+          "PersonBirthDate": {
+            "date": "1970-01-01"
           },
           "PersonName": [
             {
@@ -181,46 +186,17 @@
             }
           ],
           "PersonRelationshipCode": {
-            "ReferenceDataName": "Dependant"
+            "ReferenceDataName": "Spouse"
           },
           "PersonSINIdentification": {
-            "IdentificationID": "100000009",
-            "IdentificationCategoryText": "SIN"
+            "IdentificationID": "900000001"
           },
           "ApplicantDetail": {
-            "PrivateDentalInsuranceIndicator": false,
-            "InsurancePlan": [
-              {
-                "InsurancePlanIdentification": [
-                  {
-                    "IdentificationID": "",
-                    "IdentificationCategoryText": ""
-                  },
-                  {
-                    "IdentificationID": "",
-                    "IdentificationCategoryText": ""
-                  }
-                ]
-              },
-              {
-                "InsurancePlanIdentification": [
-                  {
-                    "IdentificationID": "",
-                    "IdentificationCategoryText": ""
-                  },
-                  {
-                    "IdentificationID": "",
-                    "IdentificationCategoryText": ""
-                  }
-                ]
-              }
-            ],
-            "AttestParentOrGuardianIndicator": true,
-            "ConsentToSharePersonalInformationIndicator": false
+            "ConsentToSharePersonalInformationIndicator": true
           },
           "ClientIdentification": [
             {
-              "IdentificationID": "10000000003",
+              "IdentificationID": "10000000004",
               "IdentificationCategoryText": "Client Number"
             }
           ]
@@ -233,21 +209,10 @@
     "BenefitApplicationCategoryCode": {
       "ReferenceDataID": "775170000"
     },
-    "BenefitApplicationIdentification": [
-      {
-        "IdentificationID": "41d42b4e-0263-ee11-8df0-000d3a09dca9",
-        "IdentificationCategoryText": "Dental Application ID"
-      }
-    ],
     "BenefitApplicationYear": {
       "BenefitApplicationYearIdentification": [
         {
-          "IdentificationID": "",
-          "IdentificationCategoryText": ""
-        },
-        {
-          "IdentificationID": "",
-          "IdentificationCategoryText": ""
+          "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8"
         }
       ]
     }

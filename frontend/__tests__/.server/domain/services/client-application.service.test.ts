@@ -30,14 +30,12 @@ describe('DefaultClientApplicationService', () => {
                 AddressCountry: {
                   CountryCode: {
                     ReferenceDataID: 'CAN',
-                    ReferenceDataName: 'Canada',
                   },
                 },
                 AddressPostalCode: 'M5H 2N2',
                 AddressProvince: {
                   ProvinceCode: {
                     ReferenceDataID: 'ON',
-                    ReferenceDataName: 'Ontario',
                   },
                 },
                 AddressSecondaryUnitText: 'Unit 101',
@@ -53,11 +51,9 @@ describe('DefaultClientApplicationService', () => {
             ],
             TelephoneNumber: [
               {
-                FullTelephoneNumber: {
-                  TelephoneNumberFullID: '555-555-5555',
-                },
                 TelephoneNumberCategoryCode: {
                   ReferenceDataName: 'Mobile',
+                  ReferenceDataID: '555-555-5555',
                 },
               },
             ],
@@ -90,10 +86,7 @@ describe('DefaultClientApplicationService', () => {
           ReferenceDataID: 'EMAIL',
         },
         ApplicantDetail: {
-          AttestParentOrGuardianIndicator: false,
-          ConsentToSharePersonalInformationIndicator: true,
           DisabilityTaxCreditIndicator: true,
-          FederalDentalCoverageIndicator: true,
           InsurancePlan: [
             {
               InsurancePlanIdentification: [
@@ -103,9 +96,11 @@ describe('DefaultClientApplicationService', () => {
               ],
             },
           ],
+          ItaIndicator: true,
           LivingIndependentlyIndicator: true,
+          PreviousApplicationIndicator: false,
+          PreviousTaxesFiledIndicator: true,
           PrivateDentalInsuranceIndicator: true,
-          ProvincialDentalCoverageIndicator: true,
         },
         ClientIdentification: [
           {
@@ -116,10 +111,6 @@ describe('DefaultClientApplicationService', () => {
             IdentificationID: '1e97fe42-0263-ee11-8df0-000d3a09df08',
             IdentificationCategoryText: 'Client ID',
           },
-        ],
-        Flags: [
-          { Flag: true, FlagCategoryText: 'isCraAssessed' },
-          { Flag: false, FlagCategoryText: 'appliedBeforeApril302024' },
         ],
         RelatedPerson: [
           {
@@ -159,17 +150,10 @@ describe('DefaultClientApplicationService', () => {
       BenefitApplicationCategoryCode: {
         ReferenceDataID: 'DENTAL',
       },
-      BenefitApplicationIdentification: [
-        {
-          IdentificationID: '41d42b4e-0263-ee11-8df0-000d3a09dca9',
-          IdentificationCategoryText: 'Dental Application ID',
-        },
-      ],
       BenefitApplicationYear: {
         BenefitApplicationYearIdentification: [
           {
-            IdentificationID: '1',
-            IdentificationCategoryText: '2024',
+            IdentificationID: '2024',
           },
         ],
       },
