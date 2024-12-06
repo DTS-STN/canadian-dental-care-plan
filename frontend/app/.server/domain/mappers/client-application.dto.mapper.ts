@@ -70,7 +70,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
           (() => {
             throw new Error('Expected child.ApplicantDetail.AttestParentOrGuardianIndicator to be defined');
           })(),
-        clientNumber: child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
+        clientNumber: child.ClientIdentification.IdentificationCategoryText === 'Client Number' ? child.ClientIdentification.IdentificationID : undefined,
         socialInsuranceNumber: child.PersonSINIdentification.IdentificationID,
       },
     }));

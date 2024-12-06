@@ -103,10 +103,10 @@ export type ClientApplicationEntity = ReadonlyDeep<{
           ConsentToSharePersonalInformationIndicator?: boolean;
           AttestParentOrGuardianIndicator?: boolean;
         };
-        ClientIdentification: Array<{
+        ClientIdentification: {
           IdentificationID: string;
           IdentificationCategoryText?: string;
-        }>;
+        };
       }>;
     };
     BenefitApplicationChannelCode: {
