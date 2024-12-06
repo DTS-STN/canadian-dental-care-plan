@@ -13,7 +13,17 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
           }[];
         }[];
       };
-      ChangedInformation: string[]; // TODO subject to change - specifications not yet provided
+      ApplicationModificationList?: string;
+      BenefitApplicationDetail: {
+        BenefitApplicationDetailID: string;
+        BenefitApplicationDetailValue?: string;
+        BenefitApplicationDetailValues?: string[];
+        BenefitApplicationDetailIndicator?: boolean;
+      }[];
+      ClientIdentification: {
+        IdentificationID: string;
+        IdentificationCategoryText: string;
+      }[];
       PersonBirthDate: {
         date: string;
       };
@@ -78,6 +88,16 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
           ConsentToSharePersonalInformationIndicator?: boolean;
           AttestParentOrGuardianIndicator?: boolean;
         };
+        BenefitApplicationDetail?: {
+          BenefitApplicationDetailID: string;
+          BenefitApplicationDetailValue?: string;
+          BenefitApplicationDetailValues?: string[];
+          BenefitApplicationDetailIndicator?: boolean;
+        }[];
+        ClientIdentification?: {
+          IdentificationID: string;
+          IdentificationCategoryText: string;
+        }[];
         PersonBirthDate: {
           date: string;
         };
@@ -99,9 +119,15 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
     };
     BenefitApplicationCategoryCode: {
       ReferenceDataID: string;
+      ReferenceDataName: string;
     };
     BenefitApplicationChannelCode: {
       ReferenceDataID: string;
+    };
+    BenefitApplicationYear: {
+      BenefitApplicationYearIdentification: {
+        IdentificationID: string;
+      }[];
     };
   };
 }>;

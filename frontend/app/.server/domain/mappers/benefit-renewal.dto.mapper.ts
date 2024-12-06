@@ -163,6 +163,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         },
         BenefitApplicationCategoryCode: {
           ReferenceDataID: this.toBenefitApplicationCategoryCode(typeOfApplication),
+          ReferenceDataName: 'Renewal',
         },
         BenefitApplicationChannelCode: {
           ReferenceDataID: '775170001', // PP's static value for "Online"
