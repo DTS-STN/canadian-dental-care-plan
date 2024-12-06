@@ -87,7 +87,7 @@ export default function ProtectedRenewReviewSubmit() {
       <div className="my-6 space-y-2">
         <li>{applicantName}</li>
         {children.map((child) => {
-          const childName = `${child.firstName} ${child.lastName}`;
+          const childName = `${child.information?.firstName} ${child.information?.lastName}`;
           return <li key={childName}>{childName}</li>;
         })}
       </div>

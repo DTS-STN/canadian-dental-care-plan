@@ -138,6 +138,11 @@ export const routes = [
             paths: { en: '/:lang/protected/renew/:id/review-adult-information', fr: '/:lang/protected/renew/:id/revue-renseignements-adulte' },
           },
           {
+            id: 'protected/renew/$id/review-child-information',
+            file: 'routes/protected/renew/$id/review-child-information.tsx',
+            paths: { en: '/:lang/protected/renew/:id/review-child-information', fr: '/:lang/protected/renew/:id/review-child-information' },
+          },
+          {
             id: 'protected/renew/$id/review-and-submit',
             file: 'routes/protected/renew/$id/review-and-submit.tsx',
             paths: { en: '/:lang/protected/renew/:id/review-and-submit', fr: '/:lang/protected/renew/:id/review-and-submit' },

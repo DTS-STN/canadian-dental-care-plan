@@ -298,7 +298,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       const existingChild = existingChildren.find((existingChild) => existingChild.information.clientNumber === renewedChild.information?.clientNumber);
       invariant(existingChild, 'Expected existingChild to be defined');
 
-      invariant(renewedChild.confirmDentalBenefits, 'Expected renewedChild.confirmDentalBenefits to be defined');
+      // invariant(renewedChild.confirmDentalBenefits, 'Expected renewedChild.confirmDentalBenefits to be defined');
       invariant(renewedChild.information, 'Expected renewedChild.information to be defined');
 
       if (renewedChild.dentalInsurance === undefined) {
@@ -308,8 +308,8 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       return {
         dentalBenefits: this.toDentalBenefits({
           existingDentalBenefits: existingChild.dentalBenefits,
-          hasFederalBenefitsChanged: renewedChild.confirmDentalBenefits.federalBenefitsChanged,
-          hasProvincialTerritorialBenefitsChanged: renewedChild.confirmDentalBenefits.provincialTerritorialBenefitsChanged,
+          hasFederalBenefitsChanged: renewedChild.confirmDentalBenefits?.federalBenefitsChanged ?? false,
+          hasProvincialTerritorialBenefitsChanged: renewedChild.confirmDentalBenefits?.provincialTerritorialBenefitsChanged ?? false,
           renewedDentalBenefits: renewedChild.dentalBenefits,
         }),
         dentalInsurance: renewedChild.dentalInsurance,

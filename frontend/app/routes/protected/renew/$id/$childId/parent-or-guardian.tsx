@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
-  const childName = state.firstName ?? childNumber;
+  const childName = state.information?.firstName ?? childNumber;
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:children.parent-or-guardian.page-title', { childName }) }) };
 

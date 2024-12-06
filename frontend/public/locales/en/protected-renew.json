@@ -537,5 +537,28 @@
     "submit-p-repayment": "If you or your family members were not eligible to apply, you or your family member may have to repay the full cost of care received through the Canadian Dental Care Plan.",
     "back-button": "Back",
     "submit-button": "Submit Application"
+  },
+  "review-child-information": {
+    "page-title": "Review child(ren) information",
+    "page-sub-title": "{{child}} information",
+    "dob-title": "Date of birth",
+    "client-number-title": "Client number",
+    "full-name-title": "Full name",
+    "social-insurance-number-title": "Social Insurance Number (SIN)",
+    "dental-title": "{{child}} access to dental insurance",
+    "dental-insurance-title": "Access to other dental insurance or coverage",
+    "dental-insurance-change": "Change answer to dental insurance",
+    "dental-benefit-title": "Access to government dental benefits",
+    "dental-benefit-change": "Change answer to government dental benefits",
+    "dental-benefit-has-access": "Has access to the following benefits:",
+    "demographic-survey-title": "Demographics questions",
+    "demographic-survey-heading": "Voluntary demographic questions",
+    "demographic-survey-responded": "Responded",
+    "demographic-survey-change": "Change answers to demographic questions",
+    "continue-button": "Continue",
+    "back-button": "Back",
+    "submit-button": "Submit renewal application",
+    "yes": "Yes",
+    "no": "No"
   }
 }

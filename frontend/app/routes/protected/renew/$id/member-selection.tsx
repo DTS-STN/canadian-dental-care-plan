@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
-import { getProtectedChildrenState, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:member-selection.page-title') }) };
 
-  const children = getProtectedChildrenState(state);
+  const children = state.children;
 
   return { meta, externallyReviewed: state.externallyReviewed, previouslyReviewed: state.previouslyReviewed, clientApplication: state.clientApplication, children, editMode: state.editMode };
 }
@@ -95,7 +95,7 @@ export default function ProtectedRenewMemberSelection() {
               {children
                 .filter((child) => child.externallyReviewed === true)
                 .map((child) => {
-                  const childName = `${child.firstName} ${child.lastName}`;
+                  const childName = `${child.information?.firstName} ${child.information?.lastName}`;
                   return (
                     <li key={childName} className="mb-4">
                       {childName}
@@ -111,7 +111,7 @@ export default function ProtectedRenewMemberSelection() {
           <div className="mt-6 space-y-8">
             <CardLink key={applicantName} title={applicantName} previouslyReviewed={previouslyReviewed} routeId="protected/renew/$id/dental-insurance" params={params} />
             {children.map((child) => {
-              const childName = `${child.firstName} ${child.lastName}`;
+              const childName = `${child.information?.firstName} ${child.information?.lastName}`;
               return <CardLink key={childName} title={childName} previouslyReviewed={child.previouslyReviewed} routeId="protected/renew/$id/$childId/parent-or-guardian" params={{ ...params, childId: child.id }} />;
             })}
           </div>

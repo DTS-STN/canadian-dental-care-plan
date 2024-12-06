@@ -537,5 +537,28 @@
     "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles, vous ou les membres de votre famille pourriez devoir rembourser le coût total des soins reçus dans le cadre du régime canadien de soins dentaires.",
     "back-button": "Retour",
     "submit-button": "Présenter la demande de renouvellement"
+  },
+  "review-child-information": {
+    "page-title": "Vérifiez les renseignements sur le ou les enfants",
+    "page-sub-title": "Renseignement sur {{child}}",
+    "dob-title": "Date de naissance",
+    "client-number-title": "Numéro de client",
+    "full-name-title": "Nom complet",
+    "social-insurance-number-title": "Social Insurance Number (SIN)",
+    "dental-title": "Accès aux soins dentaires de {{child}}",
+    "dental-insurance-title": "Accès à d'autres assurances ou protections dentaires\u00a0:",
+    "dental-insurance-change": "Changer la réponse à «\u00a0assurance dentaire\u00a0»",
+    "dental-benefit-title": "Accès à des prestations dentaires gouvernementales\u00a0: ",
+    "dental-benefit-change": "Changer la réponse à «\u00a0prestations dentaires gouvernementales\u00a0»",
+    "dental-benefit-has-access": "A accès aux prestations suivantes\u00a0:",
+    "demographic-survey-title": "Demographics questions",
+    "demographic-survey-heading": "Voluntary demographic questions",
+    "demographic-survey-responded": "Responded",
+    "demographic-survey-change": "Change answers to demographic questions",
+    "continue-button": "Continuer",
+    "back-button": "Retour",
+    "submit-button": "Présenter la demande de renouvellement",
+    "yes": "Oui",
+    "no": "Non"
   }
 }

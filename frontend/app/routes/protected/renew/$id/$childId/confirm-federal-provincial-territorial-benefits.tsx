@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
 
   const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
-  const childName = state.isNew ? childNumber : (state.firstName ?? childNumber);
+  const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
 
   const federalSocialPrograms = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
   const provinceTerritoryStates = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);

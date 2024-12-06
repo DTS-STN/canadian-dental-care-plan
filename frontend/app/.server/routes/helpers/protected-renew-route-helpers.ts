@@ -19,8 +19,8 @@ export interface ProtectedRenewState {
   readonly id: string;
   readonly editMode: boolean;
   readonly clientApplication: ClientApplicationDto;
-  externallyReviewed?: boolean;
-  previouslyReviewed?: boolean;
+  readonly externallyReviewed?: boolean;
+  readonly previouslyReviewed?: boolean;
   readonly taxFiling?: boolean;
   readonly termsAndConditions?: {
     readonly acknowledgeTerms: boolean;
@@ -55,8 +55,14 @@ export interface ProtectedRenewState {
     readonly id: string;
     readonly isParentOrLegalGuardian?: boolean;
     readonly dentalInsurance?: boolean;
-    readonly firstName?: string;
-    readonly lastName?: string;
+    readonly information?: {
+      readonly firstName: string;
+      readonly lastName: string;
+      readonly dateOfBirth: string;
+      readonly isParent: boolean;
+      readonly clientNumber?: string;
+      readonly socialInsuranceNumber: string;
+    };
     readonly isSurveyCompleted?: boolean;
     readonly externallyReviewed?: boolean;
     readonly previouslyReviewed?: boolean;
@@ -244,7 +250,21 @@ export async function startProtectedRenewState({ id, session, appContainer }: St
     id: parsedId,
     editMode: false,
     clientApplication,
-    children: clientApplication.children.map((child) => ({ id: randomUUID(), ...child.information })),
+    children: clientApplication.children.map((child) => {
+      const immutableChild = clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information.socialInsuranceNumber);
+      const childStateObj = {
+        id: randomUUID(),
+        information: child.information,
+        dentalInsurance: immutableChild?.dentalInsurance,
+        dentalBenefits: {
+          hasFederalBenefits: Boolean(immutableChild?.dentalBenefits[0]),
+          federalSocialProgram: immutableChild?.dentalBenefits[0],
+          hasProvincialTerritorialBenefits: Boolean(immutableChild?.dentalBenefits[1]),
+          provincialTerritorialSocialProgram: immutableChild?.dentalBenefits[1],
+        },
+      };
+      return childStateObj;
+    }),
   };
 
   session.set(sessionName, initialState);
@@ -383,7 +403,7 @@ function validateProtectedChildrenStateForReview({ childrenState, params }: Vali
     throw redirect(getPathById('protected/renew/$id/member-selection', params));
   }
 
-  return children.map(({ id, dentalInsurance, demographicSurvey }) => {
+  return children.map(({ id, dentalInsurance, demographicSurvey, information, dentalBenefits }) => {
     const childId = id;
 
     if (dentalInsurance === undefined) {
@@ -398,6 +418,8 @@ function validateProtectedChildrenStateForReview({ childrenState, params }: Vali
 
     return {
       id,
+      information,
+      dentalBenefits,
       dentalInsurance,
       demographicSurvey,
     };

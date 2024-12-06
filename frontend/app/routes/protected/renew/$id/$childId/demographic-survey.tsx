@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedRenewSingleChildState({ params, session });
 
   const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
-  const memberName = state.firstName ?? childNumber;
+  const memberName = state.information?.firstName ?? childNumber;
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:demographic-survey.page-title', { memberName }) }) };
 
@@ -133,10 +133,14 @@ export async function action({ context: { appContainer, session }, params, reque
     state: {
       children: protectedRenewState.children.map((child) => {
         if (child.id !== state.id) return child;
-        return { ...child, isSurveyCompleted: true, previouslyReviewed: true, demographicSurvey: parsedDataResult.data };
+        return { ...child, isSurveyCompleted: true, demographicSurvey: parsedDataResult.data, previouslyReviewed: true };
       }),
     },
   });
+
+  if (state.editMode) {
+    return redirect(getPathById('protected/renew/$id/review-child-information', params));
+  }
 
   return redirect(getPathById('protected/renew/$id/member-selection', params));
 }
