@@ -132,9 +132,17 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
+  const clientDentalBenefits = state.clientApplication.dentalBenefits
+    .map((id) => {
+      const provincialBenefit = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(id, locale);
+      const federalBenefit = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(id, locale);
+      return provincialBenefit ? provincialBenefit : federalBenefit;
+    })
+    .filter(Boolean);
+
   const dentalBenefits = state.dentalBenefits
     ? [state.dentalBenefits.hasFederalBenefits && selectedFederalGovernmentInsurancePlan?.name, state.dentalBenefits.hasProvincialTerritorialBenefits && selectedProvincialBenefit?.name].filter(Boolean)
-    : state.clientApplication.dentalBenefits;
+    : clientDentalBenefits;
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
