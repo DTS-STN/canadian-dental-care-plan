@@ -135,12 +135,10 @@ describe('DefaultClientApplicationService', () => {
               ConsentToSharePersonalInformationIndicator: false,
               AttestParentOrGuardianIndicator: false,
             },
-            ClientIdentification: [
-              {
-                IdentificationID: '10000000003',
-                IdentificationCategoryText: 'Client Number',
-              },
-            ],
+            ClientIdentification: {
+              IdentificationID: '10000000003',
+              IdentificationCategoryText: 'Client Number',
+            },
           },
         ],
       },
