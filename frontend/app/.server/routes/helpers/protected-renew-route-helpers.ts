@@ -256,12 +256,6 @@ export async function startProtectedRenewState({ id, session, appContainer }: St
         id: randomUUID(),
         information: child.information,
         dentalInsurance: immutableChild?.dentalInsurance,
-        dentalBenefits: {
-          hasFederalBenefits: Boolean(immutableChild?.dentalBenefits[0]),
-          federalSocialProgram: immutableChild?.dentalBenefits[0],
-          hasProvincialTerritorialBenefits: Boolean(immutableChild?.dentalBenefits[1]),
-          provincialTerritorialSocialProgram: immutableChild?.dentalBenefits[1],
-        },
       };
       return childStateObj;
     }),
