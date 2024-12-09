@@ -113,19 +113,19 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
 
 @injectable()
 export class MockClientApplicationRepository implements ClientApplicationRepository {
-  private readonly mockApplicantFlags: ReadonlyMap<string, Readonly<{ ItaIndicator: boolean; PreviousTaxesFiledIndicator: boolean }>> = new Map([
+  private readonly mockApplicantFlags: ReadonlyMap<string, Readonly<{ InvitationToApplyIndicator: boolean; PreviousTaxesFiledIndicator: boolean }>> = new Map([
     // by basic info
     [
       '10000000001',
       {
-        ItaIndicator: true,
+        InvitationToApplyIndicator: true,
         PreviousTaxesFiledIndicator: false,
       },
     ],
     [
       '10000000002',
       {
-        ItaIndicator: false,
+        InvitationToApplyIndicator: false,
         PreviousTaxesFiledIndicator: true,
       },
     ],
@@ -133,14 +133,14 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     [
       '800000002',
       {
-        ItaIndicator: false,
+        InvitationToApplyIndicator: false,
         PreviousTaxesFiledIndicator: true,
       },
     ],
     [
       '700000003',
       {
-        ItaIndicator: false,
+        InvitationToApplyIndicator: false,
         PreviousTaxesFiledIndicator: true,
       },
     ],
@@ -156,8 +156,8 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     this.log.debug('Fetching client application for basic info [%j]', clientApplicationBasicInfoRequestEntity);
 
     const identificationId = clientApplicationBasicInfoRequestEntity.Applicant.ClientIdentification[0].IdentificationID;
-    const personGivenName = clientApplicationBasicInfoRequestEntity.Applicant.PersonName[0].PersonGivenName[0];
-    const personSurName = clientApplicationBasicInfoRequestEntity.Applicant.PersonName[0].PersonSurName;
+    const personGivenName = clientApplicationBasicInfoRequestEntity.Applicant.PersonName.PersonGivenName[0];
+    const personSurName = clientApplicationBasicInfoRequestEntity.Applicant.PersonName.PersonSurName;
     const personBirthDate = clientApplicationBasicInfoRequestEntity.Applicant.PersonBirthDate.date;
 
     // If the ID is '10000000000', return a 404 error
@@ -168,7 +168,7 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
 
     // Otherwise, return specific flags or the default
     const clientApplicationFlags = this.mockApplicantFlags.get(identificationId) ?? {
-      ItaIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.ItaIndicator,
+      InvitationToApplyIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator,
       PreviousTaxesFiledIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
     };
 
@@ -212,7 +212,7 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
 
     // Otherwise, return specific flags or the default
     const clientApplicationFlags = this.mockApplicantFlags.get(personSINIdentification) ?? {
-      ItaIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.ItaIndicator,
+      InvitationToApplyIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator,
       PreviousTaxesFiledIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
     };
 

@@ -114,7 +114,7 @@
             ]
           }
         ],
-        "ItaIndicator": false,
+        "InvitationToApplyIndicator": false,
         "LivingIndependentlyIndicator": true,
         "PreviousApplicationIndicator": false,
         "PreviousTaxesFiledIndicator": false,
