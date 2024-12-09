@@ -93,7 +93,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.0",
     "@types/compression": "^1.7.5",
     "@types/diff": "^6.0.0",
     "@types/eslint__js": "^8.42.3",
