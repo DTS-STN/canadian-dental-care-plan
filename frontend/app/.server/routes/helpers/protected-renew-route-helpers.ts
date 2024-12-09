@@ -84,12 +84,10 @@ export interface ProtectedRenewState {
     };
   }[];
   readonly contactInformation?: {
-    isNewOrUpdatedPhoneNumber?: boolean;
-    isNewOrUpdatedEmail?: boolean;
-    phoneNumber?: string;
-    phoneNumberAlt?: string;
-    email?: string;
-    shouldReceiveEmailCommunication?: boolean;
+    readonly phoneNumber?: string;
+    readonly phoneNumberAlt?: string;
+    readonly email?: string;
+    readonly shouldReceiveEmailCommunication?: boolean;
   };
   readonly preferredLanguage?: string;
   readonly hasAddressChanged?: boolean;
