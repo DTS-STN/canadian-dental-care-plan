@@ -7,13 +7,27 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
         PrivateDentalInsuranceIndicator?: boolean;
         DisabilityTaxCreditIndicator?: boolean;
         LivingIndependentlyIndicator?: boolean;
+        MaritalStatusChangedIndicator?: boolean;
+        AddressChangedIndicator?: boolean;
+        PhoneChangedIndicator?: boolean;
+        EmailChangedIndicator?: boolean;
+        PublicInsuranceChangedIndicator?: boolean;
         InsurancePlan?: {
           InsurancePlanIdentification?: {
             IdentificationID?: string;
           }[];
         }[];
       };
-      ChangedInformation: string[]; // TODO subject to change - specifications not yet provided
+      BenefitApplicationDetail: {
+        BenefitApplicationDetailID: string;
+        BenefitApplicationDetailValue?: string;
+        BenefitApplicationDetailValues?: string[];
+        BenefitApplicationDetailIndicator?: boolean;
+      }[];
+      ClientIdentification: {
+        IdentificationID: string;
+        IdentificationCategoryText: string;
+      }[];
       PersonBirthDate: {
         date: string;
       };
@@ -78,6 +92,16 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
           ConsentToSharePersonalInformationIndicator?: boolean;
           AttestParentOrGuardianIndicator?: boolean;
         };
+        BenefitApplicationDetail?: {
+          BenefitApplicationDetailID: string;
+          BenefitApplicationDetailValue?: string;
+          BenefitApplicationDetailValues?: string[];
+          BenefitApplicationDetailIndicator?: boolean;
+        }[];
+        ClientIdentification?: {
+          IdentificationID: string;
+          IdentificationCategoryText: string;
+        }[];
         PersonBirthDate: {
           date: string;
         };
@@ -99,9 +123,15 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
     };
     BenefitApplicationCategoryCode: {
       ReferenceDataID: string;
+      ReferenceDataName: string;
     };
     BenefitApplicationChannelCode: {
       ReferenceDataID: string;
+    };
+    BenefitApplicationYear: {
+      BenefitApplicationYearIdentification: {
+        IdentificationID: string;
+      }[];
     };
   };
 }>;

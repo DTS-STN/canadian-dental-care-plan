@@ -3,7 +3,7 @@ import type { ReadonlyDeep } from 'type-fest';
 import type { ApplicantInformationDto, ChildDto, CommunicationPreferencesDto, ContactInformationDto, PartnerInformationDto } from '~/.server/domain/dtos/benefit-application.dto';
 
 export type ClientApplicationDto = ReadonlyDeep<{
-  applicantInformation: ApplicantInformationDto & { clientNumber?: string };
+  applicantInformation: ClientApplicantInformationDto;
   children: ClientChildDto[];
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
@@ -16,6 +16,8 @@ export type ClientApplicationDto = ReadonlyDeep<{
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationDto;
 }>;
+
+export type ClientApplicantInformationDto = ApplicantInformationDto & { clientNumber?: string };
 
 export type ClientChildDto = Omit<ChildDto, 'information'> & {
   information: {
