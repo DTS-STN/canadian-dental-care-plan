@@ -96,7 +96,7 @@ describe('DefaultClientApplicationService', () => {
               ],
             },
           ],
-          ItaIndicator: true,
+          InvitationToApplyIndicator: true,
           LivingIndependentlyIndicator: true,
           PreviousApplicationIndicator: false,
           PreviousTaxesFiledIndicator: true,
@@ -240,7 +240,7 @@ describe('DefaultClientApplicationService', () => {
       const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = { firstName: 'John', lastName: 'Doe', dateOfBirth: '2000-01-01', clientNumber: 'ABC123' };
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
-          PersonName: [{ PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName }],
+          PersonName: { PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName },
           PersonBirthDate: { date: mockClientApplicationBasicInfoRequestDto.dateOfBirth },
           ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber }],
         },
@@ -270,7 +270,7 @@ describe('DefaultClientApplicationService', () => {
       const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = { firstName: 'John', lastName: 'Doe', dateOfBirth: '2000-01-01', clientNumber: 'ABC123' };
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
-          PersonName: [{ PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName }],
+          PersonName: { PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName },
           PersonBirthDate: { date: mockClientApplicationBasicInfoRequestDto.dateOfBirth },
           ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber }],
         },

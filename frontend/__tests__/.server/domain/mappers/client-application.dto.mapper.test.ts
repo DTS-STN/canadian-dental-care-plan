@@ -120,7 +120,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
                   ],
                 },
               ],
-              ItaIndicator: false,
+              InvitationToApplyIndicator: false,
               LivingIndependentlyIndicator: true,
               PreviousApplicationIndicator: false,
               PreviousTaxesFiledIndicator: true,
@@ -246,7 +246,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
 
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
-          PersonName: [{ PersonGivenName: ['John'], PersonSurName: 'Doe' }],
+          PersonName: { PersonGivenName: ['John'], PersonSurName: 'Doe' },
           PersonBirthDate: { date: '2000-01-01' },
           ClientIdentification: [{ IdentificationID: 'ABC123' }],
         },

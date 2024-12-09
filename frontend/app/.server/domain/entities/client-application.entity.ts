@@ -68,7 +68,7 @@ export type ClientApplicationEntity = ReadonlyDeep<{
             IdentificationCategoryText?: string;
           }>;
         }>;
-        ItaIndicator: boolean; // TODO to be renamed not yet exposed by Interop
+        InvitationToApplyIndicator: boolean;
         LivingIndependentlyIndicator: boolean;
         PreviousApplicationIndicator: boolean;
         PreviousTaxesFiledIndicator: boolean;
@@ -125,10 +125,10 @@ export type ClientApplicationEntity = ReadonlyDeep<{
 
 export type ClientApplicationBasicInfoRequestEntity = ReadonlyDeep<{
   Applicant: {
-    PersonName: Array<{
+    PersonName: {
       PersonGivenName: Array<string>;
       PersonSurName: string;
-    }>;
+    };
     PersonBirthDate: {
       date: string;
     };

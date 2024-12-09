@@ -15,12 +15,10 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
   mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto) {
     return {
       Applicant: {
-        PersonName: [
-          {
-            PersonGivenName: [clientApplicationBasicInfoRequestDto.firstName],
-            PersonSurName: clientApplicationBasicInfoRequestDto.lastName,
-          },
-        ],
+        PersonName: {
+          PersonGivenName: [clientApplicationBasicInfoRequestDto.firstName],
+          PersonSurName: clientApplicationBasicInfoRequestDto.lastName,
+        },
         PersonBirthDate: {
           date: clientApplicationBasicInfoRequestDto.dateOfBirth,
         },
@@ -131,7 +129,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       dentalInsurance: applicant.ApplicantDetail.PrivateDentalInsuranceIndicator,
       disabilityTaxCredit: applicant.ApplicantDetail.DisabilityTaxCreditIndicator,
       hasFiledTaxes: applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
-      isInvitationToApplyClient: applicant.ApplicantDetail.ItaIndicator,
+      isInvitationToApplyClient: applicant.ApplicantDetail.InvitationToApplyIndicator,
       livingIndependently: applicant.ApplicantDetail.LivingIndependentlyIndicator,
       partnerInformation,
     };
