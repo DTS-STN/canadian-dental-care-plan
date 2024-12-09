@@ -1,25 +1,19 @@
-import { useState } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { data, redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { isValidPhoneNumber, parsePhoneNumberWithError } from 'libphonenumber-js';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { Button, ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPhoneField } from '~/components/input-phone-field';
-import { InputRadios } from '~/components/input-radios';
-import { LoadingButton } from '~/components/loading-button';
-import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -28,14 +22,8 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 enum FormAction {
-  Continue = 'continue',
   Cancel = 'cancel',
   Save = 'save',
-}
-
-enum AddOrUpdatePhoneOption {
-  Yes = 'yes',
-  No = 'no',
 }
 
 export const handle = {
@@ -59,15 +47,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     id: state.id,
-
     meta,
     defaultState: {
-      isNewOrUpdatedPhoneNumber: state.contactInformation?.isNewOrUpdatedPhoneNumber,
-      phoneNumber: state.contactInformation?.phoneNumber,
-      phoneNumberAlt: state.contactInformation?.phoneNumberAlt,
+      phoneNumber: state.contactInformation?.phoneNumber ?? state.clientApplication.contactInformation.phoneNumber,
+      phoneNumberAlt: state.contactInformation?.phoneNumberAlt ?? state.clientApplication.contactInformation.phoneNumber,
     },
-    maritalStatus: state.maritalStatus,
-    editMode: state.editMode,
   };
 }
 
@@ -83,9 +67,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const phoneNumberSchema = z
     .object({
-      isNewOrUpdatedPhoneNumber: z.nativeEnum(AddOrUpdatePhoneOption, {
-        errorMap: () => ({ message: t('protected-renew:confirm-phone.error-message.add-or-update-required') }),
-      }),
       phoneNumber: z
         .string()
         .trim()
@@ -99,21 +80,12 @@ export async function action({ context: { appContainer, session }, params, reque
         .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('protected-renew:confirm-phone.error-message.phone-number-alt-valid'))
         .optional(),
     })
-    .superRefine((val, ctx) => {
-      if (val.isNewOrUpdatedPhoneNumber === AddOrUpdatePhoneOption.Yes) {
-        if (!val.phoneNumber) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-phone.error-message.phone-required'), path: ['phoneNumber'] });
-        }
-      }
-    })
     .transform((val) => ({
-      isNewOrUpdatedPhoneNumber: val.isNewOrUpdatedPhoneNumber === AddOrUpdatePhoneOption.Yes,
       phoneNumber: val.phoneNumber ? parsePhoneNumberWithError(val.phoneNumber, 'CA').formatInternational() : val.phoneNumber,
       phoneNumberAlt: val.phoneNumberAlt ? parsePhoneNumberWithError(val.phoneNumberAlt, 'CA').formatInternational() : val.phoneNumberAlt,
     }));
 
   const parsedDataResult = phoneNumberSchema.safeParse({
-    isNewOrUpdatedPhoneNumber: formData.get('isNewOrUpdatedPhoneNumber'),
     phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
     phoneNumberAlt: formData.get('phoneNumberAlt') ? String(formData.get('phoneNumberAlt')) : undefined,
   });
@@ -124,134 +96,66 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveProtectedRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
 
-  if (state.editMode) {
-    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
-  }
-
-  return redirect(getPathById('protected/renew/$id/confirm-email', params));
+  return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }
 
 export default function ProtectedRenewConfirmPhone() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode } = useLoaderData<typeof loader>();
-  const params = useParams();
+  const { defaultState } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
-    isNewOrUpdatedPhoneNumber: 'input-radio-is-new-or-updated-phone-number-option-0',
     phoneNumber: 'phone-number',
     phoneNumberAlt: 'phone-number-alt',
   });
 
-  const [isNewOrUpdatedPhoneNumber, setIsNewOrUpdatedPhoneNumber] = useState(defaultState.isNewOrUpdatedPhoneNumber);
-
-  function handleNewOrUpdatePhoneNumberChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setIsNewOrUpdatedPhoneNumber(e.target.value === AddOrUpdatePhoneOption.Yes);
-  }
-
   return (
     <>
-      <div className="my-6 sm:my-8">
-        <Progress value={45} size="lg" label={t('renew:progress.label')} />
-      </div>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew:required-label')}</p>
+        <p className="mb-4 italic">{t('renew:all-optional-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
-            <p className="mb-4" id="adding-phone">
-              {t('protected-renew:confirm-phone.add-phone')}
-            </p>
-            <InputRadios
-              id="is-new-or-updated-phone-number"
-              name="isNewOrUpdatedPhoneNumber"
-              legend={t('protected-renew:confirm-phone.add-or-update.legend')}
-              helpMessagePrimary={t('protected-renew:confirm-phone.add-or-update.help-message')}
-              options={[
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:confirm-phone.option-yes" />,
-                  value: AddOrUpdatePhoneOption.Yes,
-                  defaultChecked: isNewOrUpdatedPhoneNumber === true,
-                  onChange: handleNewOrUpdatePhoneNumberChanged,
-                  append: isNewOrUpdatedPhoneNumber === true && (
-                    <div className="grid items-end gap-6">
-                      <InputPhoneField
-                        id="phone-number"
-                        name="phoneNumber"
-                        type="tel"
-                        inputMode="tel"
-                        className="w-full"
-                        autoComplete="tel"
-                        defaultValue={defaultState.phoneNumber ?? ''}
-                        errorMessage={errors?.phoneNumber}
-                        label={t('protected-renew:confirm-phone.phone-number')}
-                        maxLength={100}
-                        aria-describedby="adding-phone"
-                      />
-                      <InputPhoneField
-                        id="phone-number-alt"
-                        name="phoneNumberAlt"
-                        type="tel"
-                        inputMode="tel"
-                        className="w-full"
-                        autoComplete="tel"
-                        defaultValue={defaultState.phoneNumberAlt ?? ''}
-                        errorMessage={errors?.phoneNumberAlt}
-                        label={t('protected-renew:confirm-phone.phone-number-alt')}
-                        maxLength={100}
-                        aria-describedby="adding-phone"
-                      />
-                    </div>
-                  ),
-                },
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:confirm-phone.option-no" />,
-                  value: AddOrUpdatePhoneOption.No,
-                  defaultChecked: isNewOrUpdatedPhoneNumber === false,
-                  onChange: handleNewOrUpdatePhoneNumberChanged,
-                },
-              ]}
-              errorMessage={errors?.isNewOrUpdatedPhoneNumber}
-              required
-            />
+            <div className="grid items-end gap-6">
+              <InputPhoneField
+                id="phone-number"
+                name="phoneNumber"
+                type="tel"
+                inputMode="tel"
+                className="w-full"
+                autoComplete="tel"
+                defaultValue={defaultState.phoneNumber ?? ''}
+                errorMessage={errors?.phoneNumber}
+                label={t('protected-renew:confirm-phone.phone-number')}
+                maxLength={100}
+                aria-describedby="adding-phone"
+              />
+              <InputPhoneField
+                id="phone-number-alt"
+                name="phoneNumberAlt"
+                type="tel"
+                inputMode="tel"
+                className="w-full"
+                autoComplete="tel"
+                defaultValue={defaultState.phoneNumberAlt ?? ''}
+                errorMessage={errors?.phoneNumberAlt}
+                label={t('protected-renew:confirm-phone.phone-number-alt')}
+                maxLength={100}
+                aria-describedby="adding-phone"
+              />
+            </div>
           </div>
-          {editMode ? (
-            <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Contact information click">
-                {t('protected-renew:confirm-phone.save-btn')}
-              </Button>
-              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Contact information click">
-                {t('protected-renew:confirm-phone.cancel-btn')}
-              </Button>
-            </div>
-          ) : (
-            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton
-                id="continue-button"
-                name="_action"
-                value={FormAction.Continue}
-                variant="primary"
-                loading={isSubmitting}
-                endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Contact information click"
-              >
-                {t('protected-renew:confirm-phone.continue-btn')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="protected/renew/$id/marital-status"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Contact information click"
-              >
-                {t('protected-renew:confirm-phone.back-btn')}
-              </ButtonLink>
-            </div>
-          )}
+          <div className="flex flex-wrap items-center gap-3">
+            <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Contact information click">
+              {t('protected-renew:confirm-phone.save-btn')}
+            </Button>
+            <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Contact information click">
+              {t('protected-renew:confirm-phone.cancel-btn')}
+            </Button>
+          </div>
         </fetcher.Form>
       </div>
     </>
