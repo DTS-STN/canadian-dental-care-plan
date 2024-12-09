@@ -71,6 +71,13 @@
         "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres",
         "no-record": "Aucun dossier correspondant trouvé pour votre enfant"
       }
+    },
+    "parent-or-guardian": {
+      "page-title": "Vous devez être le parent ou le tuteur légal",
+      "must-be": "Vous devez être le parent ou le tuteur légal",
+      "unable-to-apply": "Vous ne pouvez pas présenter de demande pour cet enfant. Vous devez être le parent ou le tuteur légal d'un enfant pour présenter une demande en son nom.",
+      "back-btn": "Retour",
+      "continue-btn": "Retour à l'application"
     }
   }
 }
