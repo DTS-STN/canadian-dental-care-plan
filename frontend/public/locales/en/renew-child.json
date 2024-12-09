@@ -26,6 +26,49 @@
         "back-btn": "Return to summary page",
         "remove-btn": "Remove child"
       }
+    },
+    "information": {
+      "page-title": "{{childName}}: information",
+      "form-instructions-sin": "Enter the child's name as it was provided when you first applied for the child.",
+      "single-legal-name": "If the child has a single legal name",
+      "name-instructions": "If the child uses only one legal name, enter it in both the first and last name fields.",
+      "last-name": "Last name",
+      "first-name": "First name",
+      "date-of-birth": "Date of birth",
+      "client-number": "Child's client number",
+      "client-number-detail": "You can find the child’s client number in the upper right corner of the renewal letter from Service Canada or on the child’s Canadian Dental Care Plan member card.",
+      "parent-legend": "Are you the parent or legal guardian of this child?",
+      "radio-options": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "back-btn": "Back",
+      "continue-btn": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save",
+      "child-not-found": {
+        "heading": "We could not find your child's application with the information you gave us.",
+        "please-review": "Please make sure the information you entered for your child is correct.",
+        "contact-service-canada": "Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
+      },
+      "error-message": {
+        "first-name-required": "Enter child's first name",
+        "last-name-required": "Enter child's last name",
+        "date-of-birth-day-number": "Day must be a number",
+        "date-of-birth-day-required": "Date of birth must include a day",
+        "date-of-birth-is-past": "Date of birth must be in the past",
+        "date-of-birth-is-past-valid": "Date of birth too far in the past",
+        "date-of-birth-month-required": "Date of birth must include a month",
+        "date-of-birth-valid": "Day must be valid for the given month and year",
+        "date-of-birth-year-number": "Year must be a number, for example 1950",
+        "date-of-birth-year-required": "Date of birth must include a year",
+        "client-number-required": "Enter child's client number",
+        "client-number-valid": "Must be a valid client number. Your input must be 11 or 13 digits long.",
+        "is-parent": "Select whether you are the parent or legal guardian of the child",
+        "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
+        "first-name-no-digits": "First name must contain letters only",
+        "last-name-no-digits": "Last name must contain letters only"
+      }
     }
   }
 }
