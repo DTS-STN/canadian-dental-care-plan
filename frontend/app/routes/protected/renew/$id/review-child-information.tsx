@@ -75,19 +75,30 @@ export async function loader({ context: { appContainer, session }, params, reque
       .get(TYPES.domain.mappers.BenefitRenewalDtoMapper)
       .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub));
 
-  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
-  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
-
   const children = state.children.map((child) => {
-    // prettier-ignore
+    const immutableChild = state.clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information?.socialInsuranceNumber);
+
     const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
-      ? federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
-    // prettier-ignore
     const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
-      ? provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
+
+    const clientDentalBenefits = immutableChild?.dentalBenefits.map((id) => {
+      try {
+        const federalBenefit = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(id, locale);
+        return federalBenefit.name;
+      } catch {
+        const provincialBenefit = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(id, locale);
+        return provincialBenefit.name;
+      }
+    });
+
+    const dentalBenefits = child.dentalBenefits
+      ? [child.dentalBenefits.hasFederalBenefits && selectedFederalGovernmentInsurancePlan?.name, child.dentalBenefits.hasProvincialTerritorialBenefits && selectedProvincialBenefit?.name].filter(Boolean)
+      : clientDentalBenefits;
 
     return {
       id: child.id,
@@ -96,18 +107,8 @@ export async function loader({ context: { appContainer, session }, params, reque
       birthday: child.information?.dateOfBirth ?? '',
       clientNumber: child.information?.clientNumber,
       socialInsuranceNumber: child.information?.socialInsuranceNumber,
-      dentalInsurance: {
-        acessToDentalInsurance: child.dentalInsurance,
-        federalBenefit: {
-          access: child.dentalBenefits?.hasFederalBenefits,
-          benefit: selectedFederalGovernmentInsurancePlan?.name,
-        },
-        provTerrBenefit: {
-          access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
-          province: child.dentalBenefits?.province,
-          benefit: selectedProvincialBenefit?.name,
-        },
-      },
+      acessToDentalInsurance: child.dentalInsurance,
+      dentalBenefits,
       demographicSurvey: child.demographicSurvey,
     };
   });
@@ -131,7 +132,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
     saveProtectedRenewState({ params, session, state: {} });
-    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+    return redirect(getPathById('protected/renew/$id/review-child-information', params));
   }
 
   const state = loadProtectedRenewStateForReview({ params, request, session });
@@ -209,34 +210,41 @@ export default function ProtectedRenewReviewChildInformation() {
                   <h3 className="font-lato text-2xl font-bold">{t('protected-renew:review-child-information.dental-title', { child: child.firstName })}</h3>
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('protected-renew:review-child-information.dental-insurance-title')}>
-                      {child.dentalInsurance.acessToDentalInsurance ? t('protected-renew:review-child-information.yes') : t('protected-renew:review-child-information.no')}
+                      {child.acessToDentalInsurance ? t('protected-renew:review-child-information.yes') : t('protected-renew:review-child-information.no')}
                       <p className="mt-4">
                         <InlineLink id="change-access-dental" routeId="protected/renew/$id/$childId/dental-insurance" params={childParams}>
                           {t('protected-renew:review-child-information.dental-insurance-change')}
                         </InlineLink>
                       </p>
                     </DescriptionListItem>
-                    <DescriptionListItem term={t('protected-renew:review-child-information.dental-benefit-title')}>
-                      {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
+                    {child.dentalBenefits && child.dentalBenefits.length > 0 && (
+                      <DescriptionListItem term={t('protected-renew:review-child-information.dental-benefit-title')}>
                         <>
                           <p>{t('protected-renew:review-child-information.yes')}</p>
                           <p>{t('protected-renew:review-child-information.dental-benefit-has-access')}</p>
-                          <div>
-                            <ul className="ml-6 list-disc">
-                              {child.dentalInsurance.federalBenefit.access && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
-                              {child.dentalInsurance.provTerrBenefit.access && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
-                            </ul>
-                          </div>
+                          <ul className="ml-6 list-disc">
+                            {child.dentalBenefits.map((benefit, index) => (
+                              <li key={index}>{benefit}</li>
+                            ))}
+                          </ul>
                         </>
-                      ) : (
-                        <>{t('protected-renew:review-child-information.no')}</>
-                      )}
-                      <p className="mt-4">
-                        <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits" params={childParams}>
-                          {t('protected-renew:review-child-information.dental-benefit-change')}
-                        </InlineLink>
-                      </p>
-                    </DescriptionListItem>
+                        <div className="mt-4">
+                          <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits" params={childParams}>
+                            {t('protected-renew:review-child-information.dental-benefit-change')}
+                          </InlineLink>
+                        </div>
+                      </DescriptionListItem>
+                    )}
+                    {child.dentalBenefits?.length === 0 && (
+                      <DescriptionListItem term={t('protected-renew:review-child-information.dental-benefit-title')}>
+                        <p>{t('protected-renew:review-child-information.no')}</p>
+                        <div className="mt-4">
+                          <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits" params={childParams}>
+                            {t('protected-renew:review-child-information.dental-benefit-change')}
+                          </InlineLink>
+                        </div>
+                      </DescriptionListItem>
+                    )}
                   </dl>
                 </section>
                 <section className="space-y-6">

@@ -560,5 +560,25 @@
     "submit-button": "Présenter la demande de renouvellement",
     "yes": "Oui",
     "no": "Non"
+  },
+  "confirm": {
+    "page-title": "Votre demande de renouvellement au Régime canadien de soins dentaires est terminée!",
+    "whats-next": "Prochaines étapes",
+    "begin-process": "Nous commencerons à traiter votre demande de renouvellement immédiatement. Vous pouvez continuer d'utiliser vos prestations du Régime canadien de soins dentaires.",
+    "cdcp-checker": "Vous pouvez utiliser le <cdcpLink>vérificateur de l'état de votre demande du Régime canadien de soins dentaires</cdcpLink> ou composer le numéro <noWarp>1-833-537-4342</noWrap> pour suivre l'évolution de votre demande de renouvellement ou pour recevoir plus de renseignements. Vous recevrez une lettre dans les deux semaines suivant la présentation de votre demande de renouvellement pour vous informer si vous êtes admissible à la prochaine année de prestations.",
+    "applicant-summary": "Résumé de la mise à jour",
+    "applicant-title": "Demandeur",
+    "member-info": "Renseignements sur le demandeur",
+    "dental-insurance": "Accès à une assurance dentaire",
+    "dental-benefit-has-access": "A accès aux prestations suivantes\u00a0:",
+    "full-name": "Nom complet",
+    "dental-private": "Accès à d'autres assurances ou couvertures de soins dentaires\u00a0:",
+    "dental-public": "Accès à des prestations dentaires gouvernementales\u00a0:",
+    "child-title": "Renseignements sur {{childName}}",
+    "is-parent": "Parent ou tuteur légal de l'enfant\u00a0:",
+    "yes": "Oui",
+    "no": "Non",
+    "back-btn": "Return to my dashboard",
+    "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
   }
 }
