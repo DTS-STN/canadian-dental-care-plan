@@ -27,6 +27,50 @@
         "back-btn": "Return to summary page",
         "remove-btn": "Remove child"
       }
+    },
+    "information": {
+      "page-title": "{{childName}}\u00a0: Renseignements",
+      "form-instructions-sin": "Saisissez le nom de l'enfant tel qu'il a été fourni lors de votre première demande pour l'enfant",
+      "single-legal-name": "Si l'enfant a un seul nom légal",
+      "name-instructions": "Si l'enfant n'utilise qu'un seul nom, indiquez ce nom dans les champs «\u00a0prénom\u00a0» et «\u00a0nom\u00a0».",
+      "last-name": "Nom de famille",
+      "first-name": "Prénom",
+      "date-of-birth": "Date de naissance",
+      "client-number": "Numéro de client de l'enfant",
+      "client-number-detail": "Vous trouverez le numéro de client de l'enfant dans le coin supérieur droit de la lettre de renouvellement de Service Canada ou sur la carte de membre de la Sun Life de l'enfant.",
+      "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
+      "radio-options": {
+        "yes": "Oui",
+        "no": "Non"
+      },
+      "back-btn": "Retour",
+      "continue-btn": "Continuer",
+      "cancel-btn": "Annuler",
+      "save-btn": "Enregistrer",
+      "child-not-found": {
+        "heading": "(FR) We could not find your child's application with the information you gave us.",
+        "please-review": "(FR) Please make sure the information you entered for your child is correct.",
+        "contact-service-canada": "(FR) Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
+      },
+      "error-message": {
+        "first-name-required": "Entrez le prénom de l'enfant",
+        "last-name-required": "Entrez le nom de famille de l'enfant",
+        "date-of-birth-day-number": "Le jour doit être un nombre",
+        "date-of-birth-day-required": "La date de naissance doit inclure un jour",
+        "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+        "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
+        "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+        "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
+        "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+        "date-of-birth-year-required": "La date de naissance doit inclure une année",
+        "client-number-required": "Numéro de client de l'enfant",
+        "client-number-valid": "Doit être un numéro de client valide. Votre saisie doit comporter 11, 13 chiffres",
+        "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
+        "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
+        "first-name-no-digits": "Le prénom doit contenir uniquement des lettres",
+        "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres",
+        "no-record": "Aucun dossier correspondant trouvé pour votre enfant"
+      }
     }
   }
 }
