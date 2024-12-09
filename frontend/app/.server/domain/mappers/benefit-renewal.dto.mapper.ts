@@ -7,14 +7,14 @@ import { TYPES } from '~/.server/constants';
 import type {
   AdultChildBenefitRenewalDto,
   AdultChildChangeIndicators,
-  ApplicantInformationDto,
-  ChildDto,
   CommunicationPreferencesDto,
   ContactInformationDto,
   ItaBenefitRenewalDto,
   ItaChangeIndicators,
   PartnerInformationDto,
   ProtectedBenefitRenewalDto,
+  RenewalApplicantInformationDto,
+  RenewalChildDto,
   TypeOfApplicationDto,
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
@@ -27,9 +27,9 @@ export interface BenefitRenewalDtoMapper {
 }
 
 interface ToBenefitRenewalRequestEntityArgs {
-  applicantInformation: ApplicantInformationDto;
-  changedInformation: string[];
-  children: readonly ChildDto[];
+  applicantInformation: RenewalApplicantInformationDto;
+  changeIndicators?: AdultChildChangeIndicators | ItaChangeIndicators;
+  children: readonly RenewalChildDto[];
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
   dateOfBirth: string;
@@ -51,6 +51,15 @@ interface ToAddressArgs {
   province?: string;
 }
 
+interface ToChangedInformationArgs {
+  hasAddressChanged?: boolean;
+  hasEmailChanged?: boolean;
+  hasFederalBenefitsChanged?: boolean;
+  hasMaritalStatusChanged?: boolean;
+  hasPhoneChanged?: boolean;
+  hasProvincialTerritorialBenefitsChanged?: boolean;
+}
+
 interface ToEmailAddressArgs {
   contactEmail?: string;
   communicationEmail?: string;
@@ -61,49 +70,20 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>) {}
 
   mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity({
-      ...adultChildBenefitRenewalDto,
-      changedInformation: this.toAdultChildChangedInformation(adultChildBenefitRenewalDto.changeIndicators),
-    });
-  }
-
-  private toAdultChildChangedInformation({ hasAddressChanged, hasEmailChanged, hasFederalBenefitsChanged, hasMaritalStatusChanged, hasPhoneChanged, hasProvincialTerritorialBenefitsChanged }: AdultChildChangeIndicators) {
-    const changedInformation = [];
-
-    // TODO these values are not finalized and should be configurable
-    if (hasAddressChanged) changedInformation.push('775170000');
-    if (hasEmailChanged) changedInformation.push('775170001');
-    if (hasFederalBenefitsChanged) changedInformation.push('775170002');
-    if (hasMaritalStatusChanged) changedInformation.push('775170003');
-    if (hasPhoneChanged) changedInformation.push('775170004');
-    if (hasProvincialTerritorialBenefitsChanged) changedInformation.push('775170005');
-
-    return changedInformation;
+    return this.toBenefitRenewalRequestEntity(adultChildBenefitRenewalDto);
   }
 
   mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity({
-      ...itaBenefitRenewalDto,
-      changedInformation: this.toItaChangedInformation(itaBenefitRenewalDto.changeIndicators),
-    });
-  }
-
-  private toItaChangedInformation({ hasAddressChanged }: ItaChangeIndicators) {
-    const changedInformation = [];
-
-    // TODO these values are not finalized and should be configurable
-    if (hasAddressChanged) changedInformation.push('775170000');
-
-    return changedInformation;
+    return this.toBenefitRenewalRequestEntity(itaBenefitRenewalDto);
   }
 
   mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity({ ...protectedBenefitRenewalDto, changedInformation: [] });
+    return this.toBenefitRenewalRequestEntity(protectedBenefitRenewalDto);
   }
 
   private toBenefitRenewalRequestEntity({
     applicantInformation,
-    changedInformation,
+    changeIndicators,
     children,
     communicationPreferences,
     contactInformation,
@@ -123,8 +103,15 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
             DisabilityTaxCreditIndicator: disabilityTaxCredit,
             LivingIndependentlyIndicator: livingIndependently,
             InsurancePlan: this.toInsurancePlan(dentalBenefits),
+            ...this.toChangedInformation(changeIndicators),
           },
-          ChangedInformation: changedInformation,
+          BenefitApplicationDetail: [], // TODO map this from demographics answers
+          ClientIdentification: [
+            {
+              IdentificationID: applicantInformation.clientNumber,
+              IdentificationCategoryText: 'Client Number',
+            },
+          ],
           PersonBirthDate: this.toDate(dateOfBirth),
           PersonContactInformation: [
             {
@@ -163,9 +150,13 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         },
         BenefitApplicationCategoryCode: {
           ReferenceDataID: this.toBenefitApplicationCategoryCode(typeOfApplication),
+          ReferenceDataName: 'Renewal',
         },
         BenefitApplicationChannelCode: {
           ReferenceDataID: '775170001', // PP's static value for "Online"
+        },
+        BenefitApplicationYear: {
+          BenefitApplicationYearIdentification: [], // TODO map this from demographics answers
         },
       },
     };
@@ -179,6 +170,21 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         })),
       },
     ];
+  }
+
+  private toChangedInformation(changeIndicators?: ToChangedInformationArgs) {
+    if (!changeIndicators) {
+      return {};
+    }
+
+    const { hasAddressChanged, hasEmailChanged, hasFederalBenefitsChanged, hasMaritalStatusChanged, hasPhoneChanged, hasProvincialTerritorialBenefitsChanged } = changeIndicators;
+    return {
+      AddressChangedIndicator: hasAddressChanged,
+      EmailChangedIndicator: hasEmailChanged,
+      MaritalStatusChangedIndicator: hasMaritalStatusChanged,
+      PhoneChangedIndicator: hasPhoneChanged,
+      PublicInsuranceChangedIndicator: !!hasFederalBenefitsChanged || !!hasProvincialTerritorialBenefitsChanged,
+    };
   }
 
   private toDate(date: string) {
@@ -275,7 +281,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     return telephoneNumber;
   }
 
-  private toRelatedPersons(partnerInformation: PartnerInformationDto | undefined, children: ReadonlyArray<ChildDto>) {
+  private toRelatedPersons(partnerInformation: PartnerInformationDto | undefined, children: ReadonlyArray<RenewalChildDto>) {
     const relatedPersons = [];
 
     if (partnerInformation) {
@@ -309,7 +315,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     };
   }
 
-  private toRelatedPersonDependent(children: ReadonlyArray<ChildDto>) {
+  private toRelatedPersonDependent(children: ReadonlyArray<RenewalChildDto>) {
     return children.map((child) => ({
       PersonBirthDate: this.toDate(child.information.dateOfBirth),
       PersonName: [
@@ -329,6 +335,13 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         PrivateDentalInsuranceIndicator: child.dentalInsurance,
         InsurancePlan: this.toInsurancePlan(child.dentalBenefits),
       },
+      BenefitApplicationDetail: [], // TODO map this
+      ClientIdentification: [
+        {
+          IdentificationID: child.clientNumber,
+          IdentificationCategoryText: 'Client Number',
+        },
+      ],
     }));
   }
 

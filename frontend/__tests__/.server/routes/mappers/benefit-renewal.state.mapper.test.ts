@@ -175,6 +175,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           lastName: 'Doe',
           maritalStatus: 'Single',
           socialInsuranceNumber: '800000002',
+          clientNumber: '00000000000',
         },
         contactInformation: {
           copyMailingAddress: false,
@@ -204,6 +205,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         },
         children: [
           {
+            clientNumber: '11111111111',
             dentalBenefits: ['New federal program', 'New provincial program'],
             dentalInsurance: true,
             information: {
