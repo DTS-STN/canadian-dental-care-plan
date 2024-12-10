@@ -454,9 +454,13 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }
 
   private toPartnerInformation({ existingPartnerInformation, hasMaritalStatusChanged, renewedPartnerInformation }: ToPartnerInformationArgs) {
-    if (!hasMaritalStatusChanged) return existingPartnerInformation;
+    if (hasMaritalStatusChanged) return renewedPartnerInformation;
+    if (!existingPartnerInformation) return undefined;
 
-    // TODO figure out how to map this since renewal doesn't have first name, last name and date of birth fields
-    return existingPartnerInformation;
+    return {
+      confirm: existingPartnerInformation.confirm,
+      socialInsuranceNumber: existingPartnerInformation.socialInsuranceNumber,
+      yearOfBirth: new Date(existingPartnerInformation.dateOfBirth).getFullYear().toString(),
+    };
   }
 }

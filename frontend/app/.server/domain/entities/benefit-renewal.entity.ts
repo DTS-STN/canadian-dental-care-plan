@@ -105,7 +105,7 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
         PersonBirthDate: {
           date: string;
         };
-        PersonName: {
+        PersonName?: {
           PersonGivenName: string[];
           PersonSurName: string;
         }[];
