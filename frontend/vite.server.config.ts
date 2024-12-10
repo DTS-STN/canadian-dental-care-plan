@@ -26,11 +26,7 @@ export default defineConfig({
     rollupOptions: {
       // Specifies the entry point for the server runtime.
       // This is the TypeScript file that Vite will start buildin from.
-      input: './app/.server/express-server/express.server.ts',
-
-      // Sets the name of the generated server runtime entry file. This ensures consistency
-      // when referencing the file in deployment scripts or server configurations.
-      output: { entryFileNames: 'server.js' },
+      input: ['./app/.server/express-server/opentelemetry.server.ts', './app/.server/express-server/express.server.ts'],
 
       // Integrates TypeScript path aliasing using the `vite-tsconfig-paths` plugin,
       // which resolves paths defined in `tsconfig.json` for cleaner imports.

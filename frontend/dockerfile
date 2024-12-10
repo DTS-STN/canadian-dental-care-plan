@@ -125,6 +125,8 @@ LABEL org.opencontainers.image.title=${IMAGE_TITLE}
 LABEL org.opencontainers.image.url=${IMAGE_URL}
 LABEL org.opencontainers.image.vendor=${IMAGE_VENDOR}
 
-USER node
+ENV OTEL_SERVICE_VERSION=${BUILD_VERSION}
 ENV PORT=3000
-CMD ["node", "./build/server/server.js"]
+
+USER node
+CMD ["node", "--import", "./build/server/opentelemetry.server.js", "./build/server/express.server.js"]

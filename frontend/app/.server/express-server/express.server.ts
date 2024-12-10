@@ -5,8 +5,6 @@ import sourceMapSupport from 'source-map-support';
 import { logging, securityHeaders } from './middleware.server';
 import { globalErrorHandler, remixRequestHandler } from './request-handlers.server';
 import { createViteDevServer } from './vite.server';
-import { getAppContainerProvider } from '~/.server/app.container';
-import { TYPES } from '~/.server/constants';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 
@@ -16,12 +14,6 @@ const log = getLogger('express.server');
 log.info('Validating runtime environment...');
 const environment = getEnv();
 log.info('Runtime environment validation passed 🎉');
-
-// instrumentation needs to be started as early as possible to ensure proper initialization
-log.info('Initializing instrumentation');
-const appContainer = getAppContainerProvider();
-const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-instrumentationService.startInstrumentation();
 
 const isProduction = environment.NODE_ENV === 'production';
 const port = process.env.PORT ?? '3000'; // TODO :: add this to env schema
