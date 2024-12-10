@@ -95,7 +95,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, hasAddressChanged, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -189,7 +189,7 @@ export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion(
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId={hasAddressChanged ? 'protected/renew/$id/update-address' : 'protected/renew/$id/confirm-address'}
+                routeId="protected/renew/$id/member-selection"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
