@@ -23,7 +23,6 @@ import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
-import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -63,8 +62,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const maritalStatus = state.maritalStatus
     ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name
     : appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.clientApplication.applicantInformation.maritalStatus, locale).name;
-  const preferredLanguage = state.preferredLanguage
-    ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.preferredLanguage, locale).name
+  const preferredLanguage = state.communicationPreferences?.preferredLanguage
+    ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name
     : appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
   const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince
     ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr
@@ -249,9 +248,6 @@ export default function ProtectedRenewReviewAdultInformation() {
 
   return (
     <>
-      <div className="my-6 sm:my-8">
-        <Progress value={99} size="lg" label={t('renew:progress.label')} />
-      </div>
       <div className="max-w-prose">
         <p className="mb-8 text-lg">{t('protected-renew:review-adult-information.read-carefully')}</p>
         <div className="space-y-10">
@@ -377,7 +373,7 @@ export default function ProtectedRenewReviewAdultInformation() {
               <DescriptionListItem term={t('protected-renew:review-adult-information.comm-pref-title')}>
                 <p>{userInfo.communicationPreference}</p>
                 <p>
-                  <InlineLink id="change-communication-preference" routeId="protected/renew/$id/communication-preference" params={params}>
+                  <InlineLink id="change-communication-preference" routeId="protected/renew/$id/confirm-communication-preference" params={params}>
                     {t('protected-renew:review-adult-information.comm-pref-change')}
                   </InlineLink>
                 </p>
@@ -386,7 +382,7 @@ export default function ProtectedRenewReviewAdultInformation() {
                 <DescriptionListItem term={t('protected-renew:review-adult-information.lang-pref-title')}>
                   <p>{userInfo.preferredLanguage}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-language-preference" routeId="protected/renew/$id/communication-preference" params={params}>
+                    <InlineLink id="change-language-preference" routeId="protected/renew/$id/confirm-communication-preference" params={params}>
                       {t('protected-renew:review-adult-information.lang-pref-change')}
                     </InlineLink>
                   </div>

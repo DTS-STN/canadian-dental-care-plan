@@ -19,7 +19,7 @@ export const pageIds = {
       confirmEmail: 'CDCP-PROT-RENW-0012',
       confirmAddress: 'CDCP-PROT-RENW-0013',
       updateAddress: 'CDCP-PROT-RENW-0014',
-      communicationPreference: 'CDCP-PROT-RENW-0015',
+      confirmCommunicationPreference: 'CDCP-PROT-RENW-0015',
       confirmFederalProvincialTerritorialBenefits: 'CDCP-PROT-RENW-0016',
       reviewAdultInformation: 'CDCP-PROT-RENW-0017',
       reviewChildInformation: 'CDCP-RENW-ADCH-0018',

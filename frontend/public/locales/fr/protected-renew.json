@@ -398,13 +398,20 @@
   },
   "communication-preference": {
     "page-title": "Communication",
-    "preferred-language": "What is your preferred official language of communication?",
-    "back": "Back",
-    "continue": "Continue",
-    "cancel-btn": "Cancel",
-    "save-btn": "Save",
+    "preferred-language": "Quelle langue officielle de communication préférez-vous?",
+    "preferred-method": "Comment préférez-vous recevoir les communications au sujet de votre Régime canadien de soins dentaires de la Sun Life et du gouvernement du Canada\u00a0?",
+    "email": "Adresse courriel",
+    "confirm-email": "Confirmer l'adresse courriel",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
     "error-message": {
-      "preferred-language-required": "Select preferred language of communication"
+      "email-match": "Les adresses courriel entrées ne concordent pas",
+      "confirm-email-required": "Confirmez l'adresse courriel",
+      "email-required": "Entrez l'adresse courriel",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "preferred-language-required": "Sélectionnez la langue de communication préférée",
+      "preferred-method-required": "Sélectionnez le moyen de communication préféré"
     }
   },
   "update-dental-benefits": {
