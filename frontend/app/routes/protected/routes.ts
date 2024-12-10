@@ -113,9 +113,9 @@ export const routes = [
             paths: { en: '/:lang/protected/renew/:id/confirm-email', fr: '/:lang/protected/renew/:id/confirmer-courriel' },
           },
           {
-            id: 'protected/renew/$id/communication-preference',
-            file: 'routes/protected/renew/$id/communication-preference.tsx',
-            paths: { en: '/:lang/protected/renew/:id/communication-preference', fr: '/:lang/protected/renew/:id/communication-preference' },
+            id: 'protected/renew/$id/confirm-communication-preference',
+            file: 'routes/protected/renew/$id/confirm-communication-preference.tsx',
+            paths: { en: '/:lang/protected/renew/:id/confirm-communication-preference', fr: '/:lang/protected/renew/:id/confirm-communication-preference' },
           },
           {
             id: 'protected/renew/$id/confirm-address',
