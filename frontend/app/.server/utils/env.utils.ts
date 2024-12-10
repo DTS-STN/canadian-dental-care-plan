@@ -153,11 +153,12 @@ const serverEnv = clientEnvSchema.extend({
   // OpenTelemetry/Dynatrace settings
   OTEL_LOG_LEVEL: z.string().refine((val) => otelLogLevels.includes(val)).default('info'),
   OTEL_API_KEY: z.string().trim().transform(emptyToUndefined).optional(),
-  OTEL_ENVIRONMENT: z.string().trim().min(1).default('local'),
+  OTEL_ENVIRONMENT: z.string().trim().min(1).default('localhost'),
   OTEL_METRICS_ENDPOINT: z.string().trim().transform(emptyToUndefined).optional(),
   OTEL_METRICS_EXPORT_INTERVAL_MILLIS: z.coerce.number().default(60 * 1000),
   OTEL_METRICS_EXPORT_TIMEOUT_MILLIS: z.coerce.number().default(30 * 1000),
   OTEL_SERVICE_NAME: z.string().trim().min(1).default('canadian-dental-care-plan'),
+  OTEL_SERVICE_VERSION: z.string().trim().min(1).default('0.0.0'),
   OTEL_TRACES_ENDPOINT: z.string().trim().transform(emptyToUndefined).optional(),
   OTEL_USE_CONSOLE_EXPORTERS: z.string().transform(toBoolean).default('false'),
 
