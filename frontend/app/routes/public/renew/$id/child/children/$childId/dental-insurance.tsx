@@ -133,69 +133,67 @@ export default function RenewChildChildrenDentalInsurance() {
   );
 
   return (
-    <>
-      <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew:required-label')}</p>
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="my-6">
-            <InputRadios
-              id="dental-insurance"
-              name="dentalInsurance"
-              legend={t('children.dental-insurance.legend', { childName: childName })}
-              options={[
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="children.dental-insurance.option-yes" />,
-                  value: 'yes',
-                  defaultChecked: defaultState === true,
-                },
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="children.dental-insurance.option-no" />,
-                  value: 'no',
-                  defaultChecked: defaultState === false,
-                },
-              ]}
-              helpMessagePrimary={helpMessage}
-              helpMessagePrimaryClassName="text-black"
-              errorMessage={errors?.dentalInsurance}
-              required
-            />
+    <div className="max-w-prose">
+      <p className="mb-4 italic">{t('renew:required-label')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <div className="my-6">
+          <InputRadios
+            id="dental-insurance"
+            name="dentalInsurance"
+            legend={t('children.dental-insurance.legend', { childName: childName })}
+            options={[
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="children.dental-insurance.option-yes" />,
+                value: 'yes',
+                defaultChecked: defaultState === true,
+              },
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="children.dental-insurance.option-no" />,
+                value: 'no',
+                defaultChecked: defaultState === false,
+              },
+            ]}
+            helpMessagePrimary={helpMessage}
+            helpMessagePrimaryClassName="text-black"
+            errorMessage={errors?.dentalInsurance}
+            required
+          />
+        </div>
+        {editMode ? (
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Child access to other dental insurance click">
+              {t('children.dental-insurance.button.save-btn')}
+            </Button>
+            <ButtonLink
+              id="back-button"
+              routeId="public/renew/$id/child/review-child-information"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Child access to other dental insurance click"
+            >
+              {t('children.dental-insurance.button.cancel-btn')}
+            </ButtonLink>
           </div>
-          {editMode ? (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Child access to other dental insurance click">
-                {t('children.dental-insurance.button.save-btn')}
-              </Button>
-              <ButtonLink
-                id="back-button"
-                routeId="public/renew/$id/child/review-child-information"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Child access to other dental insurance click"
-              >
-                {t('children.dental-insurance.button.cancel-btn')}
-              </ButtonLink>
-            </div>
-          ) : (
-            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child access to other dental insurance click">
-                {t('children.dental-insurance.button.continue')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="public/renew/$id/child/children/$childId/information"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child access to other dental insurance click"
-              >
-                {t('children.dental-insurance.button.back')}
-              </ButtonLink>
-            </div>
-          )}
-        </fetcher.Form>
-      </div>
-    </>
+        ) : (
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child access to other dental insurance click">
+              {t('children.dental-insurance.button.continue')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              routeId="public/renew/$id/child/children/$childId/information"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child access to other dental insurance click"
+            >
+              {t('children.dental-insurance.button.back')}
+            </ButtonLink>
+          </div>
+        )}
+      </fetcher.Form>
+    </div>
   );
 }
