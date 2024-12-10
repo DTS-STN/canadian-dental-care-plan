@@ -30,7 +30,6 @@ export interface RenewState {
       provincialTerritorialSocialProgram?: string;
       province?: string;
     };
-    // TODO: Confirm FPT page no longer ask federal and provincial question seperately. Removing this state will cause error in the mapper, keeping it for now.
     readonly confirmDentalBenefits?: {
       federalBenefitsChanged: boolean;
       provincialTerritorialBenefitsChanged: boolean;
