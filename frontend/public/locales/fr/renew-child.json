@@ -79,5 +79,11 @@
       "back-btn": "Retour",
       "continue-btn": "Retour à l'application"
     }
+  },
+  "parent-intro": {
+    "page-title": "Informations sur le parent ou le tuteur légal",
+    "description": "Dans cette section, vous allez examiner et mettre à jour vos informations pour compléter la demande de renouvellement pour votre (vos) enfant(s).",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
   }
 }

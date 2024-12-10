@@ -77,5 +77,11 @@
       "back-btn": "Back",
       "continue-btn": "Return to application"
     }
+  },
+  "parent-intro": {
+    "page-title": "Parent or legal guardian information",
+    "description": "In this section you will review and update your information to complete the renewal application for your child(ren).",
+    "back-btn": "Back",
+    "continue-btn": "Continue"
   }
 }
