@@ -105,14 +105,14 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (dentalBenefits.federalProvincialTerritorialBenefitsChanged) {
-    return redirect(getPathById('public/renew/$id/adult-child/children/$childId/update-federal-provincial-territorial-benefits', params));
+    return redirect(getPathById('public/renew/$id/child/children/$childId/update-federal-provincial-territorial-benefits', params));
   }
 
   if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
+    return redirect(getPathById('public/renew/$id/child/review-child-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/adult-child/children/demographic-survey', params));
+  return redirect(getPathById('public/renew/$id/child/children/demographic-survey', params));
 }
 
 export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefits() {
@@ -190,7 +190,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/children/$childId/dental-insurance"
+                routeId="public/renew/$id/child/children/$childId/dental-insurance"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
