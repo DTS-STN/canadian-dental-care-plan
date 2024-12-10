@@ -78,6 +78,56 @@
       "unable-to-apply": "Vous ne pouvez pas présenter de demande pour cet enfant. Vous devez être le parent ou le tuteur légal d'un enfant pour présenter une demande en son nom.",
       "back-btn": "Retour",
       "continue-btn": "Retour à l'application"
+    },
+    "dental-insurance": {
+      "title": "{{childName}}\u00a0: accès à d'autres assurances dentaires",
+      "legend": "Est-ce que {{childName}} a accès à une assurance ou à une couverture dentaire\u00a0:",
+      "list": {
+        "employment": "dans le cadre des avantages sociaux de l'employeur d'un parent ou d'un tuteur légal, y compris les comptes de santé et de bien-être",
+        "pension": "par le biais de prestations de retraite d'un parent ou d'un tuteur légal",
+        "purchased": "achetée individuellement par un parent ou un tuteur légal auprès d'une compagnie d'assurance ou de prestations",
+        "professional": "par l'intermédiaire d'une organisation professionnelle ou étudiante"
+      },
+      "option-yes": "<strong>Oui</strong>, l'enfant a accès à une assurance ou une couverture dentaire",
+      "option-no": "<strong>Non</strong>, l'enfant n'a pas accès à une assurance ou une couverture dentaire",
+      "button": {
+        "back": "Retour",
+        "continue": "Continuer",
+        "cancel-btn": "Annuler",
+        "save-btn": "Sauvegarder"
+      },
+      "detail": {
+        "additional-info": {
+          "title": "Qu'entend-on par avoir accès à une assurance dentaire privée?",
+          "eligible": "Cela signifie que l'enfant a accès à tout type d'assurance ou de couverture dentaire\u00a0:",
+          "eligible-list": {
+            "employment-benefits": "dans le cadre des avantages sociaux d'employeur d'un parent ou d'un tuteur légal, y compris les comptes de santé et de bien-être",
+            "organization": {
+              "professional-student": "par une organisation professionnelle ou étudiante",
+              "note": "Remarque\u00a0: Si l'enfant est admissible à la protection dentaire au moyen d'avantages sociaux d'un parent ou d'un tuteur légal ou par une organisation professionnelle ou étudiante, il n'est pas admissible au RCSD. Cela est vrai, même si\u00a0:",
+              "not-take": "vous décidez de ne pas opter pour cette protection",
+              "pay-premium": "vous devez verser une prime d'assurance sur cette protection",
+              "not-use": "vous ne l'utilisez pas"
+            },
+            "pension": {
+              "pension-benefits": "par le biais de prestations de retraite d'un parent ou d'un tuteur légal",
+              "federal-provincial-territorial": "Cela comprend les régimes de retraite des gouvernements fédéral, provinciaux et territoriaux",
+              "exceptions": {
+                "eligible": "Exception\u00a0: L'enfant peut être admissible au RCSD si un parent ou d'un tuteur légal est à la retraite et\u00a0:",
+                "opted-out": "a renoncé aux prestations de retraite avant le 11 décembre 2023",
+                "opt-back": "ne peux pas se réinscrire en vertu des règles relatives à la pension"
+              }
+            },
+            "purchased-coverage": {
+              "purchased-through": "achetée individuellement par un parent ou d'un tuteur légal ou par le biais d'un plan de groupe d'une compagnie d'assurance ou de prestations",
+              "purchased-privately": "Si un parent ou d'un tuteur légal a souscrit actuellement une assurance dentaire privée (qui ne fait pas partie des types de protection indiqués ci-dessus), l'enfant n'est pas admissible au RCSD pendant la durée de cette couverture."
+            }
+          }
+        }
+      },
+      "error-message": {
+        "dental-insurance-required": "Sélectionnez si cet enfant a accès à une assurance dentaire"
+      }
     }
   },
   "parent-intro": {

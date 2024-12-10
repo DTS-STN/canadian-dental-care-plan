@@ -76,6 +76,56 @@
       "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
       "back-btn": "Back",
       "continue-btn": "Return to application"
+    },
+    "dental-insurance": {
+      "title": "{{childName}}: access to other dental insurance",
+      "legend": "Does {{childName}} have access to dental insurance or coverage:",
+      "list": {
+        "employment": "Through a parent or legal guardian's employment benefits including health and wellness accounts",
+        "pension": "Through a parent or legal guardian's pension benefits",
+        "purchased": "Purchased by a parent or legal guardian from an insurance or benefits company",
+        "professional": "Through a professional or student organization"
+      },
+      "option-yes": "<strong>Yes</strong>, this child has access to dental insurance or coverage",
+      "option-no": "<strong>No</strong>, this child does not have access to dental insurance or coverage",
+      "button": {
+        "back": "Back",
+        "continue": "Continue",
+        "cancel-btn": "Cancel",
+        "save-btn": "Save"
+      },
+      "detail": {
+        "additional-info": {
+          "title": "What does it mean to have access to private dental insurance or coverage?",
+          "eligible": "It means the child has access to any type of dental insurance or coverage through:",
+          "eligible-list": {
+            "employment-benefits": "a parent or legal guardian's employment benefits, including health and wellness accounts",
+            "organization": {
+              "professional-student": "a professional or student organization",
+              "note": "Note: If the child is eligible for dental coverage through a parent or legal guardian's employment benefits, or through a professional or student organization, they're not eligible for the CDCP. This is true even if:",
+              "not-take": "you decide not to take it",
+              "pay-premium": "you have to pay a premium for it",
+              "not-use": "you don't use it"
+            },
+            "pension": {
+              "pension-benefits": "a parent or legal guardian's pension benefits",
+              "federal-provincial-territorial": "this includes federal, provincial and territorial government employer pension plans",
+              "exceptions": {
+                "eligible": "Exception: The child may still be eligible if a parent or legal guardian is retired and:",
+                "opted-out": "opted out of pension benefits before December 11, 2023, and",
+                "opt-back": "can't opt back in under the pension rules"
+              }
+            },
+            "purchased-coverage": {
+              "purchased-through": "coverage bought by a parent or legal guardian through a group plan from an insurance or benefits company.",
+              "purchased-privately": "if a parent or legal guardian purchased the child's current dental insurance policy privately (and not as part of any of the coverage described above), the child is not eligible for the CDCP while that coverage is in effect."
+            }
+          }
+        }
+      },
+      "error-message": {
+        "dental-insurance-required": "Select whether the child has access to dental insurance"
+      }
     }
   },
   "parent-intro": {

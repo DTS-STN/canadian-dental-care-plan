@@ -612,6 +612,11 @@ export const routes = [
             file: 'routes/public/renew/$id/child/parent-intro.tsx',
             paths: { en: '/:lang/renew/:id/child/parent-intro', fr: '/:lang/renew/:id/enfant/parent-intro' },
           },
+          {
+            id: 'public/renew/$id/child/children/$childId/dental-insurance',
+            file: 'routes/public/renew/$id/child/children/$childId/dental-insurance.tsx',
+            paths: { en: '/:lang/renew/:id/child/children/:childId/dental-insurance', fr: '/:lang/renew/:id/enfant/enfants/:childId/assurance-dentaire' },
+          },
         ],
       },
       {
