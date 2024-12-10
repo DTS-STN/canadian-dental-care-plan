@@ -126,6 +126,13 @@ describe('DefaultBenefitRenewalStateMapper', () => {
               federalBenefitsChanged: true,
               provincialTerritorialBenefitsChanged: true,
             },
+            demographicSurvey: {
+              disabilityStatus: 'Disability status placeholder',
+              ethnicGroups: ['Group 1', 'Group 2'],
+              indigenousStatus: 'No answer',
+              genderStatus: 'Male',
+              locationBornStatus: 'Canada',
+            },
             dentalBenefits: {
               hasFederalBenefits: true,
               hasProvincialTerritorialBenefits: true,
@@ -154,6 +161,12 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           isNewOrUpdatedEmail: true,
           isNewOrUpdatedPhoneNumber: true,
           shouldReceiveEmailCommunication: true,
+        },
+        demographicSurvey: {
+          ethnicGroups: ['Group 1'],
+          indigenousStatus: 'No answer',
+          genderStatus: 'Male',
+          locationBornStatus: 'Outside Canada',
         },
         dentalBenefits: {
           hasFederalBenefits: true,
@@ -208,6 +221,13 @@ describe('DefaultBenefitRenewalStateMapper', () => {
             clientNumber: '11111111111',
             dentalBenefits: ['New federal program', 'New provincial program'],
             dentalInsurance: true,
+            demographicSurvey: {
+              disabilityStatus: 'Disability status placeholder',
+              ethnicGroups: ['Group 1', 'Group 2'],
+              indigenousStatus: 'No answer',
+              genderStatus: 'Male',
+              locationBornStatus: 'Canada',
+            },
             information: {
               dateOfBirth: '2020-01-01',
               firstName: 'John Jr.',
@@ -223,6 +243,12 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           email: 'new@example.com',
         },
         dateOfBirth: '1970-01-01',
+        demographicSurvey: {
+          ethnicGroups: ['Group 1'],
+          indigenousStatus: 'No answer',
+          genderStatus: 'Male',
+          locationBornStatus: 'Outside Canada',
+        },
         dentalBenefits: ['New federal program', 'Original provincial benefit'],
         dentalInsurance: true,
         typeOfApplication: 'adult-child',

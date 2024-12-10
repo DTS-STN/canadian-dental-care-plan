@@ -144,6 +144,7 @@ export type ProtectedClientApplicationState = NonNullable<ProtectedRenewState['c
 export type ProtectedDentalFederalBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type ProtectedDentalProvincialTerritorialBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ProtectedContactInformationState = NonNullable<ProtectedRenewState['contactInformation']>;
+export type ProtectedDemographicSurveyState = NonNullable<ProtectedRenewState['demographicSurvey']>;
 
 /**
  * Schema for validating UUID.

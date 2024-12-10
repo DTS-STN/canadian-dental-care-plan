@@ -22,11 +22,21 @@ import type {
   ProtectedAddressInformationState,
   ProtectedChildState,
   ProtectedContactInformationState,
+  ProtectedDemographicSurveyState,
   ProtectedDentalFederalBenefitsState,
   ProtectedDentalProvincialTerritorialBenefitsState,
   ProtectedPartnerInformationState,
 } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import type { AddressInformationState, ChildState, ConfirmDentalBenefitsState, ContactInformationState, DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
+import type {
+  AddressInformationState,
+  ChildState,
+  ConfirmDentalBenefitsState,
+  ContactInformationState,
+  DemographicSurveyState,
+  DentalFederalBenefitsState,
+  DentalProvincialTerritorialBenefitsState,
+  PartnerInformationState,
+} from '~/.server/routes/helpers/renew-route-helpers';
 
 export interface RenewAdultChildState {
   addressInformation?: AddressInformationState;
@@ -34,6 +44,7 @@ export interface RenewAdultChildState {
   clientApplication: ClientApplicationDto;
   confirmDentalBenefits: ConfirmDentalBenefitsState;
   contactInformation: ContactInformationState;
+  demographicSurvey?: DemographicSurveyState;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   hasAddressChanged: boolean;
@@ -46,6 +57,7 @@ export interface RenewItaState {
   addressInformation?: AddressInformationState;
   clientApplication: ClientApplicationDto;
   contactInformation: ContactInformationState;
+  demographicSurvey?: DemographicSurveyState;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   hasAddressChanged: boolean;
@@ -58,6 +70,7 @@ export interface ProtectedRenewState {
   clientApplication: ClientApplicationDto;
   children: ProtectedChildState[];
   contactInformation?: ProtectedContactInformationState;
+  demographicSurvey?: ProtectedDemographicSurveyState;
   dentalBenefits?: ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   maritalStatus?: string;
@@ -124,6 +137,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     clientApplication,
     confirmDentalBenefits,
     contactInformation,
+    demographicSurvey,
     dentalBenefits,
     dentalInsurance,
     hasAddressChanged,
@@ -177,6 +191,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasEmailChanged,
         hasPhoneChanged,
       }),
+      demographicSurvey,
       dentalBenefits: this.toDentalBenefits({
         existingDentalBenefits: clientApplication.dentalBenefits,
         hasFederalBenefitsChanged,
@@ -194,7 +209,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  mapRenewItaStateToItaBenefitRenewalDto({ addressInformation, clientApplication, contactInformation, dentalBenefits, dentalInsurance, hasAddressChanged, maritalStatus, partnerInformation }: RenewItaState): ItaBenefitRenewalDto {
+  mapRenewItaStateToItaBenefitRenewalDto({ addressInformation, clientApplication, contactInformation, demographicSurvey, dentalBenefits, dentalInsurance, hasAddressChanged, maritalStatus, partnerInformation }: RenewItaState): ItaBenefitRenewalDto {
     return {
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
@@ -220,6 +235,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedEmail: contactInformation.email,
         renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
       }),
+      demographicSurvey,
       dentalBenefits: this.toDentalBenefits({
         existingDentalBenefits: clientApplication.dentalBenefits,
         hasFederalBenefitsChanged: true,
@@ -238,7 +254,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }
 
   mapProtectedRenewStateToProtectedBenefitRenewalDto(
-    { addressInformation, children, contactInformation, dentalBenefits, dentalInsurance, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
+    { addressInformation, children, contactInformation, demographicSurvey, dentalBenefits, dentalInsurance, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
     userId: string,
   ): ProtectedBenefitRenewalDto {
     return {
@@ -248,6 +264,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: !!maritalStatus,
         renewedMaritalStatus: maritalStatus,
       }),
+      demographicSurvey,
       children: this.toChildren({
         existingChildren: clientApplication.children,
         renewedChildren: children,
@@ -327,6 +344,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
           hasProvincialTerritorialBenefitsChanged,
           renewedDentalBenefits: renewedChild.dentalBenefits,
         }),
+        demographicSurvey: renewedChild.demographicSurvey,
         dentalInsurance: renewedChild.dentalInsurance,
         information: {
           firstName: renewedChild.information.firstName,

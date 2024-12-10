@@ -9,6 +9,7 @@ import type {
   AdultChildChangeIndicators,
   CommunicationPreferencesDto,
   ContactInformationDto,
+  DemographicSurveyDto,
   ItaBenefitRenewalDto,
   ItaChangeIndicators,
   PartnerInformationDto,
@@ -33,6 +34,7 @@ interface ToBenefitRenewalRequestEntityArgs {
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
   dateOfBirth: string;
+  demographicSurvey?: DemographicSurveyDto;
   dentalBenefits: readonly string[];
   dentalInsurance?: boolean;
   disabilityTaxCredit?: boolean;
@@ -51,7 +53,7 @@ interface ToAddressArgs {
   province?: string;
 }
 
-interface ToChangedInformationArgs {
+interface ToChangeIndicatorsArgs {
   hasAddressChanged?: boolean;
   hasEmailChanged?: boolean;
   hasFederalBenefitsChanged?: boolean;
@@ -88,6 +90,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     communicationPreferences,
     contactInformation,
     dateOfBirth,
+    demographicSurvey,
     dentalBenefits,
     dentalInsurance,
     disabilityTaxCredit,
@@ -103,9 +106,9 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
             DisabilityTaxCreditIndicator: disabilityTaxCredit,
             LivingIndependentlyIndicator: livingIndependently,
             InsurancePlan: this.toInsurancePlan(dentalBenefits),
-            ...this.toChangedInformation(changeIndicators),
+            ...this.toChangeIndicators(changeIndicators),
           },
-          BenefitApplicationDetail: [], // TODO map this from demographics answers
+          BenefitApplicationDetail: this.toBenefitApplicationDetail(demographicSurvey),
           ClientIdentification: [
             {
               IdentificationID: applicantInformation.clientNumber,
@@ -172,7 +175,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     ];
   }
 
-  private toChangedInformation(changeIndicators?: ToChangedInformationArgs) {
+  private toChangeIndicators(changeIndicators?: ToChangeIndicatorsArgs) {
     if (!changeIndicators) {
       return {};
     }
@@ -185,6 +188,60 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       PhoneChangedIndicator: hasPhoneChanged,
       PublicInsuranceChangedIndicator: !!hasFederalBenefitsChanged || !!hasProvincialTerritorialBenefitsChanged,
     };
+  }
+
+  private toBenefitApplicationDetail(demographicSurvey?: DemographicSurveyDto) {
+    if (!demographicSurvey) {
+      return [];
+    }
+
+    const benefitApplicationDetail = [];
+    const { anotherEthnicGroup, disabilityStatus, ethnicGroups, firstNations, genderStatus, indigenousStatus, locationBornStatus } = demographicSurvey;
+
+    if (firstNations) {
+      benefitApplicationDetail.push({
+        BenefitApplicationDetailID: 'AreYouFirstNations',
+        BenefitApplicationDetailValues: firstNations,
+        BenefitApplicationDetailValue: indigenousStatus, // TODO verify with Interop if we should pass this as well as BenefitApplicationDetailValues
+      });
+    }
+
+    if (genderStatus) {
+      benefitApplicationDetail.push({
+        BenefitApplicationDetailID: 'Gender',
+        BenefitApplicationDetailValue: genderStatus,
+      });
+    }
+
+    if (ethnicGroups) {
+      benefitApplicationDetail.push({
+        BenefitApplicationDetailID: 'Ethnicity',
+        BenefitApplicationDetailValues: ethnicGroups,
+      });
+    }
+
+    if (disabilityStatus) {
+      benefitApplicationDetail.push({
+        BenefitApplicationDetailID: 'IdentifiesAsPersonWithDisability',
+        BenefitApplicationDetailValue: disabilityStatus, // TODO verify with Interop if we should use BenefitApplicationDetailIndicator as per their specs
+      });
+    }
+
+    if (anotherEthnicGroup) {
+      benefitApplicationDetail.push({
+        BenefitApplicationDetailID: 'OtherEthnicity',
+        BenefitApplicationDetailValue: anotherEthnicGroup,
+      });
+    }
+
+    if (locationBornStatus) {
+      benefitApplicationDetail.push({
+        BenefitApplicationDetailID: 'WhereWereYouBorn',
+        BenefitApplicationDetailValue: locationBornStatus,
+      });
+    }
+
+    return benefitApplicationDetail;
   }
 
   private toDate(date: string) {

@@ -149,6 +149,7 @@ export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBene
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ConfirmDentalBenefitsState = NonNullable<RenewState['confirmDentalBenefits']>;
 export type ContactInformationState = NonNullable<RenewState['contactInformation']>;
+export type DemographicSurveyState = NonNullable<RenewState['demographicSurvey']>;
 
 /**
  * Schema for validating UUID.

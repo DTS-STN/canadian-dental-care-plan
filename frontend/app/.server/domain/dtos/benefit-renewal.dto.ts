@@ -29,6 +29,7 @@ export type BenefitRenewalDto = Omit<BenefitApplicationDto, 'applicantInformatio
   Readonly<{
     children: RenewalChildDto[];
     applicantInformation: RenewalApplicantInformationDto;
+    demographicSurvey?: DemographicSurveyDto;
   }>;
 
 export type RenewalApplicantInformationDto = ApplicantInformationDto &
@@ -39,4 +40,15 @@ export type RenewalApplicantInformationDto = ApplicantInformationDto &
 export type RenewalChildDto = ChildDto &
   Readonly<{
     clientNumber: string;
+    demographicSurvey?: DemographicSurveyDto;
   }>;
+
+export type DemographicSurveyDto = Readonly<{
+  indigenousStatus?: string;
+  firstNations?: string[];
+  disabilityStatus?: string;
+  ethnicGroups?: string[];
+  anotherEthnicGroup?: string;
+  locationBornStatus?: string;
+  genderStatus?: string;
+}>;
