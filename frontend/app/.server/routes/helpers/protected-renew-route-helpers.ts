@@ -111,6 +111,22 @@ export interface ProtectedRenewState {
     mailingPostalCode?: string;
     mailingProvince?: string;
   };
+  readonly mailingAddress?: {
+    readonly address: string;
+    readonly apartment?: string;
+    readonly city: string;
+    readonly country: string;
+    readonly postalCode?: string;
+    readonly province?: string;
+  };
+  readonly homeAddress?: {
+    readonly address: string;
+    readonly apartment?: string;
+    readonly city: string;
+    readonly country: string;
+    readonly postalCode?: string;
+    readonly province?: string;
+  };
   readonly submissionInfo?: {
     /**
      * The UTC date and time when the application was submitted.

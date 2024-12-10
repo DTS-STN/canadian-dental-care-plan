@@ -340,7 +340,7 @@ export default function ProtectedRenewReviewAdultInformation() {
                   }}
                 />
                 <div className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="protected/renew/$id/confirm-address" params={params}>
+                  <InlineLink id="change-mailing-address" routeId="protected/renew/$id/confirm-mailing-address" params={params}>
                     {t('protected-renew:review-adult-information.mailing-change')}
                   </InlineLink>
                 </div>
@@ -359,7 +359,7 @@ export default function ProtectedRenewReviewAdultInformation() {
                   />
                 }
                 <div className="mt-4">
-                  <InlineLink id="change-home-address" routeId="protected/renew/$id/confirm-address" params={params}>
+                  <InlineLink id="change-home-address" routeId="protected/renew/$id/confirm-home-address" params={params}>
                     {t('protected-renew:review-adult-information.home-change')}
                   </InlineLink>
                 </div>

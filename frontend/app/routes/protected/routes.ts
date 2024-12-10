@@ -118,14 +118,14 @@ export const routes = [
             paths: { en: '/:lang/protected/renew/:id/confirm-communication-preference', fr: '/:lang/protected/renew/:id/confirm-communication-preference' },
           },
           {
-            id: 'protected/renew/$id/confirm-address',
-            file: 'routes/protected/renew/$id/confirm-address.tsx',
-            paths: { en: '/:lang/protected/renew/:id/confirm-address', fr: '/:lang/protected/renew/:id/confirmer-adresse' },
+            id: 'protected/renew/$id/confirm-home-address',
+            file: 'routes/protected/renew/$id/confirm-home-address.tsx',
+            paths: { en: '/:lang/protected/renew/:id/confirm-home-address', fr: '/:lang/protected/renew/:id/confirm-home-address' },
           },
           {
-            id: 'protected/renew/$id/update-address',
-            file: 'routes/protected/renew/$id/update-address.tsx',
-            paths: { en: '/:lang/protected/renew/:id/update-address', fr: '/:lang/protected/renew/:id/mise-a-jour-adresse' },
+            id: 'protected/renew/$id/confirm-mailing-address',
+            file: 'routes/protected/renew/$id/confirm-mailing-address.tsx',
+            paths: { en: '/:lang/protected/renew/:id/confirm-mailing-address', fr: '/:lang/protected/renew/:id/confirm-mailing-address' },
           },
           {
             id: 'protected/renew/$id/confirm-federal-provincial-territorial-benefits',

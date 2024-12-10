@@ -328,37 +328,20 @@
       "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com"
     }
   },
-  "confirm-address": {
-    "page-title": "Adresse",
-    "have-you-moved": "Avez-vous déménagé ou changé d'adresse postale depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
-    "is-home-address-same-as-mailing-address": "L'adresse de votre domicile est-elle la même que votre adresse postale?",
-    "radio-options": {
-      "yes": "Oui",
-      "no": "Non"
-    },
-    "help-message": "L'adresse que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
-    "error-message": {
-      "has-address-changed-required": "Sélectionnez si vous avez déménagé ou changé d'adresse postale",
-      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
-    },
-    "back-btn": "Retour",
-    "continue-btn": "Continuer",
-    "cancel-btn": "Annuler",
-    "save-btn": "Enregistrer"
-  },
   "update-address": {
-    "page-title": "Mettez l'adresse à jour",
     "mailing-address": {
+      "page-title": "Adresse postale",
       "header": "Adresse postale"
     },
     "home-address": {
+      "page-title": "Adresse à domicile",
       "header": "Adresse à domicile",
       "use-mailing-address": "Mon adresse à domicile est la même que mon adresse postale"
     },
     "address-field": {
       "address": "Adresse postale",
       "mailing-address": "Adresse postale",
-      "apartment": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple : 4B - 123 Rue Main",
+      "address-note": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple\u00a0: 4B - 123 Rue Main",
       "country": "Pays",
       "province": "Province, territoire, État ou région",
       "city": "Ville ou municipalité",
