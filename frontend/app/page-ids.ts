@@ -145,6 +145,7 @@ export const pageIds = {
         childInformation: 'CDCP-RENW-CHLD-0001',
         parentOrGuardian: 'CDCP-RENW-CHLD-0002',
         parentIntro: 'CDCP-RENW-CHLD-0003',
+        dentalInsurance: 'CDCP-RENW-CHLD-0004',
       },
     },
     demographicSurvey: {
