@@ -68,9 +68,9 @@ export const routes = [
             paths: { en: '/:lang/protected/renew/:id/demographic-survey', fr: '/:lang/protected/renew/:id/demographic-survey' },
           },
           {
-            id: 'protected/renew/$id/marital-status',
-            file: 'routes/protected/renew/$id/marital-status.tsx',
-            paths: { en: '/:lang/protected/renew/:id/marital-status', fr: '/:lang/protected/renew/:id/etat-civil' },
+            id: 'protected/renew/$id/confirm-marital-status',
+            file: 'routes/protected/renew/$id/confirm-marital-status.tsx',
+            paths: { en: '/:lang/protected/renew/:id/confirm-marital-status', fr: '/:lang/protected/renew/:id/confirm-marital-status' },
           },
           {
             file: 'routes/protected/renew/$id/$childId/layout.tsx',
