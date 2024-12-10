@@ -607,6 +607,11 @@ export const routes = [
             file: 'routes/public/renew/$id/child/children/$childId/parent-or-guardian.tsx',
             paths: { en: '/:lang/renew/:id/child/children/:childId/parent-or-guardian', fr: '/:lang/renew/:id/enfant/enfants/:childId/parent-ou-tuteur' },
           },
+          {
+            id: 'public/renew/$id/child/parent-intro',
+            file: 'routes/public/renew/$id/child/parent-intro.tsx',
+            paths: { en: '/:lang/renew/:id/child/parent-intro', fr: '/:lang/renew/:id/enfant/parent-intro' },
+          },
         ],
       },
       {
