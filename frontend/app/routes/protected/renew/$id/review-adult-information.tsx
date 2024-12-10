@@ -269,7 +269,7 @@ export default function ProtectedRenewReviewAdultInformation() {
               <DescriptionListItem term={t('protected-renew:review-adult-information.marital-title')}>
                 <p>{userInfo.maritalStatus}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-martial-status" routeId="protected/renew/$id/marital-status" params={params}>
+                  <InlineLink id="change-martial-status" routeId="protected/renew/$id/confirm-marital-status" params={params}>
                     {t('protected-renew:review-adult-information.marital-change')}
                   </InlineLink>
                 </div>
@@ -284,7 +284,7 @@ export default function ProtectedRenewReviewAdultInformation() {
                   <DescriptionListItem term={t('protected-renew:review-adult-information.sin-title')}>
                     <p>{formatSin(spouseInfo.sin)}</p>
                     <div className="mt-4">
-                      <InlineLink id="change-spouse-sin" routeId="protected/renew/$id/marital-status" params={params}>
+                      <InlineLink id="change-spouse-sin" routeId="protected/renew/$id/confirm-marital-status" params={params}>
                         {t('protected-renew:review-adult-information.sin-change')}
                       </InlineLink>
                     </div>
@@ -293,7 +293,7 @@ export default function ProtectedRenewReviewAdultInformation() {
                 <DescriptionListItem term={t('protected-renew:review-adult-information.year-of-birth')}>
                   <p>{spouseInfo.yearOfBirth}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-spouse-date-of-birth" routeId="protected/renew/$id/marital-status" params={params}>
+                    <InlineLink id="change-spouse-date-of-birth" routeId="protected/renew/$id/confirm-marital-status" params={params}>
                       {t('protected-renew:review-adult-information.dob-change')}
                     </InlineLink>
                   </div>
