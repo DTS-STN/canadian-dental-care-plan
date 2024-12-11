@@ -373,7 +373,7 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
-  const { maritalStatus, partnerInformation, addressInformation, clientApplication, contactInformation, communicationPreferences, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
+  const { maritalStatus, partnerInformation, mailingAddress, homeAddress, addressInformation, clientApplication, contactInformation, communicationPreferences, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
 
   if (dentalInsurance === undefined) {
     throw redirect(getPathById('protected/renew/$id/dental-insurance', params));
@@ -388,6 +388,8 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
   return {
     maritalStatus,
     partnerInformation,
+    mailingAddress,
+    homeAddress,
     addressInformation,
     clientApplication,
     contactInformation,

@@ -65,21 +65,21 @@ export async function loader({ context: { appContainer, session }, params, reque
   const preferredLanguage = state.communicationPreferences?.preferredLanguage
     ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name
     : appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
-  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince
-    ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province
+    ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province).abbr
     : state.clientApplication.contactInformation.mailingProvince
       ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince).abbr
       : undefined;
-  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince
-    ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province
+    ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr
     : state.clientApplication.contactInformation.homeProvince
       ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince).abbr
       : undefined;
-  const mailingCountryAbbr = state.addressInformation?.mailingCountry
-    ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.mailingCountry, locale).name
+  const mailingCountryAbbr = state.mailingAddress?.country
+    ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale).name
     : appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.mailingCountry, locale).name;
-  const homeCountryAbbr = state.addressInformation?.homeCountry
-    ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.homeCountry, locale).name
+  const homeCountryAbbr = state.homeAddress?.country
+    ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name
     : appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale).name;
 
   const userInfo = {
@@ -104,21 +104,21 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const mailingAddressInfo = {
-    address: state.addressInformation?.mailingAddress ?? state.clientApplication.contactInformation.mailingAddress,
-    city: state.addressInformation?.mailingCity ?? state.clientApplication.contactInformation.mailingCity,
+    address: state.mailingAddress?.address ?? state.clientApplication.contactInformation.mailingAddress,
+    city: state.mailingAddress?.city ?? state.clientApplication.contactInformation.mailingCity,
     province: mailingProvinceTerritoryStateAbbr,
-    postalCode: state.addressInformation?.mailingPostalCode ?? state.clientApplication.contactInformation.mailingPostalCode,
+    postalCode: state.mailingAddress?.postalCode ?? state.clientApplication.contactInformation.mailingPostalCode,
     country: mailingCountryAbbr,
-    apartment: state.addressInformation?.mailingApartment ?? state.clientApplication.contactInformation.mailingApartment,
+    apartment: state.mailingAddress?.apartment ?? state.clientApplication.contactInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.addressInformation?.homeAddress ?? state.clientApplication.contactInformation.homeAddress,
-    city: state.addressInformation?.homeCity ?? state.clientApplication.contactInformation.homeCity,
+    address: state.homeAddress?.address ?? state.clientApplication.contactInformation.homeAddress,
+    city: state.homeAddress?.city ?? state.clientApplication.contactInformation.homeCity,
     province: homeProvinceTerritoryStateAbbr,
-    postalCode: state.addressInformation?.homePostalCode ?? state.clientApplication.contactInformation.homePostalCode,
+    postalCode: state.homeAddress?.postalCode ?? state.clientApplication.contactInformation.homePostalCode,
     country: homeCountryAbbr,
-    apartment: state.addressInformation?.homeApartment ?? state.clientApplication.contactInformation.homeApartment,
+    apartment: state.homeAddress?.apartment ?? state.clientApplication.contactInformation.homeApartment,
   };
 
   const dentalInsurance = state.dentalInsurance;
