@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -13,7 +13,7 @@ import { loadProtectedRenewState, renewStateHasPartner, saveProtectedRenewState 
 import type { PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { Button } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -129,6 +129,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedRenewMaritalStatus() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, maritalStatuses } = useLoaderData<typeof loader>();
+  const params = useParams();
   const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -188,9 +189,9 @@ export default function ProtectedRenewMaritalStatus() {
           <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protectd Renew Application Form:Save - Marital status click">
             {t('protected-renew:marital-status.save-btn')}
           </Button>
-          <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Cancel - Marital status click">
+          <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Cancel - Marital status click">
             {t('protected-renew:marital-status.cancel-btn')}
-          </Button>
+          </ButtonLink>
         </div>
       </fetcher.Form>
     </div>

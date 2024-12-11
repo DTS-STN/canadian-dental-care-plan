@@ -366,7 +366,6 @@ export default function ProtectedRenewReviewAdultInformation() {
               </DescriptionListItem>
             </dl>
           </section>
-          {/*TODO: Communication screen only has the option to change preferred language, update the page to have the option to change preferred communication method*/}
           <section className="space-y-6">
             <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.comm-title')}</h2>
             <dl className="divide-y border-y">
@@ -491,11 +490,6 @@ export default function ProtectedRenewReviewAdultInformation() {
             {t('protected-renew:review-adult-information.back-button')}
           </Button>
         </fetcher.Form>
-        {/* <div className="mt-8">
-          <InlineLink routeId="protected/renew/$id/exit-application" params={params}>
-            {t('protected-renew:review-adult-information.exit-button')}
-          </InlineLink>
-        </div> */}
       </div>
       {payload && (
         <div className="mt-8">

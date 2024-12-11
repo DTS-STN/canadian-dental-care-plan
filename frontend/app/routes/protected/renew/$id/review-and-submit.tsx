@@ -84,13 +84,13 @@ export default function ProtectedRenewReviewSubmit() {
   return (
     <div className="max-w-prose">
       <p className="mb-4">{t('protected-renew:review-submit.form-instructions')}</p>
-      <div className="my-6 space-y-2">
+      <ul className="my-6 list-inside list-disc space-y-2">
         <li>{applicantName}</li>
         {children.map((child) => {
           const childName = `${child.information?.firstName} ${child.information?.lastName}`;
           return <li key={childName}>{childName}</li>;
         })}
-      </div>
+      </ul>
       <h2 className="font-lato text-lg font-bold">{t('protected-renew:review-submit.submit-renewal-title')}</h2>
       <p className="mb-4">{t('protected-renew:review-submit.submit-p-proceed')}</p>
       <p className="mb-4">{t('protected-renew:review-submit.submit-p-false-info')}</p>
@@ -102,7 +102,7 @@ export default function ProtectedRenewReviewSubmit() {
             id="submit-button"
             name="_action"
             value={FormAction.Submit}
-            variant="primary"
+            variant="green"
             loading={isSubmitting}
             endIcon={faChevronRight}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Continue - Review and submit click"
@@ -111,7 +111,7 @@ export default function ProtectedRenewReviewSubmit() {
           </LoadingButton>
           <ButtonLink
             id="back-button"
-            routeId="protected/renew/$id/tax-filing"
+            routeId="protected/renew/$id/review-child-information"
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}

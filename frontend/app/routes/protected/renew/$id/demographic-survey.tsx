@@ -88,7 +88,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, session });
 
   const demographicSurveySchema = z
     .object({
@@ -133,6 +133,10 @@ export async function action({ context: { appContainer, session }, params, reque
       previouslyReviewed: true,
     },
   });
+
+  if (state.editMode) {
+    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  }
 
   return redirect(getPathById('protected/renew/$id/member-selection', params));
 }

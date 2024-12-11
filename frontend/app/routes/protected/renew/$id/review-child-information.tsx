@@ -6,7 +6,7 @@ import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
@@ -16,7 +16,7 @@ import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, loadProtectedRenewStateForReview, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
-import { Button } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -271,16 +271,24 @@ export default function ProtectedRenewReviewChildInformation() {
               id="confirm-button"
               name="_action"
               value={FormAction.Submit}
-              variant="green"
+              variant="primary"
               disabled={isSubmitting}
               loading={isSubmitting && submitAction === FormAction.Submit}
+              endIcon={faChevronRight}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Submit - Review child(ren) information click"
             >
-              {t('protected-renew:review-child-information.submit-button')}
+              {t('protected-renew:review-child-information.continue-button')}
             </LoadingButton>
-            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Review child(ren) information click">
+            <ButtonLink
+              id="back-button"
+              routeId="protected/renew/$id/review-adult-information"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Review child(ren) information click"
+            >
               {t('protected-renew:review-child-information.back-button')}
-            </Button>
+            </ButtonLink>
           </div>
         </fetcher.Form>
       </div>
