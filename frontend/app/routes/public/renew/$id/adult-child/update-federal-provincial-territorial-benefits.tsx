@@ -160,8 +160,8 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       dentalBenefits: {
-        ...(parsedFederalBenefitsResult ? parsedFederalBenefitsResult.data : { hasFederalBenefits: false }), //TODO Replace placeholder data with renewal user data
-        ...(parsedProvincialTerritorialBenefitsResult ? parsedProvincialTerritorialBenefitsResult.data : { hasProvincialTerritorialBenefits: false }), //TODO Replace placeholder data with renewal user data
+        ...(parsedFederalBenefitsResult ? parsedFederalBenefitsResult.data : { hasFederalBenefits: false }),
+        ...(parsedProvincialTerritorialBenefitsResult ? parsedProvincialTerritorialBenefitsResult.data : { hasProvincialTerritorialBenefits: false }),
       },
     },
   });
