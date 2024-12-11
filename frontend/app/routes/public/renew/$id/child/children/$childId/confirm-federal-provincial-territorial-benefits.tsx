@@ -70,8 +70,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const renewState = loadRenewChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  // NOTE: state validation schemas are independent otherwise user have to anwser
-  // both question first before the superRefine can be executed
   const dentalBenefitsChangedSchema = z.object({
     federalProvincialTerritorialBenefitsChanged: z.boolean({ errorMap: () => ({ message: t('renew-child:children.confirm-dental-benefits.error-message.federal-provincial-territorial-benefit-required') }) }),
   });
