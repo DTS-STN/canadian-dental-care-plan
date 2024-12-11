@@ -232,8 +232,8 @@ export const TYPES = assignServiceIdentifiers({
       renew: {
         ita: {
           MailingAddressValidatorFactoryIta: serviceId<MailingAddressValidatorFactoryIta>(),
-        }
-      }
+        },
+      },
     },
     security: {
       SecurityHandler: serviceId<SecurityHandler>(),
