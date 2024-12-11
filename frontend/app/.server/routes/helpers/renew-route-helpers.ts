@@ -34,6 +34,7 @@ export interface RenewState {
       federalBenefitsChanged: boolean;
       provincialTerritorialBenefitsChanged: boolean;
     };
+    readonly federalProvincialTerritorialBenefitsChanged?: boolean;
     readonly dentalInsurance?: boolean;
     readonly information?: {
       firstName: string;

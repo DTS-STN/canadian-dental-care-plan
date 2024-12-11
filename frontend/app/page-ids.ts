@@ -147,6 +147,7 @@ export const pageIds = {
         parentOrGuardian: 'CDCP-RENW-CHLD-0002',
         parentIntro: 'CDCP-RENW-CHLD-0003',
         dentalInsurance: 'CDCP-RENW-CHLD-0004',
+        confirmFederalProvincialTerritorialBenefits: 'CDCP-RENW-CHLD-0005',
       },
     },
     demographicSurvey: {
