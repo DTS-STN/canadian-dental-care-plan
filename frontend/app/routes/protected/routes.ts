@@ -10,6 +10,11 @@ export const routes = [
         paths: { en: '/:lang/data-unavailable', fr: '/:lang/donnees-indisponibles' },
       },
       {
+        id: 'protected/unable-to-process-request',
+        file: 'routes/protected/unable-to-process-request.tsx',
+        paths: { en: '/:lang/protected/unable-to-process-request', fr: '/:lang/protected/impossible-de-traiter-la-demande' },
+      },
+      {
         id: 'protected/home',
         file: 'routes/protected/home.tsx',
         paths: { en: '/:lang/home', fr: '/:lang/accueil' },

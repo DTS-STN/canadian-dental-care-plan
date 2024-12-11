@@ -185,7 +185,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearProtectedRenewState({ params, session });
-    throw redirect(getPathById('public/unable-to-process-request', params));
+    throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
