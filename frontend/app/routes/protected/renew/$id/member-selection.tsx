@@ -13,7 +13,7 @@ import { loadProtectedRenewState } from '~/.server/routes/helpers/protected-rene
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = state.children;
 
-  return { meta, externallyReviewed: state.externallyReviewed, previouslyReviewed: state.previouslyReviewed, clientApplication: state.clientApplication, children, editMode: state.editMode };
+  return { meta, externallyReviewed: state.externallyReviewed, previouslyReviewed: state.previouslyReviewed, clientApplication: state.clientApplication, children };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -61,17 +61,12 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = loadProtectedRenewState({ params, session });
-
-  if (state.editMode) {
-    return redirect(getPathById('protected/renew/$id/member-selection', params)); //TODO: Update to 'review and submit' when page is added
-  }
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }
 
 export default function ProtectedRenewMemberSelection() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { externallyReviewed, previouslyReviewed, clientApplication, children, editMode } = useLoaderData<typeof loader>();
+  const { externallyReviewed, previouslyReviewed, clientApplication, children } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -81,78 +76,58 @@ export default function ProtectedRenewMemberSelection() {
   const hasExternalReviews = externallyReviewed ?? children.filter((child) => child.externallyReviewed === true).length > 0;
 
   return (
-    <>
-      <div className="max-w-prose">
-        {hasExternalReviews && (
-          <>
-            <p className="mb-4">{t('protected-renew:member-selection.reviewed')}</p>
-            <ul className="list-disc space-y-2 pl-10">
-              {externallyReviewed && (
-                <li key={applicantName} className="mb-4">
-                  {applicantName}
-                </li>
-              )}
-              {children
-                .filter((child) => child.externallyReviewed === true)
-                .map((child) => {
-                  const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-                  return (
-                    <li key={childName} className="mb-4">
-                      {childName}
-                    </li>
-                  );
-                })}
-            </ul>
-          </>
-        )}
-        <p className="mb-4">{t('protected-renew:member-selection.form-instructions')}</p>
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="mt-6 space-y-8">
-            <CardLink key={applicantName} title={applicantName} previouslyReviewed={previouslyReviewed} routeId="protected/renew/$id/dental-insurance" params={params} />
-            {children.map((child) => {
-              const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-              return <CardLink key={childName} title={childName} previouslyReviewed={child.previouslyReviewed} routeId="protected/renew/$id/$childId/parent-or-guardian" params={{ ...params, childId: child.id }} />;
-            })}
-          </div>
-          <p className="my-4">{t('protected-renew:member-selection.continue-help')}</p>
-          {editMode ? (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protectd Renew Application Form:Save - Member selection click">
-                {t('protected-renew:member-selection.save-btn')}
-              </Button>
-              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Cancel - Member selection click">
-                {t('protected-renew:member-selection.cancel-btn')}
-              </Button>
-            </div>
-          ) : (
-            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton
-                id="continue-button"
-                name="_action"
-                value={FormAction.Continue}
-                variant="primary"
-                loading={isSubmitting}
-                endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Continue - Member selection click"
-              >
-                {t('protected-renew:member-selection.continue-btn')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="protected/renew/$id/tax-filing"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Back - Member selection click"
-              >
-                {t('protected-renew:member-selection.back-btn')}
-              </ButtonLink>
-            </div>
-          )}
-        </fetcher.Form>
-      </div>
-    </>
+    <div className="max-w-prose">
+      {hasExternalReviews && (
+        <>
+          <p className="mb-4">{t('protected-renew:member-selection.reviewed')}</p>
+          <ul className="list-disc space-y-2 pl-10">
+            {externallyReviewed && (
+              <li key={applicantName} className="mb-4">
+                {applicantName}
+              </li>
+            )}
+            {children
+              .filter((child) => child.externallyReviewed === true)
+              .map((child) => {
+                const childName = `${child.information?.firstName} ${child.information?.lastName}`;
+                return (
+                  <li key={childName} className="mb-4">
+                    {childName}
+                  </li>
+                );
+              })}
+          </ul>
+        </>
+      )}
+      <p className="mb-4">{t('protected-renew:member-selection.form-instructions')}</p>
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <div className="mt-6 space-y-8">
+          <CardLink key={applicantName} title={applicantName} previouslyReviewed={previouslyReviewed} routeId="protected/renew/$id/dental-insurance" params={params} />
+          {children.map((child) => {
+            const childName = `${child.information?.firstName} ${child.information?.lastName}`;
+            return <CardLink key={childName} title={childName} previouslyReviewed={child.previouslyReviewed} routeId="protected/renew/$id/$childId/parent-or-guardian" params={{ ...params, childId: child.id }} />;
+          })}
+        </div>
+        <p className="my-4">{t('protected-renew:member-selection.continue-help')}</p>
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <LoadingButton
+            id="continue-button"
+            name="_action"
+            value={FormAction.Continue}
+            variant="primary"
+            loading={isSubmitting}
+            endIcon={faChevronRight}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Continue - Member selection click"
+          >
+            {t('protected-renew:member-selection.continue-btn')}
+          </LoadingButton>
+          <ButtonLink id="back-button" routeId="protected/renew/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Back - Member selection click">
+            {t('protected-renew:member-selection.back-btn')}
+          </ButtonLink>
+        </div>
+      </fetcher.Form>
+    </div>
   );
 }
 

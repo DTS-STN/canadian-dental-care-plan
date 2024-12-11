@@ -2,8 +2,9 @@ import type { FormEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useParams } from '@remix-run/react';
 
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
@@ -58,7 +59,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewFileYourTaxes() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { SCCH_BASE_URI } = useLoaderData<typeof loader>();
+  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -83,10 +84,10 @@ export default function ProtectedRenewFileYourTaxes() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
+        <ButtonLink id="back-button" routeId="protected/renew/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Applicationt:Back - File taxes click">
           {t('protected-renew:file-your-taxes.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Exit - File your taxes click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Exit - File your taxes click">
           {t('protected-renew:file-your-taxes.return-btn')}
         </LoadingButton>
       </fetcher.Form>
