@@ -70,8 +70,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     defaultState: state.dentalBenefits,
-    federalBenefitsChanged: state.confirmDentalBenefits?.federalBenefitsChanged,
-    provincialTerritorialBenefitsChanged: state.confirmDentalBenefits?.provincialTerritorialBenefitsChanged,
     childName,
     editMode: state.editMode,
     federalSocialPrograms,

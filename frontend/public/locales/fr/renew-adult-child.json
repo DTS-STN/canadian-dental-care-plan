@@ -164,20 +164,9 @@
     "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
     "select-one": "Sélectionnez une option",
     "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
-    "federal-benefits": {
-      "title": "Prestations fédérales",
-      "legend": "Votre accès aux prestations fédérales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
-      "help-message": "Les prestations gouvernementales que nous avons au dossier se trouvent également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
-      "option-yes": "<strong>Oui</strong>, mes prestations fédérales ont changé",
-      "option-no": "<strong>Non</strong>, mes prestations fédérales n'ont pas changé"
-    },
-    "provincial-territorial-benefits": {
-      "title": "Prestations provinciales ou territoriales",
-      "legend": "Votre accès aux prestations provinciales ou territoriales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
-      "help-message": "Les prestations gouvernementales que nous avons au dossier se trouvent également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
-      "option-yes": "<strong>Oui</strong>, mes prestations provinciales ou territoriales ont changé",
-      "option-no": "<strong>Non</strong>, mes prestations provinciales ou territoriales n'ont pas changé"
-    },
+    "has-benefits": "Bénéficiez-vous de prestations pour soins dentaires dans le cadre d'un programme social fédéral, provincial ou territorial autre que le Régime canadien de soins dentaires?",
+    "option-yes": "<strong>Oui</strong>, j'ai des prestations fédérales, provincial ou territorial",
+    "option-no": "<strong>Non</strong>, Non, je n'ai pas des prestations fédérales, provincial ou territorial",
     "button": {
       "back": "Retour",
       "continue": "Continuer",
@@ -388,20 +377,9 @@
       "access-to-dental": "L'accès à des prestations dentaires dans le cadre d'un programme social n'aura aucune incidence sur l'admissibilité de l'enfant au Régime canadien de soins dentaires.",
       "select-one": "Sélectionnez une option",
       "eligibility-criteria": "Si l'enfant répond à tous les critères d'admissibilité, sa couverture doit être coordonnée entre les régimes afin qu'il n'y ait pas de dédoublement ou de lacunes dans la couverture.",
-      "federal-benefits": {
-        "title": "Prestations fédérales",
-        "legend": "L'accès de {{childName}} aux prestations fédérales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
-        "help-message": "Les prestations gouvernementales que nous avons au dossier pour {{childName}} se trouvent sur la lettre de renouvellement que vous avez reçue de Service Canada.",
-        "option-yes": "<strong>Oui</strong>, les prestations fédérales de cet enfant ont changé",
-        "option-no": "<strong>Non</strong>, les prestations fédérales de cet enfant n'ont pas changé"
-      },
-      "provincial-territorial-benefits": {
-        "title": "Prestations provinciales ou territoriales",
-        "legend": "L'accès de {{childName}} aux prestations provinciales ou territoriales a-t-il changé depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
-        "help-message": "Les prestations gouvernementales que nous avons au dossier se trouvent sur la lettre de renouvellement que vous avez reçue de Service Canada.",
-        "option-yes": "<strong>Oui</strong, les prestations provinciales ou territoriales de cet enfant ont changé",
-        "option-no": "<strong>Non</strong, les prestations provinciales ou territoriales de cet enfant n'ont pas changé"
-      },
+      "has-benefits-changed": "Est-ce que {{childName}} bénéficie de prestations pour soins dentaires dans le cadre d'un programme social fédéral, provincial ou territorial autre que le Régime canadien de soins dentaires?",
+      "option-yes": "<strong>Oui</strong>, l'enfant bénéficie de prestations dentaires fédérales, provincial ou territorial",
+      "option-no": "<strong>Non</strong>, l'enfant ne bénéficie pas de prestations dentaires fédérales, provincial ou territorial",
       "button": {
         "back": "Retour",
         "continue": "Continuer",
@@ -409,8 +387,7 @@
         "save-btn": "Sauvegarder"
       },
       "error-message": {
-        "federal-benefit-required": "Sélectionnez si votre enfant bénéficie de prestations dentaires fédérales",
-        "provincial-benefit-required": "Sélectionnez si votre enfant bénéficie d'une assurance dentaire provinciale ou territoriale"
+        "federal-provincial-territorial-benefit-required": "Sélectionnez si votre enfant bénéficie de prestations dentaires fédérales provinciale ou territoriale"
       }
     },
     "update-dental-benefits": {
