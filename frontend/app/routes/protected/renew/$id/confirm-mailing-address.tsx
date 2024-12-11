@@ -51,11 +51,32 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
+  const mailingAddressInfo = state.mailingAddress
+    ? {
+        address: state.mailingAddress.address,
+        city: state.mailingAddress.city,
+        province: state.mailingAddress.province,
+        postalCode: state.mailingAddress.postalCode,
+        country: state.mailingAddress.country,
+        apartment: state.mailingAddress.apartment,
+      }
+    : {
+        address: state.clientApplication.contactInformation.mailingAddress,
+        city: state.clientApplication.contactInformation.mailingCity,
+        province: state.clientApplication.contactInformation.mailingProvince,
+        postalCode: state.clientApplication.contactInformation.mailingPostalCode,
+        country: state.clientApplication.contactInformation.mailingCountry,
+        apartment: state.clientApplication.contactInformation.mailingApartment,
+      };
+
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-address.mailing-address.page-title') }) };
 
   return {
     meta,
-    defaultState: state,
+    defaultState: {
+      ...mailingAddressInfo,
+      isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
+    },
     countryList,
     regionList,
   };
@@ -155,7 +176,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.mailingAddress?.country ?? CANADA_COUNTRY_ID);
+  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.country);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.isHomeAddressSameAsMailingAddress === true);
 
@@ -208,7 +229,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
             helpMessagePrimary={t('protected-renew:update-address.address-field.address-note')}
             helpMessagePrimaryClassName="text-black"
             autoComplete="address-line1"
-            defaultValue={defaultState.mailingAddress?.address}
+            defaultValue={defaultState.address}
             errorMessage={errors?.address}
             required
           />
@@ -220,7 +241,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
               label={t('protected-renew:update-address.address-field.city')}
               maxLength={100}
               autoComplete="address-level2"
-              defaultValue={defaultState.mailingAddress?.city}
+              defaultValue={defaultState.city}
               errorMessage={errors?.city}
               required
             />
@@ -231,7 +252,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
               label={mailingPostalCodeRequired ? t('protected-renew:update-address.address-field.postal-code') : t('protected-renew:update-address.address-field.postal-code-optional')}
               maxLength={100}
               autoComplete="postal-code"
-              defaultValue={defaultState.mailingAddress?.postalCode}
+              defaultValue={defaultState.postalCode}
               errorMessage={errors?.postalCode}
               required={mailingPostalCodeRequired}
             />
@@ -242,7 +263,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
               name="mailingProvince"
               className="w-full sm:w-1/2"
               label={t('protected-renew:update-address.address-field.province')}
-              defaultValue={defaultState.mailingAddress?.province}
+              defaultValue={defaultState.province}
               errorMessage={errors?.province}
               options={[dummyOption, ...mailingRegions]}
               required
@@ -254,7 +275,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
             className="w-full sm:w-1/2"
             label={t('protected-renew:update-address.address-field.country')}
             autoComplete="country"
-            defaultValue={defaultState.mailingAddress?.country}
+            defaultValue={defaultState.country}
             errorMessage={errors?.country}
             options={countries}
             onChange={mailingCountryChangeHandler}
