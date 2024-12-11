@@ -135,29 +135,22 @@ export async function action({ context: { appContainer, session }, params, reque
       };
     }) satisfies z.ZodType<DentalProvincialTerritorialBenefitsState>;
 
-  const dentalFederalBenefits = state.confirmDentalBenefits?.federalBenefitsChanged
-    ? {
-        hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes : undefined,
-        federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
-      }
-    : undefined;
+  const dentalBenefits = {
+    hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes : undefined,
+    federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
+    hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') ? formData.get('hasProvincialTerritorialBenefits') === HasProvincialTerritorialBenefitsOption.Yes : undefined,
+    provincialTerritorialSocialProgram: formData.get('provincialTerritorialSocialProgram') ? String(formData.get('provincialTerritorialSocialProgram')) : undefined,
+    province: formData.get('province') ? String(formData.get('province')) : undefined,
+  };
 
-  const dentalProvincialTerritorialBenefits = state.confirmDentalBenefits?.provincialTerritorialBenefitsChanged
-    ? {
-        hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') ? formData.get('hasProvincialTerritorialBenefits') === HasProvincialTerritorialBenefitsOption.Yes : undefined,
-        provincialTerritorialSocialProgram: formData.get('provincialTerritorialSocialProgram') ? String(formData.get('provincialTerritorialSocialProgram')) : undefined,
-        province: formData.get('province') ? String(formData.get('province')) : undefined,
-      }
-    : undefined;
+  const parsedFederalBenefitsResult = federalBenefitsSchema.safeParse(dentalBenefits);
+  const parsedProvincialTerritorialBenefitsResult = provincialTerritorialBenefitsSchema.safeParse(dentalBenefits);
 
-  const parsedFederalBenefitsResult = dentalFederalBenefits ? federalBenefitsSchema.safeParse(dentalFederalBenefits) : undefined;
-  const parsedProvincialTerritorialBenefitsResult = dentalProvincialTerritorialBenefits ? provincialTerritorialBenefitsSchema.safeParse(dentalProvincialTerritorialBenefits) : undefined;
-
-  if ((parsedFederalBenefitsResult && !parsedFederalBenefitsResult.success) || (parsedProvincialTerritorialBenefitsResult && !parsedProvincialTerritorialBenefitsResult.success)) {
+  if (!parsedFederalBenefitsResult.success || !parsedProvincialTerritorialBenefitsResult.success) {
     return {
       errors: {
-        ...(parsedFederalBenefitsResult && !parsedFederalBenefitsResult.success ? transformFlattenedError(parsedFederalBenefitsResult.error.flatten()) : {}),
-        ...(parsedProvincialTerritorialBenefitsResult && !parsedProvincialTerritorialBenefitsResult.success ? transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten()) : {}),
+        ...(!parsedFederalBenefitsResult.success ? transformFlattenedError(parsedFederalBenefitsResult.error.flatten()) : {}),
+        ...(!parsedProvincialTerritorialBenefitsResult.success ? transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten()) : {}),
       },
     };
   }
@@ -171,8 +164,8 @@ export async function action({ context: { appContainer, session }, params, reque
         return {
           ...child,
           dentalBenefits: {
-            ...(parsedFederalBenefitsResult ? parsedFederalBenefitsResult.data : { hasFederalBenefits: false }),
-            ...(parsedProvincialTerritorialBenefitsResult ? parsedProvincialTerritorialBenefitsResult.data : { hasProvincialTerritorialBenefits: false }),
+            ...parsedFederalBenefitsResult.data,
+            ...parsedProvincialTerritorialBenefitsResult.data,
           },
         };
       }),
