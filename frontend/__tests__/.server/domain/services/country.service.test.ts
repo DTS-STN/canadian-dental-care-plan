@@ -67,6 +67,43 @@ describe('DefaultCountryService', () => {
       expect(mockCountryRepository.listAllCountries).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryEntitiesToCountryDtos).toHaveBeenCalledOnce();
     });
+
+    it('should cache the list of countries', () => {
+      const mockCountryRepository = mock<CountryRepository>();
+      const mockCountryDtoMapper = mock<CountryDtoMapper>();
+      const mockServerConfig: CountryServiceImpl_ServiceConfig = {
+        CANADA_COUNTRY_ID: '1',
+        LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS: 60000,
+        LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS: 60000,
+      };
+
+      const service = new DefaultCountryService(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
+
+      const countryEntities = [
+        {
+          esdc_countryid: '1',
+          esdc_nameenglish: 'Canada English',
+          esdc_namefrench: 'Canada Français',
+          esdc_countrycodealpha3: 'CAN',
+        },
+        {
+          esdc_countryid: '2',
+          esdc_nameenglish: 'United States English',
+          esdc_namefrench: 'États-Unis Français',
+          esdc_countrycodealpha3: 'USA',
+        },
+      ];
+      // First call: cache miss
+      vi.mocked(mockCountryRepository.listAllCountries).mockResolvedValueOnce(countryEntities);
+      service.listCountries();
+
+      // Second call: cache hit
+      vi.mocked(mockCountryRepository.listAllCountries).mockResolvedValueOnce([]);
+      const cachedCountries = service.listCountries();
+
+      expect(mockCountryRepository.listAllCountries).toHaveBeenCalledTimes(1);
+      expect(cachedCountries).toEqual(countryEntities);
+    });
   });
 
   describe('getCountry', () => {
