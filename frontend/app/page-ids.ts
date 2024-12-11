@@ -27,6 +27,7 @@ export const pageIds = {
       confirmation: 'CDCP-PROT-RENW-0020',
     },
     dataUnavailable: 'CDCP-PROT-0099',
+    unableToProcessRequest: 'CDCP-PROT-0999',
   },
   public: {
     apply: {

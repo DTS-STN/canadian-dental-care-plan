@@ -125,7 +125,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearProtectedRenewState({ params, session });
-    // todo: make this route
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
