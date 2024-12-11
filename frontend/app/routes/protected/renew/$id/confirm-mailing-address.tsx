@@ -54,7 +54,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-address.mailing-address.page-title') }) };
 
   return {
-    id: state.id,
     meta,
     defaultState: state,
     countryList,
@@ -108,9 +107,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDataResult = mailingAddressSchema.safeParse({
     address: String(formData.get('mailingAddress')),
     country: String(formData.get('mailingCountry')),
-    province: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : '',
+    province: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
     city: String(formData.get('mailingCity')),
-    postalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : '',
+    postalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
     copyMailingAddress: formData.get('copyMailingAddress') === 'copy',
   });
 
