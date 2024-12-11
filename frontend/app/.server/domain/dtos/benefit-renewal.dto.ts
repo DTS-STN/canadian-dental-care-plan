@@ -25,11 +25,12 @@ export type ItaChangeIndicators = Readonly<{
 
 export type ProtectedBenefitRenewalDto = BenefitRenewalDto;
 
-export type BenefitRenewalDto = Omit<BenefitApplicationDto, 'applicantInformation' | 'children'> &
+export type BenefitRenewalDto = Omit<BenefitApplicationDto, 'applicantInformation' | 'children' | 'partnerInformation'> &
   Readonly<{
-    children: RenewalChildDto[];
     applicantInformation: RenewalApplicantInformationDto;
+    children: RenewalChildDto[];
     demographicSurvey?: DemographicSurveyDto;
+    partnerInformation?: RenewalPartnerInformationDto;
   }>;
 
 export type RenewalApplicantInformationDto = ApplicantInformationDto &
@@ -42,6 +43,12 @@ export type RenewalChildDto = ChildDto &
     clientNumber: string;
     demographicSurvey?: DemographicSurveyDto;
   }>;
+
+export type RenewalPartnerInformationDto = Readonly<{
+  confirm: boolean;
+  yearOfBirth: string;
+  socialInsuranceNumber: string;
+}>;
 
 export type DemographicSurveyDto = Readonly<{
   indigenousStatus?: string;

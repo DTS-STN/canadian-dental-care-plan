@@ -12,10 +12,10 @@ import type {
   DemographicSurveyDto,
   ItaBenefitRenewalDto,
   ItaChangeIndicators,
-  PartnerInformationDto,
   ProtectedBenefitRenewalDto,
   RenewalApplicantInformationDto,
   RenewalChildDto,
+  RenewalPartnerInformationDto,
   TypeOfApplicationDto,
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
@@ -39,7 +39,7 @@ interface ToBenefitRenewalRequestEntityArgs {
   dentalInsurance?: boolean;
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
-  partnerInformation?: PartnerInformationDto;
+  partnerInformation?: RenewalPartnerInformationDto;
   typeOfApplication: TypeOfApplicationDto;
 }
 
@@ -338,7 +338,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     return telephoneNumber;
   }
 
-  private toRelatedPersons(partnerInformation: PartnerInformationDto | undefined, children: ReadonlyArray<RenewalChildDto>) {
+  private toRelatedPersons(partnerInformation: RenewalPartnerInformationDto | undefined, children: ReadonlyArray<RenewalChildDto>) {
     const relatedPersons = [];
 
     if (partnerInformation) {
@@ -351,15 +351,11 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     return relatedPersons;
   }
 
-  private toRelatedPersonSpouse({ confirm, dateOfBirth, firstName, lastName, socialInsuranceNumber }: PartnerInformationDto) {
+  private toRelatedPersonSpouse({ confirm, socialInsuranceNumber, yearOfBirth }: RenewalPartnerInformationDto) {
     return {
-      PersonBirthDate: this.toDate(dateOfBirth),
-      PersonName: [
-        {
-          PersonGivenName: [firstName],
-          PersonSurName: lastName,
-        },
-      ],
+      PersonBirthDate: {
+        date: yearOfBirth, // TODO verify with Interop/PP that the PersonBirthDate field can be populated with just a year
+      },
       PersonRelationshipCode: {
         ReferenceDataName: 'Spouse' as const,
       },

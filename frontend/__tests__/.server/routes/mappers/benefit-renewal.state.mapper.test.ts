@@ -251,6 +251,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         },
         dentalBenefits: ['New federal program', 'Original provincial benefit'],
         dentalInsurance: true,
+        partnerInformation: undefined,
         typeOfApplication: 'adult-child',
         userId: 'anonymous',
       };
