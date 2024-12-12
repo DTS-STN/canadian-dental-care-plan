@@ -10,13 +10,20 @@ export interface ApplicationYearDtoMapper {
 @injectable()
 export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper {
   mapApplicationYearResultEntityToApplicationYearResultDto(applicationYearResultEntity: ApplicationYearResultEntity): ReadonlyArray<ApplicationYearResultDto> {
-    const applicationYearData = applicationYearResultEntity['ApplicationYearCollection'];
+    const applicationYearData = applicationYearResultEntity['BenefitApplicationYear'];
 
-    const simplifiedApplicationYears = applicationYearData.map((entry) => ({
-      taxYear: entry.TaxYear,
-      applicationYearId: entry.ApplicationYearID,
+    const applicationYears = applicationYearData.map((applicationYear) => ({
+      id: applicationYear.BenefitApplicationYearIdentification[0].IdentificationID,
+      applicationYear: applicationYear.BenefitApplicationYearEffectivePeriod.StartDate.YearDate,
+      taxYear: applicationYear.BenefitApplicationYearTaxYear.YearDate,
+      coverageStartDate: applicationYear.BenefitApplicationYearCoveragePeriod.StartDate.date,
+      coverageEndDate: applicationYear.BenefitApplicationYearCoveragePeriod.EndDate.date,
+      intakeStartDate: applicationYear.BenefitApplicationYearIntakePeriod.StartDate.date,
+      intakeEndDate: applicationYear.BenefitApplicationYearIntakePeriod.EndDate?.date,
+      renewalStartDate: applicationYear.BenefitApplicationYearRenewalPeriod.StartDate?.date,
+      renewalEndDate: applicationYear.BenefitApplicationYearRenewalPeriod.EndDate?.date,
     }));
 
-    return simplifiedApplicationYears;
+    return applicationYears;
   }
 }
