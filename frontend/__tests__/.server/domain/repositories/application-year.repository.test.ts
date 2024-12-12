@@ -16,18 +16,48 @@ describe('DefaultApplicationYearRepository', () => {
   describe('getApplicationYearResult', () => {
     it('should return address correction results on successful fetch', async () => {
       const mockResponseData: ApplicationYearResultEntity = {
-        ApplicationYearCollection: [
+        BenefitApplicationYear: [
           {
-            TaxYear: '2023',
-            ApplicationYearID: 'AYR001',
-          },
-          {
-            TaxYear: undefined,
-            ApplicationYearID: 'AYR005',
-          },
-          {
-            TaxYear: '2019',
-            ApplicationYearID: undefined,
+            BenefitApplicationYearIdentification: [
+              {
+                IdentificationID: '37e5aa05-813c-ef11-a317-000d3af4f3ef',
+              },
+            ],
+            BenefitApplicationYearEffectivePeriod: {
+              StartDate: {
+                YearDate: '2025',
+              },
+            },
+            BenefitApplicationYearTaxYear: {
+              YearDate: '2024',
+            },
+            BenefitApplicationYearIntakePeriod: {
+              StartDate: {
+                date: '2025-02-14',
+              },
+              EndDate: {
+                date: '2026-06-30',
+              },
+            },
+            BenefitApplicationYearRenewalPeriod: {
+              StartDate: {
+                date: '2024-12-01',
+              },
+              EndDate: {
+                date: '2025-06-30',
+              },
+            },
+            BenefitApplicationYearNext: {
+              BenefitApplicationYearIdentification: {},
+            },
+            BenefitApplicationYearCoveragePeriod: {
+              StartDate: {
+                date: '2025-04-01',
+              },
+              EndDate: {
+                date: '2026-06-30',
+              },
+            },
           },
         ],
       };

@@ -5,8 +5,46 @@ export type ApplicationYearRequestEntity = Readonly<{
 }>;
 
 export type ApplicationYearResultEntity = ReadonlyDeep<{
-  ApplicationYearCollection: Array<{
-    TaxYear?: string;
-    ApplicationYearID?: string;
-  }>;
+  BenefitApplicationYear: {
+    BenefitApplicationYearIdentification: {
+      IdentificationID: string;
+    }[];
+    BenefitApplicationYearEffectivePeriod: {
+      StartDate: {
+        YearDate: string;
+      };
+    };
+    BenefitApplicationYearTaxYear: {
+      YearDate: string;
+    };
+    BenefitApplicationYearIntakePeriod: {
+      StartDate: {
+        date: string;
+      };
+      EndDate?: {
+        date?: string;
+      };
+    };
+    BenefitApplicationYearRenewalPeriod: {
+      StartDate?: {
+        date?: string;
+      };
+      EndDate?: {
+        date?: string;
+      };
+    };
+    BenefitApplicationYearNext: {
+      BenefitApplicationYearIdentification?: {
+        IdentificationID?: string;
+      };
+    };
+    BenefitApplicationYearCoveragePeriod: {
+      StartDate: {
+        date: string;
+      };
+      EndDate: {
+        date: string;
+      };
+    };
+  }[];
 }>;
