@@ -1,25 +1,32 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { SyntheticEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { data, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
+import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewItaState } from '~/.server/routes/helpers/renew-ita-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import type { InputOptionProps } from '~/components/input-option';
+import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
+import { useEnhancedFetcher } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -27,6 +34,35 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+enum FormAction {
+  Submit = 'submit',
+  UseInvalidAddress = 'use-invalid-address',
+  UseSelectedAddress = 'use-selected-address',
+}
+
+interface CanadianAddress {
+  address: string;
+  city: string;
+  country: string;
+  countryId: string;
+  postalZipCode: string;
+  provinceState: string;
+  provinceStateId: string;
+}
+
+interface AddressSuggestionResponse {
+  enteredAddress: CanadianAddress;
+  status: 'address-suggestion';
+  suggestedAddress: CanadianAddress;
+}
+
+interface AddressInvalidResponse {
+  invalidAddress: CanadianAddress;
+  status: 'address-invalid';
+}
+
+type AddressResponse = AddressSuggestionResponse | AddressInvalidResponse;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
@@ -62,11 +98,15 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   const locale = getLocale(request);
 
+  const clientConfig = appContainer.get(TYPES.configs.ClientConfig);
+  const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
+  const countryService = appContainer.get(TYPES.domain.services.CountryService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+
   securityHandler.validateCsrfToken({ formData, session });
-
   const state = loadRenewItaState({ params, request, session });
-
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('copyMailingAddress') === 'copy';
 
   const mailingAddressValidator = appContainer.get(TYPES.routes.public.renew.ita.MailingAddressValidatorFactoryIta).createMailingAddressValidator(locale);
@@ -90,15 +130,76 @@ export async function action({ context: { appContainer, session }, params, reque
     province: validatedResult.data.provinceStateId,
   };
 
-  const homeAddress = isCopyMailingToHome
-    ? {
-        address: validatedResult.data.address,
-        city: validatedResult.data.city,
-        country: validatedResult.data.countryId,
-        postalCode: validatedResult.data.postalZipCode,
-        province: validatedResult.data.provinceStateId,
-      }
-    : undefined;
+  const homeAddress = isCopyMailingToHome ? { ...mailingAddress } : undefined;
+
+  const isNotCanada = validatedResult.data.countryId !== clientConfig.CANADA_COUNTRY_ID;
+  const isUseInvalidAddressAction = formAction === 'use-invalid-address';
+  const isUseSelectedAddressAction = formAction === 'use-selected-address';
+  const canProceedToDental = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
+
+  if (canProceedToDental) {
+    saveRenewState({
+      params,
+      session,
+      state: {
+        mailingAddress,
+        isHomeAddressSameAsMailingAddress: isCopyMailingToHome,
+        ...(homeAddress && { homeAddress }),
+      },
+    });
+
+    if (state.editMode) {
+      return redirect(getPathById('public/renew/$id/ita/review-information', params));
+    }
+    return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/ita/dental-insurance', params) : getPathById('public/renew/$id/ita/update-home-address', params));
+  }
+
+  // Validate Canadian adddress
+  invariant(validatedResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
+  invariant(validatedResult.data.provinceStateId, 'Province state is required for Canadian addresses');
+
+  // Build the address object using validated data, transforming unique identifiers
+  const formattedMailingAddress: CanadianAddress = {
+    address: validatedResult.data.address,
+    city: validatedResult.data.city,
+    countryId: validatedResult.data.countryId,
+    country: countryService.getLocalizedCountryById(validatedResult.data.countryId, locale).name,
+    postalZipCode: validatedResult.data.postalZipCode,
+    provinceStateId: validatedResult.data.provinceStateId,
+    provinceState: validatedResult.data.provinceStateId && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedResult.data.provinceStateId, locale).abbr,
+  };
+
+  const addressCorrectionResult = await addressValidationService.getAddressCorrectionResult({
+    address: formattedMailingAddress.address,
+    city: formattedMailingAddress.city,
+    postalCode: formattedMailingAddress.postalZipCode,
+    provinceCode: formattedMailingAddress.provinceState,
+    userId: 'anonymous',
+  });
+
+  if (addressCorrectionResult.status === 'not-correct') {
+    return {
+      invalidAddress: formattedMailingAddress,
+      status: 'address-invalid',
+    } as const satisfies AddressInvalidResponse;
+  }
+
+  if (addressCorrectionResult.status === 'corrected') {
+    const provinceTerritoryState = provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
+    return {
+      enteredAddress: formattedMailingAddress,
+      status: 'address-suggestion',
+      suggestedAddress: {
+        address: addressCorrectionResult.address,
+        city: addressCorrectionResult.city,
+        country: formattedMailingAddress.country,
+        countryId: formattedMailingAddress.countryId,
+        postalZipCode: addressCorrectionResult.postalCode,
+        provinceState: provinceTerritoryState.abbr,
+        provinceStateId: provinceTerritoryState.id,
+      },
+    } as const satisfies AddressSuggestionResponse;
+  }
 
   saveRenewState({
     params,
@@ -106,7 +207,7 @@ export async function action({ context: { appContainer, session }, params, reque
     state: {
       mailingAddress,
       isHomeAddressSameAsMailingAddress: isCopyMailingToHome,
-      ...(homeAddress && { homeAddress }), // Only include if homeAddress is defined
+      ...(homeAddress && { homeAddress }),
     },
   });
 
@@ -114,6 +215,10 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/ita/review-information', params));
   }
   return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/ita/dental-insurance', params) : getPathById('public/renew/$id/ita/update-home-address', params));
+}
+
+function isAddressResponse(data: unknown): data is AddressResponse {
+  return typeof data === 'object' && data !== null && 'status' in data && typeof data.status === 'string';
 }
 
 export default function RenewItaUpdateAddress() {
@@ -126,8 +231,9 @@ export default function RenewItaUpdateAddress() {
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.mailingAddress?.country ?? CANADA_COUNTRY_ID);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.isHomeAddressSameAsMailingAddress === true);
+  const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
 
-  const errors = fetcher.data?.errors;
+  const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'mailing-address',
     provinceStateId: 'mailing-province',
@@ -144,6 +250,16 @@ export default function RenewItaUpdateAddress() {
     setMailingCountryRegions(filteredProvinceTerritoryStates);
   }, [selectedMailingCountry, regionList]);
 
+  useEffect(() => {
+    setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
+  }, [fetcher, fetcher.data]);
+
+  function onDialogOpenChangeHandler(open: boolean) {
+    if (!open) {
+      setAddressDialogContent(null);
+    }
+  }
+
   const mailingCountryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
     setSelectedMailingCountry(event.currentTarget.value);
   };
@@ -152,14 +268,11 @@ export default function RenewItaUpdateAddress() {
     return countryList.map(({ id, name }) => ({ children: name, value: id }));
   }, [countryList]);
 
-  // populate mailing region/province/state list with selected country or current address country
-  const mailingRegions: InputOptionProps[] = mailingCountryRegions.map(({ id, name }) => ({ children: name, value: id }));
+  const mailingRegions = useMemo<InputOptionProps[]>(() => mailingCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [mailingCountryRegions]);
 
   const dummyOption: InputOptionProps = { children: t('renew-ita:update-address.address-field.select-one'), value: '' };
 
-  const postalCodeRequiredContries = [CANADA_COUNTRY_ID, USA_COUNTRY_ID];
-  const mailingPostalCodeRequired = postalCodeRequiredContries.includes(selectedMailingCountry);
-
+  const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedMailingCountry);
   return (
     <>
       <div className="my-6 sm:my-8">
@@ -202,12 +315,12 @@ export default function RenewItaUpdateAddress() {
                   id="mailing-postal-code"
                   name="mailingPostalCode"
                   className="w-full"
-                  label={mailingPostalCodeRequired ? t('renew-ita:update-address.address-field.postal-code') : t('renew-ita:update-address.address-field.postal-code-optional')}
+                  label={isPostalCodeRequired ? t('renew-ita:update-address.address-field.postal-code') : t('renew-ita:update-address.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
                   defaultValue={defaultState.mailingAddress?.postalCode}
                   errorMessage={errors?.postalZipCode}
-                  required={mailingPostalCodeRequired}
+                  required={isPostalCodeRequired}
                 />
               </div>
               {mailingRegions.length > 0 && (
@@ -250,9 +363,27 @@ export default function RenewItaUpdateAddress() {
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Update address click">
-                {t('renew-ita:update-address.continue')}
-              </LoadingButton>
+              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+                <DialogTrigger asChild>
+                  <LoadingButton
+                    variant="primary"
+                    id="continue-button"
+                    type="submit"
+                    name="_action"
+                    value={FormAction.Submit}
+                    loading={isSubmitting}
+                    endIcon={faChevronRight}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Update address click"
+                  >
+                    {t('renew-ita:update-address.continue')}
+                  </LoadingButton>
+                </DialogTrigger>
+                {addressDialogContent && addressDialogContent.status === 'address-suggestion' && (
+                  <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} copyAddressToHome={copyAddressChecked} />
+                )}
+                {addressDialogContent && addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} copyAddressToHome={copyAddressChecked} />}
+              </Dialog>
+
               <ButtonLink
                 id="back-button"
                 routeId="public/renew/$id/ita/confirm-address"
@@ -268,5 +399,152 @@ export default function RenewItaUpdateAddress() {
         </fetcher.Form>
       </div>
     </>
+  );
+}
+
+interface AddressSuggestionDialogContentProps {
+  enteredAddress: CanadianAddress;
+  suggestedAddress: CanadianAddress;
+  copyAddressToHome: boolean;
+}
+
+function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copyAddressToHome }: AddressSuggestionDialogContentProps) {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const fetcher = useEnhancedFetcher();
+  const enteredAddressOptionValue = 'entered-address';
+  const suggestedAddressOptionValue = 'suggested-address';
+  type AddressSelectionOption = typeof enteredAddressOptionValue | typeof suggestedAddressOptionValue;
+  const [selectedAddressSuggestionOption, setSelectedAddressSuggestionOption] = useState<AddressSelectionOption>(enteredAddressOptionValue);
+
+  function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    // Get the clicked button's value and append it to the FormData object
+    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
+    invariant(submitter, 'Expected submitter to be defined');
+    formData.set(submitter.name, submitter.value);
+
+    // Append selected address suggestion to form data
+    const selectedAddressSuggestion = selectedAddressSuggestionOption === enteredAddressOptionValue ? enteredAddress : suggestedAddress;
+    formData.set('mailingAddress', selectedAddressSuggestion.address);
+    formData.set('mailingCity', selectedAddressSuggestion.city);
+    formData.set('mailingCountry', selectedAddressSuggestion.countryId);
+    formData.set('mailingPostalCode', selectedAddressSuggestion.postalZipCode);
+    formData.set('mailingProvince', selectedAddressSuggestion.provinceStateId);
+    if (copyAddressToHome) {
+      formData.set('copyMailingAddress', 'copy');
+    }
+
+    fetcher.submit(formData, { method: 'POST' });
+  }
+
+  return (
+    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
+      <DialogHeader>
+        <DialogTitle>{t('renew-ita:update-address.dialog.address-suggestion.header')}</DialogTitle>
+        <DialogDescription>{t('renew-ita:update-address.dialog.address-suggestion.description')}</DialogDescription>
+      </DialogHeader>
+      <InputRadios
+        id="addressSelection"
+        name="addressSelection"
+        legend={t('renew-ita:update-address.dialog.address-suggestion.address-selection-legend')}
+        options={[
+          {
+            value: enteredAddressOptionValue,
+            children: (
+              <>
+                <p className="mb-2 font-semibold">{t('renew-ita:update-address.dialog.address-suggestion.entered-address-option')}</p>
+                <Address address={enteredAddress} />
+              </>
+            ),
+          },
+          {
+            value: suggestedAddressOptionValue,
+            children: (
+              <>
+                <p className="mb-2 font-semibold">{t('renew-ita:update-address.dialog.address-suggestion.suggested-address-option')}</p>
+                <Address address={suggestedAddress} />
+              </>
+            ),
+          },
+        ].map((option) => ({
+          ...option,
+          onChange: (e) => {
+            setSelectedAddressSuggestionOption(e.target.value as AddressSelectionOption);
+          },
+          checked: option.value === selectedAddressSuggestionOption,
+        }))}
+      />
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button id="dialog.corrected-address-close-button" disabled={fetcher.isSubmitting} variant="default" size="sm">
+            {t('renew-ita:update-address.dialog.address-suggestion.cancel-button')}
+          </Button>
+        </DialogClose>
+        <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
+          <LoadingButton name="_action" value={FormAction.UseSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+            {t('renew-ita:update-address.dialog.address-suggestion.use-selected-address-button')}
+          </LoadingButton>
+        </fetcher.Form>
+      </DialogFooter>
+    </DialogContent>
+  );
+}
+
+interface AddressInvalidDialogContentProps {
+  invalidAddress: CanadianAddress;
+  copyAddressToHome: boolean;
+}
+
+function AddressInvalidDialogContent({ invalidAddress, copyAddressToHome }: AddressInvalidDialogContentProps) {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const fetcher = useEnhancedFetcher();
+
+  function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    // Get the clicked button's value and append it to the FormData object
+    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
+    invariant(submitter, 'Expected submitter to be defined');
+    formData.set(submitter.name, submitter.value);
+
+    // Append selected address suggestion to form data
+    formData.set('mailingAddress', invalidAddress.address);
+    formData.set('mailingCity', invalidAddress.city);
+    formData.set('mailingCountry', invalidAddress.countryId);
+    formData.set('mailingPostalCode', invalidAddress.postalZipCode);
+    formData.set('mailingProvince', invalidAddress.provinceStateId);
+    if (copyAddressToHome) {
+      formData.set('copyMailingAddress', 'copy');
+    }
+
+    fetcher.submit(formData, { method: 'POST' });
+  }
+
+  return (
+    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
+      <DialogHeader>
+        <DialogTitle>{t('renew-ita:update-address.dialog.address-invalid.header')}</DialogTitle>
+        <DialogDescription>{t('renew-ita:update-address.dialog.address-invalid.description')}</DialogDescription>
+      </DialogHeader>
+      <div className="space-y-2">
+        <p className="font-semibold">{t('renew-ita:update-address.dialog.address-invalid.entered-address')}</p>
+        <Address address={invalidAddress} />
+      </div>
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button id="dialog.address-invalid-close-button" variant="default" size="sm">
+            {t('renew-ita:update-address.dialog.address-invalid.close-button')}
+          </Button>
+        </DialogClose>
+        <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
+          <LoadingButton name="_action" value={FormAction.UseInvalidAddress} type="submit" id="dialog.address-invalid-use-entered-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+            {t('renew-ita:update-address.dialog.address-invalid.use-entered-address-button')}
+          </LoadingButton>
+        </fetcher.Form>
+      </DialogFooter>
+    </DialogContent>
   );
 }
