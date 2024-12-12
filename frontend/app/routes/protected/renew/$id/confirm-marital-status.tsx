@@ -56,10 +56,19 @@ export async function loader({ context: { appContainer, session }, params, reque
   const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:marital-status.page-title') }) };
 
+  const hasPartner = renewStateHasPartner(state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus);
+  const partnerInformation = hasPartner
+    ? (state.clientApplication.partnerInformation ?? state.partnerInformation) && {
+        yearOfBirth: state.partnerInformation?.yearOfBirth ?? state.clientApplication.partnerInformation?.dateOfBirth,
+        socialInsuranceNumber: state.partnerInformation?.socialInsuranceNumber ?? state.clientApplication.partnerInformation?.socialInsuranceNumber,
+        confirm: state.partnerInformation?.confirm ?? state.clientApplication.partnerInformation?.confirm,
+      }
+    : undefined;
+
   return {
     defaultState: {
-      maritalStatus: state.maritalStatus,
-      ...state.partnerInformation,
+      maritalStatus: state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus,
+      partnerInformation,
     },
     maritalStatuses,
     meta,
@@ -174,12 +183,21 @@ export default function ProtectedRenewMaritalStatus() {
                 inputMode="numeric"
                 helpMessagePrimary={t('protected-renew:marital-status.help-message.sin')}
                 helpMessagePrimaryClassName="text-black"
-                defaultValue={defaultState.socialInsuranceNumber ?? ''}
+                defaultValue={defaultState.partnerInformation?.socialInsuranceNumber ?? ''}
                 errorMessage={errors?.socialInsuranceNumber}
                 required
               />
-              <InputPatternField id="year-of-birth" name="yearOfBirth" inputMode="numeric" format="####" defaultValue={defaultState.yearOfBirth ?? ''} label={t('protected-renew:marital-status.year-of-birth')} errorMessage={errors?.yearOfBirth} required />
-              <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={errors?.confirm} defaultChecked={defaultState.confirm === true} required>
+              <InputPatternField
+                id="year-of-birth"
+                name="yearOfBirth"
+                inputMode="numeric"
+                format="####"
+                defaultValue={defaultState.partnerInformation?.yearOfBirth ?? ''}
+                label={t('protected-renew:marital-status.year-of-birth')}
+                errorMessage={errors?.yearOfBirth}
+                required
+              />
+              <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={errors?.confirm} defaultChecked={defaultState.partnerInformation?.confirm === true} required>
                 {t('protected-renew:marital-status.confirm-checkbox')}
               </InputCheckbox>
             </>

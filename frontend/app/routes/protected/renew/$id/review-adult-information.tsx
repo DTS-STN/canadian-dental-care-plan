@@ -13,7 +13,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { clearProtectedRenewState, getProtectedChildrenState, loadProtectedRenewStateForReview, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { clearProtectedRenewState, getProtectedChildrenState, loadProtectedRenewStateForReview, renewStateHasPartner, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
@@ -97,11 +97,14 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationPreferenceEmail: state.clientApplication.communicationPreferences.email,
   };
 
-  const spouseInfo = (state.clientApplication.partnerInformation ?? state.partnerInformation) && {
-    yearOfBirth: state.partnerInformation?.yearOfBirth ?? state.clientApplication.partnerInformation?.dateOfBirth,
-    sin: state.partnerInformation?.socialInsuranceNumber ?? state.clientApplication.partnerInformation?.socialInsuranceNumber,
-    consent: state.partnerInformation?.confirm ?? state.clientApplication.partnerInformation?.confirm,
-  };
+  const hasPartner = renewStateHasPartner(state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus);
+  const spouseInfo = hasPartner
+    ? (state.clientApplication.partnerInformation ?? state.partnerInformation) && {
+        yearOfBirth: state.partnerInformation?.yearOfBirth ?? state.clientApplication.partnerInformation?.dateOfBirth,
+        sin: state.partnerInformation?.socialInsuranceNumber ?? state.clientApplication.partnerInformation?.socialInsuranceNumber,
+        consent: state.partnerInformation?.confirm ?? state.clientApplication.partnerInformation?.confirm,
+      }
+    : undefined;
 
   const mailingAddressInfo = {
     address: state.mailingAddress?.address ?? state.clientApplication.contactInformation.mailingAddress,
