@@ -627,6 +627,11 @@ export const routes = [
             file: 'routes/public/renew/$id/child/children/$childId/update-federal-provincial-territorial-benefits.tsx',
             paths: { en: '/:lang/renew/:id/child/children/:childId/update-federal-provincial-territorial-benefits', fr: '/:lang/renew/:id/enfant/enfants/:childId/mise-a-jour-prestations-dentaires-federales-provinciales-territoriales' },
           },
+          {
+            id: 'public/renew/$id/child/confirm-phone',
+            file: 'routes/public/renew/$id/child/confirm-phone.tsx',
+            paths: { en: '/:lang/renew/:id/child/confirm-phone', fr: '/:lang/renew/:id/enfant/confirmer-telephone' },
+          },
         ],
       },
       {

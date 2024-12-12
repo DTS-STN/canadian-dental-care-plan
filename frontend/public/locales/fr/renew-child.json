@@ -191,5 +191,27 @@
     "description": "Dans cette section, vous allez examiner et mettre à jour vos informations pour compléter la demande de renouvellement pour votre (vos) enfant(s).",
     "back-btn": "Retour",
     "continue-btn": "Continuer"
+  },
+  "confirm-phone": {
+    "page-title": "Numéro de téléphone",
+    "add-phone": "L'ajout d'un numéro de téléphone à jour au dossier aidera le gouvernement du Canada à communiquer avec vous en cas de problème lié à votre demande de renouvellement. Sinon, nous communiquerons avec vous par la poste.",
+    "add-or-update": {
+      "legend": "Souhaitez-vous mettre à jour ou ajouter votre numéro de téléphone?",
+      "help-message": "Le numéro de téléphone que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada."
+    },
+    "phone-number": "Numéro de téléphone",
+    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Sauvegarder",
+    "option-yes": "Oui",
+    "option-no": "Non",
+    "error-message": {
+      "add-or-update-required": "Indiquez si vous souhaitez ajouter ou mettre à jour votre numéro de téléphone",
+      "phone-number-valid": "Numéro de téléphone invalide",
+      "phone-number-alt-valid": "Numéro de téléphone invalide",
+      "phone-required": "Entrer un numéro de téléphone"
+    }
   }
 }
