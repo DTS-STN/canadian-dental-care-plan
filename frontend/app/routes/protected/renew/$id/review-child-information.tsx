@@ -13,7 +13,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { clearProtectedRenewState, loadProtectedRenewStateForReview, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { clearProtectedRenewState, loadProtectedRenewStateForReview, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -54,6 +54,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewStateForReview({ params, request, session });
+  const validatedChildren = validateProtectedChildrenStateForReview(state.children);
+
+  if (validatedChildren.length === 0) {
+    return redirect(getPathById('protected/renew/$id/review-and-submit', params));
+  }
 
   // renew state is valid then edit mode can be set to true
   saveProtectedRenewState({ params, session, state: { editMode: true } });
@@ -75,7 +80,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       .get(TYPES.domain.mappers.BenefitRenewalDtoMapper)
       .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub));
 
-  const children = state.children.map((child) => {
+  const children = validatedChildren.map((child) => {
     const immutableChild = state.clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information?.socialInsuranceNumber);
 
     const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
