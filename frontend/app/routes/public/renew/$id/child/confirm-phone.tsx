@@ -65,7 +65,6 @@ export async function loader({ context: { appContainer, session }, params, reque
       phoneNumberAlt: state.contactInformation?.phoneNumberAlt,
     },
     hasMaritalStatusChanged: state.hasMaritalStatusChanged,
-    maritalStatus: state.maritalStatus,
     editMode: state.editMode,
   };
 }
@@ -240,7 +239,7 @@ export default function RenewChildConfirmPhone() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/child/children/index" //TODO: marital-status screen is still work in progress, change the link to when marital-status is done
+                routeId="public/renew/$id/child/children/index" //TODO: marital-status screen is still work in progress, change the link when marital-status is done
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
