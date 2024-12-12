@@ -150,6 +150,7 @@ export const pageIds = {
         confirmFederalProvincialTerritorialBenefits: 'CDCP-RENW-CHLD-0005',
         updateFederalProvincialTerritorialBenefits: 'CDCP-RENW-CHLD-0006',
         confirmPhone: 'CDCP-RENW-CHLD-0007',
+        confirmEmail: 'CDCP-RENW-CHLD-0008',
       },
     },
     demographicSurvey: {
