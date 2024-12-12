@@ -166,7 +166,6 @@ export default function RenewChildConfirmPhone() {
               id="is-new-or-updated-phone-number"
               name="isNewOrUpdatedPhoneNumber"
               legend={t('renew-child:confirm-phone.add-or-update.legend')}
-              helpMessagePrimary={t('renew-child:confirm-phone.add-or-update.help-message')}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-child:confirm-phone.option-yes" />,
