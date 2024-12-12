@@ -13,6 +13,13 @@ export type ApplicationYearRequestDto = Readonly<{
  * Represents a Data Transfer Object (DTO) for an application year result.
  */
 export type ApplicationYearResultDto = Readonly<{
-  taxYear?: string;
-  applicationYearId?: string;
+  id: string;
+  applicationYear: string;
+  taxYear: string;
+  intakeStartDate: string;
+  intakeEndDate?: string;
+  renewalStartDate?: string;
+  renewalEndDate?: string;
+  coverageStartDate: string;
+  coverageEndDate: string;
 }>;
