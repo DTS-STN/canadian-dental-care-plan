@@ -1,15 +1,15 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { getProtectedChildrenState, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { loadProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
-import { ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-submit.page-title') }) };
 
-  const children = getProtectedChildrenState(state);
+  const children = validateProtectedChildrenStateForReview(state.children);
 
   return {
     meta,
@@ -59,7 +59,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
 
   const state = loadProtectedRenewState({ params, session });
-  const children = getProtectedChildrenState(state);
+  const children = validateProtectedChildrenStateForReview(state.children);
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
@@ -75,7 +75,6 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedRenewReviewSubmit() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { clientApplication, children } = useLoaderData<typeof loader>();
-  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -109,16 +108,9 @@ export default function ProtectedRenewReviewSubmit() {
           >
             {t('protected-renew:review-submit.submit-button')}
           </LoadingButton>
-          <ButtonLink
-            id="back-button"
-            routeId="protected/renew/$id/review-child-information"
-            params={params}
-            disabled={isSubmitting}
-            startIcon={faChevronLeft}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Back - Review and submit click"
-          >
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Back - Review and submit click">
             {t('protected-renew:review-submit.back-button')}
-          </ButtonLink>
+          </Button>
         </div>
       </fetcher.Form>
     </div>
