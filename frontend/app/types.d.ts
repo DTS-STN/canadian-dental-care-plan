@@ -5,9 +5,6 @@ import type { ClientEnv } from '~/.server/utils/env.utils';
 import type { i18nResources } from '~/.server/utils/locale.utils';
 import type { APP_LOCALES } from '~/utils/locale-utils';
 
-type enResources = (typeof i18nResources)['en'];
-type frResources = (typeof i18nResources)['fr'];
-
 /**
  * Application-scoped global types.
  */
@@ -49,25 +46,7 @@ declare module 'i18next' {
    */
   interface CustomTypeOptions {
     defaultNS: false;
-    resources: {
-      'address-validation': enResources['addressValidation'];
-      'apply-adult-child': enResources['applyAdultChild'];
-      'apply-adult': enResources['applyAdult'];
-      'apply-child': enResources['applyChild'];
-      apply: enResources['apply'];
-      'data-unavailable': enResources['dataUnavailable'];
-      gcweb: enResources['gcweb'];
-      index: enResources['index'];
-      letters: enResources['letters'];
-      status: enResources['status'];
-      renew: enResources['renew'];
-      'renew-ita': enResources['renewIta'];
-      'renew-child': enResources['renewChild'];
-      'renew-adult-child': enResources['renewAdultChild'];
-      'stub-login': enResources['stubLogin'];
-      'unable-to-process-request': enResources['unableToProcessRequest'];
-      'protected-renew': enResources['protectedRenew'];
-    };
+    resources: (typeof i18nResources)['en'];
   }
 }
 
