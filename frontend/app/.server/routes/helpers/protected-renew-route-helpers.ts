@@ -38,7 +38,7 @@ export interface ProtectedRenewState {
   readonly isSurveyCompleted?: boolean;
   readonly demographicSurvey?: {
     readonly indigenousStatus?: string;
-    readonly firstNations?: string[];
+    readonly firstNations?: string;
     readonly disabilityStatus?: string;
     readonly ethnicGroups?: string[];
     readonly anotherEthnicGroup?: string;
@@ -68,7 +68,7 @@ export interface ProtectedRenewState {
     readonly previouslyReviewed?: boolean;
     readonly demographicSurvey?: {
       readonly indigenousStatus?: string;
-      readonly firstNations?: string[];
+      readonly firstNations?: string;
       readonly disabilityStatus?: string;
       readonly ethnicGroups?: string[];
       readonly anotherEthnicGroup?: string;

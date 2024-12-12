@@ -52,7 +52,7 @@ export type RenewalPartnerInformationDto = Readonly<{
 
 export type DemographicSurveyDto = Readonly<{
   indigenousStatus?: string;
-  firstNations?: string[];
+  firstNations?: string;
   disabilityStatus?: string;
   ethnicGroups?: string[];
   anotherEthnicGroup?: string;
