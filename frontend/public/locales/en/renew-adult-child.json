@@ -164,20 +164,9 @@
     "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
     "select-one": "Select one",
     "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
-    "federal-benefits": {
-      "title": "Federal benefits",
-      "legend": "Has your access to federal benefits changed since you applied for the Canadian Dental Care Plan?",
-      "help-message": "The government benefits we have on file can also be found on the renewal letter you received from Service Canada.",
-      "option-yes": "<strong>Yes</strong>, my <strong>federal</strong> benefits have changed.",
-      "option-no": "<strong>No</strong>, my <strong>federal</strong> benefits have not changed."
-    },
-    "provincial-territorial-benefits": {
-      "title": "Provincial or territorial benefits",
-      "legend": "Has your access to provincial or territorial benefits changed since you applied for the Canadian Dental Care Plan?",
-      "help-message": "The government benefits we have on file can also be found on the renewal letter you received from Service Canada.",
-      "option-yes": "<strong>Yes</strong>, my <strong>provincial or territorial</strong> benefits have changed.",
-      "option-no": "<strong>No</strong>, my <strong>provincial or territorial</strong> benefits have not changed."
-    },
+    "has-benefits": "Do you have other dental benefits through a federal, provincial or territorial social program aside from the Canadian Dental Care Plan?",
+    "option-yes": "<strong>Yes</strong>, I have federal, provincial or territorial dental benefits.",
+    "option-no": "<strong>No</strong>, I do not have federal, provincial or territorial dental benefits.",
     "button": {
       "back": "Back",
       "continue": "Continue",
@@ -185,8 +174,7 @@
       "save-btn": "Save"
     },
     "error-message": {
-      "federal-benefit-required": "Select whether you have federal dental benefits",
-      "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits"
+      "federal-provincial-territorial-benefit-required": "Select whether you have federal provincial or territorial dental benefits"
     }
   },
   "update-dental-benefits": {
@@ -387,20 +375,9 @@
       "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social programs will not impact the child's eligibility for the Canadian Dental Care Plan.",
       "select-one": "Select one",
       "eligibility-criteria": "If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
-      "federal-benefits": {
-        "title": "Federal benefits",
-        "legend": "Has {{childName}}'s access to federal benefits changed since you applied for the Canadian Dental Care Plan?",
-        "help-message": "The government benefits we have on file for {{childName}} can be found on the renewal letter you received from Service Canada.",
-        "option-yes": "<strong>Yes</strong>, this child's federal benefits have changed.",
-        "option-no": "<strong>No</strong>, this child's federal benefits have not changed."
-      },
-      "provincial-territorial-benefits": {
-        "title": "Provincial or territorial benefits",
-        "legend": "Has {{childName}}'s access to provincial or territorial benefits changed since you applied for the Canadian Dental Care Plan?",
-        "help-message": "The government benefits we have on file for {{childName}} can be found on the renewal letter you received from Service Canada.",
-        "option-yes": "<strong>Yes</strong>, this child's provincial or territorial benefits have changed.",
-        "option-no": "<strong>No</strong>, this child's provincial or territorial benefits have not changed."
-      },
+      "has-benefits-changed": "Does {{childName}} have dental benefits through a federal, provincial or territorial social program aside from the Canadian Dental Care Plan?",
+      "option-yes": "<strong>Yes</strong>, this child has federal, provincial or territorial dental benefits.",
+      "option-no": "<strong>No</strong>, this child does not have federal, provincial or territorial dental benefits.",
       "button": {
         "back": "Back",
         "continue": "Continue",
@@ -408,8 +385,7 @@
         "save-btn": "Save"
       },
       "error-message": {
-        "federal-benefit-required": "Select whether you have federal dental benefits",
-        "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits"
+        "federal-provincial-territorial-benefit-required": "Select whether you have federal provincial or territorial dental benefits"
       }
     },
     "update-dental-benefits": {

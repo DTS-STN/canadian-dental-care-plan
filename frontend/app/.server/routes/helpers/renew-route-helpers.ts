@@ -102,6 +102,7 @@ export interface RenewState {
     province?: string;
   };
   readonly dentalInsurance?: boolean;
+  readonly federalProvincialTerritorialBenefitsChanged?: boolean;
   readonly dentalBenefits?: {
     hasFederalBenefits: boolean;
     federalSocialProgram?: string;
