@@ -1,25 +1,12 @@
 import type { Session } from '@remix-run/node';
 
-import type addressValidation from '../public/locales/en/address-validation.json';
-import type applyAdultChild from '../public/locales/en/apply-adult-child.json';
-import type applyAdult from '../public/locales/en/apply-adult.json';
-import type applyChild from '../public/locales/en/apply-child.json';
-import type apply from '../public/locales/en/apply.json';
-import type dataUnavailable from '../public/locales/en/data-unavailable.json';
-import type gcweb from '../public/locales/en/gcweb.json';
-import type index from '../public/locales/en/index.json';
-import type letters from '../public/locales/en/letters.json';
-import type protectedRenew from '../public/locales/en/protected-renew.json';
-import type renewAdultChild from '../public/locales/en/renew-adult-child.json';
-import type renewChild from '../public/locales/en/renew-child.json';
-import type renewIta from '../public/locales/en/renew-ita.json';
-import type renew from '../public/locales/en/renew.json';
-import type status from '../public/locales/en/status.json';
-import type stubLogin from '../public/locales/en/stub-login.json';
-import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
 import type { AppContainerProvider } from '~/.server/app-container.provider';
 import type { ClientEnv } from '~/.server/utils/env.utils';
+import type { i18nResources } from '~/.server/utils/locale.utils';
 import type { APP_LOCALES } from '~/utils/locale-utils';
+
+type enResources = (typeof i18nResources)['en'];
+type frResources = (typeof i18nResources)['fr'];
 
 /**
  * Application-scoped global types.
@@ -63,23 +50,23 @@ declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: false;
     resources: {
-      'address-validation': typeof addressValidation;
-      'apply-adult-child': typeof applyAdultChild;
-      'apply-adult': typeof applyAdult;
-      'apply-child': typeof applyChild;
-      apply: typeof apply;
-      'data-unavailable': typeof dataUnavailable;
-      gcweb: typeof gcweb;
-      index: typeof index;
-      letters: typeof letters;
-      status: typeof status;
-      renew: typeof renew;
-      'renew-ita': typeof renewIta;
-      'renew-child': typeof renewChild;
-      'renew-adult-child': typeof renewAdultChild;
-      'stub-login': typeof stubLogin;
-      'unable-to-process-request': typeof unableToProcessRequest;
-      'protected-renew': typeof protectedRenew;
+      'address-validation': enResources['addressValidation'] & frResources['addressValidation'];
+      'apply-adult-child': enResources['applyAdultChild'] & frResources['applyAdultChild'];
+      'apply-adult': enResources['applyAdult'] & frResources['applyAdult'];
+      'apply-child': enResources['applyChild'] & frResources['applyChild'];
+      apply: enResources['apply'] & frResources['apply'];
+      'data-unavailable': enResources['dataUnavailable'] & frResources['dataUnavailable'];
+      gcweb: enResources['gcweb'] & frResources['gcweb'];
+      index: enResources['index'] & frResources['index'];
+      letters: enResources['letters'] & frResources['letters'];
+      status: enResources['status'] & frResources['status'];
+      renew: enResources['renew'] & frResources['renew'];
+      'renew-ita': enResources['renewIta'] & frResources['renewIta'];
+      'renew-child': enResources['renewChild'] & frResources['renewChild'];
+      'renew-adult-child': enResources['renewAdultChild'] & frResources['renewAdultChild'];
+      'stub-login': enResources['stubLogin'] & frResources['stubLogin'];
+      'unable-to-process-request': enResources['unableToProcessRequest'] & frResources['unableToProcessRequest'];
+      'protected-renew': enResources['protectedRenew'] & frResources['protectedRenew'];
     };
   }
 }
