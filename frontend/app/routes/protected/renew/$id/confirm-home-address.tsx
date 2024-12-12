@@ -50,12 +50,29 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
+  const homeAddressInfo = state.homeAddress
+    ? {
+        address: state.homeAddress.address,
+        city: state.homeAddress.city,
+        province: state.homeAddress.province,
+        postalCode: state.homeAddress.postalCode,
+        country: state.homeAddress.country,
+        apartment: state.homeAddress.apartment,
+      }
+    : {
+        address: state.clientApplication.contactInformation.homeAddress,
+        city: state.clientApplication.contactInformation.homeCity,
+        province: state.clientApplication.contactInformation.homeProvince,
+        postalCode: state.clientApplication.contactInformation.homePostalCode,
+        country: state.clientApplication.contactInformation.homeCountry,
+        apartment: state.clientApplication.contactInformation.homeApartment,
+      };
+
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-address.home-address.page-title') }) };
 
   return {
-    id: state.id,
     meta,
-    defaultState: state,
+    defaultState: { ...homeAddressInfo },
     countryList,
     regionList,
   };
@@ -139,7 +156,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.homeAddress?.country ?? CANADA_COUNTRY_ID);
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.country);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
 
   const errors = fetcher.data?.errors;
@@ -188,7 +205,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
             helpMessagePrimaryClassName="text-black"
             maxLength={30}
             autoComplete="address-line1"
-            defaultValue={defaultState.homeAddress?.address}
+            defaultValue={defaultState.address}
             errorMessage={errors?.address}
             required
           />
@@ -200,7 +217,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
               label={t('protected-renew:update-address.address-field.city')}
               maxLength={100}
               autoComplete="address-level2"
-              defaultValue={defaultState.homeAddress?.city}
+              defaultValue={defaultState.city}
               errorMessage={errors?.city}
               required
             />
@@ -211,7 +228,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
               label={homePostalCodeRequired ? t('protected-renew:update-address.address-field.postal-code') : t('protected-renew:update-address.address-field.postal-code-optional')}
               maxLength={100}
               autoComplete="postal-code"
-              defaultValue={defaultState.homeAddress?.postalCode ?? ''}
+              defaultValue={defaultState.postalCode ?? ''}
               errorMessage={errors?.postalCode}
               required={homePostalCodeRequired}
             />
@@ -222,7 +239,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
               name="homeProvince"
               className="w-full sm:w-1/2"
               label={t('protected-renew:update-address.address-field.province')}
-              defaultValue={defaultState.homeAddress?.province}
+              defaultValue={defaultState.province}
               errorMessage={errors?.province}
               options={[dummyOption, ...homeRegions]}
               required
@@ -234,7 +251,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
             className="w-full sm:w-1/2"
             label={t('protected-renew:update-address.address-field.country')}
             autoComplete="country"
-            defaultValue={defaultState.homeAddress?.country ?? ''}
+            defaultValue={defaultState.country}
             errorMessage={errors?.country}
             options={countries}
             onChange={homeCountryChangeHandler}
