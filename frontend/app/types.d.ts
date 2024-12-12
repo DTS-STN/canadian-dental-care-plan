@@ -50,23 +50,23 @@ declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: false;
     resources: {
-      'address-validation': enResources['addressValidation'] & frResources['addressValidation'];
-      'apply-adult-child': enResources['applyAdultChild'] & frResources['applyAdultChild'];
-      'apply-adult': enResources['applyAdult'] & frResources['applyAdult'];
-      'apply-child': enResources['applyChild'] & frResources['applyChild'];
-      apply: enResources['apply'] & frResources['apply'];
-      'data-unavailable': enResources['dataUnavailable'] & frResources['dataUnavailable'];
-      gcweb: enResources['gcweb'] & frResources['gcweb'];
-      index: enResources['index'] & frResources['index'];
-      letters: enResources['letters'] & frResources['letters'];
-      status: enResources['status'] & frResources['status'];
-      renew: enResources['renew'] & frResources['renew'];
-      'renew-ita': enResources['renewIta'] & frResources['renewIta'];
-      'renew-child': enResources['renewChild'] & frResources['renewChild'];
-      'renew-adult-child': enResources['renewAdultChild'] & frResources['renewAdultChild'];
-      'stub-login': enResources['stubLogin'] & frResources['stubLogin'];
-      'unable-to-process-request': enResources['unableToProcessRequest'] & frResources['unableToProcessRequest'];
-      'protected-renew': enResources['protectedRenew'] & frResources['protectedRenew'];
+      'address-validation': enResources['addressValidation'];
+      'apply-adult-child': enResources['applyAdultChild'];
+      'apply-adult': enResources['applyAdult'];
+      'apply-child': enResources['applyChild'];
+      apply: enResources['apply'];
+      'data-unavailable': enResources['dataUnavailable'];
+      gcweb: enResources['gcweb'];
+      index: enResources['index'];
+      letters: enResources['letters'];
+      status: enResources['status'];
+      renew: enResources['renew'];
+      'renew-ita': enResources['renewIta'];
+      'renew-child': enResources['renewChild'];
+      'renew-adult-child': enResources['renewAdultChild'];
+      'stub-login': enResources['stubLogin'];
+      'unable-to-process-request': enResources['unableToProcessRequest'];
+      'protected-renew': enResources['protectedRenew'];
     };
   }
 }
