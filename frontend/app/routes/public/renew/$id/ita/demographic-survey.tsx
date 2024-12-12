@@ -88,7 +88,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const demographicSurveySchema = z
     .object({
       indigenousStatus: z.string().trim().optional(),
-      firstNations: z.array(z.string().trim()),
+      firstNations: z.string().trim(),
       disabilityStatus: z.string().trim().optional(),
       ethnicGroups: z.array(z.string().trim()),
       anotherEthnicGroup: z.string().trim().optional(),
@@ -96,7 +96,7 @@ export async function action({ context: { appContainer, session }, params, reque
       genderStatus: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.indigenousStatus === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && !val.firstNations.length) {
+      if (val.indigenousStatus === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && !val.firstNations) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:demographic-survey.error-message.first-nations-required'), path: ['firstNations'] });
       }
 
@@ -107,7 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedDataResult = demographicSurveySchema.safeParse({
     indigenousStatus: String(formData.get('indigenousStatus') ?? ''),
-    firstNations: formData.getAll('firstNations'),
+    firstNations: String(formData.get('firstNations') ?? ''),
     disabilityStatus: String(formData.get('disabilityStatus') ?? ''),
     ethnicGroups: formData.getAll('ethnicGroups'),
     anotherEthnicGroup: String(formData.get('anotherEthnicGroup') ?? ''),
@@ -171,7 +171,7 @@ export default function RenewItaDemographicSurveyQuestions() {
     value: status.id,
     onChange: handleOnIsIndigenousStatusChanged,
     append: status.id === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && isIndigenousStatusValue && (
-      <InputCheckboxes id="first-nations" name="firstNations" legend={t('renew-ita:demographic-survey.indigenous-status')} options={firstNationsOptions} errorMessage={errors?.firstNations} required />
+      <InputRadios id="first-nations" name="firstNations" legend={t('renew-ita:demographic-survey.indigenous-status')} options={firstNationsOptions} errorMessage={errors?.firstNations} required />
     ),
   }));
 

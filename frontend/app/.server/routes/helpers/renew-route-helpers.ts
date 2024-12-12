@@ -45,7 +45,7 @@ export interface RenewState {
     };
     readonly demographicSurvey?: {
       readonly indigenousStatus?: string;
-      readonly firstNations?: string[];
+      readonly firstNations?: string;
       readonly disabilityStatus?: string;
       readonly ethnicGroups?: string[];
       readonly anotherEthnicGroup?: string;
@@ -130,7 +130,7 @@ export interface RenewState {
   };
   readonly demographicSurvey?: {
     readonly indigenousStatus?: string;
-    readonly firstNations?: string[];
+    readonly firstNations?: string;
     readonly disabilityStatus?: string;
     readonly ethnicGroups?: string[];
     readonly anotherEthnicGroup?: string;

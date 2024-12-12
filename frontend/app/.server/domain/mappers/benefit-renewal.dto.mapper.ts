@@ -201,7 +201,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     if (firstNations) {
       benefitApplicationDetail.push({
         BenefitApplicationDetailID: 'AreYouFirstNations',
-        BenefitApplicationDetailValues: firstNations,
+        BenefitApplicationDetailValues: [firstNations],
         BenefitApplicationDetailValue: indigenousStatus, // TODO verify with Interop if we should pass this as well as BenefitApplicationDetailValues
       });
     }
