@@ -13,7 +13,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { clearProtectedRenewState, getProtectedChildrenState, loadProtectedRenewStateForReview, renewStateHasPartner, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { clearProtectedRenewState, loadProtectedRenewStateForReview, renewStateHasPartner, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
@@ -202,14 +202,14 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedRenewStateForReview({ params, request, session });
 
-  if (getProtectedChildrenState(state).length === 0) {
+  if (validateProtectedChildrenStateForReview(state.children).length === 0) {
     const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub);
     await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
 
     const submissionInfo = { submittedOn: new UTCDate().toISOString() };
     saveProtectedRenewState({ params, session, state: { submissionInfo } });
 
-    return redirect(getPathById('protected/renew/$id/confirmation', params));
+    return redirect(getPathById('protected/renew/$id/review-and-submit', params));
   }
 
   return redirect(getPathById('protected/renew/$id/review-child-information', params));

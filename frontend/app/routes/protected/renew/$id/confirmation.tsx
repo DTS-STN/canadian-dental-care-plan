@@ -6,8 +6,7 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
-import { clearProtectedRenewState, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import { getChildrenState } from '~/.server/routes/helpers/renew-route-helpers';
+import { clearProtectedRenewState, loadProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -64,8 +63,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
 
-  const children = getChildrenState(state).map((child) => {
-    if (child.dentalInsurance === undefined || child.information === undefined) {
+  const children = validateProtectedChildrenStateForReview(state.children).map((child) => {
+    if (child.demographicSurvey === undefined || child.isParentOrLegalGuardian === undefined || child.dentalInsurance === undefined || child.information === undefined) {
       throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
     }
 

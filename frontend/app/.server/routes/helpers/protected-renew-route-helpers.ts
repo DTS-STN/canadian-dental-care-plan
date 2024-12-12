@@ -354,7 +354,7 @@ interface LoadProtectedRenewStateForReviewArgs {
  * @param args - The arguments.
  * @returns The validated adult state.
  */
-export function loadProtectedRenewStateForReview({ params, request, session }: LoadProtectedRenewStateForReviewArgs) {
+export function loadProtectedRenewStateForReview({ params, session }: LoadProtectedRenewStateForReviewArgs) {
   const state = loadProtectedRenewState({ params, session });
 
   try {
@@ -383,7 +383,7 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
     throw redirect(getPathById('protected/renew/$id/demographic-survey', params));
   }
 
-  const children = getProtectedChildrenState(state).length > 0 ? validateProtectedChildrenStateForReview({ childrenState: state.children, params }) : [];
+  const children = validateProtectedChildrenStateForReview(state.children);
 
   return {
     maritalStatus,
@@ -403,37 +403,17 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
   };
 }
 
-interface ValidateProtectedChildrenStateForReviewArgs {
-  childrenState: ProtectedChildState[];
-  params: Params;
-}
-
-function validateProtectedChildrenStateForReview({ childrenState, params }: ValidateProtectedChildrenStateForReviewArgs) {
-  const children = getProtectedChildrenState({ children: childrenState });
-
-  if (children.length === 0) {
-    throw redirect(getPathById('protected/renew/$id/member-selection', params));
-  }
-
-  return children.map(({ id, dentalInsurance, demographicSurvey, information, dentalBenefits }) => {
-    const childId = id;
-
-    if (dentalInsurance === undefined) {
-      throw redirect(getPathById('protected/renew/$id/$childId/dental-insurance', { ...params, childId }));
-    }
-
-    if (demographicSurvey === undefined) {
-      throw redirect(getPathById('protected/renew/$id/$childId/demographic-survey', { ...params, childId }));
-    }
-
-    // TODO: complete state validations when all screens are created
-
-    return {
-      id,
-      information,
-      dentalBenefits,
-      dentalInsurance,
-      demographicSurvey,
-    };
-  });
+export function validateProtectedChildrenStateForReview(childrenState: ProtectedChildState[]) {
+  return childrenState
+    .filter((child) => child.demographicSurvey !== undefined && child.dentalInsurance !== undefined && child.isParentOrLegalGuardian !== undefined)
+    .map(({ id, dentalInsurance, demographicSurvey, information, dentalBenefits, isParentOrLegalGuardian }) => {
+      return {
+        id,
+        isParentOrLegalGuardian,
+        information,
+        dentalBenefits,
+        dentalInsurance,
+        demographicSurvey,
+      };
+    });
 }
