@@ -5,21 +5,6 @@
   "required-label": "Remplir tous les champs.",
   "optional-label": "Remplir tous les champs sauf s'ils sont indiqués facultatifs.",
   "all-optional-label": "Toutes les champs sont faculatives.",
-  "index": {
-    "page-title": "Renouvelez votre adhésion au Régime canadien de soins dentaires",
-    "eligibility": "Pour renouveler votre adhésion au Régime canadien de soins dentaires, vous devez fournir les renseignements suivants pour chaque demandeur\u00a0:",
-    "full-name": "Nom complet",
-    "client-number": "Numéro de client",
-    "dob": "Date de naissance",
-    "sin": "Numéro d'assurance sociale (NAS) de l'époux ou du conjoint de fait (le cas échéant)",
-    "address": "Adresse personnelle et adresse postale",
-    "dental-coverage": "Liste des assurances pour soins dentaires dont vous bénéficiez actuellement dans le cadre de programmes sociaux gouvernementaux (le cas échéant)",
-    "renew-now": "Renouvelez maintenant",
-    "to-apply": "Pour renouveler votre adhésion au Régime canadien de soins dentaires, cliquez sur le bouton ci-dessous.",
-    "start-button": "Renouvelez maintenant",
-    "back-button": "Retour",
-    "apply-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
-  },
   "terms-and-conditions": {
     "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires",
     "page-heading": "Conditions générales d'utilisation et énoncé de confidentialité",
