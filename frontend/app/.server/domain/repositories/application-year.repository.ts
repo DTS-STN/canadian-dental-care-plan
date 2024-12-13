@@ -2,18 +2,18 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { ApplicationYearRequestEntity, ApplicationYearResultEntity } from '~/.server/domain/entities';
+import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
 
 export interface ApplicationYearRepository {
   /**
-   * Returns possible application years given the current date in 'applicationYearRequestEntity'.
+   * Returns all application year entities given a date
    *
    * @param applicationYearRequestEntity The request entity object containing the current date.
-   * @returns A promise that resolves to a `ApplicationYearResultEntity` object containing the possible application years.
+   * @returns A promise that resolves to a `ApplicationYearResultEntity` object containing all application years.
    */
-  listApplicationYears(applicationYearRequestEntity: ApplicationYearRequestEntity): Promise<ApplicationYearResultEntity>;
+  listApplicationYears(date: string): Promise<ApplicationYearResultEntity>;
 }
 
 @injectable()
@@ -28,11 +28,11 @@ export class DefaultApplicationYearRepository implements ApplicationYearReposito
     this.log = logFactory.createLogger('DefaultApplicationYearRepository');
   }
 
-  async listApplicationYears(applicationYearRequestEntity: ApplicationYearRequestEntity): Promise<ApplicationYearResultEntity> {
-    this.log.trace('Getting possible application year dates given applicationYearRequest: [%j]', applicationYearRequestEntity);
+  async listApplicationYears(date: string): Promise<ApplicationYearResultEntity> {
+    this.log.trace('Fetching all application year entities for date: [%s]', date);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/retrieve-benefit-application-config-dates`);
-    url.searchParams.set('date', applicationYearRequestEntity.currentDate);
+    url.searchParams.set('date', date);
 
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.retrieve-benefit-application-config-dates.gets', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
@@ -70,8 +70,8 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
     this.log = logFactory.createLogger('MockApplicationYearRepository');
   }
 
-  listApplicationYears(applicationYearRequestEntity: ApplicationYearRequestEntity): Promise<ApplicationYearResultEntity> {
-    this.log.debug('Fetching all application years for request [%j]', applicationYearRequestEntity);
+  listApplicationYears(date: string): Promise<ApplicationYearResultEntity> {
+    this.log.debug('Fetching all application year entities for date: [%s]', date);
 
     const applicationYearResponseEntity: ApplicationYearResultEntity = {
       BenefitApplicationYear: [

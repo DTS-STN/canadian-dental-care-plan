@@ -73,7 +73,7 @@ describe('DefaultApplicationYearRepository', () => {
 
       const repository = new DefaultApplicationYearRepository(mockLogFactory, mockServerConfig, mockHttpClient);
 
-      const result = await repository.listApplicationYears({ currentDate: '2024-11-13' });
+      const result = await repository.listApplicationYears('2024-11-13');
       expect(result).toEqual(mockResponseData);
     });
 
@@ -88,7 +88,7 @@ describe('DefaultApplicationYearRepository', () => {
       mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(null, { status: 500 }));
 
       const repository = new DefaultApplicationYearRepository(mockLogFactory, mockServerConfig, mockHttpClient);
-      await expect(() => repository.listApplicationYears({ currentDate: '2024-11-13' })).rejects.toThrowError();
+      await expect(() => repository.listApplicationYears('2024-11-13')).rejects.toThrowError();
     });
   });
 });
