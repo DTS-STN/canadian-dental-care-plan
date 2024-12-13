@@ -8,7 +8,7 @@ import type { LogFactory, Logger } from '~/.server/factories';
 import type { FetchFn, HttpClient } from '~/.server/http';
 import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
 import type { ClientMetadata, IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
-import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/.server/utils/raoidc.utils';
+import * as raoidcUtils from '~/.server/utils/raoidc.utils';
 import { expandTemplate } from '~/utils/string-utils';
 
 export interface RaoidcService {
@@ -105,23 +105,35 @@ export class DefaultRaoidcService implements RaoidcService {
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS' | 'AUTH_JWT_PRIVATE_KEY' | 'AUTH_LOGOUT_REDIRECT_URL' | 'HTTP_PROXY_URL'>,
     @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger('DefaultRaoidcService');
+    this.log = logFactory.createLogger(this.constructor.name);
     this.fetchFn = httpClient.getFetchFn({ proxyUrl: serverConfig.HTTP_PROXY_URL });
+    this.init();
+  }
 
+  private init() {
     // Configure caching for raoidc operations
-    this.fetchServerMetadata.options.maxAge = 1000 * serverConfig.AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS;
+    const raoidcMetadataCacheTTL = 1000 * this.serverConfig.AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS;
+
+    this.fetchServerMetadata = moize(this.fetchServerMetadata, {
+      maxAge: raoidcMetadataCacheTTL,
+      onCacheAdd: () => {
+        this.log.info('Creating new fetchServerMetadata memo');
+      },
+    });
+
+    this.log.debug('%s initiated.', this.constructor.name);
   }
 
   async generateSigninRequest(redirectUri: string): Promise<SigninRequest> {
     this.log.debug('Generating OIDC signin request');
     const { AUTH_RAOIDC_BASE_URL } = this.serverConfig;
 
-    const { codeChallenge, codeVerifier } = generateCodeChallenge();
+    const { codeChallenge, codeVerifier } = raoidcUtils.generateCodeChallenge();
     const clientId = this.serverConfig.AUTH_RAOIDC_CLIENT_ID;
     const scope = 'openid profile';
-    const state = generateRandomState();
+    const state = raoidcUtils.generateRandomState();
     const { serverMetadata } = await this.fetchServerMetadata(AUTH_RAOIDC_BASE_URL, this.fetchFn);
-    const authUrl = generateAuthorizationRequest(serverMetadata.authorization_endpoint, clientId, codeChallenge, redirectUri, scope, state);
+    const authUrl = raoidcUtils.generateAuthorizationRequest(serverMetadata.authorization_endpoint, clientId, codeChallenge, redirectUri, scope, state);
 
     return { authUrl, codeVerifier, state };
   }
@@ -164,15 +176,11 @@ export class DefaultRaoidcService implements RaoidcService {
     };
 
     const { jwkSet, serverMetadata } = await this.fetchServerMetadata(AUTH_RAOIDC_BASE_URL, this.fetchFn);
-    const { accessToken, idToken } = await fetchAccessToken(serverMetadata, jwkSet, authCode, client, codeVerifier, redirectUri, this.fetchFn);
-    const userInfoToken = await fetchUserInfo(serverMetadata.userinfo_endpoint, jwkSet, accessToken, client, this.fetchFn);
+    const { accessToken, idToken } = await raoidcUtils.fetchAccessToken(serverMetadata, jwkSet, authCode, client, codeVerifier, redirectUri, this.fetchFn);
+    const userInfoToken = await raoidcUtils.fetchUserInfo(serverMetadata.userinfo_endpoint, jwkSet, accessToken, client, this.fetchFn);
 
     return { accessToken, idToken, userInfoToken };
   }
 
-  protected fetchServerMetadata = moize(fetchServerMetadata, {
-    onCacheAdd: () => {
-      this.log.info('Creating new fetchServerMetadata memo');
-    },
-  });
+  protected fetchServerMetadata = raoidcUtils.fetchServerMetadata;
 }

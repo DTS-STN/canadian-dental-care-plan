@@ -1,4 +1,5 @@
 import type { JWTPayload } from 'jose';
+import type { Moized } from 'moize';
 import { subtle } from 'node:crypto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
@@ -67,7 +68,7 @@ describe('DefaultRaoidcService', () => {
       const serviceTest = new DefaultRaoidcServiceTest(mockLogFactory, mockServerConfig, mockHttpClient);
 
       // Act and Assert
-      expect(serviceTest.fetchServerMetadataTest.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect((serviceTest.fetchServerMetadataTest as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
     });
   });
 

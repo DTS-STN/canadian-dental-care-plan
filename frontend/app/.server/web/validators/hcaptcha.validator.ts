@@ -53,7 +53,7 @@ export class DefaultHCaptchaValidator implements HCaptchaValidator {
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_MAX_SCORE'>,
     @inject(TYPES.web.services.HCaptchaService) private readonly hCaptchaService: HCaptchaService,
   ) {
-    this.log = logFactory.createLogger('DefaultHCaptchaValidator');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   async validateHCaptchaResponse({ hCaptchaResponse, ipAddress, userId = 'anonymous' }: ValidateHCaptchaResponseParams): Promise<ValidateHCaptchaResponseResult> {

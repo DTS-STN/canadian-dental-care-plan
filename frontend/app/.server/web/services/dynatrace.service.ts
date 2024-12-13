@@ -30,7 +30,7 @@ export class DefaultDynatraceService implements DynatraceService {
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultDynatraceService');
+    this.log = logFactory.createLogger(this.constructor.name);
 
     this.findDynatraceRumScript.options.maxAge = 1000 * this.serverConfig.DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS;
   }

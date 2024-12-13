@@ -38,7 +38,7 @@ export class DefaultLetterRepository implements LetterRepository {
     private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_BASE_URI' | 'INTEROP_CCT_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_COMMUNITY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger('DefaultLetterRepository');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   async findLettersByClientId(clientId: string): Promise<ReadonlyArray<LetterEntity>> {
@@ -111,7 +111,7 @@ export class MockLetterRepository implements LetterRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('MockLetterRepository');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   findLettersByClientId(clientId: string): Promise<ReadonlyArray<LetterEntity>> {

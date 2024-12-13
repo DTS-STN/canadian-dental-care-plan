@@ -21,7 +21,7 @@ export class RedisHealthCheck implements HealthCheck {
     private readonly serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL' | 'REDIS_USERNAME' | 'REDIS_STANDALONE_HOST' | 'REDIS_STANDALONE_PORT' | 'REDIS_SENTINEL_NAME' | 'REDIS_SENTINEL_HOST' | 'REDIS_SENTINEL_PORT' | 'REDIS_COMMAND_TIMEOUT_SECONDS'>,
     @inject(TYPES.data.services.RedisService) private readonly redisService: RedisService,
   ) {
-    this.log = logFactory.createLogger('RedisHealthCheck');
+    this.log = logFactory.createLogger(this.constructor.name);
 
     this.name = 'redis';
     this.check = this.redisCheckFn();

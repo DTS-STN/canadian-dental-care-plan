@@ -24,7 +24,7 @@ export class DefaultDynatraceRepository implements DynatraceRepository {
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'DYNATRACE_API_RUM_SCRIPT_TOKEN' | 'DYNATRACE_API_RUM_SCRIPT_URI'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger('DefaultDynatraceRepository');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   async findDynatraceRumScript(): Promise<string | null> {

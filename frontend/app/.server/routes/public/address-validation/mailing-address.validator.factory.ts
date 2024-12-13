@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
 import { TYPES } from '~/.server/constants';
+import type { LogFactory, Logger } from '~/.server/factories';
 import { DefaultMailingAddressValidator } from '~/.server/routes/public/address-validation/mailing-address.validator';
 import type { MailingAddressValidator } from '~/.server/routes/public/address-validation/mailing-address.validator';
 import type { AddressValidatorFactory } from '~/.server/routes/validators/';
@@ -20,15 +21,32 @@ export interface MailingAddressValidatorFactory {
 
 @injectable()
 export class DefaultMailingAddressValidatorFactory implements MailingAddressValidatorFactory {
-  constructor(@inject(TYPES.routes.validators.AddressValidatorFactory) private readonly addressValidatorFactory: AddressValidatorFactory) {}
+  private readonly log: Logger;
+
+  constructor(
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.routes.validators.AddressValidatorFactory) private readonly addressValidatorFactory: AddressValidatorFactory,
+  ) {
+    this.log = logFactory.createLogger(this.constructor.name);
+    this.init();
+  }
+
+  private init() {
+    this.createMailingAddressValidator = moize(this.createMailingAddressValidator, {
+      maxSize: Infinity,
+      onCacheAdd: (cache) => {
+        this.log.info('Creating new createMailingAddressValidator memo; cache.key: %s', [...cache.keys].shift());
+      },
+    });
+
+    this.log.debug('%s initiated.', this.constructor.name);
+  }
 
   /**
    * Memoizes the creation of mailing address validators to reduce the number of times i18next files are read.
    * Each locale will have its own memoized validator.
    */
-  createMailingAddressValidator = moize(this._createMailingAddressValidator, { maxSize: Infinity });
-
-  private _createMailingAddressValidator(locale: AppLocale): MailingAddressValidator {
+  createMailingAddressValidator(locale: AppLocale): MailingAddressValidator {
     return new DefaultMailingAddressValidator(locale, this.addressValidatorFactory);
   }
 }
