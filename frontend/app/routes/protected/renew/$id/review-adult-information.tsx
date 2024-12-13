@@ -49,7 +49,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  const state = loadProtectedRenewStateForReview({ params, request, session });
+  const state = loadProtectedRenewStateForReview({ params, session });
 
   // renew state is valid then edit mode can be set to true
   saveProtectedRenewState({ params, session, state: { editMode: true } });
@@ -200,7 +200,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const state = loadProtectedRenewStateForReview({ params, request, session });
+  const state = loadProtectedRenewStateForReview({ params, session });
 
   if (validateProtectedChildrenStateForReview(state.children).length === 0) {
     const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub);

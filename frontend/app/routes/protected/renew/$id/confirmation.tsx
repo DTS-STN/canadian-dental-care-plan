@@ -6,7 +6,7 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
-import { clearProtectedRenewState, loadProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { clearProtectedRenewState, isPrimaryApplicantStateComplete, loadProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -52,16 +52,17 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const userInfo = {
-    firstName: state.clientApplication.applicantInformation.firstName,
-    lastName: state.clientApplication.applicantInformation.lastName,
-  };
-
-  const dentalInsurance = {
-    acessToDentalInsurance: state.dentalInsurance,
-    selectedFederalBenefit: selectedFederalBenefit?.name,
-    selectedProvincialBenefits: selectedProvincialBenefits?.name,
-  };
+  const primaryApplicantInfo = isPrimaryApplicantStateComplete(state)
+    ? {
+        firstName: state.clientApplication.applicantInformation.firstName,
+        lastName: state.clientApplication.applicantInformation.lastName,
+        dentalInsurance: {
+          accessToDentalInsurance: state.dentalInsurance,
+          selectedFederalBenefit: selectedFederalBenefit?.name,
+          selectedProvincialBenefits: selectedProvincialBenefits?.name,
+        },
+      }
+    : undefined;
 
   const children = validateProtectedChildrenStateForReview(state.children).map((child) => {
     if (child.demographicSurvey === undefined || child.isParentOrLegalGuardian === undefined || child.dentalInsurance === undefined || child.information === undefined) {
@@ -98,8 +99,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm.page-title') }) };
 
   return {
-    userInfo,
-    dentalInsurance,
+    primaryApplicantInfo,
     children,
     meta,
   };
@@ -124,7 +124,7 @@ export default function ProtectedRenewConfirm() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const { children, userInfo, dentalInsurance } = useLoaderData<typeof loader>();
+  const { primaryApplicantInfo, children } = useLoaderData<typeof loader>();
 
   const cdcpLink = <InlineLink to={t('protected-renew:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
@@ -139,35 +139,38 @@ export default function ProtectedRenewConfirm() {
       </section>
 
       <section className="space-y-8">
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.applicant-summary')}</h2>
-        <section className="space-y-6">
-          <span className="font-lato text-3xl font-bold">{t('confirm.applicant-title')}</span>
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.member-info')}</h3>
-          <dl className="divide-y border-y">
-            <DescriptionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DescriptionListItem>
-          </dl>
-        </section>
-
-        <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
-          <dl className="divide-y border-y">
-            <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
-            <DescriptionListItem term={t('confirm.dental-public')}>
-              {dentalInsurance.selectedFederalBenefit || dentalInsurance.selectedProvincialBenefits ? (
-                <>
-                  <p>{t('protected-renew:confirm.yes')}</p>
-                  <p>{t('protected-renew:confirm.dental-benefit-has-access')}</p>
-                  <ul className="ml-6 list-disc">
-                    {dentalInsurance.selectedFederalBenefit && <li>{dentalInsurance.selectedFederalBenefit}</li>}
-                    {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
-                  </ul>
-                </>
-              ) : (
-                <p>{t('confirm.no')}</p>
-              )}
-            </DescriptionListItem>
-          </dl>
-        </section>
+        {primaryApplicantInfo && (
+          <>
+            <h2 className="font-lato text-3xl font-bold">{t('confirm.applicant-summary')}</h2>
+            <section className="space-y-6">
+              <span className="font-lato text-3xl font-bold">{t('confirm.applicant-title')}</span>
+              <h3 className="font-lato text-2xl font-bold">{t('confirm.member-info')}</h3>
+              <dl className="divide-y border-y">
+                <DescriptionListItem term={t('confirm.full-name')}>{`${primaryApplicantInfo.firstName} ${primaryApplicantInfo.lastName}`}</DescriptionListItem>
+              </dl>
+            </section>
+            <section className="space-y-6">
+              <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
+              <dl className="divide-y border-y">
+                <DescriptionListItem term={t('confirm.dental-private')}> {primaryApplicantInfo.dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dental-public')}>
+                  {primaryApplicantInfo.dentalInsurance.selectedFederalBenefit || primaryApplicantInfo.dentalInsurance.selectedProvincialBenefits ? (
+                    <>
+                      <p>{t('protected-renew:confirm.yes')}</p>
+                      <p>{t('protected-renew:confirm.dental-benefit-has-access')}</p>
+                      <ul className="ml-6 list-disc">
+                        {primaryApplicantInfo.dentalInsurance.selectedFederalBenefit && <li>{primaryApplicantInfo.dentalInsurance.selectedFederalBenefit}</li>}
+                        {primaryApplicantInfo.dentalInsurance.selectedProvincialBenefits && <li>{primaryApplicantInfo.dentalInsurance.selectedProvincialBenefits}</li>}
+                      </ul>
+                    </>
+                  ) : (
+                    <p>{t('confirm.no')}</p>
+                  )}
+                </DescriptionListItem>
+              </dl>
+            </section>
+          </>
+        )}
 
         {/* CHILDREN DETAILS */}
         {children.map((child) => (

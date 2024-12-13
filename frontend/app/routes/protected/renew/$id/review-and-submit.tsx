@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { loadProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isPrimaryApplicantStateComplete, loadProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -43,11 +43,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-submit.page-title') }) };
 
+  const primaryApplicantName = isPrimaryApplicantStateComplete(state) ? `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}` : undefined;
   const children = validateProtectedChildrenStateForReview(state.children);
 
   return {
     meta,
-    clientApplication: state.clientApplication,
+    primaryApplicantName,
     children,
   };
 }
@@ -74,17 +75,15 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewReviewSubmit() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { clientApplication, children } = useLoaderData<typeof loader>();
+  const { primaryApplicantName, children } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-
-  const applicantName = `${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`;
 
   return (
     <div className="max-w-prose">
       <p className="mb-4">{t('protected-renew:review-submit.form-instructions')}</p>
       <ul className="my-6 list-inside list-disc space-y-2">
-        <li>{applicantName}</li>
+        {primaryApplicantName && <li>{primaryApplicantName}</li>}
         {children.map((child) => {
           const childName = `${child.information?.firstName} ${child.information?.lastName}`;
           return <li key={childName}>{childName}</li>;

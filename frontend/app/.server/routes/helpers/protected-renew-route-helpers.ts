@@ -344,7 +344,6 @@ export function loadProtectedRenewSingleChildState({ params, session }: LoadProt
 
 interface LoadProtectedRenewStateForReviewArgs {
   params: Params;
-  request: Request;
   session: Session;
 }
 
@@ -367,6 +366,10 @@ export function loadProtectedRenewStateForReview({ params, session }: LoadProtec
   }
 }
 
+export function isPrimaryApplicantStateComplete(state: ProtectedRenewState) {
+  return state.dentalInsurance !== undefined && state.demographicSurvey !== undefined;
+}
+
 interface ValidateProtectedRenewStateForReviewArgs {
   params: Params;
   state: ProtectedRenewState;
@@ -375,15 +378,14 @@ interface ValidateProtectedRenewStateForReviewArgs {
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
   const { maritalStatus, partnerInformation, mailingAddress, homeAddress, addressInformation, clientApplication, contactInformation, communicationPreferences, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
 
-  if (dentalInsurance === undefined) {
-    throw redirect(getPathById('protected/renew/$id/dental-insurance', params));
-  }
-
-  if (demographicSurvey === undefined) {
-    throw redirect(getPathById('protected/renew/$id/demographic-survey', params));
-  }
-
   const children = validateProtectedChildrenStateForReview(state.children);
+
+  if (!isPrimaryApplicantStateComplete(state)) {
+    if (children.length === 0) {
+      throw redirect(getPathById('protected/renew/$id/member-selection', params));
+    }
+    throw redirect(getPathById('protected/renew/$id/review-child-information', params));
+  }
 
   return {
     maritalStatus,

@@ -72,7 +72,7 @@ export interface ProtectedRenewState {
   contactInformation?: ProtectedContactInformationState;
   demographicSurvey?: ProtectedDemographicSurveyState;
   dentalBenefits?: ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
-  dentalInsurance: boolean;
+  dentalInsurance?: boolean;
   maritalStatus?: string;
   partnerInformation?: ProtectedPartnerInformationState;
 }
