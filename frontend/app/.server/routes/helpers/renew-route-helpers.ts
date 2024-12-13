@@ -30,10 +30,6 @@ export interface RenewState {
       provincialTerritorialSocialProgram?: string;
       province?: string;
     };
-    readonly confirmDentalBenefits?: {
-      federalBenefitsChanged: boolean;
-      provincialTerritorialBenefitsChanged: boolean;
-    };
     readonly federalProvincialTerritorialBenefitsChanged?: boolean;
     readonly dentalInsurance?: boolean;
     readonly information?: {
@@ -110,10 +106,6 @@ export interface RenewState {
     provincialTerritorialSocialProgram?: string;
     province?: string;
   };
-  readonly confirmDentalBenefits?: {
-    federalBenefitsChanged: boolean;
-    provincialTerritorialBenefitsChanged: boolean;
-  };
   readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
   readonly submissionInfo?: {
     /**
@@ -149,7 +141,6 @@ export type MailingAddressState = NonNullable<RenewState['mailingAddress']>;
 export type HomeAddressState = NonNullable<RenewState['homeAddress']>;
 export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
-export type ConfirmDentalBenefitsState = NonNullable<RenewState['confirmDentalBenefits']>;
 export type ContactInformationState = NonNullable<RenewState['contactInformation']>;
 export type DemographicSurveyState = NonNullable<RenewState['demographicSurvey']>;
 

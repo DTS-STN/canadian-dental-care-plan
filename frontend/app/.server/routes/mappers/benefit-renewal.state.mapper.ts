@@ -27,22 +27,12 @@ import type {
   ProtectedDentalProvincialTerritorialBenefitsState,
   ProtectedPartnerInformationState,
 } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import type {
-  AddressInformationState,
-  ChildState,
-  ConfirmDentalBenefitsState,
-  ContactInformationState,
-  DemographicSurveyState,
-  DentalFederalBenefitsState,
-  DentalProvincialTerritorialBenefitsState,
-  PartnerInformationState,
-} from '~/.server/routes/helpers/renew-route-helpers';
+import type { AddressInformationState, ChildState, ContactInformationState, DemographicSurveyState, DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
 
 export interface RenewAdultChildState {
   addressInformation?: AddressInformationState;
   children: ChildState[];
   clientApplication: ClientApplicationDto;
-  confirmDentalBenefits: ConfirmDentalBenefitsState;
   contactInformation: ContactInformationState;
   demographicSurvey?: DemographicSurveyState;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
@@ -112,8 +102,7 @@ interface ToContactInformationArgs {
 
 interface ToDentalBenefitsArgs {
   existingDentalBenefits: readonly string[];
-  hasFederalBenefitsChanged: boolean;
-  hasProvincialTerritorialBenefitsChanged: boolean;
+  hasFederalProvincialTerritorialBenefitsChanged: boolean;
   renewedDentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
 }
 
@@ -135,7 +124,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     addressInformation,
     children,
     clientApplication,
-    confirmDentalBenefits,
     contactInformation,
     demographicSurvey,
     dentalBenefits,
@@ -155,9 +143,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       throw Error('Expected hasPhoneChanged to be defined');
     }
 
-    const hasFederalBenefitsChanged = confirmDentalBenefits.federalBenefitsChanged;
-    const hasProvincialTerritorialBenefitsChanged = confirmDentalBenefits.provincialTerritorialBenefitsChanged;
-
     return {
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
@@ -174,8 +159,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasEmailChanged,
         hasMaritalStatusChanged,
         hasPhoneChanged,
-        hasFederalBenefitsChanged,
-        hasProvincialTerritorialBenefitsChanged,
+        hasFederalProvincialTerritorialBenefitsChanged: !!dentalBenefits,
       },
       communicationPreferences: this.toCommunicationPreferences({
         existingCommunicationPreferences: clientApplication.communicationPreferences,
@@ -194,8 +178,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       demographicSurvey,
       dentalBenefits: this.toDentalBenefits({
         existingDentalBenefits: clientApplication.dentalBenefits,
-        hasFederalBenefitsChanged,
-        hasProvincialTerritorialBenefitsChanged,
+        hasFederalProvincialTerritorialBenefitsChanged: !!dentalBenefits,
         renewedDentalBenefits: dentalBenefits,
       }),
       dentalInsurance,
@@ -238,8 +221,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       demographicSurvey,
       dentalBenefits: this.toDentalBenefits({
         existingDentalBenefits: clientApplication.dentalBenefits,
-        hasFederalBenefitsChanged: true,
-        hasProvincialTerritorialBenefitsChanged: true,
+        hasFederalProvincialTerritorialBenefitsChanged: true,
         renewedDentalBenefits: dentalBenefits,
       }),
       dentalInsurance,
@@ -285,8 +267,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       dentalBenefits: this.toDentalBenefits({
         existingDentalBenefits: clientApplication.dentalBenefits,
-        hasFederalBenefitsChanged: !!dentalBenefits,
-        hasProvincialTerritorialBenefitsChanged: !!dentalBenefits,
+        hasFederalProvincialTerritorialBenefitsChanged: !!dentalBenefits,
         renewedDentalBenefits: dentalBenefits,
       }),
       dentalInsurance,
@@ -327,11 +308,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         throw new Error('Expected renewedChild.dentalInsurance to be defined');
       }
 
-      // confirmDentalBenefits does not exist in protected renewal state
-      // for protected renewal state, federal and provincial/territorial benefits have been changed if dentalBenefits is defined
-      const hasFederalBenefitsChanged = renewedChild.confirmDentalBenefits?.federalBenefitsChanged ?? !!renewedChild.dentalBenefits;
-      const hasProvincialTerritorialBenefitsChanged = renewedChild.confirmDentalBenefits?.provincialTerritorialBenefitsChanged ?? !!renewedChild.dentalBenefits;
-
       return {
         clientNumber:
           existingChild.information.clientNumber ??
@@ -340,8 +316,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
           })(),
         dentalBenefits: this.toDentalBenefits({
           existingDentalBenefits: existingChild.dentalBenefits,
-          hasFederalBenefitsChanged,
-          hasProvincialTerritorialBenefitsChanged,
+          hasFederalProvincialTerritorialBenefitsChanged: !!renewedChild.dentalBenefits,
           renewedDentalBenefits: renewedChild.dentalBenefits,
         }),
         demographicSurvey: renewedChild.demographicSurvey,
@@ -422,32 +397,28 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  private toDentalBenefits({ existingDentalBenefits, hasFederalBenefitsChanged, hasProvincialTerritorialBenefitsChanged, renewedDentalBenefits }: ToDentalBenefitsArgs) {
-    if (!hasFederalBenefitsChanged && !hasProvincialTerritorialBenefitsChanged) return existingDentalBenefits;
+  private toDentalBenefits({ existingDentalBenefits, hasFederalProvincialTerritorialBenefitsChanged, renewedDentalBenefits }: ToDentalBenefitsArgs) {
+    if (!hasFederalProvincialTerritorialBenefitsChanged) return existingDentalBenefits;
     if (!renewedDentalBenefits) return [];
 
     const dentalBenefits = [];
 
-    if (!hasFederalBenefitsChanged) {
+    if (renewedDentalBenefits.hasFederalBenefits && renewedDentalBenefits.federalSocialProgram && !validator.isEmpty(renewedDentalBenefits.federalSocialProgram)) {
+      dentalBenefits.push(renewedDentalBenefits.federalSocialProgram);
+    } else {
       const federalGovernmentInsurancePlans = this.federalGovernmentInsurancePlanService.listFederalGovernmentInsurancePlans();
-      const existingFederalGovernmentInsurancePlan = federalGovernmentInsurancePlans
-        .filter((federalGovernmentInsurancePlan) => existingDentalBenefits.includes(federalGovernmentInsurancePlan.id))
-        .map((federalGovernmentInsurancePlan) => federalGovernmentInsurancePlan.id);
+      const existingFederalGovernmentInsurancePlan = federalGovernmentInsurancePlans.filter((plan) => existingDentalBenefits.includes(plan.id)).map((plan) => plan.id);
 
       dentalBenefits.push(...existingFederalGovernmentInsurancePlan);
-    } else if (renewedDentalBenefits.hasFederalBenefits && renewedDentalBenefits.federalSocialProgram && !validator.isEmpty(renewedDentalBenefits.federalSocialProgram)) {
-      dentalBenefits.push(renewedDentalBenefits.federalSocialProgram);
     }
 
-    if (!hasProvincialTerritorialBenefitsChanged) {
+    if (renewedDentalBenefits.hasProvincialTerritorialBenefits && renewedDentalBenefits.provincialTerritorialSocialProgram && !validator.isEmpty(renewedDentalBenefits.provincialTerritorialSocialProgram)) {
+      dentalBenefits.push(renewedDentalBenefits.provincialTerritorialSocialProgram);
+    } else {
       const provincialGovernmentInsurancePlans = this.provincialGovernmentInsurancePlanService.listProvincialGovernmentInsurancePlans();
-      const existingProvincialGovernmentInsurancePlan = provincialGovernmentInsurancePlans
-        .filter((provincialGovernmentInsurancePlan) => existingDentalBenefits.includes(provincialGovernmentInsurancePlan.id))
-        .map((provincialGovernmentInsurancePlan) => provincialGovernmentInsurancePlan.id);
+      const existingProvincialGovernmentInsurancePlan = provincialGovernmentInsurancePlans.filter((plan) => existingDentalBenefits.includes(plan.id)).map((plan) => plan.id);
 
       dentalBenefits.push(...existingProvincialGovernmentInsurancePlan);
-    } else if (renewedDentalBenefits.hasProvincialTerritorialBenefits && renewedDentalBenefits.provincialTerritorialSocialProgram && !validator.isEmpty(renewedDentalBenefits.provincialTerritorialSocialProgram)) {
-      dentalBenefits.push(renewedDentalBenefits.provincialTerritorialSocialProgram);
     }
 
     return dentalBenefits;

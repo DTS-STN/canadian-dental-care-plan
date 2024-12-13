@@ -122,10 +122,6 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         children: [
           {
             id: '1',
-            confirmDentalBenefits: {
-              federalBenefitsChanged: true,
-              provincialTerritorialBenefitsChanged: true,
-            },
             demographicSurvey: {
               disabilityStatus: 'Disability status placeholder',
               ethnicGroups: ['Group 1', 'Group 2'],
@@ -150,10 +146,6 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           },
         ],
         clientApplication: mockClientApplication,
-        confirmDentalBenefits: {
-          federalBenefitsChanged: true,
-          provincialTerritorialBenefitsChanged: false,
-        },
         contactInformation: {
           email: 'new@example.com',
           phoneNumber: '555-555-1234',
@@ -213,8 +205,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           hasEmailChanged: true,
           hasMaritalStatusChanged: true,
           hasPhoneChanged: true,
-          hasFederalBenefitsChanged: true,
-          hasProvincialTerritorialBenefitsChanged: false,
+          hasFederalProvincialTerritorialBenefitsChanged: false,
         },
         children: [
           {

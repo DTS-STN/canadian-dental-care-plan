@@ -88,7 +88,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       isParent: child.information.isParent,
       dentalInsurance: {
         acessToDentalInsurance: child.dentalInsurance,
-        hasChanged: child.confirmDentalBenefits.federalBenefitsChanged || child.confirmDentalBenefits.provincialTerritorialBenefitsChanged,
+        hasChanged: child.federalProvincialTerritorialBenefitsChanged,
         federalBenefit: {
           access: child.dentalBenefits?.hasFederalBenefits,
           benefit: selectedFederalGovernmentInsurancePlan?.name,
