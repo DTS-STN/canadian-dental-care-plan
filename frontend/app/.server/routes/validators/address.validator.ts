@@ -93,7 +93,7 @@ export class DefaultAddressValidator {
           })
           .trim()
           .min(1, this.errorMessages.address.required)
-          .max(60)
+          .max(30)
           .refine(isAllValidInputCharacters, this.errorMessages.address.invalidCharacters),
         countryId: z
           .string({
