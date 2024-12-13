@@ -99,11 +99,11 @@ export default function RenewChildParentIntro() {
             variant="primary"
             loading={isSubmitting && submitAction === FormAction.Continue}
             endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Child Application Form:Continue - Parent intro click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Parent intro click"
           >
             {t('renew-child:parent-intro.continue-btn')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Child Application Form:Back - Parent intro click">
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Parent intro click">
             {t('renew-child:parent-intro.back-btn')}
           </Button>
         </div>
