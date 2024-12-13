@@ -28,11 +28,17 @@ export class DefaultBuildInfoService implements BuildInfoService {
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
     this.log = logFactory.createLogger(this.constructor.name);
+    this.init();
   }
 
-  getBuildInfo = moize(this._getBuildInfo);
+  private init() {
+    // Configure caching for buildInfo operations
+    this.getBuildInfo = moize(this.getBuildInfo);
 
-  _getBuildInfo(): BuildInfo {
+    this.log.debug('%s initiated.', this.constructor.name);
+  }
+
+  getBuildInfo(): BuildInfo {
     this.log.debug('Getting application build info');
     return this.readBuildInfo('build-info.json') ?? this.defaultBuildInfo;
   }
