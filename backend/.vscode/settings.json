@@ -1,30 +1,5 @@
 {
   "[java]": {
     "editor.insertSpaces": false
-  },
-  "java.compile.nullAnalysis.mode": "automatic",
-  "java.completion.favoriteStaticMembers": [
-    "org.assertj.core.api.Assertions.*",
-    "org.hamcrest.CoreMatchers.*",
-    "org.junit.Assert.*",
-    "org.junit.Assume.*",
-    "org.junit.jupiter.api.Assertions.*",
-    "org.junit.jupiter.api.Assumptions.*",
-    "org.junit.jupiter.api.DynamicContainer.*",
-    "org.junit.jupiter.api.DynamicTest.*",
-    "org.mockito.ArgumentMatchers.*",
-    "org.mockito.Mockito.*",
-    "org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*",
-    "org.springframework.restdocs.mockmvc.MokMvcRestDocumentation.*",
-    "org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*",
-    "org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*",
-    "org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*",
-    "org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*",
-    "org.springframework.test.web.client.match.MockRestRequestMatchers.*",
-    "org.springframework.test.web.client.response.MockRestResponseCreators.*",
-    "org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*",
-    "org.springframework.test.web.servlet.result.MockMvcResultHandlers.*",
-    "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*"
-  ],
-  "java.configuration.updateBuildConfiguration": "automatic"
+  }
 }
