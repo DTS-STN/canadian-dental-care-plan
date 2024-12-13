@@ -2,10 +2,9 @@ import type { Params } from '@remix-run/react';
 
 import type { Namespace } from 'i18next';
 import { createInstance } from 'i18next';
-import I18NexFsBackend from 'i18next-fs-backend';
-import { resolve } from 'node:path';
 import { initReactI18next } from 'react-i18next';
 
+import { i18nResources } from '../i18n.resources';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { APP_LOCALES } from '~/utils/locale-utils';
@@ -85,27 +84,18 @@ export async function initI18n<N extends Namespace>(locale: string | undefined, 
   const { I18NEXT_DEBUG } = getEnv();
   const i18n = createInstance();
 
-  await i18n
-    .use(initReactI18next)
-    .use(I18NexFsBackend)
-    .init({
-      appendNamespaceToMissingKey: true,
-      debug: I18NEXT_DEBUG,
-      defaultNS: false,
-      backend: {
-        loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json'),
-      },
-      fallbackLng: false,
-      interpolation: {
-        escapeValue: false,
-      },
-      lng: locale,
-      ns: namespaces,
-      preload: APP_LOCALES,
-      react: {
-        useSuspense: false,
-      },
-    });
+  await i18n.use(initReactI18next).init({
+    appendNamespaceToMissingKey: true,
+    debug: I18NEXT_DEBUG,
+    defaultNS: false,
+    fallbackLng: false,
+    interpolation: { escapeValue: false },
+    lng: locale,
+    ns: namespaces,
+    preload: APP_LOCALES,
+    react: { useSuspense: false },
+    resources: i18nResources,
+  });
 
   log.debug('i18next initialization complete');
   return i18n;

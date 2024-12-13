@@ -1,23 +1,7 @@
 import type { Session } from '@remix-run/node';
 
-import type addressValidation from '../public/locales/en/address-validation.json';
-import type applyAdultChild from '../public/locales/en/apply-adult-child.json';
-import type applyAdult from '../public/locales/en/apply-adult.json';
-import type applyChild from '../public/locales/en/apply-child.json';
-import type apply from '../public/locales/en/apply.json';
-import type dataUnavailable from '../public/locales/en/data-unavailable.json';
-import type gcweb from '../public/locales/en/gcweb.json';
-import type index from '../public/locales/en/index.json';
-import type letters from '../public/locales/en/letters.json';
-import type protectedRenew from '../public/locales/en/protected-renew.json';
-import type renewAdultChild from '../public/locales/en/renew-adult-child.json';
-import type renewChild from '../public/locales/en/renew-child.json';
-import type renewIta from '../public/locales/en/renew-ita.json';
-import type renew from '../public/locales/en/renew.json';
-import type status from '../public/locales/en/status.json';
-import type stubLogin from '../public/locales/en/stub-login.json';
-import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
 import type { AppContainerProvider } from '~/.server/app-container.provider';
+import type { i18nResources } from '~/.server/i18n.resources';
 import type { ClientEnv } from '~/.server/utils/env.utils';
 import type { APP_LOCALES } from '~/utils/locale-utils';
 
@@ -62,25 +46,7 @@ declare module 'i18next' {
    */
   interface CustomTypeOptions {
     defaultNS: false;
-    resources: {
-      'address-validation': typeof addressValidation;
-      'apply-adult-child': typeof applyAdultChild;
-      'apply-adult': typeof applyAdult;
-      'apply-child': typeof applyChild;
-      apply: typeof apply;
-      'data-unavailable': typeof dataUnavailable;
-      gcweb: typeof gcweb;
-      index: typeof index;
-      letters: typeof letters;
-      status: typeof status;
-      renew: typeof renew;
-      'renew-ita': typeof renewIta;
-      'renew-child': typeof renewChild;
-      'renew-adult-child': typeof renewAdultChild;
-      'stub-login': typeof stubLogin;
-      'unable-to-process-request': typeof unableToProcessRequest;
-      'protected-renew': typeof protectedRenew;
-    };
+    resources: (typeof i18nResources)['en'];
   }
 }
 
