@@ -27,7 +27,12 @@ export class DefaultApplicationYearService implements ApplicationYearService {
     @inject(TYPES.domain.repositories.ApplicationYearRepository) private readonly applicationYearRepository: ApplicationYearRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('DefaultApplicationYearService');
+    this.log = logFactory.createLogger(this.constructor.name);
+    this.init();
+  }
+
+  private init(): void {
+    this.log.debug('%s initiated.', this.constructor.name);
   }
 
   async listApplicationYears(applicationYearRequestDto: ApplicationYearRequestDto): Promise<ReadonlyArray<ApplicationYearResultDto>> {

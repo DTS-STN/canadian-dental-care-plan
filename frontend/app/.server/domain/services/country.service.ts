@@ -77,11 +77,33 @@ export class DefaultCountryService implements CountryService {
     @inject(TYPES.domain.repositories.CountryRepository) private readonly countryRepository: CountryRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: CountryServiceImpl_ServiceConfig,
   ) {
-    this.log = logFactory.createLogger('DefaultCountryService');
+    this.log = logFactory.createLogger(this.constructor.name);
+    this.init();
+  }
 
+  private init(): void {
     // Configure caching for country operations
-    this.listCountries.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS;
-    this.getCountryById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS;
+    const allCountriesCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS;
+    const countryCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS;
+
+    this.log.debug('Cache TTL values; allCountriesCacheTTL: %d ms, countryCacheTTL: %d ms', allCountriesCacheTTL, countryCacheTTL);
+
+    this.listCountries = moize(this.listCountries, {
+      maxAge: allCountriesCacheTTL,
+      onCacheAdd: (cache) => {
+        this.log.info('Creating new listCountries memo; keys: %s', cache.keys);
+      },
+    });
+
+    this.getCountryById = moize(this.getCountryById, {
+      maxAge: countryCacheTTL,
+      maxSize: Infinity,
+      onCacheAdd: (cache) => {
+        this.log.info('Creating new getCountryById memo; keys: %s', cache.keys);
+      },
+    });
+
+    this.log.info('%s initialized.', this.constructor.name);
   }
 
   /**
@@ -89,9 +111,13 @@ export class DefaultCountryService implements CountryService {
    *
    * @returns An array of Country DTOs.
    */
-  listCountries = moize(this.defaultListCountries, {
-    onCacheAdd: () => this.log.info('Creating new listCountries memo'),
-  });
+  listCountries(): ReadonlyArray<CountryDto> {
+    this.log.debug('Get all countries');
+    const countryEntities = this.countryRepository.listAllCountries();
+    const countryDtos = this.countryDtoMapper.mapCountryEntitiesToCountryDtos(countryEntities);
+    this.log.trace('Returning countries: [%j]', countryDtos);
+    return countryDtos;
+  }
 
   /**
    * Retrieves a specific country by its ID.
@@ -100,10 +126,19 @@ export class DefaultCountryService implements CountryService {
    * @returns The Country DTO corresponding to the specified ID.
    * @throws {CountryNotFoundException} If no country is found with the specified ID.
    */
-  getCountryById = moize(this.defaultGetCountryById, {
-    maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new getCountryById memo'),
-  });
+  getCountryById(id: string): CountryDto {
+    this.log.debug('Get country with id: [%s]', id);
+    const countryEntity = this.countryRepository.findCountryById(id);
+
+    if (!countryEntity) {
+      this.log.error('Country with id: [%s] not found', id);
+      throw new CountryNotFoundException(`Country with id: [${id}] not found`);
+    }
+
+    const countryDto = this.countryDtoMapper.mapCountryEntityToCountryDto(countryEntity);
+    this.log.trace('Returning country: [%j]', countryDto);
+    return countryDto;
+  }
 
   /**
    * Retrieves a list of all countries in the specified locale and sorts them.
@@ -134,28 +169,6 @@ export class DefaultCountryService implements CountryService {
     const localizedCountryDto = this.countryDtoMapper.mapCountryDtoToCountryLocalizedDto(countryDto, locale);
     this.log.trace('Returning localized country: [%j]', localizedCountryDto);
     return localizedCountryDto;
-  }
-
-  private defaultListCountries(): ReadonlyArray<CountryDto> {
-    this.log.debug('Get all countries');
-    const countryEntities = this.countryRepository.listAllCountries();
-    const countryDtos = this.countryDtoMapper.mapCountryEntitiesToCountryDtos(countryEntities);
-    this.log.trace('Returning countries: [%j]', countryDtos);
-    return countryDtos;
-  }
-
-  private defaultGetCountryById(id: string): CountryDto {
-    this.log.debug('Get country with id: [%s]', id);
-    const countryEntity = this.countryRepository.findCountryById(id);
-
-    if (!countryEntity) {
-      this.log.error('Country with id: [%s] not found', id);
-      throw new CountryNotFoundException(`Country with id: [${id}] not found`);
-    }
-
-    const countryDto = this.countryDtoMapper.mapCountryEntityToCountryDto(countryEntity);
-    this.log.trace('Returning country: [%j]', countryDto);
-    return countryDto;
   }
 
   private sortLocalizedCountries(countries: ReadonlyArray<CountryLocalizedDto>, locale: AppLocale): ReadonlyArray<CountryLocalizedDto> {

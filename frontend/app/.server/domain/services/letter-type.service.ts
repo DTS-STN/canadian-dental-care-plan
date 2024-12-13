@@ -58,19 +58,33 @@ export class DefaultLetterTypeService implements LetterTypeService {
     @inject(TYPES.domain.repositories.LetterTypeRepository) private readonly letterTypeRepository: LetterTypeRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultLetterTypeService');
-
-    // Configure caching for letter type operations
-    // TODO new config for getLetterTypeById?
-    this.listLetterTypes.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS;
-    this.getLetterTypeById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS;
+    this.log = logFactory.createLogger(this.constructor.name);
+    this.init();
   }
 
-  listLetterTypes = moize(this.defaultListLetterTypes, {
-    onCacheAdd: () => this.log.info('Creating new listLetterTypes memo'),
-  });
+  private init(): void {
+    // Configure caching for letter type operations
+    // TODO new config for getLetterTypeById?
+    const allLetterTypesCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS;
+    const letterTypeCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS;
 
-  private defaultListLetterTypes(): ReadonlyArray<LetterTypeDto> {
+    this.log.debug('Cache TTL values; allLetterTypesCacheTTL: %d ms, letterTypeCacheTTL: %d ms', allLetterTypesCacheTTL, letterTypeCacheTTL);
+
+    this.listLetterTypes = moize(this.listLetterTypes, {
+      maxAge: allLetterTypesCacheTTL,
+      onCacheAdd: () => this.log.info('Creating new listLetterTypes memo'),
+    });
+
+    this.getLetterTypeById = moize(this.getLetterTypeById, {
+      maxAge: letterTypeCacheTTL,
+      maxSize: Infinity,
+      onCacheAdd: () => this.log.info('Creating new getLetterTypeById memo'),
+    });
+
+    this.log.debug('%s initiated.', this.constructor.name);
+  }
+
+  listLetterTypes(): ReadonlyArray<LetterTypeDto> {
     this.log.trace('Getting all letter types');
     const letterTypeEntities = this.letterTypeRepository.listAllLetterTypes();
     const letterTypeDtos = this.letterTypeDtoMapper.mapLetterTypeEntitiesToLetterTypeDtos(letterTypeEntities);
@@ -78,12 +92,7 @@ export class DefaultLetterTypeService implements LetterTypeService {
     return letterTypeDtos;
   }
 
-  getLetterTypeById = moize(this.defaultGetLetterTypeById, {
-    maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new getLetterTypeById memo'),
-  });
-
-  private defaultGetLetterTypeById(id: string): LetterTypeDto {
+  getLetterTypeById(id: string): LetterTypeDto {
     this.log.trace('Getting letter type with id: [%s]', id);
     const letterTypeEntity = this.letterTypeRepository.findLetterTypeById(id);
 

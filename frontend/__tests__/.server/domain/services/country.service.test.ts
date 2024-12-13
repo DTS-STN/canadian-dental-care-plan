@@ -1,3 +1,4 @@
+import type { Moized } from 'moize';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -28,8 +29,8 @@ describe('DefaultCountryService', () => {
 
       const service = new DefaultCountryService(mockLogFactory, mockCountryDtoMapper, mockCountryRepository, mockServerConfig); // Act and Assert
 
-      expect(service.listCountries.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.getCountryById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect((service.listCountries as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect((service.getCountryById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
