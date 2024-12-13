@@ -1,3 +1,5 @@
 {
-  "java.compile.nullAnalysis.mode": "automatic"
+  "[java]": {
+    "editor.insertSpaces": false
+  }
 }
