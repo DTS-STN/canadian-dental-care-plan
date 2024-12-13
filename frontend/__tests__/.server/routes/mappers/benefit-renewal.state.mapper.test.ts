@@ -205,7 +205,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           hasEmailChanged: true,
           hasMaritalStatusChanged: true,
           hasPhoneChanged: true,
-          hasFederalProvincialTerritorialBenefitsChanged: false,
+          hasFederalProvincialTerritorialBenefitsChanged: true,
         },
         children: [
           {
