@@ -162,6 +162,10 @@
   },
   "demographic-survey": {
     "page-title": "Voluntary demographic questions for {{memberName}}",
+    "improve-cdcp": "Answering these questions is optional. Your answers will help Health Canada improve the Canadian Dental Care Plan and make sure our services are accessible to everyone.",
+    "confidential": "The information collected will only be used for statistical purposes and will be kept confidential.",
+    "impact-enrollment": "Your completion of the demographic questions will not impact your enrolment in the Canadian Dental Care Plan.",
+    "prefer-not-to-answer-btn": "Prefer not to answer",
     "optional": "All questions are optional.",
     "indigenous-status": "Is this person First Nations, Métis or Inuk (Inuit)?",
     "disability-status": "Does this person have a disability?",

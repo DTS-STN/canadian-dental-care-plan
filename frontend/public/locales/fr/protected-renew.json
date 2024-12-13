@@ -162,6 +162,10 @@
   },
   "demographic-survey": {
     "page-title": "Voluntary demographic questions for {{memberName}}",
+    "improve-cdcp": "La réponse à ces questions est facultative. Vos réponses aideront Santé Canada à améliorer le Régime canadien de soins dentaires et à s'assurer que nos services sont accessibles à tous.",
+    "confidential": "Les renseignements recueillis ne serviront qu'à des fins statistiques et resteront confidentiels.",
+    "impact-enrollment": "Le fait de répondre aux questions d'ordre démographique n'aura pas d'incidence sur votre adhésion au Régime canadien de soins dentaires.",
+    "prefer-not-to-answer-btn": "Sauter les questions d'ordre démographique",
     "optional": "All questions are optional.",
     "indigenous-status": "Is this person First Nations, Métis or Inuk (Inuit)?",
     "disability-status": "Does this person have a disability?",
