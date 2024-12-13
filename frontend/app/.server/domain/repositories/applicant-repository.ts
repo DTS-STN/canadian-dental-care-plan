@@ -28,7 +28,7 @@ export class DefaultApplicantRepository implements ApplicantRepository {
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_APPLICANT_API_BASE_URI' | 'INTEROP_APPLICANT_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger('DefaultApplicantRepository');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null> {
@@ -137,7 +137,7 @@ export class MockApplicantRepository implements ApplicantRepository {
   ];
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('MockApplicantRepository');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null> {

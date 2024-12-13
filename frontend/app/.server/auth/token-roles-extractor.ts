@@ -19,7 +19,7 @@ export class DefaultTokenRolesExtractor implements TokenRolesExtractor {
     private readonly issuer: string,
     private readonly jwksUrl?: string,
   ) {
-    this.log = logFactory.createLogger('DefaultTokenRolesExtractor');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   async extract(jwt?: string): Promise<string[]> {

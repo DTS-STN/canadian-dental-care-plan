@@ -125,7 +125,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     @inject(TYPES.web.validators.HCaptchaValidator) private readonly hCaptchaValidator: HCaptchaValidator,
     @inject(TYPES.web.validators.RaoidcSessionValidator) private readonly raoidcSessionValidator: RaoidcSessionValidator,
   ) {
-    this.log = logFactory.createLogger('DefaultSecurityHandler');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   /**

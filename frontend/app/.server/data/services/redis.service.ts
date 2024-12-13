@@ -38,7 +38,7 @@ export class DefaultRedisService implements RedisService {
   private readonly redisClient: Redis;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig) {
-    this.log = logFactory.createLogger('DefaultRedisService');
+    this.log = logFactory.createLogger(this.constructor.name);
     this.redisClient = new Redis(this.getRedisConfig(serverConfig));
 
     const redisUrl = serverConfig.REDIS_SENTINEL_NAME //

@@ -25,7 +25,7 @@ export class DefaultApplicationYearRepository implements ApplicationYearReposito
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger('DefaultApplicationYearRepository');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   async listApplicationYears(date: string): Promise<ApplicationYearResultEntity> {
@@ -67,7 +67,7 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('MockApplicationYearRepository');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   listApplicationYears(date: string): Promise<ApplicationYearResultEntity> {

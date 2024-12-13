@@ -65,7 +65,7 @@ export class DefaultHttpClient implements HttpClient {
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.observability.InstrumentationService) private readonly instrumentationService: InstrumentationService,
   ) {
-    this.log = logFactory.createLogger(DefaultHttpClient.name);
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   getFetchFn(options: FetchOptions): FetchFn {

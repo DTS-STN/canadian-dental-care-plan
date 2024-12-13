@@ -105,7 +105,7 @@ export class DefaultRaoidcService implements RaoidcService {
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS' | 'AUTH_JWT_PRIVATE_KEY' | 'AUTH_LOGOUT_REDIRECT_URL' | 'HTTP_PROXY_URL'>,
     @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger('DefaultRaoidcService');
+    this.log = logFactory.createLogger(this.constructor.name);
     this.fetchFn = httpClient.getFetchFn({ proxyUrl: serverConfig.HTTP_PROXY_URL });
 
     // Configure caching for raoidc operations

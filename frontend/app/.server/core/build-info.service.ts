@@ -27,7 +27,7 @@ export class DefaultBuildInfoService implements BuildInfoService {
   };
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger(DefaultBuildInfoService.name);
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   getBuildInfo = moize(this._getBuildInfo);

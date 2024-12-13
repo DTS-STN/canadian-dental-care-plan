@@ -25,7 +25,7 @@ export class DefaultCountryRepository implements CountryRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultCountryRepository');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   listAllCountries(): ReadonlyArray<CountryEntity> {

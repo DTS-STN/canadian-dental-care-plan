@@ -25,7 +25,7 @@ export class DefaultPreferredLanguageRepository implements PreferredLanguageRepo
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultPreferredLanguageRepository');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   listAllPreferredLanguages(): PreferredLanguageEntity[] {

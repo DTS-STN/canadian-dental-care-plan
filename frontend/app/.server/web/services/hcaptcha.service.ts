@@ -27,7 +27,7 @@ export class DefaultHCaptchaService implements HCaptchaService {
     @inject(TYPES.web.repositories.HCaptchaRepository) private readonly hCaptchaRepository: HCaptchaRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('DefaultHCaptchaService');
+    this.log = logFactory.createLogger(this.constructor.name);
   }
 
   async verifyHCaptchaResponse(hCaptchaVerifyRequestDto: HCaptchaVerifyRequestDto): Promise<HCaptchaVerifyResponseDto> {
