@@ -1,8 +1,8 @@
 import type { Session } from '@remix-run/node';
 
 import type { AppContainerProvider } from '~/.server/app-container.provider';
+import type { i18nResources } from '~/.server/i18n.resources';
 import type { ClientEnv } from '~/.server/utils/env.utils';
-import type { i18nResources } from '~/.server/utils/locale.utils';
 import type { APP_LOCALES } from '~/utils/locale-utils';
 
 /**
