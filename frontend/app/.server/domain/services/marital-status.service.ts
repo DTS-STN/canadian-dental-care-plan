@@ -67,21 +67,52 @@ export class DefaultMaritalStatusService implements MaritalStatusService {
     @inject(TYPES.domain.repositories.MaritalStatusRepository) private readonly maritalStatusRepository: MaritalStatusRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultMaritalStatusService');
-
-    // Configure caching for marital status operations
-    this.listMaritalStatuses.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS;
-    this.getMaritalStatusById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS;
+    this.log = logFactory.createLogger(this.constructor.name);
+    this.init();
   }
 
-  listMaritalStatuses = moize(this.defaultListMaritalStatuses, {
-    onCacheAdd: () => this.log.info('Creating new listMaritalStatuses memo'),
-  });
+  private init(): void {
+    // Configure caching for marital status operations
+    const allMaritalStatusesCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS;
+    const maritalStatusCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS;
 
-  getMaritalStatusById = moize(this.defaultGetMaritalStatusById, {
-    maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new getMaritalStatusById memo'),
-  });
+    this.log.debug('Cache TTL values; allMaritalStatusesCacheTTL: %d ms, maritalStatusCacheTTL: %d ms', allMaritalStatusesCacheTTL, maritalStatusCacheTTL);
+
+    this.listMaritalStatuses = moize(this.listMaritalStatuses, {
+      maxAge: allMaritalStatusesCacheTTL,
+      onCacheAdd: () => this.log.info('Creating new listMaritalStatuses memo'),
+    });
+
+    this.getMaritalStatusById = moize(this.getMaritalStatusById, {
+      maxAge: maritalStatusCacheTTL,
+      maxSize: Infinity,
+      onCacheAdd: () => this.log.info('Creating new getMaritalStatusById memo'),
+    });
+
+    this.log.debug('%s initiated.', this.constructor.name);
+  }
+
+  listMaritalStatuses(): ReadonlyArray<MaritalStatusDto> {
+    this.log.debug('Get all marital statuses');
+    const maritalStatusEntities = this.maritalStatusRepository.listAllMaritalStatuses();
+    const maritalStatusDtos = this.maritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos(maritalStatusEntities);
+    this.log.trace('Returning marital statuses: [%j]', maritalStatusDtos);
+    return maritalStatusDtos;
+  }
+
+  getMaritalStatusById(id: string): MaritalStatusDto {
+    this.log.debug('Get marital status with id: [%s]', id);
+    const maritalStatusEntity = this.maritalStatusRepository.findMaritalStatusById(id);
+
+    if (!maritalStatusEntity) {
+      this.log.error('Marital status with id: [%s] not found', id);
+      throw new MaritalStatusNotFoundException(`Marital status with id: [${id}] not found`);
+    }
+
+    const maritalStatusDto = this.maritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto(maritalStatusEntity);
+    this.log.trace('Returning marital status: [%j]', maritalStatusDto);
+    return maritalStatusDto;
+  }
 
   listLocalizedMaritalStatuses(locale: AppLocale): ReadonlyArray<MaritalStatusLocalizedDto> {
     this.log.debug('Get all localized marital statuses with locale: [%s]', locale);
@@ -97,27 +128,5 @@ export class DefaultMaritalStatusService implements MaritalStatusService {
     const localizedMaritalStatusDto = this.maritalStatusDtoMapper.mapMaritalStatusDtoToMaritalStatusLocalizedDto(maritalStatusDto, locale);
     this.log.trace('Returning localized marital status: [%j]', localizedMaritalStatusDto);
     return localizedMaritalStatusDto;
-  }
-
-  private defaultListMaritalStatuses(): ReadonlyArray<MaritalStatusDto> {
-    this.log.debug('Get all marital statuses');
-    const maritalStatusEntities = this.maritalStatusRepository.listAllMaritalStatuses();
-    const maritalStatusDtos = this.maritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos(maritalStatusEntities);
-    this.log.trace('Returning marital statuses: [%j]', maritalStatusDtos);
-    return maritalStatusDtos;
-  }
-
-  private defaultGetMaritalStatusById(id: string): MaritalStatusDto {
-    this.log.debug('Get marital status with id: [%s]', id);
-    const maritalStatusEntity = this.maritalStatusRepository.findMaritalStatusById(id);
-
-    if (!maritalStatusEntity) {
-      this.log.error('Marital status with id: [%s] not found', id);
-      throw new MaritalStatusNotFoundException(`Marital status with id: [${id}] not found`);
-    }
-
-    const maritalStatusDto = this.maritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto(maritalStatusEntity);
-    this.log.trace('Returning marital status: [%j]', maritalStatusDto);
-    return maritalStatusDto;
   }
 }

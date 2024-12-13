@@ -1,3 +1,4 @@
+import type { Moized } from 'moize';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -27,8 +28,8 @@ describe('DefaultFederalGovernmentInsurancePlanService', () => {
 
       const service = new DefaultFederalGovernmentInsurancePlanService(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
 
-      expect(service.listFederalGovernmentInsurancePlans.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.getFederalGovernmentInsurancePlanById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect((service.listFederalGovernmentInsurancePlans as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect((service.getFederalGovernmentInsurancePlanById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 

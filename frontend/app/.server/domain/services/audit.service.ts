@@ -20,7 +20,12 @@ export class DefaultAuditService implements AuditService {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultAuditService');
+    this.log = logFactory.createLogger(this.constructor.name);
+    this.init();
+  }
+
+  private init(): void {
+    this.log.debug('%s initiated.', this.constructor.name);
   }
 
   createAudit(eventId: string, auditDetails?: AuditDetails): void {

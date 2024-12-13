@@ -60,10 +60,23 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
     @inject(TYPES.domain.repositories.ClientFriendlyStatusRepository) private readonly clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
   ) {
-    this.log = logFactory.createLogger('DefaultClientFriendlyStatusService');
+    this.log = logFactory.createLogger(this.constructor.name);
+    this.init();
+  }
 
+  private init(): void {
     // Configure caching for client friendly status operations
-    this.getClientFriendlyStatusById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS;
+    const clientFriendlyStatusCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS;
+
+    this.log.debug('Cache TTL value: clientFriendlyStatusCacheTTL: %d ms', clientFriendlyStatusCacheTTL);
+
+    this.getClientFriendlyStatusById = moize(this.getClientFriendlyStatusById, {
+      maxAge: clientFriendlyStatusCacheTTL,
+      maxSize: Infinity,
+      onCacheAdd: () => this.log.info('Creating new getClientFriendlyStatusById memo'),
+    });
+
+    this.log.debug('%s initiated.', this.constructor.name);
   }
 
   /**
@@ -71,20 +84,7 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
    *
    * @returns An array of ClientFriendlyStatus DTOs.
    */
-  getClientFriendlyStatusById = moize(this.defaultGetClientFriendlyStatusById, {
-    maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new getClientFriendlyStatusById memo'),
-  });
-
-  getLocalizedClientFriendlyStatusById(id: string, locale: AppLocale): ClientFriendlyStatusLocalizedDto {
-    this.log.debug('Get localized client friendly status with id: [%s] and locale: [%s]', id, locale);
-    const clientFriendlyStatusDto = this.getClientFriendlyStatusById(id);
-    const clientFriendlyStatusLocalizedDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto(clientFriendlyStatusDto, locale);
-    this.log.trace('Returning localized client friendly status: [%j]', clientFriendlyStatusLocalizedDto);
-    return clientFriendlyStatusLocalizedDto;
-  }
-
-  private defaultGetClientFriendlyStatusById(id: string): ClientFriendlyStatusDto {
+  getClientFriendlyStatusById(id: string): ClientFriendlyStatusDto {
     this.log.debug('Get client friendly status with id: [%s]', id);
     const clientFriendlyStatusEntity = this.clientFriendlyStatusRepository.findClientFriendlyStatusById(id);
 
@@ -96,5 +96,13 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
     const clientFriendlyStatusDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto(clientFriendlyStatusEntity);
     this.log.trace('Returning client friendly status: [%j]', clientFriendlyStatusDto);
     return clientFriendlyStatusDto;
+  }
+
+  getLocalizedClientFriendlyStatusById(id: string, locale: AppLocale): ClientFriendlyStatusLocalizedDto {
+    this.log.debug('Get localized client friendly status with id: [%s] and locale: [%s]', id, locale);
+    const clientFriendlyStatusDto = this.getClientFriendlyStatusById(id);
+    const clientFriendlyStatusLocalizedDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto(clientFriendlyStatusDto, locale);
+    this.log.trace('Returning localized client friendly status: [%j]', clientFriendlyStatusLocalizedDto);
+    return clientFriendlyStatusLocalizedDto;
   }
 }

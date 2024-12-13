@@ -86,27 +86,70 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     @inject(TYPES.domain.repositories.ProvinceTerritoryStateRepository) private readonly provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultProvinceTerritoryStateService');
-
-    // set moize options
-    this.listProvinceTerritoryStates.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS;
-    this.getProvinceTerritoryStateById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS;
-    this.getProvinceTerritoryStateByCode.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS;
+    this.log = logFactory.createLogger(this.constructor.name);
+    this.init();
   }
 
-  listProvinceTerritoryStates = moize(this.defaultListProvinceTerritoryStates, {
-    onCacheAdd: () => this.log.info('Creating new listProvinceTerritoryStates memo'),
-  });
+  private init(): void {
+    const allProvinceTerritoryStatesCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS;
+    const provinceTerritoryStateCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS;
 
-  getProvinceTerritoryStateById = moize(this.defaultGetProvinceTerritoryStateById, {
-    maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateById memo'),
-  });
+    this.log.debug('Cache TTL values; allProvinceTerritoryStatesCacheTTL: %d ms, provinceTerritoryStateCacheTTL: %d ms', allProvinceTerritoryStatesCacheTTL, provinceTerritoryStateCacheTTL);
 
-  getProvinceTerritoryStateByCode = moize(this.defaultGetProvinceTerritoryStateByCode, {
-    maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateByCode memo'),
-  });
+    this.listProvinceTerritoryStates = moize(this.listProvinceTerritoryStates, {
+      maxAge: allProvinceTerritoryStatesCacheTTL,
+      onCacheAdd: () => this.log.info('Creating new listProvinceTerritoryStates memo'),
+    });
+
+    this.getProvinceTerritoryStateById = moize(this.getProvinceTerritoryStateById, {
+      maxAge: provinceTerritoryStateCacheTTL,
+
+      maxSize: Infinity,
+      onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateById memo'),
+    });
+
+    this.getProvinceTerritoryStateByCode = moize(this.getProvinceTerritoryStateByCode, {
+      maxAge: provinceTerritoryStateCacheTTL,
+      maxSize: Infinity,
+      onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateByCode memo'),
+    });
+
+    this.log.debug('%s initiated.', this.constructor.name);
+  }
+
+  listProvinceTerritoryStates(): ReadonlyArray<ProvinceTerritoryStateDto> {
+    this.log.debug('Get all province territory states');
+    const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.listAllProvinceTerritoryStates();
+    const provinceTerritoryStateDtos = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(provinceTerritoryStateEntities);
+    this.log.trace('Returning province territory states: [%j]', provinceTerritoryStateDtos);
+    return provinceTerritoryStateDtos;
+  }
+
+  getProvinceTerritoryStateById(id: string): ProvinceTerritoryStateDto {
+    this.log.debug('Get province territory state with id: [%s]', id);
+    const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateById(id);
+
+    if (!provinceTerritoryStateEntity) {
+      throw new ProvinceTerritoryStateNotFoundException(`Province territory state: [${id}] not found`);
+    }
+
+    const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity);
+    this.log.trace('Returning province territory state: [%j]', provinceTerritoryStateDto);
+    return provinceTerritoryStateDto;
+  }
+
+  getProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateDto {
+    this.log.debug('Get province territory state with code: [%s]', code);
+    const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateByCode(code);
+
+    if (!provinceTerritoryStateEntity) {
+      throw new ProvinceTerritoryStateNotFoundException(`Province territory state with code [${code}] not found`);
+    }
+
+    const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity);
+    this.log.trace('Returning province territory state: [%j]', provinceTerritoryStateDto);
+    return provinceTerritoryStateDto;
+  }
 
   listAndSortLocalizedProvinceTerritoryStates(locale: AppLocale): ReadonlyArray<ProvinceTerritoryStateLocalizedDto> {
     this.log.debug('Get and sort all localized province territory states with locale: [%s]', locale);
@@ -141,40 +184,6 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     const localizedProvinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto(provinceTerritoryStateDto, locale);
     this.log.trace('Returning localized province territory state with code [%s]: [%j]', code, localizedProvinceTerritoryStateDto);
     return localizedProvinceTerritoryStateDto;
-  }
-
-  private defaultListProvinceTerritoryStates(): ReadonlyArray<ProvinceTerritoryStateDto> {
-    this.log.debug('Get all province territory states');
-    const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.listAllProvinceTerritoryStates();
-    const provinceTerritoryStateDtos = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(provinceTerritoryStateEntities);
-    this.log.trace('Returning province territory states: [%j]', provinceTerritoryStateDtos);
-    return provinceTerritoryStateDtos;
-  }
-
-  private defaultGetProvinceTerritoryStateById(id: string): ProvinceTerritoryStateDto {
-    this.log.debug('Get province territory state with id: [%s]', id);
-    const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateById(id);
-
-    if (!provinceTerritoryStateEntity) {
-      throw new ProvinceTerritoryStateNotFoundException(`Province territory state: [${id}] not found`);
-    }
-
-    const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity);
-    this.log.trace('Returning province territory state: [%j]', provinceTerritoryStateDto);
-    return provinceTerritoryStateDto;
-  }
-
-  private defaultGetProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateDto {
-    this.log.debug('Get province territory state with code: [%s]', code);
-    const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateByCode(code);
-
-    if (!provinceTerritoryStateEntity) {
-      throw new ProvinceTerritoryStateNotFoundException(`Province territory state with code [${code}] not found`);
-    }
-
-    const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity);
-    this.log.trace('Returning province territory state: [%j]', provinceTerritoryStateDto);
-    return provinceTerritoryStateDto;
   }
 
   /**

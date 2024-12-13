@@ -36,7 +36,12 @@ export class DefaultClientApplicationService implements ClientApplicationService
     @inject(TYPES.domain.mappers.ClientApplicationDtoMapper) private readonly clientApplicationDtoMapper: ClientApplicationDtoMapper,
     @inject(TYPES.domain.repositories.ClientApplicationRepository) private readonly clientApplicationRepository: ClientApplicationRepository,
   ) {
-    this.log = logFactory.createLogger('DefaultClientApplicationService');
+    this.log = logFactory.createLogger(this.constructor.name);
+    this.init();
+  }
+
+  private init(): void {
+    this.log.debug('%s initiated.', this.constructor.name);
   }
 
   async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): Promise<ClientApplicationDto | null> {
