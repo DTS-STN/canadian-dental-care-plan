@@ -29,15 +29,6 @@ const breadcrumbsSchema = z
   )
   .readonly();
 
-const buildInfoSchema = z
-  .object({
-    buildDate: z.string(),
-    buildId: z.string(),
-    buildRevision: z.string(),
-    buildVersion: z.string(),
-  })
-  .readonly();
-
 const i18nKeySchema = z
   .custom<ParsedKeysByNamespaces>()
   .refine((val) => typeof val === 'string' && !validator.isEmpty(val))
@@ -51,8 +42,6 @@ export const i18nNamespacesSchema = z
 const pageIdentifierSchema = z.string().readonly();
 
 export type Breadcrumbs = z.infer<typeof breadcrumbsSchema>;
-
-export type BuildInfo = z.infer<typeof buildInfoSchema>;
 
 export type I18nNamespaces = z.infer<typeof i18nNamespacesSchema>;
 
@@ -81,14 +70,6 @@ export function useBreadcrumbs() {
       .map((result) => (result.success ? result.data : undefined))
       .reduce(coalesce) ?? []
   );
-}
-
-export function useBuildInfo() {
-  return useMatches()
-    .map(({ data }) => data as { buildInfo?: BuildInfo } | undefined)
-    .map((data) => buildInfoSchema.safeParse(data?.buildInfo))
-    .map((result) => (result.success ? result.data : undefined))
-    .reduce(coalesce);
 }
 
 export function useTransformAdobeAnalyticsUrl() {

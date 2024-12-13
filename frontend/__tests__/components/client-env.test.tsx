@@ -12,6 +12,10 @@ describe('<ClientEnv>', () => {
     const env: ClientEnv = {
       ADOBE_ANALYTICS_JQUERY_SRC: 'https://example.com/jquery.min.js',
       ANOTHER_ETHNIC_GROUP_OPTION: 100000002,
+      BUILD_DATE: '2000-01-01T00:00:00Z',
+      BUILD_ID: '000000',
+      BUILD_REVISION: '00000000',
+      BUILD_VERSION: '0.0.0',
       CANADA_COUNTRY_ID: 'CAN',
       CLIENT_STATUS_SUCCESS_ID: 'CLIENT_STATUS_SUCCESS',
       COMMUNICATION_METHOD_EMAIL_ID: 'EMAIL',

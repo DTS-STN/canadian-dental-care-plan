@@ -5,8 +5,8 @@ import { createRemixStub } from '@remix-run/testing';
 
 import { describe, expect, it } from 'vitest';
 
-import type { Breadcrumbs, BuildInfo, RouteHandleData } from '~/utils/route-utils';
-import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
+import type { Breadcrumbs, RouteHandleData } from '~/utils/route-utils';
+import { coalesce, useBreadcrumbs, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 
 /*
  * @vitest-environment jsdom
@@ -77,68 +77,6 @@ describe('useBreadcrumbs()', () => {
 
     const element = await waitFor(() => screen.findByTestId('data'));
     expect(element.textContent).toEqual(JSON.stringify(breadcrumbs));
-  });
-});
-
-describe('useBuildInfo()', () => {
-  it('expect no build info from useBuildInfo() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
-      {
-        Component: () => <Outlet />,
-        children: [
-          {
-            Component: () => <div data-testid="data">{JSON.stringify(useBuildInfo())}</div>,
-            path: '/',
-          },
-        ],
-      },
-    ]);
-
-    render(<RemixStub />);
-
-    const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual('');
-  });
-
-  it('expect correctly coalesced build info from useBuildInfo() if the loaders provide data', async () => {
-    interface DataBuildInfo {
-      buildInfo: BuildInfo;
-    }
-
-    const RemixStub = createRemixStub([
-      {
-        Component: () => <Outlet />,
-        loader: () => ({
-          buildInfo: {
-            buildDate: '0000-00-00T00:00:00Z',
-            buildId: '0000',
-            buildRevision: '00000000',
-            buildVersion: '0.0.0-00000000-0000',
-          },
-        }),
-        children: [
-          {
-            Component: () => <div data-testid="data">{JSON.stringify(useBuildInfo())}</div>,
-            loader: () => {
-              return {
-                buildInfo: {
-                  buildDate: '2000-01-01T00:00:00Z',
-                  buildId: '6969',
-                  buildRevision: '69696969',
-                  buildVersion: '0.0.0-69696969-6969',
-                },
-              } satisfies DataBuildInfo;
-            },
-            path: '/',
-          },
-        ],
-      },
-    ]);
-
-    render(<RemixStub />);
-
-    const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual('{"buildDate":"2000-01-01T00:00:00Z","buildId":"6969","buildRevision":"69696969","buildVersion":"0.0.0-69696969-6969"}');
   });
 });
 

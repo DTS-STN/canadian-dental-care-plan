@@ -13,7 +13,6 @@ import invariant from 'tiny-invariant';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { BuildInfo, BuildInfoService } from '~/.server/core';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface InstrumentationService {
@@ -51,20 +50,27 @@ export interface InstrumentationService {
   startActiveSpan<T extends (span: Span) => unknown>(name: string, fn: T): ReturnType<T>;
 }
 
-export type DefaultInstrumentationServiceServerConfig = Pick<ServerConfig, 'OTEL_SERVICE_NAME'>;
+export type DefaultInstrumentationServiceServerConfig = Pick<ServerConfig, 'BUILD_DATE' | 'BUILD_ID' | 'BUILD_REVISION' | 'BUILD_VERSION' | 'OTEL_SERVICE_NAME'>;
 
 @injectable()
 export class DefaultInstrumentationService implements InstrumentationService {
+  private readonly buildInfo;
   private readonly log: Logger;
-  private readonly buildInfo: BuildInfo;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: DefaultInstrumentationServiceServerConfig,
-    @inject(TYPES.core.BuildInfoService) buildInfoService: BuildInfoService,
   ) {
     this.log = logFactory.createLogger(DefaultInstrumentationService.name);
-    this.buildInfo = buildInfoService.getBuildInfo();
+
+    const { BUILD_DATE, BUILD_ID, BUILD_REVISION, BUILD_VERSION } = serverConfig;
+
+    this.buildInfo = {
+      buildDate: BUILD_DATE,
+      buildId: BUILD_ID,
+      buildRevision: BUILD_REVISION,
+      buildVersion: BUILD_VERSION,
+    } as const;
   }
 
   /**

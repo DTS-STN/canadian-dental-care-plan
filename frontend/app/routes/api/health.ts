@@ -10,15 +10,13 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
 
   const allHealthChecks = context.appContainer.findAll(TYPES.health.HealthCheck);
-  const buildInfoService = context.appContainer.get(TYPES.core.BuildInfoService);
-
-  const { buildRevision: buildId, buildVersion: version } = buildInfoService.getBuildInfo();
+  const serverConfig = context.appContainer.get(TYPES.configs.ServerConfig);
 
   const healthCheckOptions: HealthCheckOptions = {
     excludeComponents: toArray(exclude),
     includeComponents: toArray(include),
     includeDetails: await isAuthorized({ context, request }),
-    metadata: { buildId, version },
+    metadata: { buildId: serverConfig.BUILD_ID, version: serverConfig.BUILD_VERSION },
     timeoutMs: toNumber(timeout),
   };
 

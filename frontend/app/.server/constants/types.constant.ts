@@ -4,7 +4,6 @@ import type { interfaces } from 'inversify';
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
-import type { BuildInfoService } from '~/.server/core';
 import type { RedisService } from '~/.server/data/services';
 import type {
   AddressValidationDtoMapper,
@@ -135,9 +134,6 @@ export const TYPES = assignServiceIdentifiers({
   configs: {
     ClientConfig: serviceId<ClientConfig>(),
     ServerConfig: serviceId<ServerConfig>(),
-  },
-  core: {
-    BuildInfoService: serviceId<BuildInfoService>(),
   },
   data: {
     services: {

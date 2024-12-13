@@ -4,7 +4,6 @@ import { ContainerModule } from 'inversify';
 import { DefaultRaoidcService } from '~/.server/auth/raoidc.service';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import { DefaultBuildInfoService } from '~/.server/core';
 import { DefaultRedisService } from '~/.server/data/services';
 import {
   DefaultAddressValidationService,
@@ -43,7 +42,6 @@ function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
  */
 export const servicesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.auth.RaoidcService).to(DefaultRaoidcService);
-  bind(TYPES.core.BuildInfoService).to(DefaultBuildInfoService);
   // RedisService bindings depend on the SESSION_STORAGE_TYPE configuration string
   bind(TYPES.data.services.RedisService).to(DefaultRedisService).when(sessionTypeIs('redis'));
   bind(TYPES.domain.services.AddressValidationService).to(DefaultAddressValidationService);

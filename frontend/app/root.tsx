@@ -60,13 +60,11 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
 };
 
 export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
-  const buildInfoService = appContainer.get(TYPES.core.BuildInfoService);
   const dynatraceService = appContainer.get(TYPES.web.services.DynatraceService);
   const requestUrl = new URL(request.url);
   const locale = getLocale(request);
   const t = await getFixedT(request, ['gcweb']);
 
-  const buildInfo = buildInfoService.getBuildInfo();
   const dynatraceRumScript = await dynatraceService.findDynatraceRumScript();
   const env = appContainer.get(TYPES.configs.ClientConfig);
   const meta = {
@@ -82,7 +80,6 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const csrfToken = String(session.get('csrfToken'));
 
   return {
-    buildInfo,
     csrfToken,
     dynatraceRumScript,
     env,

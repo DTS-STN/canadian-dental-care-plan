@@ -1,6 +1,18 @@
 import { z } from 'zod';
 
-const validFeatureNames = ['address-validation', 'doc-upload', 'hcaptcha', 'show-prototype-banner', 'stub-login', 'status', 'view-letters', 'view-letters-online-application', 'view-messages', 'view-payload'] as const;
+const validFeatureNames = [
+  //
+  'address-validation',
+  'doc-upload',
+  'hcaptcha',
+  'show-prototype-banner',
+  'stub-login',
+  'status',
+  'view-letters',
+  'view-letters-online-application',
+  'view-messages',
+  'view-payload',
+] as const;
 
 export type FeatureName = (typeof validFeatureNames)[number];
 
@@ -18,9 +30,13 @@ const toBoolean = (val?: string) => val === 'true';
  */
 // prettier-ignore
 export const clientEnvSchema = z.object({
-  // Adobe Analytics scripts
   ADOBE_ANALYTICS_SRC: z.string().url().optional(),
   ADOBE_ANALYTICS_JQUERY_SRC: z.string().url().default('https://code.jquery.com/jquery-3.7.1.min.js'),
+
+  BUILD_DATE: z.string().default('2000-01-01T00:00:00Z'),
+  BUILD_ID: z.string().default('000000'),
+  BUILD_REVISION: z.string().default('00000000'),
+  BUILD_VERSION: z.string().default('0.0.0'),
 
   ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(""),
 

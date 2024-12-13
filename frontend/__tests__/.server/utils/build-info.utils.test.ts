@@ -21,7 +21,7 @@ describe('readBuildInfo', () => {
   it('should return a BuildInfo object if the file exists', () => {
     const expectedBuildInfo = {
       buildDate: '2000-01-01T00:00:00Z',
-      buildId: '0000',
+      buildId: '000000',
       buildRevision: '00000000',
       buildVersion: '0.0.0-00000000-0000',
     };

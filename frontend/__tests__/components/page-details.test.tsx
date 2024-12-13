@@ -3,15 +3,17 @@ import { render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PageDetails } from '~/components/page-details';
-import { useBuildInfo, usePageIdentifier } from '~/utils/route-utils';
+import { getClientEnv } from '~/utils/env-utils';
+import { usePageIdentifier } from '~/utils/route-utils';
 
+vi.mock('~/utils/env-utils');
 vi.mock('~/utils/route-utils');
 
 describe('PageDetails', () => {
   beforeEach(() => {
-    vi.mocked(useBuildInfo, { partial: true }).mockReturnValue({
-      buildDate: '2024-03-11T00:00:00Z',
-      buildVersion: '1.0.0',
+    vi.mocked(getClientEnv, { partial: true }).mockReturnValue({
+      BUILD_DATE: '2024-03-11T00:00:00Z',
+      BUILD_VERSION: '1.0.0',
     });
 
     vi.mocked(usePageIdentifier).mockReturnValue('page123');
@@ -50,13 +52,13 @@ describe('PageDetails', () => {
   });
 
   it('does not display build date if not available', () => {
-    vi.mocked(useBuildInfo, { partial: true }).mockReturnValueOnce({});
+    vi.mocked(getClientEnv, { partial: true }).mockReturnValue({});
     const { queryByText } = render(<PageDetails />);
     expect(queryByText('gcweb:page-details.date-modfied')).not.toBeInTheDocument();
   });
 
   it('does not display build version if not available', () => {
-    vi.mocked(useBuildInfo, { partial: true }).mockReturnValueOnce({ buildVersion: '' });
+    vi.mocked(getClientEnv, { partial: true }).mockReturnValue({ BUILD_VERSION: '' });
     const { queryByText } = render(<PageDetails />);
     expect(queryByText('gcweb:page-details.version')).not.toBeInTheDocument();
   });
