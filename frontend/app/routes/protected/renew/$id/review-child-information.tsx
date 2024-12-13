@@ -13,10 +13,10 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { clearProtectedRenewState, loadProtectedRenewStateForReview, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { clearProtectedRenewState, isPrimaryApplicantStateComplete, loadProtectedRenewState, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
-import { ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -53,12 +53,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const state = loadProtectedRenewStateForReview({ params, request, session });
+  const state = loadProtectedRenewState({ params, session });
   const validatedChildren = validateProtectedChildrenStateForReview(state.children);
-
-  if (validatedChildren.length === 0) {
-    return redirect(getPathById('protected/renew/$id/review-and-submit', params));
-  }
 
   // renew state is valid then edit mode can be set to true
   saveProtectedRenewState({ params, session, state: { editMode: true } });
@@ -133,13 +129,15 @@ export async function action({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
+  const state = loadProtectedRenewState({ params, session });
+
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
-    saveProtectedRenewState({ params, session, state: {} });
+    if (!isPrimaryApplicantStateComplete(state)) {
+      return redirect(getPathById('protected/renew/$id/member-selection', params));
+    }
     return redirect(getPathById('protected/renew/$id/review-child-information', params));
   }
-
-  const state = loadProtectedRenewStateForReview({ params, request, session });
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
@@ -284,16 +282,9 @@ export default function ProtectedRenewReviewChildInformation() {
             >
               {t('protected-renew:review-child-information.continue-button')}
             </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              routeId="protected/renew/$id/review-adult-information"
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Review child(ren) information click"
-            >
+            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Review child(ren) information click">
               {t('protected-renew:review-child-information.back-button')}
-            </ButtonLink>
+            </Button>
           </div>
         </fetcher.Form>
       </div>
