@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "name": "Backend API",
+      "path": "backend"
+    },
+    {
+      "name": "Frontend",
+      "path": "frontend"
+    },
+    {
+      "name": "GitOps",
+      "path": "gitops"
+    },
+    {
+      "name": "Infrastructure",
+      "path": "infrastructure"
+    }
+  ],
+  "settings": {
+    "files.trimTrailingWhitespace": true
+  }
+}
