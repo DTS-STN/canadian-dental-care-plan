@@ -152,7 +152,7 @@ export default function ProtectedDemographicSurveyQuestions() {
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     indigenousStatus: 'input-radio-indigenous-status-option-0-label',
-    firstNations: 'input-checkbox-first-nations-option-0-label',
+    firstNations: 'input-radio-first-nations-option-0-label',
     disabilityStatus: 'input-radio-disability-status-option-0-label',
     ethnicGroups: 'input-checkboxes-ethnic-groups',
     anotherEthnicGroup: 'another-ethnic-group',
@@ -210,23 +210,28 @@ export default function ProtectedDemographicSurveyQuestions() {
   return (
     <>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('protected-renew:demographic-survey.optional')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
+            <p>{t('protected-renew:demographic-survey.improve-cdcp')}</p>
+            <p>{t('protected-renew:demographic-survey.confidential')}</p>
+            <p>{t('protected-renew:demographic-survey.impact-enrollment')}</p>
+            <Button name="_action" value={FormAction.Save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application:Prefer not to answer - Demographic survey click">
+              {t('protected-renew:demographic-survey.prefer-not-to-answer-btn')}
+            </Button>
+            <p className="mb-4 italic">{t('protected-renew:demographic-survey.optional')}</p>
             <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('protected-renew:demographic-survey.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
             <InputRadios id="disability-status" name="disabilityStatus" legend={t('protected-renew:demographic-survey.disability-status')} options={disabilityStatusOptions} errorMessage={errors?.disabilityStatus} required />
             <InputCheckboxes id="ethnic-groups" name="ethnicGroups" legend={t('protected-renew:demographic-survey.ethnic-groups')} options={ethnicGroupOptions} errorMessage={errors?.ethnicGroups} required />
             <InputRadios id="location-born-status" name="locationBornStatus" legend={t('protected-renew:demographic-survey.location-born-status')} options={locationBornStatusOptions} errorMessage={errors?.locationBornStatus} required />
             <InputRadios id="gender-status" name="genderStatus" legend={t('protected-renew:demographic-survey.gender-status')} options={genderStatusOptions} errorMessage={errors?.genderStatus} required />
           </div>
-
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
-                {t('protected-renew:demographic-survey.save-btn')}
-              </Button>
+              <LoadingButton id="prefer-not-to-answer-button" variant="alternative" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
+                {t('protected-renew:demographic-survey.continue-btn')}
+              </LoadingButton>
               <ButtonLink
                 id="back-button"
                 routeId="protected/renew/$id/review-adult-information"
