@@ -613,6 +613,16 @@ export const routes = [
             paths: { en: '/:lang/renew/:id/child/parent-intro', fr: '/:lang/renew/:id/enfant/parent-intro' },
           },
           {
+            id: 'public/renew/$id/child/confirm-marital-status',
+            file: 'routes/public/renew/$id/child/confirm-marital-status.tsx',
+            paths: { en: '/:lang/renew/:id/child/confirm-marital-status', fr: '/:lang/renew/:id/enfant/confirmer-etat-civil' },
+          },
+          {
+            id: 'public/renew/$id/child/marital-status',
+            file: 'routes/public/renew/$id/child/marital-status.tsx',
+            paths: { en: '/:lang/renew/:id/child/marital-status', fr: '/:lang/renew/:id/enfant/etat-civil' },
+          },
+          {
             id: 'public/renew/$id/child/children/$childId/dental-insurance',
             file: 'routes/public/renew/$id/child/children/$childId/dental-insurance.tsx',
             paths: { en: '/:lang/renew/:id/child/children/:childId/dental-insurance', fr: '/:lang/renew/:id/enfant/enfants/:childId/assurance-dentaire' },
