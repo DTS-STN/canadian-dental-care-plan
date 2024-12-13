@@ -35,7 +35,7 @@ export class DefaultApplicationYearService implements ApplicationYearService {
 
     this.auditService.createAudit('application-year.get-application-year-result', { userId: applicationYearRequestDto.userId });
 
-    const applicationYearResultEntity = await this.applicationYearRepository.listApplicationYears(applicationYearRequestDto);
+    const applicationYearResultEntity = await this.applicationYearRepository.listApplicationYears(applicationYearRequestDto.date);
     const applicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultEntityToApplicationYearResultDto(applicationYearResultEntity);
 
     this.log.trace('Returning possible application years result: [%j]', applicationYearResultDto);

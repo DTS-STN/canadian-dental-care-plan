@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const id = randomUUID().toString();
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
-  const applicationYears = await applicationYearService.listApplicationYears({ currentDate, userId: 'anonymous' });
+  const applicationYears = await applicationYearService.listApplicationYears({ date: currentDate, userId: 'anonymous' });
   const state = startApplyState({ id, session, applicationYears });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:index.page-title') }) };
