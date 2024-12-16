@@ -29,6 +29,7 @@ export interface BenefitRenewalDtoMapper {
 
 interface ToBenefitRenewalRequestEntityArgs {
   applicantInformation: RenewalApplicantInformationDto;
+  applicationYearId: string;
   changeIndicators?: AdultChildChangeIndicators | ItaChangeIndicators;
   children: readonly RenewalChildDto[];
   communicationPreferences: CommunicationPreferencesDto;
@@ -84,6 +85,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
 
   private toBenefitRenewalRequestEntity({
     applicantInformation,
+    applicationYearId,
     changeIndicators,
     children,
     communicationPreferences,
@@ -158,7 +160,11 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
           ReferenceDataID: '775170001', // PP's static value for "Online"
         },
         BenefitApplicationYear: {
-          BenefitApplicationYearIdentification: [], // TODO map this from demographics answers
+          BenefitApplicationYearIdentification: [
+            {
+              IdentificationID: applicationYearId,
+            },
+          ],
         },
       },
     };

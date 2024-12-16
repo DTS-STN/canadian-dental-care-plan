@@ -27,6 +27,7 @@ export type ProtectedBenefitRenewalDto = BenefitRenewalDto;
 export type BenefitRenewalDto = Omit<BenefitApplicationDto, 'applicantInformation' | 'children' | 'partnerInformation'> &
   Readonly<{
     applicantInformation: RenewalApplicantInformationDto;
+    applicationYearId: string;
     children: RenewalChildDto[];
     demographicSurvey?: DemographicSurveyDto;
     partnerInformation?: RenewalPartnerInformationDto;

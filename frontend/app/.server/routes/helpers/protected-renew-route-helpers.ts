@@ -376,7 +376,7 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
-  const { maritalStatus, partnerInformation, mailingAddress, homeAddress, addressInformation, clientApplication, contactInformation, communicationPreferences, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
+  const { applicationYear, maritalStatus, partnerInformation, mailingAddress, homeAddress, addressInformation, clientApplication, contactInformation, communicationPreferences, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
 
   const children = validateProtectedChildrenStateForReview(state.children);
 
@@ -388,6 +388,7 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
   }
 
   return {
+    applicationYear,
     maritalStatus,
     partnerInformation,
     mailingAddress,

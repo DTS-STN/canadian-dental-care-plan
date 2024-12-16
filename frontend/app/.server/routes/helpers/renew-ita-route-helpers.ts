@@ -78,8 +78,24 @@ interface ValidateRenewItaStateForReviewArgs {
 }
 
 export function validateRenewItaStateForReview({ params, state }: ValidateRenewItaStateForReviewArgs) {
-  const { maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, mailingAddress, homeAddress, applicantInformation, clientApplication, dentalBenefits, dentalInsurance, hasAddressChanged, demographicSurvey } =
-    state;
+  const {
+    applicationYear,
+    maritalStatus,
+    partnerInformation,
+    contactInformation,
+    editMode,
+    id,
+    submissionInfo,
+    typeOfRenewal,
+    mailingAddress,
+    homeAddress,
+    applicantInformation,
+    clientApplication,
+    dentalBenefits,
+    dentalInsurance,
+    hasAddressChanged,
+    demographicSurvey,
+  } = state;
 
   if (typeOfRenewal === undefined) {
     throw redirect(getPathById('public/renew/$id/type-renewal', params));
@@ -126,6 +142,7 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
   }
 
   return {
+    applicationYear,
     maritalStatus,
     editMode,
     id,

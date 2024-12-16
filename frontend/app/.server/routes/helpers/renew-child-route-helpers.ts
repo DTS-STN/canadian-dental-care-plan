@@ -122,7 +122,7 @@ interface ValidateStateForReviewArgs {
 }
 
 export function validateRenewChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
-  const { hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, addressInformation, applicantInformation } = state;
+  const { applicationYear, hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, addressInformation, applicantInformation } = state;
 
   if (typeOfRenewal === undefined) {
     throw redirect(getPathById('public/renew/$id/type-renewal', params));
@@ -159,6 +159,7 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
   const children = validateChildrenStateForReview({ childrenState: state.children, params });
 
   return {
+    applicationYear,
     maritalStatus,
     editMode,
     id,
