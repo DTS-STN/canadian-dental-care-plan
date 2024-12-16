@@ -123,6 +123,7 @@ interface ValidateRenewAdultChildStateForReviewArgs {
 
 export function validateRenewAdultChildStateForReview({ params, state }: ValidateRenewAdultChildStateForReviewArgs) {
   const {
+    applicationYear,
     hasMaritalStatusChanged,
     hasAddressChanged,
     maritalStatus,
@@ -200,6 +201,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
   const children = getChildrenState(state).length > 0 ? validateChildrenStateForReview({ childrenState: state.children, params }) : [];
 
   return {
+    applicationYear,
     hasMaritalStatusChanged,
     maritalStatus,
     editMode,

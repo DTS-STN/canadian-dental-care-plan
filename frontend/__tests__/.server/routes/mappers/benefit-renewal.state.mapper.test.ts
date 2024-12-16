@@ -119,6 +119,11 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           mailingPostalCode: '90210',
           mailingProvince: 'LA',
         },
+        applicationYear: {
+          id: '2024',
+          taxYear: '2024',
+          coverageStartDate: '2024-01-01',
+        },
         children: [
           {
             id: '1',
@@ -183,6 +188,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           socialInsuranceNumber: '800000002',
           clientNumber: '00000000000',
         },
+        applicationYearId: '2024',
         contactInformation: {
           copyMailingAddress: false,
           homeAddress: '123 New Fake Street',

@@ -20,6 +20,7 @@ import type {
 import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
 import type {
   ProtectedAddressInformationState,
+  ProtectedApplicationYearState,
   ProtectedChildState,
   ProtectedContactInformationState,
   ProtectedDemographicSurveyState,
@@ -27,10 +28,20 @@ import type {
   ProtectedDentalProvincialTerritorialBenefitsState,
   ProtectedPartnerInformationState,
 } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import type { AddressInformationState, ChildState, ContactInformationState, DemographicSurveyState, DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
+import type {
+  AddressInformationState,
+  ApplicationYearState,
+  ChildState,
+  ContactInformationState,
+  DemographicSurveyState,
+  DentalFederalBenefitsState,
+  DentalProvincialTerritorialBenefitsState,
+  PartnerInformationState,
+} from '~/.server/routes/helpers/renew-route-helpers';
 
 export interface RenewAdultChildState {
   addressInformation?: AddressInformationState;
+  applicationYear: ApplicationYearState;
   children: ChildState[];
   clientApplication: ClientApplicationDto;
   contactInformation: ContactInformationState;
@@ -46,6 +57,7 @@ export interface RenewAdultChildState {
 
 export interface RenewItaState {
   addressInformation?: AddressInformationState;
+  applicationYear: ApplicationYearState;
   clientApplication: ClientApplicationDto;
   contactInformation: ContactInformationState;
   demographicSurvey?: DemographicSurveyState;
@@ -58,6 +70,7 @@ export interface RenewItaState {
 
 export interface ProtectedRenewState {
   addressInformation?: ProtectedAddressInformationState;
+  applicationYear: ProtectedApplicationYearState;
   clientApplication: ClientApplicationDto;
   children: ProtectedChildState[];
   contactInformation?: ProtectedContactInformationState;
@@ -123,6 +136,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
   mapRenewAdultChildStateToAdultChildBenefitRenewalDto({
     addressInformation,
+    applicationYear,
     children,
     clientApplication,
     contactInformation,
@@ -152,6 +166,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedMaritalStatus: maritalStatus,
       }),
+      applicationYearId: applicationYear.id,
       children: this.toChildren({
         existingChildren: clientApplication.children,
         renewedChildren: children,
@@ -194,7 +209,18 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  mapRenewItaStateToItaBenefitRenewalDto({ addressInformation, clientApplication, contactInformation, demographicSurvey, dentalBenefits, dentalInsurance, hasAddressChanged, maritalStatus, partnerInformation }: RenewItaState): ItaBenefitRenewalDto {
+  mapRenewItaStateToItaBenefitRenewalDto({
+    addressInformation,
+    applicationYear,
+    clientApplication,
+    contactInformation,
+    demographicSurvey,
+    dentalBenefits,
+    dentalInsurance,
+    hasAddressChanged,
+    maritalStatus,
+    partnerInformation,
+  }: RenewItaState): ItaBenefitRenewalDto {
     return {
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
@@ -202,6 +228,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: true,
         renewedMaritalStatus: maritalStatus,
       }),
+      applicationYearId: applicationYear.id,
       changeIndicators: {
         hasAddressChanged,
       },
@@ -238,7 +265,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }
 
   mapProtectedRenewStateToProtectedBenefitRenewalDto(
-    { addressInformation, children, contactInformation, demographicSurvey, dentalBenefits, dentalInsurance, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
+    { addressInformation, applicationYear, children, contactInformation, demographicSurvey, dentalBenefits, dentalInsurance, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
     userId: string,
   ): ProtectedBenefitRenewalDto {
     return {
@@ -248,6 +275,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: !!maritalStatus,
         renewedMaritalStatus: maritalStatus,
       }),
+      applicationYearId: applicationYear.id,
       demographicSurvey,
       children: this.toChildren({
         existingChildren: clientApplication.children,
