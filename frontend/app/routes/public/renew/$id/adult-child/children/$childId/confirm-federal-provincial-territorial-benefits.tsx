@@ -75,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const dentalBenefits = {
-    hasFederalProvincialTerritorialBenefitsChanged: formData.get('hasFederalProvincialTerritorialBenefitsChanged') ? formData.get('federalProvincialTerritorialBenefitsChanged') === FederalBenefitsChangedOption.Yes : undefined,
+    hasFederalProvincialTerritorialBenefitsChanged: formData.get('hasFederalProvincialTerritorialBenefitsChanged') ? formData.get('hasFederalProvincialTerritorialBenefitsChanged') === FederalBenefitsChangedOption.Yes : undefined,
   };
 
   const parsedDentalBenefitsResult = dentalBenefitsChangedSchema.safeParse(dentalBenefits);
@@ -146,7 +146,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
           <fieldset className="mb-6">
             <InputRadios
               id="federal-provincial-territorial-benefits-changed"
-              name="federalProvincialTerritorialBenefitsChanged"
+              name="hasFederalProvincialTerritorialBenefitsChanged"
               legend={t('renew-adult-child:children.confirm-dental-benefits.has-benefits-changed', { childName })}
               options={[
                 {

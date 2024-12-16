@@ -132,7 +132,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
           <fieldset className="mb-6">
             <InputRadios
               id="federal-provincial-territorial-benefits-changed"
-              name="federalProvincialTerritorialBenefitsChanged"
+              name="hasFederalProvincialTerritorialBenefitsChanged"
               legend={t('renew-adult-child:confirm-dental-benefits.has-benefits')}
               options={[
                 {
