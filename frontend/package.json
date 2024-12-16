@@ -85,7 +85,7 @@
   "devDependencies": {
     "@eslint/compat": "^1.2.4",
     "@eslint/eslintrc": "^3.2.0",
-    "@eslint/js": "^9.16.0",
+    "@eslint/js": "^9.17.0",
     "@playwright/test": "^1.49.1",
     "@remix-run/dev": "^2.15.1",
     "@remix-run/express": "^2.15.1",
@@ -115,7 +115,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "globals": "^15.13.0",
     "jsdom": "^25.0.1",
-    "msw": "^2.6.8",
+    "msw": "^2.6.9",
     "nodemon": "^3.1.9",
     "patch-package": "^8.0.0",
     "playwright-teamcity-reporter": "^1.0.4",
