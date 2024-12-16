@@ -150,15 +150,10 @@ export default function RenewItaAccessToDentalInsurance() {
               <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
                 {t('dental-insurance.button.save-btn')}
               </Button>
-              <ButtonLink
-                id="back-button"
-                routeId="public/apply/$id/adult/review-information"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental insurance click"
-              >
-                {t('dental-insurance.button.cancel-btn')}
-              </ButtonLink>
+
+              <Button id="cancel-button" name="_action" value="cancel" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental insurance click">
+                {t('renew-ita:confirm-phone.cancel-btn')}
+              </Button>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">

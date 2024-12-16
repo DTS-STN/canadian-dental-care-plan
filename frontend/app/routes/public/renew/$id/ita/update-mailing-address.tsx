@@ -112,10 +112,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const mailingAddressValidator = appContainer.get(TYPES.routes.public.renew.ita.MailingAddressValidatorFactoryIta).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('mailingAddress')),
-    countryId: String(formData.get('mailingCountry')),
-    provinceStateId: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : '',
+    countryId: String(formData.get('countryId')),
+    provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
     city: String(formData.get('mailingCity')),
-    postalZipCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : '',
+    postalZipCode: formData.get('postalZipCode') ? String(formData.get('postalZipCode')) : undefined,
   });
 
   if (!validatedResult.success) {
@@ -313,7 +313,7 @@ export default function RenewItaUpdateAddress() {
                 />
                 <InputSanitizeField
                   id="mailing-postal-code"
-                  name="mailingPostalCode"
+                  name="postalZipCode"
                   className="w-full"
                   label={isPostalCodeRequired ? t('renew-ita:update-address.address-field.postal-code') : t('renew-ita:update-address.address-field.postal-code-optional')}
                   maxLength={100}
@@ -326,7 +326,7 @@ export default function RenewItaUpdateAddress() {
               {mailingRegions.length > 0 && (
                 <InputSelect
                   id="mailing-province"
-                  name="mailingProvince"
+                  name="provinceStateId"
                   className="w-full sm:w-1/2"
                   label={t('renew-ita:update-address.address-field.province')}
                   defaultValue={defaultState.mailingAddress?.province}
@@ -337,7 +337,7 @@ export default function RenewItaUpdateAddress() {
               )}
               <InputSelect
                 id="mailing-country"
-                name="mailingCountry"
+                name="countryId"
                 className="w-full sm:w-1/2"
                 label={t('renew-ita:update-address.address-field.country')}
                 autoComplete="country"
@@ -429,9 +429,9 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copy
     const selectedAddressSuggestion = selectedAddressSuggestionOption === enteredAddressOptionValue ? enteredAddress : suggestedAddress;
     formData.set('mailingAddress', selectedAddressSuggestion.address);
     formData.set('mailingCity', selectedAddressSuggestion.city);
-    formData.set('mailingCountry', selectedAddressSuggestion.countryId);
-    formData.set('mailingPostalCode', selectedAddressSuggestion.postalZipCode);
-    formData.set('mailingProvince', selectedAddressSuggestion.provinceStateId);
+    formData.set('countryId', selectedAddressSuggestion.countryId);
+    formData.set('postalZipCode', selectedAddressSuggestion.postalZipCode);
+    formData.set('provinceStateId', selectedAddressSuggestion.provinceStateId);
     if (copyAddressToHome) {
       formData.set('copyMailingAddress', 'copy');
     }
@@ -513,9 +513,9 @@ function AddressInvalidDialogContent({ invalidAddress, copyAddressToHome }: Addr
     // Append selected address suggestion to form data
     formData.set('mailingAddress', invalidAddress.address);
     formData.set('mailingCity', invalidAddress.city);
-    formData.set('mailingCountry', invalidAddress.countryId);
-    formData.set('mailingPostalCode', invalidAddress.postalZipCode);
-    formData.set('mailingProvince', invalidAddress.provinceStateId);
+    formData.set('countryId', invalidAddress.countryId);
+    formData.set('postalZipCode', invalidAddress.postalZipCode);
+    formData.set('provinceStateId', invalidAddress.provinceStateId);
     if (copyAddressToHome) {
       formData.set('copyMailingAddress', 'copy');
     }
