@@ -14,6 +14,11 @@ import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 export interface RenewState {
   readonly id: string;
   readonly editMode: boolean;
+  readonly applicationYear: {
+    id: string;
+    taxYear: string;
+    coverageStartDate: string;
+  };
   readonly applicantInformation?: {
     firstName: string;
     lastName: string;
@@ -140,6 +145,7 @@ export interface RenewState {
   // TODO Add remaining states
 }
 
+export type ApplicationYearState = RenewState['applicationYear'];
 export type ChildState = RenewState['children'][number];
 export type ApplicantInformationState = NonNullable<RenewState['applicantInformation']>;
 export type TypeOfRenewalState = NonNullable<RenewState['typeOfRenewal']>;
@@ -249,6 +255,7 @@ export function clearRenewState({ params, session }: ClearStateArgs) {
 }
 
 interface StartArgs {
+  applicationYear: ApplicationYearState;
   id: string;
   session: Session;
 }
@@ -258,13 +265,14 @@ interface StartArgs {
  * @param args - The arguments.
  * @returns The initial Renew state.
  */
-export function startRenewState({ id, session }: StartArgs) {
+export function startRenewState({ applicationYear, id, session }: StartArgs) {
   const log = getLogger('renew-route-helpers.server/startRenewState');
   const parsedId = idSchema.parse(id);
 
   const initialState: RenewState = {
     id: parsedId,
     editMode: false,
+    applicationYear,
     children: [],
   };
 

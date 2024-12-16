@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
 
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useLoaderData, useNavigate, useParams } from '@remix-run/react';
 
 import { randomUUID } from 'crypto';
+import invariant from 'tiny-invariant';
 
 import { TYPES } from '~/.server/constants';
 import { startProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { pageIds } from '~/page-ids';
+import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -32,8 +36,22 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
+  const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
+  const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin });
+  if (!clientApplication) {
+    throw redirect(getPathById('protected/data-unavailable'));
+  }
+
+  const currentDate = getCurrentDateString(locale);
+  const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
+  const applicationYear = await applicationYearService.findRenewalApplicationYear({ date: currentDate, userId: userInfoToken.sub });
+  invariant(applicationYear, 'Expected applicationYear to be defined'); // TODO this should redirect to the protected apply flow when introduced
+
   const id = randomUUID().toString();
-  const state = await startProtectedRenewState({ id, session, appContainer });
+  const state = startProtectedRenewState({ applicationYear, clientApplication, id, session });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:index.page-title') }) };
 

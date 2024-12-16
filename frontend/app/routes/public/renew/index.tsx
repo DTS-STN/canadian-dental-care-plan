@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
 
+import { redirect } from '@remix-run/node';
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData, useNavigate, useParams } from '@remix-run/react';
 
 import { randomUUID } from 'crypto';
 
+import { TYPES } from '~/.server/constants';
 import { startRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { pageIds } from '~/page-ids';
+import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -24,12 +27,20 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
   const id = randomUUID().toString();
-  const state = startRenewState({ id, session });
+
+  const currentDate = getCurrentDateString(locale);
+  const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
+  const applicationYear = await applicationYearService.findRenewalApplicationYear({ date: currentDate, userId: 'anonymous' });
+  if (!applicationYear) {
+    throw redirect(getPathById('public/apply/index', params));
+  }
+
+  const state = startRenewState({ applicationYear, id, session });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:terms-and-conditions.page-title') }) };
 

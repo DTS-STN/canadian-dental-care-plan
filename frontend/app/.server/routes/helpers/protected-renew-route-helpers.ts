@@ -6,8 +6,6 @@ import { isRedirectResponse, isResponse } from '@remix-run/react/dist/data';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
-import type { AppContainerProvider } from '~/.server/app-container.provider';
-import { TYPES } from '~/.server/constants';
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
@@ -18,6 +16,11 @@ import { getPathById } from '~/utils/route-utils';
 export interface ProtectedRenewState {
   readonly id: string;
   readonly editMode: boolean;
+  readonly applicationYear: {
+    id: string;
+    taxYear: string;
+    coverageStartDate: string;
+  };
   readonly clientApplication: ClientApplicationDto;
   readonly externallyReviewed?: boolean;
   readonly previouslyReviewed?: boolean;
@@ -137,6 +140,7 @@ export interface ProtectedRenewState {
   // TODO Add remaining states
 }
 
+export type ProtectedApplicationYearState = NonNullable<ProtectedRenewState['applicationYear']>;
 export type ProtectedPartnerInformationState = NonNullable<ProtectedRenewState['partnerInformation']>;
 export type ProtectedChildState = ProtectedRenewState['children'][number];
 export type ProtectedAddressInformationState = NonNullable<ProtectedRenewState['addressInformation']>;
@@ -243,9 +247,10 @@ export function clearProtectedRenewState({ params, session }: ClearStateArgs) {
 }
 
 interface StartArgs {
+  applicationYear: ProtectedApplicationYearState;
+  clientApplication: ProtectedClientApplicationState;
   id: string;
   session: Session;
-  appContainer: AppContainerProvider;
 }
 
 /**
@@ -253,21 +258,16 @@ interface StartArgs {
  * @param args - The arguments.
  * @returns The initial protected renew state.
  */
-export async function startProtectedRenewState({ id, session, appContainer }: StartArgs) {
+export function startProtectedRenewState({ applicationYear, clientApplication, id, session }: StartArgs) {
   const log = getLogger('protected-renew-route-helpers.server/startProtectedRenewState');
   const parsedId = idSchema.parse(id);
   const sessionName = getSessionName(parsedId);
-
-  const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
-  const clientApplication = await clientApplicationService.findClientApplicationBySin(session.get('userInfoToken').sin);
-  if (!clientApplication) {
-    throw redirect(getPathById('protected/data-unavailable'));
-  }
 
   // TODO: create a mapper function from clientApplication to initialState?
   const initialState: ProtectedRenewState = {
     id: parsedId,
     editMode: false,
+    applicationYear,
     clientApplication,
     children: clientApplication.children.map((child) => {
       const immutableChild = clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information.socialInsuranceNumber);
