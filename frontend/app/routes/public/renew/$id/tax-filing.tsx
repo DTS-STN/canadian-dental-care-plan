@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:tax-filing.page-title') }) };
 
-  return { id: state.id, meta, defaultState: state.taxFiling };
+  return { id: state.id, meta, defaultState: state.taxFiling, taxYear: state.applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -78,7 +78,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewFlowTaxFiling() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = useLoaderData<typeof loader>();
+  const { defaultState, taxYear } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -98,7 +98,7 @@ export default function RenewFlowTaxFiling() {
           <InputRadios
             id="tax-filing"
             name="taxFiling"
-            legend={t('renew:tax-filing.form-instructions')}
+            legend={t('renew:tax-filing.form-instructions', { taxYear })}
             options={[
               { value: TaxFilingOption.Yes, children: t('renew:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
               { value: TaxFilingOption.No, children: t('renew:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
