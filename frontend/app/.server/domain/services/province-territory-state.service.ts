@@ -86,7 +86,7 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     @inject(TYPES.domain.repositories.ProvinceTerritoryStateRepository) private readonly provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultProvinceTerritoryStateService');
     this.init();
   }
 
@@ -114,7 +114,7 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
       onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateByCode memo'),
     });
 
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultProvinceTerritoryStateService initiated.');
   }
 
   listProvinceTerritoryStates(): ReadonlyArray<ProvinceTerritoryStateDto> {

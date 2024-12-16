@@ -58,7 +58,7 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
     @inject(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository) private readonly federalGovernmentInsurancePlanRepository: FederalGovernmentInsurancePlanRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultFederalGovernmentInsurancePlanService');
     this.init();
   }
 
@@ -79,7 +79,7 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
       onCacheAdd: () => this.log.info('Creating new getFederalGovernmentInsurancePlanById memo'),
     });
 
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultFederalGovernmentInsurancePlanService initiated.');
   }
 
   listFederalGovernmentInsurancePlans(): ReadonlyArray<FederalGovernmentInsurancePlanDto> {

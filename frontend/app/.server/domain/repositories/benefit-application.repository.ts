@@ -26,7 +26,7 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
     private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_BENEFIT_APPLICATION_API_BASE_URI' | 'INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultBenefitApplicationRepository');
   }
 
   async createBenefitApplication(benefitApplicationRequestEntity: BenefitApplicationRequestEntity): Promise<BenefitApplicationResponseEntity> {
@@ -65,7 +65,7 @@ export class MockBenefitApplicationRepository implements BenefitApplicationRepos
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('MockBenefitApplicationRepository');
   }
 
   createBenefitApplication(benefitApplicationRequestEntity: BenefitApplicationRequestEntity): Promise<BenefitApplicationResponseEntity> {

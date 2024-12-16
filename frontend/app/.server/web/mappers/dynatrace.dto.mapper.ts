@@ -21,7 +21,7 @@ export class DefaultDynatraceDtoMapper implements DynatraceDtoMapper {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultDynatraceDtoMapper');
   }
 
   mapDynatraceRumScriptToDynatraceRumScriptDto(dynatraceRumScript: string): DynatraceRumScriptDto | null {

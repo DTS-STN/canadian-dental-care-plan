@@ -95,7 +95,7 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultDemographicSurveyRepository');
   }
 
   listAllIndigenousStatuses(): IndigenousStatusEntity[] {

@@ -26,7 +26,7 @@ export class DefaultPreferredCommunicationMethodService implements PreferredComm
     @inject(TYPES.domain.repositories.PreferredCommunicationMethodRepository) private readonly preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultPreferredCommunicationMethodService');
     this.init();
   }
 
@@ -47,7 +47,7 @@ export class DefaultPreferredCommunicationMethodService implements PreferredComm
       onCacheAdd: () => this.log.info('Creating new getPreferredCommunicationMethodById memo'),
     });
 
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultPreferredCommunicationMethodService initiated.');
   }
 
   listPreferredCommunicationMethods(): PreferredCommunicationMethodDto[] {

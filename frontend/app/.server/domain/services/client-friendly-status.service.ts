@@ -60,7 +60,7 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
     @inject(TYPES.domain.repositories.ClientFriendlyStatusRepository) private readonly clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultClientFriendlyStatusService');
     this.init();
   }
 
@@ -76,7 +76,7 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
       onCacheAdd: () => this.log.info('Creating new getClientFriendlyStatusById memo'),
     });
 
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultClientFriendlyStatusService initiated.');
   }
 
   /**

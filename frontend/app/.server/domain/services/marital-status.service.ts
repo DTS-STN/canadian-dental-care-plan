@@ -67,7 +67,7 @@ export class DefaultMaritalStatusService implements MaritalStatusService {
     @inject(TYPES.domain.repositories.MaritalStatusRepository) private readonly maritalStatusRepository: MaritalStatusRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultMaritalStatusService');
     this.init();
   }
 
@@ -89,7 +89,7 @@ export class DefaultMaritalStatusService implements MaritalStatusService {
       onCacheAdd: () => this.log.info('Creating new getMaritalStatusById memo'),
     });
 
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultMaritalStatusService initiated.');
   }
 
   listMaritalStatuses(): ReadonlyArray<MaritalStatusDto> {

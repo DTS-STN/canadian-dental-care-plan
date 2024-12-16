@@ -58,7 +58,7 @@ export class DefaultLetterTypeService implements LetterTypeService {
     @inject(TYPES.domain.repositories.LetterTypeRepository) private readonly letterTypeRepository: LetterTypeRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultLetterTypeService');
     this.init();
   }
 
@@ -81,7 +81,7 @@ export class DefaultLetterTypeService implements LetterTypeService {
       onCacheAdd: () => this.log.info('Creating new getLetterTypeById memo'),
     });
 
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultLetterTypeService initiated.');
   }
 
   listLetterTypes(): ReadonlyArray<LetterTypeDto> {

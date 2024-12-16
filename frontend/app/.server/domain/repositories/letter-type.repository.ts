@@ -25,7 +25,7 @@ export class DefaultLetterTypeRepository implements LetterTypeRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultLetterTypeRepository');
   }
 
   listAllLetterTypes(): ReadonlyArray<LetterTypeEntity> {

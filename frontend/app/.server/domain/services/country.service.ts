@@ -77,7 +77,7 @@ export class DefaultCountryService implements CountryService {
     @inject(TYPES.domain.repositories.CountryRepository) private readonly countryRepository: CountryRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: CountryServiceImpl_ServiceConfig,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultCountryService');
     this.init();
   }
 
@@ -103,7 +103,7 @@ export class DefaultCountryService implements CountryService {
       },
     });
 
-    this.log.info('%s initialized.', this.constructor.name);
+    this.log.debug('DefaultCountryService initialized.');
   }
 
   /**

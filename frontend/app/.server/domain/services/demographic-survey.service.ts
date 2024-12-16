@@ -250,7 +250,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     @inject(TYPES.domain.repositories.DemographicSurveyRepository) private readonly DemographicSurveyRepository: DemographicSurveyRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultDemographicSurveyServiceService');
     this.init();
   }
 
@@ -325,7 +325,7 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
       onCacheAdd: () => this.log.info('Creating new getGenderStatusById memo'),
     });
 
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultDemographicSurveyServiceService initiated.');
   }
 
   // Indigenous status

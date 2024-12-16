@@ -27,12 +27,12 @@ export class DefaultAddressValidationService implements AddressValidationService
     @inject(TYPES.domain.repositories.AddressValidationRepository) private readonly addressValidationRepository: AddressValidationRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultAddressValidationService');
     this.init();
   }
 
   private init(): void {
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultAddressValidationService initiated.');
   }
 
   async getAddressCorrectionResult(addressCorrectionRequestDto: AddressCorrectionRequestDto): Promise<AddressCorrectionResultDto> {
