@@ -623,6 +623,21 @@ export const routes = [
             paths: { en: '/:lang/renew/:id/child/marital-status', fr: '/:lang/renew/:id/enfant/etat-civil' },
           },
           {
+            id: 'public/renew/$id/child/confirm-address',
+            file: 'routes/public/renew/$id/child/confirm-address.tsx',
+            paths: { en: '/:lang/renew/:id/child/confirm-address', fr: '/:lang/renew/:id/enfant/confirmer-adresse' },
+          },
+          {
+            id: 'public/renew/$id/child/update-mailing-address',
+            file: 'routes/public/renew/$id/child/update-mailing-address.tsx',
+            paths: { en: '/:lang/renew/:id/child/update-mailing-address', fr: '/:lang/renew/:id/child/mise-a-jour-adresse-postale' },
+          },
+          {
+            id: 'public/renew/$id/child/update-home-address',
+            file: 'routes/public/renew/$id/child/update-home-address.tsx',
+            paths: { en: '/:lang/renew/:id/child/update-home-address', fr: '/:lang/renew/:id/child/mise-a-jour-adresse-domicile' },
+          },
+          {
             id: 'public/renew/$id/child/children/$childId/dental-insurance',
             file: 'routes/public/renew/$id/child/children/$childId/dental-insurance.tsx',
             paths: { en: '/:lang/renew/:id/child/children/:childId/dental-insurance', fr: '/:lang/renew/:id/enfant/enfants/:childId/assurance-dentaire' },

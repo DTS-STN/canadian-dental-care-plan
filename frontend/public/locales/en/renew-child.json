@@ -279,5 +279,89 @@
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "The Social Insurance Number (SIN) must be unique"
     }
+  },
+  "confirm-address": {
+    "page-title": "Address",
+    "have-you-moved": "Would you like to update your home or mailing address?",
+    "is-home-address-same-as-mailing-address": "Is your home address the same as your mailing address?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "help-message": "The address we have on file can also be found on the renewal letter you received from Service Canada.",
+    "error-message": {
+      "has-address-changed-required": "Select whether you have moved or changed your mailing address",
+      "is-home-address-same-as-mailing-address-required": "Select whether or not your mailing address and home address are the same"
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save"
+  },
+  "update-address": {
+    "mailing-address": {
+      "page-title": "Mailing address"
+    },
+    "home-address": {
+      "page-title": "Home address",
+      "use-mailing-address": "My mailing address is the same as my home address"
+    },
+    "address-field": {
+      "address": "Address",
+      "address-note": "Include apartment number (if applicable), street number, street name. For example: 123 Main Street Suite 4B",
+      "country": "Country",
+      "province": "Province, territory, state, or region",
+      "city": "City or town",
+      "postal-code": "Postal code or ZIP code",
+      "postal-code-optional": "Postal code or ZIP code (optional)",
+      "select-one": "Select one"
+    },
+    "dialog": {
+      "address-suggestion": {
+        "address-selection-legend": "Please select an address option below:",
+        "cancel-button": "Cancel",
+        "description": "There's a problem with the address you provided.  Please select the address you want to use. If you live in an apartment or suite, make sure to include that information.",
+        "entered-address-option": "Entered address:",
+        "header": "Verify your address",
+        "suggested-address-option": "Suggested address:",
+        "use-selected-address-button": "Use selected address"
+      },
+      "address-invalid": {
+        "close-button": "Close",
+        "description": "The mailing address you entered appears to be invalid. Please review the details below.",
+        "entered-address": "Entered address:",
+        "header": "Invalid address",
+        "use-entered-address-button": "Use entered address"
+      }
+    },
+    "back": "Back",
+    "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "error-message": {
+      "mailing-address": {
+        "address-required": "Address must be provided",
+        "city-required": "City must be provided",
+        "country-required": "Country must be selected",
+        "postal-code-required": "Postal code or Zip code must be provided",
+        "postal-code-valid": "Invalid postal code (A1A 1A1)",
+        "province-required": "Province must be selected",
+        "zip-code-valid": "Invalid zip code (12345)",
+        "invalid-postal-code-for-country": "A Canadian postal code in the mailing address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
+        "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
+      },
+      "home-address": {
+        "address-required": "Address must be provided",
+        "city-required": "City must be provided",
+        "country-required": "Country must be selected",
+        "postal-code-required": "Postal code or Zip code must be provided",
+        "postal-code-valid": "Invalid postal code (A1A 1A1)",
+        "province-required": "Province must be selected",
+        "zip-code-valid": "Invalid zip code (12345)",
+        "invalid-postal-code-for-country": "A Canadian postal code in the home address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
+        "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
+      },
+      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+    }
   }
 }
