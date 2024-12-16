@@ -1,15 +1,26 @@
 import { injectable } from 'inversify';
 
-import type { ApplicationYearResultDto } from '~/.server/domain/dtos';
+import type { ApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
 import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
 
 export interface ApplicationYearDtoMapper {
-  mapApplicationYearResultEntityToApplicationYearResultDto(applicationYearResultEntity: ApplicationYearResultEntity): ReadonlyArray<ApplicationYearResultDto>;
+  mapApplicationYearResultEntityToApplicationYearResultDtos(applicationYearResultEntity: ApplicationYearResultEntity): ReadonlyArray<ApplicationYearResultDto>;
+
+  mapApplicationYearResultDtoToRenewalApplicationYearResultDto(applicationYearResultDto: ApplicationYearResultDto): RenewalApplicationYearResultDto;
 }
 
 @injectable()
 export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper {
-  mapApplicationYearResultEntityToApplicationYearResultDto(applicationYearResultEntity: ApplicationYearResultEntity): ReadonlyArray<ApplicationYearResultDto> {
+  mapApplicationYearResultDtoToRenewalApplicationYearResultDto(applicationYearResultDto: ApplicationYearResultDto): RenewalApplicationYearResultDto {
+    return {
+      id: applicationYearResultDto.id,
+      taxYear: applicationYearResultDto.taxYear,
+      coverageStartDate: applicationYearResultDto.coverageStartDate,
+      coverageEndDate: applicationYearResultDto.coverageEndDate,
+    };
+  }
+
+  mapApplicationYearResultEntityToApplicationYearResultDtos(applicationYearResultEntity: ApplicationYearResultEntity): ReadonlyArray<ApplicationYearResultDto> {
     const applicationYearData = applicationYearResultEntity['BenefitApplicationYear'];
 
     const applicationYears = applicationYearData.map((applicationYear) => ({
