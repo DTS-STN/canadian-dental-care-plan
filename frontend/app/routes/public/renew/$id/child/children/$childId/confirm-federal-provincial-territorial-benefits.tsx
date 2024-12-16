@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   return {
-    defaultState: state.federalProvincialTerritorialBenefitsChanged,
+    defaultState: state.hasFederalProvincialTerritorialBenefitsChanged,
     childName,
     editMode: state.editMode,
     meta,
@@ -71,11 +71,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const dentalBenefitsChangedSchema = z.object({
-    federalProvincialTerritorialBenefitsChanged: z.boolean({ errorMap: () => ({ message: t('renew-child:children.confirm-dental-benefits.error-message.federal-provincial-territorial-benefit-required') }) }),
+    hasFederalProvincialTerritorialBenefitsChanged: z.boolean({ errorMap: () => ({ message: t('renew-child:children.confirm-dental-benefits.error-message.federal-provincial-territorial-benefit-required') }) }),
   });
 
   const dentalBenefits = {
-    federalProvincialTerritorialBenefitsChanged: formData.get('federalProvincialTerritorialBenefitsChanged') ? formData.get('federalProvincialTerritorialBenefitsChanged') === FederalBenefitsChangedOption.Yes : undefined,
+    hasFederalProvincialTerritorialBenefitsChanged: formData.get('hasFederalProvincialTerritorialBenefitsChanged') ? formData.get('hasFederalProvincialTerritorialBenefitsChanged') === FederalBenefitsChangedOption.Yes : undefined,
   };
 
   const parsedDentalBenefitsResult = dentalBenefitsChangedSchema.safeParse(dentalBenefits);
@@ -96,13 +96,13 @@ export async function action({ context: { appContainer, session }, params, reque
         if (child.id !== state.id) return child;
         return {
           ...child,
-          federalProvincialTerritorialBenefitsChanged: parsedDentalBenefitsResult.data.federalProvincialTerritorialBenefitsChanged,
+          hasFederalProvincialTerritorialBenefitsChanged: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefitsChanged,
         };
       }),
     },
   });
 
-  if (dentalBenefits.federalProvincialTerritorialBenefitsChanged) {
+  if (dentalBenefits.hasFederalProvincialTerritorialBenefitsChanged) {
     return redirect(getPathById('public/renew/$id/child/children/$childId/update-federal-provincial-territorial-benefits', params));
   }
 
@@ -123,7 +123,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
-    federalProvincialTerritorialBenefitsChanged: 'input-radio-federal-provincial-territorial-benefits-changed-option-0',
+    hasFederalProvincialTerritorialBenefitsChanged: 'input-radio-federal-provincial-territorial-benefits-changed-option-0',
   });
 
   function handleOnFederalProvincialTerritorialBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
@@ -146,7 +146,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
           <fieldset className="mb-6">
             <InputRadios
               id="federal-provincial-territorial-benefits-changed"
-              name="federalProvincialTerritorialBenefitsChanged"
+              name="hasFederalProvincialTerritorialBenefitsChanged"
               legend={t('renew-child:children.confirm-dental-benefits.has-benefits-changed', { childName })}
               options={[
                 {
@@ -162,7 +162,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
                   onChange: handleOnFederalProvincialTerritorialBenefitChanged,
                 },
               ]}
-              errorMessage={errors?.federalProvincialTerritorialBenefitsChanged}
+              errorMessage={errors?.hasFederalProvincialTerritorialBenefitsChanged}
               required
             />
           </fieldset>

@@ -56,10 +56,9 @@ interface ToAddressArgs {
 interface ToChangeIndicatorsArgs {
   hasAddressChanged?: boolean;
   hasEmailChanged?: boolean;
-  hasFederalBenefitsChanged?: boolean;
   hasMaritalStatusChanged?: boolean;
   hasPhoneChanged?: boolean;
-  hasProvincialTerritorialBenefitsChanged?: boolean;
+  hasFederalProvincialTerritorialBenefitsChanged?: boolean;
 }
 
 interface ToEmailAddressArgs {
@@ -180,13 +179,13 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       return {};
     }
 
-    const { hasAddressChanged, hasEmailChanged, hasFederalBenefitsChanged, hasMaritalStatusChanged, hasPhoneChanged, hasProvincialTerritorialBenefitsChanged } = changeIndicators;
+    const { hasAddressChanged, hasEmailChanged, hasMaritalStatusChanged, hasPhoneChanged, hasFederalProvincialTerritorialBenefitsChanged } = changeIndicators;
     return {
       AddressChangedIndicator: hasAddressChanged,
       EmailChangedIndicator: hasEmailChanged,
       MaritalStatusChangedIndicator: hasMaritalStatusChanged,
       PhoneChangedIndicator: hasPhoneChanged,
-      PublicInsuranceChangedIndicator: !!hasFederalBenefitsChanged || !!hasProvincialTerritorialBenefitsChanged,
+      PublicInsuranceChangedIndicator: hasFederalProvincialTerritorialBenefitsChanged,
     };
   }
 

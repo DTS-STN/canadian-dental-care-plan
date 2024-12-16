@@ -122,10 +122,6 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         children: [
           {
             id: '1',
-            confirmDentalBenefits: {
-              federalBenefitsChanged: true,
-              provincialTerritorialBenefitsChanged: true,
-            },
             demographicSurvey: {
               disabilityStatus: 'Disability status placeholder',
               ethnicGroups: ['Group 1', 'Group 2'],
@@ -150,10 +146,6 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           },
         ],
         clientApplication: mockClientApplication,
-        confirmDentalBenefits: {
-          federalBenefitsChanged: true,
-          provincialTerritorialBenefitsChanged: false,
-        },
         contactInformation: {
           email: 'new@example.com',
           phoneNumber: '555-555-1234',
@@ -176,6 +168,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         dentalInsurance: true,
         hasAddressChanged: true,
         hasMaritalStatusChanged: true,
+        hasFederalProvincialTerritorialBenefitsChanged: true,
         maritalStatus: 'Single',
       };
 
@@ -213,8 +206,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           hasEmailChanged: true,
           hasMaritalStatusChanged: true,
           hasPhoneChanged: true,
-          hasFederalBenefitsChanged: true,
-          hasProvincialTerritorialBenefitsChanged: false,
+          hasFederalProvincialTerritorialBenefitsChanged: true,
         },
         children: [
           {
@@ -249,7 +241,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           genderStatus: 'Male',
           locationBornStatus: 'Outside Canada',
         },
-        dentalBenefits: ['New federal program', 'Original provincial benefit'],
+        dentalBenefits: ['New federal program'],
         dentalInsurance: true,
         partnerInformation: undefined,
         typeOfApplication: 'adult-child',
