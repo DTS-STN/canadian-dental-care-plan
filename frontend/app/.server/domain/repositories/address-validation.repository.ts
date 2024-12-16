@@ -26,7 +26,7 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultAddressValidationRepository');
   }
 
   async getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity> {
@@ -72,7 +72,7 @@ export class MockAddressValidationRepository implements AddressValidationReposit
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('MockAddressValidationRepository');
   }
 
   getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity> {

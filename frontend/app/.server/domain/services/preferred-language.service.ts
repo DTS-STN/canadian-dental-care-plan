@@ -45,7 +45,7 @@ export class DefaultPreferredLanguageService implements PreferredLanguageService
     @inject(TYPES.domain.repositories.PreferredLanguageRepository) private readonly preferredLanguageRepository: PreferredLanguageRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: PreferredLanguageServiceImpl_ServerConfig,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultPreferredLanguageService');
     this.init();
   }
 
@@ -66,7 +66,7 @@ export class DefaultPreferredLanguageService implements PreferredLanguageService
       onCacheAdd: () => this.log.info('Creating new getPreferredLanguageById memo'),
     });
 
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultPreferredLanguageService initiated.');
   }
 
   listPreferredLanguages(): ReadonlyArray<PreferredLanguageDto> {

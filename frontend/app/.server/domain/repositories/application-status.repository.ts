@@ -37,7 +37,7 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_STATUS_CHECK_API_BASE_URI' | 'INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultApplicationStatusRepository');
   }
 
   async getApplicationStatusByBasicInfo(applicationStatusBasicInfoRequestEntity: ApplicationStatusBasicInfoRequestEntity): Promise<ApplicationStatusEntity> {
@@ -122,7 +122,7 @@ export class MockApplicationStatusRepository implements ApplicationStatusReposit
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('MockApplicationStatusRepository');
   }
 
   getApplicationStatusByBasicInfo(applicationStatusBasicInfoRequestEntity: ApplicationStatusBasicInfoRequestEntity): Promise<ApplicationStatusEntity> {

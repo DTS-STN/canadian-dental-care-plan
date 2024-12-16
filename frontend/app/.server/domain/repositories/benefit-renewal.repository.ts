@@ -25,7 +25,7 @@ export class DefaultBenefitRenewalRepository implements BenefitRenewalRepository
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultBenefitRenewalRepository');
   }
 
   async createBenefitRenewal(benefitRenewalRequest: BenefitRenewalRequestEntity): Promise<BenefitRenewalResponseEntity> {
@@ -68,7 +68,7 @@ export class MockBenefitRenewalRepository implements BenefitRenewalRepository {
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('MockBenefitRenewalRepository');
   }
 
   createBenefitRenewal(benefitRenewalRequest: BenefitRenewalRequestEntity): Promise<BenefitRenewalResponseEntity> {

@@ -30,12 +30,12 @@ export class DefaultApplicantService implements ApplicantService {
     @inject(TYPES.domain.repositories.ApplicantRepository) private readonly applicantRepository: ApplicantRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultApplicantService');
     this.init();
   }
 
   private init(): void {
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultApplicantService initiated.');
   }
 
   async findClientNumberBySin({ sin, userId }: ApplicantRequestDto): Promise<string | null> {

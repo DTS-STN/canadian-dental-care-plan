@@ -26,7 +26,7 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     @inject(TYPES.domain.repositories.ProvincialGovernmentInsurancePlanRepository) private readonly provincialGovernmentInsurancePlanRepository: ProvincialGovernmentInsurancePlanRepository,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultProvincialGovernmentInsurancePlanService');
     this.init();
   }
 
@@ -47,7 +47,7 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
       onCacheAdd: () => this.log.info('Creating new getProvincialGovernmentInsurancePlanById memo'),
     });
 
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultProvincialGovernmentInsurancePlanService initiated.');
   }
 
   listProvincialGovernmentInsurancePlans(): ReadonlyArray<ProvincialGovernmentInsurancePlanDto> {

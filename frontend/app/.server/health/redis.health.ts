@@ -12,7 +12,6 @@ export class RedisHealthCheck implements HealthCheck {
   private readonly log: Logger;
 
   readonly name: string;
-  readonly check: (signal?: AbortSignal) => Promise<void> | void;
   readonly metadata?: Record<string, string>;
 
   constructor(
@@ -21,10 +20,8 @@ export class RedisHealthCheck implements HealthCheck {
     private readonly serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL' | 'REDIS_USERNAME' | 'REDIS_STANDALONE_HOST' | 'REDIS_STANDALONE_PORT' | 'REDIS_SENTINEL_NAME' | 'REDIS_SENTINEL_HOST' | 'REDIS_SENTINEL_PORT' | 'REDIS_COMMAND_TIMEOUT_SECONDS'>,
     @inject(TYPES.data.services.RedisService) private readonly redisService: RedisService,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
-
+    this.log = logFactory.createLogger('RedisHealthCheck');
     this.name = 'redis';
-    this.check = this.redisCheckFn();
     this.metadata = {
       REDIS_USERNAME: this.serverConfig.REDIS_USERNAME ?? '',
       REDIS_STANDALONE_HOST: this.serverConfig.REDIS_STANDALONE_HOST,
@@ -34,19 +31,26 @@ export class RedisHealthCheck implements HealthCheck {
       REDIS_SENTINEL_PORT: (this.serverConfig.REDIS_SENTINEL_PORT ?? '').toString(),
       REDIS_COMMAND_TIMEOUT_SECONDS: this.serverConfig.REDIS_COMMAND_TIMEOUT_SECONDS.toString(),
     };
+
+    this.init();
   }
 
-  private redisCheckFn(): (signal?: AbortSignal) => Promise<void> {
-    return moize.promise(
-      async () => {
-        await this.redisService.ping();
-      },
-      {
-        // transformArgs is required to effectively ignore the abort signal sent from @dts-stn/health-checks when caching
-        transformArgs: () => [],
-        onCacheAdd: () => this.log.info('Initializing new cached Redis health check function'),
-        maxAge: this.serverConfig.HEALTH_CACHE_TTL,
-      },
-    );
+  private init(): void {
+    const healthCacheTTL = this.serverConfig.HEALTH_CACHE_TTL;
+
+    this.log.debug('Cache TTL value: healthCacheTTL: %d ms', healthCacheTTL);
+
+    this.check = moize.promise(this.check, {
+      maxAge: healthCacheTTL,
+      // transformArgs is required to effectively ignore the abort signal sent from @dts-stn/health-checks when caching
+      transformArgs: () => [],
+      onCacheAdd: () => this.log.info('Initializing new cached Redis health check function'),
+    });
+
+    this.log.debug('RedisHealthCheck initiated.');
+  }
+
+  async check(signal?: AbortSignal): Promise<void> {
+    await this.redisService.ping();
   }
 }

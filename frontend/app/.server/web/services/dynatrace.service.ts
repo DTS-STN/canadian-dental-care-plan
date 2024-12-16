@@ -30,16 +30,23 @@ export class DefaultDynatraceService implements DynatraceService {
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
-
-    this.findDynatraceRumScript.options.maxAge = 1000 * this.serverConfig.DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS;
+    this.log = logFactory.createLogger('DefaultDynatraceService');
+    this.init();
   }
 
-  findDynatraceRumScript = moize.promise(this.defaultFindDynatraceRumScript, {
-    onCacheAdd: () => this.log.info('Creating new findDynatraceRumScript memo'),
-  });
+  private init(): void {
+    const dynatraceRumScriptUriCacheTTL = 1000 * this.serverConfig.DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS;
 
-  async defaultFindDynatraceRumScript(userId = 'anonymous'): Promise<DynatraceRumScriptDto | null> {
+    this.log.debug('Cache TTL value: dynatraceRumScriptUriCacheTTL: %d ms', dynatraceRumScriptUriCacheTTL);
+
+    this.findDynatraceRumScript = moize.promise(this.findDynatraceRumScript, {
+      onCacheAdd: () => this.log.info('Creating new findDynatraceRumScript memo'),
+    });
+
+    this.log.debug('DefaultDynatraceService initiated.');
+  }
+
+  async findDynatraceRumScript(userId = 'anonymous'): Promise<DynatraceRumScriptDto | null> {
     this.log.trace('Finding Dynatrace RUM script for user [%s]', userId);
 
     try {

@@ -27,11 +27,11 @@ export class DefaultMailingAddressValidatorFactory implements MailingAddressVali
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.routes.validators.AddressValidatorFactory) private readonly addressValidatorFactory: AddressValidatorFactory,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultMailingAddressValidatorFactory');
     this.init();
   }
 
-  private init() {
+  private init(): void {
     this.createMailingAddressValidator = moize(this.createMailingAddressValidator, {
       maxSize: Infinity,
       onCacheAdd: (cache) => {
@@ -39,7 +39,7 @@ export class DefaultMailingAddressValidatorFactory implements MailingAddressVali
       },
     });
 
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultMailingAddressValidatorFactory initiated.');
   }
 
   /**

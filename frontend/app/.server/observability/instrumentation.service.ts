@@ -63,7 +63,7 @@ export class DefaultInstrumentationService implements InstrumentationService {
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: DefaultInstrumentationServiceServerConfig,
     @inject(TYPES.core.BuildInfoService) buildInfoService: BuildInfoService,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultInstrumentationService');
     this.buildInfo = buildInfoService.getBuildInfo();
   }
 

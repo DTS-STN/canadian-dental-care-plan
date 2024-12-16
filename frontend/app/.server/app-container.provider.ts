@@ -42,7 +42,7 @@ export class DefaultAppContainerProvider implements AppContainerProvider {
 
   constructor(private readonly container: interfaces.Container) {
     const logFactory = container.get(TYPES.factories.LogFactory);
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultAppContainerProvider');
   }
 
   find<T>(serviceIdentifier: ServiceIdentifier<T>): T | undefined {

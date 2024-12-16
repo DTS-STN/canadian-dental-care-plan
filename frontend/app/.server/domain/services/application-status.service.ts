@@ -38,12 +38,12 @@ export class DefaultApplicationStatusService implements ApplicationStatusService
     @inject(TYPES.domain.repositories.ApplicationStatusRepository) private readonly applicationStatusRepository: ApplicationStatusRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultApplicationStatusService');
     this.init();
   }
 
   private init(): void {
-    this.log.debug('%s initiated.', this.constructor.name);
+    this.log.debug('DefaultApplicationStatusService initiated.');
   }
 
   async findApplicationStatusIdByBasicInfo(applicationStatusBasicInfoRequestDto: ApplicationStatusBasicInfoRequestDto): Promise<string | null> {

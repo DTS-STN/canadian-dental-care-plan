@@ -37,7 +37,7 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
     @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('DefaultClientApplicationRepository');
   }
 
   async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null> {
@@ -149,7 +149,7 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
   private readonly log: Logger;
 
   constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger(this.constructor.name);
+    this.log = logFactory.createLogger('MockClientApplicationRepository');
   }
 
   findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null> {
