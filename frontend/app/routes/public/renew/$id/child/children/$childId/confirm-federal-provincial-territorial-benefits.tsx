@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   return {
-    defaultState: state.federalProvincialTerritorialBenefitsChanged,
+    defaultState: state.hasFederalProvincialTerritorialBenefitsChanged,
     childName,
     editMode: state.editMode,
     meta,

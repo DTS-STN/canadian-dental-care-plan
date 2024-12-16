@@ -168,6 +168,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         dentalInsurance: true,
         hasAddressChanged: true,
         hasMaritalStatusChanged: true,
+        hasFederalProvincialTerritorialBenefitsChanged: true,
         maritalStatus: 'Single',
       };
 
@@ -240,7 +241,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           genderStatus: 'Male',
           locationBornStatus: 'Outside Canada',
         },
-        dentalBenefits: ['New federal program', 'Original provincial benefit'],
+        dentalBenefits: ['New federal program'],
         dentalInsurance: true,
         partnerInformation: undefined,
         typeOfApplication: 'adult-child',

@@ -185,7 +185,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       EmailChangedIndicator: hasEmailChanged,
       MaritalStatusChangedIndicator: hasMaritalStatusChanged,
       PhoneChangedIndicator: hasPhoneChanged,
-      PublicInsuranceChangedIndicator: !!hasFederalProvincialTerritorialBenefitsChanged,
+      PublicInsuranceChangedIndicator: hasFederalProvincialTerritorialBenefitsChanged,
     };
   }
 

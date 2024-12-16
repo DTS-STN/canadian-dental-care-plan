@@ -138,7 +138,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     dentalBenefits,
     dentalInsurance,
     demographicSurvey,
-    federalProvincialTerritorialBenefitsChanged,
+    hasFederalProvincialTerritorialBenefitsChanged,
   } = state;
 
   if (typeOfRenewal === undefined) {
@@ -189,11 +189,11 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/renew/$id/adult-child/dental-insurance', params));
   }
 
-  if (federalProvincialTerritorialBenefitsChanged === undefined) {
+  if (hasFederalProvincialTerritorialBenefitsChanged === undefined) {
     throw redirect(getPathById('public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
   }
 
-  if (federalProvincialTerritorialBenefitsChanged && dentalBenefits === undefined) {
+  if (hasFederalProvincialTerritorialBenefitsChanged && dentalBenefits === undefined) {
     throw redirect(getPathById('public/renew/$id/adult-child/update-federal-provincial-territorial-benefits', params));
   }
 
@@ -216,7 +216,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     children,
     hasAddressChanged,
     demographicSurvey,
-    federalProvincialTerritorialBenefitsChanged,
+    hasFederalProvincialTerritorialBenefitsChanged,
   };
 }
 
@@ -232,7 +232,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
     throw redirect(getPathById('public/renew/$id/adult-child/children/index', params));
   }
 
-  return children.map(({ id, dentalBenefits, dentalInsurance, information, demographicSurvey, federalProvincialTerritorialBenefitsChanged }) => {
+  return children.map(({ id, dentalBenefits, dentalInsurance, information, demographicSurvey, hasFederalProvincialTerritorialBenefitsChanged }) => {
     const childId = id;
 
     if (information === undefined) {
@@ -247,11 +247,11 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/renew/$id/adult-child/children/$childId/dental-insurance', { ...params, childId }));
     }
 
-    if (federalProvincialTerritorialBenefitsChanged === undefined) {
+    if (hasFederalProvincialTerritorialBenefitsChanged === undefined) {
       throw redirect(getPathById('public/renew/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits', { ...params, childId }));
     }
 
-    if (federalProvincialTerritorialBenefitsChanged && dentalBenefits === undefined) {
+    if (hasFederalProvincialTerritorialBenefitsChanged && dentalBenefits === undefined) {
       throw redirect(getPathById('public/renew/$id/adult-child/children/$childId/update-federal-provincial-territorial-benefits', { ...params, childId }));
     }
 
@@ -261,7 +261,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       dentalInsurance,
       information,
       demographicSurvey,
-      federalProvincialTerritorialBenefitsChanged,
+      hasFederalProvincialTerritorialBenefitsChanged,
     };
   });
 }

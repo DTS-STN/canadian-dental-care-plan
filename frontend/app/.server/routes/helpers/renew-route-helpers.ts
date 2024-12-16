@@ -30,7 +30,7 @@ export interface RenewState {
       provincialTerritorialSocialProgram?: string;
       province?: string;
     };
-    readonly federalProvincialTerritorialBenefitsChanged?: boolean;
+    readonly hasFederalProvincialTerritorialBenefitsChanged?: boolean;
     readonly dentalInsurance?: boolean;
     readonly information?: {
       firstName: string;
@@ -98,7 +98,7 @@ export interface RenewState {
     province?: string;
   };
   readonly dentalInsurance?: boolean;
-  readonly federalProvincialTerritorialBenefitsChanged?: boolean;
+  readonly hasFederalProvincialTerritorialBenefitsChanged?: boolean;
   readonly dentalBenefits?: {
     hasFederalBenefits: boolean;
     federalSocialProgram?: string;

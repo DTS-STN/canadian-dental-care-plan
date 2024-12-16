@@ -116,7 +116,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     : undefined;
 
   const dentalBenefit = {
-    hasChanged: state.federalProvincialTerritorialBenefitsChanged,
+    hasChanged: state.hasFederalProvincialTerritorialBenefitsChanged,
     federalBenefit: {
       access: state.dentalBenefits?.hasFederalBenefits,
       benefit: selectedFederalGovernmentInsurancePlan?.name,
