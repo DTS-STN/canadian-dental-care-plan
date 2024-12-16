@@ -322,7 +322,7 @@
     "dialog": {
       "address-suggestion": {
         "address-selection-legend": "Veuillez sélectionner une option d'adresse ci\u2011dessous\u00a0:",
-        "cancel-button": "Annuler",
+        "cancel-button": "Retour",
         "description": "Il y a un problème avec l'adresse que vous avez fournie. Veuillez sélectionner l'adresse que vous souhaitez utiliser. Si vous vivez dans un appartement ou une chambre, n'oubliez pas de le préciser.",
         "entered-address-option": "Adresse saisie\u00a0:",
         "header": "Vérifiez votre adresse",
@@ -330,10 +330,10 @@
         "use-selected-address-button": "Utiliser l'adresse sélectionnée"
       },
       "address-invalid": {
-        "close-button": "Fermer",
-        "description": "L'adresse postale que vous avez saisie semble invalide. Veuillez vérifier les détails ci\u2011dessous.",
+        "close-button": "Retour",
+        "description": "Nous n'avons pas pu vérifier votre adresse. Vous pouvez soit la mettre à jour, soit continuer avec l'adresse que vous avez saisie. Si vous vivez dans un appartement ou une chambre, n'oubliez pas d'indiquer cette information.",
         "entered-address": "Adresse saisie\u00a0:",
-        "header": "Adresse invalide",
+        "header": "Vérifiez votre adresse",
         "use-entered-address-button": "Utiliser l'adresse saisie"
       }
     },
