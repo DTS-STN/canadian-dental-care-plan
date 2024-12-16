@@ -153,6 +153,8 @@ export const pageIds = {
         confirmEmail: 'CDCP-RENW-CHLD-0008',
         confirmMaritalStatus: 'CDCP-RENW-CHLD-0009',
         maritalStatus: 'CDCP-RENW-CHLD-00010',
+        confirmAddress: 'CDCP-RENW-CHLD-0011',
+        updateAddress: 'CDCP-RENW-ITA-00012',
       },
     },
     demographicSurvey: {
