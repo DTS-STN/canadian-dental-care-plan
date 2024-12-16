@@ -2,7 +2,7 @@ import type { FormEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -31,12 +31,12 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  const { id } = loadRenewState({ params, session });
+  const { id, applicationYear } = loadRenewState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:file-your-taxes.page-title') }) };
 
-  return { id, meta };
+  return { id, meta, taxYear: applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -53,6 +53,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewFileYourTaxes() {
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { taxYear } = useLoaderData<typeof loader>();
 
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -70,7 +71,7 @@ export default function RenewFileYourTaxes() {
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>{t('renew:file-your-taxes.ineligible-to-renew')}</p>
-        <p>{t('renew:file-your-taxes.tax-not-filed')}</p>
+        <p>{t('renew:file-your-taxes.tax-not-filed', { taxYear })}</p>
         <p>{t('renew:file-your-taxes.unable-to-assess')}</p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="renew:file-your-taxes.tax-info" components={{ taxInfo }} />

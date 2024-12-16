@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:tax-filing.page-title') }) };
 
-  return { id: state.id, meta, defaultState: state.taxFiling };
+  return { id: state.id, meta, defaultState: state.taxFiling, taxYear: state.applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -83,7 +83,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewFlowTaxFiling() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = useLoaderData<typeof loader>();
+  const { defaultState, taxYear } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -91,39 +91,37 @@ export default function ProtectedRenewFlowTaxFiling() {
   const errorSummary = useErrorSummary(errors, { taxFiling: 'input-radio-tax-filing-option-0' });
 
   return (
-    <>
-      <div className="max-w-prose">
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <InputRadios
-            id="tax-filing"
-            name="taxFiling"
-            legend={t('protected-renew:tax-filing.form-instructions')}
-            options={[
-              { value: TaxFilingOption.Yes, children: t('protected-renew:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
-              { value: TaxFilingOption.No, children: t('protected-renew:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
-            ]}
-            errorMessage={errors?.taxFiling}
-            required
-          />
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-protected-Renew:Continue - Tax filing click">
-              {t('protected-renew:tax-filing.continue-btn')}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              routeId="protected/renew/$id/terms-and-conditions"
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-protected-Renew:Back - Tax filing click"
-            >
-              {t('protected-renew:tax-filing.back-btn')}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </div>
-    </>
+    <div className="max-w-prose">
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <InputRadios
+          id="tax-filing"
+          name="taxFiling"
+          legend={t('protected-renew:tax-filing.form-instructions', { taxYear })}
+          options={[
+            { value: TaxFilingOption.Yes, children: t('protected-renew:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
+            { value: TaxFilingOption.No, children: t('protected-renew:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
+          ]}
+          errorMessage={errors?.taxFiling}
+          required
+        />
+        <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-protected-Renew:Continue - Tax filing click">
+            {t('protected-renew:tax-filing.continue-btn')}
+          </LoadingButton>
+          <ButtonLink
+            id="back-button"
+            routeId="protected/renew/$id/terms-and-conditions"
+            params={params}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-protected-Renew:Back - Tax filing click"
+          >
+            {t('protected-renew:tax-filing.back-btn')}
+          </ButtonLink>
+        </div>
+      </fetcher.Form>
+    </div>
   );
 }

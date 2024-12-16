@@ -2,7 +2,7 @@ import type { FormEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { useFetcher, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -34,14 +34,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const { id } = loadProtectedRenewState({ params, session });
+  const { id, applicationYear } = loadProtectedRenewState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:file-your-taxes.page-title') }) };
 
-  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
-
-  return { id, meta, SCCH_BASE_URI };
+  return { id, meta, taxYear: applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -52,13 +50,15 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
   clearProtectedRenewState({ params, session });
-  return redirect(t('protected-renew:file-your-taxes.return-btn-link'));
+  return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 
 export default function ProtectedRenewFileYourTaxes() {
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { taxYear } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -75,7 +75,7 @@ export default function ProtectedRenewFileYourTaxes() {
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>{t('protected-renew:file-your-taxes.ineligible-to-renew')}</p>
-        <p>{t('protected-renew:file-your-taxes.tax-not-filed')}</p>
+        <p>{t('protected-renew:file-your-taxes.tax-not-filed', { taxYear })}</p>
         <p>{t('protected-renew:file-your-taxes.unable-to-assess')}</p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:file-your-taxes.tax-info" components={{ taxInfo }} />
