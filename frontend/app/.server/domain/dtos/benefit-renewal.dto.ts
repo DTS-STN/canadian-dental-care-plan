@@ -22,7 +22,11 @@ export type ItaChangeIndicators = Readonly<{
   hasAddressChanged: boolean;
 }>;
 
-export type ChildBenefitRenewalDto = BenefitRenewalDto & ChildChangeIndicators;
+export type ChildBenefitRenewalDto = BenefitRenewalDto &
+  BenefitRenewalDto &
+  Readonly<{
+    changeIndicators: ChildChangeIndicators;
+  }>;
 
 export type ChildChangeIndicators = Readonly<{
   hasAddressChanged: boolean;
