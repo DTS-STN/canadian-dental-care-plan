@@ -17,6 +17,8 @@ import type {
   RenewalChildDto,
   RenewalPartnerInformationDto,
   TypeOfApplicationDto,
+  ChildBenefitRenewalDto,
+  ChildChangeIndicators
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
 import { parseDateString } from '~/utils/date-utils';
@@ -24,13 +26,14 @@ import { parseDateString } from '~/utils/date-utils';
 export interface BenefitRenewalDtoMapper {
   mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity;
   mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity;
+  mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(childBenefitRenewalDto: ChildBenefitRenewalDto): BenefitRenewalRequestEntity;
   mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedRenewDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity;
 }
 
 interface ToBenefitRenewalRequestEntityArgs {
   applicantInformation: RenewalApplicantInformationDto;
   applicationYearId: string;
-  changeIndicators?: AdultChildChangeIndicators | ItaChangeIndicators;
+  changeIndicators?: AdultChildChangeIndicators | ItaChangeIndicators | ChildChangeIndicators;
   children: readonly RenewalChildDto[];
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
@@ -77,6 +80,10 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
 
   mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity {
     return this.toBenefitRenewalRequestEntity(itaBenefitRenewalDto);
+  }
+
+  mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(childBenefitRenewalDto: ChildBenefitRenewalDto): BenefitRenewalRequestEntity {
+    return this.toBenefitRenewalRequestEntity(childBenefitRenewalDto);
   }
 
   mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity {
