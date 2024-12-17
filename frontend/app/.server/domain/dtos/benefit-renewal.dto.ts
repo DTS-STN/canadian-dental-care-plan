@@ -29,7 +29,6 @@ export type ChildChangeIndicators = Readonly<{
   hasEmailChanged: boolean;
   hasMaritalStatusChanged: boolean;
   hasPhoneChanged: boolean;
-  hasFederalProvincialTerritorialBenefitsChanged: boolean;
 }>;
 
 export type ProtectedBenefitRenewalDto = BenefitRenewalDto;
