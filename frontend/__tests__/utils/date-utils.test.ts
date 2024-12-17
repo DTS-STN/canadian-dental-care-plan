@@ -101,6 +101,11 @@ describe('useMonths', () => {
     it('should throw an error for an invalid date string', () => {
       expect(() => getAgeFromDateString('abcd-ef-gh')).toThrowError();
     });
+
+    it('should return age when reference date is passed', () => {
+      expect(getAgeFromDateString('2000-01-01', '2024-12-31')).toEqual(24);
+      expect(getAgeFromDateString('2000-01-01', '2025-01-01')).toEqual(25);
+    });
   });
 
   describe('getAgeFromDateTimeString', () => {
@@ -115,19 +120,32 @@ describe('useMonths', () => {
     it('should throw an error for an invalid datetime string', () => {
       expect(() => getAgeFromDateTimeString('abcd-ef-gh')).toThrowError();
     });
+
+    it('should return age when reference date is passed', () => {
+      expect(getAgeFromDateTimeString('2000-01-02T00:00:00.000Z', '2025-01-01T23:59:59.999Z')).toEqual(24);
+      expect(getAgeFromDateTimeString('2000-01-02T00:00:00.000Z', '2025-01-02T00:00:00.000Z')).toEqual(25);
+    });
   });
 
   describe('getAgeFromDate', () => {
-    it('should return the age from a given UTC date object', () => {
+    it('should return the age from a given UTC date object with default date', () => {
       expect(getAgeFromDate(new UTCDate(2000, 0, 1))).toEqual(24);
     });
 
-    it('should return the age rounded down to closest full year from a given UTC date object', () => {
+    it('should return the age rounded down to closest full year from a given UTC date object with default date', () => {
       expect(getAgeFromDate(new UTCDate(2000, 0, 2))).toEqual(23);
     });
 
     it('should throw an error if the UTC date is in the future', () => {
       expect(() => getAgeFromDate(new UTCDate(3000, 0, 1))).toThrowError();
+    });
+
+    it('should calculate age as of a specific reference date in the future', () => {
+      expect(getAgeFromDate(new UTCDate(2000, 0, 1), new UTCDate(2030, 0, 1))).toEqual(30);
+    });
+
+    it('should throw an error if referenceDate is before the UTC date', () => {
+      expect(() => getAgeFromDate(new UTCDate(2000, 1, 1, 24, 0, 0, 0), new UTCDate(2000, 1, 1, 23, 59, 59, 999))).toThrowError();
     });
   });
 
