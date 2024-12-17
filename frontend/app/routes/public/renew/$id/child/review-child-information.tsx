@@ -115,7 +115,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/child/confirm-address', params));
   }
 
-  return redirect(getPathById('public/renew/$id/child/review-parent-information', params));
+  return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
 }
 
 export default function RenewChildReviewChildInformation() {

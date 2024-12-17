@@ -92,7 +92,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/child/review-parent-information', params));
+    return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
   }
   return redirect(getPathById('public/renew/$id/child/review-child-information', params));
 }

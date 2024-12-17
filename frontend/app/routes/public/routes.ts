@@ -588,6 +588,11 @@ export const routes = [
             paths: { en: '/:lang/renew/:id/child/review-child-information', fr: '/:lang/renew/:id/enfant/revue-renseignements-enfant' },
           },
           {
+            id: 'public/renew/$id/child/review-adult-information',
+            file: 'routes/public/renew/$id/child/review-adult-information.tsx',
+            paths: { en: '/:lang/renew/:id/child/review-adult-information', fr: '/:lang/renew/:id/enfant/revue-renseignements-adulte' },
+          },
+          {
             id: 'public/renew/$id/child/confirmation',
             file: 'routes/public/renew/$id/child/confirmation.tsx',
             paths: { en: '/:lang/renew/:id/child/confirmation', fr: '/:lang/renew/:id/enfant/confirmation' },
