@@ -185,7 +185,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
     throw redirect(getPathById('public/renew/$id/child/children/index', params));
   }
 
-  return children.map(({ id, dentalBenefits, dentalInsurance, information }) => {
+  return children.map(({ id, dentalBenefits, dentalInsurance, information, demographicSurvey, hasFederalProvincialTerritorialBenefitsChanged }) => {
     const childId = id;
 
     if (information === undefined) {
@@ -209,6 +209,8 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       dentalBenefits,
       dentalInsurance,
       information,
+      demographicSurvey,
+      hasFederalProvincialTerritorialBenefitsChanged,
     };
   });
 }

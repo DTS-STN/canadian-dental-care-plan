@@ -363,5 +363,29 @@
       },
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
     }
+  },
+  "review-child-information": {
+    "read-carefully": "Review this information carefully. The information provided will be used to update your child(ren)'s Canadian Dental Care Plan member account.",
+    "page-title": "Review child(ren) information",
+    "page-sub-title": "{{child}} information",
+    "dob-title": "Date of birth",
+    "is-parent": "Parent or legal guardian of child",
+    "client-number-title": "Client number",
+    "full-name-title": "Full name",
+    "dental-title": "{{child}} access to dental insurance",
+    "dental-insurance-title": "Access to other dental insurance or coverage",
+    "dental-insurance-change": "Change answer to dental insurance",
+    "dental-benefit-title": "Access to government dental benefits",
+    "dental-benefit-change": "Change answer to government dental benefits",
+    "dental-benefit-has-access": "Has access to the following benefits:",
+    "demographic-survey-title": "Demographics questions",
+    "demographic-survey-heading": "Voluntary demographic questions",
+    "demographic-survey-responded": "Responded",
+    "demographic-survey-change": "Change answers to demographic questions",
+    "continue-button": "Continue",
+    "back-button": "Back",
+    "yes": "Yes",
+    "no": "No",
+    "no-update": "No update"
   }
 }
