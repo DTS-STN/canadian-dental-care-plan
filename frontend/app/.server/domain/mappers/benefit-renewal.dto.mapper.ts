@@ -7,6 +7,8 @@ import { TYPES } from '~/.server/constants';
 import type {
   AdultChildBenefitRenewalDto,
   AdultChildChangeIndicators,
+  ChildBenefitRenewalDto,
+  ChildChangeIndicators,
   CommunicationPreferencesDto,
   ContactInformationDto,
   DemographicSurveyDto,
@@ -17,8 +19,6 @@ import type {
   RenewalChildDto,
   RenewalPartnerInformationDto,
   TypeOfApplicationDto,
-  ChildBenefitRenewalDto,
-  ChildChangeIndicators
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
 import { parseDateString } from '~/utils/date-utils';
