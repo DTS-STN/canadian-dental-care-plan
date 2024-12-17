@@ -7,6 +7,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type {
   AdultChildBenefitRenewalDto,
+  ChildBenefitRenewalDto,
   ClientApplicantInformationDto,
   ClientApplicationDto,
   ClientChildDto,
@@ -68,6 +69,18 @@ export interface RenewItaState {
   partnerInformation?: PartnerInformationState;
 }
 
+export interface RenewChildState {
+  applicationYear: ApplicationYearState;
+  clientApplication: ClientApplicationDto;
+  children: ChildState[];
+  hasMaritalStatusChanged: boolean;
+  maritalStatus?: string;
+  partnerInformation?: PartnerInformationState;
+  contactInformation: ContactInformationState;
+  addressInformation?: AddressInformationState;
+  hasAddressChanged: boolean;
+}
+
 export interface ProtectedRenewState {
   addressInformation?: ProtectedAddressInformationState;
   applicationYear: ProtectedApplicationYearState;
@@ -84,6 +97,7 @@ export interface ProtectedRenewState {
 export interface BenefitRenewalStateMapper {
   mapRenewAdultChildStateToAdultChildBenefitRenewalDto(renewAdultChildState: RenewAdultChildState): AdultChildBenefitRenewalDto;
   mapRenewItaStateToItaBenefitRenewalDto(renewItaState: RenewItaState): ItaBenefitRenewalDto;
+  mapRenewChildStateToChildBenefitRenewalDto(renewChildSTate: RenewChildState): ChildBenefitRenewalDto;
   mapProtectedRenewStateToProtectedBenefitRenewalDto(protectedRenewState: ProtectedRenewState, userId: string): ProtectedBenefitRenewalDto;
 }
 
@@ -260,6 +274,53 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedPartnerInformation: partnerInformation,
       }),
       typeOfApplication: 'adult',
+      userId: 'anonymous',
+    };
+  }
+
+  mapRenewChildStateToChildBenefitRenewalDto({ applicationYear, addressInformation, children, clientApplication, contactInformation, hasAddressChanged, hasMaritalStatusChanged, maritalStatus, partnerInformation }: RenewChildState): ChildBenefitRenewalDto {
+    const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
+    if (hasEmailChanged === undefined) {
+      throw Error('Expected hasEmailChanged to be defined');
+    }
+
+    const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
+    if (hasPhoneChanged === undefined) {
+      throw Error('Expected hasPhoneChanged to be defined');
+    }
+
+    return {
+      ...clientApplication,
+      applicantInformation: this.toApplicantInformation({
+        existingApplicantInformation: clientApplication.applicantInformation,
+        hasMaritalStatusChanged,
+        renewedMaritalStatus: maritalStatus,
+      }),
+      applicationYearId: applicationYear.id,
+      children: this.toChildren({
+        existingChildren: clientApplication.children,
+        renewedChildren: children,
+      }),
+      changeIndicators: {
+        hasAddressChanged,
+        hasEmailChanged,
+        hasMaritalStatusChanged,
+        hasPhoneChanged,
+      },
+      contactInformation: this.toContactInformation({
+        renewedAddressInformation: addressInformation,
+        renewedContactInformation: contactInformation,
+        existingContactInformation: clientApplication.contactInformation,
+        hasAddressChanged,
+        hasEmailChanged,
+        hasPhoneChanged,
+      }),
+      partnerInformation: this.toPartnerInformation({
+        existingPartnerInformation: clientApplication.partnerInformation,
+        hasMaritalStatusChanged,
+        renewedPartnerInformation: partnerInformation,
+      }),
+      typeOfApplication: 'child',
       userId: 'anonymous',
     };
   }
