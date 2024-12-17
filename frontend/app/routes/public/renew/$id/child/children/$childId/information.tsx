@@ -11,7 +11,7 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { loadRenewChildState, loadRenewSingleChildState } from '~/.server/routes/helpers/renew-child-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -27,7 +27,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
-import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
+import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -77,6 +77,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadRenewSingleChildState({ params, request, session });
   const renewState = loadRenewChildState({ params, request, session });
+
+  const locale = getLocale(request);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // Form action Continue & Save
@@ -122,6 +124,8 @@ export async function action({ context: { appContainer, session }, params, reque
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
 
+      const coverageStartDate = renewState.applicationYear.coverageStartDate;
+
       if (!isValidDateString(dateOfBirth)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -138,6 +142,12 @@ export async function action({ context: { appContainer, session }, params, reque
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: t('renew-child:children.information.error-message.date-of-birth-is-past-valid'),
+          path: ['dateOfBirth'],
+        });
+      } else if (getAgeFromDateString(dateOfBirth, coverageStartDate) >= 18) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('renew-child:children.information.error-message.date-of-birth-ineligible', { coverageStartDate: toLocaleDateString(parseDateString(coverageStartDate), locale) }),
           path: ['dateOfBirth'],
         });
       }

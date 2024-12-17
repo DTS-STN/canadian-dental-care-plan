@@ -311,6 +311,7 @@
         "date-of-birth-day-required": "La date de naissance doit inclure un jour",
         "date-of-birth-is-past": "La date de naissance doit être dans le passé",
         "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
+        "date-of-birth-ineligible": "La personne n'est pas éligible au renouvellement de ses prestations car elle aura 18 ans à compter du {{coverageStartDate}}. Ils doivent soumettre une demande à l'âge adulte pour maintenir leur couverture dentaire.",
         "date-of-birth-month-required": "La date de naissance doit inclure un mois",
         "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
         "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
