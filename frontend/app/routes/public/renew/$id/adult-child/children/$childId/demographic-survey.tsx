@@ -135,6 +135,10 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
+  if (state.editMode) {
+    return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
+  }
+
   return redirect(getPathById('public/renew/$id/adult-child/children/index', params));
 }
 

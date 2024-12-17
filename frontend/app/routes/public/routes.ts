@@ -558,7 +558,7 @@ export const routes = [
               {
                 id: 'public/renew/$id/adult-child/children/$childId/demographic-survey',
                 file: 'routes/public/renew/$id/adult-child/children/$childId/demographic-survey.tsx',
-                paths: { en: '/:lang/renew/:id/adult-child/children/$childId/demographic-survey', fr: '/:lang/renew/:id/adult-child/children/$childId/demographic-survey' },
+                paths: { en: '/:lang/renew/:id/adult-child/children/:childId/demographic-survey', fr: '/:lang/renew/:id/adult-child/children/:childId/demographic-survey' },
               },
             ],
           },
