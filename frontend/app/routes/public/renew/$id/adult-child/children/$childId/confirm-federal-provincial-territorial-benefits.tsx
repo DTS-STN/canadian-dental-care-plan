@@ -102,7 +102,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  if (dentalBenefits.hasFederalProvincialTerritorialBenefitsChanged) {
+  if (dentalBenefits.hasFederalProvincialTerritorialBenefitsChanged === true) {
     return redirect(getPathById('public/renew/$id/adult-child/children/$childId/update-federal-provincial-territorial-benefits', params));
   }
 
@@ -110,7 +110,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/adult-child/children/demographic-survey', params));
+  return redirect(getPathById('public/renew/$id/adult-child/children/$childId/demographic-survey', params));
 }
 
 export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefits() {
