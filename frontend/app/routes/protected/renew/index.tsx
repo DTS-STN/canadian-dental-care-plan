@@ -22,7 +22,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.public.apply.index,
-  pageTitleI18nKey: 'protected-renew:terms-and-conditions.page-heading',
+  pageTitleI18nKey: 'protected-renew:terms-and-conditions.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {

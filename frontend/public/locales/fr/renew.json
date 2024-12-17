@@ -79,16 +79,6 @@
       "info-source": "https://www.canada.ca/fr/emploi-developpement-social/ministere/transparence/aai/rapports/infosource.html",
       "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy",
       "sun-life": "https://www.sunlife.ca/fr/"
-    },
-    "checkboxes": {
-      "acknowledge-terms": "Je reconnais avoir lu les modalités",
-      "acknowledge-privacy": "Je reconnais avoir lu l'avis de confidentialité",
-      "share-data": "Je consens à l'échange des données",
-      "error-message": {
-        "acknowledge-terms-required": "La case à cocher des modalités doit être sélectionnée",
-        "acknowledge-privacy-required": "La case à cocher de l'avis de confidentialité doit être sélectionnée",
-        "share-data-required": "La case à cocher de l'échange des données doit être sélectionnée"
-      }
     }
   },
   "applicant-information": {

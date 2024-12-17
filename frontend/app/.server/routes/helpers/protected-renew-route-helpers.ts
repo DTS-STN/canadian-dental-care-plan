@@ -25,11 +25,6 @@ export interface ProtectedRenewState {
   readonly externallyReviewed?: boolean;
   readonly previouslyReviewed?: boolean;
   readonly taxFiling?: boolean;
-  readonly termsAndConditions?: {
-    readonly acknowledgeTerms: boolean;
-    readonly acknowledgePrivacy: boolean;
-    readonly shareData: boolean;
-  };
   readonly dentalInsurance?: boolean;
   readonly dentalBenefits?: {
     hasFederalBenefits: boolean;

@@ -1,21 +1,17 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { data, redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { redirect } from '@remix-run/node';
+import { useFetcher } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
-import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
-import { InputCheckbox } from '~/components/input-checkbox';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
@@ -24,10 +20,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-
-enum CheckboxValue {
-  Yes = 'yes',
-}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
@@ -43,12 +35,12 @@ export async function loader({ context: { appContainer, session }, request, para
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const state = loadProtectedRenewState({ params, session });
+  loadProtectedRenewState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:terms-and-conditions.page-title') }) };
 
-  return { meta, defaultState: state.termsAndConditions };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
@@ -58,54 +50,16 @@ export async function action({ context: { appContainer, session }, request, para
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const consentSchema = z
-    .object({
-      acknowledgeTerms: z.nativeEnum(CheckboxValue, {
-        errorMap: () => ({ message: t('protected-renew:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required') }),
-      }),
-      acknowledgePrivacy: z.nativeEnum(CheckboxValue, {
-        errorMap: () => ({ message: t('protected-renew:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required') }),
-      }),
-      shareData: z.nativeEnum(CheckboxValue, {
-        errorMap: () => ({ message: t('protected-renew:terms-and-conditions.checkboxes.error-message.share-data-required') }),
-      }),
-    })
-    .transform((val) => ({
-      acknowledgeTerms: val.acknowledgeTerms.valueOf() === CheckboxValue.Yes,
-      acknowledgePrivacy: val.acknowledgePrivacy.valueOf() === CheckboxValue.Yes,
-      shareData: val.shareData.valueOf() === CheckboxValue.Yes,
-    }));
-
-  const parsedDataResult = consentSchema.safeParse({
-    acknowledgeTerms: formData.get('acknowledgeTerms'),
-    acknowledgePrivacy: formData.get('acknowledgePrivacy'),
-    shareData: formData.get('shareData'),
-  });
-
-  if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
-  }
-
-  saveProtectedRenewState({ params, session, state: { termsAndConditions: parsedDataResult.data } });
+  saveProtectedRenewState({ params, session, state: {} });
 
   return redirect(getPathById('protected/renew/$id/tax-filing', params));
 }
 
 export default function RenewTermsAndConditions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = useLoaderData<typeof loader>();
   const { SCCH_BASE_URI } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-
-  const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, {
-    acknowledgeTerms: 'input-checkbox-acknowledge-terms',
-    acknowledgePrivacy: 'input-checkbox-acknowledge-privacy',
-    shareData: 'input-checkbox-share-data',
-  });
 
   const canadaTermsConditions = <InlineLink to={t('protected-renew:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link" newTabIndicator target="_blank" />;
   const fileacomplaint = <InlineLink to={t('protected-renew:terms-and-conditions.links.file-complaint')} className="external-link" newTabIndicator target="_blank" />;
@@ -118,7 +72,6 @@ export default function RenewTermsAndConditions() {
     <div className="max-w-prose">
       <div className="space-y-6">
         <p>{t('protected-renew:terms-and-conditions.intro-text')}</p>
-        <errorSummary.ErrorSummary />
         <Collapsible summary={t('protected-renew:terms-and-conditions.terms-and-conditions-of-use.summary')}>
           <div className="space-y-6">
             <div className="space-y-4">
@@ -205,15 +158,6 @@ export default function RenewTermsAndConditions() {
         {t('protected-renew:terms-and-conditions.apply.application-consent')}
       </p>
       <fetcher.Form method="post" noValidate>
-        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CheckboxValue.Yes} defaultChecked={defaultState?.acknowledgeTerms} errorMessage={errors?.acknowledgeTerms} required>
-          {t('protected-renew:terms-and-conditions.checkboxes.acknowledge-terms')}
-        </InputCheckbox>
-        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} defaultChecked={defaultState?.acknowledgePrivacy} errorMessage={errors?.acknowledgePrivacy} required>
-          {t('protected-renew:terms-and-conditions.checkboxes.acknowledge-privacy')}
-        </InputCheckbox>
-        <InputCheckbox id="share-data" name="shareData" value={CheckboxValue.Yes} defaultChecked={defaultState?.shareData} errorMessage={errors?.shareData} required>
-          {t('protected-renew:terms-and-conditions.checkboxes.share-data')}
-        </InputCheckbox>
         <CsrfTokenInput />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
