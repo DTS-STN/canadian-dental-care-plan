@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import { AdultChildBenefitRenewalDto, ItaBenefitRenewalDto, ProtectedBenefitRenewalDto } from '~/.server/domain/dtos';
+import { AdultChildBenefitRenewalDto, ChildBenefitRenewalDto, ItaBenefitRenewalDto, ProtectedBenefitRenewalDto } from '~/.server/domain/dtos';
 import type { BenefitRenewalDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitRenewalRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -21,6 +21,13 @@ export interface BenefitRenewalService {
    * @param adultChildBenefitRenewalDto The adult child benefit renewal request dto
    */
   createItaBenefitRenewal(itaBenefitRenewalDto: ItaBenefitRenewalDto): Promise<void>;
+
+  /**
+   * Submits a child benefit renewal request.
+   *
+   * @param childBenefitRenewalDto The child benefit renewal request dto
+   */
+  createChildBenefitRenewal(childBenefitRenewalDto: ChildBenefitRenewalDto): Promise<void>;
 
   /**
    * Submits benefit renewal request for protected route.
@@ -68,6 +75,17 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
 
     this.log.trace('Successfully created ITA benefit renewal for request [%j]', itaBenefitRenewalDto);
+  }
+
+  async createChildBenefitRenewal(childBenefitRenewalDto: ChildBenefitRenewalDto): Promise<void> {
+    this.log.trace('Creating child benefit renewal for request [%j]', childBenefitRenewalDto);
+
+    this.auditService.createAudit('child-renewal-submit.post', { userId: childBenefitRenewalDto.userId });
+
+    const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(childBenefitRenewalDto);
+    await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+
+    this.log.trace('Successfully created child benefit renewal for request [%j]', childBenefitRenewalDto);
   }
 
   async createProtectedBenefitRenewal(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): Promise<void> {
