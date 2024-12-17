@@ -122,7 +122,22 @@ interface ValidateStateForReviewArgs {
 }
 
 export function validateRenewChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
-  const { applicationYear, hasAddressChanged, maritalStatus, partnerInformation, contactInformation, editMode, id, submissionInfo, typeOfRenewal, addressInformation, applicantInformation } = state;
+  const {
+    applicationYear,
+    hasFederalProvincialTerritorialBenefitsChanged,
+    clientApplication,
+    hasMaritalStatusChanged,
+    hasAddressChanged,
+    maritalStatus,
+    partnerInformation,
+    contactInformation,
+    editMode,
+    id,
+    submissionInfo,
+    typeOfRenewal,
+    addressInformation,
+    applicantInformation,
+  } = state;
 
   if (typeOfRenewal === undefined) {
     throw redirect(getPathById('public/renew/$id/type-renewal', params));
@@ -140,8 +155,20 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('public/renew/$id/applicant-information', params));
   }
 
-  if (maritalStatus === undefined) {
-    throw redirect(getPathById('public/renew/$id/child/marital-status', params));
+  if (clientApplication === undefined) {
+    throw redirect(getPathById('public/renew/$id/applicant-information', params));
+  }
+
+  if (hasMaritalStatusChanged === undefined) {
+    throw redirect(getPathById('public/renew/$id/child/confirm-marital-status', params));
+  }
+
+  if (hasMaritalStatusChanged && maritalStatus === undefined) {
+    throw redirect(getPathById('public/renew/$id/child/confirm-marital-status', params));
+  }
+
+  if (hasAddressChanged === undefined) {
+    throw redirect(getPathById('public/renew/$id/child/confirm-address', params));
   }
 
   if (hasAddressChanged && addressInformation === undefined) {
@@ -170,6 +197,10 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     addressInformation,
     partnerInformation,
     children,
+    hasFederalProvincialTerritorialBenefitsChanged,
+    hasMaritalStatusChanged,
+    hasAddressChanged,
+    clientApplication,
   };
 }
 
@@ -178,7 +209,7 @@ interface ValidateChildrenStateForReviewArgs {
   params: Params;
 }
 
-function validateChildrenStateForReview({ childrenState, params }: ValidateChildrenStateForReviewArgs) {
+export function validateChildrenStateForReview({ childrenState, params }: ValidateChildrenStateForReviewArgs) {
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
@@ -200,8 +231,12 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/renew/$id/child/children/$childId/dental-insurance', { ...params, childId }));
     }
 
-    if (dentalBenefits === undefined) {
-      throw redirect(getPathById('public/renew/$id/child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
+    if (hasFederalProvincialTerritorialBenefitsChanged === undefined) {
+      throw redirect(getPathById('public/renew/$id/child/children/$childId/confirm-federal-provincial-territorial-benefits', { ...params, childId }));
+    }
+
+    if (hasFederalProvincialTerritorialBenefitsChanged && dentalBenefits === undefined) {
+      throw redirect(getPathById('public/renew/$id/child/children/$childId/update-federal-provincial-territorial-benefits', { ...params, childId }));
     }
 
     return {

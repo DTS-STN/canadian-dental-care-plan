@@ -5,7 +5,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +12,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { loadRenewChildState } from '~/.server/routes/helpers/renew-child-route-helpers';
+import { loadRenewChildState, validateChildrenStateForReview } from '~/.server/routes/helpers/renew-child-route-helpers';
 import { clearRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
@@ -49,23 +48,15 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  // todo: uncomment and remove the state declaration below
-  // const state = loadRenewChildStateForReview({ params, request, session });
   const state = loadRenewChildState({ params, request, session });
+  validateChildrenStateForReview({ childrenState: state.children, params });
 
   // renew state is valid then edit mode can be set to true
   saveRenewState({ params, session, state: { editMode: true } });
 
-  // const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-child:review-child-information.page-title') }) };
-
-  // todo: uncomment once state mapper is complete
-  // const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
-  // const benefitRenewalDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitRenewalDtoMapper);
-  // const benefitRenewalStateMapper = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper);
-  // const payload = viewPayloadEnabled && benefitRenewalDtoMapper.mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalStateMapper.mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state));
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
@@ -105,12 +96,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     };
   });
 
-  return {
-    id: state.id,
-    children,
-    meta,
-    // payload  todo: uncomment once state mapper is complete
-  };
+  return { children, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -128,16 +114,6 @@ export async function action({ context: { appContainer, session }, params, reque
     saveRenewState({ params, session, state: {} });
     return redirect(getPathById('public/renew/$id/child/confirm-address', params));
   }
-
-  // todo: uncomment and remove the state declaration below
-  // const state = loadRenewChildStateForReview({ params, request, session });
-
-  // todo: uncomment once state mapper is complete
-  // const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state);
-  // await appContainer.get(TYPES.domain.services.BenefitRenewalService).createAdultChildBenefitRenewal(benefitRenewalDto);
-
-  const submissionInfo = { submittedOn: new UTCDate().toISOString() };
-  saveRenewState({ params, session, state: { submissionInfo } });
 
   return redirect(getPathById('public/renew/$id/child/review-parent-information', params));
 }
@@ -278,12 +254,6 @@ export default function RenewChildReviewChildInformation() {
           </div>
         </fetcher.Form>
       </div>
-      {/* todo: uncomment once state mapper is complete */}
-      {/* {payload && (
-        <div className="mt-8">
-          <DebugPayload data={payload} enableCopy></DebugPayload>
-        </div>
-      )} */}
     </>
   );
 }
