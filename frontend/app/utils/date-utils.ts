@@ -39,33 +39,56 @@ export function extractDateParts(date: string) {
 }
 
 /**
+ * Calculates the age in full years based on a given date string.
+ * The age is determined by comparing the provided date to the current date or to an optional reference date.
  *
  * @param date string representing the date (ex. '2024-01-01')
- * @returns difference in full years from the current date and the input.  This operation rounds the year down for fractional time differences.
+ * @param referenceDate optional string representing the reference date (ex. '2025-01-01'). If not provided, the current date is used.
+ * @returns difference in full years from the current date and the input. This operation rounds the year down for fractional time differences.
+ * @throws Error if the provided `date` or `referenceDate` is invalid.
  */
-export function getAgeFromDateString(date: string) {
+export function getAgeFromDateString(date: string, referenceDate?: string) {
   invariant(isValidDateString(date), `date is invalid [${date}]`);
-  return getAgeFromDate(parseDateString(date));
+  if (!referenceDate) {
+    return getAgeFromDate(parseDateString(date));
+  }
+
+  invariant(isValidDateString(referenceDate), `referenceDate is invalid [${referenceDate}]`);
+  return getAgeFromDate(parseDateString(date), parseDateString(referenceDate));
 }
 
 /**
+ * Calculates the age in full years based on a given date-time string.
+ * The age is determined by comparing the provided date-time to the current date-time or to an optional reference date-time.
  *
  * @param dateTime string representing the datetime (ex. '2024-01-01T00:00:00Z')
- * @returns difference in full years from the current date and the input.  This operation rounds the year down for fractional time differences.
+ * @param referenceDateTime (optional) string representing the reference datetime (ex. '2025-01-01T00:00:00Z'). If not provided, the current date-time is used.
+ * @returns difference in full years from the current date and the input. This operation rounds the year down for fractional time differences.
+ * @throws Error if the provided `dateTime` or `referenceDateTime` is invalid.
  */
-export function getAgeFromDateTimeString(dateTime: string) {
+export function getAgeFromDateTimeString(dateTime: string, referenceDateTime?: string) {
   invariant(isValidDateTimeString(dateTime), `dateTime is invalid [${dateTime}]`);
-  return getAgeFromDate(parseDateTimeString(dateTime));
+  if (!referenceDateTime) {
+    return getAgeFromDate(parseDateTimeString(dateTime));
+  }
+
+  invariant(isValidDateTimeString(referenceDateTime), `referenceDateTime is invalid [${referenceDateTime}]`);
+  return getAgeFromDate(parseDateTimeString(dateTime), parseDateTimeString(referenceDateTime));
 }
 
 /**
+ * Calculates the difference in full years between two dates.
+ * If no specific date is provided, it defaults to today's date.
  *
- * @param utcDate UTC date object (ex. new UTCDate(2024,1,1))
- * @returns difference in full years from the current date and the input.  This operation rounds the year down for fractional time differences.
+ * @param utcDate UTC date object (ex. new UTCDate(2024, 1, 1))
+ * @param referenceDate Optional UTC date object to calculate the age as of that date. Defaults to today's date.
+ * @returns Difference in full years between `referenceDate` (or today) and `utcDate`. This operation rounds the year down for fractional time differences.
+ * @throws Error if `utcDate` is in the past or if `referenceDate` is earlier than `utcDate`.
  */
-export function getAgeFromDate(utcDate: UTCDate) {
+export function getAgeFromDate(utcDate: UTCDate, referenceDate: UTCDate = new UTCDate()) {
   invariant(isPastDate(utcDate), `utcDate must be in past [${utcDate}]`);
-  return differenceInYears(new UTCDate(), utcDate);
+  invariant(referenceDate >= utcDate, `referenceDate [${referenceDate}] must not be earlier than utcDate [${utcDate}]`);
+  return differenceInYears(referenceDate, utcDate);
 }
 
 export function isPastDateString(date: string) {
