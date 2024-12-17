@@ -662,6 +662,11 @@ export const routes = [
             file: 'routes/public/renew/$id/child/confirm-email.tsx',
             paths: { en: '/:lang/renew/:id/child/confirm-email', fr: '/:lang/renew/:id/enfant/confirmer-courriel' },
           },
+          {
+            id: 'public/renew/$id/child/children/$childId/demographic-survey',
+            file: 'routes/public/renew/$id/child/children/$childId/demographic-survey.tsx',
+            paths: { en: '/:lang/renew/:id/child/children/:childId/demographic-survey', fr: '/:lang/renew/:id/child/children/:childId/demographic-survey' },
+          },
         ],
       },
       {
