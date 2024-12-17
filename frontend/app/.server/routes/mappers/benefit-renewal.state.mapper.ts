@@ -317,10 +317,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       partnerInformation: this.toPartnerInformation({
         existingPartnerInformation: clientApplication.partnerInformation,
-        hasMaritalStatusChanged: true,
+        hasMaritalStatusChanged,
         renewedPartnerInformation: partnerInformation,
       }),
-      typeOfApplication: children.length === 0 ? 'adult' : 'adult-child',
+      typeOfApplication: 'child',
       userId: 'anonymous',
     };
   }
