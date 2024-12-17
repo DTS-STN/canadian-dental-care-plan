@@ -11,6 +11,7 @@ import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
+import { getAgeFromDateString } from '~/utils/date-utils';
 import { getPathById } from '~/utils/route-utils';
 
 export interface ProtectedRenewState {
@@ -258,21 +259,23 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
   const parsedId = idSchema.parse(id);
   const sessionName = getSessionName(parsedId);
 
-  // TODO: create a mapper function from clientApplication to initialState?
   const initialState: ProtectedRenewState = {
     id: parsedId,
     editMode: false,
     applicationYear,
     clientApplication,
-    children: clientApplication.children.map((child) => {
-      const immutableChild = clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information.socialInsuranceNumber);
-      const childStateObj = {
-        id: randomUUID(),
-        information: child.information,
-        dentalInsurance: immutableChild?.dentalInsurance,
-      };
-      return childStateObj;
-    }),
+    children: clientApplication.children
+      // filter out children who will be 18 or older at the start of the coverage period as they are ineligible for renewal
+      .filter((child) => getAgeFromDateString(child.information.dateOfBirth, applicationYear.coverageStartDate) < 18) //
+      .map((child) => {
+        const immutableChild = clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information.socialInsuranceNumber);
+        const childStateObj = {
+          id: randomUUID(),
+          information: child.information,
+          dentalInsurance: immutableChild?.dentalInsurance,
+        };
+        return childStateObj;
+      }),
   };
 
   session.set(sessionName, initialState);
