@@ -90,7 +90,15 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewSingleChildState({ params, session });
   const protectedRenewState = loadProtectedRenewState({ params, session });
 
-  const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(TYPES.configs.ClientConfig);
+  const {
+    IS_APPLICANT_FIRST_NATIONS_YES_OPTION,
+    ANOTHER_ETHNIC_GROUP_OPTION,
+    INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER,
+    DISABILITY_STATUS_PREFER_NOT_TO_ANSWER,
+    ETHNIC_GROUP_PREFER_NOT_TO_ANSWER,
+    LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER,
+    GENDER_STATUS_PREFER_NOT_TO_ANSWER,
+  } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const demographicSurveySchema = z
@@ -113,14 +121,16 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     });
 
+  const preferNotToAnswer = z.nativeEnum(FormAction).parse(formData.get('_action')) === FormAction.Save;
+
   const parsedDataResult = demographicSurveySchema.safeParse({
-    indigenousStatus: String(formData.get('indigenousStatus') ?? ''),
+    indigenousStatus: preferNotToAnswer ? INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('indigenousStatus') ?? ''),
     firstNations: String(formData.get('firstNations') ?? ''),
-    disabilityStatus: String(formData.get('disabilityStatus') ?? ''),
-    ethnicGroups: formData.getAll('ethnicGroups'),
+    disabilityStatus: preferNotToAnswer ? DISABILITY_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('disabilityStatus') ?? ''),
+    ethnicGroups: preferNotToAnswer || formData.getAll('ethnicGroups').includes(ETHNIC_GROUP_PREFER_NOT_TO_ANSWER.toString()) ? [ETHNIC_GROUP_PREFER_NOT_TO_ANSWER.toString()] : formData.getAll('ethnicGroups'),
     anotherEthnicGroup: String(formData.get('anotherEthnicGroup') ?? ''),
-    locationBornStatus: String(formData.get('locationBornStatus') ?? ''),
-    genderStatus: String(formData.get('genderStatus') ?? ''),
+    locationBornStatus: preferNotToAnswer ? LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('locationBornStatus') ?? ''),
+    genderStatus: preferNotToAnswer ? GENDER_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('genderStatus') ?? ''),
   });
 
   if (!parsedDataResult.success) {
@@ -234,9 +244,9 @@ export default function ProtectedChildrenDemographicSurveyQuestions() {
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
+              <LoadingButton id="save-button" variant="primary" name="_action" value={FormAction.Continue} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
                 {t('protected-renew:demographic-survey.save-btn')}
-              </Button>
+              </LoadingButton>
               <ButtonLink
                 id="back-button"
                 routeId="protected/renew/$id/review-child-information"
@@ -249,7 +259,7 @@ export default function ProtectedChildrenDemographicSurveyQuestions() {
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
+              <LoadingButton id="continue-button" variant="primary" name="_action" value={FormAction.Continue} loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
                 {t('protected-renew:demographic-survey.continue-btn')}
               </LoadingButton>
               <ButtonLink id="back-button" routeId="protected/renew/$id/$childId/dental-insurance" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Cancel - Questions click">

@@ -43,6 +43,11 @@ export const clientEnvSchema = z.object({
   // demographic survey codes
   IS_APPLICANT_FIRST_NATIONS_YES_OPTION: z.coerce.number().default(775170000),
   ANOTHER_ETHNIC_GROUP_OPTION: z.coerce.number().default(775170009),
+  INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775170003),
+  DISABILITY_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775170004),
+  ETHNIC_GROUP_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775170011),
+  LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775170003),
+  GENDER_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775170004),
 
   // marital status codes
   MARITAL_STATUS_CODE_MARRIED: z.coerce.number().default(775170001),
