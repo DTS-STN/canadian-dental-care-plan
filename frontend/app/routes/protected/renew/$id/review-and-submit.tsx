@@ -2,13 +2,15 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
+import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { isPrimaryApplicantStateComplete, loadProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isPrimaryApplicantStateComplete, loadProtectedRenewState, loadProtectedRenewStateForReview, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -59,7 +61,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formData = await request.formData();
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewStateForReview({ params, session });
   const children = validateProtectedChildrenStateForReview(state.children);
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
@@ -68,7 +70,12 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
-  //TODO: Implement data submission to MSCA backend
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub);
+  await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
+
+  const submissionInfo = { submittedOn: new UTCDate().toISOString() };
+  saveProtectedRenewState({ params, session, state: { submissionInfo } });
 
   return redirect(getPathById('protected/renew/$id/confirmation', params));
 }

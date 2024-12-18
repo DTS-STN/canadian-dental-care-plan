@@ -67,9 +67,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  //prettier - ignore;
+  // prettier-ignore
   const payload =
     viewPayloadEnabled &&
     appContainer
@@ -140,7 +139,6 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
   const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub);
   await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
