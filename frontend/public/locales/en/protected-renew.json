@@ -110,7 +110,11 @@
     "back-btn": "Back",
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
-    "save-btn": "Save"
+    "save-btn": "Save",
+    "select-member": {
+      "heading": "Select a member",
+      "to-continue": "You must select a member to continue."
+    }
   },
   "dental-insurance": {
     "page-title": "{{memberName}}: Access to other dental insurance",

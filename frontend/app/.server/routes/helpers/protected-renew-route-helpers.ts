@@ -368,6 +368,10 @@ export function isPrimaryApplicantStateComplete(state: ProtectedRenewState) {
   return state.dentalInsurance !== undefined && state.demographicSurvey !== undefined;
 }
 
+export function isChildrenStateComplete(state: ProtectedRenewState) {
+  return state.children.every((child) => child.isParentOrLegalGuardian !== undefined && child.dentalInsurance !== undefined && child.demographicSurvey !== undefined);
+}
+
 interface ValidateProtectedRenewStateForReviewArgs {
   params: Params;
   state: ProtectedRenewState;
