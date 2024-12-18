@@ -272,6 +272,7 @@ export default function RenewChildIndex() {
               <LoadingButton
                 id="continue-button"
                 name="_action"
+                disabled={!hasChildren || isSubmitting}
                 value={FormAction.Continue}
                 variant="primary"
                 loading={isSubmitting && submitAction === FormAction.Continue}
