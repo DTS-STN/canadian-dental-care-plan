@@ -149,7 +149,7 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (state.editMode) {
-      return redirect(getPathById('public/renew/$id/child/review-parent-information', params));
+      return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
     }
     return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/child/review-child-information', params) : getPathById('public/renew/$id/child/update-home-address', params));
   }
@@ -212,7 +212,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/child/review-parent-information', params));
+    return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
   }
   return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/child/review-child-information', params) : getPathById('public/renew/$id/child/update-home-address', params));
 }
@@ -356,7 +356,7 @@ export default function RenewChildUpdateAddress() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Update address click">
                 {t('renew-child:update-address.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/child/review-parent-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Update address click">
+              <ButtonLink id="back-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Update address click">
                 {t('renew-child:update-address.cancel-btn')}
               </ButtonLink>
             </div>

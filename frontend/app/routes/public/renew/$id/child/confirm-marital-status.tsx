@@ -84,7 +84,7 @@ export async function action({ context: { appContainer, session }, params, reque
     if (parsedDataResult.data.hasMaritalStatusChanged) {
       return redirect(getPathById('public/renew/$id/child/marital-status', params));
     }
-    return redirect(getPathById('public/renew/$id/child/review-parent-information', params));
+    return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
   }
 
   if (parsedDataResult.data.hasMaritalStatusChanged) {
@@ -134,7 +134,7 @@ export default function RenewChildConfirmMaritalStatus() {
               <Button name="_action" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Confirm marital status click">
                 {t('renew-child:marital-status.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/child/review-parent-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Confirm marital status click">
+              <ButtonLink id="back-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Confirm marital status click">
                 {t('marital-status.cancel-btn')}
               </ButtonLink>
             </div>

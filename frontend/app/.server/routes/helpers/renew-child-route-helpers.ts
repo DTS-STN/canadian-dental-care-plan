@@ -128,6 +128,9 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     clientApplication,
     hasMaritalStatusChanged,
     hasAddressChanged,
+    isHomeAddressSameAsMailingAddress,
+    mailingAddress,
+    homeAddress,
     maritalStatus,
     partnerInformation,
     contactInformation,
@@ -171,16 +174,20 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('public/renew/$id/child/confirm-address', params));
   }
 
-  if (hasAddressChanged && addressInformation === undefined) {
-    throw redirect(getPathById('public/renew/$id/child/update-address', params));
+  if (hasAddressChanged && mailingAddress === undefined) {
+    throw redirect(getPathById('public/renew/$id/child/update-mailing-address', params));
+  }
+
+  if (hasAddressChanged && !isHomeAddressSameAsMailingAddress && homeAddress === undefined) {
+    throw redirect(getPathById('public/renew/$id/child/update-home-address', params));
   }
 
   if (contactInformation?.isNewOrUpdatedPhoneNumber === undefined) {
-    throw redirect(getPathById('public/renew/$id/confirm-phone', params));
+    throw redirect(getPathById('public/renew/$id/child/confirm-phone', params));
   }
 
   if (contactInformation.isNewOrUpdatedEmail === undefined) {
-    throw redirect(getPathById('public/renew/$id/confirm-email', params));
+    throw redirect(getPathById('public/renew/$id/child/confirm-email', params));
   }
 
   const children = validateChildrenStateForReview({ childrenState: state.children, params });
@@ -200,6 +207,9 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     hasFederalProvincialTerritorialBenefitsChanged,
     hasMaritalStatusChanged,
     hasAddressChanged,
+    isHomeAddressSameAsMailingAddress,
+    mailingAddress,
+    homeAddress,
     clientApplication,
   };
 }

@@ -156,6 +156,7 @@ export const pageIds = {
         confirmAddress: 'CDCP-RENW-CHLD-0011',
         updateAddress: 'CDCP-RENW-CHLD-0012',
         reviewChildInformation: 'CDCP-RENW-CHLD-0013',
+        reviewAdultInformation: 'CDCP-RENW-CHLD-0014',
         exitApplication: 'CDCP-RENW-CHLD-0015',
         demographicSurvey: 'CDCP-RENW-CHLD-0016',
       },
