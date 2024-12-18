@@ -388,5 +388,13 @@
     "yes": "Yes",
     "no": "No",
     "no-update": "No update"
+  },
+  "exit-application": {
+    "page-title": "Exiting the application",
+    "are-you-sure": "Are you sure you want to exit this application? If you click \"Exit\", the form will reset and the information will be lost.",
+    "click-back": "Click \"Back\" to return to the form.",
+    "back-btn": "Back",
+    "exit-btn": "Exit",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   }
 }
