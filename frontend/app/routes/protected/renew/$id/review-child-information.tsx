@@ -135,7 +135,7 @@ export async function action({ context: { appContainer, session }, params, reque
     if (!isPrimaryApplicantStateComplete(state)) {
       return redirect(getPathById('protected/renew/$id/member-selection', params));
     }
-    return redirect(getPathById('protected/renew/$id/review-child-information', params));
+    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
