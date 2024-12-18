@@ -130,7 +130,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewChildConfirmPhone() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, hasMaritalStatusChanged, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -238,7 +238,7 @@ export default function RenewChildConfirmPhone() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/child/children/index" //TODO: marital-status screen is still work in progress, change the link when marital-status is done
+                routeId={hasMaritalStatusChanged ? 'public/renew/$id/child/marital-status' : 'public/renew/$id/child/confirm-marital-status'}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
