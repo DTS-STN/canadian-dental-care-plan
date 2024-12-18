@@ -6,36 +6,37 @@
   "optional-label": "Remplir tous les champs sauf s'ils sont indiqués facultatifs.",
   "all-optional-label": "Toutes les champs sont faculatives.",
   "terms-and-conditions": {
-    "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires",
+    "page-title": "Conditions d'utilisation et déclaration de confidentialité",
     "page-heading": "Conditions générales d'utilisation et énoncé de confidentialité",
-    "intro-text": "Merci d'utiliser la demande en ligne du Régime canadien de soins dentaires (RCSD) («\u00a0la demande en ligne\u00a0»). Nous avons établi conditions d'utilisation de ce service («\u00a0conditions d'utilisation\u00a0»). Veuillez les lire attentivement.",
+    "intro-text": "Merci d'utiliser la demande de renouvellement en ligne du Régime canadien de soins dentaires (RCSD) («\u00a0la demande de renouvellement\u00a0»). Nous avons établi d'importantes conditions d'utilisation de ce service («\u00a0conditions\u00a0»). Veuillez les lire attentivement.",
     "terms-and-conditions-of-use": {
-      "summary": "Conditions générales d'utilisation",
-      "online-application-legal-terms": "<strong>VEUILLEZ LIRE ATTENTIVEMENT.</strong> Les présentes conditions d'utilisation de la demande en ligne du Régime canadien de soins dentaires (RCSD) contiennent des renseignements sur vos droits et obligations juridiques et régissent votre utilisation de la demande en ligne. Les présentes conditions d'utilisation doivent être lues en parallèle avec celles du site Web Canada.ca. En cas de divergence, les présentes conditions d'utilisation ont préséance sur celles du site Web <canadaTermsConditions>Canada.ca</canadaTermsConditions>. En cas de divergence, les présentes conditions générales d'utilisation ont préséance sur celles du site Web Canada.ca.",
-      "online-application-access-terms": "Votre accès à la demande en ligne et votre utilisation de celle-ci, y compris tout le contenu, sont assujettis à (1) votre acceptation des présentes conditions d'utilisation et (2) votre respect de celles-ci.",
-      "online-application-usage-terms": "Chaque fois que vous utilisez la demande en ligne, ces conditions continuent de s'appliquer. En utilisant la demande en ligne, vous acceptez de respecter les conditions suivantes. Il vous incombe de comprendre et de conserver ces conditions.",
+      "summary": "Conditions d'utilisation",
+      "online-application-legal-terms": "<strong>VEUILLEZ LIRE ATTENTIVEMENT.</strong> Les présentes conditions d'utilisation de la demande de renouvellement du Régime canadien de soins dentaires (RCSD) contiennent des renseignements sur vos droits et obligations juridiques et régissent votre utilisation de la demande de renouvellement. Les présentes conditions d'utilisation doivent être lues en parallèle avec celles du site Web Canada.ca. En cas de divergence, les présentes conditions d'utilisation ont préséance sur celles du site Web <canadaTermsConditions>Canada.ca</canadaTermsConditions>. En cas de divergence, les présentes conditions générales d'utilisation ont préséance sur celles du site Web Canada.ca.",
+      "online-application-access-terms": "Votre accès à la demande de renouvellement et votre utilisation de celle-ci, y compris tout le contenu, sont assujettis à (1) votre acceptation des présentes conditions d'utilisation et (2) votre respect de celles-ci.",
+      "online-application-usage-terms": "Chaque fois que vous utilisez la demande de renouvellement, ces conditions continuent de s'appliquer. En utilisant la demande de renouvellement, vous acceptez de respecter les conditions suivantes. Il vous incombe de comprendre et de conserver ces conditions.",
       "online-application-outage": "Il peut arriver que le système soit interrompu pour des raisons de maintenance.",
-      "online-application-timeout": "Si vous êtes inactif pendant 15 minutes dans la demande en ligne, votre séance prendra fin et vous perdrez tous les renseignements que vous avez entrés.",
-      "terms-rejection-policy": "Vous pouvez en tout temps décider de ne pas accepter les conditions, auquel cas vous ne serez pas autorisé à accéder à la demande en ligne et à l'utiliser.",
+      "online-application-timeout": "Si vous êtes inactif pendant 15 minutes dans la demande de renouvellement, votre séance prendra fin et vous perdrez tous les renseignements que vous avez entrés.",
+      "terms-rejection-policy": "Vous pouvez en tout temps décider de ne pas accepter les conditions, auquel cas vous ne serez pas autorisé à accéder à la demande de renouvellement et à l'utiliser.",
       "esdc-definition-clarification": "Aux fins des présentes conditions d'utilisation, «\u00a0EDSC\u00a0» désigne Sa Majesté le Roi du chef du Canada représenté par le ministre de l'Emploi et du Développement social du Canada.",
       "online-application": {
-        "heading": "Conditions générales d'utilisation de la demande en ligne",
-        "self-agreement": "Votre utilisation de la demande en ligne signifie que vous avez lu et accepté les présentes conditions d'utilisation et l'énoncé de confidentialité. Si, à tout moment, vous cessez d'accepter l'une ou l'autre des conditions d'utilisation, vous devez renoncer à utiliser la demande en ligne.",
-        "on-behalf-of-someone-else": "Si vous utilisez la demande en ligne au nom d'un enfant, vous certifiez en l'utilisant que vous disposez de toute l'autorité nécessaire pour accepter les conditions d'utilisation au nom de cette personne, et que vous acceptez les conditions d'utilisation au nom de la personne que vous représentez.",
+        "heading": "Conditions générales d'utilisation de la demande de renouvellement",
+        "self-agreement": "Votre utilisation de la demande de renouvellement signifie que vous avez lu et accepté les présentes conditions d'utilisation et l'énoncé de confidentialité. Si, à tout moment, vous cessez d'accepter l'une ou l'autre des conditions d'utilisation, vous devez renoncer à utiliser la demande de renouvellement.",
+        "on-behalf-of-someone-else": "Si vous utilisez la demande de renouvellement au nom d'un enfant, vous certifiez en l'utilisant que vous disposez de toute l'autorité nécessaire pour accepter les conditions d'utilisation au nom de cette personne, et que vous acceptez les conditions d'utilisation au nom de la personne que vous représentez.",
         "at-your-own-risk": "Si vous utilisez un ordinateur partagé ou une connexion Internet partagée, vous utilisez ce service à vos propres risques et vous devrez protéger toutes vos informations personnelles. Si vous utilisez un ordinateur public, assurez-vous de fermer le navigateur ou de vous déconnecter lorsque vous avez terminé.",
-        "msdc": "EDSC utilise les services de Microsoft Corporation pour exécuter la demande en ligne. Les centres de données Microsoft utilisés par EDSC sont au Canada conformément à l'entente sur <microsoftDataPrivacyPolicy>les conditions de service de Microsoft Corporation</microsoftDataPrivacyPolicy>.",
+        "msdc": "EDSC utilise les services de Microsoft Corporation pour exécuter la demande de renouvellement. Les centres de données Microsoft utilisés par EDSC sont au Canada conformément à l'entente sur <microsoftDataPrivacyPolicy>les conditions de service de Microsoft Corporation</microsoftDataPrivacyPolicy>.",
         "antibot": "EDSC utilise les services de protection contre les robots hCaptcha pour nos outils en ligne conformément aux <hcaptchaTermsOfService>conditions de service</hcaptchaTermsOfService> de hCaptcha."
       },
       "changes-to-these-terms-of-use": {
         "heading": "Changements apportés aux présentes conditions d'utilisation",
-        "esdc-terms-amendment-policy": "EDSC peut modifier les présentes conditions à tout moment et sans préavis. Ces changements prennent effet immédiatement à la date de leur publication. En utilisant la demande en ligne, vous acceptez de respecter les conditions modifiées. Vous devez vous assurer de comprendre et de conserver les conditions modifiées."
+        "esdc-terms-amendment-policy": "EDSC peut modifier les présentes conditions à tout moment et sans préavis. Ces changements prennent effet immédiatement à la date de leur publication. En utilisant la demande de renouvellement, vous acceptez de respecter les conditions modifiées. Vous devez vous assurer de comprendre et de conserver les conditions modifiées."
       }
     },
     "privacy-notice-statement": {
       "summary": "Énoncé de confidentialité",
       "personal-information": {
         "heading": "Renseignements personnels",
-        "service-canada-application-administration": "Les renseignements personnels recueillis dans la présente demande sont nécessaires aux fins de l'inscription au Régime canadien de soins dentaires (RCSD). Service Canada, qui fait partie d'Emploi et Développement social Canada (EDSC), administre les demandes au titre du RCSD au nom de Santé Canada. Service Canada recueillera les renseignements personnels que vous avez inclus dans votre demande de participation au RCSD afin de vous inscrire au régime.",
+        "service-canada-application-administration": "Service Canada, qui fait partie d'Emploi et Développement social Canada (EDSC), administre les demandes au titre du Régime canadien de soins dentaires (RCSD) au nom de Santé Canada. Les renseignements personnels recueillis dans cette demande de renouvellement sont nécessaires pour renouveler votre adhésion au RCSD.",
+        "share-information": "EDSC peut utiliser ou communiquer les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC, de SC et de Statistique Canada. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet.",
         "collection-use": "La collecte, l'utilisation et la divulgation de vos renseignements personnels sont autorisées par la <cite>Loi sur le ministère de la Santé</cite>, la <cite>Loi sur les mesures de soins dentaires</cite> et la <cite>Loi sur le ministère de l'Emploi et du Développement social</cite>, entre autres, et sont protégées par les dispositions de la Loi sur la protection des renseignements personnels.",
         "microsoft-policy": "EDSC exécute ce processus de demande en utilisant les services du fournisseur tiers Microsoft Corporation, qui peut être soumis à des lois étrangères. Vous trouverez de plus amples renseignements en consultant cette page Web <microsoftDataPrivacyPolicy>Politique de protection des données et principes de confidentialité de Microsoft</microsoftDataPrivacyPolicy>."
       },
@@ -47,7 +48,8 @@
           "hc-ppu-440": "Régime canadien de soins dentaires (SC PPU 440)"
         },
         "info-source-access": "Vous pouvez apprendre comment accéder à cette information dans la publication du gouvernement intitulée <infosource>Info Source</infosource>. Vous pouvez également accéder à Info Source en ligne dans n'importe quel Centre Service Canada.",
-        "personal-information-handling-complaint-process": "Si vous n'êtes pas satisfait de la façon dont vos renseignements personnels ont été traités par EDSC, vous pouvez communiquer avec le Commissariat à la protection de la vie privée du Canada pour <fileacomplaint>déposer une plainte</fileacomplaint>."
+        "personal-information-handling-complaint-process": "Si vous n'êtes pas satisfait de la façon dont vos renseignements personnels ont été traités par EDSC, vous pouvez communiquer avec le Commissariat à la protection de la vie privée du Canada pour <fileacomplaint>déposer une plainte</fileacomplaint>.",
+        "application-participation": "La participation au Régime canadien de soins dentaires est volontaire. Toutefois, si vous refusez de fournir des renseignements, EDSC ne pourra pas traiter votre demande de renouvellement."
       }
     },
     "sharing-your-information": {
@@ -60,14 +62,12 @@
       },
       "sharing-of-information-and-oral-health-providers": {
         "heading": "Partage d'informations et prestataires de santé bucco-dentaire",
-        "enrol-consent": "En vous inscrivant au RCSD, vous consentez également à ce que vos fournisseurs de soins de santé buccodentaire divulguent tous les renseignements personnels, tel qu'autorisé par la <cite>Loi sur le ministère de la Santé</cite> et la <cite>Loi sur les mesures de soins dentaires</cite>, qui peuvent être jugés utiles par la Sun Life dans le contexte de l'administration du programme, de la vérification et de la gestion des demandes de règlement, et de la sécurité des patients/clients. Ces renseignements peuvent comprendre, sans s'y limiter, des détails sur les services fournis, des données cliniques sur le patient, des paiements et des radiographies.",
-        "considered-minor": "Si vous êtes considéré comme mineur dans votre province ou territoire, vos renseignements peuvent également être communiqués à vos parents ou tuteurs légaux.",
-        "analysis": "EDSC peut utiliser ou communiquer les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC, de SC et de Statistique Canada. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet."
+        "enrol-consent": "En renouvelant votre adhésion au RCSD, vous consentez également à ce que vos fournisseurs de soins buccodentaires divulguent tous les renseignements personnels, conformément à la <cite>Loi sur le ministère de la Santé</cite> et à la <cite>Loi sur les mesures de soins dentaires</cite>, qui peuvent être jugés utiles par la Sun Life dans le contexte de l'administration du programme, de la vérification des demandes de règlement, de la gestion des demandes de règlement et de la sécurité des patients et des clients. Ces renseignements peuvent comprendre, sans s'y limiter, des détails sur les services fournis, des données cliniques sur le patient, des paiements et des radiographies.",
+        "considered-minor": "Si vous êtes considéré comme mineur dans votre province ou territoire, vos renseignements peuvent également être communiqués à vos parents ou tuteurs légaux."
       }
     },
     "apply": {
-      "application-participation": "La participation au Régime canadien de soins dentaires est volontaire. Toutefois, si vous ne fournissez pas vos renseignements personnels dans votre demande, votre admissibilité au Régime canadien de soins dentaires ne pourra pas être validée.",
-      "application-consent": "En poursuivant cette demande, vous reconnaissez avoir lu et accepté les modalités et l'énoncé de confidentialité ci-dessus. De plus, vous consentez à ce que vos renseignements personnels soient communiqués aux fins susmentionnées.",
+      "application-consent": "En poursuivant cette demande de renouvellement, vous reconnaissez avoir lu et accepté les conditions générales et l'énoncé de confidentialité ci-dessus. En outre, vous consentez également à ce que vos renseignements personnels soient transmis aux fins énumérées ci-dessus.",
       "back-button": "Retour",
       "link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
       "start-button": "Accepter et poursuivre"
