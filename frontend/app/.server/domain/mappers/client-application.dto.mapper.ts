@@ -62,7 +62,11 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       information: {
         firstName: child.PersonName[0].PersonGivenName[0],
         lastName: child.PersonName[0].PersonSurName,
-        dateOfBirth: child.PersonBirthDate.date,
+        dateOfBirth:
+          child.PersonBirthDate.date ??
+          (() => {
+            throw new Error('Expected child.PersonBirthDate.date to be defined');
+          })(),
         isParent:
           child.ApplicantDetail.AttestParentOrGuardianIndicator ??
           (() => {
@@ -112,7 +116,11 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
             (() => {
               throw new Error('Expected partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator to be defined');
             })(),
-          dateOfBirth: partner.PersonBirthDate.date,
+          yearOfBirth:
+            partner.PersonBirthDate.YearDate ??
+            (() => {
+              throw new Error('Expected partner.PersonBirthDate.YearDate to be defined');
+            })(),
           firstName: partner.PersonName[0].PersonGivenName[0],
           lastName: partner.PersonName[0].PersonSurName,
           socialInsuranceNumber: partner.PersonSINIdentification.IdentificationID,

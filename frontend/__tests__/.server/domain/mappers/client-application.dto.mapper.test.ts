@@ -135,7 +135,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
             RelatedPerson: [
               {
                 PersonBirthDate: {
-                  date: '2000-01-01',
+                  YearDate: '2000',
                 },
                 PersonName: [
                   {
@@ -219,7 +219,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
         livingIndependently: true,
         partnerInformation: {
           confirm: false,
-          dateOfBirth: '2000-01-01',
+          yearOfBirth: '2000',
           firstName: 'Jane',
           lastName: 'Doe',
           socialInsuranceNumber: '80000002',

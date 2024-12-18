@@ -80,7 +80,8 @@ export type ClientApplicationEntity = ReadonlyDeep<{
       }>;
       RelatedPerson: Array<{
         PersonBirthDate: {
-          date: string;
+          date?: string;
+          YearDate?: string;
         };
         PersonName: Array<{
           PersonGivenName: Array<string>;

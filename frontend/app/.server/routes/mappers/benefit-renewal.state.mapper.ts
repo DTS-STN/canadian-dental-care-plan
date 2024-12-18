@@ -11,10 +11,10 @@ import type {
   ClientApplicantInformationDto,
   ClientApplicationDto,
   ClientChildDto,
+  ClientPartnerInformationDto,
   CommunicationPreferencesDto,
   ContactInformationDto,
   ItaBenefitRenewalDto,
-  PartnerInformationDto,
   ProtectedBenefitRenewalDto,
   RenewalApplicantInformationDto,
 } from '~/.server/domain/dtos';
@@ -135,7 +135,7 @@ interface ToDentalBenefitsArgs {
 }
 
 interface ToPartnerInformationArgs {
-  existingPartnerInformation?: ReadonlyObjectDeep<PartnerInformationDto>;
+  existingPartnerInformation?: ReadonlyObjectDeep<ClientPartnerInformationDto>;
   hasMaritalStatusChanged: boolean;
   renewedPartnerInformation?: PartnerInformationState;
 }
@@ -506,13 +506,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }
 
   private toPartnerInformation({ existingPartnerInformation, hasMaritalStatusChanged, renewedPartnerInformation }: ToPartnerInformationArgs) {
-    if (hasMaritalStatusChanged) return renewedPartnerInformation;
-    if (!existingPartnerInformation) return undefined;
-
-    return {
-      confirm: existingPartnerInformation.confirm,
-      socialInsuranceNumber: existingPartnerInformation.socialInsuranceNumber,
-      yearOfBirth: new Date(existingPartnerInformation.dateOfBirth).getFullYear().toString(),
-    };
+    return hasMaritalStatusChanged ? renewedPartnerInformation : existingPartnerInformation;
   }
 }
