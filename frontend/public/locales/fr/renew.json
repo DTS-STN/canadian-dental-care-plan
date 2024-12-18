@@ -17,14 +17,14 @@
       "online-application-outage": "Il peut arriver que le système soit interrompu pour des raisons de maintenance.",
       "online-application-timeout": "Si vous êtes inactif pendant 15 minutes dans la demande de renouvellement, votre séance prendra fin et vous perdrez tous les renseignements que vous avez entrés.",
       "terms-rejection-policy": "Vous pouvez en tout temps décider de ne pas accepter les conditions, auquel cas vous ne serez pas autorisé à accéder à la demande de renouvellement et à l'utiliser.",
-      "esdc-definition-clarification": "Aux fins des présentes conditions d'utilisation, «\u00a0EDSC\u00a0» désigne Sa Majesté le Roi du chef du Canada représenté par le ministre de l'Emploi et du Développement social du Canada.",
+      "esdc-definition-clarification": "Aux fins des présentes conditions d'utilisation, «\u00a0EDSC\u00a0» désigne le ministre de l'Emploi et du Développement social du Canada représentant Sa Majesté le Roi du chef Canada.",
       "online-application": {
         "heading": "Conditions générales d'utilisation de la demande de renouvellement",
         "self-agreement": "Votre utilisation de la demande de renouvellement signifie que vous avez lu et accepté les présentes conditions d'utilisation et l'énoncé de confidentialité. Si, à tout moment, vous cessez d'accepter l'une ou l'autre des conditions d'utilisation, vous devez renoncer à utiliser la demande de renouvellement.",
-        "on-behalf-of-someone-else": "Si vous utilisez la demande de renouvellement au nom d'un enfant, vous certifiez en l'utilisant que vous disposez de toute l'autorité nécessaire pour accepter les conditions d'utilisation au nom de cette personne, et que vous acceptez les conditions d'utilisation au nom de la personne que vous représentez.",
-        "at-your-own-risk": "Si vous utilisez un ordinateur partagé ou une connexion Internet partagée, vous utilisez ce service à vos propres risques et vous devrez protéger toutes vos informations personnelles. Si vous utilisez un ordinateur public, assurez-vous de fermer le navigateur ou de vous déconnecter lorsque vous avez terminé.",
-        "msdc": "EDSC utilise les services de Microsoft Corporation pour exécuter la demande de renouvellement. Les centres de données Microsoft utilisés par EDSC sont au Canada conformément à l'entente sur <microsoftDataPrivacyPolicy>les conditions de service de Microsoft Corporation</microsoftDataPrivacyPolicy>.",
-        "antibot": "EDSC utilise les services de protection contre les robots hCaptcha pour nos outils en ligne conformément aux <hcaptchaTermsOfService>conditions de service</hcaptchaTermsOfService> de hCaptcha."
+        "on-behalf-of-someone-else": "Si vous utilisez le renouvellement au nom d'un enfant, vous certifiez alors que vous avez toutes autorisations nécessaires pour accepter les conditions d'utilisation au nom de cette personne, et que vous acceptez les conditions au nom de la personne que vous représentez.",
+        "at-your-own-risk": "Si vous utilisez un ordinateur partagé ou une connexion internet partagée, vous utilisez ce service à vos propres risques et devez veiller à la sécurité de vos informations personnelles. Si vous utilisez un ordinateur public, veillez à fermer le navigateur ou à vous déconnecter lorsque vous avez terminé.",
+        "msdc": "EDSC utilise les services de Microsoft Corporation pour exécuter l'application de renouvellement. Les centres de données Microsoft utilisés par EDSC sont situés au Canada, conformément à l'accord sur <microsoftDataPrivacyPolicy>les conditions de service de Microsoft Corporation</microsoftDataPrivacyPolicy>.",
+        "antibot": "EDSC utilise les services anti-robots hCaptcha pour ses outils en ligne, conformément aux <hcaptchaTermsOfService>conditions de service</hcaptchaTermsOfService> de hCaptcha."
       },
       "changes-to-these-terms-of-use": {
         "heading": "Changements apportés aux présentes conditions d'utilisation",
@@ -38,30 +38,30 @@
         "service-canada-application-administration": "Service Canada, qui fait partie d'Emploi et Développement social Canada (EDSC), administre les demandes au titre du Régime canadien de soins dentaires (RCSD) au nom de Santé Canada. Les renseignements personnels recueillis dans cette demande de renouvellement sont nécessaires pour renouveler votre adhésion au RCSD.",
         "share-information": "EDSC peut utiliser ou communiquer les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC, de SC et de Statistique Canada. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet.",
         "collection-use": "La collecte, l'utilisation et la divulgation de vos renseignements personnels sont autorisées par la <cite>Loi sur le ministère de la Santé</cite>, la <cite>Loi sur les mesures de soins dentaires</cite> et la <cite>Loi sur le ministère de l'Emploi et du Développement social</cite>, entre autres, et sont protégées par les dispositions de la Loi sur la protection des renseignements personnels.",
-        "microsoft-policy": "EDSC exécute ce processus de demande en utilisant les services du fournisseur tiers Microsoft Corporation, qui peut être soumis à des lois étrangères. Vous trouverez de plus amples renseignements en consultant cette page Web <microsoftDataPrivacyPolicy>Politique de protection des données et principes de confidentialité de Microsoft</microsoftDataPrivacyPolicy>."
+        "microsoft-policy": "EDSC exécute ce processus de demande en utilisant les services du fournisseur tiers Microsoft Corporation, qui peut être soumis à des lois étrangères. Pour plus d'informations, voir la <microsoftDataPrivacyPolicy>politique de confidentialité des données et les principes de confidentialité de Microsoft</microsoftDataPrivacyPolicy>."
       },
       "how-we-protect-your-privacy": {
         "heading": "Comment protégeons-nous vos renseignements personnels?",
-        "personal-information-rights-and-access": "Vous avez droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, le cas échéant, à leur correction. Ils sont conservés dans les fichiers de renseignements personnels suivants (FRPs)\u00a0:",
+        "personal-information-rights-and-access": "Vous avez droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, s'il y a lieu, à leur correction. Ils sont conservés dans les fichiers de renseignements personnels (FRP) suivants\u00a0:",
         "personal-information-banks": {
           "esdc-ppu-712": "Régime canadien de soins dentaires (ESDC PPU 712)",
           "hc-ppu-440": "Régime canadien de soins dentaires (SC PPU 440)"
         },
         "info-source-access": "Vous pouvez apprendre comment accéder à cette information dans la publication du gouvernement intitulée <infosource>Info Source</infosource>. Vous pouvez également accéder à Info Source en ligne dans n'importe quel Centre Service Canada.",
-        "personal-information-handling-complaint-process": "Si vous n'êtes pas satisfait de la façon dont vos renseignements personnels ont été traités par EDSC, vous pouvez communiquer avec le Commissariat à la protection de la vie privée du Canada pour <fileacomplaint>déposer une plainte</fileacomplaint>.",
+        "personal-information-handling-complaint-process": "Si vous n'êtes pas satisfait de la façon dont vos renseignements personnels ont été traités par EDSC, vous pouvez communiquer avec le Commissariat à la protection de la vie privée du Canada (CPVP) pour <fileacomplaint>déposer une plainte</fileacomplaint>.",
         "application-participation": "La participation au Régime canadien de soins dentaires est volontaire. Toutefois, si vous refusez de fournir des renseignements, EDSC ne pourra pas traiter votre demande de renouvellement."
       }
     },
     "sharing-your-information": {
       "summary": "Communication de vos renseignements",
       "government-of-canada-and-sun-life": {
-        "heading": "Gouvernement du canada et Sun Life",
+        "heading": "Gouvernement du Canada et Sun Life",
         "share-info": "Emploi et Développement social Canada peut communiquer vos renseignements personnels à Santé Canada, à l'Agence du revenu du Canada et à la Sun Life pour administrer le régime, valider votre admissibilité et vous inscrire au Régime canadien de soins dentaires (RCSD).",
-        "disclose-info": "Vos renseignements peuvent également être divulguées à l'administrateur des prestations du RCSD (la Sun Life) et aux agents et fournisseurs de services de l'administrateur des prestations aux fins de souscription, de vérification, d'administration, de décision et d'enquête concernant les prestations versées au titre du RCSD.",
+        "disclose-info": "Vos renseignements peuvent également être divulgués à l'administrateur des prestations du RCSD (la Sun Life) et aux agents et fournisseurs de services de l'administrateur des prestations aux fins de souscription, de vérification, d'administration, de décision et d'enquête concernant les prestations versées au titre du RCSD.",
         "sun-life-authorization": "La Sun Life est autorisée à recueillir, à utiliser et à divulguer des renseignements à votre sujet à toute personne ou organisation, y compris les fournisseurs de soins de santé buccodentaire, les établissements, les services d'enquête et le RCSD, aux fins de l'administration du programme, de la vérification, des demandes de règlement et de la sécurité des patients/clients."
       },
       "sharing-of-information-and-oral-health-providers": {
-        "heading": "Partage d'informations et prestataires de santé bucco-dentaire",
+        "heading": "Communication de vos renseignements et prestataires de soins buccodentaires",
         "enrol-consent": "En renouvelant votre adhésion au RCSD, vous consentez également à ce que vos fournisseurs de soins buccodentaires divulguent tous les renseignements personnels, conformément à la <cite>Loi sur le ministère de la Santé</cite> et à la <cite>Loi sur les mesures de soins dentaires</cite>, qui peuvent être jugés utiles par la Sun Life dans le contexte de l'administration du programme, de la vérification des demandes de règlement, de la gestion des demandes de règlement et de la sécurité des patients et des clients. Ces renseignements peuvent comprendre, sans s'y limiter, des détails sur les services fournis, des données cliniques sur le patient, des paiements et des radiographies.",
         "considered-minor": "Si vous êtes considéré comme mineur dans votre province ou territoire, vos renseignements peuvent également être communiqués à vos parents ou tuteurs légaux."
       }
