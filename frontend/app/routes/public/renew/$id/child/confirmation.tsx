@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     (state.hasAddressChanged && state.addressInformation === undefined) ||
     state.submissionInfo === undefined ||
     state.typeOfRenewal === undefined ||
-    (state.hasMaritalStatusChanged && state.maritalStatus === undefined)
+    (state.hasMaritalStatusChanged && state.maritalStatus === undefined) || getChildrenState(state).length === 0
     ) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
