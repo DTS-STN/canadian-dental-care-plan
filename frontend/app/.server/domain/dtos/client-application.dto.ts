@@ -1,6 +1,6 @@
 import type { ReadonlyDeep } from 'type-fest';
 
-import type { ApplicantInformationDto, ChildDto, CommunicationPreferencesDto, ContactInformationDto, PartnerInformationDto } from '~/.server/domain/dtos/benefit-application.dto';
+import type { ApplicantInformationDto, ChildDto, CommunicationPreferencesDto, ContactInformationDto } from '~/.server/domain/dtos/benefit-application.dto';
 
 export type ClientApplicationDto = ReadonlyDeep<{
   applicantInformation: ClientApplicantInformationDto;
@@ -14,7 +14,7 @@ export type ClientApplicationDto = ReadonlyDeep<{
   hasFiledTaxes: boolean;
   isInvitationToApplyClient: boolean;
   livingIndependently?: boolean;
-  partnerInformation?: PartnerInformationDto;
+  partnerInformation?: ClientPartnerInformationDto;
 }>;
 
 export type ClientApplicantInformationDto = ApplicantInformationDto & { clientNumber?: string };
@@ -29,6 +29,14 @@ export type ClientChildDto = Omit<ChildDto, 'information'> & {
     socialInsuranceNumber: string;
   };
 };
+
+export type ClientPartnerInformationDto = ReadonlyDeep<{
+  confirm: boolean;
+  yearOfBirth: string;
+  firstName: string;
+  lastName: string;
+  socialInsuranceNumber: string;
+}>;
 
 export type ClientApplicationBasicInfoRequestDto = Readonly<{
   clientNumber: string;

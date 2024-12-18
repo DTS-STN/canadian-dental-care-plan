@@ -96,7 +96,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
     isInvitationToApplyClient: false,
     partnerInformation: {
       confirm: true,
-      dateOfBirth: '1970-01-01',
+      yearOfBirth: '1970',
       firstName: 'Jane',
       lastName: 'Doe',
       socialInsuranceNumber: '800011819',

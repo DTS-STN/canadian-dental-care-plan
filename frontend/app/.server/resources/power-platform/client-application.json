@@ -200,7 +200,7 @@
         },
         {
           "PersonBirthDate": {
-            "date": "1970-01-01"
+            "YearDate": "1970"
           },
           "PersonName": [
             {

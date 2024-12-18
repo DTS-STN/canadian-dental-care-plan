@@ -103,7 +103,8 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
           IdentificationCategoryText: string;
         }[];
         PersonBirthDate: {
-          date: string;
+          date?: string;
+          YearDate?: string;
         };
         PersonName?: {
           PersonGivenName: string[];

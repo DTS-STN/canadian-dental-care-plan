@@ -100,7 +100,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const hasPartner = renewStateHasPartner(state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus);
   const spouseInfo = hasPartner
     ? (state.clientApplication.partnerInformation ?? state.partnerInformation) && {
-        yearOfBirth: state.partnerInformation?.yearOfBirth ?? state.clientApplication.partnerInformation?.dateOfBirth,
+        yearOfBirth: state.partnerInformation?.yearOfBirth ?? state.clientApplication.partnerInformation?.yearOfBirth,
         sin: state.partnerInformation?.socialInsuranceNumber ?? state.clientApplication.partnerInformation?.socialInsuranceNumber,
         consent: state.partnerInformation?.confirm ?? state.clientApplication.partnerInformation?.confirm,
       }

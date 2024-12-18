@@ -366,7 +366,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   private toRelatedPersonSpouse({ confirm, socialInsuranceNumber, yearOfBirth }: RenewalPartnerInformationDto) {
     return {
       PersonBirthDate: {
-        date: yearOfBirth, // TODO verify with Interop/PP that the PersonBirthDate field can be populated with just a year
+        YearDate: yearOfBirth,
       },
       PersonRelationshipCode: {
         ReferenceDataName: 'Spouse' as const,
@@ -400,7 +400,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         PrivateDentalInsuranceIndicator: child.dentalInsurance,
         InsurancePlan: this.toInsurancePlan(child.dentalBenefits),
       },
-      BenefitApplicationDetail: [], // TODO map this
+      BenefitApplicationDetail: this.toBenefitApplicationDetail(child.demographicSurvey),
       ClientIdentification: [
         {
           IdentificationID: child.clientNumber,
