@@ -166,9 +166,6 @@ export default function RenewAdultChildConfirm() {
   const cdcpLink = <InlineLink to={t('renew-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
   const mscaLink = <InlineLink to={t('renew-child:confirm.msca-link')} className="external-link" newTabIndicator target="_blank" />;
 
-  // this link will be used in a future release
-  // const cdcpLink = <InlineLink routeId="public/status/index" params={params} className="external-link" target='_blank' />;
-
   return (
     <div className="max-w-prose space-y-10">
       <section>
@@ -186,7 +183,7 @@ export default function RenewAdultChildConfirm() {
           }}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Print top - Application successfully submitted click"
         >
-          {t('confirm.print-btn')}
+          {t('confirm.print-or-save-btn')}
         </Button>
       </section>
 
