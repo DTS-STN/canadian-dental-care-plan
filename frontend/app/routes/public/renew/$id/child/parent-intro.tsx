@@ -56,10 +56,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Back) {
-    return redirect(getPathById('public/renew/$id/child/child-summary', params));
+    return redirect(getPathById('public/renew/$id/child/children/index', params));
   }
 
-  return redirect(getPathById('public/renew/$id/child/marital-status', params));
+  return redirect(getPathById('public/renew/$id/child/confirm-marital-status', params));
 }
 
 export default function RenewChildParentIntro() {

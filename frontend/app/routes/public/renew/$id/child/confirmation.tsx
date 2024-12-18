@@ -164,41 +164,13 @@ export default function RenewAdultChildConfirm() {
   const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo } = useLoaderData<typeof loader>();
 
   const cdcpLink = <InlineLink to={t('renew-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLink = <InlineLink to={t('renew-child:confirm.msca-link')} className="external-link" newTabIndicator target="_blank" />;
 
   // this link will be used in a future release
   // const cdcpLink = <InlineLink routeId="public/status/index" params={params} className="external-link" target='_blank' />;
 
   return (
     <div className="max-w-prose space-y-10">
-      {/* CHILDREN DETAILS */}
-      {children.map((child) => (
-        <section className="space-y-6" key={child.id}>
-          <h3 className="font-lato text-2xl font-bold">{child.firstName}</h3>
-          <section>
-            <h4 className="font-lato text-xl font-bold">{t('confirm.child-title', { childName: child.firstName })}</h4>
-            <dl className="mt-6 divide-y border-y">
-              <DescriptionListItem term={t('confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DescriptionListItem>
-              <DescriptionListItem term={t('confirm.dental-private')}>{child.dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
-              <DescriptionListItem term={t('confirm.dental-public')}>
-                {child.dentalInsurance.federalBenefit.benefit || child.dentalInsurance.provTerrBenefit.benefit ? (
-                  <>
-                    <p>{t('renew-child:confirm.yes')}</p>
-                    <p>{t('renew-child:confirm.dental-benefit-has-access')}</p>
-                    <ul className="ml-6 list-disc">
-                      {child.dentalInsurance.federalBenefit.benefit && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
-                      {child.dentalInsurance.provTerrBenefit.benefit && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
-                    </ul>
-                  </>
-                ) : (
-                  <p>{t('confirm.no')}</p>
-                )}
-              </DescriptionListItem>
-              <DescriptionListItem term={t('confirm.is-parent')}>{child.isParent ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
-            </dl>
-          </section>
-        </section>
-      ))}
-
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.keep-copy')}</h2>
         <p className="mt-4">
@@ -228,14 +200,43 @@ export default function RenewAdultChildConfirm() {
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.register-msca-title')}</h2>
-        <p className="mt-4">{t('confirm.register-msca-text')}</p>
+        <p className="mt-4">
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink, noWrap: <span className="whitespace-nowrap" /> }} />
+        </p>
       </section>
 
       <section className="space-y-8">
         <h2 className="font-lato text-3xl font-bold">{t('confirm.applicant-summary')}</h2>
+        {/* CHILDREN DETAILS */}
+        {children.map((child, index) => (
+          <section className="space-y-6" key={child.id}>
+            <section>
+              <h4 className="font-lato text-xl font-bold">{t('confirm.child-number', { childNumber: index + 1 })}</h4>
+              <dl className="mt-6 divide-y border-y">
+                <DescriptionListItem term={t('confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dental-private')}>{child.dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dental-public')}>
+                  {child.dentalInsurance.federalBenefit.benefit || child.dentalInsurance.provTerrBenefit.benefit ? (
+                    <>
+                      <p>{t('renew-child:confirm.yes')}</p>
+                      <p>{t('renew-child:confirm.dental-benefit-has-access')}</p>
+                      <ul className="ml-6 list-disc">
+                        {child.dentalInsurance.federalBenefit.benefit && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
+                        {child.dentalInsurance.provTerrBenefit.benefit && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
+                      </ul>
+                    </>
+                  ) : (
+                    <p>{t('confirm.no')}</p>
+                  )}
+                </DescriptionListItem>
+                <DescriptionListItem term={t('confirm.is-parent')}>{child.isParent ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+              </dl>
+            </section>
+          </section>
+        ))}
         <section className="space-y-6">
-          <span className="font-lato text-3xl font-bold">{t('confirm.applicant-title')}</span>
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.member-info')}</h3>
+          <span className="font-lato text-3xl font-bold">{t('confirm.parent-or-guardian-title')}</span>
+          <h3 className="font-lato text-2xl font-bold">{t('confirm.parent-or-guardian-info')}</h3>
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dob')}>{userInfo.birthday}</DescriptionListItem>
