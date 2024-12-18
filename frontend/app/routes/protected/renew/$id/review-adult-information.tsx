@@ -155,9 +155,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-adult-information.page-title') }) };
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  //prettier - ignore;
+  // prettier-ignore
   const payload =
     viewPayloadEnabled &&
     appContainer
@@ -198,8 +197,6 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
   const state = loadProtectedRenewStateForReview({ params, session });
 
   if (validateProtectedChildrenStateForReview(state.children).length === 0) {
