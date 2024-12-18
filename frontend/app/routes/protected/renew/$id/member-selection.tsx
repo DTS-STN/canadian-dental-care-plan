@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
@@ -9,12 +10,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
-import { loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isChildrenStateComplete, isPrimaryApplicantStateComplete, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
 import { ButtonLink } from '~/components/buttons';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -61,6 +64,12 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const state = loadProtectedRenewState({ params, session });
+
+  if (!isPrimaryApplicantStateComplete(state) && !isChildrenStateComplete(state)) {
+    return { status: 'select-member' };
+  }
+
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }
 
@@ -71,12 +80,13 @@ export default function ProtectedRenewMemberSelection() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
+  const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
   const applicantName = `${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`;
-
   const hasExternalReviews = externallyReviewed ?? children.filter((child) => child.externallyReviewed === true).length > 0;
 
   return (
     <div className="max-w-prose">
+      {fetcherStatus === 'select-member' && <SelectMember />}
       {hasExternalReviews && (
         <>
           <p className="mb-4">{t('protected-renew:member-selection.reviewed')}</p>
@@ -103,7 +113,7 @@ export default function ProtectedRenewMemberSelection() {
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
         <div className="mt-6 space-y-8">
-          <CardLink key={applicantName} title={applicantName} previouslyReviewed={previouslyReviewed} routeId="protected/renew/$id/dental-insurance" params={params} />
+          <CardLink id="primary-applicant" key={applicantName} title={applicantName} previouslyReviewed={previouslyReviewed} routeId="protected/renew/$id/dental-insurance" params={params} />
           {children.map((child) => {
             const childName = `${child.information?.firstName} ${child.information?.lastName}`;
             return <CardLink key={childName} title={childName} previouslyReviewed={child.previouslyReviewed} routeId="protected/renew/$id/$childId/parent-or-guardian" params={{ ...params, childId: child.id }} />;
@@ -149,5 +159,28 @@ function CardLink({ routeId, title, previouslyReviewed, ...props }: CardLinkProp
         </>
       )}
     </AppLink>
+  );
+}
+
+function SelectMember() {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (wrapperRef.current) {
+      wrapperRef.current.scrollIntoView({ behavior: 'smooth' });
+      wrapperRef.current.focus();
+    }
+  }, []);
+
+  return (
+    <div ref={wrapperRef} id="select-member" className="mb-4">
+      <ContextualAlert type="danger">
+        <h2 className="mb-2 font-bold">{t('protected-renew:member-selection.select-member.heading')}</h2>
+        <InlineLink to="#primary-applicant" className="mb-2">
+          {t('protected-renew:member-selection.select-member.to-continue')}
+        </InlineLink>
+      </ContextualAlert>
+    </div>
   );
 }
