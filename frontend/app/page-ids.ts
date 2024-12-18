@@ -159,6 +159,7 @@ export const pageIds = {
         reviewAdultInformation: 'CDCP-RENW-CHLD-0014',
         exitApplication: 'CDCP-RENW-CHLD-0015',
         demographicSurvey: 'CDCP-RENW-CHLD-0016',
+        confirmation: 'CDCP-RENW-CHLD-0017',
       },
     },
     unableToProcessRequest: 'CDCP-UNAB-0001',

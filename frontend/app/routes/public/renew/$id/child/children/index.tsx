@@ -107,15 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/child/children/index', params));
   }
 
-  saveRenewState({
-    params,
-    session,
-    state: {
-      editMode: true, // last step in the flow
-    },
-  });
-
-  return redirect(getPathById('public/renew/$id/child/review-child-information', params));
+  return redirect(getPathById('public/renew/$id/child/parent-intro', params));
 }
 
 export default function RenewChildIndex() {
