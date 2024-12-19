@@ -130,7 +130,7 @@
     "form-instructions": "Pour qui renouvelez-vous l'adhésion?",
     "radio-options": {
       "personal": "Je renouvelle pour <strong>moi-même</strong>",
-      "personal-and-child": "Je présente une demande de renouvellement pour <strong>moi-même</strong> ou pour <strong>moi-même et mon ou mes enfants</strong>",
+      "personal-and-child": "Je renouvelle pour <strong>moi-même et mon ou mes enfants</strong>",
       "child": "Je présente une demande de renouvellement pour <strong>mon ou mes enfants</strong>",
       "delegate": "Je présente une demande de renouvellement <strong>au nom d'une autre personne à titre de représentant légal ou mandataire</strong>"
     },
