@@ -703,6 +703,11 @@ export const routes = [
             file: 'routes/public/renew/$id/adult/confirm-phone.tsx',
             paths: { en: '/:lang/renew/:id/adult/confirm-phone', fr: '/:lang/renouveller/:id/adulte/confirmer-telephone' },
           },
+          {
+            id: 'public/renew/$id/adult/confirm-email',
+            file: 'routes/public/renew/$id/adult/confirm-email.tsx',
+            paths: { en: '/:lang/renew/:id/adult/confirm-email', fr: '/:lang/renouveller/:id/adulte/confirmer-courriel' },
+          },
         ],
       },
       {

@@ -61,5 +61,33 @@
       "phone-number-alt-valid": "Numéro de téléphone invalide",
       "phone-required": "Entrer un numéro de téléphone"
     }
+  },
+  "confirm-email": {
+    "page-title": "Adresse courriel",
+    "add-email": "Une adresse courriel à jour permet au gouvernement du Canada et à la Sun Life de communiquer avec vous au sujet de votre adhésion au Régime canadien de soins dentaires. Vous trouverez l'adresse courriel que nous avons dans nos dossiers dans la lettre de Service Canada.",
+    "add-or-update": {
+      "legend": "Souhaitez-vous mettre à jour ou ajouter votre adresse courriel?",
+      "help-message": "L'adresse courriel que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada."
+    },
+    "receive-comms": {
+      "legend": "Souhaitez-vous recevoir des communications par courriel de la part de la Sun Life et du gouvernement du Canada?"
+    },
+    "email": "Adresse courriel",
+    "confirm-email": "Confirmer l'adresse courriel",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Sauvegarder",
+    "option-yes": "Oui",
+    "option-no": "Non",
+    "error-message": {
+      "add-or-update-required": "Sélectionnez si vous souhaitez mettre à jour ou ajouter une adresse courriel",
+      "email-match": "Les adresses courriel entrées ne concordent pas",
+      "confirm-email-required": "Confirmez l'adresse courriel",
+      "email-required": "Entrez l'adresse courriel",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@example.com",
+      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com",
+      "receive-comms-required": "Select whether you would like to receive email communication"
+    }
   }
 }
