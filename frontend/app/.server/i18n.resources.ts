@@ -9,6 +9,7 @@ import indexEn from '~/../public/locales/en/index.json';
 import lettersEn from '~/../public/locales/en/letters.json';
 import protectedRenewEn from '~/../public/locales/en/protected-renew.json';
 import renewAdultChildEn from '~/../public/locales/en/renew-adult-child.json';
+import renewAdultEn from '~/../public/locales/en/renew-adult.json';
 import renewChildEn from '~/../public/locales/en/renew-child.json';
 import renewItaEn from '~/../public/locales/en/renew-ita.json';
 import renewEn from '~/../public/locales/en/renew.json';
@@ -26,6 +27,7 @@ import indexFr from '~/../public/locales/fr/index.json';
 import lettersFr from '~/../public/locales/fr/letters.json';
 import protectedRenewFr from '~/../public/locales/fr/protected-renew.json';
 import renewAdultChildFr from '~/../public/locales/fr/renew-adult-child.json';
+import renewAdultFr from '~/../public/locales/fr/renew-adult.json';
 import renewChildFr from '~/../public/locales/fr/renew-child.json';
 import renewItaFr from '~/../public/locales/fr/renew-ita.json';
 import renewFr from '~/../public/locales/fr/renew.json';
@@ -49,6 +51,7 @@ const i18nResourcesEn = {
   'renew-adult-child': renewAdultChildEn,
   'renew-child': renewChildEn,
   'renew-ita': renewItaEn,
+  'renew-adult': renewAdultEn,
   renew: renewEn,
   status: statusEn,
   'stub-login': stubLoginEn,
@@ -69,6 +72,7 @@ const i18nResourcesFr = {
   'renew-adult-child': renewAdultChildFr,
   'renew-child': renewChildFr,
   'renew-ita': renewItaFr,
+  'renew-adult': renewAdultFr,
   renew: renewFr,
   status: statusFr,
   'stub-login': stubLoginFr,

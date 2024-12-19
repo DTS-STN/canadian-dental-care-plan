@@ -111,6 +111,9 @@ export const pageIds = {
       fileYourTaxes: 'CDCP-RENW-0005',
       typeOfRenewal: 'CDCP-RENW-0006',
       renewalDelegate: 'CDCP-RENW-0007',
+      adult: {
+        confirmMaritalStatus: 'CDCP-RENW-AD-0001',
+      },
       ita: {
         maritalStatus: 'CDCP-RENW-ITA-0001',
         confirmPhone: 'CDCP-RENW-ITA-0002',
