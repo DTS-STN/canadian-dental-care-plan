@@ -85,11 +85,13 @@ export function validateRenewAdultStateForReview({ params, state }: ValidateRene
     maritalStatus,
     partnerInformation,
     contactInformation,
+    homeAddress,
+    mailingAddress,
+    isHomeAddressSameAsMailingAddress,
     editMode,
     id,
     submissionInfo,
     typeOfRenewal,
-    addressInformation,
     applicantInformation,
     clientApplication,
     dentalBenefits,
@@ -130,8 +132,12 @@ export function validateRenewAdultStateForReview({ params, state }: ValidateRene
     throw redirect(getPathById('public/renew/$id/adult/confirm-address', params));
   }
 
-  if (hasAddressChanged && addressInformation === undefined) {
+  if (hasAddressChanged && mailingAddress === undefined) {
     throw redirect(getPathById('public/renew/$id/adult/update-mailing-address', params));
+  }
+
+  if (hasAddressChanged && !isHomeAddressSameAsMailingAddress && homeAddress === undefined) {
+    throw redirect(getPathById('public/renew/$id/adult/update-home-address', params));
   }
 
   if (contactInformation?.isNewOrUpdatedPhoneNumber === undefined) {
@@ -167,7 +173,9 @@ export function validateRenewAdultStateForReview({ params, state }: ValidateRene
     applicantInformation,
     dentalBenefits,
     dentalInsurance,
-    addressInformation,
+    homeAddress,
+    mailingAddress,
+    isHomeAddressSameAsMailingAddress,
     partnerInformation,
     hasAddressChanged,
     demographicSurvey,
