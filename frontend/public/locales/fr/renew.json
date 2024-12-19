@@ -115,14 +115,14 @@
       "last-name-required": "Entrez le nom de famille",
       "first-name-no-digits": "Le prénom doit contenir uniquement des lettres",
       "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres",
-      "client-number-required": "Entrez le numéro de client ",
+      "client-number-required": "Entrez le numéro de client à 11 chiffres",
       "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
       "client-number-valid": "Doit être un numéro de client valide. Votre saisie doit comporter 11, 13 chiffres"
     },
     "status-not-found": {
-      "heading": "Nous n'avons pas pu trouver votre demande avec les informations que vous nous avez fournies.",
-      "please-review": "Veuillez vous assurer que les informations que vous avez saisies sont correctes.",
-      "contact-service-canada": "Si le problème persiste, contactez Service Canada en appelant le <noWrap>1-833-537-4342</noWrap>."
+      "heading": "Nous n'avons pas pu trouver votre demande avec les informations que vous nous avez fournies",
+      "please-review": "Assurez-vous que les informations que vous avez saisies sont correctes.",
+      "contact-service-canada": "Si vous devez modifier votre nom ou si ce problème persiste, contactez Service Canada en composant le <noWrap>1-833-537-4342</noWrap>."
     }
   },
   "type-of-renewal": {
