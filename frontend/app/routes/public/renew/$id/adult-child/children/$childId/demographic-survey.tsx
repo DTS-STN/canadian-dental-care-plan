@@ -75,6 +75,7 @@ export async function loader({ context: { appContainer, session }, request, para
     defaultState: state.demographicSurvey,
     editMode: state.editMode,
     i18nOptions: { memberName },
+    memberName,
   };
 }
 
@@ -87,7 +88,15 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadRenewAdultSingleChildState({ params, request, session });
   const renewState = loadRenewAdultChildState({ params, request, session });
 
-  const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(TYPES.configs.ClientConfig);
+  const {
+    IS_APPLICANT_FIRST_NATIONS_YES_OPTION,
+    ANOTHER_ETHNIC_GROUP_OPTION,
+    INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER,
+    DISABILITY_STATUS_PREFER_NOT_TO_ANSWER,
+    ETHNIC_GROUP_PREFER_NOT_TO_ANSWER,
+    LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER,
+    GENDER_STATUS_PREFER_NOT_TO_ANSWER,
+  } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const demographicSurveySchema = z
@@ -110,14 +119,16 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     });
 
+  const preferNotToAnswer = z.nativeEnum(FormAction).parse(formData.get('_action')) === FormAction.Save;
+
   const parsedDataResult = demographicSurveySchema.safeParse({
-    indigenousStatus: String(formData.get('indigenousStatus') ?? ''),
+    indigenousStatus: preferNotToAnswer ? INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('indigenousStatus') ?? ''),
     firstNations: String(formData.get('firstNations') ?? ''),
-    disabilityStatus: String(formData.get('disabilityStatus') ?? ''),
-    ethnicGroups: formData.getAll('ethnicGroups'),
+    disabilityStatus: preferNotToAnswer ? DISABILITY_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('disabilityStatus') ?? ''),
+    ethnicGroups: preferNotToAnswer || formData.getAll('ethnicGroups').includes(ETHNIC_GROUP_PREFER_NOT_TO_ANSWER.toString()) ? [ETHNIC_GROUP_PREFER_NOT_TO_ANSWER.toString()] : formData.getAll('ethnicGroups'),
     anotherEthnicGroup: String(formData.get('anotherEthnicGroup') ?? ''),
-    locationBornStatus: String(formData.get('locationBornStatus') ?? ''),
-    genderStatus: String(formData.get('genderStatus') ?? ''),
+    locationBornStatus: preferNotToAnswer ? LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('locationBornStatus') ?? ''),
+    genderStatus: preferNotToAnswer ? GENDER_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('genderStatus') ?? ''),
   });
 
   if (!parsedDataResult.success) {
@@ -144,7 +155,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewAdultChildChildrenDemographicSurveyQuestions() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { indigenousStatuses, firstNations, disabilityStatuses, ethnicGroups, locationBornStatuses, genderStatuses, defaultState, editMode, memberName } = useLoaderData<typeof loader>();
   const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -182,7 +193,7 @@ export default function RenewAdultChildChildrenDemographicSurveyQuestions() {
     value: status.id,
     onChange: handleOnIsIndigenousStatusChanged,
     append: status.id === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && isIndigenousStatusValue && (
-      <InputRadios id="first-nations" name="firstNations" legend={t('renew-adult-child:children.demographic-survey.indigenous-status')} options={firstNationsOptions} errorMessage={errors?.firstNations} required />
+      <InputRadios id="first-nations" name="firstNations" legend={t('renew-adult-child:children.demographic-survey.indigenous-status', { memberName })} options={firstNationsOptions} errorMessage={errors?.firstNations} required />
     ),
   }));
 
@@ -199,7 +210,7 @@ export default function RenewAdultChildChildrenDemographicSurveyQuestions() {
       <InputSanitizeField
         id="another-ethnic-group"
         name="anotherEthnicGroup"
-        label={t('renew-adult-child:children.demographic-survey.ethnic-groups')}
+        label={t('renew-adult-child:children.demographic-survey.ethnic-groups', { memberName })}
         defaultValue={defaultState?.anotherEthnicGroup ?? ''}
         errorMessage={errors?.anotherEthnicGroup}
         required
@@ -218,21 +229,50 @@ export default function RenewAdultChildChildrenDemographicSurveyQuestions() {
   return (
     <>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew-adult-child:children.demographic-survey.optional')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('renew-adult-child:children.demographic-survey.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
-            <InputRadios id="disability-status" name="disabilityStatus" legend={t('renew-adult-child:children.demographic-survey.disability-status')} options={disabilityStatusOptions} errorMessage={errors?.disabilityStatus} required />
-            <InputCheckboxes id="ethnic-groups" name="ethnicGroups" legend={t('renew-adult-child:children.demographic-survey.ethnic-groups')} options={ethnicGroupOptions} errorMessage={errors?.ethnicGroups} required />
-            <InputRadios id="location-born-status" name="locationBornStatus" legend={t('renew-adult-child:children.demographic-survey.location-born-status')} options={locationBornStatusOptions} errorMessage={errors?.locationBornStatus} required />
-            <InputRadios id="gender-status" name="genderStatus" legend={t('renew-adult-child:children.demographic-survey.gender-status')} options={genderStatusOptions} errorMessage={errors?.genderStatus} required />
+            <p>{t('renew-adult-child:children.demographic-survey.improve-cdcp')}</p>
+            <p>{t('renew-adult-child:children.demographic-survey.confidential')}</p>
+            <p>{t('renew-adult-child:children.demographic-survey.impact-enrollment')}</p>
+            <Button name="_action" value={FormAction.Save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application:Prefer not to answer - Demographic survey click">
+              {t('renew-adult-child:children.demographic-survey.prefer-not-to-answer-btn')}
+            </Button>
+            <p className="mb-4 italic">{t('renew-adult-child:children.demographic-survey.optional')}</p>
+            <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('renew-adult-child:children.demographic-survey.indigenous-status', { memberName })} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
+            <InputRadios
+              id="disability-status"
+              name="disabilityStatus"
+              legend={t('renew-adult-child:children.demographic-survey.disability-status', { memberName })}
+              options={disabilityStatusOptions}
+              errorMessage={errors?.disabilityStatus}
+              required
+              helpMessagePrimary={t('renew-adult-child:children.demographic-survey.disability-help-message')}
+            />
+            <InputCheckboxes id="ethnic-groups" name="ethnicGroups" legend={t('renew-adult-child:children.demographic-survey.ethnic-groups', { memberName })} options={ethnicGroupOptions} errorMessage={errors?.ethnicGroups} required />
+            <InputRadios
+              id="location-born-status"
+              name="locationBornStatus"
+              legend={t('renew-adult-child:children.demographic-survey.location-born-status', { memberName })}
+              options={locationBornStatusOptions}
+              errorMessage={errors?.locationBornStatus}
+              required
+            />
+            <InputRadios
+              id="gender-status"
+              name="genderStatus"
+              legend={t('renew-adult-child:children.demographic-survey.gender-status', { memberName })}
+              options={genderStatusOptions}
+              errorMessage={errors?.genderStatus}
+              required
+              helpMessagePrimary={t('renew-adult-child:children.demographic-survey.gender-help-message')}
+            />
           </div>
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
+              <Button name="_action" value={FormAction.Continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
                 {t('renew-adult-child:children.demographic-survey.save-btn')}
               </Button>
               <ButtonLink
@@ -247,7 +287,7 @@ export default function RenewAdultChildChildrenDemographicSurveyQuestions() {
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
+              <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
                 {t('renew-adult-child:children.demographic-survey.continue-btn')}
               </LoadingButton>
               <ButtonLink

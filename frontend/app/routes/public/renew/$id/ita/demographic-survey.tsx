@@ -82,7 +82,15 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const { IS_APPLICANT_FIRST_NATIONS_YES_OPTION, ANOTHER_ETHNIC_GROUP_OPTION } = appContainer.get(TYPES.configs.ClientConfig);
+  const {
+    IS_APPLICANT_FIRST_NATIONS_YES_OPTION,
+    ANOTHER_ETHNIC_GROUP_OPTION,
+    INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER,
+    DISABILITY_STATUS_PREFER_NOT_TO_ANSWER,
+    ETHNIC_GROUP_PREFER_NOT_TO_ANSWER,
+    LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER,
+    GENDER_STATUS_PREFER_NOT_TO_ANSWER,
+  } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const demographicSurveySchema = z
@@ -105,14 +113,16 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     });
 
+  const preferNotToAnswer = z.nativeEnum(FormAction).parse(formData.get('_action')) === FormAction.Save;
+
   const parsedDataResult = demographicSurveySchema.safeParse({
-    indigenousStatus: String(formData.get('indigenousStatus') ?? ''),
+    indigenousStatus: preferNotToAnswer ? INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('indigenousStatus') ?? ''),
     firstNations: String(formData.get('firstNations') ?? ''),
-    disabilityStatus: String(formData.get('disabilityStatus') ?? ''),
-    ethnicGroups: formData.getAll('ethnicGroups'),
+    disabilityStatus: preferNotToAnswer ? DISABILITY_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('disabilityStatus') ?? ''),
+    ethnicGroups: preferNotToAnswer || formData.getAll('ethnicGroups').includes(ETHNIC_GROUP_PREFER_NOT_TO_ANSWER.toString()) ? [ETHNIC_GROUP_PREFER_NOT_TO_ANSWER.toString()] : formData.getAll('ethnicGroups'),
     anotherEthnicGroup: String(formData.get('anotherEthnicGroup') ?? ''),
-    locationBornStatus: String(formData.get('locationBornStatus') ?? ''),
-    genderStatus: String(formData.get('genderStatus') ?? ''),
+    locationBornStatus: preferNotToAnswer ? LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('locationBornStatus') ?? ''),
+    genderStatus: preferNotToAnswer ? GENDER_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('genderStatus') ?? ''),
   });
 
   if (!parsedDataResult.success) {
@@ -200,21 +210,43 @@ export default function RenewItaDemographicSurveyQuestions() {
   return (
     <>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew-ita:demographic-survey.optional')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
+            <p>{t('renew-ita:demographic-survey.improve-cdcp')}</p>
+            <p>{t('renew-ita:demographic-survey.confidential')}</p>
+            <p>{t('renew-ita:demographic-survey.impact-enrollment')}</p>
+            <Button name="_action" value={FormAction.Save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application:Prefer not to answer - Demographic survey click">
+              {t('renew-ita:demographic-survey.prefer-not-to-answer-btn')}
+            </Button>
+            <p className="mb-4 italic">{t('renew-ita:demographic-survey.optional')}</p>
             <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('renew-ita:demographic-survey.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
-            <InputRadios id="disability-status" name="disabilityStatus" legend={t('renew-ita:demographic-survey.disability-status')} options={disabilityStatusOptions} errorMessage={errors?.disabilityStatus} required />
+            <InputRadios
+              id="disability-status"
+              name="disabilityStatus"
+              legend={t('renew-ita:demographic-survey.disability-status')}
+              options={disabilityStatusOptions}
+              errorMessage={errors?.disabilityStatus}
+              required
+              helpMessagePrimary={t('renew-ita:demographic-survey.disability-help-message')}
+            />
             <InputCheckboxes id="ethnic-groups" name="ethnicGroups" legend={t('renew-ita:demographic-survey.ethnic-groups')} options={ethnicGroupOptions} errorMessage={errors?.ethnicGroups} required />
             <InputRadios id="location-born-status" name="locationBornStatus" legend={t('renew-ita:demographic-survey.location-born-status')} options={locationBornStatusOptions} errorMessage={errors?.locationBornStatus} required />
-            <InputRadios id="gender-status" name="genderStatus" legend={t('renew-ita:demographic-survey.gender-status')} options={genderStatusOptions} errorMessage={errors?.genderStatus} required />
+            <InputRadios
+              id="gender-status"
+              name="genderStatus"
+              legend={t('renew-ita:demographic-survey.gender-status')}
+              options={genderStatusOptions}
+              errorMessage={errors?.genderStatus}
+              required
+              helpMessagePrimary={t('renew-ita:demographic-survey.gender-help-message')}
+            />
           </div>
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
+              <Button name="_action" value={FormAction.Continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
                 {t('renew-ita:demographic-survey.save-btn')}
               </Button>
               <ButtonLink
@@ -229,7 +261,7 @@ export default function RenewItaDemographicSurveyQuestions() {
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
+              <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
                 {t('renew-ita:demographic-survey.continue-btn')}
               </LoadingButton>
               <ButtonLink

@@ -194,7 +194,7 @@ export default function RenewChildrenDemographicSurveyQuestions() {
     value: status.id,
     onChange: handleOnIsIndigenousStatusChanged,
     append: status.id === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && isIndigenousStatusValue && (
-      <InputRadios id="first-nations" name="firstNations" legend={t('renew-child:demographic-survey.indigenous-status')} options={firstNationsOptions} errorMessage={errors?.firstNations} required />
+      <InputRadios id="first-nations" name="firstNations" legend={t('renew-child:demographic-survey.indigenous-status', { memberName })} options={firstNationsOptions} errorMessage={errors?.firstNations} required />
     ),
   }));
 
@@ -245,10 +245,26 @@ export default function RenewChildrenDemographicSurveyQuestions() {
             </Button>
             <p className="mb-4 italic">{t('renew-child:demographic-survey.optional')}</p>
             <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('renew-child:demographic-survey.indigenous-status', { memberName })} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
-            <InputRadios id="disability-status" name="disabilityStatus" legend={t('renew-child:demographic-survey.disability-status', { memberName })} options={disabilityStatusOptions} errorMessage={errors?.disabilityStatus} required />
+            <InputRadios
+              id="disability-status"
+              name="disabilityStatus"
+              legend={t('renew-child:demographic-survey.disability-status', { memberName })}
+              options={disabilityStatusOptions}
+              errorMessage={errors?.disabilityStatus}
+              required
+              helpMessagePrimary={t('renew-child:demographic-survey.disability-help-message')}
+            />
             <InputCheckboxes id="ethnic-groups" name="ethnicGroups" legend={t('renew-child:demographic-survey.ethnic-groups', { memberName })} options={ethnicGroupOptions} errorMessage={errors?.ethnicGroups} required />
             <InputRadios id="location-born-status" name="locationBornStatus" legend={t('renew-child:demographic-survey.location-born-status', { memberName })} options={locationBornStatusOptions} errorMessage={errors?.locationBornStatus} required />
-            <InputRadios id="gender-status" name="genderStatus" legend={t('renew-child:demographic-survey.gender-status', { memberName })} options={genderStatusOptions} errorMessage={errors?.genderStatus} required />
+            <InputRadios
+              id="gender-status"
+              name="genderStatus"
+              legend={t('renew-child:demographic-survey.gender-status', { memberName })}
+              options={genderStatusOptions}
+              errorMessage={errors?.genderStatus}
+              required
+              helpMessagePrimary={t('renew-child:demographic-survey.gender-help-message')}
+            />
           </div>
 
           {editMode ? (
