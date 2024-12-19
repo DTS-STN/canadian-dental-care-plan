@@ -693,6 +693,11 @@ export const routes = [
             file: 'routes/public/renew/$id/adult/confirm-marital-status.tsx',
             paths: { en: '/:lang/renew/:id/adult/confirm-marital-status', fr: '/:lang/renouveller/:id/adulte/confirmer-etat-civil' },
           },
+          {
+            id: 'public/renew/$id/adult/marital-status',
+            file: 'routes/public/renew/$id/adult/marital-status.tsx',
+            paths: { en: '/:lang/renew/:id/adult/marital-status', fr: '/:lang/renouveller/:id/adulte/etat-civil' },
+          },
         ],
       },
       {
