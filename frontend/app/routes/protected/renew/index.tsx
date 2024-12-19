@@ -40,7 +40,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
   const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
-  const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin });
+  const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, userId: userInfoToken.sub });
   if (!clientApplication) {
     throw redirect(getPathById('protected/data-unavailable'));
   }

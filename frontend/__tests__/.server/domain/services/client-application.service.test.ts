@@ -5,12 +5,15 @@ import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, Client
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { ClientApplicationRepository } from '~/.server/domain/repositories';
+import type { AuditService } from '~/.server/domain/services';
 import { DefaultClientApplicationService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 describe('DefaultClientApplicationService', () => {
   const mockLogFactory = mock<LogFactory>();
   mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
+
+  const mockAuditService = mock<AuditService>();
 
   // Mock for ClientApplicationEntity
   const mockClientApplicationEntity: ClientApplicationEntity = {
@@ -189,7 +192,7 @@ describe('DefaultClientApplicationService', () => {
   describe('findClientApplicationBySin', () => {
     it('should find client application by SIN', async () => {
       // Arrange
-      const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = { sin: '80000002' };
+      const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = { sin: '80000002', userId: 'test-user' };
       const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = { Applicant: { PersonSINIdentification: { IdentificationID: mockClientApplicationSinRequestDto.sin } } };
 
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
@@ -199,7 +202,7 @@ describe('DefaultClientApplicationService', () => {
       mockClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto.mockReturnValue(mockClientApplicationDto);
       mockClientApplicationDtoMapper.mapClientApplicationSinRequestDtoToClientApplicationSinRequestEntity.mockReturnValue(mockClientApplicationSinRequestEntity);
 
-      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
+      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository, mockAuditService);
 
       // Act
       const result = await service.findClientApplicationBySin(mockClientApplicationSinRequestDto);
@@ -212,7 +215,7 @@ describe('DefaultClientApplicationService', () => {
     });
 
     it('should return null if client application is not found by SIN', async () => {
-      const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = { sin: '80000002' };
+      const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = { sin: '80000002', userId: 'test-user' };
       const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = { Applicant: { PersonSINIdentification: { IdentificationID: mockClientApplicationSinRequestDto.sin } } };
 
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
@@ -221,7 +224,7 @@ describe('DefaultClientApplicationService', () => {
       const mockClientApplicationDtoMapper = mock<ClientApplicationDtoMapper>();
       mockClientApplicationDtoMapper.mapClientApplicationSinRequestDtoToClientApplicationSinRequestEntity.mockReturnValue(mockClientApplicationSinRequestEntity);
 
-      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
+      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository, mockAuditService);
 
       // Act
       const result = await service.findClientApplicationBySin(mockClientApplicationSinRequestDto);
@@ -237,7 +240,7 @@ describe('DefaultClientApplicationService', () => {
   describe('findClientApplicationByBasicInfo', () => {
     it('should find client application by basic info', async () => {
       // Arrange
-      const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = { firstName: 'John', lastName: 'Doe', dateOfBirth: '2000-01-01', clientNumber: 'ABC123' };
+      const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = { firstName: 'John', lastName: 'Doe', dateOfBirth: '2000-01-01', clientNumber: 'ABC123', userId: 'test-user' };
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
           PersonName: { PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName },
@@ -253,7 +256,7 @@ describe('DefaultClientApplicationService', () => {
       mockClientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto.mockReturnValue(mockClientApplicationDto);
       mockClientApplicationDtoMapper.mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity.mockReturnValue(mockClientApplicationBasicInfoRequestEntity);
 
-      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
+      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository, mockAuditService);
 
       // Act
       const result = await service.findClientApplicationByBasicInfo(mockClientApplicationBasicInfoRequestDto);
@@ -267,7 +270,7 @@ describe('DefaultClientApplicationService', () => {
 
     it('should return null if client application is not found by basic info', async () => {
       // Arrange
-      const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = { firstName: 'John', lastName: 'Doe', dateOfBirth: '2000-01-01', clientNumber: 'ABC123' };
+      const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = { firstName: 'John', lastName: 'Doe', dateOfBirth: '2000-01-01', clientNumber: 'ABC123', userId: 'test-user' };
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
           PersonName: { PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName },
@@ -282,7 +285,7 @@ describe('DefaultClientApplicationService', () => {
       const mockClientApplicationDtoMapper = mock<ClientApplicationDtoMapper>();
       mockClientApplicationDtoMapper.mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity.mockReturnValue(mockClientApplicationBasicInfoRequestEntity);
 
-      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository);
+      const service = new DefaultClientApplicationService(mockLogFactory, mockClientApplicationDtoMapper, mockClientApplicationRepository, mockAuditService);
 
       // Act
       const result = await service.findClientApplicationByBasicInfo(mockClientApplicationBasicInfoRequestDto);

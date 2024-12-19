@@ -139,7 +139,13 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   // Fetch client application data using ClientApplicationService
-  const clientApplication = await clientApplicationService.findClientApplicationByBasicInfo(parsedDataResult.data);
+  const clientApplication = await clientApplicationService.findClientApplicationByBasicInfo({
+    firstName: parsedDataResult.data.firstName,
+    lastName: parsedDataResult.data.lastName,
+    dateOfBirth: parsedDataResult.data.dateOfBirth,
+    clientNumber: parsedDataResult.data.clientNumber,
+    userId: 'anonymous',
+  });
 
   if (!clientApplication) {
     return { status: 'status-not-found' } as const;
