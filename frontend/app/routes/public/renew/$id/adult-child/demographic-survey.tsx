@@ -33,6 +33,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 enum FormAction {
   Continue = 'continue',
   Save = 'save',
+  Back = 'back',
 }
 
 export const handle = {
@@ -82,6 +83,17 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
+  const state = loadRenewAdultChildState({ params, request, session });
+
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+
+  if (formAction === FormAction.Back) {
+    if (state.hasFederalProvincialTerritorialBenefitsChanged) {
+      return redirect(getPathById('public/renew/$id/adult-child/update-federal-provincial-territorial-benefits', params));
+    }
+    return redirect(getPathById('public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
+  }
+
   const {
     IS_APPLICANT_FIRST_NATIONS_YES_OPTION,
     ANOTHER_ETHNIC_GROUP_OPTION,
@@ -113,7 +125,7 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     });
 
-  const preferNotToAnswer = z.nativeEnum(FormAction).parse(formData.get('_action')) === FormAction.Save;
+  const preferNotToAnswer = formAction === FormAction.Save;
 
   const parsedDataResult = demographicSurveySchema.safeParse({
     indigenousStatus: preferNotToAnswer ? INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('indigenousStatus') ?? ''),
@@ -263,16 +275,9 @@ export default function RenewAdultChildDemographicSurveyQuestions() {
               <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
                 {t('renew-adult-child:demographic-survey.continue-btn')}
               </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Cancel - Questions click"
-              >
+              <LoadingButton id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Cancel - Questions click">
                 {t('renew-adult-child:demographic-survey.back-btn')}
-              </ButtonLink>
+              </LoadingButton>
             </div>
           )}
         </fetcher.Form>
