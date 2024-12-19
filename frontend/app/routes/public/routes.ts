@@ -498,9 +498,14 @@ export const routes = [
             paths: { en: '/:lang/renew/:id/adult-child/confirm-address', fr: '/:lang/renew/:id/adulte-enfant/confirmer-adresse' },
           },
           {
-            id: 'public/renew/$id/adult-child/update-address',
-            file: 'routes/public/renew/$id/adult-child/update-address.tsx',
-            paths: { en: '/:lang/renew/:id/adult-child/update-address', fr: '/:lang/renew/:id/adulte-enfant/mise-a-jour-adresse' },
+            id: 'public/renew/$id/adult-child/update-mailing-address',
+            file: 'routes/public/renew/$id/adult-child/update-mailing-address.tsx',
+            paths: { en: '/:lang/renew/:id/adult-child/update-mailing-address', fr: '/:lang/renew/:id/adulte-enfant/mise-a-jour-adresse-postale' },
+          },
+          {
+            id: 'public/renew/$id/adult-child/update-home-address',
+            file: 'routes/public/renew/$id/adult-child/update-home-address.tsx',
+            paths: { en: '/:lang/renew/:id/adult-child/update-home-address', fr: '/:lang/renew/:id/adulte-enfant/mise-a-jour-adresse-domicile' },
           },
           {
             id: 'public/renew/$id/adult-child/dental-insurance',
