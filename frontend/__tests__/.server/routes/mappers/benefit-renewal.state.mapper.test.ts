@@ -106,19 +106,6 @@ describe('DefaultBenefitRenewalStateMapper', () => {
   describe('mapRenewAdultChildStateToAdultChildBenefitRenewalDto', () => {
     it('should map a valid RenewAdultChildState to AdultChildBenefitRenewalDto with information changed', () => {
       const renewAdultChildState: RenewAdultChildState = {
-        addressInformation: {
-          copyMailingAddress: false,
-          homeAddress: '123 New Fake Street',
-          homeCity: 'Home City',
-          homeCountry: 'United States',
-          homePostalCode: '90210',
-          homeProvince: 'LA',
-          mailingAddress: '456 New Fake Street',
-          mailingCity: 'Mailing City',
-          mailingCountry: 'United States',
-          mailingPostalCode: '90210',
-          mailingProvince: 'LA',
-        },
         applicationYear: {
           id: '2024',
           taxYear: '2024',
@@ -174,6 +161,21 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         hasAddressChanged: true,
         hasMaritalStatusChanged: true,
         hasFederalProvincialTerritorialBenefitsChanged: true,
+        homeAddress: {
+          address: '123 New Fake Street',
+          city: 'Home City',
+          country: 'United States',
+          postalCode: '90210',
+          province: 'LA',
+        },
+        isHomeAddressSameAsMailingAddress: false,
+        mailingAddress: {
+          address: '456 New Fake Street',
+          city: 'Mailing City',
+          country: 'United States',
+          postalCode: '90210',
+          province: 'LA',
+        },
         maritalStatus: 'Single',
       };
 

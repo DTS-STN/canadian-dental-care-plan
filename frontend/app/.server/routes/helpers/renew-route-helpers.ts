@@ -71,21 +71,6 @@ export interface RenewState {
   };
   readonly hasAddressChanged?: boolean;
   readonly isHomeAddressSameAsMailingAddress?: boolean;
-  readonly addressInformation?: {
-    copyMailingAddress?: boolean;
-    homeAddress?: string;
-    homeApartment?: string;
-    homeCity?: string;
-    homeCountry?: string;
-    homePostalCode?: string;
-    homeProvince?: string;
-    mailingAddress?: string;
-    mailingApartment?: string;
-    mailingCity?: string;
-    mailingCountry?: string;
-    mailingPostalCode?: string;
-    mailingProvince?: string;
-  };
   readonly mailingAddress?: {
     address: string;
     apartment?: string;
@@ -129,7 +114,6 @@ export interface RenewState {
     readonly locationBornStatus?: string;
     readonly genderStatus?: string;
   };
-  // TODO Add remaining states
 }
 
 export type ApplicationYearState = RenewState['applicationYear'];
@@ -137,7 +121,6 @@ export type ChildState = RenewState['children'][number];
 export type ApplicantInformationState = NonNullable<RenewState['applicantInformation']>;
 export type TypeOfRenewalState = NonNullable<RenewState['typeOfRenewal']>;
 export type PartnerInformationState = NonNullable<RenewState['partnerInformation']>;
-export type AddressInformationState = NonNullable<RenewState['addressInformation']>;
 export type MailingAddressState = NonNullable<RenewState['mailingAddress']>;
 export type HomeAddressState = NonNullable<RenewState['homeAddress']>;
 export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;

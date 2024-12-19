@@ -138,7 +138,6 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     id,
     submissionInfo,
     typeOfRenewal,
-    addressInformation,
     applicantInformation,
   } = state;
 
@@ -201,7 +200,6 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     typeOfRenewal,
     contactInformation,
     applicantInformation,
-    addressInformation,
     partnerInformation,
     children,
     hasFederalProvincialTerritorialBenefitsChanged,
