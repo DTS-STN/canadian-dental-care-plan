@@ -111,7 +111,7 @@ export interface RenewState {
     provincialTerritorialSocialProgram?: string;
     province?: string;
   };
-  readonly typeOfRenewal?: 'adult-child' | 'child' | 'delegate';
+  readonly typeOfRenewal?: 'adult' | 'adult-child' | 'child' | 'delegate';
   readonly submissionInfo?: {
     /**
      * The UTC date and time when the application was submitted.
