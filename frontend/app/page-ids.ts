@@ -116,6 +116,7 @@ export const pageIds = {
         maritalStatus: 'CDCP-RENW-AD-0002',
         confirmPhone: 'CDCP-RENW-AD-0003',
         confirmEmail: 'CDCP-RENW-AD-0004',
+        confirmAddress: 'CDCP-RENW-AD-0005',
       },
       ita: {
         maritalStatus: 'CDCP-RENW-ITA-0001',
