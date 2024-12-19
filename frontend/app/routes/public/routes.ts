@@ -713,6 +713,11 @@ export const routes = [
             file: 'routes/public/renew/$id/adult/confirm-address.tsx',
             paths: { en: '/:lang/renew/:id/adult/confirm-address', fr: '/:lang/renouveller/:id/adulte/confirmer-adresse' },
           },
+          {
+            id: 'public/renew/$id/adult/update-mailing-address',
+            file: 'routes/public/renew/$id/adult/update-mailing-address.tsx',
+            paths: { en: '/:lang/renew/:id/adult/update-mailing-address', fr: '/:lang/renouveller/:id/adulte/mise-a-jour-adresse-postale' },
+          },
         ],
       },
       {
