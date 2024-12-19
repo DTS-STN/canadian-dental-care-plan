@@ -114,6 +114,7 @@ export const pageIds = {
       adult: {
         confirmMaritalStatus: 'CDCP-RENW-AD-0001',
         maritalStatus: 'CDCP-RENW-AD-0002',
+        confirmPhone: 'CDCP-RENW-AD-0003',
       },
       ita: {
         maritalStatus: 'CDCP-RENW-ITA-0001',

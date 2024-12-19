@@ -698,6 +698,11 @@ export const routes = [
             file: 'routes/public/renew/$id/adult/marital-status.tsx',
             paths: { en: '/:lang/renew/:id/adult/marital-status', fr: '/:lang/renouveller/:id/adulte/etat-civil' },
           },
+          {
+            id: 'public/renew/$id/adult/confirm-phone',
+            file: 'routes/public/renew/$id/adult/confirm-phone.tsx',
+            paths: { en: '/:lang/renew/:id/adult/confirm-phone', fr: '/:lang/renouveller/:id/adulte/confirmer-telephone' },
+          },
         ],
       },
       {
