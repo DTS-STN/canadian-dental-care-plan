@@ -708,6 +708,11 @@ export const routes = [
             file: 'routes/public/renew/$id/adult/confirm-email.tsx',
             paths: { en: '/:lang/renew/:id/adult/confirm-email', fr: '/:lang/renouveller/:id/adulte/confirmer-courriel' },
           },
+          {
+            id: 'public/renew/$id/adult/confirm-address',
+            file: 'routes/public/renew/$id/adult/confirm-address.tsx',
+            paths: { en: '/:lang/renew/:id/adult/confirm-address', fr: '/:lang/renouveller/:id/adulte/confirmer-adresse' },
+          },
         ],
       },
       {

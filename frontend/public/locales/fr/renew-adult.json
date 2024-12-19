@@ -88,5 +88,22 @@
       "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com",
       "receive-comms-required": "Select whether you would like to receive email communication"
     }
+  },
+  "confirm-address": {
+    "page-title": "Adresse",
+    "have-you-moved": "Souhaitez-vous mettre à jour l'adresse de votre domicile ou votre adresse postale?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "help-message": "L'adresse que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
+    "error-message": {
+      "has-address-changed-required": "Sélectionnez si vous avez déménagé ou changé d'adresse postale",
+      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer"
   }
 }
