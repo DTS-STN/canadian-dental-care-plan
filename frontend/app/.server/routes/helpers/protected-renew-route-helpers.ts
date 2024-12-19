@@ -95,21 +95,6 @@ export interface ProtectedRenewState {
   };
   readonly hasAddressChanged?: boolean;
   readonly isHomeAddressSameAsMailingAddress?: boolean;
-  readonly addressInformation?: {
-    copyMailingAddress: boolean;
-    homeAddress?: string;
-    homeApartment?: string;
-    homeCity?: string;
-    homeCountry?: string;
-    homePostalCode?: string;
-    homeProvince?: string;
-    mailingAddress: string;
-    mailingApartment?: string;
-    mailingCity: string;
-    mailingCountry: string;
-    mailingPostalCode?: string;
-    mailingProvince?: string;
-  };
   readonly mailingAddress?: {
     readonly address: string;
     readonly apartment?: string;
@@ -133,13 +118,13 @@ export interface ProtectedRenewState {
      */
     submittedOn: string;
   };
-  // TODO Add remaining states
 }
 
 export type ProtectedApplicationYearState = NonNullable<ProtectedRenewState['applicationYear']>;
 export type ProtectedPartnerInformationState = NonNullable<ProtectedRenewState['partnerInformation']>;
 export type ProtectedChildState = ProtectedRenewState['children'][number];
-export type ProtectedAddressInformationState = NonNullable<ProtectedRenewState['addressInformation']>;
+export type ProtectedHomeAddressState = NonNullable<ProtectedRenewState['homeAddress']>;
+export type ProtectedMailingAddressState = NonNullable<ProtectedRenewState['mailingAddress']>;
 export type ProtectedClientApplicationState = NonNullable<ProtectedRenewState['clientApplication']>;
 export type ProtectedDentalFederalBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type ProtectedDentalProvincialTerritorialBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
@@ -378,7 +363,7 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
-  const { applicationYear, maritalStatus, partnerInformation, mailingAddress, homeAddress, addressInformation, clientApplication, contactInformation, communicationPreferences, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
+  const { applicationYear, maritalStatus, partnerInformation, mailingAddress, homeAddress, clientApplication, contactInformation, communicationPreferences, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
 
   const children = validateProtectedChildrenStateForReview(state.children);
 
@@ -395,7 +380,6 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
     partnerInformation,
     mailingAddress,
     homeAddress,
-    addressInformation,
     clientApplication,
     contactInformation,
     communicationPreferences,

@@ -53,8 +53,6 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const state = loadRenewItaStateForReview({ params, request, session });
 
-  // invariant(!state.hasAddressChanged || (state.addressInformation && state.addressInformation.homeCountry), `Unexpected home address country: ${state.addressInformation?.homeCountry}`);
-
   // renew state is valid then edit mode can be set to true
   saveRenewState({ params, session, state: { editMode: true } });
 

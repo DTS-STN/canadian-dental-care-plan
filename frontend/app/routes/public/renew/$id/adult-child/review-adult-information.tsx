@@ -60,10 +60,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
-  const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
-  const countryHome = state.addressInformation?.homeCountry ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
+  const countryMailing = state.mailingAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
+  const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined;
 
   const userInfo = {
@@ -85,23 +85,23 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const mailingAddressInfo = state.hasAddressChanged
     ? {
-        address: state.addressInformation?.mailingAddress,
-        city: state.addressInformation?.mailingCity,
+        address: state.mailingAddress?.address,
+        city: state.mailingAddress?.city,
         province: mailingProvinceTerritoryStateAbbr,
-        postalCode: state.addressInformation?.mailingPostalCode,
+        postalCode: state.mailingAddress?.postalCode,
         country: countryMailing,
-        apartment: state.addressInformation?.mailingApartment,
+        apartment: state.mailingAddress?.apartment,
       }
     : undefined;
 
   const homeAddressInfo = state.hasAddressChanged
     ? {
-        address: state.addressInformation?.homeAddress,
-        city: state.addressInformation?.homeCity,
+        address: state.homeAddress?.address,
+        city: state.homeAddress?.city,
         province: homeProvinceTerritoryStateAbbr,
-        postalCode: state.addressInformation?.homePostalCode,
+        postalCode: state.homeAddress?.postalCode,
         country: countryHome,
-        apartment: state.addressInformation?.homeApartment,
+        apartment: state.homeAddress?.apartment,
       }
     : undefined;
 

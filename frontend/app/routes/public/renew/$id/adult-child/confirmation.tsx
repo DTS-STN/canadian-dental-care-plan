@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   // prettier-ignore
   if (state.applicantInformation === undefined ||
     state.dentalInsurance === undefined ||
-    (state.hasAddressChanged && state.addressInformation === undefined) ||
+    (state.hasAddressChanged && state.mailingAddress === undefined) ||
     state.submissionInfo === undefined ||
     state.typeOfRenewal === undefined ||
     (state.hasMaritalStatusChanged && state.maritalStatus === undefined)
@@ -60,10 +60,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const selectedProvincialBenefits = state.dentalBenefits?.provincialTerritorialSocialProgram
     ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
-  const mailingProvinceTerritoryStateAbbr = state.addressInformation?.mailingProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.addressInformation?.homeProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.addressInformation.homeProvince).abbr : undefined;
-  const countryMailing = state.addressInformation?.mailingCountry ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.mailingCountry, locale) : undefined;
-  const countryHome = state.addressInformation?.homeCountry ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.addressInformation.homeCountry, locale) : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
+  const countryMailing = state.mailingAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
+  const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined;
 
   const userInfo = {
@@ -82,25 +82,25 @@ export async function loader({ context: { appContainer, session }, params, reque
       }
     : null;
 
-  const mailingAddressInfo = state.addressInformation
+  const mailingAddressInfo = state.mailingAddress
     ? {
-        address: state.addressInformation.mailingAddress,
-        city: state.addressInformation.mailingCity,
+        address: state.mailingAddress.address,
+        city: state.mailingAddress.city,
         province: mailingProvinceTerritoryStateAbbr,
-        postalCode: state.addressInformation.mailingPostalCode,
+        postalCode: state.mailingAddress.postalCode,
         country: countryMailing?.name ?? '',
-        apartment: state.addressInformation.mailingApartment,
+        apartment: state.mailingAddress.apartment,
       }
     : null;
 
-  const homeAddressInfo = state.addressInformation
+  const homeAddressInfo = state.homeAddress
     ? {
-        address: state.addressInformation.homeAddress,
-        city: state.addressInformation.homeCity,
+        address: state.homeAddress.address,
+        city: state.homeAddress.city,
         province: homeProvinceTerritoryStateAbbr,
-        postalCode: state.addressInformation.homePostalCode,
+        postalCode: state.homeAddress.postalCode,
         country: countryHome?.name ?? '',
-        apartment: state.addressInformation.homeApartment,
+        apartment: state.homeAddress.apartment,
       }
     : null;
 
@@ -252,8 +252,8 @@ export default function RenewAdultChildConfirm() {
               {mailingAddressInfo ? (
                 <Address
                   address={{
-                    address: mailingAddressInfo.address ?? '',
-                    city: mailingAddressInfo.city ?? '',
+                    address: mailingAddressInfo.address,
+                    city: mailingAddressInfo.city,
                     provinceState: mailingAddressInfo.province,
                     postalZipCode: mailingAddressInfo.postalCode,
                     country: mailingAddressInfo.country,
@@ -268,8 +268,8 @@ export default function RenewAdultChildConfirm() {
               {homeAddressInfo ? (
                 <Address
                   address={{
-                    address: homeAddressInfo.address ?? '',
-                    city: homeAddressInfo.city ?? '',
+                    address: homeAddressInfo.address,
+                    city: homeAddressInfo.city,
                     provinceState: homeAddressInfo.province,
                     postalZipCode: homeAddressInfo.postalCode,
                     country: homeAddressInfo.country,

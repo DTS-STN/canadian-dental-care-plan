@@ -133,7 +133,8 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     id,
     submissionInfo,
     typeOfRenewal,
-    addressInformation,
+    homeAddress,
+    mailingAddress,
     applicantInformation,
     clientApplication,
     dentalBenefits,
@@ -174,7 +175,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/renew/$id/adult-child/confirm-address', params));
   }
 
-  if (hasAddressChanged && addressInformation === undefined) {
+  if (hasAddressChanged && mailingAddress === undefined) {
     throw redirect(getPathById('public/renew/$id/adult-child/update-mailing-address', params));
   }
 
@@ -213,7 +214,8 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     applicantInformation,
     dentalBenefits,
     dentalInsurance,
-    addressInformation,
+    homeAddress,
+    mailingAddress,
     partnerInformation,
     children,
     hasAddressChanged,
