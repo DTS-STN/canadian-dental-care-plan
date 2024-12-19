@@ -158,7 +158,7 @@
     "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
     "federal-benefits": {
       "title": "Prestations fédérales",
-      "legend": "Bénéficiez-vous d'une assurance dentaire par le biais d'un programme social fédéral?",
+      "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social fédéral autre que le Régime canadien de soins dentaires?",
       "option-yes": "<strong>Oui</strong>, j'ai des prestations <strong>fédérales</strong> pour soins dentaires",
       "option-no": "<strong>Non</strong>, je n'ai pas des prestations <strong>fédérales</strong> pour soins dentaires",
       "social-programs": {
@@ -167,7 +167,7 @@
     },
     "provincial-territorial-benefits": {
       "title": "Prestations provinciales ou territoriales",
-      "legend": "Bénéficiez-vous d'une assurance dentaire par le biais d'un programme social provincial ou territorial?",
+      "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social provincial ou territorial autre que le Régime canadien de soins dentaires?",
       "option-yes": "<strong>Oui</strong>, j'ai des prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
       "option-no": "<strong>Non</strong>, je n'ai pas des prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
       "social-programs": {
