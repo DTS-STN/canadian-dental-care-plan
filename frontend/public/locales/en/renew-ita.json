@@ -157,7 +157,7 @@
     "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
     "federal-benefits": {
       "title": "Federal benefits",
-      "legend": "Do you have dental benefits through a federal social program?",
+      "legend": "Do you have other dental benefits through a federal social program aside from the Canadian Dental Care Plan?",
       "option-yes": "<strong>Yes</strong>, I have <strong>federal</strong> dental benefits",
       "option-no": "<strong>No</strong>, I do not have <strong>federal</strong> dental benefits",
       "social-programs": {
@@ -166,7 +166,7 @@
     },
     "provincial-territorial-benefits": {
       "title": "Provincial or territorial benefits",
-      "legend": "Do you have dental benefits through a provincial or territorial social program?",
+      "legend": "Do you have other dental benefits through a provincial or territorial social program aside from the Canadian Dental Care Plan?",
       "option-yes": "<strong>Yes</strong>, I have <strong>provincial or territorial</strong> dental benefits",
       "option-no": "<strong>No</strong>, I do not have <strong>provincial or territorial</strong> dental benefits",
       "social-programs": {
