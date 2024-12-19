@@ -18,7 +18,7 @@
     "error-message": {
       "marital-status-required": "Select marital status",
       "confirm-required": "Checkbox must be selected",
-      "date-of-birth-year-required": "Year of birth is required",
+      "date-of-birth-year-required": "Enter year of birth, for example 1950",
       "yob-is-future": "Year of birth must be in the past",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
