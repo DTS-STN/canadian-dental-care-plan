@@ -129,7 +129,8 @@
     "page-title": "Type of renewal",
     "form-instructions": "Who are you renewing for?",
     "radio-options": {
-      "personal-and-child": "I am renewing for <strong>myself</strong> or <strong>myself and my child(ren)</strong>",
+      "personal": "I am renewing for <strong>myself</strong>",
+      "personal-and-child": "I am renewing for <strong>myself and my child(ren)</strong>",
       "child": "I am renewing for <strong>my child(ren)</strong>",
       "delegate": "I am renewing on behalf of someone else as a <strong>legal delegate or Power of Attorney</strong>"
     },

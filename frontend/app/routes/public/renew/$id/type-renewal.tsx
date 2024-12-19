@@ -24,6 +24,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 enum RenewalType {
+  Adult = 'adult',
   AdultChild = 'adult-child',
   Child = 'child',
   Delegate = 'delegate',
@@ -82,6 +83,13 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
+  if (parsedDataResult.data.typeOfRenewal === RenewalType.Adult) {
+    if (state.clientApplication?.isInvitationToApplyClient) {
+      return redirect(getPathById('public/renew/$id/ita/marital-status', params));
+    }
+    return redirect(getPathById('public/renew/$id/adult/confirm-marital-status', params));
+  }
+
   if (parsedDataResult.data.typeOfRenewal === RenewalType.AdultChild) {
     if (state.clientApplication?.isInvitationToApplyClient) {
       return redirect(getPathById('public/renew/$id/ita/marital-status', params));
@@ -121,6 +129,11 @@ export default function RenewTypeOfRenewal() {
             name="typeOfRenewal"
             legend={t('renew:type-of-renewal.form-instructions')}
             options={[
+              {
+                value: RenewalType.Adult,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="renew:type-of-renewal.radio-options.personal" />,
+                defaultChecked: defaultState === RenewalType.Adult,
+              },
               {
                 value: RenewalType.AdultChild,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="renew:type-of-renewal.radio-options.personal-and-child" />,
