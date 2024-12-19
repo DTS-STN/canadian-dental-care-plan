@@ -175,7 +175,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
   }
 
   if (hasAddressChanged && addressInformation === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult-child/update-address', params));
+    throw redirect(getPathById('public/renew/$id/adult-child/update-mailing-address', params));
   }
 
   if (contactInformation?.isNewOrUpdatedPhoneNumber === undefined) {

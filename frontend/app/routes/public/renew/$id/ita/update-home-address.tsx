@@ -70,7 +70,7 @@ type AddressResponse = AddressSuggestionResponse | AddressInvalidResponse;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.ita.updateAddress,
+  pageIdentifier: pageIds.public.renew.ita.updateHomeAddress,
   pageTitleI18nKey: 'renew-ita:update-address.home-address.page-title',
 } as const satisfies RouteHandleData;
 

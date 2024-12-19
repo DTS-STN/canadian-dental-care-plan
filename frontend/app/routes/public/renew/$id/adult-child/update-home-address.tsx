@@ -12,7 +12,7 @@ import validator from 'validator';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { loadRenewChildState } from '~/.server/routes/helpers/renew-child-route-helpers';
+import { loadRenewAdultChildState } from '~/.server/routes/helpers/renew-adult-child-route-helpers';
 import type { HomeAddressState } from '~/.server/routes/helpers/renew-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -69,9 +69,9 @@ interface AddressInvalidResponse {
 type AddressResponse = AddressSuggestionResponse | AddressInvalidResponse;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.child.updateHomeAddress,
-  pageTitleI18nKey: 'renew-child:update-address.home-address.page-title',
+  i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
+  pageIdentifier: pageIds.public.renew.adultChild.updateHomeAddress,
+  pageTitleI18nKey: 'renew-adult-child:update-address.home-address.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -79,14 +79,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  const state = loadRenewChildState({ params, request, session });
+  const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-child:update-address.home-address.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:update-address.home-address.page-title') }) };
 
   return {
     id: state.id,
@@ -110,47 +110,47 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
 
   securityHandler.validateCsrfToken({ formData, session });
-  const state = loadRenewChildState({ params, request, session });
+  const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   const homeAddressSchema = z
     .object({
-      address: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-child:update-address.error-message.characters-valid')),
+      address: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-adult-child:update-address.error-message.characters-valid')),
       country: z.string().trim(),
       province: z.string().trim().optional(),
-      city: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-child:update-address.error-message.characters-valid')),
-      postalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-child:update-address.error-message.characters-valid')).optional(),
+      city: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-adult-child:update-address.error-message.characters-valid')),
+      postalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-adult-child:update-address.error-message.characters-valid')).optional(),
     })
     .superRefine((val, ctx) => {
       if (!val.address || validator.isEmpty(val.address)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.address-required'), path: ['address'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:update-address.error-message.home-address.address-required'), path: ['address'] });
       }
 
       if (!val.country || validator.isEmpty(val.country)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.country-required'), path: ['country'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:update-address.error-message.home-address.country-required'), path: ['country'] });
       }
 
       if (!val.city || validator.isEmpty(val.city)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.city-required'), path: ['city'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:update-address.error-message.home-address.city-required'), path: ['city'] });
       }
 
       if (val.country === CANADA_COUNTRY_ID || val.country === USA_COUNTRY_ID) {
         if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.province-required'), path: ['province'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:update-address.error-message.home-address.province-required'), path: ['province'] });
         }
         if (!val.postalCode || validator.isEmpty(val.postalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.postal-code-required'), path: ['postalCode'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:update-address.error-message.home-address.postal-code-required'), path: ['postalCode'] });
         } else if (!isValidPostalCode(val.country, val.postalCode)) {
-          const message = val.country === CANADA_COUNTRY_ID ? t('renew-child:update-address.error-message.home-address.postal-code-valid') : t('renew-child:update-address.error-message.home-address.zip-code-valid');
+          const message = val.country === CANADA_COUNTRY_ID ? t('renew-adult-child:update-address.error-message.home-address.postal-code-valid') : t('renew-adult-child:update-address.error-message.home-address.zip-code-valid');
           ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['postalCode'] });
         } else if (val.country === CANADA_COUNTRY_ID && val.province && !isValidCanadianPostalCode(val.province, val.postalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.invalid-postal-code-for-province'), path: ['postalCode'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:update-address.error-message.home-address.invalid-postal-code-for-province'), path: ['postalCode'] });
         }
       }
 
       if (val.country && val.country !== CANADA_COUNTRY_ID && val.postalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.postalCode)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.invalid-postal-code-for-country'), path: ['country'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:update-address.error-message.home-address.invalid-postal-code-for-country'), path: ['country'] });
       }
     })
     .transform((val) => ({
@@ -172,14 +172,14 @@ export async function action({ context: { appContainer, session }, params, reque
   const isNotCanada = parsedDataResult.data.country !== clientConfig.CANADA_COUNTRY_ID;
   const isUseInvalidAddressAction = formAction === 'use-invalid-address';
   const isUseSelectedAddressAction = formAction === 'use-selected-address';
-  const canProceedToReviewChild = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
-  if (canProceedToReviewChild) {
+  const canProceedToDental = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
+  if (canProceedToDental) {
     saveRenewState({ params, session, state: { homeAddress: parsedDataResult.data } });
 
     if (state.editMode) {
-      return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
+      return redirect(getPathById('public/renew/$id/adult-child/review-information', params));
     }
-    return redirect(getPathById('public/renew/$id/child/review-child-information', params));
+    return redirect(getPathById('public/renew/$id/adult-child/dental-insurance', params));
   }
 
   invariant(parsedDataResult.data.postalCode, 'Postal zip code is required for Canadian addresses');
@@ -230,16 +230,16 @@ export async function action({ context: { appContainer, session }, params, reque
   saveRenewState({ params, session, state: { homeAddress: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
+    return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
   }
-  return redirect(getPathById('public/renew/$id/child/review-child-information', params));
+  return redirect(getPathById('public/renew/$id/adult-child/dental-insurance', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
   return typeof data === 'object' && data !== null && 'status' in data && typeof data.status === 'string';
 }
 
-export default function RenewChildUpdateAddress() {
+export default function RenewAdultChildUpdateAddress() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, countryList, regionList, editMode } = useLoaderData<typeof loader>();
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
@@ -283,7 +283,7 @@ export default function RenewChildUpdateAddress() {
 
   const homeRegions = useMemo<InputOptionProps[]>(() => homeCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [homeCountryRegions]);
 
-  const dummyOption: InputOptionProps = { children: t('renew-child:update-address.address-field.select-one'), value: '' };
+  const dummyOption: InputOptionProps = { children: t('renew-adult-child:update-address.address-field.select-one'), value: '' };
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedHomeCountry);
   return (
@@ -292,19 +292,20 @@ export default function RenewChildUpdateAddress() {
         <Progress value={55} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew:required-label')}</p>
+        <p className="mb-4 italic">{t('renew:optional-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-8">
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-adult-child:update-address.home-address.header')}</legend>
             <div className="space-y-6">
               <>
                 <InputSanitizeField
                   id="home-address"
                   name="homeAddress"
                   className="w-full"
-                  label={t('renew-child:update-address.address-field.address')}
-                  helpMessagePrimary={t('renew-child:update-address.address-field.address-note')}
+                  label={t('renew-adult-child:update-address.address-field.address')}
+                  helpMessagePrimary={t('renew-adult-child:update-address.address-field.address-note')}
                   helpMessagePrimaryClassName="text-black"
                   maxLength={30}
                   autoComplete="address-line1"
@@ -317,7 +318,7 @@ export default function RenewChildUpdateAddress() {
                     id="home-city"
                     name="homeCity"
                     className="w-full"
-                    label={t('renew-child:update-address.address-field.city')}
+                    label={t('renew-adult-child:update-address.address-field.city')}
                     maxLength={100}
                     autoComplete="address-level2"
                     defaultValue={defaultState.homeAddress?.city}
@@ -328,7 +329,7 @@ export default function RenewChildUpdateAddress() {
                     id="home-postal-code"
                     name="homePostalCode"
                     className="w-full"
-                    label={isPostalCodeRequired ? t('renew-child:update-address.address-field.postal-code') : t('renew-child:update-address.address-field.postal-code-optional')}
+                    label={isPostalCodeRequired ? t('renew-adult-child:update-address.address-field.postal-code') : t('renew-adult-child:update-address.address-field.postal-code-optional')}
                     maxLength={100}
                     autoComplete="postal-code"
                     defaultValue={defaultState.homeAddress?.postalCode ?? ''}
@@ -341,7 +342,7 @@ export default function RenewChildUpdateAddress() {
                     id="home-province"
                     name="homeProvince"
                     className="w-full sm:w-1/2"
-                    label={t('renew-child:update-address.address-field.province')}
+                    label={t('renew-adult-child:update-address.address-field.province')}
                     defaultValue={defaultState.homeAddress?.province}
                     errorMessage={errors?.province}
                     options={[dummyOption, ...homeRegions]}
@@ -352,7 +353,7 @@ export default function RenewChildUpdateAddress() {
                   id="home-country"
                   name="homeCountry"
                   className="w-full sm:w-1/2"
-                  label={t('renew-child:update-address.address-field.country')}
+                  label={t('renew-adult-child:update-address.address-field.country')}
                   autoComplete="country"
                   defaultValue={defaultState.homeAddress?.country ?? ''}
                   errorMessage={errors?.country}
@@ -365,11 +366,11 @@ export default function RenewChildUpdateAddress() {
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Update address click">
-                {t('renew-child:update-address.save-btn')}
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Update address click">
+                {t('renew-adult-child:update-address.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Update address click">
-                {t('renew-child:update-address.cancel-btn')}
+              <ButtonLink id="back-button" routeId="public/renew/$id/adult-child/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Update address click">
+                {t('renew-adult-child:update-address.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
@@ -384,9 +385,9 @@ export default function RenewChildUpdateAddress() {
                     value={FormAction.Submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Update home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Update home address click"
                   >
-                    {t('renew-child:update-address.continue')}
+                    {t('renew-adult-child:update-address.continue')}
                   </LoadingButton>
                 </DialogTrigger>
                 {addressDialogContent && addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
@@ -394,13 +395,13 @@ export default function RenewChildUpdateAddress() {
               </Dialog>
               <ButtonLink
                 id="back-button"
-                routeId={defaultState.hasAddressChanged ? `public/renew/$id/child/update-mailing-address` : `public/renew/$id/child/confirm-address`}
+                routeId={defaultState.hasAddressChanged ? `public/renew/$id/adult-child/update-mailing-address` : `public/renew/$id/adult-child/confirm-address`}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Update home address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Update home address click"
               >
-                {t('renew-child:update-address.back')}
+                {t('renew-adult-child:update-address.back')}
               </ButtonLink>
             </div>
           )}
@@ -446,19 +447,19 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
   return (
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
-        <DialogTitle>{t('renew-child:update-address.dialog.address-suggestion.header')}</DialogTitle>
-        <DialogDescription>{t('renew-child:update-address.dialog.address-suggestion.description')}</DialogDescription>
+        <DialogTitle>{t('renew-adult-child:update-address.dialog.address-suggestion.header')}</DialogTitle>
+        <DialogDescription>{t('renew-adult-child:update-address.dialog.address-suggestion.description')}</DialogDescription>
       </DialogHeader>
       <InputRadios
         id="addressSelection"
         name="addressSelection"
-        legend={t('renew-child:update-address.dialog.address-suggestion.address-selection-legend')}
+        legend={t('renew-adult-child:update-address.dialog.address-suggestion.address-selection-legend')}
         options={[
           {
             value: enteredAddressOptionValue,
             children: (
               <>
-                <p className="mb-2 font-semibold">{t('renew-child:update-address.dialog.address-suggestion.entered-address-option')}</p>
+                <p className="mb-2 font-semibold">{t('renew-adult-child:update-address.dialog.address-suggestion.entered-address-option')}</p>
                 <Address address={enteredAddress} />
               </>
             ),
@@ -467,7 +468,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
             value: suggestedAddressOptionValue,
             children: (
               <>
-                <p className="mb-2 font-semibold">{t('renew-child:update-address.dialog.address-suggestion.suggested-address-option')}</p>
+                <p className="mb-2 font-semibold">{t('renew-adult-child:update-address.dialog.address-suggestion.suggested-address-option')}</p>
                 <Address address={suggestedAddress} />
               </>
             ),
@@ -483,12 +484,12 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
       <DialogFooter>
         <DialogClose asChild>
           <Button id="dialog.corrected-address-close-button" disabled={fetcher.isSubmitting} variant="default" size="sm">
-            {t('renew-child:update-address.dialog.address-suggestion.cancel-button')}
+            {t('renew-adult-child:update-address.dialog.address-suggestion.cancel-button')}
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
           <LoadingButton name="_action" value={FormAction.UseSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
-            {t('renew-child:update-address.dialog.address-suggestion.use-selected-address-button')}
+            {t('renew-adult-child:update-address.dialog.address-suggestion.use-selected-address-button')}
           </LoadingButton>
         </fetcher.Form>
       </DialogFooter>
@@ -526,22 +527,22 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
   return (
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
-        <DialogTitle>{t('renew-child:update-address.dialog.address-invalid.header')}</DialogTitle>
-        <DialogDescription>{t('renew-child:update-address.dialog.address-invalid.description')}</DialogDescription>
+        <DialogTitle>{t('renew-adult-child:update-address.dialog.address-invalid.header')}</DialogTitle>
+        <DialogDescription>{t('renew-adult-child:update-address.dialog.address-invalid.description')}</DialogDescription>
       </DialogHeader>
       <div className="space-y-2">
-        <p className="font-semibold">{t('renew-child:update-address.dialog.address-invalid.entered-address')}</p>
+        <p className="font-semibold">{t('renew-adult-child:update-address.dialog.address-invalid.entered-address')}</p>
         <Address address={invalidAddress} />
       </div>
       <DialogFooter>
         <DialogClose asChild>
           <Button id="dialog.address-invalid-close-button" variant="default" size="sm">
-            {t('renew-child:update-address.dialog.address-invalid.close-button')}
+            {t('renew-adult-child:update-address.dialog.address-invalid.close-button')}
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
           <LoadingButton name="_action" value={FormAction.UseInvalidAddress} type="submit" id="dialog.address-invalid-use-entered-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
-            {t('renew-child:update-address.dialog.address-invalid.use-entered-address-button')}
+            {t('renew-adult-child:update-address.dialog.address-invalid.use-entered-address-button')}
           </LoadingButton>
         </fetcher.Form>
       </DialogFooter>
