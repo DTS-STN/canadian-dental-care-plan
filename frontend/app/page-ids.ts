@@ -113,6 +113,7 @@ export const pageIds = {
       renewalDelegate: 'CDCP-RENW-0007',
       adult: {
         confirmMaritalStatus: 'CDCP-RENW-AD-0001',
+        maritalStatus: 'CDCP-RENW-AD-0002',
       },
       ita: {
         maritalStatus: 'CDCP-RENW-ITA-0001',
