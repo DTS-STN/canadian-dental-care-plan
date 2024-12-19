@@ -232,10 +232,26 @@ export default function ProtectedDemographicSurveyQuestions() {
             </Button>
             <p className="mb-4 italic">{t('protected-renew:demographic-survey.optional')}</p>
             <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('protected-renew:demographic-survey.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
-            <InputRadios id="disability-status" name="disabilityStatus" legend={t('protected-renew:demographic-survey.disability-status')} options={disabilityStatusOptions} errorMessage={errors?.disabilityStatus} required />
+            <InputRadios
+              id="disability-status"
+              name="disabilityStatus"
+              legend={t('protected-renew:demographic-survey.disability-status')}
+              options={disabilityStatusOptions}
+              errorMessage={errors?.disabilityStatus}
+              required
+              helpMessagePrimary={t('protected-renew:demographic-survey.disability-help-message')}
+            />
             <InputCheckboxes id="ethnic-groups" name="ethnicGroups" legend={t('protected-renew:demographic-survey.ethnic-groups')} options={ethnicGroupOptions} errorMessage={errors?.ethnicGroups} required />
             <InputRadios id="location-born-status" name="locationBornStatus" legend={t('protected-renew:demographic-survey.location-born-status')} options={locationBornStatusOptions} errorMessage={errors?.locationBornStatus} required />
-            <InputRadios id="gender-status" name="genderStatus" legend={t('protected-renew:demographic-survey.gender-status')} options={genderStatusOptions} errorMessage={errors?.genderStatus} required />
+            <InputRadios
+              id="gender-status"
+              name="genderStatus"
+              legend={t('protected-renew:demographic-survey.gender-status')}
+              options={genderStatusOptions}
+              errorMessage={errors?.genderStatus}
+              required
+              helpMessagePrimary={t('protected-renew:demographic-survey.gender-help-message')}
+            />
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">

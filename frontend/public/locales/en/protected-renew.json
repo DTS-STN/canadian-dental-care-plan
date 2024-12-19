@@ -160,11 +160,13 @@
     "impact-enrollment": "Your completion of the demographic questions will not impact your enrolment in the Canadian Dental Care Plan.",
     "prefer-not-to-answer-btn": "Prefer not to answer",
     "optional": "All questions are optional.",
-    "indigenous-status": "Is this person First Nations, Métis or Inuk (Inuit)?",
-    "disability-status": "Does this person have a disability?",
-    "ethnic-groups": "To which ethnic group(s) does this person belong? Please select all that apply.",
-    "location-born-status": "Where was this person born?",
-    "gender-status": "What is this person's gender?",
+    "indigenous-status": "Are you First Nations, Métis or Inuk (Inuit)?",
+    "disability-status": "Do you indentify as someone with a disability?",
+    "disability-help-message": "A person with a disability is a person who has a long-term difficulty or condition, such as vision, hearing, mobility, flexibility, dexterity, pain, learning, developmental, memory or mental health-related impairments, that limit their daily activities inside or outside the home such as at school, work, or in the community in general.",
+    "ethnic-groups": "In our society, people are often described by their race or racial background. These are not based in science, but our race may influence the way we are treated by individuals and institutions, and this may affect our health. Which category(ies) best describes you? Check all that apply:",
+    "location-born-status": "Where were you born?",
+    "gender-status": "What is your gender?",
+    "gender-help-message": "Gender refers to current gender which may be different from sex assigned at birth and may be different from what is indicated on legal documents.",
     "continue-btn": "Continue",
     "back-btn": "Back",
     "save-btn": "Save",
@@ -297,6 +299,29 @@
         "provincial-benefit-program-required": "Select which provincial or territorial program you are covered under",
         "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
         "provincial-territorial-required": "Select a province or territory"
+      }
+    },
+    "demographic-survey": {
+      "page-title": "Voluntary demographic questions for {{memberName}}",
+      "improve-cdcp": "Answering these questions is optional. Your answers will help Health Canada improve the Canadian Dental Care Plan and make sure our services are accessible to everyone.",
+      "confidential": "The information collected will only be used for statistical purposes and will be kept confidential.",
+      "impact-enrollment": "Your completion of the demographic questions will not impact your enrolment in the Canadian Dental Care Plan.",
+      "prefer-not-to-answer-btn": "Prefer not to answer",
+      "optional": "All questions are optional.",
+      "indigenous-status": "Is {{memberName}} First Nations, Métis or Inuk (Inuit)?",
+      "disability-status": "Does {{memberName}} indentify as someone with a disability?",
+      "disability-help-message": "A person with a disability is a person who has a long-term difficulty or condition, such as vision, hearing, mobility, flexibility, dexterity, pain, learning, developmental, memory or mental health-related impairments, that limit their daily activities inside or outside the home such as at school, work, or in the community in general.",
+      "ethnic-groups": "In our society, people are often described by their race or racial background. These are not based in science, but our race may influence the way we are treated by individuals and institutions, and this may affect our health. Which category(ies) best describes {{memberName}}? Check all that apply:",
+      "location-born-status": "Where was {{memberName}} born?",
+      "gender-status": "What is {{memberName}}'s gender?",
+      "gender-help-message": "Gender refers to current gender which may be different from sex assigned at birth and may be different from what is indicated on legal documents.",
+      "continue-btn": "Continue",
+      "back-btn": "Back",
+      "save-btn": "Save",
+      "cancel-btn": "Cancel",
+      "error-message": {
+        "first-nations-required": "Please select if this person is First Nations, Métis or Inuk (Inuit)",
+        "another-ethnic-group-required": "Please specify the ethnic group"
       }
     }
   },
