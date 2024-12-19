@@ -172,8 +172,8 @@
     "save-btn": "Sauvegarder",
     "cancel-btn": "Annuler",
     "error-message": {
-      "first-nations-required": "Please select if this person is First Nations, Métis or Inuk (Inuit)",
-      "another-ethnic-group-required": "Please specify the ethnic group"
+      "first-nations-required": "Cochez tout ce qui s'applique",
+      "another-ethnic-group-required": "Précisez la race"
     }
   },
   "marital-status": {
@@ -320,8 +320,8 @@
       "save-btn": "Sauvegarder",
       "cancel-btn": "Annuler",
       "error-message": {
-        "first-nations-required": "Please select if this person is First Nations, Métis or Inuk (Inuit)",
-        "another-ethnic-group-required": "Please specify the ethnic group"
+        "first-nations-required": "Cochez tout ce qui s'applique",
+        "another-ethnic-group-required": "Précisez la race"
       }
     }
   },

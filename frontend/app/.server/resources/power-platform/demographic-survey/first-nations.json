@@ -78,14 +78,14 @@
             "Label": {
               "LocalizedLabels": [
                 {
-                  "Label": "Inuk (Inuit)",
+                  "Label": "Inuit",
                   "LanguageCode": 1033,
                   "IsManaged": false,
                   "MetadataId": "57f30299-4881-4b9d-a1c0-0813a07f1818",
                   "HasChanged": null
                 },
                 {
-                  "Label": "Inuk (Inuit)",
+                  "Label": "Inuit",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "89078da9-fb53-ee11-be6f-000d3a09d1b8",
