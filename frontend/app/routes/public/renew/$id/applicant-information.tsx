@@ -182,11 +182,11 @@ export default function RenewApplicationInformation() {
 
   return (
     <>
-      {fetcherStatus === 'status-not-found' && <StatusNotFound />}
       <div className="my-6 sm:my-8">
         <Progress value={25} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
+        {fetcherStatus === 'status-not-found' && <StatusNotFound />}
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         <p className="mb-6">{t('renew:applicant-information.required-information')}</p>
         <errorSummary.ErrorSummary />

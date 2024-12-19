@@ -115,14 +115,14 @@
       "last-name-required": "Enter last name",
       "first-name-no-digits": "First name must contain letters only",
       "last-name-no-digits": "Last name must contain letters only",
-      "client-number-required": "Enter client number",
+      "client-number-required": "Enter 11 digit client number",
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
       "client-number-valid": "Must be a valid client number. Your input must be 11 or 13 digits long."
     },
     "status-not-found": {
       "heading": "We could not find your application with the information you gave us.",
       "please-review": "Please make sure the information you entered is correct.",
-      "contact-service-canada": "Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
+      "contact-service-canada": "If you need to update your name or if this issue continues, contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>."
     }
   },
   "type-of-renewal": {
