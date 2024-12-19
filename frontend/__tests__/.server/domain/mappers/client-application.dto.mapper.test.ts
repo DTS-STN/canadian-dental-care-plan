@@ -242,6 +242,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
         lastName: 'Doe',
         dateOfBirth: '2000-01-01',
         clientNumber: 'ABC123',
+        userId: 'test-user',
       };
 
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
@@ -265,6 +266,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
       // Arrange
       const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = {
         sin: '123456789',
+        userId: 'test-user',
       };
 
       const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = {
