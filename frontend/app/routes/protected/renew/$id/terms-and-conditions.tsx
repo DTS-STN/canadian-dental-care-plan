@@ -111,6 +111,7 @@ export default function RenewTermsAndConditions() {
             <section className="space-y-4">
               <h2 className="font-lato text-lg font-bold"> {t('protected-renew:terms-and-conditions.privacy-notice-statement.personal-information.heading')}</h2>
               <p>{t('protected-renew:terms-and-conditions.privacy-notice-statement.personal-information.service-canada-application-administration')}</p>
+              <p>{t('protected-renew:terms-and-conditions.privacy-notice-statement.personal-information.share-information')}</p>
               <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:terms-and-conditions.privacy-notice-statement.personal-information.collection-use" components={{ cite }} />
               </p>
@@ -131,6 +132,7 @@ export default function RenewTermsAndConditions() {
               <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-handling-complaint-process" components={{ fileacomplaint }} />
               </p>
+              <p className="my-8">{t('protected-renew:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.application-participation')}</p>
             </section>
           </div>
         </Collapsible>
@@ -148,12 +150,10 @@ export default function RenewTermsAndConditions() {
                 <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.enrol-consent" components={{ cite }} />
               </p>
               <p>{t('protected-renew:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.considered-minor')}</p>
-              <p>{t('protected-renew:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.analysis')}</p>
             </section>
           </div>
         </Collapsible>
       </div>
-      <p className="my-8">{t('protected-renew:terms-and-conditions.apply.application-participation')}</p>
       <p className="my-8" id="application-consent">
         {t('protected-renew:terms-and-conditions.apply.application-consent')}
       </p>

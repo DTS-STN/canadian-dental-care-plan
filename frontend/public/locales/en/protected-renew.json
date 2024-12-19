@@ -3,36 +3,37 @@
     "page-title": "Renew"
   },
   "terms-and-conditions": {
-    "page-title": "Terms and conditions",
+    "page-title": "Terms and conditions of use and privacy notice statement",
     "page-heading": "Terms and conditions of use and privacy notice statement",
-    "intro-text": "Thank you for using the Canadian Dental Care Plan (CDCP) Online Application (\"the Online Application\"). We have developed important terms and conditions for using this service (\"Terms\"). Please read them carefully.",
+    "intro-text": "Thank you for using the Canadian Dental Care Plan (CDCP) online renewal application (\"the renewal application\"). We have developed important terms and conditions for using this service (\"Terms\"). Please read them carefully.",
     "terms-and-conditions-of-use": {
       "summary": "Terms and Conditions of Use",
-      "online-application-legal-terms": "<strong>PLEASE READ CAREFULLY.</strong> These Terms for the Canadian Dental Care Plan (CDCP) Online Application contain information about your legal rights and obligations and regulate your use of the Online Application. These Terms should be read in conjunction with the <canadaTermsConditions>Canada.ca website Terms and Conditions</canadaTermsConditions>. In case they are differing, the present Terms take precedence over Canada.ca Terms and Conditions.",
-      "online-application-access-terms": "Your access to and use of the Online Application, including any and all content, is subject to (1) your acceptance of, and (2) your compliance with these Terms.",
-      "online-application-usage-terms": "Every time you use the Online Application, these Terms will apply. By using the Online Application, you agree to abide by the following Terms. It is your responsibility to understand and retain these Terms.",
+      "online-application-legal-terms": "<strong>PLEASE READ CAREFULLY.</strong> These Terms for the Canadian Dental Care Plan (CDCP) renewal application contain information about your legal rights and obligations and regulate your use of the renewal application. These Terms should be read in conjunction with the <canadaTermsConditions>Canada.ca website Terms and Conditions</canadaTermsConditions>. In case they are differing, the present Terms take precedence over Canada.ca Terms and Conditions.",
+      "online-application-access-terms": "Your access to and use of the renewal application, including any and all content, is subject to (1) your acceptance of, and (2) your compliance with these Terms.",
+      "online-application-usage-terms": "Every time you use the renewal application, these Terms will apply. By using the renewal application, you agree to abide by the following Terms. It is your responsibility to understand and retain these Terms.",
       "online-application-outage": "There will be times when the system might be down for maintenance.",
-      "online-application-timeout": "If you are inactive for 15 minutes on the Online Application, your session will end and you will lose any information you entered.",
-      "terms-rejection-policy": "At any time you may decide not to accept the Terms, in which case you will not be permitted to access and use the Online Application.",
+      "online-application-timeout": "If you are inactive for 15 minutes on the renewal application, your session will end and you will lose any information you entered.",
+      "terms-rejection-policy": "At any time you may decide not to accept the Terms, in which case you will not be permitted to access and use the renewal application.",
       "esdc-definition-clarification": "In these Terms, \"ESDC\" refers to the Minister of Employment and Social Development, representing His Majesty the King in Right of Canada.",
       "online-application": {
-        "heading": "Terms of Use for the Online Application:",
-        "self-agreement": "Using the Online Application means that you have read and agree to these Terms and the Privacy Notice Statement. If, at any time, you withdraw your agreement to any of the Terms you must stop use of the Online Application.",
-        "on-behalf-of-someone-else": "If you are using the Application on behalf of a child, by using the Online Application, you certify that you have all the necessary authority to agree to the Terms on behalf of that individual, and that you agree to the Terms on behalf of the individual you are representing.",
+        "heading": "Terms of Use for the Renewal Application:",
+        "self-agreement": "Using the renewal application means that you have read and agree to these Terms and the Privacy Notice Statement. If, at any time, you withdraw your agreement to any of the Terms you must stop use of the renewal application.",
+        "on-behalf-of-someone-else": "If you are using the Application on behalf of a child, by using the renewal application, you certify that you have all the necessary authority to agree to the Terms on behalf of that individual, and that you agree to the Terms on behalf of the individual you are representing.",
         "at-your-own-risk": "If you are using a shared computer or shared internet connection, you are using this service at your own risk, and you will need to keep any personal information safe. If you are using a public computer make sure to close the browser or log out when you are done.",
-        "msdc": "ESDC uses services from Microsoft Corporation to run the Online Application. The Microsoft data centres used by ESDC are in Canada in accordance with <microsoftDataPrivacyPolicy>Microsoft Corporation's Terms of Service Agreement</microsoftDataPrivacyPolicy>.",
+        "msdc": "ESDC uses services from Microsoft Corporation to run the renewal application. The Microsoft data centres used by ESDC are in Canada in accordance with <microsoftDataPrivacyPolicy>Microsoft Corporation's Terms of Service Agreement</microsoftDataPrivacyPolicy>.",
         "antibot": "ESDC uses hCaptcha anti-bot services for our online tools in accordance with hCaptcha's <hcaptchaTermsOfService>Terms of Service</hcaptchaTermsOfService>."
       },
       "changes-to-these-terms-of-use": {
         "heading": "Changes to these Terms of Use",
-        "esdc-terms-amendment-policy": "ESDC may amend these Terms at any time and without notice. Such changes shall be effective immediately on the date they are published. By using the Online Application, you agree to abide by the amended Terms. You are responsible to ensure you understand and retain the amended Terms."
+        "esdc-terms-amendment-policy": "ESDC may amend these Terms at any time and without notice. Such changes shall be effective immediately on the date they are published. By using the renewal application, you agree to abide by the amended Terms. You are responsible to ensure you understand and retain the amended Terms."
       }
     },
     "privacy-notice-statement": {
       "summary": "Privacy Notice Statement",
       "personal-information": {
         "heading": "Personal Information",
-        "service-canada-application-administration": "The personal information collected in this application is required for the purposes of applying for the Canada Dental Care Plan (CDCP). Service Canada, which is part of Employment and Social Development Canada (ESDC), administers applications for the CDCP on behalf of Health Canada. Service Canada will collect the personal information you include in your CDCP application to register and enroll you into the Plan.",
+        "service-canada-application-administration": "Service Canada, which is part of Employment and Social Development Canada (ESDC), administers applications for the Canadian Dental Care Plan (CDCP) on behalf of Health Canada. The personal information collected in this renewal application is required for the purposes of renewing your coverage in the CDCP.",
+        "share-information": "ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC, Health Canada and Statistics Canada. These uses or activities will not result in any administrative decisions made about you.",
         "collection-use": "The collection, use, and disclosure of your personal information is authorized by, among other laws, the <cite>Department of Health Act</cite>, the <cite>Dental Care Measures Act</cite>, the <cite>Department of Employment and Social Development Act</cite>, and is protected by the provisions of the <cite>Privacy Act</cite>.",
         "microsoft-policy": "ESDC carries out this application process using services from a third-party provider, Microsoft Corporation, which may be subject to foreign laws. For more information, see <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles</microsoftDataPrivacyPolicy>."
       },
@@ -44,28 +45,28 @@
           "hc-ppu-440": "Canadian Dental Care Plan (HC PPU 440)"
         },
         "info-source-access": "You can learn how to access this information in the government publication called <infosource>Info Source</infosource>. You can also access Info Source online at any Service Canada Centre.",
-        "personal-information-handling-complaint-process": "If you do not agree with the way your personal information was handled by ESDC, you can contact the Office of the Privacy Commissioner of Canada (OPC) to <fileacomplaint>file a complaint</fileacomplaint>."
+        "personal-information-handling-complaint-process": "If you do not agree with the way your personal information was handled by ESDC, you can contact the Office of the Privacy Commissioner of Canada to <fileacomplaint>file a complaint</fileacomplaint>.",
+        "application-participation": "Participation in the CDCP is voluntary. However, refusal to provide information will result in ESDC being unable to process your renewal application."
       }
     },
     "sharing-your-information": {
       "summary": "Sharing your information",
       "government-of-canada-and-sun-life": {
         "heading": "Government of Canada and Sun Life",
-        "share-info": "Employment and Social Development Canada (ESDC) may share your personal information with Health Canada (HC), the Canada Revenue Agency (CRA), and Sun Life to administer the plan, validate your eligibility, and register you for the Canadian Dental Care Plan (CDCP).",
+        "share-info": "Employment and Social Development Canada may share your personal information with Health Canada, the Canada Revenue Agency, and Sun Life to administer the plan, validate your eligibility, and register you for the Canadian Dental Care Plan (CDCP).",
         "disclose-info": "Your information may also be disclosed to the CDCP benefits administrator (Sun Life), the benefits administrator's agents, and service providers for the purpose of underwriting, verification, administration, adjudication and investigation of claims under the CDCP.",
         "sun-life-authorization": "Sun Life is authorized to collect, use, and disclose information about you to any person or organization, including oral health providers, institutions, investigative services, and the CDCP, for the purposes of program administration, audit, claims and patient/client safety."
       },
       "sharing-of-information-and-oral-health-providers": {
         "heading": "Sharing of information and Oral Health Providers",
-        "enrol-consent": "By enrolling in the CDCP, you are also providing consent to your oral health providers to disclose all personal information, as authorized by the <cite>Department of Health Act</cite> and the <cite>Dental Care Measures Act</cite>, that may be considered useful by Sun Life in the context of program administration, conducting claims verifications, managing claims, and patient/client safety. This information may include, but is not limited to, details on the services provided, patient clinical data, payments, and X-rays.",
-        "considered-minor": "If you are considered a minor in your province or territory, your information can also be shared with your parents or legal guardians.",
-        "analysis": "ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC, Health Canada and Statistics Canada. These uses or activities will not result in any administrative decisions made about you."
+        "enrol-consent": "By renewing your CDCP coverage, you are also providing consent to your oral health providers to disclose all personal information, as authorized by the <cite>Department of Health Act</cite> and the <cite>Dental Care Measures Act</cite>, that may be considered useful by Sun Life in the context of program administration, conducting claims verifications, managing claims, and patient/client safety. This information may include, but is not limited to, details on the services provided, patient clinical data, payments, and X-rays.",
+        "considered-minor": "If you are considered a minor in your province or territory, your information can also be shared with your parents or legal guardians."
       }
     },
     "apply": {
-      "application-participation": "Participation in the Canadian Dental Care Plan is voluntary. However, if you do not provide your personal information in your application, you cannot be considered for the Canadian Dental Care Plan.",
-      "application-consent": "By continuing with this application you agree that you have read and accept the above terms and conditions and privacy notice statement. In addition, you also consent to the sharing of your personal information for the purposes listed above.",
+      "application-consent": "By continuing with this renewal application, you agree that you have read the above terms and conditions and privacy notice statement. In addition, you consent to the sharing of your personal information for the purposes listed above.",
       "back-button": "Back",
+      "link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
       "start-button": "Agree and continue"
     },
     "links": {
