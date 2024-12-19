@@ -147,9 +147,15 @@ interface ToDentalBenefitsArgs {
 }
 
 interface ToHomeAddressArgs {
+  existingContactInformation: ReadonlyObjectDeep<ContactInformationDto>;
   homeAddress?: ProtectedHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress: ProtectedMailingAddressState;
+  mailingAddress?: ProtectedMailingAddressState;
+}
+
+interface ToMailingAddressArgs {
+  existingContactInformation: ReadonlyObjectDeep<ContactInformationDto>;
+  mailingAddress?: ProtectedMailingAddressState;
 }
 
 interface ToPartnerInformationArgs {
@@ -273,7 +279,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       children: [],
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
-        hasAddressChanged,
+        hasAddressChanged: !!homeAddress || !!mailingAddress, // use this derived value instead of the hasAddressChanged flag because the flag only indicates changes to the mailing address in the frontend
         hasEmailChanged: true,
         hasPhoneChanged: true,
         isHomeAddressSameAsMailingAddress,
@@ -468,16 +474,11 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   private toContactInformation({ existingContactInformation, hasAddressChanged, hasEmailChanged, hasPhoneChanged, isHomeAddressSameAsMailingAddress, renewedContactInformation, renewedHomeAddress, renewedMailingAddress }: ToContactInformationArgs) {
     return {
       ...existingContactInformation,
-      ...(hasAddressChanged && renewedMailingAddress
+      ...(hasAddressChanged
         ? {
             copyMailingAddress: isHomeAddressSameAsMailingAddress,
-            ...this.toHomeAddress({ isHomeAddressSameAsMailingAddress, homeAddress: renewedHomeAddress, mailingAddress: renewedMailingAddress }),
-            mailingAddress: renewedMailingAddress.address,
-            mailingApartment: renewedMailingAddress.apartment,
-            mailingCity: renewedMailingAddress.city,
-            mailingCountry: renewedMailingAddress.country,
-            mailingPostalCode: renewedMailingAddress.postalCode,
-            mailingProvince: renewedMailingAddress.province,
+            ...this.toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress, homeAddress: renewedHomeAddress, mailingAddress: renewedMailingAddress }),
+            ...this.toMailingAddress({ existingContactInformation, mailingAddress: renewedMailingAddress }),
           }
         : {}),
       ...(hasPhoneChanged
@@ -494,28 +495,64 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  private toHomeAddress({ isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToHomeAddressArgs) {
+  private toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToHomeAddressArgs) {
     if (isHomeAddressSameAsMailingAddress) {
-      return {
-        homeAddress: mailingAddress.address,
-        homeApartment: mailingAddress.apartment,
-        homeCity: mailingAddress.city,
-        homeCountry: mailingAddress.country,
-        homePostalCode: mailingAddress.postalCode,
-        homeProvince: mailingAddress.province,
-      };
+      return mailingAddress
+        ? {
+            homeAddress: mailingAddress.address,
+            homeApartment: mailingAddress.apartment,
+            homeCity: mailingAddress.city,
+            homeCountry: mailingAddress.country,
+            homePostalCode: mailingAddress.postalCode,
+            homeProvince: mailingAddress.province,
+          }
+        : {
+            homeAddress: existingContactInformation.mailingAddress,
+            homeApartment: existingContactInformation.mailingApartment,
+            homeCity: existingContactInformation.mailingCity,
+            homeCountry: existingContactInformation.mailingCountry,
+            homePostalCode: existingContactInformation.mailingPostalCode,
+            homeProvince: existingContactInformation.mailingProvince,
+          };
     }
 
-    invariant(homeAddress, 'Expected homeAddress to be defined when isHomeAddressSameAsMailingAddress is false.');
+    return homeAddress
+      ? {
+          homeAddress: homeAddress.address,
+          homeApartment: homeAddress.apartment,
+          homeCity: homeAddress.city,
+          homeCountry: homeAddress.country,
+          homePostalCode: homeAddress.postalCode,
+          homeProvince: homeAddress.province,
+        }
+      : {
+          homeAddress: existingContactInformation.homeAddress,
+          homeApartment: existingContactInformation.homeApartment,
+          homeCity: existingContactInformation.homeCity,
+          homeCountry: existingContactInformation.homeCountry,
+          homePostalCode: existingContactInformation.homePostalCode,
+          homeProvince: existingContactInformation.homeProvince,
+        };
+  }
 
-    return {
-      homeAddress: homeAddress.address,
-      homeApartment: homeAddress.apartment,
-      homeCity: homeAddress.city,
-      homeCountry: homeAddress.country,
-      homePostalCode: homeAddress.postalCode,
-      homeProvince: homeAddress.province,
-    };
+  private toMailingAddress({ existingContactInformation, mailingAddress }: ToMailingAddressArgs) {
+    return mailingAddress
+      ? {
+          mailingAddress: mailingAddress.address,
+          mailingApartment: mailingAddress.apartment,
+          mailingCity: mailingAddress.city,
+          mailingCountry: mailingAddress.country,
+          mailingPostalCode: mailingAddress.postalCode,
+          mailingProvince: mailingAddress.province,
+        }
+      : {
+          mailingAddress: existingContactInformation.mailingAddress,
+          mailingApartment: existingContactInformation.mailingApartment,
+          mailingCity: existingContactInformation.mailingCity,
+          mailingCountry: existingContactInformation.mailingCountry,
+          mailingPostalCode: existingContactInformation.mailingPostalCode,
+          mailingProvince: existingContactInformation.mailingProvince,
+        };
   }
 
   private toCommunicationPreferences({ existingCommunicationPreferences, hasEmailChanged, renewedEmail, renewedReceiveEmailCommunication }: ToCommunicationPreferencesArgs) {
