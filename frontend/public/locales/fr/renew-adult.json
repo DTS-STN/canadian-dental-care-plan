@@ -66,8 +66,7 @@
     "page-title": "Adresse courriel",
     "add-email": "Une adresse courriel à jour permet au gouvernement du Canada et à la Sun Life de communiquer avec vous au sujet de votre adhésion au Régime canadien de soins dentaires. Vous trouverez l'adresse courriel que nous avons dans nos dossiers dans la lettre de Service Canada.",
     "add-or-update": {
-      "legend": "Souhaitez-vous mettre à jour ou ajouter votre adresse courriel?",
-      "help-message": "L'adresse courriel que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada."
+      "legend": "Souhaitez-vous mettre à jour ou ajouter votre adresse courriel?"
     },
     "receive-comms": {
       "legend": "Souhaitez-vous recevoir des communications par courriel de la part de la Sun Life et du gouvernement du Canada?"

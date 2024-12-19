@@ -146,7 +146,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/renew/$id/adult/confirm-address', params));
 }
 
-export default function RenewAdultChildConfirmEmail() {
+export default function RenewAdultConfirmEmail() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
