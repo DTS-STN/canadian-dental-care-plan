@@ -106,12 +106,10 @@
     "page-title": "Renew your Canadian Dental Care Plan benefits",
     "reviewed": "The following member(s) have already renewed:",
     "form-instructions": "Below is a list of members who can renew. Choose the member you want to renew for.",
-    "continue-help": "After you've chosen all the members you want to renew, click 'Continue'.",
-    "completed": "Completed",
+    "continue-help": "Once all the members you want to renew for are ready to submit, click 'Continue' to review and submit the application.",
+    "completed": "Ready to submit",
     "back-btn": "Back",
     "continue-btn": "Continue",
-    "cancel-btn": "Cancel",
-    "save-btn": "Save",
     "select-member": {
       "heading": "Select a member",
       "to-continue": "You must select a member to continue."
