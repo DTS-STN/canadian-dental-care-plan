@@ -224,5 +224,23 @@
     "error-message": {
       "dental-insurance-required": "Sélectionnez si vous avez une assurance dentaire"
     }
+  },
+  "confirm-dental-benefits": {
+    "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
+    "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
+    "select-one": "Sélectionnez une option",
+    "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
+    "has-benefits": "Bénéficiez-vous de prestations pour soins dentaires dans le cadre d'un programme social fédéral, provincial ou territorial autre que le Régime canadien de soins dentaires?",
+    "option-yes": "<strong>Oui</strong>, j'ai des prestations fédérales, provincial ou territorial",
+    "option-no": "<strong>Non</strong>, Non, je n'ai pas des prestations fédérales, provincial ou territorial",
+    "button": {
+      "back": "Retour",
+      "continue": "Continuer",
+      "cancel-btn": "Annuler",
+      "save-btn": "Sauvegarder"
+    },
+    "error-message": {
+      "federal-provincial-territorial-benefit-required": "Sélectionnez si vous bénéficiez de prestations dentaires fédérales provinciale ou territoriale"
+    }
   }
 }
