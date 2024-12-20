@@ -1,11 +1,11 @@
 import type { Session } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
-import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/responses';
 
 import type { ApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
+import { isRedirectResponse } from '~/.server/utils/response.utils';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadApplyAdultStateArgs {
@@ -65,7 +65,7 @@ export function loadApplyAdultStateForReview({ params, request, session }: LoadA
   try {
     return validateApplyAdultStateForReview({ params, state });
   } catch (err) {
-    if (isResponse(err) && isRedirectResponse(err)) {
+    if (isRedirectResponse(err)) {
       saveApplyState({ params, session, state: { editMode: false } });
     }
     throw err;

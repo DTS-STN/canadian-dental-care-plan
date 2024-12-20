@@ -1,7 +1,6 @@
 import type { Session } from '@remix-run/node';
 import { redirect, redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
-import { isRedirectResponse, isResponse } from '@remix-run/react/dist/data';
 
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
@@ -10,6 +9,7 @@ import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
+import { isRedirectResponse } from '~/.server/utils/response.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -346,7 +346,7 @@ export function loadProtectedRenewStateForReview({ params, session }: LoadProtec
   try {
     return validateProtectedRenewStateForReview({ params, state });
   } catch (err) {
-    if (isResponse(err) && isRedirectResponse(err)) {
+    if (isRedirectResponse(err)) {
       saveProtectedRenewState({ params, session, state: { editMode: false } });
     }
     throw err;
