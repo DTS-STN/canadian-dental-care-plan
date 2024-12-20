@@ -49,8 +49,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     id: state.id,
     meta,
     defaultState: {
-      phoneNumber: state.contactInformation?.phoneNumber ?? state.clientApplication.contactInformation.phoneNumber,
-      phoneNumberAlt: state.contactInformation?.phoneNumberAlt ?? state.clientApplication.contactInformation.phoneNumber,
+      phoneNumber: state.contactInformation?.phoneNumber,
+      phoneNumberAlt: state.contactInformation?.phoneNumberAlt,
     },
   };
 }

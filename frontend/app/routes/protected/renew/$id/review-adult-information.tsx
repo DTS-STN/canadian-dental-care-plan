@@ -58,7 +58,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const communicationPreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethod, locale);
+  const communicationPreference = state.communicationPreferences
+    ? appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale)
+    : appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethod, locale);
   const maritalStatus = state.maritalStatus
     ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name
     : appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.clientApplication.applicantInformation.maritalStatus, locale).name;
@@ -87,14 +89,14 @@ export async function loader({ context: { appContainer, session }, params, reque
     lastName: state.clientApplication.applicantInformation.lastName,
     sin: state.clientApplication.applicantInformation.socialInsuranceNumber,
     clientNumber: state.clientApplication.applicantInformation.clientNumber,
-    phoneNumber: state.contactInformation?.phoneNumber ?? state.clientApplication.contactInformation.phoneNumber,
-    altPhoneNumber: state.contactInformation?.phoneNumberAlt ?? state.clientApplication.contactInformation.phoneNumberAlt,
+    phoneNumber: state.contactInformation?.phoneNumber,
+    altPhoneNumber: state.contactInformation?.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
     maritalStatus: maritalStatus,
-    contactInformationEmail: state.contactInformation?.email ?? state.clientApplication.contactInformation.email,
+    contactInformationEmail: state.contactInformation?.email,
     communicationPreference: communicationPreference.name,
     preferredLanguage: preferredLanguage,
-    communicationPreferenceEmail: state.clientApplication.communicationPreferences.email,
+    clientApplicationEmail: state.clientApplication.communicationPreferences.email,
   };
 
   const hasPartner = renewStateHasPartner(state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus);
@@ -321,7 +323,7 @@ export default function ProtectedRenewReviewAdultInformation() {
             <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.contact-info-title')}</h2>
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('protected-renew:review-adult-information.phone-title')}>
-                <p>{userInfo.phoneNumber ?? t('protected-renew:review-adult-information.no-update')}</p>
+                <p>{userInfo.phoneNumber}</p>
                 <div className="mt-4">
                   <InlineLink id="change-phone-number" routeId="protected/renew/$id/confirm-phone" params={params}>
                     {t('protected-renew:review-adult-information.phone-change')}
@@ -329,7 +331,7 @@ export default function ProtectedRenewReviewAdultInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('protected-renew:review-adult-information.alt-phone-title')}>
-                <p>{userInfo.altPhoneNumber ?? t('protected-renew:review-adult-information.no-update')}</p>
+                <p>{userInfo.altPhoneNumber}</p>
                 <div className="mt-4">
                   <InlineLink id="change-alternate-phone-number" routeId="protected/renew/$id/confirm-phone" params={params}>
                     {t('protected-renew:review-adult-information.alt-phone-change')}
@@ -337,7 +339,7 @@ export default function ProtectedRenewReviewAdultInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('protected-renew:review-adult-information.email')}>
-                <p>{userInfo.contactInformationEmail ?? t('protected-renew:review-adult-information.no-update')}</p>
+                <p>{userInfo.contactInformationEmail}</p>
                 <div className="mt-4">
                   <InlineLink id="change-email" routeId="protected/renew/$id/confirm-email" params={params}>
                     {t('protected-renew:review-adult-information.email-change')}
