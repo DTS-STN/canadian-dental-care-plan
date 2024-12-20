@@ -249,6 +249,12 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
     editMode: false,
     applicationYear,
     clientApplication,
+    contactInformation: {
+      phoneNumber: clientApplication.contactInformation.phoneNumber,
+      phoneNumberAlt: clientApplication.contactInformation.phoneNumberAlt,
+      email: clientApplication.contactInformation.email,
+    },
+    communicationPreferences: clientApplication.communicationPreferences,
     children: clientApplication.children
       // filter out children who will be 18 or older at the start of the coverage period as they are ineligible for renewal
       .filter((child) => getAgeFromDateString(child.information.dateOfBirth, applicationYear.coverageStartDate) < 18) //

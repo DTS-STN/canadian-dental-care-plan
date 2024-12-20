@@ -45,13 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm-email.page-title') }) };
 
-  return {
-    id: state.id,
-    meta,
-    defaultState: {
-      email: state.contactInformation?.email ?? state.clientApplication.contactInformation.email,
-    },
-  };
+  return { meta, defaultState: { email: state.contactInformation?.email } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -114,53 +108,51 @@ export default function ProtectedRenewConfirmEmail() {
   });
 
   return (
-    <>
-      <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew:all-optional-label')}</p>
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="mb-6">
-            <div className="grid gap-6 md:grid-cols-2">
-              <InputField
-                id="email"
-                name="email"
-                type="email"
-                inputMode="email"
-                className="w-full"
-                autoComplete="email"
-                defaultValue={defaultState.email}
-                errorMessage={errors?.email}
-                label={t('protected-renew:confirm-email.email')}
-                maxLength={64}
-                aria-describedby="adding-email"
-              />
-              <InputField
-                id="confirm-email"
-                name="confirmEmail"
-                type="email"
-                inputMode="email"
-                className="w-full"
-                autoComplete="email"
-                defaultValue={defaultState.email}
-                errorMessage={errors?.confirmEmail}
-                label={t('protected-renew:confirm-email.confirm-email')}
-                maxLength={64}
-                aria-describedby="adding-email"
-              />
-            </div>
+    <div className="max-w-prose">
+      <p className="mb-4 italic">{t('renew:all-optional-label')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <div className="mb-6">
+          <div className="grid gap-6 md:grid-cols-2">
+            <InputField
+              id="email"
+              name="email"
+              type="email"
+              inputMode="email"
+              className="w-full"
+              autoComplete="email"
+              defaultValue={defaultState.email}
+              errorMessage={errors?.email}
+              label={t('protected-renew:confirm-email.email')}
+              maxLength={64}
+              aria-describedby="adding-email"
+            />
+            <InputField
+              id="confirm-email"
+              name="confirmEmail"
+              type="email"
+              inputMode="email"
+              className="w-full"
+              autoComplete="email"
+              defaultValue={defaultState.email}
+              errorMessage={errors?.confirmEmail}
+              label={t('protected-renew:confirm-email.confirm-email')}
+              maxLength={64}
+              aria-describedby="adding-email"
+            />
           </div>
+        </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Contact information click">
-              {t('protected-renew:confirm-email.save-btn')}
-            </Button>
-            <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Contact information click">
-              {t('protected-renew:confirm-email.cancel-btn')}
-            </Button>
-          </div>
-        </fetcher.Form>
-      </div>
-    </>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Contact information click">
+            {t('protected-renew:confirm-email.save-btn')}
+          </Button>
+          <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Contact information click">
+            {t('protected-renew:confirm-email.cancel-btn')}
+          </Button>
+        </div>
+      </fetcher.Form>
+    </div>
   );
 }

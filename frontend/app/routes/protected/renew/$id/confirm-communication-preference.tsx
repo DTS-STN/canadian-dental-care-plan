@@ -61,9 +61,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     preferredCommunicationMethods,
     preferredLanguages,
-    defaultState: {
-      ...(state.communicationPreferences ?? state.clientApplication.communicationPreferences),
-    },
+    defaultState: { ...state.communicationPreferences, email: state.contactInformation?.email },
     isReadOnlyEmail: !!state.contactInformation?.email,
   };
 }
