@@ -1,13 +1,13 @@
 import type { Session } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
-import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/responses';
 
 import { z } from 'zod';
 
 import { getChildrenState, isNewChildState, loadRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import type { ChildState, RenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
+import { isRedirectResponse } from '~/.server/utils/response.utils';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadRenewAdultChildStateArgs {
@@ -109,7 +109,7 @@ export function loadRenewAdultChildStateForReview({ params, request, session }: 
   try {
     return validateRenewAdultChildStateForReview({ params, state });
   } catch (err) {
-    if (isResponse(err) && isRedirectResponse(err)) {
+    if (isRedirectResponse(err)) {
       saveRenewState({ params, session, state: { editMode: false } });
     }
     throw err;

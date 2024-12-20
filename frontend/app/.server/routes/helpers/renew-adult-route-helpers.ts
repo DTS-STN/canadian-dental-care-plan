@@ -1,11 +1,11 @@
 import type { Session } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
-import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/responses';
 
 import type { RenewState } from '~/.server/routes//helpers/renew-route-helpers';
 import { loadRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
+import { isRedirectResponse } from '~/.server/utils/response.utils';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadRenewAdultStateArgs {
@@ -65,7 +65,7 @@ export function loadRenewAdultStateForReview({ params, request, session }: LoadR
   try {
     return validateRenewAdultStateForReview({ params, state });
   } catch (err) {
-    if (isResponse(err) && isRedirectResponse(err)) {
+    if (isRedirectResponse(err)) {
       saveRenewState({ params, session, state: { editMode: false } });
     }
     throw err;
