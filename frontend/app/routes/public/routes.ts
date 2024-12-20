@@ -728,6 +728,11 @@ export const routes = [
             file: 'routes/public/renew/$id/adult/dental-insurance.tsx',
             paths: { en: '/:lang/renew/:id/adult/dental-insurance', fr: '/:lang/renouveller/:id/adulte/assurance-dentaire' },
           },
+          {
+            id: 'public/renew/$id/adult/confirm-federal-provincial-territorial-benefits',
+            file: 'routes/public/renew/$id/adult/confirm-federal-provincial-territorial-benefits.tsx',
+            paths: { en: '/:lang/renew/:id/adult/confirm-federal-provincial-territorial-benefits', fr: '/:lang/renouveller/:id/adulte/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
+          },
         ],
       },
       {
