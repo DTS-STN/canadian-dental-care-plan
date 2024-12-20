@@ -242,5 +242,43 @@
     "error-message": {
       "federal-provincial-territorial-benefit-required": "Select whether you have federal provincial or territorial dental benefits"
     }
+  },
+  "update-dental-benefits": {
+    "title": "Access to other federal, provincial or territorial dental benefits",
+    "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
+    "select-one": "Select one",
+    "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
+    "federal-benefits": {
+      "title": "Federal benefits",
+      "legend": "Do you have other dental benefits through a federal, provincial or territorial social program aside from the Canadian Dental Care Plan?",
+      "option-yes": "<strong>Yes</strong>, I have <strong>federal</strong> dental benefits",
+      "option-no": "<strong>No</strong>, I do not have <strong>federal</strong> dental benefits",
+      "social-programs": {
+        "legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
+      }
+    },
+    "provincial-territorial-benefits": {
+      "title": "Provincial or territorial benefits",
+      "legend": "Do you have other dental benefits through a provincial or territorial social program aside from the Canadian Dental Care Plan?",
+      "option-yes": "<strong>Yes</strong>, I have <strong>provincial or territorial</strong> dental benefits",
+      "option-no": "<strong>No</strong>, I do not have <strong>provincial or territorial</strong> dental benefits",
+      "social-programs": {
+        "input-legend": "Through which province or territory?",
+        "radio-legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
+      }
+    },
+    "button": {
+      "back": "Back",
+      "continue": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save"
+    },
+    "error-message": {
+      "federal-benefit-program-required": "Select which federal program you are covered under",
+      "federal-benefit-required": "Select whether you have federal dental benefits",
+      "provincial-benefit-program-required": "Select which provincial or territorial program you are covered under",
+      "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
+      "provincial-territorial-required": "Select a province or territory"
+    }
   }
 }

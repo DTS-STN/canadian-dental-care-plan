@@ -121,6 +121,7 @@ export const pageIds = {
         updateHomeAddress: 'CDCP-RENW-AD-0007',
         dentalInsurance: 'CDCP-RENW-AD-0008',
         confirmFederalProvincialTerritorialBenefits: 'CDCP-RENW-AD-0009',
+        updateFederalProvincialTerritorialBenefits: 'CDCP-RENW-AD-0010',
       },
       ita: {
         maritalStatus: 'CDCP-RENW-ITA-0001',
