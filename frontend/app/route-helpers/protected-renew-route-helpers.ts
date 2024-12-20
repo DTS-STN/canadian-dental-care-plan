@@ -9,8 +9,7 @@ import { removePathSegment } from '~/utils/url-utils';
  */
 export function transformAdobeAnalyticsUrl(url: string | URL) {
   const urlObj = new URL(url);
-  // TODO: add translated route segments
-  const protectedRenewRouteRegex = /^\/(en|fr)\/protected\/(renew)\//i;
+  const protectedRenewRouteRegex = /^\/(en|fr)\/(protected|protege)\/(renew|renouveller)\//i;
   if (!protectedRenewRouteRegex.test(urlObj.pathname)) return urlObj;
   return new URL(removePathSegment(urlObj, 3));
 }
@@ -24,12 +23,11 @@ export function transformAdobeAnalyticsUrl(url: string | URL) {
  */
 export function transformChildrenRouteAdobeAnalyticsUrl(url: string | URL) {
   const urlObj = new URL(url);
-  // TODO: add translated route segments
-  const protectedRenewRouteRegex = /^\/(en|fr)\/protected\/(renew)\//i;
+  const protectedRenewRouteRegex = /^\/(en|fr)\/(protected|protege)\/(renew|renouveller)\/.*\/(children|enfants)\//i;
   if (!protectedRenewRouteRegex.test(urlObj.pathname)) return urlObj;
   // remove protected renew state id
-  let transofrmedUrl = removePathSegment(urlObj, 3);
+  let transformedUrl = removePathSegment(urlObj, 3);
   // remove protected renew child state id
-  transofrmedUrl = removePathSegment(transofrmedUrl, 3);
-  return new URL(transofrmedUrl);
+  transformedUrl = removePathSegment(transformedUrl, 4);
+  return new URL(transformedUrl);
 }
