@@ -533,14 +533,13 @@
     "no-update": "Pas de mise à jour"
   },
   "review-submit": {
-    "page-title": "Vérifiez vos renseignements",
+    "page-title": "Soumettre votre demande de renouvellement",
     "form-instructions": "Vous soumettez une demande de renouvellement pour les personnes suivantes\u00a0:",
-    "submit-renewal-title": "Soumettre votre demande de renouvellement",
-    "submit-p-proceed": "En transmettant votre demande, vous consentez à attester de la véracité des informations fournies.",
-    "submit-p-false-info": "Si vous fournissez de fausses informations sur votre demande, vous et les autres personnes pour lesquelles vous avez postulé pourriez être exclus du régime.",
-    "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles, vous ou les membres de votre famille pourriez devoir rembourser le coût total des soins reçus dans le cadre du régime canadien de soins dentaires.",
+    "submit-p-proceed": "En procédant à cette demande de renouvellement, vous acceptez d'attester la véracité des renseignements fournis.",
+    "submit-p-false-info": "Si vous fournissez de faux renseignements dans votre demande de renouvellement, vous et les autres personnes pour lesquelles vous avez présenté une demande pourriez être exclus du Régime canadien de soins dentaires.",
+    "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles au renouvellement, vous pourriez avoir à rembourser la totalité des frais pour les soins reçus par l'intermédiaire du Régime canadien de soins dentaires.",
     "back-button": "Retour",
-    "submit-button": "Présenter la demande de renouvellement"
+    "submit-button": "Soumettre la demande de renouvellement"
   },
   "review-child-information": {
     "page-title": "Vérifiez les renseignements sur le ou les enfants",
