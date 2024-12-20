@@ -1,10 +1,10 @@
 import { Outlet } from '@remix-run/react';
 
-import { transformAdultChildChildrenRouteAdobeAnalyticsUrl } from '~/route-helpers/renew-route-helpers';
+import { transformChildChildrenRouteAdobeAnalyticsUrl } from '~/route-helpers/renew-route-helpers';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  transformAdobeAnalyticsUrl: transformAdultChildChildrenRouteAdobeAnalyticsUrl,
+  transformAdobeAnalyticsUrl: transformChildChildrenRouteAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
 
 /**
