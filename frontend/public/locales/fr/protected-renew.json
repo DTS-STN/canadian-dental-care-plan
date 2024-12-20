@@ -206,24 +206,24 @@
   "children": {
     "child-number": "Child {{childNumber}}",
     "parent-or-guardian": {
-      "page-title": "{{childName}}\u00a0: parent or legal guardian",
-      "back-btn": "Back",
-      "continue-btn": "Continue",
-      "form-instructions": "Are you the parent or legal guardian of this child?",
+      "page-title": "{{childName}}\u00a0: parent ou tuteur légal",
+      "back-btn": "Retour",
+      "continue-btn": "Continuer",
+      "form-instructions": "Êtes-vous le parent ou le tuteur légal de {{childName}}\u00a0?",
       "radio-options": {
-        "yes": "Yes",
-        "no": "No"
+        "yes": "Oui",
+        "no": "Non"
       },
       "error-message": {
-        "parent-or-guardian-required": "Select whether you are the parent or legal guardian of this child"
+        "parent-or-guardian-required": "Sélectionnez si vous êtes le parent ou le guardien légal pour ces enfants"
       }
     },
     "parent-or-guardian-required": {
-      "page-title": "You must be a parent or legal guardian",
-      "must-be": "You must be a parent or legal guardian.",
-      "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
-      "back-btn": "Back",
-      "continue-btn": "Continue to next member"
+      "page-title": "Vous devez être le parent ou le tuteur légal",
+      "must-be": "Vous devez être un parent ou un tuteur légal.",
+      "unable-to-apply": "Vous ne pouvez pas présenter de demande pour cet enfant. Vous devez être le parent ou le tuteur légal d’un enfant pour présenter une demande en son nom.",
+      "back-btn": "Retour",
+      "continue-btn": "Retourner à l'application"
     },
     "dental-insurance": {
       "title": "{{childName}}\u00a0: access to other dental insurance",
