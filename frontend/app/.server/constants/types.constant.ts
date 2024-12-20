@@ -1,6 +1,7 @@
 import type { HealthCheck } from '@dts-stn/health-checks';
 import type { interfaces } from 'inversify';
 
+import type { MailingAddressValidatorFactoryAdult } from '../routes/public/renew/adult';
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
@@ -236,6 +237,9 @@ export const TYPES = assignServiceIdentifiers({
         },
         child: {
           MailingAddressValidatorFactoryChild: serviceId<MailingAddressValidatorFactoryChild>(),
+        },
+        adult: {
+          MailingAddressValidatorFactoryAdult: serviceId<MailingAddressValidatorFactoryAdult>(),
         },
       },
     },
