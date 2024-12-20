@@ -96,7 +96,6 @@ export default function ProtectedRenewReviewSubmit() {
           return <li key={childName}>{childName}</li>;
         })}
       </ul>
-      <h2 className="font-lato text-lg font-bold">{t('protected-renew:review-submit.submit-renewal-title')}</h2>
       <p className="mb-4">{t('protected-renew:review-submit.submit-p-proceed')}</p>
       <p className="mb-4">{t('protected-renew:review-submit.submit-p-false-info')}</p>
       <p className="mb-4">{t('protected-renew:review-submit.submit-p-repayment')}</p>
