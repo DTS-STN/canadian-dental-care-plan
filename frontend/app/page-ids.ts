@@ -118,6 +118,7 @@ export const pageIds = {
         confirmEmail: 'CDCP-RENW-AD-0004',
         confirmAddress: 'CDCP-RENW-AD-0005',
         updateMailingAddress: 'CDCP-RENW-AD-0006',
+        updateHomeAddress: 'CDCP-RENW-AD-0007',
       },
       ita: {
         maritalStatus: 'CDCP-RENW-ITA-0001',

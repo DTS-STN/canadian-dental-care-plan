@@ -13,7 +13,7 @@ import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewAdultState } from '~/.server/routes/helpers/renew-adult-route-helpers';
-import type { MailingAddressState } from '~/.server/routes/helpers/renew-route-helpers';
+import type { HomeAddressState } from '~/.server/routes/helpers/renew-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/.server/utils/postal-zip-code.utils';
@@ -23,7 +23,6 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
-import { InputCheckbox } from '~/components/input-checkbox';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
@@ -71,8 +70,8 @@ type AddressResponse = AddressSuggestionResponse | AddressInvalidResponse;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adult.updateMailingAddress,
-  pageTitleI18nKey: 'renew-adult:update-address.mailing-address.page-title',
+  pageIdentifier: pageIds.public.renew.adult.updateHomeAddress,
+  pageTitleI18nKey: 'renew-adult:update-address.home-address.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -87,7 +86,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult:update-address.mailing-address.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult:update-address.home-address.page-title') }) };
 
   return {
     id: state.id,
@@ -101,8 +100,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   const locale = getLocale(request);
-  const t = await getFixedT(request, handle.i18nNamespaces);
 
   const clientConfig = appContainer.get(TYPES.configs.ClientConfig);
   const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
@@ -112,11 +111,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadRenewAdultState({ params, request, session });
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-  const isCopyMailingToHome = formData.get('copyMailingAddress') === 'copy';
+  const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
-  const mailingAddressSchema = z
+  const homeAddressSchema = z
     .object({
       address: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-adult:update-address.error-message.characters-valid')),
       country: z.string().trim(),
@@ -126,91 +124,69 @@ export async function action({ context: { appContainer, session }, params, reque
     })
     .superRefine((val, ctx) => {
       if (!val.address || validator.isEmpty(val.address)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.mailing-address.address-required'), path: ['address'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.home-address.address-required'), path: ['address'] });
       }
 
       if (!val.country || validator.isEmpty(val.country)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.mailing-address.country-required'), path: ['country'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.home-address.country-required'), path: ['country'] });
       }
 
       if (!val.city || validator.isEmpty(val.city)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.mailing-address.city-required'), path: ['city'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.home-address.city-required'), path: ['city'] });
       }
 
       if (val.country === CANADA_COUNTRY_ID || val.country === USA_COUNTRY_ID) {
         if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.mailing-address.province-required'), path: ['province'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.home-address.province-required'), path: ['province'] });
         }
         if (!val.postalCode || validator.isEmpty(val.postalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.mailing-address.postal-code-required'), path: ['postalCode'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.home-address.postal-code-required'), path: ['postalCode'] });
         } else if (!isValidPostalCode(val.country, val.postalCode)) {
-          const message = val.country === CANADA_COUNTRY_ID ? t('renew-adult:update-address.error-message.mailing-address.postal-code-valid') : t('renew-adult:update-address.error-message.mailing-address.zip-code-valid');
+          const message = val.country === CANADA_COUNTRY_ID ? t('renew-adult:update-address.error-message.home-address.postal-code-valid') : t('renew-adult:update-address.error-message.home-address.zip-code-valid');
           ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['postalCode'] });
         } else if (val.country === CANADA_COUNTRY_ID && val.province && !isValidCanadianPostalCode(val.province, val.postalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.mailing-address.invalid-postal-code-for-province'), path: ['postalCode'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.home-address.invalid-postal-code-for-province'), path: ['postalCode'] });
         }
       }
 
       if (val.country && val.country !== CANADA_COUNTRY_ID && val.postalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.postalCode)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.mailing-address.invalid-postal-code-for-country'), path: ['country'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:update-address.error-message.home-address.invalid-postal-code-for-country'), path: ['country'] });
       }
     })
     .transform((val) => ({
       ...val,
       postalCode: val.country && val.postalCode ? formatPostalCode(val.country, val.postalCode) : val.postalCode,
-    })) satisfies z.ZodType<MailingAddressState>;
+    })) satisfies z.ZodType<HomeAddressState>;
 
-  const parsedDataResult = mailingAddressSchema.safeParse({
-    address: String(formData.get('mailingAddress')),
-    country: String(formData.get('mailingCountry')),
-    province: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
-    city: String(formData.get('mailingCity')),
-    postalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
+  const parsedDataResult = homeAddressSchema.safeParse({
+    address: String(formData.get('homeAddress')),
+    country: String(formData.get('homeCountry')),
+    province: formData.get('homeProvince') ? String(formData.get('homeProvince')) : undefined,
+    city: String(formData.get('homeCity')),
+    postalCode: formData.get('homePostalCode') ? String(formData.get('homePostalCode')) : undefined,
   });
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
-
-  const mailingAddress = {
-    address: parsedDataResult.data.address,
-    city: parsedDataResult.data.city,
-    country: parsedDataResult.data.country,
-    postalCode: parsedDataResult.data.postalCode,
-    province: parsedDataResult.data.province,
-  };
-
-  const homeAddress = isCopyMailingToHome ? { ...mailingAddress } : undefined;
-
   const isNotCanada = parsedDataResult.data.country !== clientConfig.CANADA_COUNTRY_ID;
   const isUseInvalidAddressAction = formAction === 'use-invalid-address';
   const isUseSelectedAddressAction = formAction === 'use-selected-address';
   const canProceedToDental = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
-
   if (canProceedToDental) {
-    saveRenewState({
-      params,
-      session,
-      state: {
-        mailingAddress,
-        isHomeAddressSameAsMailingAddress: isCopyMailingToHome,
-        ...(homeAddress && { homeAddress }),
-      },
-    });
+    saveRenewState({ params, session, state: { homeAddress: parsedDataResult.data } });
 
     if (state.editMode) {
-      return redirect(getPathById('public/renew/$id/adult/review-adult-information', params));
+      return redirect(getPathById('public/renew/$id/adult/review-information', params));
     }
-
-    return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/adult/dental-insurance', params) : getPathById('public/renew/$id/adult/update-home-address', params));
+    return redirect(getPathById('public/renew/$id/adult/dental-insurance', params));
   }
 
-  // Validate Canadian adddress
   invariant(parsedDataResult.data.postalCode, 'Postal zip code is required for Canadian addresses');
   invariant(parsedDataResult.data.province, 'Province state is required for Canadian addresses');
 
   // Build the address object using validated data, transforming unique identifiers
-  const formattedMailingAddress: CanadianAddress = {
+  const formattedHomeAddress: CanadianAddress = {
     address: parsedDataResult.data.address,
     city: parsedDataResult.data.city,
     countryId: parsedDataResult.data.country,
@@ -221,16 +197,16 @@ export async function action({ context: { appContainer, session }, params, reque
   };
 
   const addressCorrectionResult = await addressValidationService.getAddressCorrectionResult({
-    address: formattedMailingAddress.address,
-    city: formattedMailingAddress.city,
-    postalCode: formattedMailingAddress.postalZipCode,
-    provinceCode: formattedMailingAddress.provinceState,
+    address: formattedHomeAddress.address,
+    city: formattedHomeAddress.city,
+    postalCode: formattedHomeAddress.postalZipCode,
+    provinceCode: formattedHomeAddress.provinceState,
     userId: 'anonymous',
   });
 
   if (addressCorrectionResult.status === 'not-correct') {
     return {
-      invalidAddress: formattedMailingAddress,
+      invalidAddress: formattedHomeAddress,
       status: 'address-invalid',
     } as const satisfies AddressInvalidResponse;
   }
@@ -238,34 +214,25 @@ export async function action({ context: { appContainer, session }, params, reque
   if (addressCorrectionResult.status === 'corrected') {
     const provinceTerritoryState = provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
     return {
-      enteredAddress: formattedMailingAddress,
+      enteredAddress: formattedHomeAddress,
       status: 'address-suggestion',
       suggestedAddress: {
         address: addressCorrectionResult.address,
         city: addressCorrectionResult.city,
-        country: formattedMailingAddress.country,
-        countryId: formattedMailingAddress.countryId,
+        country: formattedHomeAddress.country,
+        countryId: formattedHomeAddress.countryId,
         postalZipCode: addressCorrectionResult.postalCode,
         provinceState: provinceTerritoryState.abbr,
         provinceStateId: provinceTerritoryState.id,
       },
     } as const satisfies AddressSuggestionResponse;
   }
-
-  saveRenewState({
-    params,
-    session,
-    state: {
-      mailingAddress,
-      isHomeAddressSameAsMailingAddress: isCopyMailingToHome,
-      ...(homeAddress && { homeAddress }),
-    },
-  });
+  saveRenewState({ params, session, state: { homeAddress: parsedDataResult.data } });
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/adult/review-adult-information', params));
   }
-  return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/adult/dental-insurance', params) : getPathById('public/renew/$id/adult/update-home-address', params));
+  return redirect(getPathById('public/renew/$id/adult/dental-insurance', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
@@ -279,29 +246,23 @@ export default function RenewAdultUpdateAddress() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.mailingAddress?.country ?? CANADA_COUNTRY_ID);
-  const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
-  const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.isHomeAddressSameAsMailingAddress === true);
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.homeAddress?.country ?? CANADA_COUNTRY_ID);
+  const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
   const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
 
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
-    address: 'mailing-address',
-    province: 'mailing-province',
-    country: 'mailing-country',
-    city: 'mailing-city',
-    postalCode: 'mailing-postal-code',
-    copyMailingAddress: 'copy-mailing-address',
+    address: 'home-address',
+    province: 'home-province',
+    country: 'home-country',
+    city: 'home-city',
+    postalCode: 'home-postal-code',
   });
 
-  const checkHandler = () => {
-    setCopyAddressChecked((curState) => !curState);
-  };
-
   useEffect(() => {
-    const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedMailingCountry);
-    setMailingCountryRegions(filteredProvinceTerritoryStates);
-  }, [selectedMailingCountry, regionList]);
+    const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedHomeCountry);
+    setHomeCountryRegions(filteredProvinceTerritoryStates);
+  }, [selectedHomeCountry, regionList]);
 
   useEffect(() => {
     setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
@@ -312,22 +273,19 @@ export default function RenewAdultUpdateAddress() {
       setAddressDialogContent(null);
     }
   }
-
-  const mailingCountryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
-    setSelectedMailingCountry(event.currentTarget.value);
+  const homeCountryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
+    setSelectedHomeCountry(event.currentTarget.value);
   };
 
   const countries = useMemo<InputOptionProps[]>(() => {
     return countryList.map(({ id, name }) => ({ children: name, value: id }));
   }, [countryList]);
 
-  // populate mailing region/province/state list with selected country or current address country
-  const mailingRegions = useMemo<InputOptionProps[]>(() => mailingCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [mailingCountryRegions]);
+  const homeRegions = useMemo<InputOptionProps[]>(() => homeCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [homeCountryRegions]);
 
   const dummyOption: InputOptionProps = { children: t('renew-adult:update-address.address-field.select-one'), value: '' };
 
-  const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedMailingCountry);
-
+  const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedHomeCountry);
   return (
     <>
       <div className="my-6 sm:my-8">
@@ -338,73 +296,71 @@ export default function RenewAdultUpdateAddress() {
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <fieldset className="mb-6">
+          <fieldset className="mb-8">
             <div className="space-y-6">
-              <InputSanitizeField
-                id="mailing-address"
-                name="mailingAddress"
-                className="w-full"
-                label={t('renew-adult:update-address.address-field.mailing-address')}
-                maxLength={30}
-                helpMessagePrimary={t('renew-adult:update-address.address-field.address-note')}
-                helpMessagePrimaryClassName="text-black"
-                autoComplete="address-line1"
-                defaultValue={defaultState.mailingAddress?.address}
-                errorMessage={errors?.address}
-                required
-              />
-              <div className="grid items-end gap-6 md:grid-cols-2">
+              <>
                 <InputSanitizeField
-                  id="mailing-city"
-                  name="mailingCity"
+                  id="home-address"
+                  name="homeAddress"
                   className="w-full"
-                  label={t('renew-adult:update-address.address-field.city')}
-                  maxLength={100}
-                  autoComplete="address-level2"
-                  defaultValue={defaultState.mailingAddress?.city}
-                  errorMessage={errors?.city}
+                  label={t('renew-adult:update-address.address-field.address')}
+                  helpMessagePrimary={t('renew-adult:update-address.address-field.address-note')}
+                  helpMessagePrimaryClassName="text-black"
+                  maxLength={30}
+                  autoComplete="address-line1"
+                  defaultValue={defaultState.homeAddress?.address}
+                  errorMessage={errors?.address}
                   required
                 />
-                <InputSanitizeField
-                  id="mailing-postal-code"
-                  name="mailingPostalCode"
-                  className="w-full"
-                  label={isPostalCodeRequired ? t('renew-adult:update-address.address-field.postal-code') : t('renew-adult:update-address.address-field.postal-code-optional')}
-                  maxLength={100}
-                  autoComplete="postal-code"
-                  defaultValue={defaultState.mailingAddress?.postalCode}
-                  errorMessage={errors?.postalCode}
-                  required={isPostalCodeRequired}
-                />
-              </div>
-
-              {mailingRegions.length > 0 && (
+                <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
+                  <InputSanitizeField
+                    id="home-city"
+                    name="homeCity"
+                    className="w-full"
+                    label={t('renew-adult:update-address.address-field.city')}
+                    maxLength={100}
+                    autoComplete="address-level2"
+                    defaultValue={defaultState.homeAddress?.city}
+                    errorMessage={errors?.city}
+                    required
+                  />
+                  <InputSanitizeField
+                    id="home-postal-code"
+                    name="homePostalCode"
+                    className="w-full"
+                    label={isPostalCodeRequired ? t('renew-adult:update-address.address-field.postal-code') : t('renew-adult:update-address.address-field.postal-code-optional')}
+                    maxLength={100}
+                    autoComplete="postal-code"
+                    defaultValue={defaultState.homeAddress?.postalCode ?? ''}
+                    errorMessage={errors?.postalCode}
+                    required={isPostalCodeRequired}
+                  />
+                </div>
+                {homeRegions.length > 0 && (
+                  <InputSelect
+                    id="home-province"
+                    name="homeProvince"
+                    className="w-full sm:w-1/2"
+                    label={t('renew-adult:update-address.address-field.province')}
+                    defaultValue={defaultState.homeAddress?.province}
+                    errorMessage={errors?.province}
+                    options={[dummyOption, ...homeRegions]}
+                    required
+                  />
+                )}
                 <InputSelect
-                  id="mailing-province"
-                  name="mailingProvince"
+                  id="home-country"
+                  name="homeCountry"
                   className="w-full sm:w-1/2"
-                  label={t('renew-adult:update-address.address-field.province')}
-                  defaultValue={defaultState.mailingAddress?.province}
-                  errorMessage={errors?.province}
-                  options={[dummyOption, ...mailingRegions]}
+                  label={t('renew-adult:update-address.address-field.country')}
+                  autoComplete="country"
+                  defaultValue={defaultState.homeAddress?.country ?? ''}
+                  errorMessage={errors?.country}
+                  options={countries}
+                  onChange={homeCountryChangeHandler}
                   required
                 />
-              )}
-              <InputSelect
-                id="mailing-country"
-                name="mailingCountry"
-                className="w-full sm:w-1/2"
-                label={t('renew-adult:update-address.address-field.country')}
-                autoComplete="country"
-                defaultValue={defaultState.mailingAddress?.country}
-                errorMessage={errors?.country}
-                options={countries}
-                onChange={mailingCountryChangeHandler}
-                required
-              />
-              <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
-                {t('renew-adult:update-address.home-address.use-mailing-address')}
-              </InputCheckbox>
+              </>
             </div>
           </fieldset>
           {editMode ? (
@@ -412,7 +368,7 @@ export default function RenewAdultUpdateAddress() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Update address click">
                 {t('renew-adult:update-address.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Update address click">
+              <ButtonLink id="back-button" routeId="public/renew/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Update address click">
                 {t('renew-adult:update-address.cancel-btn')}
               </ButtonLink>
             </div>
@@ -428,24 +384,21 @@ export default function RenewAdultUpdateAddress() {
                     value={FormAction.Submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Update mailing address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Update home address click"
                   >
                     {t('renew-adult:update-address.continue')}
                   </LoadingButton>
                 </DialogTrigger>
-                {addressDialogContent && addressDialogContent.status === 'address-suggestion' && (
-                  <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} copyAddressToHome={copyAddressChecked} />
-                )}
-                {addressDialogContent && addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} copyAddressToHome={copyAddressChecked} />}
+                {addressDialogContent && addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
+                {addressDialogContent && addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
               </Dialog>
-
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult/confirm-address"
+                routeId={defaultState.hasAddressChanged ? `public/renew/$id/adult/update-mailing-address` : `public/renew/$id/adult/confirm-address`}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Update mailing address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Update home address click"
               >
                 {t('renew-adult:update-address.back')}
               </ButtonLink>
@@ -460,10 +413,9 @@ export default function RenewAdultUpdateAddress() {
 interface AddressSuggestionDialogContentProps {
   enteredAddress: CanadianAddress;
   suggestedAddress: CanadianAddress;
-  copyAddressToHome: boolean;
 }
 
-function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copyAddressToHome }: AddressSuggestionDialogContentProps) {
+function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: AddressSuggestionDialogContentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useEnhancedFetcher();
   const enteredAddressOptionValue = 'entered-address';
@@ -482,14 +434,11 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copy
 
     // Append selected address suggestion to form data
     const selectedAddressSuggestion = selectedAddressSuggestionOption === enteredAddressOptionValue ? enteredAddress : suggestedAddress;
-    formData.set('mailingAddress', selectedAddressSuggestion.address);
-    formData.set('mailingCity', selectedAddressSuggestion.city);
-    formData.set('mailingCountry', selectedAddressSuggestion.countryId);
-    formData.set('mailingPostalCode', selectedAddressSuggestion.postalZipCode);
-    formData.set('mailingProvince', selectedAddressSuggestion.provinceStateId);
-    if (copyAddressToHome) {
-      formData.set('copyMailingAddress', 'copy');
-    }
+    formData.set('homeAddress', selectedAddressSuggestion.address);
+    formData.set('homeCity', selectedAddressSuggestion.city);
+    formData.set('homeCountry', selectedAddressSuggestion.countryId);
+    formData.set('homePostalCode', selectedAddressSuggestion.postalZipCode);
+    formData.set('homeProvince', selectedAddressSuggestion.provinceStateId);
 
     fetcher.submit(formData, { method: 'POST' });
   }
@@ -549,10 +498,9 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copy
 
 interface AddressInvalidDialogContentProps {
   invalidAddress: CanadianAddress;
-  copyAddressToHome: boolean;
 }
 
-function AddressInvalidDialogContent({ invalidAddress, copyAddressToHome }: AddressInvalidDialogContentProps) {
+function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogContentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useEnhancedFetcher();
 
@@ -566,14 +514,11 @@ function AddressInvalidDialogContent({ invalidAddress, copyAddressToHome }: Addr
     formData.set(submitter.name, submitter.value);
 
     // Append selected address suggestion to form data
-    formData.set('mailingAddress', invalidAddress.address);
-    formData.set('mailingCity', invalidAddress.city);
-    formData.set('mailingCountry', invalidAddress.countryId);
-    formData.set('mailingPostalCode', invalidAddress.postalZipCode);
-    formData.set('mailingProvince', invalidAddress.provinceStateId);
-    if (copyAddressToHome) {
-      formData.set('copyMailingAddress', 'copy');
-    }
+    formData.set('homeAddress', invalidAddress.address);
+    formData.set('homeCity', invalidAddress.city);
+    formData.set('homeCountry', invalidAddress.countryId);
+    formData.set('homePostalCode', invalidAddress.postalZipCode);
+    formData.set('homeProvince', invalidAddress.provinceStateId);
 
     fetcher.submit(formData, { method: 'POST' });
   }
