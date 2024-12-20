@@ -73,7 +73,6 @@ export interface RenewState {
   readonly isHomeAddressSameAsMailingAddress?: boolean;
   readonly mailingAddress?: {
     address: string;
-    apartment?: string;
     city: string;
     country: string;
     postalCode?: string;
@@ -81,7 +80,6 @@ export interface RenewState {
   };
   readonly homeAddress?: {
     address: string;
-    apartment?: string;
     city: string;
     country: string;
     postalCode?: string;

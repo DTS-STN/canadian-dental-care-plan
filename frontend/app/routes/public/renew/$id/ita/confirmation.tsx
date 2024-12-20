@@ -96,7 +96,6 @@ export async function loader({ context: { appContainer, session }, params, reque
         province: mailingProvinceTerritoryStateAbbr,
         postalCode: state.mailingAddress.postalCode,
         country: countryMailing?.name ?? '',
-        apartment: state.mailingAddress.apartment,
       }
     : null;
 
@@ -107,7 +106,6 @@ export async function loader({ context: { appContainer, session }, params, reque
         province: homeProvinceTerritoryStateAbbr,
         postalCode: state.homeAddress.postalCode,
         country: countryHome?.name ?? '',
-        apartment: state.homeAddress.apartment,
       }
     : null;
 
@@ -235,7 +233,6 @@ export default function RenewFlowConfirm() {
                     provinceState: mailingAddressInfo.province,
                     postalZipCode: mailingAddressInfo.postalCode,
                     country: mailingAddressInfo.country,
-                    apartment: mailingAddressInfo.apartment,
                   }}
                 />
               ) : (
@@ -251,7 +248,6 @@ export default function RenewFlowConfirm() {
                     provinceState: homeAddressInfo.province,
                     postalZipCode: homeAddressInfo.postalCode,
                     country: homeAddressInfo.country,
-                    apartment: homeAddressInfo.apartment,
                   }}
                 />
               ) : (

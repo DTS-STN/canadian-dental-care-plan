@@ -97,7 +97,6 @@ export interface ProtectedRenewState {
   readonly isHomeAddressSameAsMailingAddress?: boolean;
   readonly mailingAddress?: {
     readonly address: string;
-    readonly apartment?: string;
     readonly city: string;
     readonly country: string;
     readonly postalCode?: string;
@@ -105,7 +104,6 @@ export interface ProtectedRenewState {
   };
   readonly homeAddress?: {
     readonly address: string;
-    readonly apartment?: string;
     readonly city: string;
     readonly country: string;
     readonly postalCode?: string;

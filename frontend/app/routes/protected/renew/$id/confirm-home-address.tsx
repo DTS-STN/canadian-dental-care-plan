@@ -35,7 +35,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { isAllValidInputCharacters } from '~/utils/string-utils';
+import { formatAddressLine, isAllValidInputCharacters } from '~/utils/string-utils';
 
 enum FormAction {
   Submit = 'submit',
@@ -94,15 +94,13 @@ export async function loader({ context: { appContainer, session }, params, reque
         province: state.homeAddress.province,
         postalCode: state.homeAddress.postalCode,
         country: state.homeAddress.country,
-        apartment: state.homeAddress.apartment,
       }
     : {
-        address: state.clientApplication.contactInformation.homeAddress,
+        address: formatAddressLine({ address: state.clientApplication.contactInformation.homeAddress, apartment: state.clientApplication.contactInformation.homeApartment }),
         city: state.clientApplication.contactInformation.homeCity,
         province: state.clientApplication.contactInformation.homeProvince,
         postalCode: state.clientApplication.contactInformation.homePostalCode,
         country: state.clientApplication.contactInformation.homeCountry,
-        apartment: state.clientApplication.contactInformation.homeApartment,
       };
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-address.home-address.page-title') }) };
