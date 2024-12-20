@@ -723,6 +723,11 @@ export const routes = [
             file: 'routes/public/renew/$id/adult/update-home-address.tsx',
             paths: { en: '/:lang/renew/:id/adult/update-home-address', fr: '/:lang/renouveller/:id/adulte/mise-a-jour-adresse-domicile' },
           },
+          {
+            id: 'public/renew/$id/adult/dental-insurance',
+            file: 'routes/public/renew/$id/adult/dental-insurance.tsx',
+            paths: { en: '/:lang/renew/:id/adult/dental-insurance', fr: '/:lang/renouveller/:id/adulte/assurance-dentaire' },
+          },
         ],
       },
       {
