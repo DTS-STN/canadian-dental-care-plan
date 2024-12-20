@@ -500,7 +500,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       return mailingAddress
         ? {
             homeAddress: mailingAddress.address,
-            homeApartment: mailingAddress.apartment,
+            homeApartment: undefined,
             homeCity: mailingAddress.city,
             homeCountry: mailingAddress.country,
             homePostalCode: mailingAddress.postalCode,
@@ -519,7 +519,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     return homeAddress
       ? {
           homeAddress: homeAddress.address,
-          homeApartment: homeAddress.apartment,
+          homeApartment: undefined,
           homeCity: homeAddress.city,
           homeCountry: homeAddress.country,
           homePostalCode: homeAddress.postalCode,
@@ -539,7 +539,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     return mailingAddress
       ? {
           mailingAddress: mailingAddress.address,
-          mailingApartment: mailingAddress.apartment,
+          mailingApartment: undefined,
           mailingCity: mailingAddress.city,
           mailingCountry: mailingAddress.country,
           mailingPostalCode: mailingAddress.postalCode,

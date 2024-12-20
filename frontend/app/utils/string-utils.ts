@@ -123,7 +123,7 @@ interface FormatAddressLineArguments {
  * @param params Address line formatting parameters
  * @returns Formatted address line
  */
-function formatAddressLine({ address, apartment }: FormatAddressLineArguments): string {
+export function formatAddressLine({ address, apartment }: FormatAddressLineArguments): string {
   if (!apartment?.trim()) {
     return address;
   }
