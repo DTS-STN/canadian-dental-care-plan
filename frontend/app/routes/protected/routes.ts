@@ -83,27 +83,27 @@ export const routes = [
               {
                 id: 'protected/renew/$id/$childId/parent-or-guardian',
                 file: 'routes/protected/renew/$id/$childId/parent-or-guardian.tsx',
-                paths: { en: '/:lang/protected/renew/:id/:childId/parent-or-guardian', fr: '/:lang/protege/renouveller/:id/:childId/parent-ou-tuteur' },
+                paths: { en: '/:lang/protected/renew/:id/children/:childId/parent-or-guardian', fr: '/:lang/protege/renouveller/:id/enfants/:childId/parent-ou-tuteur' },
               },
               {
                 id: 'protected/renew/$id/$childId/parent-or-guardian-required',
                 file: 'routes/protected/renew/$id/$childId/parent-or-guardian-required.tsx',
-                paths: { en: '/:lang/protected/renew/:id/:childId/parent-or-guardian-required', fr: '/:lang/protege/renouveller/:id/:childId/parent-ou-tuteur-requis' },
+                paths: { en: '/:lang/protected/renew/:id/children/:childId/parent-or-guardian-required', fr: '/:lang/protege/renouveller/:id/enfants/:childId/parent-ou-tuteur-requis' },
               },
               {
                 id: 'protected/renew/$id/$childId/dental-insurance',
                 file: 'routes/protected/renew/$id/$childId/dental-insurance.tsx',
-                paths: { en: '/:lang/protected/renew/:id/:childId/dental-insurance', fr: '/:lang/protege/renouveller/:id/:childId/assurance-dentaire' },
+                paths: { en: '/:lang/protected/renew/:id/children/:childId/dental-insurance', fr: '/:lang/protege/renouveller/:id/enfants/:childId/assurance-dentaire' },
               },
               {
                 id: 'protected/renew/$id/$childId/demographic-survey',
                 file: 'routes/protected/renew/$id/$childId/demographic-survey.tsx',
-                paths: { en: '/:lang/protected/renew/:id/:childId/demographic-survey', fr: '/:lang/protege/renouveller/:id/:childId/questionnaire-demographique' },
+                paths: { en: '/:lang/protected/renew/:id/children/:childId/demographic-survey', fr: '/:lang/protege/renouveller/:id/enfants/:childId/questionnaire-demographique' },
               },
               {
                 id: 'protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits',
                 file: 'routes/protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits.tsx',
-                paths: { en: '/:lang/protected/renew/:id/:childId/confirm-federal-provincial-territorial-benefits', fr: '/:lang/protege/renouveller/:id/:childId/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
+                paths: { en: '/:lang/protected/renew/:id/children/childId/confirm-federal-provincial-territorial-benefits', fr: '/:lang/protege/renouveller/:id/enfants/:childId/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
               },
             ],
           },
