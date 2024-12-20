@@ -5,6 +5,7 @@
   "required-label": "Complete all fields.",
   "optional-label": "Complete all fields unless marked as optional.",
   "all-optional-label": "All fields are optional.",
+  "all-questions-optional-label": "All questions are optional.",
   "terms-and-conditions": {
     "page-title": "Terms and conditions of use and privacy notice statement",
     "page-heading": "Terms and conditions of use and privacy notice statement",

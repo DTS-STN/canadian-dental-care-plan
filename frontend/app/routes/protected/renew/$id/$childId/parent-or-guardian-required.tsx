@@ -56,7 +56,7 @@ export default function ProtectedRenewFlowParentOrGuardianRequired() {
   const isSubmitting = fetcher.state !== 'idle';
 
   return (
-    <>
+    <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>{t('protected-renew:children.parent-or-guardian-required.must-be')}</p>
         <p>{t('protected-renew:children.parent-or-guardian-required.unable-to-apply')}</p>
@@ -77,6 +77,6 @@ export default function ProtectedRenewFlowParentOrGuardianRequired() {
           {t('protected-renew:children.parent-or-guardian-required.continue-btn')}
         </LoadingButton>
       </fetcher.Form>
-    </>
+    </div>
   );
 }

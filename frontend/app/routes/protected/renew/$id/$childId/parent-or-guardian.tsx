@@ -28,7 +28,7 @@ enum ParentOrGuardianOption {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.parentOrGuardian,
   pageTitleI18nKey: 'protected-renew:children.parent-or-guardian.page-title',
 } as const satisfies RouteHandleData;
@@ -111,7 +111,8 @@ export default function ProtectedRenewParentOrGuardian() {
   const errorSummary = useErrorSummary(errors, { parentOrGuardian: 'input-radio-parent-or-guardian-option-0' });
 
   return (
-    <>
+    <div className="max-w-prose">
+      <p className="mb-4 italic">{t('renew:required-label')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
@@ -142,6 +143,6 @@ export default function ProtectedRenewParentOrGuardian() {
           </ButtonLink>
         </div>
       </fetcher.Form>
-    </>
+    </div>
   );
 }

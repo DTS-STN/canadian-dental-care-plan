@@ -5,6 +5,7 @@
   "required-label": "Remplir tous les champs.",
   "optional-label": "Remplir tous les champs sauf s'ils sont indiqués facultatifs.",
   "all-optional-label": "Toutes les champs sont faculatives.",
+  "all-questions-optional-label": "Toutes les questions sont facultatives.",
   "terms-and-conditions": {
     "page-title": "Conditions d'utilisation et déclaration de confidentialité",
     "page-heading": "Conditions générales d'utilisation et énoncé de confidentialité",

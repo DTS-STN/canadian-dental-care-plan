@@ -23,7 +23,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.dentalInsurance,
   pageTitleI18nKey: 'protected-renew:children.dental-insurance.title',
 };
@@ -133,6 +133,7 @@ export default function ProtectedRenewChildrenDentalInsurance() {
   return (
     <>
       <div className="max-w-prose">
+        <p className="mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
