@@ -51,6 +51,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
       lastName: 'Doe',
       maritalStatus: 'Married',
       socialInsuranceNumber: '800000002',
+      clientId: '00000000-0000-0000-0000-000000000000',
       clientNumber: '00000000000',
     },
     children: [
@@ -58,6 +59,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         dentalBenefits: ['Original federal benefit', 'Original provincial benefit'],
         dentalInsurance: false,
         information: {
+          clientId: '00000000-0000-0000-0000-000000000001',
           clientNumber: '11111111111',
           dateOfBirth: '2020-01-01',
           firstName: 'John Jr.',
