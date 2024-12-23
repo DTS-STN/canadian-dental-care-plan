@@ -159,9 +159,5 @@
       "@trivago/prettier-plugin-sort-imports",
       "prettier-plugin-tailwindcss"
     ]
-  },
-  "overrides": {
-    "@remix-run/dev": "^2.15.1",
-    "@remix-run/react": "^2.15.1"
   }
 }
