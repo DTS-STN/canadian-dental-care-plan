@@ -123,7 +123,7 @@ export interface ProtectedRenewState {
 }
 
 export interface BenefitRenewalStateMapper {
-  mapRenewAdultStateToAdultBenefitRenewalDto(renewAdultState: RenewAdultState) : AdultBenefitRenewalDto;
+  mapRenewAdultStateToAdultBenefitRenewalDto(renewAdultState: RenewAdultState): AdultBenefitRenewalDto;
   mapRenewAdultChildStateToAdultChildBenefitRenewalDto(renewAdultChildState: RenewAdultChildState): AdultChildBenefitRenewalDto;
   mapRenewItaStateToItaBenefitRenewalDto(renewItaState: RenewItaState): ItaBenefitRenewalDto;
   mapRenewChildStateToChildBenefitRenewalDto(renewChildSTate: RenewChildState): ChildBenefitRenewalDto;
