@@ -1,5 +1,18 @@
 import type { ApplicantInformationDto, BenefitApplicationDto, ChildDto } from '~/.server/domain/dtos/benefit-application.dto';
 
+export type AdultBenefitRenewalDto = BenefitRenewalDto &
+  Readonly<{
+    changeIndicators: AdultChangeIndicators;
+  }>;
+
+export type AdultChangeIndicators = Readonly<{
+  hasAddressChanged: boolean;
+  hasEmailChanged: boolean;
+  hasMaritalStatusChanged: boolean;
+  hasPhoneChanged: boolean;
+  hasFederalProvincialTerritorialBenefitsChanged: boolean;
+}>;
+
 export type AdultChildBenefitRenewalDto = BenefitRenewalDto &
   Readonly<{
     changeIndicators: AdultChildChangeIndicators;
