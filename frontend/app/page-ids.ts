@@ -122,6 +122,7 @@ export const pageIds = {
         dentalInsurance: 'CDCP-RENW-AD-0008',
         confirmFederalProvincialTerritorialBenefits: 'CDCP-RENW-AD-0009',
         updateFederalProvincialTerritorialBenefits: 'CDCP-RENW-AD-0010',
+        demographicSurvey: 'CDCP-RENW-AD-0011',
       },
       ita: {
         maritalStatus: 'CDCP-RENW-ITA-0001',
