@@ -738,6 +738,11 @@ export const routes = [
             file: 'routes/public/renew/$id/adult/update-federal-provincial-territorial-benefits.tsx',
             paths: { en: '/:lang/renew/:id/adult/update-federal-provincial-territorial-benefits', fr: '/:lang/renouveller/:id/adulte/mise-a-jour-prestations-dentaires-federales-provinciales-territoriales' },
           },
+          {
+            id: 'public/renew/$id/adult/demographic-survey',
+            file: 'routes/public/renew/$id/adult/demographic-survey.tsx',
+            paths: { en: '/:lang/renew/:id/adult/demographic-survey', fr: '/:lang/renouveller/:id/adulte/questionnaire-demographique' },
+          },
         ],
       },
       {
