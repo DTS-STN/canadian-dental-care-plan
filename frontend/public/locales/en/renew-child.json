@@ -30,13 +30,13 @@
     "information": {
       "page-title": "{{childName}}: information",
       "form-instructions-sin": "Enter the child's name as it was provided when you first applied for the child.",
-      "single-legal-name": "If the child has a single legal name",
-      "name-instructions": "If the child uses only one legal name, enter it in both the first and last name fields.",
+      "single-legal-name": "If the child has one legal name",
+      "name-instructions": "If the child uses only one legal name, enter that name in both the first name and last name fields.",
       "last-name": "Last name",
       "first-name": "First name",
       "date-of-birth": "Date of birth",
       "client-number": "Child's client number",
-      "client-number-detail": "You can find the child’s client number in the upper right corner of the renewal letter from Service Canada or on the child’s Canadian Dental Care Plan member card.",
+      "client-number-detail": "You can find the child's client number in the upper right corner of the renewal letter from Service Canada or on your Canadian Dental Care Plan member card.",
       "parent-legend": "Are you the parent or legal guardian of this child?",
       "radio-options": {
         "yes": "Yes",

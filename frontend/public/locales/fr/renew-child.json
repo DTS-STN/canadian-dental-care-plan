@@ -1,31 +1,30 @@
 {
   "children": {
-    "child-number": "Child {{childNumber}}",
+    "child-number": "Enfant {{childNumber}}",
     "index": {
-      "page-title": "Child(ren)'s renewal",
-      "you-have-completed": "You have completed the renewal process for yourself.",
+      "page-title": "Renouvellement pour enfant(s)",
       "in-this-section": "Dans cette section, vous pouvez ajouter les enfants pour lesquels vous souhaitez renouveler l'adhésion en sélectionnant le bouton «\u00a0Renouveler pour un enfant\u00a0».",
-      "each-child": "Each child must have a client number to renew their membership. If the child does not have a client number, you will need to apply for the Canadian Dental Care Plan.",
-      "dob-title": "Date of birth",
-      "client-number-title": "Client number",
-      "edit-child": "Edit child's information",
-      "add-child": "Renew a child",
-      "add-another-child": "Renew another child",
-      "remove-child": "Remove child",
-      "back-btn": "Back",
-      "continue-btn": "Continue with application",
-      "cancel-btn": "Cancel",
-      "save-btn": "Save",
-      "dental-insurance-title": "Access to other dental insurance or coverage",
-      "dental-benefit-title": "Access to government dental benefits",
-      "dental-benefit-has-access": "Has access to the following benefits:",
-      "yes": "Yes",
-      "no": "No",
+      "each-child": "Chaque enfant doit avoir un numéro de client pour renouveler son adhésion. Si l'enfant n'a pas de numéro de client, vous devrez présenter une demande au Régime canadien de soins dentaires.",
+      "dob-title": "Date de naissance",
+      "client-number-title": "Numéro de client",
+      "edit-child": "Modifier les données de l'enfant",
+      "add-child": "Renouveler pour un enfant",
+      "add-another-child": "Renouveler pour un autre enfant",
+      "remove-child": "Retirer l'enfant",
+      "back-btn": "Retour",
+      "continue-btn": "Poursuivre la demande",
+      "cancel-btn": "Annuler",
+      "save-btn": "Sauvegarder",
+      "dental-insurance-title": "Accès à d'autres assurances ou couvertures de soins dentaires",
+      "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
+      "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
+      "yes": "Oui",
+      "no": "Non",
       "modal": {
-        "header": "Remove {{childName}}",
-        "info": "Do you want to remove {{childName}} from this application?",
-        "back-btn": "Return to summary page",
-        "remove-btn": "Remove child"
+        "header": "Retirer {{childName}}",
+        "info": "Voulez-vous retirer {{childName}} de cette application?",
+        "back-btn": "Retour à la page de résumé",
+        "remove-btn": "Retirer l'enfant"
       }
     },
     "information": {
@@ -164,7 +163,7 @@
       },
       "provincial-territorial-benefits": {
         "title": "Prestations provinciales ou territoriales",
-        "legend": "Est-ce que {{childName}} bénéficie d'autres prestations pour soins dentaires dans le cadre d’un programme social provincial ou territorial autre que le Régime canadien de soins dentaires?",
+        "legend": "Est-ce que {{childName}} bénéficie d'autres prestations pour soins dentaires dans le cadre d'un programme social provincial ou territorial autre que le Régime canadien de soins dentaires?",
         "option-yes": "<strong>Oui</strong, les prestations provinciales ou territoriales de cet enfant ont changé",
         "option-no": "<strong>Non</strong, les prestations provinciales ou territoriales de cet enfant n'ont pas changé",
         "social-programs": {
