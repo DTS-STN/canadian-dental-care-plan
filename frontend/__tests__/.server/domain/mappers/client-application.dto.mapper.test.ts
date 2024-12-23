@@ -128,6 +128,10 @@ describe('DefaultClientApplicationDtoMapper', () => {
             },
             ClientIdentification: [
               {
+                IdentificationID: '00000000-0000-0000-0000-000000000000',
+                IdentificationCategoryText: 'Client ID',
+              },
+              {
                 IdentificationID: '00000000000',
                 IdentificationCategoryText: 'Client Number',
               },
@@ -155,10 +159,12 @@ describe('DefaultClientApplicationDtoMapper', () => {
                   ConsentToSharePersonalInformationIndicator: false,
                   AttestParentOrGuardianIndicator: false,
                 },
-                ClientIdentification: {
-                  IdentificationID: '10000000003',
-                  IdentificationCategoryText: 'Client Number',
-                },
+                ClientIdentification: [
+                  {
+                    IdentificationID: '10000000003',
+                    IdentificationCategoryText: 'Client Number',
+                  },
+                ],
               },
             ],
           },
@@ -184,6 +190,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
           lastName: 'Doe',
           maritalStatus: 'MARRIED',
           socialInsuranceNumber: '80000002',
+          clientId: '00000000-0000-0000-0000-000000000000',
           clientNumber: '00000000000',
         },
         children: [],

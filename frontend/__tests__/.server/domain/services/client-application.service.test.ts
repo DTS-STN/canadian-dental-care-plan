@@ -138,10 +138,12 @@ describe('DefaultClientApplicationService', () => {
               ConsentToSharePersonalInformationIndicator: false,
               AttestParentOrGuardianIndicator: false,
             },
-            ClientIdentification: {
-              IdentificationID: '10000000003',
-              IdentificationCategoryText: 'Client Number',
-            },
+            ClientIdentification: [
+              {
+                IdentificationID: '10000000003',
+                IdentificationCategoryText: 'Client Number',
+              },
+            ],
           },
         ],
       },
@@ -166,6 +168,7 @@ describe('DefaultClientApplicationService', () => {
     applicantInformation: {
       firstName: 'John',
       lastName: 'Doe',
+      clientId: '00000000-0000-0000-0000-000000000000',
       maritalStatus: 'MARRIED',
       socialInsuranceNumber: '80000002',
     },

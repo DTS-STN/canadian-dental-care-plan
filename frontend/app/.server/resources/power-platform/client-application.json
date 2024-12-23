@@ -123,10 +123,6 @@
       },
       "ClientIdentification": [
         {
-          "IdentificationID": "4f35f70b-2f83-ee11-8179-000d3a09d000",
-          "IdentificationCategoryText": "Applicant ID"
-        },
-        {
           "IdentificationID": "1e97fe42-0263-ee11-8df0-000d3a09df08",
           "IdentificationCategoryText": "Client ID"
         },
@@ -168,10 +164,16 @@
             ],
             "AttestParentOrGuardianIndicator": true
           },
-          "ClientIdentification": {
-            "IdentificationID": "10000000003",
-            "IdentificationCategoryText": "Client Number"
-          }
+          "ClientIdentification": [
+            {
+              "IdentificationID": "8c840878-844a-46f5-91d4-90f8bc7743bc",
+              "IdentificationCategoryText": "Client ID"
+            },
+            {
+              "IdentificationID": "10000000003",
+              "IdentificationCategoryText": "Client Number"
+            }
+          ]
         },
         {
           "PersonBirthDate": {
@@ -193,10 +195,16 @@
             "PrivateDentalInsuranceIndicator": false,
             "AttestParentOrGuardianIndicator": true
           },
-          "ClientIdentification": {
-            "IdentificationID": "10000000004",
-            "IdentificationCategoryText": "Client Number"
-          }
+          "ClientIdentification": [
+            {
+              "IdentificationID": "5f706beb-7aa1-4acc-aeb4-dd4979574276",
+              "IdentificationCategoryText": "Client ID"
+            },
+            {
+              "IdentificationID": "10000000004",
+              "IdentificationCategoryText": "Client Number"
+            }
+          ]
         },
         {
           "PersonBirthDate": {
@@ -217,10 +225,16 @@
           "ApplicantDetail": {
             "ConsentToSharePersonalInformationIndicator": true
           },
-          "ClientIdentification": {
-            "IdentificationID": "10000000004",
-            "IdentificationCategoryText": "Client Number"
-          }
+          "ClientIdentification": [
+            {
+              "IdentificationID": "2086dfd5-a925-4e8e-8797-3f0463b8473a",
+              "IdentificationCategoryText": "Client ID"
+            },
+            {
+              "IdentificationID": "10000000004",
+              "IdentificationCategoryText": "Client Number"
+            }
+          ]
         }
       ]
     },

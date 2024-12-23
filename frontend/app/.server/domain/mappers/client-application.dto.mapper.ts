@@ -48,6 +48,11 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       firstName: applicant.PersonName[0].PersonGivenName[0],
       lastName: applicant.PersonName[0].PersonSurName,
       maritalStatus: applicant.PersonMaritalStatus.StatusCode.ReferenceDataID,
+      clientId:
+        applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID ??
+        (() => {
+          throw new Error("Expected applicant.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'");
+        })(),
       clientNumber: applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
       socialInsuranceNumber: applicant.PersonSINIdentification.IdentificationID,
     };
@@ -72,7 +77,12 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
           (() => {
             throw new Error('Expected child.ApplicantDetail.AttestParentOrGuardianIndicator to be defined');
           })(),
-        clientNumber: child.ClientIdentification.IdentificationCategoryText === 'Client Number' ? child.ClientIdentification.IdentificationID : undefined,
+        clientId:
+          child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID ??
+          (() => {
+            throw new Error("Expected child.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'");
+          })(),
+        clientNumber: child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
         socialInsuranceNumber: child.PersonSINIdentification.IdentificationID,
       },
     }));

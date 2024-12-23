@@ -17,7 +17,10 @@ export type ClientApplicationDto = ReadonlyDeep<{
   partnerInformation?: ClientPartnerInformationDto;
 }>;
 
-export type ClientApplicantInformationDto = ApplicantInformationDto & { clientNumber?: string };
+export type ClientApplicantInformationDto = ApplicantInformationDto & {
+  clientId: string;
+  clientNumber?: string;
+};
 
 export type ClientChildDto = Omit<ChildDto, 'information'> & {
   information: {
@@ -25,6 +28,7 @@ export type ClientChildDto = Omit<ChildDto, 'information'> & {
     lastName: string;
     dateOfBirth: string;
     isParent: boolean;
+    clientId: string;
     clientNumber?: string;
     socialInsuranceNumber: string;
   };
