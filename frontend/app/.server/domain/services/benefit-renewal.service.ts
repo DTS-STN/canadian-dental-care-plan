@@ -1,13 +1,20 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import { AdultChildBenefitRenewalDto, ChildBenefitRenewalDto, ItaBenefitRenewalDto, ProtectedBenefitRenewalDto } from '~/.server/domain/dtos';
+import { AdultBenefitRenewalDto, AdultChildBenefitRenewalDto, ChildBenefitRenewalDto, ItaBenefitRenewalDto, ProtectedBenefitRenewalDto } from '~/.server/domain/dtos';
 import type { BenefitRenewalDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitRenewalRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface BenefitRenewalService {
+  /**
+   * Submits an adult benefit renewal request.
+   *
+   * @param adultBenefitRenewalDto The adult benefit renewal request dto
+   */
+  createAdultBenefitRenewal(adultBenefitRenewalDto: AdultBenefitRenewalDto): Promise<void>;
+
   /**
    * Submits an adult child benefit renewal request.
    *
@@ -53,6 +60,17 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
 
   private init(): void {
     this.log.debug('DefaultBenefitRenewalService initiated.');
+  }
+
+  async createAdultBenefitRenewal(adultBenefitRenewalDto: AdultBenefitRenewalDto): Promise<void> {
+    this.log.trace('Creating adult benefit renewal for request [%j]', adultBenefitRenewalDto);
+
+    this.auditService.createAudit('adult-renewal-submit.post', { userId: adultBenefitRenewalDto.userId });
+
+    const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapAdultBenefitRenewalDtoToBenefitRenewalRequestEntity(adultBenefitRenewalDto);
+    await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+
+    this.log.trace('Successfully created adult benefit renewal for request [%j]', adultBenefitRenewalDto);
   }
 
   async createAdultChildBenefitRenewal(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): Promise<void> {
