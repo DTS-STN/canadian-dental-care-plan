@@ -45,8 +45,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-submit.page-title') }) };
 
-  const primaryApplicantName = isPrimaryApplicantStateComplete(state) ? `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}` : undefined;
-  const children = validateProtectedChildrenStateForReview(state.children);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+
+  const primaryApplicantName = isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) ? `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}` : undefined;
+  const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
   return {
     meta,
@@ -61,8 +64,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formData = await request.formData();
 
-  const state = loadProtectedRenewStateForReview({ params, session });
-  const children = validateProtectedChildrenStateForReview(state.children);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+
+  const state = loadProtectedRenewStateForReview({ params, session, demographicSurveyEnabled });
+  const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {

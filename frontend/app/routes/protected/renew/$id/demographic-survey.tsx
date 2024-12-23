@@ -47,6 +47,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
+  securityHandler.validateFeatureEnabled('demographic-survey');
 
   const state = loadProtectedRenewState({ params, session });
 

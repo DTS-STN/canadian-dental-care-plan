@@ -14,7 +14,6 @@ import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, loadProtectedRenewStateForReview, renewStateHasPartner, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
@@ -24,6 +23,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
+import { useFeature } from '~/root';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -49,12 +49,16 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
-  const state = loadProtectedRenewStateForReview({ params, session });
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+  const state = loadProtectedRenewStateForReview({ params, session, demographicSurveyEnabled });
 
   // renew state is valid then edit mode can be set to true
   saveProtectedRenewState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -202,11 +206,15 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearProtectedRenewState({ params, session });
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
+
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
@@ -215,9 +223,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const state = loadProtectedRenewStateForReview({ params, session });
+  const state = loadProtectedRenewStateForReview({ params, session, demographicSurveyEnabled });
 
-  if (validateProtectedChildrenStateForReview(state.children).length === 0) {
+  if (validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).length === 0) {
     const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub);
     await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
 
@@ -263,6 +271,8 @@ export default function ProtectedRenewReviewAdultInformation() {
 
     fetcher.submit(formData, { method: 'POST' });
   }
+
+  const demographicSurveyEnabled = useFeature('demographic-survey');
 
   return (
     <>
@@ -449,19 +459,21 @@ export default function ProtectedRenewReviewAdultInformation() {
               )}
             </dl>
           </section>
-          <section className="space-y-6">
-            <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.demographic-title')}</h2>
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('protected-renew:review-adult-information.demographic-questions')}>
-                <p>{t('protected-renew:review-adult-information.demographic-responded')}</p>
-                <p>
-                  <InlineLink id="change-demographic-question" routeId="protected/renew/$id/demographic-survey" params={params}>
-                    {t('protected-renew:review-adult-information.demographic-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
-            </dl>
-          </section>
+          {demographicSurveyEnabled && (
+            <section className="space-y-6">
+              <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.demographic-title')}</h2>
+              <dl className="divide-y border-y">
+                <DescriptionListItem term={t('protected-renew:review-adult-information.demographic-questions')}>
+                  <p>{t('protected-renew:review-adult-information.demographic-responded')}</p>
+                  <p>
+                    <InlineLink id="change-demographic-question" routeId="protected/renew/$id/demographic-survey" params={params}>
+                      {t('protected-renew:review-adult-information.demographic-change')}
+                    </InlineLink>
+                  </p>
+                </DescriptionListItem>
+              </dl>
+            </section>
+          )}
           {!hasChildren && (
             <section className="space-y-4">
               <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.submit-app-title')}</h2>
@@ -494,12 +506,12 @@ export default function ProtectedRenewReviewAdultInformation() {
                 id="confirm-button"
                 name="_action"
                 value={FormAction.Submit}
-                variant="green"
+                variant="primary"
                 disabled={isSubmitting}
                 loading={isSubmitting && submitAction === FormAction.Submit}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Submit - Review child(ren) information click"
               >
-                {t('protected-renew:review-adult-information.submit-button')}
+                {t('protected-renew:review-adult-information.continue-button')}
               </LoadingButton>
             </>
           )}

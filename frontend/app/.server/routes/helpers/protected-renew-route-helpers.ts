@@ -332,6 +332,7 @@ export function loadProtectedRenewSingleChildState({ params, session }: LoadProt
 interface LoadProtectedRenewStateForReviewArgs {
   params: Params;
   session: Session;
+  demographicSurveyEnabled: boolean;
 }
 
 /**
@@ -340,11 +341,11 @@ interface LoadProtectedRenewStateForReviewArgs {
  * @param args - The arguments.
  * @returns The validated adult state.
  */
-export function loadProtectedRenewStateForReview({ params, session }: LoadProtectedRenewStateForReviewArgs) {
+export function loadProtectedRenewStateForReview({ params, session, demographicSurveyEnabled }: LoadProtectedRenewStateForReviewArgs) {
   const state = loadProtectedRenewState({ params, session });
 
   try {
-    return validateProtectedRenewStateForReview({ params, state });
+    return validateProtectedRenewStateForReview({ params, state, demographicSurveyEnabled });
   } catch (err) {
     if (isRedirectResponse(err)) {
       saveProtectedRenewState({ params, session, state: { editMode: false } });
@@ -353,29 +354,29 @@ export function loadProtectedRenewStateForReview({ params, session }: LoadProtec
   }
 }
 
-export function isPrimaryApplicantStateComplete(state: ProtectedRenewState) {
-  return state.dentalInsurance !== undefined && state.demographicSurvey !== undefined;
+export function isPrimaryApplicantStateComplete(state: ProtectedRenewState, demographicSurveyEnabled: boolean) {
+  return state.dentalInsurance !== undefined && (demographicSurveyEnabled ? state.demographicSurvey !== undefined : true);
 }
 
-export function isChildrenStateComplete(state: ProtectedRenewState) {
-  return state.children.every((child) => child.isParentOrLegalGuardian !== undefined && child.dentalInsurance !== undefined && child.demographicSurvey !== undefined);
+export function isChildrenStateComplete(state: ProtectedRenewState, demographicSurveyEnabled: boolean) {
+  return state.children.every((child) => child.isParentOrLegalGuardian !== undefined && child.dentalInsurance !== undefined && (demographicSurveyEnabled ? child.demographicSurvey !== undefined : true));
 }
 
 interface ValidateProtectedRenewStateForReviewArgs {
   params: Params;
   state: ProtectedRenewState;
+  demographicSurveyEnabled: boolean;
 }
 
-export function validateProtectedRenewStateForReview({ params, state }: ValidateProtectedRenewStateForReviewArgs) {
+export function validateProtectedRenewStateForReview({ params, state, demographicSurveyEnabled }: ValidateProtectedRenewStateForReviewArgs) {
   const { applicationYear, maritalStatus, partnerInformation, mailingAddress, homeAddress, clientApplication, contactInformation, communicationPreferences, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
 
-  const children = validateProtectedChildrenStateForReview(state.children);
+  const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
-  if (!isPrimaryApplicantStateComplete(state)) {
+  if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
     if (children.length === 0) {
       throw redirect(getPathById('protected/renew/$id/member-selection', params));
     }
-    throw redirect(getPathById('protected/renew/$id/review-child-information', params));
   }
 
   return {
@@ -396,9 +397,9 @@ export function validateProtectedRenewStateForReview({ params, state }: Validate
   };
 }
 
-export function validateProtectedChildrenStateForReview(childrenState: ProtectedChildState[]) {
+export function validateProtectedChildrenStateForReview(childrenState: ProtectedChildState[], demographicSurveyEnabled: boolean) {
   return childrenState
-    .filter((child) => child.demographicSurvey !== undefined && child.dentalInsurance !== undefined && child.isParentOrLegalGuardian !== undefined)
+    .filter((child) => (demographicSurveyEnabled ? child.demographicSurvey !== undefined : true) && child.dentalInsurance !== undefined && child.isParentOrLegalGuardian !== undefined)
     .map(({ id, dentalInsurance, demographicSurvey, information, dentalBenefits, isParentOrLegalGuardian }) => {
       return {
         id,

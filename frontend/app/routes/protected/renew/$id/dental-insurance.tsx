@@ -60,6 +60,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   // state validation schema
   const dentalInsuranceSchema = z.object({
@@ -79,6 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       dentalInsurance: parsedDataResult.data.dentalInsurance,
+      previouslyReviewed: demographicSurveyEnabled ? undefined : true,
     },
   });
 
@@ -90,7 +93,11 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
   }
 
-  return redirect(getPathById('protected/renew/$id/demographic-survey', params));
+  if (demographicSurveyEnabled) {
+    return redirect(getPathById('protected/renew/$id/demographic-survey', params));
+  }
+
+  return redirect(getPathById('protected/renew/$id/member-selection', params));
 }
 
 export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion() {

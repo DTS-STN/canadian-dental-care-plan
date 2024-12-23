@@ -54,12 +54,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, session });
-  const validatedChildren = validateProtectedChildrenStateForReview(state.children);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+  const validatedChildren = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
   // renew state is valid then edit mode can be set to true
   saveProtectedRenewState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-child-information.page-title') }) };
@@ -129,10 +130,12 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const state = loadProtectedRenewState({ params, session });
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
-    if (!isPrimaryApplicantStateComplete(state)) {
+    if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
       return redirect(getPathById('protected/renew/$id/member-selection', params));
     }
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
@@ -186,6 +189,8 @@ export default function ProtectedRenewReviewChildInformation() {
 
     fetcher.submit(formData, { method: 'POST' });
   }
+
+  const demographicSurveyEnabled = useFeature('demographic-survey');
 
   return (
     <>
@@ -247,19 +252,21 @@ export default function ProtectedRenewReviewChildInformation() {
                     )}
                   </dl>
                 </section>
-                <section className="space-y-6">
-                  <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-child-information.demographic-survey-title')}</h2>
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('protected-renew:review-child-information.demographic-survey-title')}>
-                      <p>{t('protected-renew:review-child-information.demographic-survey-responded')}</p>
-                      <div className="mt-4">
-                        <InlineLink id="change-demographic-survey" routeId="protected/renew/$id/$childId/demographic-survey" params={childParams}>
-                          {t('protected-renew:review-child-information.demographic-survey-change')}
-                        </InlineLink>
-                      </div>
-                    </DescriptionListItem>
-                  </dl>
-                </section>
+                {demographicSurveyEnabled && (
+                  <section className="space-y-6">
+                    <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-child-information.demographic-survey-title')}</h2>
+                    <dl className="divide-y border-y">
+                      <DescriptionListItem term={t('protected-renew:review-child-information.demographic-survey-title')}>
+                        <p>{t('protected-renew:review-child-information.demographic-survey-responded')}</p>
+                        <div className="mt-4">
+                          <InlineLink id="change-demographic-survey" routeId="protected/renew/$id/$childId/demographic-survey" params={childParams}>
+                            {t('protected-renew:review-child-information.demographic-survey-change')}
+                          </InlineLink>
+                        </div>
+                      </DescriptionListItem>
+                    </dl>
+                  </section>
+                )}
               </section>
             );
           })}

@@ -40,6 +40,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   if (state.submissionInfo === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
@@ -52,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const primaryApplicantInfo = isPrimaryApplicantStateComplete(state)
+  const primaryApplicantInfo = isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)
     ? {
         firstName: state.clientApplication.applicantInformation.firstName,
         lastName: state.clientApplication.applicantInformation.lastName,
@@ -64,8 +66,8 @@ export async function loader({ context: { appContainer, session }, params, reque
       }
     : undefined;
 
-  const children = validateProtectedChildrenStateForReview(state.children).map((child) => {
-    if (child.demographicSurvey === undefined || child.isParentOrLegalGuardian === undefined || child.dentalInsurance === undefined || child.information === undefined) {
+  const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).map((child) => {
+    if (child.isParentOrLegalGuardian === undefined || child.dentalInsurance === undefined || child.information === undefined) {
       throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
     }
 
