@@ -65,8 +65,10 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadProtectedRenewState({ params, session });
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
-  if (!isPrimaryApplicantStateComplete(state) && !isChildrenStateComplete(state)) {
+  if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) && !isChildrenStateComplete(state, demographicSurveyEnabled)) {
     return { status: 'select-member' };
   }
 

@@ -61,6 +61,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewSingleChildState({ params, session });
   const protectedRenewState = loadProtectedRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   // state validation schema
   const dentalInsuranceSchema = z.object({
@@ -80,7 +82,7 @@ export async function action({ context: { appContainer, session }, params, reque
     state: {
       children: protectedRenewState.children.map((child) => {
         if (child.id !== state.id) return child;
-        return { ...child, dentalInsurance: parsedDataResult.data.dentalInsurance };
+        return { ...child, dentalInsurance: parsedDataResult.data.dentalInsurance, previouslyReviewed: demographicSurveyEnabled ? undefined : true };
       }),
     },
   });
@@ -89,7 +91,11 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/review-child-information', params));
   }
 
-  return redirect(getPathById('protected/renew/$id/$childId/demographic-survey', params));
+  if (demographicSurveyEnabled) {
+    return redirect(getPathById('protected/renew/$id/$childId/demographic-survey', params));
+  }
+
+  return redirect(getPathById('protected/renew/$id/member-selection', params));
 }
 
 export default function ProtectedRenewChildrenDentalInsurance() {
