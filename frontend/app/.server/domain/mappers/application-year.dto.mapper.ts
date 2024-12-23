@@ -13,10 +13,11 @@ export interface ApplicationYearDtoMapper {
 export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper {
   mapApplicationYearResultDtoToRenewalApplicationYearResultDto(applicationYearResultDto: ApplicationYearResultDto): RenewalApplicationYearResultDto {
     return {
-      id: applicationYearResultDto.id,
+      intakeYearId: applicationYearResultDto.intakeYearId,
       taxYear: applicationYearResultDto.taxYear,
       coverageStartDate: applicationYearResultDto.coverageStartDate,
       coverageEndDate: applicationYearResultDto.coverageEndDate,
+      renewalYearId: applicationYearResultDto.renewalYearId,
     };
   }
 
@@ -24,15 +25,16 @@ export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper
     const applicationYearData = applicationYearResultEntity['BenefitApplicationYear'];
 
     const applicationYears = applicationYearData.map((applicationYear) => ({
-      id: applicationYear.BenefitApplicationYearIdentification[0].IdentificationID,
       applicationYear: applicationYear.BenefitApplicationYearEffectivePeriod.StartDate.YearDate,
       taxYear: applicationYear.BenefitApplicationYearTaxYear.YearDate,
       coverageStartDate: applicationYear.BenefitApplicationYearCoveragePeriod.StartDate.date,
       coverageEndDate: applicationYear.BenefitApplicationYearCoveragePeriod.EndDate.date,
       intakeStartDate: applicationYear.BenefitApplicationYearIntakePeriod.StartDate.date,
       intakeEndDate: applicationYear.BenefitApplicationYearIntakePeriod.EndDate?.date,
+      intakeYearId: applicationYear.BenefitApplicationYearIdentification[0].IdentificationID,
       renewalStartDate: applicationYear.BenefitApplicationYearRenewalPeriod.StartDate?.date,
       renewalEndDate: applicationYear.BenefitApplicationYearRenewalPeriod.EndDate?.date,
+      renewalYearId: applicationYear.BenefitApplicationYearNext.BenefitApplicationYearIdentification?.IdentificationID,
     }));
 
     return applicationYears;

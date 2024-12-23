@@ -36,11 +36,20 @@ export async function loader({ context: { appContainer, session }, params, reque
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
   const applicationYear = await applicationYearService.findRenewalApplicationYear({ date: currentDate, userId: 'anonymous' });
-  if (!applicationYear) {
+  if (!applicationYear?.renewalYearId) {
     throw redirect(getPathById('public/apply/index', params));
   }
 
-  const state = startRenewState({ applicationYear, id, session });
+  const state = startRenewState({
+    applicationYear: {
+      intakeYearId: applicationYear.intakeYearId,
+      renewalYearId: applicationYear.renewalYearId,
+      taxYear: applicationYear.taxYear,
+      coverageStartDate: applicationYear.coverageStartDate,
+    },
+    id,
+    session,
+  });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:terms-and-conditions.page-title') }) };
 

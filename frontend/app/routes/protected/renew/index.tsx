@@ -48,10 +48,20 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
   const applicationYear = await applicationYearService.findRenewalApplicationYear({ date: currentDate, userId: userInfoToken.sub });
-  invariant(applicationYear, 'Expected applicationYear to be defined'); // TODO this should redirect to the protected apply flow when introduced
+  invariant(applicationYear?.renewalYearId, 'Expected applicationYear.renewalYearId to be defined'); // TODO this should redirect to the protected apply flow when introduced
 
   const id = randomUUID().toString();
-  const state = startProtectedRenewState({ applicationYear, clientApplication, id, session });
+  const state = startProtectedRenewState({
+    applicationYear: {
+      intakeYearId: applicationYear.intakeYearId,
+      renewalYearId: applicationYear.renewalYearId,
+      taxYear: applicationYear.taxYear,
+      coverageStartDate: applicationYear.coverageStartDate,
+    },
+    clientApplication,
+    id,
+    session,
+  });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:index.page-title') }) };
 
