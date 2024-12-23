@@ -190,6 +190,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           lastName: 'Doe',
           maritalStatus: 'Single',
           socialInsuranceNumber: '800000002',
+          clientId: '00000000-0000-0000-0000-000000000000',
           clientNumber: '00000000000',
         },
         applicationYearId: '2024',
@@ -220,6 +221,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         },
         children: [
           {
+            clientId: '00000000-0000-0000-0000-000000000001',
             clientNumber: '11111111111',
             dentalBenefits: ['New federal program', 'New provincial program'],
             dentalInsurance: true,
