@@ -5,6 +5,8 @@ import validator from 'validator';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type {
+  AdultBenefitRenewalDto,
+  AdultChangeIndicators,
   AdultChildBenefitRenewalDto,
   AdultChildChangeIndicators,
   ChildBenefitRenewalDto,
@@ -24,6 +26,7 @@ import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
 import { parseDateString } from '~/utils/date-utils';
 
 export interface BenefitRenewalDtoMapper {
+  mapAdultBenefitRenewalDtoToBenefitRenewalRequestEntity(adultBenefitRenewalDto: AdultBenefitRenewalDto): BenefitRenewalRequestEntity;
   mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity;
   mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity;
   mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(childBenefitRenewalDto: ChildBenefitRenewalDto): BenefitRenewalRequestEntity;
@@ -33,7 +36,7 @@ export interface BenefitRenewalDtoMapper {
 interface ToBenefitRenewalRequestEntityArgs {
   applicantInformation: RenewalApplicantInformationDto;
   applicationYearId: string;
-  changeIndicators?: AdultChildChangeIndicators | ItaChangeIndicators | ChildChangeIndicators;
+  changeIndicators?: AdultChangeIndicators | AdultChildChangeIndicators | ItaChangeIndicators | ChildChangeIndicators;
   children: readonly RenewalChildDto[];
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
@@ -73,6 +76,10 @@ interface ToEmailAddressArgs {
 @injectable()
 export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>) {}
+
+  mapAdultBenefitRenewalDtoToBenefitRenewalRequestEntity(adultBenefitRenewalDto: AdultBenefitRenewalDto): BenefitRenewalRequestEntity {
+    return this.toBenefitRenewalRequestEntity(adultBenefitRenewalDto);
+  }
 
   mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity {
     return this.toBenefitRenewalRequestEntity(adultChildBenefitRenewalDto);
