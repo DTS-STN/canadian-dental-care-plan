@@ -20,7 +20,7 @@ export type ApplyState = ReadonlyDeep<{
   lastUpdatedOn: string;
   allChildrenUnder18?: boolean;
   applicationYears: {
-    id: string;
+    intakeYearId: string;
     taxYear: string;
   }[];
   applicantInformation?: {

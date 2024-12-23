@@ -146,7 +146,9 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
             },
           },
           BenefitApplicationYearNext: {
-            BenefitApplicationYearIdentification: {},
+            BenefitApplicationYearIdentification: {
+              IdentificationID: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
+            },
           },
           BenefitApplicationYearCoveragePeriod: {
             StartDate: {

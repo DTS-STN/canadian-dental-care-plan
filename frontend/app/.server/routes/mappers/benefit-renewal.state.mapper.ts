@@ -224,7 +224,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedMaritalStatus: maritalStatus,
       }),
-      applicationYearId: applicationYear.id,
+      applicationYearId: applicationYear.renewalYearId,
       children: [],
       changeIndicators: {
         hasAddressChanged,
@@ -294,7 +294,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedMaritalStatus: maritalStatus,
       }),
-      applicationYearId: applicationYear.id,
+      applicationYearId: applicationYear.renewalYearId,
       children: this.toChildren({
         existingChildren: clientApplication.children,
         renewedChildren: children,
@@ -360,7 +360,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: true,
         renewedMaritalStatus: maritalStatus,
       }),
-      applicationYearId: applicationYear.id,
+      applicationYearId: applicationYear.renewalYearId,
       changeIndicators: {
         hasAddressChanged,
       },
@@ -428,7 +428,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedMaritalStatus: maritalStatus,
       }),
-      applicationYearId: applicationYear.id,
+      applicationYearId: applicationYear.renewalYearId,
       children: this.toChildren({
         existingChildren: clientApplication.children,
         renewedChildren: children,
@@ -470,7 +470,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: !!maritalStatus,
         renewedMaritalStatus: maritalStatus,
       }),
-      applicationYearId: applicationYear.id,
+      applicationYearId: applicationYear.renewalYearId,
       demographicSurvey,
       children: this.toChildren({
         existingChildren: clientApplication.children,

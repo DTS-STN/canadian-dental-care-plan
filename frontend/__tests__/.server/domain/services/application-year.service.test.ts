@@ -16,39 +16,40 @@ describe('DefaultApplicationYearService', () => {
   const mockApplicationYearResultDtos: ApplicationYearResultDto[] = [
     {
       // all fields set
-      id: '1',
       applicationYear: '2024',
       taxYear: '2024',
       coverageStartDate: '2024-01-01',
       coverageEndDate: '2024-12-31',
       intakeStartDate: '2024-01-01',
       intakeEndDate: '2024-12-31',
+      intakeYearId: '2024',
       renewalStartDate: '2024-01-01',
       renewalEndDate: '2024-12-31',
+      renewalYearId: '2024',
     },
     {
       // optional dates not set
-      id: '2',
       applicationYear: '2025',
       taxYear: '2025',
       coverageStartDate: '2025-01-01',
       coverageEndDate: '2025-12-31',
       intakeStartDate: '2025-01-01',
+      intakeYearId: '2024',
     },
     {
       // optional end dates not set
-      id: '3',
       applicationYear: '2026',
       taxYear: '2026',
       coverageStartDate: '2026-01-01',
       coverageEndDate: '2026-12-31',
       intakeStartDate: '2026-01-01',
+      intakeYearId: '2024',
       renewalStartDate: '2026-01-01',
     },
   ];
 
   const mockRenewalApplicationYearResultDto: RenewalApplicationYearResultDto = {
-    id: '1',
+    intakeYearId: '2024',
     taxYear: '2024',
     coverageStartDate: '2024-01-01',
     coverageEndDate: '2024-12-31',
