@@ -275,7 +275,7 @@
     "index": {
       "page-title": "Renouvellement pour enfant(s)",
       "you-have-completed": "Vous avez terminé le processus de renouvellement pour vous-même.",
-      "in-this-section": "Si vous souhaitez renouveler pour votre enfant, sélectionnez le bouton «\u00a0Renouveler pour un enfant\u00a0». Sinon, poursuivez la demande. Si vous ne souhaitez pas ajouter d'enfants, sélectionnez «\u00a0Continuer avec la demande\u00a0».",
+      "in-this-section": "Si vous souhaitez renouveler pour votre enfant, sélectionnez le bouton «\u00a0Renouveler pour un enfant\u00a0». Si vous ne souhaitez pas ajouter d'enfants, sélectionnez «\u00a0Poursuivre la demande\u00a0».",
       "each-child": "Chaque enfant doit avoir un numéro de client pour renouveler son adhésion. Si l'enfant n'a pas de numéro de client, vous devrez présenter une demande au Régime canadien de soins dentaires.",
       "dob-title": "Date de naissance",
       "client-number-title": "Numéro de client",
@@ -301,9 +301,9 @@
     },
     "information": {
       "page-title": "{{childName}}\u00a0: Renseignements",
-      "form-instructions-sin": "Indiquer le nom légal de l'enfant tel qu'indiqué sur sa carte ou sa lettre de numéro d'assurance sociale (le cas échéant) ou tout autre document gouvernemental.",
+      "form-instructions-sin": "Saisissez le nom de l'enfant tel qu'il a été fourni lors de votre première demande pour l'enfant.",
       "single-legal-name": "Si l'enfant a un seul nom légal",
-      "name-instructions": "Si l'enfant utilise un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
+      "name-instructions": "Si l'enfant n'utilise qu'un seul nom, indiquez ce nom dans les champs «\u00a0prénom\u00a0» et «\u00a0nom\u00a0».",
       "last-name": "Nom de famille",
       "first-name": "Prénom",
       "date-of-birth": "Date de naissance",
