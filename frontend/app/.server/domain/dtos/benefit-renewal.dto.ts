@@ -61,11 +61,13 @@ export type BenefitRenewalDto = Omit<BenefitApplicationDto, 'applicantInformatio
 
 export type RenewalApplicantInformationDto = ApplicantInformationDto &
   Readonly<{
+    clientId: string;
     clientNumber: string;
   }>;
 
 export type RenewalChildDto = ChildDto &
   Readonly<{
+    clientId: string;
     clientNumber: string;
     demographicSurvey?: DemographicSurveyDto;
   }>;

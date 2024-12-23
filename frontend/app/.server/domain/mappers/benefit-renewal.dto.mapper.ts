@@ -126,6 +126,10 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
           BenefitApplicationDetail: this.toBenefitApplicationDetail(demographicSurvey),
           ClientIdentification: [
             {
+              IdentificationID: applicantInformation.clientId,
+              IdentificationCategoryText: 'Client ID',
+            },
+            {
               IdentificationID: applicantInformation.clientNumber,
               IdentificationCategoryText: 'Client Number',
             },
@@ -409,6 +413,10 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       },
       BenefitApplicationDetail: this.toBenefitApplicationDetail(child.demographicSurvey),
       ClientIdentification: [
+        {
+          IdentificationID: child.clientId,
+          IdentificationCategoryText: 'Client ID',
+        },
         {
           IdentificationID: child.clientNumber,
           IdentificationCategoryText: 'Client Number',

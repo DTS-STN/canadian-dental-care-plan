@@ -517,6 +517,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       lastName: existingApplicantInformation.lastName,
       maritalStatus: renewedMaritalStatus,
       socialInsuranceNumber: existingApplicantInformation.socialInsuranceNumber,
+      clientId: existingApplicantInformation.clientId,
       clientNumber:
         existingApplicantInformation.clientNumber ??
         (() => {
@@ -536,6 +537,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }
 
       return {
+        clientId: existingChild.information.clientId,
         clientNumber:
           existingChild.information.clientNumber ??
           (() => {
