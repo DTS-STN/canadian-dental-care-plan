@@ -81,7 +81,7 @@ import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.ser
 import type { HCaptchaDtoMapper } from '~/.server/web/mappers';
 import type { DynatraceDtoMapper } from '~/.server/web/mappers/dynatrace.dto.mapper';
 import type { DynatraceRepository, HCaptchaRepository } from '~/.server/web/repositories';
-import type { DynatraceService, HCaptchaService, SessionService } from '~/.server/web/services';
+import type { DynatraceService, HCaptchaService } from '~/.server/web/services';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 
 /**
@@ -262,7 +262,6 @@ export const TYPES = assignServiceIdentifiers({
     services: {
       DynatraceService: serviceId<DynatraceService>(),
       HCaptchaService: serviceId<HCaptchaService>(),
-      SessionService: serviceId<SessionService>(),
     },
     validators: {
       CsrfTokenValidator: serviceId<CsrfTokenValidator>(),
