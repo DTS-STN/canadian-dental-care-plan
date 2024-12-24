@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import { DefaultRedisService } from '~/.server/data/services';
+import { DefaultRedisService } from '~/.server/data';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 vi.mock('ioredis', () => {

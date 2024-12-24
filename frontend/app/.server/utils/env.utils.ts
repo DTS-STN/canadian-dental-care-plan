@@ -95,7 +95,7 @@ const serverEnv = clientEnvSchema.extend({
   // session configuration
   SESSION_STORAGE_TYPE: z.enum(['file', 'redis']).default('file'),
   SESSION_EXPIRES_SECONDS: z.coerce.number().default(1200),
-  SESSION_COOKIE_NAME: z.string().trim().min(1).default('__CDCP//session'),
+  SESSION_COOKIE_NAME: z.string().trim().min(1).default('__CDCP||session'),
   SESSION_COOKIE_DOMAIN: z.string().trim().min(1).optional(),
   SESSION_COOKIE_PATH: z.string().trim().min(1).default('/'),
   SESSION_COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('lax'),
@@ -103,6 +103,7 @@ const serverEnv = clientEnvSchema.extend({
   SESSION_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
   SESSION_COOKIE_SECURE: z.string().transform(toBoolean).default('true'),
   SESSION_FILE_DIR: z.string().trim().min(1).default('./node_modules/cache/sessions/'),
+  SESSION_KEY_PREFIX: z.string().trim().min(1).default('SESSION:'),
 
 
   // redis server configuration

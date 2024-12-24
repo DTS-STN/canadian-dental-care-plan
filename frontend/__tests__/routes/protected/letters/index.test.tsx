@@ -1,5 +1,4 @@
 import type { AppLoadContext } from '@remix-run/node';
-import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
@@ -20,11 +19,11 @@ describe('Letters Page', () => {
 
   describe('loader()', () => {
     it('should return sorted letters', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-      session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
-      session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
-
       const mockAppLoadContext = mockDeep<AppLoadContext>();
+
+      mockAppLoadContext.session.get.calledWith('idToken').mockReturnValueOnce({ sub: '00000000-0000-0000-0000-000000000000' });
+      mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999', sub: '1111111' });
+
       mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
@@ -53,7 +52,7 @@ describe('Letters Page', () => {
 
       const response = await loader({
         request: new Request('http://localhost/letters?sort=desc'),
-        context: { ...mockAppLoadContext, session },
+        context: mockAppLoadContext,
         params: {},
       });
 
@@ -66,11 +65,11 @@ describe('Letters Page', () => {
   });
 
   it('retrieves letter types', async () => {
-    const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-    session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
-    session.set('userInfoToken', { sin: '999999999' });
-
     const mockAppLoadContext = mockDeep<AppLoadContext>();
+
+    mockAppLoadContext.session.get.calledWith('idToken').mockReturnValueOnce({ sub: '00000000-0000-0000-0000-000000000000' });
+    mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999' });
+
     mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
     mockAppLoadContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
     mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValue({
@@ -99,7 +98,7 @@ describe('Letters Page', () => {
 
     const response = await loader({
       request: new Request('http://localhost/letters'),
-      context: { ...mockAppLoadContext, session },
+      context: mockAppLoadContext,
       params: {},
     });
 

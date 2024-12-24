@@ -1,5 +1,4 @@
 import type { AppLoadContext } from '@remix-run/node';
-import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
@@ -30,8 +29,6 @@ describe('_public.apply.id.communication-preference', () => {
 
   describe('loader()', () => {
     it('should id, state, country list and region list', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-
       const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
@@ -55,7 +52,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/communication-preference'),
-        context: { ...mockAppLoadContext, session },
+        context: mockAppLoadContext,
         params: {},
       });
 

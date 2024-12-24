@@ -4,7 +4,7 @@ import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { RedisService } from '~/.server/data/services';
+import type { RedisService } from '~/.server/data';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 @injectable()

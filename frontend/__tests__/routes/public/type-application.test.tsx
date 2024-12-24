@@ -1,5 +1,4 @@
 import type { AppLoadContext } from '@remix-run/node';
-import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
@@ -30,11 +29,9 @@ describe('_public.apply.id.type-of-application', () => {
 
   describe('loader()', () => {
     it('should load id, and typeOfApplication', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: mock<AppLoadContext>(),
         params: {},
       });
 

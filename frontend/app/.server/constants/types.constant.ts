@@ -1,12 +1,11 @@
 import type { HealthCheck } from '@dts-stn/health-checks';
 import type { interfaces } from 'inversify';
 
-import type { MailingAddressValidatorFactoryAdult } from '../routes/public/renew/adult';
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
 import type { BuildInfoService } from '~/.server/core';
-import type { RedisService } from '~/.server/data/services';
+import type { RedisService } from '~/.server/data';
 import type {
   AddressValidationDtoMapper,
   ApplicantDtoMapper,
@@ -73,6 +72,7 @@ import type { HttpClient } from '~/.server/http';
 import type { InstrumentationService } from '~/.server/observability';
 import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
 import type { MailingAddressValidatorFactory } from '~/.server/routes/public/address-validation';
+import type { MailingAddressValidatorFactoryAdult } from '~/.server/routes/public/renew/adult';
 import type { MailingAddressValidatorFactoryChild } from '~/.server/routes/public/renew/child';
 import type { MailingAddressValidatorFactoryIta } from '~/.server/routes/public/renew/ita';
 import type { SecurityHandler } from '~/.server/routes/security';

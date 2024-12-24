@@ -30,7 +30,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 
   const locale = getLocale(request);
   const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
-  const validationResult = await mailingAddressValidator.validateMailingAddress(session.get('route.address-validation'));
+  const validationResult = await mailingAddressValidator.validateMailingAddress(session.find('route.address-validation') ?? {});
 
   if (!validationResult.success) {
     session.unset('route.address-validation');

@@ -173,10 +173,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
 
-  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-adult-information.page-title') }) };
 
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const csrfToken = session.get<string>('csrfToken');
+  const userInfoToken = session.get<UserinfoToken>('userInfoToken');
 
   // prettier-ignore
   const payload =

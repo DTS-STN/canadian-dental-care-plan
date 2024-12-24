@@ -1,11 +1,12 @@
-import { CookieParseOptions, CookieSerializeOptions, Session, SessionData, SessionStorage, createCookie, createSessionStorage } from '@remix-run/node';
+import { CookieParseOptions, CookieSerializeOptions, Session, SessionData, createCookie, createSessionStorage } from '@remix-run/node';
+import type { SessionStorage } from '@remix-run/node';
 
 import { inject, injectable } from 'inversify';
 import { randomUUID } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { RedisService } from '~/.server/data/services';
+import type { RedisService } from '~/.server/data';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { createFileSessionStorage } from '~/.server/utils/session.utils';
 

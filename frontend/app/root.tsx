@@ -79,7 +79,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
     title: t('gcweb:meta.title.default'),
   };
   const origin = requestUrl.origin;
-  const csrfToken = String(session.get('csrfToken'));
+  const csrfToken = session.get<string>('csrfToken');
 
   return {
     buildInfo,

@@ -1,5 +1,3 @@
-import type { Session } from '@remix-run/node';
-
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
@@ -8,6 +6,7 @@ import type { LogFactory, Logger } from '~/.server/factories';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
 import type { ValidateRequestMethodParams } from '~/.server/routes/security';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
+import type { Session } from '~/.server/web/session';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 import type { FeatureName } from '~/utils/env-utils';
 

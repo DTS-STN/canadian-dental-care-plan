@@ -36,7 +36,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const userInfoToken = session.get<UserinfoToken>('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
   const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);

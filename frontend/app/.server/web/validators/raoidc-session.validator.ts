@@ -1,4 +1,4 @@
-import { Session } from '@remix-run/node';
+import '@remix-run/node';
 
 import { inject, injectable } from 'inversify';
 
@@ -7,6 +7,7 @@ import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 import type { FetchFn, HttpClient } from '~/.server/http';
 import { IdToken, UserinfoToken, validateSession } from '~/.server/utils/raoidc.utils';
+import type { Session } from '~/.server/web/session';
 
 /**
  * Parameters for RAOIDC session validation.
@@ -98,7 +99,7 @@ export class DefaultRaoidcSessionValidator implements RaoidcSessionValidator {
       return null;
     }
 
-    const value = session.get(name);
+    const value = session.get<T>(name);
     this.log.trace('Extracted value for name [%s] from session [%s]', name, session.id);
     return value;
   }

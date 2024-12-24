@@ -4,7 +4,7 @@ import type { Namespace } from 'i18next';
 import { createInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import { i18nResources } from '../i18n.resources';
+import { i18nResources } from '~/.server/i18n.resources';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { APP_LOCALES } from '~/utils/locale-utils';

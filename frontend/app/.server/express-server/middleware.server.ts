@@ -1,7 +1,11 @@
 import type { RequestHandler } from 'express';
+import sessionMiddleware from 'express-session';
 import { minimatch } from 'minimatch';
 import morganMiddleware from 'morgan';
+import { randomUUID } from 'node:crypto';
 
+import type { ServerConfig } from '~/.server/configs';
+import { createMemoryStore, createRedisStore } from '~/.server/express-server/session.server';
 import { getLogger } from '~/.server/utils/logging.utils';
 
 /**
@@ -65,6 +69,50 @@ export function logging(isProduction: boolean): RequestHandler {
 
   return (request, response, next) => {
     if (shouldIgnore(ignorePatterns, request.path)) return next();
+    return middleware(request, response, next);
+  };
+}
+
+/**
+ * Configures session middleware, optionally skipping it for bots and specific paths.
+ */
+export function session(isProduction: boolean, serverConfig: ServerConfig): RequestHandler {
+  const log = getLogger('express.server/sessionRequestHandler');
+
+  const ignorePatterns = ['/api/buildinfo', '/api/health', '/api/readyz', '/.well-known/jwks.json'];
+
+  const { SESSION_STORAGE_TYPE, SESSION_COOKIE_DOMAIN, SESSION_COOKIE_NAME, SESSION_COOKIE_PATH, SESSION_COOKIE_SAME_SITE, SESSION_COOKIE_SECRET, SESSION_COOKIE_SECURE, SESSION_EXPIRES_SECONDS } = serverConfig;
+
+  const sessionStore =
+    SESSION_STORAGE_TYPE === 'redis' //
+      ? createRedisStore(serverConfig)
+      : createMemoryStore();
+
+  const middleware = sessionMiddleware({
+    store: sessionStore,
+    name: SESSION_COOKIE_NAME,
+    secret: SESSION_COOKIE_SECRET,
+    genid: () => randomUUID(),
+    proxy: true,
+    resave: false,
+    rolling: true,
+    saveUninitialized: false,
+    cookie: {
+      domain: SESSION_COOKIE_DOMAIN,
+      path: SESSION_COOKIE_PATH,
+      secure: SESSION_COOKIE_SECURE ? isProduction : false,
+      httpOnly: true,
+      maxAge: SESSION_EXPIRES_SECONDS * 1000,
+      sameSite: SESSION_COOKIE_SAME_SITE,
+    },
+  });
+
+  return (request, response, next) => {
+    if (shouldIgnore(ignorePatterns, request.path)) {
+      log.trace('Skipping session: [%s]', request.path);
+      return next();
+    }
+
     return middleware(request, response, next);
   };
 }

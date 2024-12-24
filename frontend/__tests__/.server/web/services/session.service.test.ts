@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { RedisService } from '~/.server/data/services';
+import type { RedisService } from '~/.server/data';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { FileSessionService, RedisSessionService } from '~/.server/web/services';
 

@@ -44,15 +44,15 @@ export async function action({ context: { appContainer, session }, request }: Ac
   switch (action) {
     case 'end': {
       log.debug("Ending user's server-side session; sessionId: [%s], locale: [%s], redirectTo: [%s]", sessionId, locale, redirectTo);
-      const sessionService = appContainer.get(TYPES.web.services.SessionService);
-      const headers = { 'Set-Cookie': await sessionService.destroySession(session) };
+
+      session.destroy();
 
       if (redirectTo) {
         const redirectToUrl = getApiSessionRedirectToUrl(redirectTo, locale);
-        return redirectDocument(redirectToUrl, { headers });
+        return redirectDocument(redirectToUrl);
       }
 
-      return Response.json(null, { headers, status: 204 });
+      return Response.json(null, { status: 204 });
     }
 
     case 'extend': {

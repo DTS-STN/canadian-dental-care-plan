@@ -1,4 +1,3 @@
-import type { Session } from '@remix-run/node';
 import { redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
@@ -12,6 +11,7 @@ import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
+import type { Session } from '~/.server/web/session';
 import { getAgeFromDateString } from '~/utils/date-utils';
 
 export type ApplyState = ReadonlyDeep<{

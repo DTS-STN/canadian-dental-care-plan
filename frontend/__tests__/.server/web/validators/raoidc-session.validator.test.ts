@@ -1,5 +1,3 @@
-import type { Session } from '@remix-run/node';
-
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
@@ -8,6 +6,7 @@ import type { LogFactory, Logger } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { validateSession } from '~/.server/utils/raoidc.utils';
+import type { Session } from '~/.server/web/session';
 import { DefaultRaoidcSessionValidator } from '~/.server/web/validators';
 
 vi.mock('~/.server/utils/raoidc.utils');
