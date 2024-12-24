@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect } from 'react-router';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';

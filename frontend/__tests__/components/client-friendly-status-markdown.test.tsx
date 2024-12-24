@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -34,7 +34,7 @@ describe('ClientFriendlyStatusMarkdown Component', () => {
   it('renders inline-links from parsing anchors in markdown content', () => {
     const content = `[link text](https://www.example.com)`;
 
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <ClientFriendlyStatusMarkdown content={content} />,
         path: '/',

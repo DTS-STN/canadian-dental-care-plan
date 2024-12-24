@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
-import type { SubmitOptions } from '@remix-run/react';
-import { useSubmit } from '@remix-run/react';
+import type { SubmitOptions } from 'react-router';
+import { useSubmit } from 'react-router';
 
 import type { ApiSessionAction, ApiSessionRedirectTo } from '~/routes/api/session';
 

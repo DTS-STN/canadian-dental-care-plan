@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 
-import { Outlet } from '@remix-run/react';
-import { createRemixStub } from '@remix-run/testing';
+import { Outlet, createRoutesStub } from 'react-router';
 
 import { describe, expect, it } from 'vitest';
 
@@ -32,7 +31,7 @@ describe('coalesce<T> reducer', () => {
 
 describe('useBreadcrumbs()', () => {
   it('expect no breadcrumbs from useBreadcrumbs() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -57,7 +56,7 @@ describe('useBreadcrumbs()', () => {
       { labelI18nKey: 'gcweb:breadcrumbs.benefits', to: '/benefits' },
     ];
 
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         handle: {
@@ -82,7 +81,7 @@ describe('useBreadcrumbs()', () => {
 
 describe('useBuildInfo()', () => {
   it('expect no build info from useBuildInfo() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -105,7 +104,7 @@ describe('useBuildInfo()', () => {
       buildInfo: BuildInfo;
     }
 
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         loader: () => ({
@@ -144,7 +143,7 @@ describe('useBuildInfo()', () => {
 
 describe('useI18nNamespaces()', () => {
   it('expect no i18n namespaces from useI18nNamespaces() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -163,7 +162,7 @@ describe('useI18nNamespaces()', () => {
   });
 
   it('expect correctly flattened i18n namespaces from useI18nNamespaces() if the loaders provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         handle: { i18nNamespaces: ['index'] } satisfies RouteHandleData,
@@ -186,7 +185,7 @@ describe('useI18nNamespaces()', () => {
 
 describe('useTransformAdobeAnalyticsUrl()', () => {
   it('expect no transform url function from useTransformAdobeAnalyticsUrl() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -205,7 +204,7 @@ describe('useTransformAdobeAnalyticsUrl()', () => {
   });
 
   it('expect correctly coalesced transform url from useTransformAdobeAnalyticsUrl() if the loaders provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         handle: {} satisfies RouteHandleData,
@@ -228,7 +227,7 @@ describe('useTransformAdobeAnalyticsUrl()', () => {
 
 describe('usePageIdentifier()', () => {
   it('expect no page identifier from usePageIdentifier() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -247,7 +246,7 @@ describe('usePageIdentifier()', () => {
   });
 
   it('expect correctly coalesced page identifier from usePageIdentifier() if the loaders provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         handle: { pageIdentifier: 'CDCP-0000' } satisfies RouteHandleData,
@@ -270,7 +269,7 @@ describe('usePageIdentifier()', () => {
 
 describe('usePageTitle()', () => {
   it('expect no page title from usePageTitle() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -289,7 +288,7 @@ describe('usePageTitle()', () => {
   });
 
   it('expect correctly coalesced page title from usePageTitle() if the loaders provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         handle: { pageTitleI18nKey: 'index:page-title' } satisfies RouteHandleData,

@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 
-import { useMatches, useParams, useSearchParams } from '@remix-run/react';
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub, useMatches, useParams, useSearchParams } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -14,10 +13,10 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@remix-run/react', async (actual) => {
+vi.mock('react-router', async (actual) => {
   // XXX :: GjB :: using actual <Link> component and useHref hook because I'm too lazy to mock it 🤷
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const { Link, generatePath, useHref } = await actual<typeof import('@remix-run/react')>();
+  const { Link, generatePath, useHref } = await actual<typeof import('react-router')>();
 
   return {
     Link,
@@ -60,7 +59,7 @@ describe('Language Switcher', () => {
     vi.mocked(getAltLanguage).mockReturnValue(responseLang);
     vi.mocked(useMatches).mockReturnValue([{ id: 'public/apply/index', data: {}, handle: {}, params: {}, pathname: '' }]);
 
-    const RemixStub = createRemixStub([{ Component: () => <LanguageSwitcher>Français</LanguageSwitcher>, path: '/' }]);
+    const RemixStub = createRoutesStub([{ Component: () => <LanguageSwitcher>Français</LanguageSwitcher>, path: '/' }]);
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('language-switcher'));

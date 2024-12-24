@@ -1,8 +1,7 @@
 import type { ChangeEvent } from 'react';
 
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useLoaderData, useParams, useSearchParams } from '@remix-run/react';
+import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useLoaderData, useParams, useSearchParams } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';

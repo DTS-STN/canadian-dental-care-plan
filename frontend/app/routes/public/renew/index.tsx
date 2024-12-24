@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
-import { redirect } from '@remix-run/node';
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useLoaderData, useNavigate, useParams } from '@remix-run/react';
+import { redirect } from 'react-router';
+import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { useLoaderData, useNavigate, useParams } from 'react-router';
 
 import { randomUUID } from 'crypto';
 

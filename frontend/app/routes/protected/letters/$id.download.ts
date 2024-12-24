@@ -1,5 +1,5 @@
-import { data } from '@remix-run/node';
-import type { LoaderFunctionArgs } from '@remix-run/node';
+import { data } from 'react-router';
+import type { LoaderFunctionArgs } from 'react-router';
 
 import { Buffer } from 'node:buffer';
 import { sanitize } from 'sanitize-filename-ts';

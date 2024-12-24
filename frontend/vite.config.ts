@@ -1,5 +1,4 @@
-import { vitePlugin as remix } from '@remix-run/dev';
-
+import { reactRouter } from '@react-router/dev/vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
@@ -38,25 +37,7 @@ export default defineConfig({
     //
     // see https://github.com/remix-run/remix/issues/9871
     //
-    process.env.NODE_ENV === 'test'
-      ? react()
-      : remix({
-          future: {
-            // Fix vite client-side dependency optimization issues that trigger a server restart.
-            // https://remix.run/docs/en/main/guides/dependency-optimization
-            unstable_optimizeDeps: true,
-            v3_fetcherPersist: true,
-            // XXX  :: GjB :: lazy route discovery breaks navigation from the language switcher when running in devmode
-            //                strangely, when running in production mode, it works perfectly fine 🤷
-            // TODO :: GjB :: figure out why this doesn't work in devmode and hopefully fix it.
-            v3_lazyRouteDiscovery: false,
-            v3_relativeSplatPath: true,
-            v3_routeConfig: true,
-            v3_singleFetch: true,
-            v3_throwAbortReason: true,
-          },
-          serverBuildFile: 'app.js',
-        }),
+    process.env.NODE_ENV === 'test' ? react() : reactRouter(),
   ],
   ssr: {
     noExternal: ['react-idle-timer', 'fast-json-patch'],

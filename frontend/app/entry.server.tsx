@@ -1,7 +1,7 @@
-import type { ActionFunctionArgs, AppLoadContext, EntryContext, LoaderFunctionArgs } from '@remix-run/node';
-import { createReadableStreamFromReadable } from '@remix-run/node';
-import { RemixServer } from '@remix-run/react';
+import type { ActionFunctionArgs, AppLoadContext, EntryContext, LoaderFunctionArgs } from 'react-router';
+import { ServerRouter } from 'react-router';
 
+import { createReadableStreamFromReadable } from '@react-router/node';
 import { isbot } from 'isbot';
 import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
@@ -14,8 +14,6 @@ import { getLogger } from '~/.server/utils/logging.utils';
 import { NonceProvider } from '~/components/nonce-context';
 import { getNamespaces } from '~/utils/locale-utils';
 import { randomHexString } from '~/utils/string-utils';
-
-const abortDelay = 5_000;
 
 /**
  * We need to extend the server-side session lifetime whenever a client-side
@@ -59,7 +57,7 @@ export function handleError(error: unknown, { context: { appContainer }, request
   }
 }
 
-export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext, { appContainer }: AppLoadContext) {
+export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, reactRouterContext: EntryContext, { appContainer }: AppLoadContext) {
   const log = getLogger('entry.server/handleRequest');
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
@@ -67,7 +65,7 @@ export default async function handleRequest(request: Request, responseStatusCode
   instrumentationService.createCounter('http.server.requests').add(1);
 
   const locale = getLocale(request);
-  const routes = Object.values(remixContext.routeModules);
+  const routes = Object.values(reactRouterContext.routeModules);
   const i18n = await initI18n(locale, getNamespaces(routes));
   const nonce = randomHexString(32);
 
@@ -81,7 +79,7 @@ export default async function handleRequest(request: Request, responseStatusCode
     const { pipe, abort } = renderToPipeableStream(
       <I18nextProvider i18n={i18n}>
         <NonceProvider nonce={nonce}>
-          <RemixServer context={remixContext} url={request.url} abortDelay={abortDelay} />
+          <ServerRouter context={reactRouterContext} url={request.url} />
         </NonceProvider>
       </I18nextProvider>,
       {
@@ -108,6 +106,9 @@ export default async function handleRequest(request: Request, responseStatusCode
       },
     );
 
-    setTimeout(abort, abortDelay);
+    // Abort the streaming render pass after 11 seconds
+    // to allow the rejected boundaries to be flushed
+    // see: https://reactrouter.com/explanation/special-files#streamtimeout
+    setTimeout(abort, 10_000);
   });
 }

@@ -1,13 +1,21 @@
-import type { AppContainerProvider } from '~/.server/app-container.provider';
+import type { RouteModules } from 'react-router';
+
 import type { i18nResources } from '~/.server/i18n.resources';
 import type { ClientEnv } from '~/.server/utils/env.utils';
-import type { Session } from '~/.server/web/session';
 import type { APP_LOCALES } from '~/utils/locale-utils';
+
+/* eslint-disable no-var */
 
 /**
  * Application-scoped global types.
  */
 declare global {
+  /**
+   * React Router adds the route modules to global
+   * scope, but doesn't declare them anywhere.
+   */
+  var __reactRouterRouteModules: RouteModules;
+
   /**
    * A union type representing the possible values for the application locale.
    * This type is derived from the elements of the `APP_LOCALES` array.
@@ -46,18 +54,6 @@ declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: false;
     resources: (typeof i18nResources)['en'];
-  }
-}
-
-declare module '@remix-run/server-runtime' {
-  interface AppLoadContext {
-    appContainer: AppContainerProvider;
-    session: Session;
-  }
-
-  interface Future {
-    // see: https://remix.run/docs/en/main/guides/single-fetch#type-inference
-    v3_singleFetch: true;
   }
 }
 

@@ -1,5 +1,5 @@
-import { redirect } from '@remix-run/node';
-import type { Params } from '@remix-run/react';
+import { redirect } from 'react-router';
+import type { Params } from 'react-router';
 
 import type { ApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';

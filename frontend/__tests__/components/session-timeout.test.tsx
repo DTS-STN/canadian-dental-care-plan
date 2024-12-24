@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
 import { useIdleTimer } from 'react-idle-timer';
@@ -38,7 +38,7 @@ describe('SessionTimeout', () => {
       onSessionExtend: vi.fn(),
     };
 
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <SessionTimeout {...defaultProps} {...props} />,
         path: '/',

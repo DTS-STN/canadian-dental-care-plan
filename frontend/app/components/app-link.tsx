@@ -1,9 +1,8 @@
 import type { ComponentProps } from 'react';
 
-import type { Params } from '@remix-run/react';
-import { Link, useHref } from '@remix-run/react';
+import type { Params, To } from 'react-router';
+import { Link, useHref } from 'react-router';
 
-import type { To } from 'react-router';
 import invariant from 'tiny-invariant';
 
 import { NewTabIndicator } from '~/components/new-tab-indicator';

@@ -1,4 +1,4 @@
-import { useLocation } from '@remix-run/react';
+import { useLocation } from 'react-router';
 
 import { normalizeSpaces } from './string-utils';
 import { APP_LOCALES, removeLanguageFromPath } from '~/utils/locale-utils';

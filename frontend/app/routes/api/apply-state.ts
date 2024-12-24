@@ -1,7 +1,7 @@
 /**
  * An API route that can be used to perform actions with user's apply state.
  */
-import type { ActionFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs } from 'react-router';
 
 import { z } from 'zod';
 

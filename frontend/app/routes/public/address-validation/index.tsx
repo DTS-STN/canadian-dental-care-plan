@@ -1,9 +1,8 @@
 import type { SyntheticEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useLoaderData } from 'react-router';
 
 import { faCheck, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -182,10 +181,12 @@ export async function action({ context: { appContainer, session }, request, para
 
 function isAddressResponse(data: unknown): data is AddressResponse {
   return (
+    // Ensure status is a string
+    // Ensure 'status' exists on data
     typeof data === 'object' && // Ensure it's an object
     data !== null && // Ensure it's not null
-    'status' in data && // Ensure 'status' exists on data
-    typeof data.status === 'string' // Ensure status is a string
+    'status' in data &&
+    typeof data.status === 'string'
   );
 }
 

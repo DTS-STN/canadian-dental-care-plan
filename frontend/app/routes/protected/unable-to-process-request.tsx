@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
 

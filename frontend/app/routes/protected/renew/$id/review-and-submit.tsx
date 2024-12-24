@@ -1,6 +1,5 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useFetcher, useLoaderData } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';

@@ -1,4 +1,4 @@
-import type { MetaArgs } from '@remix-run/node';
+import type { MetaArgs } from 'react-router';
 
 import { describe, expect, it } from 'vitest';
 

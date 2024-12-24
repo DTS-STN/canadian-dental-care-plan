@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
+import type { LoaderFunctionArgs } from 'react-router';
 
 /**
  * A basic readiness endpoint to be used by kubernetes container probes

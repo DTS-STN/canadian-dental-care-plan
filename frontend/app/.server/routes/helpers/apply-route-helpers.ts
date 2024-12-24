@@ -1,5 +1,5 @@
-import { redirectDocument } from '@remix-run/node';
-import type { Params } from '@remix-run/react';
+import { redirectDocument } from 'react-router';
+import type { Params } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';

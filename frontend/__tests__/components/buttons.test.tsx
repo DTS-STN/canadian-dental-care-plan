@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { describe, expect, it, vi } from 'vitest';
 
@@ -49,7 +49,7 @@ describe('Button Component', () => {
 
 describe('ButtonLink Component', () => {
   it('renders link with default props', () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <ButtonLink to="/">Click me</ButtonLink>,
         path: '/',
@@ -64,7 +64,7 @@ describe('ButtonLink Component', () => {
   });
 
   it('renders link with custom size and variant', () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => (
           <ButtonLink size="lg" variant="primary" to="/">
@@ -81,7 +81,7 @@ describe('ButtonLink Component', () => {
   });
 
   it('renders pill link', () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => (
           <ButtonLink pill to="/">

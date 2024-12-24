@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { describe, expect, it } from 'vitest';
 
@@ -14,7 +14,7 @@ describe('Breadcrumbs', () => {
       { content: 'Contact', to: '/contact' },
     ];
 
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <Breadcrumbs items={items} />,
         path: '/',

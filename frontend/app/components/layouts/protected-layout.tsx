@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
 
-import { Link } from '@remix-run/react';
+import { Link } from 'react-router';
 
 import { faArrowRightFromBracket, faChevronDown, faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

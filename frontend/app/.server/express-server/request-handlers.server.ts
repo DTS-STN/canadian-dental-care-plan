@@ -1,6 +1,5 @@
-import { createRequestHandler } from '@remix-run/express';
-
 import { UTCDate } from '@date-fns/utc';
+import { createRequestHandler } from '@react-router/express';
 import type { ErrorRequestHandler, RequestHandler } from 'express';
 import path from 'node:path';
 import type { ViteDevServer } from 'vite';
@@ -47,7 +46,7 @@ export function remixRequestHandler(mode: string, viteDevServer?: ViteDevServer)
   return createRequestHandler({
     mode: serverConfig.NODE_ENV,
     build: viteDevServer //
-      ? () => viteDevServer.ssrLoadModule('virtual:remix/server-build')
+      ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
       : () => import(remixServerBuild),
     getLoadContext: (request, response) => {
       const appContainer = getAppContainerProvider();

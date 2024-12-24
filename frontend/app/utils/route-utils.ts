@@ -1,5 +1,5 @@
-import type { Params } from '@remix-run/react';
-import { generatePath, useMatches } from '@remix-run/react';
+import type { Params } from 'react-router';
+import { generatePath, useMatches } from 'react-router';
 
 import type { FlatNamespace, KeysByTOptions, Namespace, ParseKeysByNamespaces, TOptions } from 'i18next';
 import invariant from 'tiny-invariant';

@@ -1,5 +1,5 @@
-import { redirectDocument } from '@remix-run/node';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import { redirectDocument } from 'react-router';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
 import { subtle } from 'crypto';
 import { CompactEncrypt, SignJWT } from 'jose';

@@ -22,7 +22,7 @@ vi.mock('node:crypto', () => ({
   },
 }));
 
-vi.mock('@remix-run/node', () => ({
+vi.mock('@react-router/node', () => ({
   redirect: vi.fn((to: string) => `MockedRedirect(${to})`),
 }));
 

@@ -1,5 +1,3 @@
-import '@remix-run/node';
-
 import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';

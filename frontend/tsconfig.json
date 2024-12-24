@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx", "**/.server/**/*.ts", "**/.server/**/*.tsx", "**/.client/**/*.ts", "**/.client/**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "**/.server/**/*.ts", "**/.server/**/*.tsx", "**/.client/**/*.ts", "**/.client/**/*.tsx", ".react-router/types/**/*"],
   "exclude": ["**/tmp/**"],
   "compilerOptions": {
     "allowJs": true,
@@ -12,14 +12,17 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "noEmit": true,
-    "paths": { "~/*": ["./app/*"] },
+    "paths": {
+      "~/*": ["./app/*"]
+    },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2022",
-    "types": ["@remix-run/node", "@testing-library/jest-dom", "vite/client"],
+    "types": ["@react-router/node", "@testing-library/jest-dom", "vite/client"],
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "rootDirs": [".", "./.react-router/types"]
   }
 }

@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Outlet, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
+import type { LoaderFunctionArgs } from 'react-router';
+import { Outlet, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from 'react-router';
 
 import { TYPES } from '~/.server/constants';
 import { NotFoundError, ProtectedLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';

@@ -1,6 +1,5 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useFetcher, useParams } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useFetcher, useParams } from 'react-router';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';

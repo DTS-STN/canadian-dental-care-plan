@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -17,7 +17,7 @@ describe('SkipNavigationLinks', () => {
   });
 
   it('renders without crashing', () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <SkipNavigationLinks />,
         path: '/',
@@ -27,7 +27,7 @@ describe('SkipNavigationLinks', () => {
   });
 
   it('renders skip links', () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <SkipNavigationLinks />,
         path: '/',
@@ -39,7 +39,7 @@ describe('SkipNavigationLinks', () => {
   });
 
   it('calls scrollAndFocusFromAnchorLink when skip link is clicked', () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <SkipNavigationLinks />,
         path: '/',

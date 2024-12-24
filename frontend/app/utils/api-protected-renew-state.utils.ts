@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useSubmit } from '@remix-run/react';
+import { useSubmit } from 'react-router';
 
 import type { ApiProtectedRenewStateAction } from '~/routes/api/protected-renew-state';
 

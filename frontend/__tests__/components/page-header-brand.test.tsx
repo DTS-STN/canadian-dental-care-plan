@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -37,7 +37,7 @@ describe('PageHeaderBrand', () => {
   });
 
   it('renders without crashing', () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <PageHeaderBrand />,
         path: '/',
@@ -47,7 +47,7 @@ describe('PageHeaderBrand', () => {
   });
 
   it('displays the Government of Canada logo', () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <PageHeaderBrand />,
         path: '/',
@@ -58,7 +58,7 @@ describe('PageHeaderBrand', () => {
   });
 
   it('displays the Language Switcher', () => {
-    const RemixStub = createRemixStub([
+    const RemixStub = createRoutesStub([
       {
         Component: () => <PageHeaderBrand />,
         path: '/',

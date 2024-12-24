@@ -5,7 +5,7 @@
  */
 import { StrictMode, startTransition } from 'react';
 
-import { RemixBrowser } from '@remix-run/react';
+import { HydratedRouter } from 'react-router/dom';
 
 import { hydrateRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
@@ -13,7 +13,8 @@ import { I18nextProvider } from 'react-i18next';
 import { getNamespaces, initI18n } from '~/utils/locale-utils';
 
 async function hydrate() {
-  const routes = Object.values(window.__remixRouteModules);
+  const routeModules = Object.values(globalThis.__reactRouterRouteModules);
+  const routes = routeModules.filter((routeModule) => routeModule !== undefined);
   const i18n = await initI18n(getNamespaces(routes));
 
   startTransition(() => {
@@ -21,7 +22,7 @@ async function hydrate() {
       document,
       <StrictMode>
         <I18nextProvider i18n={i18n}>
-          <RemixBrowser />
+          <HydratedRouter />
         </I18nextProvider>
       </StrictMode>,
     );
