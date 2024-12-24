@@ -1,8 +1,8 @@
-import type { ScriptProps } from '@remix-run/react/dist/components';
+import type { ComponentPropsWithoutRef } from 'react';
 
 import type { ClientEnv } from '~/utils/env-utils';
 
-export interface ClientEnvProps extends ScriptProps {
+export interface ClientEnvProps extends ComponentPropsWithoutRef<'script'> {
   env: ClientEnv;
 }
 

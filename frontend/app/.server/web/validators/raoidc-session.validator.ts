@@ -1,12 +1,11 @@
-import '@remix-run/node';
-
 import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 import type { FetchFn, HttpClient } from '~/.server/http';
-import { IdToken, UserinfoToken, validateSession } from '~/.server/utils/raoidc.utils';
+import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
+import { validateSession } from '~/.server/utils/raoidc.utils';
 import type { Session } from '~/.server/web/session';
 
 /**

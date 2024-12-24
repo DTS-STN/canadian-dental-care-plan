@@ -91,7 +91,7 @@ export class MockAddressValidationRepository implements AddressValidationReposit
     this.log = logFactory.createLogger('MockAddressValidationRepository');
   }
 
-  getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity> {
+  async getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity> {
     this.log.debug('Checking correctness of address for addressCorrectionRequest: [%j]', addressCorrectionRequestEntity);
     const statusCode = this.mockStatusCodeFromProvinceCode(addressCorrectionRequestEntity.provinceCode);
     const addressCorrectionResults: AddressCorrectionResultEntity = {
@@ -107,7 +107,7 @@ export class MockAddressValidationRepository implements AddressValidationReposit
     };
 
     this.log.debug('Address correction results: [%j]', addressCorrectionResults);
-    return Promise.resolve(addressCorrectionResults);
+    return await Promise.resolve(addressCorrectionResults);
   }
 
   protected mockStatusCodeFromProvinceCode(provinceCode: string) {
@@ -136,7 +136,7 @@ export class MockAddressValidationRepository implements AddressValidationReposit
     };
   }
 
-  checkHealth(): Promise<void> {
-    return Promise.resolve();
+  async checkHealth(): Promise<void> {
+    return await Promise.resolve();
   }
 }

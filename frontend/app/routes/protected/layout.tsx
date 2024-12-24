@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Outlet, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
+import type { LoaderFunctionArgs } from 'react-router';
+import { Outlet, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from 'react-router';
 
 import { TYPES } from '~/.server/constants';
 import { NotFoundError, ProtectedLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
@@ -32,12 +32,12 @@ export default function Layout() {
   const navigate = useNavigate();
   const apiSession = useApiSession();
 
-  function handleOnSessionEnd() {
-    navigate('/auth/logout');
+  async function handleOnSessionEnd() {
+    await navigate('/auth/logout');
   }
 
-  function handleOnSessionExtend() {
-    apiSession.submit({ action: 'extend' });
+  async function handleOnSessionExtend() {
+    await apiSession.submit({ action: 'extend' });
   }
 
   return (

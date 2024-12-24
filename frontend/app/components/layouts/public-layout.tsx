@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { useEffect } from 'react';
 
-import { Link } from '@remix-run/react';
+import { Link } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
 

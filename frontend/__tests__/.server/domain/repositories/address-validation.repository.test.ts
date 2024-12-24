@@ -53,7 +53,7 @@ describe('DefaultAddressValidationRepository', () => {
       mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(null, { status: 500 }));
 
       const repository = new DefaultAddressValidationRepository(mockLogFactory, mockServerConfig, mockHttpClient);
-      await expect(() => repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' })).rejects.toThrowError();
+      await expect(async () => await repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' })).rejects.toThrowError();
     });
   });
 });

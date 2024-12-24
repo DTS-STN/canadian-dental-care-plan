@@ -1,6 +1,5 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { data } from '@remix-run/node';
-import { Outlet, isRouteErrorResponse, useParams, useRouteError } from '@remix-run/react';
+import type { LoaderFunctionArgs } from 'react-router';
+import { Outlet, data, isRouteErrorResponse, useParams, useRouteError } from 'react-router';
 
 import { TYPES } from '~/.server/constants';
 import { BilingualNotFoundError, NotFoundError, ServerError } from '~/components/layouts/public-layout';

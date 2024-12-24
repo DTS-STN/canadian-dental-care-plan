@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Outlet, useLoaderData } from '@remix-run/react';
+import type { LoaderFunctionArgs } from 'react-router';
+import { Outlet, useLoaderData } from 'react-router';
 
 import { TYPES } from '~/.server/constants';
 import { getLocale } from '~/.server/utils/locale.utils';
@@ -24,12 +24,12 @@ export default function Route() {
   const { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
   const apiSession = useApiSession();
 
-  function handleOnSessionEnd() {
-    apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-status' });
+  async function handleOnSessionEnd() {
+    await apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-status' });
   }
 
-  function handleOnSessionExtend() {
-    apiSession.submit({ action: 'extend' });
+  async function handleOnSessionExtend() {
+    await apiSession.submit({ action: 'extend' });
   }
 
   return (

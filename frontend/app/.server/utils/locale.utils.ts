@@ -1,4 +1,4 @@
-import type { Params } from '@remix-run/react';
+import type { Params } from 'react-router';
 
 import type { Namespace } from 'i18next';
 import { createInstance } from 'i18next';

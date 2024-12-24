@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 
-import { useParams } from '@remix-run/react';
+import { useParams } from 'react-router';
+import type { To } from 'react-router';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
-import type { To } from 'react-router';
 
 import { InlineLink } from './inline-link';
 

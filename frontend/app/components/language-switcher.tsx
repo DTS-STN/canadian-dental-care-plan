@@ -1,4 +1,4 @@
-import { useMatches, useParams, useSearchParams } from '@remix-run/react';
+import { useMatches, useParams, useSearchParams } from 'react-router';
 
 import type { InlineLinkProps } from '~/components/inline-link';
 import { InlineLink } from '~/components/inline-link';

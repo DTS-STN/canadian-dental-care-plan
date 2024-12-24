@@ -2,14 +2,14 @@ import type { PropsWithChildren } from 'react';
 
 import { act, render, renderHook } from '@testing-library/react';
 
-import { useFetcher } from '@remix-run/react';
+import { useFetcher } from 'react-router';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useEnhancedFetcher, useFetcherKey } from '~/hooks';
 
-vi.mock('@remix-run/react');
+vi.mock('react-router');
 vi.mock('~/components/csrf-token-input');
 vi.mock('~/hooks/use-fetcher-key.hook');
 

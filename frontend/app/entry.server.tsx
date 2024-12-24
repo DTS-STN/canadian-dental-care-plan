@@ -1,10 +1,11 @@
-import type { ActionFunctionArgs, AppLoadContext, EntryContext, LoaderFunctionArgs } from '@remix-run/node';
-import { createReadableStreamFromReadable } from '@remix-run/node';
-import { RemixServer } from '@remix-run/react';
+import type { ActionFunctionArgs, AppLoadContext, EntryContext, LoaderFunctionArgs } from 'react-router';
+import { ServerRouter } from 'react-router';
 
+import { createReadableStreamFromReadable } from '@react-router/node';
 import { isbot } from 'isbot';
 import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
+import type { RenderToPipeableStreamOptions } from 'react-dom/server';
 import { I18nextProvider } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
@@ -14,8 +15,6 @@ import { getLogger } from '~/.server/utils/logging.utils';
 import { NonceProvider } from '~/components/nonce-context';
 import { getNamespaces } from '~/utils/locale-utils';
 import { randomHexString } from '~/utils/string-utils';
-
-const abortDelay = 5_000;
 
 /**
  * We need to extend the server-side session lifetime whenever a client-side
@@ -59,7 +58,7 @@ export function handleError(error: unknown, { context: { appContainer }, request
   }
 }
 
-export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext, { appContainer }: AppLoadContext) {
+export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, routerContext: EntryContext, { appContainer }: AppLoadContext) {
   const log = getLogger('entry.server/handleRequest');
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
@@ -67,47 +66,64 @@ export default async function handleRequest(request: Request, responseStatusCode
   instrumentationService.createCounter('http.server.requests').add(1);
 
   const locale = getLocale(request);
-  const routes = Object.values(remixContext.routeModules);
+  const routes = Object.values(routerContext.routeModules);
   const i18n = await initI18n(locale, getNamespaces(routes));
   const nonce = randomHexString(32);
 
-  // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
-  responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
-  responseHeaders.set('Content-Security-Policy', generateContentSecurityPolicy(nonce));
-
   return await new Promise((resolve, reject) => {
+    const userAgent = request.headers.get('user-agent');
+
+    // Ensure requests from bots and SPA Mode renders wait for all content to load before responding
+    // https://react.dev/reference/react-dom/server/renderToPipeableStream#waiting-for-all-content-to-load-for-crawlers-and-static-generation
+    const readyOption: keyof RenderToPipeableStreamOptions =
+      (userAgent && isbot(userAgent)) || routerContext.isSpaMode //
+        ? 'onAllReady'
+        : 'onShellReady';
+
     let shellRendered = false;
 
     const { pipe, abort } = renderToPipeableStream(
       <I18nextProvider i18n={i18n}>
         <NonceProvider nonce={nonce}>
-          <RemixServer context={remixContext} url={request.url} abortDelay={abortDelay} />
+          <ServerRouter context={routerContext} url={request.url} nonce={nonce} />
         </NonceProvider>
       </I18nextProvider>,
       {
-        [handlerFnName]() {
+        [readyOption]() {
           shellRendered = true;
+
+          // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
+          responseHeaders.set('Content-Type', 'text/html');
+          responseHeaders.set('Content-Security-Policy', generateContentSecurityPolicy(nonce));
+
           const body = new PassThrough();
           const stream = createReadableStreamFromReadable(body);
+
           resolve(new Response(stream, { headers: responseHeaders, status: responseStatusCode }));
+
           pipe(body);
         },
-        onShellError(error: unknown) {
+        onShellError(error) {
           reject(error);
         },
-        onError(error: unknown) {
+        onError(error) {
           // eslint-disable-next-line no-param-reassign
           responseStatusCode = 500;
-          // Log streaming rendering errors from inside the shell.  Don't log
+
+          // Log streaming rendering errors from inside the shell. Don't log
           // errors encountered during initial shell rendering since they'll
           // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
-            console.error(error);
+            log.error('Error while rendering react element', error);
           }
         },
+        nonce,
       },
     );
 
-    setTimeout(abort, abortDelay);
+    // Abort the streaming render pass after 11 seconds
+    // to allow the rejected boundaries to be flushed
+    // see: https://reactrouter.com/explanation/special-files#streamtimeout
+    setTimeout(abort, 10_000);
   });
 }

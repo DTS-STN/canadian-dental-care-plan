@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '~/.server/domain/entities';
+import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
 
@@ -71,7 +71,7 @@ export class MockBenefitRenewalRepository implements BenefitRenewalRepository {
     this.log = logFactory.createLogger('MockBenefitRenewalRepository');
   }
 
-  createBenefitRenewal(benefitRenewalRequest: BenefitRenewalRequestEntity): Promise<BenefitRenewalResponseEntity> {
+  async createBenefitRenewal(benefitRenewalRequest: BenefitRenewalRequestEntity): Promise<BenefitRenewalResponseEntity> {
     this.log.debug('Submiting benefit renewal for request [%j]', benefitRenewalRequest);
 
     const benefitRenewalResponseEntity: BenefitRenewalResponseEntity = {
@@ -87,6 +87,6 @@ export class MockBenefitRenewalRepository implements BenefitRenewalRepository {
 
     this.log.debug('Benefit renewal: [%j]', benefitRenewalResponseEntity);
 
-    return Promise.resolve(benefitRenewalResponseEntity);
+    return await Promise.resolve(benefitRenewalResponseEntity);
   }
 }

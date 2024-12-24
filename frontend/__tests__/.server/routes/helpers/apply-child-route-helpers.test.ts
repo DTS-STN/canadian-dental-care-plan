@@ -1,4 +1,4 @@
-import type { Params } from '@remix-run/react';
+import type { Params } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -6,7 +6,7 @@ import { validateApplyChildStateForReview } from '~/.server/routes/helpers/apply
 import type { ApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 
-vi.mock('@remix-run/node', () => ({
+vi.mock('react-router', () => ({
   redirect: vi.fn((to: string) => `MockedRedirect(${to})`),
 }));
 

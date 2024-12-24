@@ -140,7 +140,7 @@ export class MockApplicantRepository implements ApplicantRepository {
     this.log = logFactory.createLogger('MockApplicantRepository');
   }
 
-  findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null> {
+  async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null> {
     this.log.debug('Fetching applicant for sin [%j]', applicantRequestEntity);
 
     const personSinIdentification = applicantRequestEntity.Applicant.PersonSINIdentification.IdentificationID;
@@ -148,7 +148,7 @@ export class MockApplicantRepository implements ApplicantRepository {
 
     if (!peronalInformationEntity) {
       this.log.debug('No applicant found; Returning null');
-      return Promise.resolve(null);
+      return await Promise.resolve(null);
     }
 
     const clientIdentification: { IdentificationID?: string; IdentificationCategoryText?: string }[] = [];
@@ -172,6 +172,6 @@ export class MockApplicantRepository implements ApplicantRepository {
     };
 
     this.log.debug('Returning applicant [%j]', applicantResponseEntity);
-    return Promise.resolve(applicantResponseEntity);
+    return await Promise.resolve(applicantResponseEntity);
   }
 }

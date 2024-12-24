@@ -179,3 +179,5 @@ test-results/
 
 build-info.json
 vite.config.ts.timestamp-*
+
+.react-router/

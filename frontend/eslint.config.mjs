@@ -11,7 +11,15 @@ import tseslint from 'typescript-eslint';
 const compat = new FlatCompat({ baseDirectory: import.meta.name });
 
 export default tseslint.config(
-  { ignores: ['build/', 'coverage/', 'tmp/'] },
+  {
+    ignores: [
+      '**/.react-router/', //
+      '**/build/',
+      '**/coverage/',
+      '**/playwright-report/',
+      '**/tmp/',
+    ],
+  },
   {
     //
     // base config
@@ -58,6 +66,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
       '@typescript-eslint/prefer-nullish-coalescing': 'error',
       '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/promise-function-async': 'error',
       // Rule: @typescript-eslint/require-await
       // Note: you must disable the base rule as it can report incorrect errors
       // https://typescript-eslint.io/rules/require-await/#how-to-use

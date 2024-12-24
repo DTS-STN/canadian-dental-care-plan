@@ -1,4 +1,4 @@
-import type { AppLoadContext } from '@remix-run/node';
+import type { AppLoadContext } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';

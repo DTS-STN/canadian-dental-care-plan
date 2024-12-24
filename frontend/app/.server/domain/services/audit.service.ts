@@ -2,7 +2,7 @@ import { UTCDate } from '@date-fns/utc';
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import { AuditDetails } from '~/.server/domain/dtos';
+import type { AuditDetails } from '~/.server/domain/dtos';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface AuditService {

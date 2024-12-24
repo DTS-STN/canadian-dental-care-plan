@@ -77,10 +77,10 @@ export class DefaultHttpClient implements HttpClient {
       const dispatcher = new ProxyAgent({ uri: proxyUrl, proxyTls: { timeout: proxyTlsTimeout } });
       this.log.debug('A proxy [%s] has been configured with timeout [%d] ms; using custom fetch', proxyUrl, proxyTlsTimeout);
 
-      return (input, init) => {
+      return async (input, init) => {
         // @ts-expect-error since remix v2.9.x, the server fetch() polyfill is provided by undici,
         //                  which accepts a dispatcher object to facilitate request proxying
-        return fetch(input, { ...init, dispatcher });
+        return await fetch(input, { ...init, dispatcher });
       };
     }
 

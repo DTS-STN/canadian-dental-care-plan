@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { useHref } from '@remix-run/react';
+import { useHref } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -8,7 +8,7 @@ import { AppLink } from '~/components/app-link';
 import type { AppLinkProps } from '~/components/app-link';
 import { getPathById } from '~/utils/route-utils';
 
-vi.mock('@remix-run/react', () => ({
+vi.mock('react-router', () => ({
   Link: vi.fn(({ children }) => <a href="https://www.example.com">{children}</a>),
   useHref: vi.fn((to) => to),
 }));

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useFetchers, useLocation, useNavigation } from '@remix-run/react';
+import { useFetchers, useLocation, useNavigation } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
 import type { IIdleTimerProps } from 'react-idle-timer';

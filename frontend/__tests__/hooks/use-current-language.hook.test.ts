@@ -1,4 +1,4 @@
-import { useLocation } from '@remix-run/react';
+import { useLocation } from 'react-router';
 
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
@@ -6,7 +6,7 @@ import { mock } from 'vitest-mock-extended';
 import { useCurrentLanguage } from '~/hooks/use-current-language.hook';
 import { getAltLanguage, getLanguage } from '~/utils/locale-utils';
 
-vi.mock('@remix-run/react', () => ({
+vi.mock('react-router', () => ({
   useLocation: vi.fn(),
 }));
 

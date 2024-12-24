@@ -5,33 +5,27 @@
  */
 import { StrictMode, startTransition } from 'react';
 
-import { RemixBrowser } from '@remix-run/react';
+import { HydratedRouter } from 'react-router/dom';
 
+import type { i18n } from 'i18next';
 import { hydrateRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 
 import { getNamespaces, initI18n } from '~/utils/locale-utils';
 
-async function hydrate() {
-  const routes = Object.values(window.__remixRouteModules);
-  const i18n = await initI18n(getNamespaces(routes));
-
-  startTransition(() => {
-    hydrateRoot(
-      document,
-      <StrictMode>
-        <I18nextProvider i18n={i18n}>
-          <RemixBrowser />
-        </I18nextProvider>
-      </StrictMode>,
-    );
-  });
+function hydrateDocument(i18n: i18n): void {
+  hydrateRoot(
+    document,
+    <StrictMode>
+      <I18nextProvider i18n={i18n}>
+        <HydratedRouter />
+      </I18nextProvider>
+    </StrictMode>,
+  );
 }
 
-if (typeof requestIdleCallback === 'function') {
-  requestIdleCallback(hydrate);
-} else {
-  // Safari doesn't support requestIdleCallback
-  // https://caniuse.com/requestidlecallback
-  setTimeout(hydrate, 1);
-}
+startTransition(() => {
+  const routeModules = Object.values(globalThis.__reactRouterRouteModules);
+  const routes = routeModules.filter((routeModule) => routeModule !== undefined);
+  void initI18n(getNamespaces(routes)).then(hydrateDocument);
+});

@@ -1,4 +1,4 @@
-import { data, redirectDocument } from '@remix-run/node';
+import { data, redirectDocument } from 'react-router';
 
 import { inject, injectable } from 'inversify';
 

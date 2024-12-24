@@ -1,4 +1,4 @@
-import { Outlet } from '@remix-run/react';
+import { Outlet } from 'react-router';
 
 import { transformChildChildrenRouteAdobeAnalyticsUrl } from '~/route-helpers/renew-route-helpers';
 import type { RouteHandleData } from '~/utils/route-utils';

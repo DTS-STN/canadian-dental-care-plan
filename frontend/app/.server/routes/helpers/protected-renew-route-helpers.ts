@@ -1,5 +1,5 @@
-import { redirect, redirectDocument } from '@remix-run/node';
-import type { Params } from '@remix-run/react';
+import { redirect, redirectDocument } from 'react-router';
+import type { Params } from 'react-router';
 
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';

@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 
-import { Outlet } from '@remix-run/react';
-import { createRemixStub } from '@remix-run/testing';
+import { Outlet, createRoutesStub } from 'react-router';
 
 import { describe, expect, it } from 'vitest';
 
@@ -32,7 +31,7 @@ describe('coalesce<T> reducer', () => {
 
 describe('useBreadcrumbs()', () => {
   it('expect no breadcrumbs from useBreadcrumbs() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -44,9 +43,9 @@ describe('useBreadcrumbs()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('[]');
   });
 
@@ -57,7 +56,7 @@ describe('useBreadcrumbs()', () => {
       { labelI18nKey: 'gcweb:breadcrumbs.benefits', to: '/benefits' },
     ];
 
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         handle: {
@@ -73,16 +72,16 @@ describe('useBreadcrumbs()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual(JSON.stringify(breadcrumbs));
   });
 });
 
 describe('useBuildInfo()', () => {
   it('expect no build info from useBuildInfo() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -94,9 +93,9 @@ describe('useBuildInfo()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('');
   });
 
@@ -105,7 +104,7 @@ describe('useBuildInfo()', () => {
       buildInfo: BuildInfo;
     }
 
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         loader: () => ({
@@ -135,16 +134,16 @@ describe('useBuildInfo()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('{"buildDate":"2000-01-01T00:00:00Z","buildId":"6969","buildRevision":"69696969","buildVersion":"0.0.0-69696969-6969"}');
   });
 });
 
 describe('useI18nNamespaces()', () => {
   it('expect no i18n namespaces from useI18nNamespaces() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -156,14 +155,14 @@ describe('useI18nNamespaces()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('[]');
   });
 
   it('expect correctly flattened i18n namespaces from useI18nNamespaces() if the loaders provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         handle: { i18nNamespaces: ['index'] } satisfies RouteHandleData,
@@ -177,16 +176,16 @@ describe('useI18nNamespaces()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('["index","gcweb"]');
   });
 });
 
 describe('useTransformAdobeAnalyticsUrl()', () => {
   it('expect no transform url function from useTransformAdobeAnalyticsUrl() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -198,14 +197,14 @@ describe('useTransformAdobeAnalyticsUrl()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('{"transformAdobeAnalyticsUrl":false}');
   });
 
   it('expect correctly coalesced transform url from useTransformAdobeAnalyticsUrl() if the loaders provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         handle: {} satisfies RouteHandleData,
@@ -219,16 +218,16 @@ describe('useTransformAdobeAnalyticsUrl()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('{"transformAdobeAnalyticsUrl":true}');
   });
 });
 
 describe('usePageIdentifier()', () => {
   it('expect no page identifier from usePageIdentifier() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -240,14 +239,14 @@ describe('usePageIdentifier()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('');
   });
 
   it('expect correctly coalesced page identifier from usePageIdentifier() if the loaders provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         handle: { pageIdentifier: 'CDCP-0000' } satisfies RouteHandleData,
@@ -261,16 +260,16 @@ describe('usePageIdentifier()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('"CDCP-0001"');
   });
 });
 
 describe('usePageTitle()', () => {
   it('expect no page title from usePageTitle() if the loaders do not provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
@@ -282,14 +281,14 @@ describe('usePageTitle()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('');
   });
 
   it('expect correctly coalesced page title from usePageTitle() if the loaders provide data', async () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         handle: { pageTitleI18nKey: 'index:page-title' } satisfies RouteHandleData,
@@ -303,9 +302,9 @@ describe('usePageTitle()', () => {
       },
     ]);
 
-    render(<RemixStub />);
+    render(<RoutesStub />);
 
-    const element = await waitFor(() => screen.findByTestId('data'));
+    const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('"index:page-title"');
   });
 });

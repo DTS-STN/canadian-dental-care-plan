@@ -1,9 +1,8 @@
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useFetcher } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -69,7 +68,7 @@ export default function RenewChildParentIntro() {
   const isSubmitting = fetcher.state !== 'idle';
   const [submitAction, setSubmitAction] = useState<string>();
 
-  function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+  async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -81,7 +80,7 @@ export default function RenewChildParentIntro() {
 
     setSubmitAction(submitter.value);
 
-    fetcher.submit(formData, { method: 'POST' });
+    await fetcher.submit(formData, { method: 'POST' });
   }
 
   return (

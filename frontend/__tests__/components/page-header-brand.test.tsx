@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -37,34 +37,34 @@ describe('PageHeaderBrand', () => {
   });
 
   it('renders without crashing', () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <PageHeaderBrand />,
         path: '/',
       },
     ]);
-    render(<RemixStub />);
+    render(<RoutesStub />);
   });
 
   it('displays the Government of Canada logo', () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <PageHeaderBrand />,
         path: '/',
       },
     ]);
-    const { getByAltText } = render(<RemixStub />);
+    const { getByAltText } = render(<RoutesStub />);
     expect(getByAltText('gcweb:header.govt-of-canada.text')).toBeInTheDocument();
   });
 
   it('displays the Language Switcher', () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <PageHeaderBrand />,
         path: '/',
       },
     ]);
-    const { getByText } = render(<RemixStub />);
+    const { getByText } = render(<RoutesStub />);
     expect(getByText('gcweb:language-switcher.alt-lang')).toBeInTheDocument();
   });
 });

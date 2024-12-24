@@ -24,7 +24,7 @@ describe('scrollAndFocusFromAnchorLink', () => {
       </h1>,
     );
 
-    const actual = await waitFor(() => findByTestId('heading'));
+    const actual = await waitFor(async () => await findByTestId('heading'));
     const spyFocus = vi.spyOn(actual, 'focus');
 
     const url = new URL(window.location.href);
@@ -44,7 +44,7 @@ describe('scrollAndFocusFromAnchorLink', () => {
       </h1>,
     );
 
-    const actual = await waitFor(() => findByTestId('heading'));
+    const actual = await waitFor(async () => await findByTestId('heading'));
     const spyFocus = vi.spyOn(actual, 'focus');
 
     scrollAndFocusFromAnchorLink('not-parsable-href');
@@ -62,7 +62,7 @@ describe('scrollAndFocusFromAnchorLink', () => {
       </h1>,
     );
 
-    const actual = await waitFor(() => findByTestId('heading'));
+    const actual = await waitFor(async () => await findByTestId('heading'));
     const spyFocus = vi.spyOn(actual, 'focus');
 
     const url = new URL(window.location.href);
@@ -81,7 +81,7 @@ describe('scrollAndFocusFromAnchorLink', () => {
       </h1>,
     );
 
-    const actual = await waitFor(() => findByTestId('heading'));
+    const actual = await waitFor(async () => await findByTestId('heading'));
     const spyFocus = vi.spyOn(actual, 'focus');
 
     const url = new URL(window.location.href);

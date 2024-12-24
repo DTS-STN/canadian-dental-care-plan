@@ -153,7 +153,7 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     this.log = logFactory.createLogger('MockClientApplicationRepository');
   }
 
-  findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null> {
+  async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null> {
     this.log.debug('Fetching client application for basic info [%j]', clientApplicationBasicInfoRequestEntity);
 
     const identificationId = clientApplicationBasicInfoRequestEntity.Applicant.ClientIdentification[0].IdentificationID;
@@ -164,7 +164,7 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     // If the ID is '10000000000', return a 404 error
     if (identificationId === '10000000000') {
       this.log.debug('Client application not found for basic info [%j]', clientApplicationBasicInfoRequestEntity);
-      return Promise.resolve(null);
+      return await Promise.resolve(null);
     }
 
     // Otherwise, return specific flags or the default
@@ -197,10 +197,10 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     };
 
     this.log.debug('Client application [%j]', clientApplicationEntity);
-    return Promise.resolve(clientApplicationEntity);
+    return await Promise.resolve(clientApplicationEntity);
   }
 
-  findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<ClientApplicationEntity | null> {
+  async findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<ClientApplicationEntity | null> {
     this.log.debug('Fetching client application for sin [%j]', clientApplicationSinRequestEntity);
 
     const personSINIdentification = clientApplicationSinRequestEntity.Applicant.PersonSINIdentification.IdentificationID;
@@ -208,7 +208,7 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     // If the ID is '900000001', return a 404 error
     if (personSINIdentification === '900000001') {
       this.log.debug('Client application not found for sin [%j]', clientApplicationSinRequestEntity);
-      return Promise.resolve(null);
+      return await Promise.resolve(null);
     }
 
     // Otherwise, return specific flags or the default
@@ -235,6 +235,6 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     };
 
     this.log.debug('Client application [%j]', clientApplicationEntity);
-    return Promise.resolve(clientApplicationEntity);
+    return await Promise.resolve(clientApplicationEntity);
   }
 }

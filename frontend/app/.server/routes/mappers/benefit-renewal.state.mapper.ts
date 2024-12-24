@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import invariant from 'tiny-invariant';
-import { ReadonlyObjectDeep } from 'type-fest/source/readonly-deep';
+import type { ReadonlyObjectDeep } from 'type-fest/source/readonly-deep';
 import validator from 'validator';
 
 import type { ServerConfig } from '~/.server/configs';

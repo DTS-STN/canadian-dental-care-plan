@@ -3,7 +3,7 @@ import express from 'express';
 import sourceMapSupport from 'source-map-support';
 
 import { logging, securityHeaders, session } from '~/.server/express-server/middleware.server';
-import { globalErrorHandler, remixRequestHandler } from '~/.server/express-server/request-handlers.server';
+import { globalErrorHandler, rrRequestHandler } from '~/.server/express-server/request-handlers.server';
 import { createViteDevServer } from '~/.server/express-server/vite.server';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
@@ -66,8 +66,8 @@ if (viteDevServer) {
   app.use(viteDevServer.middlewares);
 }
 
-log.info('  ✓ registering remix request handler');
-app.all('*', remixRequestHandler(environment.NODE_ENV, viteDevServer));
+log.info('  ✓ registering react router request handler');
+app.all('*', rrRequestHandler(environment.NODE_ENV, viteDevServer));
 
 log.info('  ✓ registering global error handler');
 app.use(globalErrorHandler(isProduction));

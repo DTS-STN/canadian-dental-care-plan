@@ -2,7 +2,8 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import { AddressValidator, AddressValidatorErrorMessages, DefaultAddressValidator } from '~/.server/routes/validators/address.validator';
+import type { AddressValidator, AddressValidatorErrorMessages } from '~/.server/routes/validators/address.validator';
+import { DefaultAddressValidator } from '~/.server/routes/validators/address.validator';
 
 /**
  * Interface for creating address validators.
