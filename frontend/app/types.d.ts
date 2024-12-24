@@ -1,8 +1,9 @@
-import type { Session } from '@remix-run/node';
+import type { Session as RemixSession } from '@remix-run/node';
 
 import type { AppContainerProvider } from '~/.server/app-container.provider';
 import type { i18nResources } from '~/.server/i18n.resources';
 import type { ClientEnv } from '~/.server/utils/env.utils';
+import type { Session } from '~/.server/web/session';
 import type { APP_LOCALES } from '~/utils/locale-utils';
 
 /**
@@ -53,11 +54,20 @@ declare module 'i18next' {
 declare module '@remix-run/server-runtime' {
   interface AppLoadContext {
     appContainer: AppContainerProvider;
-    session: Session;
+    session: RemixSession;
+    future_session?: Session;
   }
 
   interface Future {
     // see: https://remix.run/docs/en/main/guides/single-fetch#type-inference
     v3_singleFetch: true;
   }
+}
+
+/**
+ * Declare additional properties on express session object using [declaration merging](https://www.typescriptlang.org/docs/handbook/declaration-merging.html).
+ */
+declare module 'express-session' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface SessionData extends Record<string, unknown> {}
 }

@@ -9,6 +9,7 @@ import type { ViteDevServer } from 'vite';
 import { getAppContainerProvider } from '~/.server/app.container';
 import { TYPES } from '~/.server/constants';
 import { getLogger } from '~/.server/utils/logging.utils';
+import { ExpressSession, NoopSession } from '~/.server/web/session';
 import { randomString } from '~/utils/string-utils';
 
 const log = getLogger('request-handlers.server.ts');
@@ -78,10 +79,11 @@ async function handleStatelessRequest({ build, mode, request, response }: { buil
   const sessionService = appContainer.get(TYPES.web.services.SessionService);
 
   const session = await sessionService.getSession(null);
+  const future_session = new NoopSession();
 
   const remixRequest = createRemixRequest(request, response);
   const remixRequestHandler = createRequestHandler(build, mode);
-  const remixResponse = await remixRequestHandler(remixRequest, { appContainer, session });
+  const remixResponse = await remixRequestHandler(remixRequest, { appContainer, session, future_session });
 
   await sendRemixResponse(response, remixResponse);
 }
@@ -92,10 +94,14 @@ async function handleStatelessRequest({ build, mode, request, response }: { buil
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleStatefulRequest({ build, mode, request, response }: { build: () => Promise<any>; mode: string; request: Request; response: Response }): Promise<void> {
   const appContainer = getAppContainerProvider();
+  const logFactory = appContainer.get(TYPES.factories.LogFactory);
   const sessionService = appContainer.get(TYPES.web.services.SessionService);
 
   log.debug('Initializing server session...');
   const session = await sessionService.getSession(request.headers.cookie);
+
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  const future_session = request.session ? new ExpressSession(logFactory, request.session) : new NoopSession();
 
   // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
   // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
@@ -111,7 +117,7 @@ async function handleStatefulRequest({ build, mode, request, response }: { build
 
   const remixRequest = createRemixRequest(request, response);
   const remixRequestHandler = createRequestHandler(build, mode);
-  const remixResponse = await remixRequestHandler(remixRequest, { appContainer, session });
+  const remixResponse = await remixRequestHandler(remixRequest, { appContainer, session, future_session });
 
   log.debug('Auto-committing session and creating session cookie');
   const sessionCookie = await sessionService.commitSession(session);
