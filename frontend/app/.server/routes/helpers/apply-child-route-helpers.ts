@@ -1,4 +1,3 @@
-import type { Session } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
@@ -8,6 +7,7 @@ import type { ApplyState, ChildrenState } from '~/.server/routes/helpers/apply-r
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
+import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadApplyChildStateArgs {

@@ -1,4 +1,3 @@
-import type { Session } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
@@ -8,6 +7,7 @@ import type { ChildState, RenewState } from '~/.server/routes/helpers/renew-rout
 import { getChildrenState, isNewChildState, loadRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
+import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadRenewChildStateArgs {

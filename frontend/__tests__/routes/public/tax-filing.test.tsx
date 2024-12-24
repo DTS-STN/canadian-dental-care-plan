@@ -1,5 +1,4 @@
 import type { AppLoadContext } from '@remix-run/node';
-import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
@@ -33,11 +32,9 @@ describe('_public.apply.id.tax-filing', () => {
 
   describe('loader()', () => {
     it('should load id, and taxFiling2023', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/adult/tax-filing'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: mock<AppLoadContext>(),
         params: {},
       });
 

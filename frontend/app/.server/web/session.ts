@@ -1,6 +1,4 @@
 import type { Request } from 'express';
-import type {} from 'express-session';
-// Augments the Express Request object with the session property.
 import assert from 'node:assert';
 import validator from 'validator';
 

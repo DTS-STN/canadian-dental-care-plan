@@ -1,5 +1,3 @@
-import type { Session as RemixSession } from '@remix-run/node';
-
 import type { AppContainerProvider } from '~/.server/app-container.provider';
 import type { i18nResources } from '~/.server/i18n.resources';
 import type { ClientEnv } from '~/.server/utils/env.utils';
@@ -54,8 +52,7 @@ declare module 'i18next' {
 declare module '@remix-run/server-runtime' {
   interface AppLoadContext {
     appContainer: AppContainerProvider;
-    session: RemixSession;
-    future_session?: Session;
+    session: Session;
   }
 
   interface Future {

@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
 
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const userInfoToken = session.get<UserinfoToken>('userInfoToken');
 
   // prettier-ignore
   const payload =
@@ -141,7 +141,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const userInfoToken = session.get<UserinfoToken>('userInfoToken');
 
   const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub);
   await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);

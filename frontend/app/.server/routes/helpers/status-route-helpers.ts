@@ -1,10 +1,10 @@
-import type { Session } from '@remix-run/node';
 import { redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
 import { getLogger } from '~/.server/utils/logging.utils';
+import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
 export interface StatusState {

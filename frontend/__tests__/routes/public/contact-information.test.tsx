@@ -1,5 +1,4 @@
 import type { AppLoadContext } from '@remix-run/node';
-import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mockDeep } from 'vitest-mock-extended';
@@ -28,8 +27,6 @@ describe('_public.apply.id.contact-information', () => {
 
   describe('loader()', () => {
     it('should id, state, country list and region list', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-
       const mockAppLoadContext = mockDeep<AppLoadContext>();
       mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.CountryService).mockReturnValueOnce({
         listCountries: () => [{ id: '1', nameEn: 'super country', nameFr: '(FR) super country' }],
@@ -41,7 +38,7 @@ describe('_public.apply.id.contact-information', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/contact-information'),
-        context: { ...mockAppLoadContext, session },
+        context: mockAppLoadContext,
         params: {},
       });
 

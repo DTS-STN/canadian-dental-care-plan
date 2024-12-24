@@ -1,4 +1,4 @@
-import { Session, data, redirectDocument } from '@remix-run/node';
+import { data, redirectDocument } from '@remix-run/node';
 
 import { inject, injectable } from 'inversify';
 
@@ -6,6 +6,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
+import type { Session } from '~/.server/web/session';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 import type { FeatureName } from '~/utils/env-utils';
 
@@ -160,7 +161,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     this.log.debug('Validating CSRF token');
 
     const requestToken = String(formData.get('_csrf'));
-    const sessionToken = String(session.get('csrfToken'));
+    const sessionToken = String(session.find('csrfToken'));
 
     const result = this.csrfTokenValidator.validateCsrfToken({ requestToken, sessionToken });
 

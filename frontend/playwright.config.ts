@@ -38,6 +38,7 @@ export default defineConfig({
       INTEROP_API_SUBSCRIPTION_KEY: '00000000000000000000000000000000',
       MOCK_AUTH_ALLOWED_REDIRECTS: 'http://localhost:3000/auth/callback/raoidc',
       PORT: port,
+      SESSION_COOKIE_SECURE: 'false'
     },
   },
 });

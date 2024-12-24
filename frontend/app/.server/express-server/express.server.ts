@@ -2,9 +2,9 @@ import compression from 'compression';
 import express from 'express';
 import sourceMapSupport from 'source-map-support';
 
-import { logging, securityHeaders } from './middleware.server';
-import { globalErrorHandler, remixRequestHandler } from './request-handlers.server';
-import { createViteDevServer } from './vite.server';
+import { logging, securityHeaders, session } from '~/.server/express-server/middleware.server';
+import { globalErrorHandler, remixRequestHandler } from '~/.server/express-server/request-handlers.server';
+import { createViteDevServer } from '~/.server/express-server/vite.server';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
 
@@ -57,6 +57,9 @@ if (isProduction) {
 
 log.info('    ✓ security headers middleware');
 app.use(securityHeaders());
+
+log.info('    ✓ session middleware (%s)', environment.SESSION_STORAGE_TYPE);
+app.use(session(isProduction, environment));
 
 if (viteDevServer) {
   log.info('    ✓ vite dev server middlewares');
