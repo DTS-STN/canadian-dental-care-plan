@@ -162,11 +162,11 @@ export default function RenewAdultChildConfirmEmail() {
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
+            <p className="mb-4">{t('renew-ita:confirm-email.add-or-update.help-message')}</p>
             <InputRadios
               id="is-new-or-updated-email"
               name="isNewOrUpdatedEmail"
               legend={t('renew-ita:confirm-email.add-or-update.legend')}
-              helpMessagePrimary={t('renew-ita:confirm-email.add-or-update.help-message')}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-ita:confirm-email.option-yes" />,
