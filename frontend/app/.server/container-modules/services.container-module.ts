@@ -29,7 +29,7 @@ import {
 } from '~/.server/domain/services';
 import { DefaultHttpClient } from '~/.server/http';
 import { DefaultInstrumentationService } from '~/.server/observability';
-import { DefaultDynatraceService, DefaultHCaptchaService, FileSessionService, RedisSessionService } from '~/.server/web/services';
+import { DefaultDynatraceService, DefaultHCaptchaService } from '~/.server/web/services';
 
 function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
   return ({ parentContext }: interfaces.Request) => {
@@ -69,7 +69,4 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.observability.InstrumentationService).to(DefaultInstrumentationService);
   bind(TYPES.web.services.DynatraceService).to(DefaultDynatraceService);
   bind(TYPES.web.services.HCaptchaService).to(DefaultHCaptchaService);
-  // SessionService bindings depend on the SESSION_STORAGE_TYPE configuration string
-  bind(TYPES.web.services.SessionService).to(FileSessionService).when(sessionTypeIs('file'));
-  bind(TYPES.web.services.SessionService).to(RedisSessionService).when(sessionTypeIs('redis'));
 });
