@@ -294,7 +294,7 @@ export default function RenewAdultUpdateAddress() {
                 id="mailing-address"
                 name="mailingAddress"
                 className="w-full"
-                label={t('renew-adult:update-address.address-field.mailing-address')}
+                label={t('renew-adult:update-address.address-field.address')}
                 maxLength={30}
                 helpMessagePrimary={t('renew-adult:update-address.address-field.address-note')}
                 helpMessagePrimaryClassName="text-black"
