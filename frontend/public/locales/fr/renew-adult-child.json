@@ -151,7 +151,7 @@
     "cancel-btn": "Annuler",
     "save-btn": "sauvegarder",
     "error-message": {
-     "mailing-address": {
+      "mailing-address": {
         "address-required": "Entrez l'adresse postale, normalement le numéro et le nom de la rue",
         "city-required": "Entrez une ville ou une municipalité pour votre adresse postale",
         "country-required": "Sélectionnez un pays pour votre adresse postale",
