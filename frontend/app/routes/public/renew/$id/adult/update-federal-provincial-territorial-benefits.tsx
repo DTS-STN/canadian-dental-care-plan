@@ -80,6 +80,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadRenewAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
   const federalBenefitsSchema = z
@@ -159,7 +162,11 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/adult/review-adult-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/adult/demographic-survey', params));
+  if (demographicSurveyEnabled) {
+    return redirect(getPathById('public/renew/$id/adult/demographic-survey', params));
+  }
+
+  return redirect(getPathById('public/renew/$id/adult/review-adult-information', params));
 }
 
 export default function RenewAdultUpdateFederalProvincialTerritorialBenefits() {

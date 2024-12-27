@@ -47,6 +47,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: LoaderFunctionArgs) {
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateFeatureEnabled('demographic-survey');
+
   const state = loadRenewAdultChildState({ params, request, session });
 
   const memberName = `${state.applicantInformation?.firstName} ${state.applicantInformation?.lastName}`;

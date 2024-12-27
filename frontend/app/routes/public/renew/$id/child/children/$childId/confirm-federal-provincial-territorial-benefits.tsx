@@ -70,6 +70,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const renewState = loadRenewChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+
   const dentalBenefitsChangedSchema = z.object({
     hasFederalProvincialTerritorialBenefitsChanged: z.boolean({ errorMap: () => ({ message: t('renew-child:children.confirm-dental-benefits.error-message.federal-provincial-territorial-benefit-required') }) }),
   });
@@ -110,7 +113,11 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/child/review-child-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/child/children/$childId/demographic-survey', params));
+  if (demographicSurveyEnabled) {
+    return redirect(getPathById('public/renew/$id/child/children/$childId/demographic-survey', params));
+  }
+
+  return redirect(getPathById('public/renew/$id/child/review-child-information', params));
 }
 
 export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefits() {
