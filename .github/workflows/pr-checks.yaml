@@ -1,0 +1,48 @@
+name: PR checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+env:
+  CI: true
+
+permissions: read-all
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.check-paths.outputs.frontend }}
+      gitops: ${{ steps.check-paths.outputs.gitops }}
+      infrastructure: ${{ steps.check-paths.outputs.infrastructure }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check-paths
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const response = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            const files = response.data.map(file => file.filename);
+            const hasFrontendChanges = files.some(file => file.startsWith('frontend/'));
+            const hasGitopsChanges = files.some(file => file.startsWith('gitops/'));
+            const hasInfrastructureChanges = files.some(file => file.startsWith('infrastructure/'));
+
+            core.setOutput('frontend', hasFrontendChanges);
+            core.setOutput('gitops', hasGitopsChanges);
+            core.setOutput('infrastructure', hasInfrastructureChanges);
+
+  build-frontend:
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.frontend == 'true' }}
+    uses: ./.github/workflows/build-frontend.yaml
