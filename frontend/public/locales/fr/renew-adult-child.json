@@ -120,7 +120,6 @@
     },
     "address-field": {
       "address": "Adresse postale",
-      "mailing-address": "Adresse postale",
       "address-note": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple\u00a0: 4B - 123 Rue Main",
       "country": "Pays",
       "province": "Province, territoire, État ou région",
@@ -153,26 +152,26 @@
     "save-btn": "sauvegarder",
     "error-message": {
       "mailing-address": {
-        "address-required": "Une adresse doit être fournie",
-        "city-required": "Une ville doit être fournie",
-        "country-required": "Un pays doit être sélectionné",
-        "postal-code-required": "Le code postal ou le code zip doit être fourni",
-        "postal-code-valid": "Code postal invalide (A1A 1A1)",
-        "province-required": "Une province doit être sélectionnée",
-        "zip-code-valid": "Code zip invalide (12345)",
-        "invalid-postal-code-for-country": "Un code postal canadien a été saisi dans l'adresse postale, mais le Canada n'a pas été sélectionné comme pays. Veuillez sélectionner le Canada et la province appropriée, ou modifier le code postal",
-        "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
+        "address-required": "Entrez l'adresse postale, normalement le numéro et le nom de la rue",
+        "city-required": "Entrez une ville ou une municipalité pour votre adresse postale",
+        "country-required": "Sélectionnez un pays pour votre adresse postale",
+        "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse postale",
+        "postal-code-valid": "Entrez un code postal pour l'adresse postale dans le bon format, par exemple A1A 1A1",
+        "province-required": "Sélectionnez une province, un territoire, un État ou une région pour votre adresse postale",
+        "zip-code-valid": "Entrez un code postal américain pour l'adresse postale dans le bon format, par exemple 12345 ou 12345-6789",
+        "invalid-postal-code-for-country": "Un code postal canadien a été saisi pour l'adresse postale, mais le Canada n'a pas été sélectionné comme pays. Veuillez sélectionner le Canada et la province appropriée, ou modifier le code postal",
+        "invalid-postal-code-for-province": "Le code postal ne correspond pas à la province ou au territoire sélectionné"
       },
       "home-address": {
-        "address-required": "Une adresse doit être fournie",
-        "city-required": "Une ville doit être fournie",
-        "country-required": "Un pays doit être sélectionné",
-        "postal-code-required": "Le code postal ou le code zip doit être fourni",
-        "postal-code-valid": "Code postal invalide (A1A 1A1)",
-        "province-required": "Une province doit être sélectionnée",
-        "zip-code-valid": "Code zip invalide (12345)",
-        "invalid-postal-code-for-country": "Un code postal canadien a été saisi dans l'adresse du domicile, mais le Canada n'a pas été sélectionné comme pays. Veuillez sélectionner le Canada et la province appropriée, ou modifier le code postal",
-        "invalid-postal-code-for-province": "Le code postal ne correspond pas à la province ou au territoire que vous avez sélectionné"
+        "address-required": "Entrez l'adresse du domicile, normalement le numéro et le nom de la rue",
+        "city-required": "Entrez une ville ou une municipalité pour votre adresse du domicile",
+        "country-required": "Sélectionnez un pays pour votre adresse du domicile",
+        "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse du domicile",
+        "postal-code-valid": "Entrez un code postal pour l'adresse du domicile dans le bon format, par exemple A1A 1A1",
+        "province-required": "Sélectionnez une province, un territoire, un État ou une région pour votre adresse du domicile",
+        "zip-code-valid": "Entrez un code postal américain pour l'adresse du domicile dans le bon format, par exemple 12345 ou 12345-6789",
+        "invalid-postal-code-for-country": "Un code postal canadien a été saisi pour l'adresse du domicile, mais le Canada n'a pas été sélectionné comme pays. Veuillez sélectionner le Canada et la province appropriée, ou modifier le code postal",
+        "invalid-postal-code-for-province": "Le code postal ne correspond pas à la province ou au territoire sélectionné"
       },
       "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et crochet ()"
     }

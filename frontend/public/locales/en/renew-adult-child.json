@@ -119,7 +119,6 @@
     },
     "address-field": {
       "address": "Address",
-      "mailing-address": "Mailing address",
       "address-note": "Include apartment number (if applicable), street number, street name. For example: 4B - 123 Main St.",
       "country": "Country",
       "province": "Province, territory, state, or region",

@@ -339,13 +339,13 @@ export default function RenewAdultChildUpdateAddress() {
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-adult-child:update-address.mailing-address.header')}</legend>
+            <legend className="sr-only">{t('renew-adult-child:update-address.mailing-address.header')}</legend>
             <div className="space-y-6">
               <InputSanitizeField
                 id="mailing-address"
                 name="mailingAddress"
                 className="w-full"
-                label={t('renew-adult-child:update-address.address-field.mailing-address')}
+                label={t('renew-adult-child:update-address.address-field.address')}
                 maxLength={30}
                 helpMessagePrimary={t('renew-adult-child:update-address.address-field.address-note')}
                 helpMessagePrimaryClassName="text-black"
