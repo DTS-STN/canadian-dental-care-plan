@@ -1,0 +1,48 @@
+name: Build CDCP frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/build-frontend.yaml
+      - frontend/**
+  workflow_call: {}
+  workflow_dispatch: {}
+
+env:
+  CI: true
+
+permissions: read-all
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - run: npm clean-install
+        working-directory: frontend/
+      - run: npm run format:check
+        working-directory: frontend/
+      - run: npm run lint
+        working-directory: frontend/
+      - run: npm run test:unit:coverage
+        working-directory: frontend/
+      - run: npx playwright install chromium --with-deps
+        working-directory: frontend/
+      - run: npm run test:e2e
+        working-directory: frontend/
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - run: npm clean-install
+        working-directory: frontend/
+      - run: podman build --file dockerfile .
+        working-directory: frontend/
