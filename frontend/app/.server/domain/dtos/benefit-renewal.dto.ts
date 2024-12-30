@@ -18,14 +18,6 @@ export type AdultChildBenefitRenewalDto = BenefitRenewalDto &
     changeIndicators: AdultChildChangeIndicators;
   }>;
 
-export type AdultChangeIndicators = Readonly<{
-  hasAddressChanged: boolean;
-  hasEmailChanged: boolean;
-  hasMaritalStatusChanged: boolean;
-  hasPhoneChanged: boolean;
-  hasFederalProvincialTerritorialBenefitsChanged: boolean;
-}>;
-
 export type AdultChildChangeIndicators = Readonly<{
   hasAddressChanged: boolean;
   hasEmailChanged: boolean;
