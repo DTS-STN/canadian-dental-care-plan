@@ -156,6 +156,8 @@ export default function RenewChildReviewChildInformation() {
     fetcher.submit(formData, { method: 'POST' });
   }
 
+  const demographicSurveyEnabled = useFeature('demographic-survey');
+
   return (
     <>
       <div className="my-6 sm:my-8">
@@ -215,19 +217,21 @@ export default function RenewChildReviewChildInformation() {
                     </DescriptionListItem>
                   </dl>
                 </section>
-                <section className="space-y-6">
-                  <h2 className="font-lato text-2xl font-bold">{t('renew-child:review-child-information.demographic-survey-title')}</h2>
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('renew-child:review-child-information.demographic-survey-title')}>
-                      <p>{child.demographicSurvey ? t('renew-child:review-child-information.demographic-survey-responded') : t('renew-child:review-child-information.no')}</p>
-                      <div className="mt-4">
-                        <InlineLink id="change-demographic-survey" routeId="public/renew/$id/child/children/$childId/demographic-survey" params={childParams}>
-                          {t('renew-child:review-child-information.demographic-survey-change')}
-                        </InlineLink>
-                      </div>
-                    </DescriptionListItem>
-                  </dl>
-                </section>
+                {demographicSurveyEnabled && (
+                  <section className="space-y-6">
+                    <h2 className="font-lato text-2xl font-bold">{t('renew-child:review-child-information.demographic-survey-title')}</h2>
+                    <dl className="divide-y border-y">
+                      <DescriptionListItem term={t('renew-child:review-child-information.demographic-survey-title')}>
+                        <p>{child.demographicSurvey ? t('renew-child:review-child-information.demographic-survey-responded') : t('renew-child:review-child-information.no')}</p>
+                        <div className="mt-4">
+                          <InlineLink id="change-demographic-survey" routeId="public/renew/$id/child/children/$childId/demographic-survey" params={childParams}>
+                            {t('renew-child:review-child-information.demographic-survey-change')}
+                          </InlineLink>
+                        </div>
+                      </DescriptionListItem>
+                    </dl>
+                  </section>
+                )}
               </section>
             );
           })}

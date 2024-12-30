@@ -157,10 +157,16 @@ export async function action({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
     saveRenewState({ params, session, state: { editMode: false } });
-    return redirect(getPathById('public/renew/$id/ita/demographic-survey', params));
+    if (demographicSurveyEnabled) {
+      return redirect(getPathById('public/renew/$id/ita/demographic-survey', params));
+    }
+    return redirect(getPathById('public/renew/$id/ita/federal-provincial-territorial-benefits', params));
   }
 
   const state = loadRenewItaStateForReview({ params, request, session });
@@ -208,6 +214,8 @@ export default function RenewItaReviewInformation() {
 
     fetcher.submit(formData, { method: 'POST' });
   }
+
+  const demographicSurveyEnabled = useFeature('demographic-survey');
 
   return (
     <>
@@ -364,19 +372,21 @@ export default function RenewItaReviewInformation() {
               </DescriptionListItem>
             </dl>
           </section>
-          <section className="space-y-6">
-            <h2 className="font-lato text-2xl font-bold">{t('renew-ita:review-information.demographic-survey-title')}</h2>
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('renew-ita:review-information.demographic-survey-title')}>
-                <p>{demographicSurvey ? t('renew-ita:review-information.demographic-survey-responded') : t('renew-ita:review-information.no')}</p>
-                <div className="mt-4">
-                  <InlineLink id="change-demographic-survey" routeId="public/renew/$id/ita/demographic-survey" params={params}>
-                    {t('renew-ita:review-information.demographic-survey-change')}
-                  </InlineLink>
-                </div>
-              </DescriptionListItem>
-            </dl>
-          </section>
+          {demographicSurveyEnabled && (
+            <section className="space-y-6">
+              <h2 className="font-lato text-2xl font-bold">{t('renew-ita:review-information.demographic-survey-title')}</h2>
+              <dl className="divide-y border-y">
+                <DescriptionListItem term={t('renew-ita:review-information.demographic-survey-title')}>
+                  <p>{demographicSurvey ? t('renew-ita:review-information.demographic-survey-responded') : t('renew-ita:review-information.no')}</p>
+                  <div className="mt-4">
+                    <InlineLink id="change-demographic-survey" routeId="public/renew/$id/ita/demographic-survey" params={params}>
+                      {t('renew-ita:review-information.demographic-survey-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              </dl>
+            </section>
+          )}
           <section className="space-y-4">
             <h2 className="font-lato text-2xl font-bold">{t('renew-ita:review-information.submit-app-title')}</h2>
             <p>{t('renew-ita:review-information.submit-p-proceed')}</p>

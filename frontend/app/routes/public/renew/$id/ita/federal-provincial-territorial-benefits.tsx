@@ -78,6 +78,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
@@ -155,7 +158,11 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById('public/renew/$id/ita/demographic-survey', params));
+  if (demographicSurveyEnabled) {
+    return redirect(getPathById('public/renew/$id/ita/demographic-survey', params));
+  }
+
+  return redirect(getPathById('public/renew/$id/ita/review-information', params));
 }
 
 export default function RenewItaFederalProvincialTerritorialBenefits() {
