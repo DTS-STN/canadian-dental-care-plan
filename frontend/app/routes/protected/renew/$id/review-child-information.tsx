@@ -1,15 +1,9 @@
-import type { SyntheticEvent } from 'react';
-import { useState } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
@@ -24,9 +18,8 @@ import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { useClientEnv, useFeature } from '~/root';
+import { useFeature } from '~/root';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -141,14 +134,6 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
-  const userInfoToken = session.get<UserinfoToken>('userInfoToken');
-
-  const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub);
-  await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
-
-  const submissionInfo = { submittedOn: new UTCDate().toISOString() };
-  saveProtectedRenewState({ params, session, state: { submissionInfo } });
-
   return redirect(getPathById('protected/renew/$id/review-and-submit', params));
 }
 
@@ -157,38 +142,8 @@ export default function ProtectedRenewReviewChildInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
   const { children, payload } = useLoaderData<typeof loader>();
-  const { HCAPTCHA_SITE_KEY } = useClientEnv();
-  const hCaptchaEnabled = useFeature('hcaptcha');
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const { captchaRef } = useHCaptcha();
-  const [submitAction, setSubmitAction] = useState<string>();
-
-  function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    // Get the clicked button's value and append it to the FormData object
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.append(submitter.name, submitter.value);
-
-    setSubmitAction(submitter.value);
-
-    if (hCaptchaEnabled && captchaRef.current) {
-      try {
-        const response = captchaRef.current.getResponse();
-        formData.set('h-captcha-response', response);
-      } catch {
-        /* intentionally ignore and proceed with submission */
-      } finally {
-        captchaRef.current.resetCaptcha();
-      }
-    }
-
-    fetcher.submit(formData, { method: 'POST' });
-  }
 
   const demographicSurveyEnabled = useFeature('demographic-survey');
 
@@ -271,9 +226,8 @@ export default function ProtectedRenewReviewChildInformation() {
             );
           })}
         </div>
-        <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+        <fetcher.Form method="post" className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <CsrfTokenInput />
-          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton
               id="confirm-button"
@@ -281,7 +235,7 @@ export default function ProtectedRenewReviewChildInformation() {
               value={FormAction.Submit}
               variant="primary"
               disabled={isSubmitting}
-              loading={isSubmitting && submitAction === FormAction.Submit}
+              loading={isSubmitting}
               endIcon={faChevronRight}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Submit - Review child(ren) information click"
             >
