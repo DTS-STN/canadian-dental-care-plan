@@ -233,6 +233,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasPhoneChanged,
         hasFederalProvincialTerritorialBenefitsChanged: hasFederalProvincialTerritorialBenefitsChanged,
       },
+      communicationPreferences: this.toCommunicationPreferences({
+        existingCommunicationPreferences: clientApplication.communicationPreferences,
+        hasEmailChanged,
+        renewedEmail: contactInformation.email,
+        renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+      }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
         hasAddressChanged,

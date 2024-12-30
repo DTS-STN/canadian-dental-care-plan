@@ -123,6 +123,7 @@ export const pageIds = {
         confirmFederalProvincialTerritorialBenefits: 'CDCP-RENW-AD-0009',
         updateFederalProvincialTerritorialBenefits: 'CDCP-RENW-AD-0010',
         demographicSurvey: 'CDCP-RENW-AD-0011',
+        reviewAdultInformation: 'CDCP-RENW-AD-0012',
       },
       ita: {
         maritalStatus: 'CDCP-RENW-ITA-0001',
