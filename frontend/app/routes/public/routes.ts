@@ -743,6 +743,11 @@ export const routes = [
             file: 'routes/public/renew/$id/adult/demographic-survey.tsx',
             paths: { en: '/:lang/renew/:id/adult/demographic-survey', fr: '/:lang/renouveller/:id/adulte/questionnaire-demographique' },
           },
+          {
+            id: 'public/renew/$id/adult/review-adult-information',
+            file: 'routes/public/renew/$id/adult/review-adult-information.tsx',
+            paths: { en: '/:lang/renew/:id/adult/review-adult-information', fr: '/:lang/renouveller/:id/adulte/revue-renseignements-adulte' },
+          },
         ],
       },
       {

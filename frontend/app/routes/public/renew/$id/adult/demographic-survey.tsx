@@ -152,7 +152,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById('public/renew/$id/adult/review-information', params));
+  return redirect(getPathById('public/renew/$id/adult/review-adult-information', params));
 }
 
 export default function RenewAdultDemographicSurveyQuestions() {
@@ -265,7 +265,7 @@ export default function RenewAdultDemographicSurveyQuestions() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult/review-information"
+                routeId="public/renew/$id/adult/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental insurance click"
