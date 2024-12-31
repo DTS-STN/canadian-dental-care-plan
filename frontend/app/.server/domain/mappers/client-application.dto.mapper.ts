@@ -64,38 +64,39 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       socialInsuranceNumber: applicant.PersonSINIdentification.IdentificationID,
     };
 
-    const children = applicant.RelatedPerson.filter((person) => person.PersonRelationshipCode.ReferenceDataName === 'Dependant').map((child) => ({
-      dentalBenefits: child.ApplicantDetail.InsurancePlan?.[0].InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
-      dentalInsurance:
-        child.ApplicantDetail.PrivateDentalInsuranceIndicator ??
-        (() => {
-          throw new Error('Expected child.ApplicantDetail.PrivateDentalInsuranceIndicator to be defined');
-        })(),
-      information: {
-        firstName: child.PersonName[0].PersonGivenName[0],
-        lastName: child.PersonName[0].PersonSurName,
-        dateOfBirth:
-          child.PersonBirthDate.date ??
+    const children =
+      applicant.RelatedPerson?.filter((person) => person.PersonRelationshipCode.ReferenceDataName === 'Dependant').map((child) => ({
+        dentalBenefits: child.ApplicantDetail.InsurancePlan?.[0].InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
+        dentalInsurance:
+          child.ApplicantDetail.PrivateDentalInsuranceIndicator ??
           (() => {
-            throw new Error('Expected child.PersonBirthDate.date to be defined');
+            throw new Error('Expected child.ApplicantDetail.PrivateDentalInsuranceIndicator to be defined');
           })(),
-        isParent:
-          child.ApplicantDetail.AttestParentOrGuardianIndicator ??
-          (() => {
-            throw new Error('Expected child.ApplicantDetail.AttestParentOrGuardianIndicator to be defined');
-          })(),
-        clientId:
-          child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID ??
-          (() => {
-            throw new Error("Expected child.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'");
-          })(),
-        clientNumber: child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
-        socialInsuranceNumber: child.PersonSINIdentification.IdentificationID,
-      },
-    }));
+        information: {
+          firstName: child.PersonName[0].PersonGivenName[0],
+          lastName: child.PersonName[0].PersonSurName,
+          dateOfBirth:
+            child.PersonBirthDate.date ??
+            (() => {
+              throw new Error('Expected child.PersonBirthDate.date to be defined');
+            })(),
+          isParent:
+            child.ApplicantDetail.AttestParentOrGuardianIndicator ??
+            (() => {
+              throw new Error('Expected child.ApplicantDetail.AttestParentOrGuardianIndicator to be defined');
+            })(),
+          clientId:
+            child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID ??
+            (() => {
+              throw new Error("Expected child.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'");
+            })(),
+          clientNumber: child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
+          socialInsuranceNumber: child.PersonSINIdentification.IdentificationID,
+        },
+      })) ?? [];
 
     const communicationPreferences = {
-      email: applicant.PersonContactInformation[0].EmailAddress.at(0)?.EmailAddressID,
+      email: applicant.PersonContactInformation[0].EmailAddress?.at(0)?.EmailAddressID,
       preferredLanguage: applicant.PersonLanguage[0].CommunicationCategoryCode.ReferenceDataID,
       preferredMethod: applicant.PreferredMethodCommunicationCode.ReferenceDataID,
     };
@@ -113,19 +114,19 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       homeCity: homeAddress.AddressCityName,
       homeCountry: homeAddress.AddressCountry.CountryCode.ReferenceDataID,
       homePostalCode: homeAddress.AddressPostalCode,
-      homeProvince: homeAddress.AddressProvince.ProvinceCode.ReferenceDataID,
+      homeProvince: homeAddress.AddressProvince?.ProvinceCode.ReferenceDataID,
       mailingAddress: mailingAddress.AddressStreet.StreetName,
       mailingApartment: mailingAddress.AddressSecondaryUnitText,
       mailingCity: mailingAddress.AddressCityName,
       mailingCountry: mailingAddress.AddressCountry.CountryCode.ReferenceDataID,
       mailingPostalCode: mailingAddress.AddressPostalCode,
-      mailingProvince: mailingAddress.AddressProvince.ProvinceCode.ReferenceDataID,
-      phoneNumber: applicant.PersonContactInformation[0].TelephoneNumber.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.TelephoneNumberCategoryCode.ReferenceDataID,
-      phoneNumberAlt: applicant.PersonContactInformation[0].TelephoneNumber.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.TelephoneNumberCategoryCode.ReferenceDataID,
-      email: applicant.PersonContactInformation[0].EmailAddress.at(0)?.EmailAddressID,
+      mailingProvince: mailingAddress.AddressProvince?.ProvinceCode.ReferenceDataID,
+      phoneNumber: applicant.PersonContactInformation[0].TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.TelephoneNumberCategoryCode.ReferenceDataID,
+      phoneNumberAlt: applicant.PersonContactInformation[0].TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.TelephoneNumberCategoryCode.ReferenceDataID,
+      email: applicant.PersonContactInformation[0].EmailAddress?.at(0)?.EmailAddressID,
     };
 
-    const partner = applicant.RelatedPerson.find((person) => person.PersonRelationshipCode.ReferenceDataName === 'Spouse');
+    const partner = applicant.RelatedPerson?.find((person) => person.PersonRelationshipCode.ReferenceDataName === 'Spouse');
     const partnerInformation = partner
       ? {
           confirm:
