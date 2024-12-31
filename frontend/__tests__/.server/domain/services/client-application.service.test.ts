@@ -147,9 +147,6 @@ describe('DefaultClientApplicationService', () => {
           },
         ],
       },
-      BenefitApplicationChannelCode: {
-        ReferenceDataID: 'ONLINE',
-      },
       BenefitApplicationCategoryCode: {
         ReferenceDataID: 'DENTAL',
       },

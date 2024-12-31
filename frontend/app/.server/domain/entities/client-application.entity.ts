@@ -17,21 +17,21 @@ export type ClientApplicationEntity = ReadonlyDeep<{
               ReferenceDataID: string;
             };
           };
-          AddressPostalCode: string;
-          AddressProvince: {
+          AddressPostalCode?: string;
+          AddressProvince?: {
             ProvinceCode: {
-              ReferenceDataID: string;
+              ReferenceDataID?: string;
             };
           };
-          AddressSecondaryUnitText: string;
+          AddressSecondaryUnitText?: string;
           AddressStreet: {
             StreetName: string;
           };
         }>;
-        EmailAddress: Array<{
+        EmailAddress?: Array<{
           EmailAddressID: string;
         }>;
-        TelephoneNumber: Array<{
+        TelephoneNumber?: Array<{
           TelephoneNumberCategoryCode: {
             ReferenceDataID: string;
             ReferenceDataName: string;
@@ -78,7 +78,7 @@ export type ClientApplicationEntity = ReadonlyDeep<{
         IdentificationID: string;
         IdentificationCategoryText?: string;
       }>;
-      RelatedPerson: Array<{
+      RelatedPerson?: Array<{
         PersonBirthDate: {
           date?: string;
           YearDate?: string;
@@ -109,9 +109,6 @@ export type ClientApplicationEntity = ReadonlyDeep<{
           IdentificationCategoryText?: string;
         }>;
       }>;
-    };
-    BenefitApplicationChannelCode: {
-      ReferenceDataID: string;
     };
     BenefitApplicationCategoryCode: {
       ReferenceDataID: string;

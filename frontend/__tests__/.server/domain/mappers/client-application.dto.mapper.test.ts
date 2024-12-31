@@ -168,9 +168,6 @@ describe('DefaultClientApplicationDtoMapper', () => {
               },
             ],
           },
-          BenefitApplicationChannelCode: {
-            ReferenceDataID: 'ONLINE',
-          },
           BenefitApplicationCategoryCode: {
             ReferenceDataID: 'DENTAL',
           },
