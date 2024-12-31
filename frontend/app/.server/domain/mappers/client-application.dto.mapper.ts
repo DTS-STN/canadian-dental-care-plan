@@ -25,8 +25,12 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
         ClientIdentification: [
           {
             IdentificationID: clientApplicationBasicInfoRequestDto.clientNumber,
+            IdentificationCategoryText: 'Client Number',
           },
         ],
+      },
+      BenefitApplicationYear: {
+        IdentificationID: clientApplicationBasicInfoRequestDto.applicationYearId,
       },
     };
   }
@@ -37,6 +41,9 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
         PersonSINIdentification: {
           IdentificationID: clientApplicationSinRequestDto.sin,
         },
+      },
+      BenefitApplicationYear: {
+        IdentificationID: clientApplicationSinRequestDto.applicationYearId,
       },
     };
   }
