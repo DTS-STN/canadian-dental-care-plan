@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
-import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
+import type { ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import { DefaultClientApplicationDtoMapper } from '~/.server/domain/mappers';
 
 describe('DefaultClientApplicationDtoMapper', () => {
@@ -249,15 +249,17 @@ describe('DefaultClientApplicationDtoMapper', () => {
         lastName: 'Doe',
         dateOfBirth: '2000-01-01',
         clientNumber: 'ABC123',
+        applicationYearId: '00000000-0000-0000-0000-000000000000',
         userId: 'test-user',
       };
 
-      const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
+      const mockClientApplicationBasicInfoRequestEntity = {
         Applicant: {
           PersonName: { PersonGivenName: ['John'], PersonSurName: 'Doe' },
           PersonBirthDate: { date: '2000-01-01' },
-          ClientIdentification: [{ IdentificationID: 'ABC123' }],
+          ClientIdentification: [{ IdentificationID: 'ABC123', IdentificationCategoryText: 'Client Number' }],
         },
+        BenefitApplicationYear: { IdentificationID: '00000000-0000-0000-0000-000000000000' },
       };
 
       // Act
@@ -273,11 +275,13 @@ describe('DefaultClientApplicationDtoMapper', () => {
       // Arrange
       const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = {
         sin: '123456789',
+        applicationYearId: '00000000-0000-0000-0000-000000000000',
         userId: 'test-user',
       };
 
       const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = {
         Applicant: { PersonSINIdentification: { IdentificationID: '123456789' } },
+        BenefitApplicationYear: { IdentificationID: '00000000-0000-0000-0000-000000000000' },
       };
 
       // Act
