@@ -195,8 +195,11 @@ describe('DefaultClientApplicationService', () => {
   describe('findClientApplicationBySin', () => {
     it('should find client application by SIN', async () => {
       // Arrange
-      const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = { sin: '80000002', userId: 'test-user' };
-      const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = { Applicant: { PersonSINIdentification: { IdentificationID: mockClientApplicationSinRequestDto.sin } } };
+      const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = { sin: '80000002', applicationYearId: '00000000-0000-0000-0000-000000000000', userId: 'test-user' };
+      const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = {
+        Applicant: { PersonSINIdentification: { IdentificationID: mockClientApplicationSinRequestDto.sin } },
+        BenefitApplicationYear: { IdentificationID: '00000000-0000-0000-0000-000000000000' },
+      };
 
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
       mockClientApplicationRepository.findClientApplicationBySin.mockResolvedValue(mockClientApplicationEntity);
@@ -218,8 +221,11 @@ describe('DefaultClientApplicationService', () => {
     });
 
     it('should return null if client application is not found by SIN', async () => {
-      const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = { sin: '80000002', userId: 'test-user' };
-      const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = { Applicant: { PersonSINIdentification: { IdentificationID: mockClientApplicationSinRequestDto.sin } } };
+      const mockClientApplicationSinRequestDto: ClientApplicationSinRequestDto = { sin: '80000002', applicationYearId: '00000000-0000-0000-0000-000000000000', userId: 'test-user' };
+      const mockClientApplicationSinRequestEntity: ClientApplicationSinRequestEntity = {
+        Applicant: { PersonSINIdentification: { IdentificationID: mockClientApplicationSinRequestDto.sin } },
+        BenefitApplicationYear: { IdentificationID: '00000000-0000-0000-0000-000000000000' },
+      };
 
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
       mockClientApplicationRepository.findClientApplicationBySin.mockResolvedValue(null);
@@ -243,13 +249,21 @@ describe('DefaultClientApplicationService', () => {
   describe('findClientApplicationByBasicInfo', () => {
     it('should find client application by basic info', async () => {
       // Arrange
-      const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = { firstName: 'John', lastName: 'Doe', dateOfBirth: '2000-01-01', clientNumber: 'ABC123', userId: 'test-user' };
+      const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = {
+        firstName: 'John',
+        lastName: 'Doe',
+        dateOfBirth: '2000-01-01',
+        clientNumber: 'ABC123',
+        applicationYearId: '00000000-0000-0000-0000-000000000000',
+        userId: 'test-user',
+      };
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
           PersonName: { PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName },
           PersonBirthDate: { date: mockClientApplicationBasicInfoRequestDto.dateOfBirth },
           ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber }],
         },
+        BenefitApplicationYear: { IdentificationID: '00000000-0000-0000-0000-000000000000' },
       };
 
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
@@ -273,13 +287,21 @@ describe('DefaultClientApplicationService', () => {
 
     it('should return null if client application is not found by basic info', async () => {
       // Arrange
-      const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = { firstName: 'John', lastName: 'Doe', dateOfBirth: '2000-01-01', clientNumber: 'ABC123', userId: 'test-user' };
+      const mockClientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto = {
+        firstName: 'John',
+        lastName: 'Doe',
+        dateOfBirth: '2000-01-01',
+        clientNumber: 'ABC123',
+        applicationYearId: '00000000-0000-0000-0000-000000000000',
+        userId: 'test-user',
+      };
       const mockClientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
           PersonName: { PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName },
           PersonBirthDate: { date: mockClientApplicationBasicInfoRequestDto.dateOfBirth },
           ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber }],
         },
+        BenefitApplicationYear: { IdentificationID: '00000000-0000-0000-0000-000000000000' },
       };
 
       const mockClientApplicationRepository = mock<ClientApplicationRepository>();
