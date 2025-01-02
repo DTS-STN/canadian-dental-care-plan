@@ -45,8 +45,8 @@
   "confirm-email": {
     "page-title": "Email",
     "add-or-update": {
-      "legend": "Would you like to receive email communication from Sun Life and the Government of Canada?",
-      "help-message": "Email communication will help the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan membership. Otherwise we'll contact you by mail."
+      "legend": "Would you like to receive email communication from Sun Life and the Government of Canada about your Canadian Dental Care Plan coverage?",
+      "help-message": "Email communication will help the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan coverage. Otherwise, we'll contact you by mail."
     },
     "email": "Email address",
     "confirm-email": "Confirm email address",
