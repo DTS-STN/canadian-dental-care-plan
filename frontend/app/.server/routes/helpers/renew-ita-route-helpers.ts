@@ -24,7 +24,7 @@ export function loadRenewItaState({ params, request, session }: LoadRenewItaStat
   const { pathname } = new URL(request.url);
   const renewState = loadRenewState({ params, session });
 
-  if (renewState.typeOfRenewal !== 'adult-child') {
+  if (renewState.typeOfRenewal !== 'adult-child' && renewState.typeOfRenewal !== 'adult') {
     throw redirect(getPathById('public/renew/$id/type-renewal', params));
   }
 
@@ -106,7 +106,7 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     throw redirect(getPathById('public/renew/$id/renewal-delegate', params));
   }
 
-  if (typeOfRenewal !== 'adult-child') {
+  if (typeOfRenewal !== 'adult-child' && typeOfRenewal !== 'adult') {
     throw redirect(getPathById('public/renew/$id/type-renewal', params));
   }
 
