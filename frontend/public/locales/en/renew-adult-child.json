@@ -232,12 +232,12 @@
     }
   },
   "dental-insurance": {
-    "title": "Access to other dental insurance",
-    "legend": "Do you have access to dental insurance or coverage:",
+    "title": "Access to private dental insurance",
+    "legend": "Do you have access to private dental insurance or coverage?",
     "list": {
-      "employment": "Through your employment benefits or a family member's employment benefits, including health and wellness accounts",
-      "pension": "Through your pension benefits or a family member's pension benefits",
-      "purchased": "Purchased by you or a family member or through a group plan from an insurance or benefits company",
+      "employment": "Through a parent or legal guardian's employment benefits including health and wellness accounts",
+      "pension": "Through a parent or legal guardian's pension benefits",
+      "purchased": "Purchased by a parent or legal guardian from an insurance or benefits company",
       "professional": "Through a professional or student organization"
     },
     "option-yes": "<strong>Yes</strong>, I have access to dental insurance or coverage",
@@ -250,18 +250,31 @@
     },
     "detail": {
       "additional-info": {
-        "title": "Additional information",
-        "eligible": "Exception: You may still be eligible if you are retired and:",
-        "list": {
-          "opted": "you opted out of pension benefits before December 11, 2023, and",
-          "cannot-opt": "you can't opt back in under the pension rules"
-        },
-        "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your or a family member's:",
-        "not-eligible-employer": "employer",
-        "not-eligible-pension": "pension (see exception)",
-        "not-eligible-organization": "professional or student organization.",
-        "not-eligible-note": "As such, you are not eligible for the Canadian Dental Care Plan.",
-        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own, you are not eligible for the Canadian Dental Care Plan while that coverage is in effect."
+        "title": "What does it mean to have access to private dental insurance or coverage?",
+        "eligible": "It means you do not have access to any type of dental insurance or coverage through:",
+        "eligible-list": {
+          "employment-benefits": "your employment benefits or a family member's employment benefits, including health and wellness accounts",
+          "organization": {
+            "professional-student": "a professional or student organization",
+            "note": "Note: If you're eligible for dental coverage through your employment benefits or through a professional or student organization, you're not eligible for CDCP. This is true even if:",
+            "not-take": "you decide not to take it",
+            "pay-premium": "you have to pay a premium for it",
+            "not-use": "you don't use it"
+          },
+          "pension": {
+            "pension-benefits": "your pension benefits or a family member's pension benefits",
+            "federal-provincial-territorial": "this includes federal, provincial and territorial government employer pension plans",
+            "exceptions": {
+              "eligible": "Exception: You may be eligible for the CDCP if you're retired and:",
+              "opted-out": "you opted out of pension benefits before December 11, 2023, and",
+              "opt-back": "you can't opt back in under the pension rules"
+            }
+          },
+          "purchased-coverage": {
+            "purchased-through": "coverage bought by you or a family member or through a group plan from an insurance or benefits company",
+            "purchased-privately": "if you purchased your current dental insurance policy privately  (and not as part of any of the coverage described above), you're not eligible for the CDCP while that coverage is in effect."
+          }
+        }
       }
     },
     "error-message": {

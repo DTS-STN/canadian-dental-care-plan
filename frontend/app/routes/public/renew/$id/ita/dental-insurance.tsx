@@ -24,6 +24,13 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+enum FormAction {
+  Continue = 'continue',
+  Cancel = 'cancel',
+  Back = 'back',
+  Save = 'save',
+}
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.ita.dentalInsurance,
@@ -57,6 +64,14 @@ export async function action({ context: { appContainer, session }, params, reque
     dentalInsurance: z.boolean({ errorMap: () => ({ message: t('renew-ita:dental-insurance.error-message.dental-insurance-required') }) }),
   });
 
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  if (formAction === FormAction.Back) {
+    if (state.hasAddressChanged) {
+      return redirect(getPathById('public/renew/$id/ita/update-mailing-address', params));
+    }
+    return redirect(getPathById('public/renew/$id/ita/confirm-address', params));
+  }
+
   const parsedDataResult = dentalInsuranceSchema.safeParse({
     dentalInsurance: formData.get('dentalInsurance') ? formData.get('dentalInsurance') === 'yes' : undefined,
   });
@@ -74,7 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/renew/$id/ita/federal-provincial-territorial-benefits', params));
 }
 
-export default function RenewItaAccessToDentalInsurance() {
+export default function RenewItaAccessToDentalInsuranceQuestion() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
@@ -86,26 +101,31 @@ export default function RenewItaAccessToDentalInsurance() {
 
   const helpMessage = (
     <div className="my-4 space-y-4">
-      <ul className="list-disc pl-7">
-        <li>{t('dental-insurance.list.employment')}</li>
-        <li>{t('dental-insurance.list.pension')}</li>
-        <li>{t('dental-insurance.list.purchased')}</li>
-        <li>{t('dental-insurance.list.professional')}</li>
-      </ul>
       <Collapsible summary={t('dental-insurance.detail.additional-info.title')}>
         <div className="space-y-4">
-          <p>{t('dental-insurance.detail.additional-info.not-eligible')}</p>
-          <ul className="list-disc space-y-1 pl-7">
-            <li>{t('dental-insurance.detail.additional-info.not-eligible-employer')}</li>
-            <li>{t('dental-insurance.detail.additional-info.not-eligible-pension')}</li>
-            <li>{t('dental-insurance.detail.additional-info.not-eligible-organization')}</li>
-          </ul>
-          <p>{t('dental-insurance.detail.additional-info.not-eligible-note')}</p>
-          <p>{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
           <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
           <ul className="list-disc space-y-1 pl-7">
-            <li>{t('dental-insurance.detail.additional-info.list.opted')}</li>
-            <li>{t('dental-insurance.detail.additional-info.list.cannot-opt')}</li>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.employment-benefits')}</li>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.professional-student')}</li>
+            <p className="pl-4">{t('dental-insurance.detail.additional-info.eligible-list.organization.note')}</p>
+            <ul className="list-disc space-y-1 pl-12">
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.not-take')}</li>
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.pay-premium')}</li>
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.not-use')}</li>
+            </ul>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.pension-benefits')}</li>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.federal-provincial-territorial')}</li>
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.eligible')}</li>
+              <ul className="list-disc space-y-1 pl-7">
+                <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opted-out')}</li>
+                <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opt-back')}</li>
+              </ul>
+            </ul>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-through')}</li>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-privately')}</li>
+            </ul>
           </ul>
         </div>
       </Collapsible>
@@ -147,29 +167,34 @@ export default function RenewItaAccessToDentalInsurance() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
+              <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
                 {t('dental-insurance.button.save-btn')}
               </Button>
-
-              <Button id="cancel-button" name="_action" value="cancel" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental insurance click">
-                {t('renew-ita:confirm-phone.cancel-btn')}
-              </Button>
+              <ButtonLink
+                id="back-button"
+                routeId="public/renew/$id/ita/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental insurance click"
+              >
+                {t('dental-insurance.button.cancel-btn')}
+              </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Access to other dental insurance click">
+              <LoadingButton
+                name="_action"
+                value={FormAction.Continue}
+                variant="primary"
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Access to other dental insurance click"
+              >
                 {t('dental-insurance.button.continue')}
               </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="public/renew/$id/ita/confirm-address"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Access to other dental insurance click"
-              >
+              <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Access to other dental insurance click">
                 {t('dental-insurance.button.back')}
-              </ButtonLink>
+              </Button>
             </div>
           )}
         </fetcher.Form>

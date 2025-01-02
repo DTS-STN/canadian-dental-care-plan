@@ -25,11 +25,12 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 enum FormAction {
   Continue = 'continue',
   Save = 'save',
+  Back = 'back',
 }
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
-  pageTitleI18nKey: 'protected-renew:dental-insurance.page-title',
+  pageTitleI18nKey: 'protected-renew:dental-insurance.title',
   pageIdentifier: pageIds.protected.renew.dentalInsurance,
 };
 
@@ -46,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const memberName = `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`;
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:dental-insurance.page-title', { memberName }) }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:dental-insurance.title', { memberName }) }) };
 
   return { id: state, meta, defaultState: state.dentalInsurance, hasAddressChanged: state.hasAddressChanged, editMode: state.editMode, i18nOptions: { memberName } };
 }
@@ -112,26 +113,31 @@ export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion(
 
   const helpMessage = (
     <div className="my-4 space-y-4">
-      <ul className="list-disc pl-7">
-        <li>{t('dental-insurance.list.employment')}</li>
-        <li>{t('dental-insurance.list.pension')}</li>
-        <li>{t('dental-insurance.list.purchased')}</li>
-        <li>{t('dental-insurance.list.professional')}</li>
-      </ul>
       <Collapsible summary={t('dental-insurance.detail.additional-info.title')}>
         <div className="space-y-4">
-          <p>{t('dental-insurance.detail.additional-info.not-eligible')}</p>
-          <ul className="list-disc space-y-1 pl-7">
-            <li>{t('dental-insurance.detail.additional-info.not-eligible-employer')}</li>
-            <li>{t('dental-insurance.detail.additional-info.not-eligible-pension')}</li>
-            <li>{t('dental-insurance.detail.additional-info.not-eligible-organization')}</li>
-          </ul>
-          <p>{t('dental-insurance.detail.additional-info.not-eligible-note')}</p>
-          <p>{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
           <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
           <ul className="list-disc space-y-1 pl-7">
-            <li>{t('dental-insurance.detail.additional-info.list.opted')}</li>
-            <li>{t('dental-insurance.detail.additional-info.list.cannot-opt')}</li>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.employment-benefits')}</li>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.professional-student')}</li>
+            <p className="pl-4">{t('dental-insurance.detail.additional-info.eligible-list.organization.note')}</p>
+            <ul className="list-disc space-y-1 pl-12">
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.not-take')}</li>
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.pay-premium')}</li>
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.not-use')}</li>
+            </ul>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.pension-benefits')}</li>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.federal-provincial-territorial')}</li>
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.eligible')}</li>
+              <ul className="list-disc space-y-1 pl-7">
+                <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opted-out')}</li>
+                <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opt-back')}</li>
+              </ul>
+            </ul>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-through')}</li>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-privately')}</li>
+            </ul>
           </ul>
         </div>
       </Collapsible>
