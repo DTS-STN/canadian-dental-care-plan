@@ -413,11 +413,11 @@ export default function RenewAdultReviewAdultInformation() {
             {t('renew-adult:review-adult-information.back-button')}
           </Button>
         </fetcher.Form>
-        {/* <div className="mt-8">
+        <div className="mt-8">
           <InlineLink routeId="public/renew/$id/adult/exit-application" params={params}>
             {t('renew-adult:review-adult-information.exit-button')}
           </InlineLink>
-        </div> */}
+        </div>
       </div>
       {payload && (
         <div className="mt-8">

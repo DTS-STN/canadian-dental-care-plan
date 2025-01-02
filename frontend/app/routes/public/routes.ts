@@ -748,6 +748,11 @@ export const routes = [
             file: 'routes/public/renew/$id/adult/review-adult-information.tsx',
             paths: { en: '/:lang/renew/:id/adult/review-adult-information', fr: '/:lang/renouveller/:id/adulte/revue-renseignements-adulte' },
           },
+          {
+            id: 'public/renew/$id/adult/exit-application',
+            file: 'routes/public/renew/$id/adult/exit-application.tsx',
+            paths: { en: '/:lang/renew/:id/adult/exit-application', fr: '/:lang/renouveller/:id/adulte/quitter-demande' },
+          },
         ],
       },
       {

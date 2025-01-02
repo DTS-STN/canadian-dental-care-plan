@@ -409,5 +409,13 @@
       "back-btn": "Retour",
       "close-btn": "Fermer la demande"
     }
+  },
+  "exit-application": {
+    "page-title": "Quitter la demande",
+    "are-you-sure": "Êtes-vous certain de vouloir quitter cette demande? Si vous cliquez sur «\u00a0Quitter\u00a0», le formulaire sera réinitialisé et vos renseignements seront perdus.",
+    "click-back": "Cliquez sur «\u00a0Retour\u00a0» pour retourner au formulaire.",
+    "back-btn": "Retour",
+    "exit-btn": "Quitter",
+    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   }
 }
