@@ -746,7 +746,7 @@ export const routes = [
           {
             id: 'public/renew/$id/adult/review-adult-information',
             file: 'routes/public/renew/$id/adult/review-adult-information.tsx',
-            paths: { en: '/:lang/renew/:id/adult/review-adult-information', fr: '/:lang/renouveller/:id/renew/revue-renseignements-adulte' },
+            paths: { en: '/:lang/renew/:id/adult/review-adult-information', fr: '/:lang/renouveller/:id/adulte/revue-renseignements-adulte' },
           },
           {
             id: 'public/renew/$id/adult/exit-application',
