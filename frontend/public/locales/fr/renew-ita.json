@@ -46,8 +46,8 @@
     "page-title": "Adresse courriel",
     "add-email": "Adresse courriel",
     "add-or-update": {
-      "legend": "Souhaitez-vous recevoir des communications par courriel de la part de la Sun Life et du gouvernement du Canada?",
-      "help-message": "La communication par courriel aidera au gouvernement du Canada et à Sun Life de vous contacter au sujet de votre adhésion au Régime canadien de soins dentaires. Sinon, nous vous contacterons par la poste."
+      "legend": "Souhaitez-vous recevoir des communications par courriel de la part de Sun Life et du gouvernement du Canada concernant votre couverture du Régime canadien de soins dentaires?",
+      "help-message": "La communication par courriel aidera au gouvernement du Canada et à Sun Life de vous contacter au sujet de votre adhésion au Régime canadien de soins dentaires. Sinon, nous contacterons avec vous par la poste."
     },
     "email": "Adresse courriel",
     "confirm-email": "Confirmer l'adresse courriel",
