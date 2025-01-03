@@ -10,7 +10,6 @@ export type AdultChangeIndicators = Readonly<{
   hasEmailChanged: boolean;
   hasMaritalStatusChanged: boolean;
   hasPhoneChanged: boolean;
-  hasFederalProvincialTerritorialBenefitsChanged: boolean;
 }>;
 
 export type AdultChildBenefitRenewalDto = BenefitRenewalDto &
@@ -23,7 +22,6 @@ export type AdultChildChangeIndicators = Readonly<{
   hasEmailChanged: boolean;
   hasMaritalStatusChanged: boolean;
   hasPhoneChanged: boolean;
-  hasFederalProvincialTerritorialBenefitsChanged: boolean;
 }>;
 
 export type ItaBenefitRenewalDto = BenefitRenewalDto &
@@ -36,7 +34,6 @@ export type ItaChangeIndicators = Readonly<{
 }>;
 
 export type ChildBenefitRenewalDto = BenefitRenewalDto &
-  BenefitRenewalDto &
   Readonly<{
     changeIndicators: ChildChangeIndicators;
   }>;

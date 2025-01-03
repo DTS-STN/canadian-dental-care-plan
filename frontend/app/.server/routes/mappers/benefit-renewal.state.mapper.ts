@@ -51,7 +51,6 @@ export interface RenewAdultState {
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   hasAddressChanged: boolean;
-  hasFederalProvincialTerritorialBenefitsChanged: boolean;
   hasMaritalStatusChanged: boolean;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
@@ -69,7 +68,6 @@ export interface RenewAdultChildState {
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   hasAddressChanged: boolean;
-  hasFederalProvincialTerritorialBenefitsChanged: boolean;
   hasMaritalStatusChanged: boolean;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
@@ -205,7 +203,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     mailingAddress,
     maritalStatus,
     partnerInformation,
-    hasFederalProvincialTerritorialBenefitsChanged,
   }: RenewAdultState): AdultBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
@@ -231,7 +228,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasEmailChanged,
         hasMaritalStatusChanged,
         hasPhoneChanged,
-        hasFederalProvincialTerritorialBenefitsChanged: hasFederalProvincialTerritorialBenefitsChanged,
       },
       communicationPreferences: this.toCommunicationPreferences({
         existingCommunicationPreferences: clientApplication.communicationPreferences,
@@ -252,7 +248,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       demographicSurvey,
       dentalBenefits: this.toDentalBenefits({
         existingDentalBenefits: clientApplication.dentalBenefits,
-        hasFederalProvincialTerritorialBenefitsChanged: hasFederalProvincialTerritorialBenefitsChanged,
+        hasFederalProvincialTerritorialBenefitsChanged: true,
         renewedDentalBenefits: dentalBenefits,
       }),
       dentalInsurance,
@@ -281,7 +277,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     mailingAddress,
     maritalStatus,
     partnerInformation,
-    hasFederalProvincialTerritorialBenefitsChanged,
   }: RenewAdultChildState): AdultChildBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
@@ -310,7 +305,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasEmailChanged,
         hasMaritalStatusChanged,
         hasPhoneChanged,
-        hasFederalProvincialTerritorialBenefitsChanged: hasFederalProvincialTerritorialBenefitsChanged,
       },
       communicationPreferences: this.toCommunicationPreferences({
         existingCommunicationPreferences: clientApplication.communicationPreferences,
@@ -331,7 +325,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       demographicSurvey,
       dentalBenefits: this.toDentalBenefits({
         existingDentalBenefits: clientApplication.dentalBenefits,
-        hasFederalProvincialTerritorialBenefitsChanged: hasFederalProvincialTerritorialBenefitsChanged,
+        hasFederalProvincialTerritorialBenefitsChanged: true,
         renewedDentalBenefits: dentalBenefits,
       }),
       dentalInsurance,
@@ -551,7 +545,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
           })(),
         dentalBenefits: this.toDentalBenefits({
           existingDentalBenefits: existingChild.dentalBenefits,
-          hasFederalProvincialTerritorialBenefitsChanged: !!renewedChild.dentalBenefits,
+          hasFederalProvincialTerritorialBenefitsChanged: true,
           renewedDentalBenefits: renewedChild.dentalBenefits,
         }),
         demographicSurvey: renewedChild.demographicSurvey,

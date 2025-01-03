@@ -163,7 +163,6 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         dentalInsurance: true,
         hasAddressChanged: true,
         hasMaritalStatusChanged: true,
-        hasFederalProvincialTerritorialBenefitsChanged: true,
         homeAddress: {
           address: '123 New Fake Street',
           city: 'Home City',
@@ -218,7 +217,6 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           hasEmailChanged: true,
           hasMaritalStatusChanged: true,
           hasPhoneChanged: true,
-          hasFederalProvincialTerritorialBenefitsChanged: true,
         },
         children: [
           {
