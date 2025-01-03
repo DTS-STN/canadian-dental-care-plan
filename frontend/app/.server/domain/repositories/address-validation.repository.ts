@@ -15,11 +15,16 @@ export interface AddressValidationRepository {
    * @returns A promise that resolves to a `AddressCorrectionResultEntity` object containing corrected address results
    */
   getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity>;
+
+  getMetadata(): Record<string, string>;
+
+  checkHealth(): Promise<void>;
 }
 
 @injectable()
 export class DefaultAddressValidationRepository implements AddressValidationRepository {
   private readonly log: Logger;
+  private readonly baseUrl: string;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
@@ -27,13 +32,14 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultAddressValidationRepository');
+    this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/address/validation/v1/CAN/correct`;
   }
 
   async getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity> {
     this.log.trace('Checking correctness of address for addressCorrectionRequest: [%j]', addressCorrectionRequestEntity);
     const { address, city, postalCode, provinceCode } = addressCorrectionRequestEntity;
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/address/validation/v1/CAN/correct`);
+    const url = new URL(this.baseUrl);
     url.searchParams.set('AddressFullText', address);
     url.searchParams.set('AddressCityName', city);
     url.searchParams.set('AddressPostalCode', postalCode);
@@ -64,6 +70,16 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
     this.log.trace('Address correction results: [%j]', addressCorrectionResults);
 
     return addressCorrectionResults;
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      baseUrl: this.baseUrl,
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    await this.getAddressCorrectionResult({ address: '111 WELLINGTON ST', city: 'Ottawa', postalCode: 'K1A0A4', provinceCode: 'ON' });
   }
 }
 
@@ -112,5 +128,15 @@ export class MockAddressValidationRepository implements AddressValidationReposit
 
     // Others
     return 'Valid';
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      mockEnabled: 'true',
+    };
+  }
+
+  checkHealth(): Promise<void> {
+    return Promise.resolve();
   }
 }
