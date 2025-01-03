@@ -170,7 +170,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById('protected/renew/$id/review-child-information', params));
+  return redirect(getPathById('protected/renew/$id/member-selection', params));
 }
 
 export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefits() {
