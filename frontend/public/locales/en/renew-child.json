@@ -15,7 +15,7 @@
       "continue-btn": "Continue with application",
       "cancel-btn": "Cancel",
       "save-btn": "Save",
-      "dental-insurance-title": "Access to other dental insurance or coverage",
+      "dental-insurance-title": "Access to private dental insurance or coverage",
       "dental-benefit-title": "Access to government dental benefits",
       "dental-benefit-has-access": "Has access to the following benefits:",
       "yes": "Yes",
@@ -79,7 +79,7 @@
       "continue-btn": "Return to application"
     },
     "dental-insurance": {
-      "title": "{{childName}}: access to other dental insurance",
+      "title": "{{childName}}: access to private dental insurance",
       "legend": "Does {{childName}} have access to dental insurance or coverage:",
       "list": {
         "employment": "Through a parent or legal guardian's employment benefits including health and wellness accounts",
@@ -374,7 +374,7 @@
     "client-number-title": "Client number",
     "full-name-title": "Full name",
     "dental-title": "{{child}} access to dental insurance",
-    "dental-insurance-title": "Access to other dental insurance or coverage",
+    "dental-insurance-title": "Access to private dental insurance or coverage",
     "dental-insurance-change": "Change answer to dental insurance",
     "dental-benefit-title": "Access to government dental benefits",
     "dental-benefit-change": "Change answer to government dental benefits",
@@ -495,7 +495,7 @@
     "email": "Email",
     "mailing": "Mailing address",
     "home": "Home address",
-    "dental-private": "Access to dental insurance or coverage",
+    "dental-private": "Access to private dental insurance or coverage",
     "dental-public": "Access to government dental benefits",
     "child-number": "Applicant: Child {{childNumber}}",
     "is-parent": "Parent or legal guardian of child",

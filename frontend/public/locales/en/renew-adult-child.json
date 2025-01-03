@@ -298,7 +298,7 @@
       "continue-btn": "Continue with application",
       "cancel-btn": "Cancel",
       "save-btn": "Save",
-      "dental-insurance-title": "Access to other dental insurance or coverage",
+      "dental-insurance-title": "Access to private dental insurance or coverage",
       "dental-benefit-title": "Access to government dental benefits",
       "dental-benefit-has-access": "Has access to the following benefits:",
       "yes": "Yes",
@@ -362,7 +362,7 @@
       "continue-btn": "Return to application"
     },
     "dental-insurance": {
-      "title": "{{childName}}: access to other dental insurance",
+      "title": "{{childName}}: access to private dental insurance",
       "legend": "Does {{childName}} have access to dental insurance or coverage:",
       "list": {
         "employment": "Through a parent or legal guardian's employment benefits including health and wellness accounts",
@@ -380,19 +380,30 @@
       },
       "detail": {
         "additional-info": {
-          "title": "Additional information",
-          "eligible": "A child is still considered to have access to dental insurance or coverage if a parent or legal guardian chooses to opt out of benefits provided through:",
+          "title": "What does it mean to have access to private dental insurance or coverage?",
+          "eligible": "It means the child has access to any type of dental insurance or coverage through:",
           "eligible-list": {
-            "employer": "an employer",
-            "pension": "pension (see exception)",
-            "professional": "professional or student organization."
-          },
-          "not-eligible": "As such, the child is not eligible for Canadian Dental Care Plan.",
-          "not-eligible-purchased": "If a parent or legal guardian purchased the current dental insurance policy privately, a child is not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
-          "excepton": "Exception: A child may still be eligible if a parent or legal guardian are retired and:",
-          "exception-list": {
-            "opted-out": "Opted out of pension benefits before December 11, 2023, and",
-            "opt-back": "Can't opt back in under the pension rules"
+            "employment-benefits": "a parent or legal guardian's employment benefits, including health and wellness accounts",
+            "organization": {
+              "professional-student": "a professional or student organization",
+              "note": "Note: If the child is eligible for dental coverage through a parent or legal guardian's employment benefits, or through a professional or student organization, they're not eligible for the CDCP. This is true even if:",
+              "not-take": "you decide not to take it",
+              "pay-premium": "you have to pay a premium for it",
+              "not-use": "you don't use it"
+            },
+            "pension": {
+              "pension-benefits": "a parent or legal guardian's pension benefits",
+              "federal-provincial-territorial": "this includes federal, provincial and territorial government employer pension plans",
+              "exceptions": {
+                "eligible": "Exception: The child may still be eligible if a parent or legal guardian is retired and:",
+                "opted-out": "opted out of pension benefits before December 11, 2023, and",
+                "opt-back": "can't opt back in under the pension rules"
+              }
+            },
+            "purchased-coverage": {
+              "purchased-through": "coverage bought by a parent or legal guardian through a group plan from an insurance or benefits company.",
+              "purchased-privately": "if a parent or legal guardian purchased the child's current dental insurance policy privately (and not as part of any of the coverage described above), the child is not eligible for the CDCP while that coverage is in effect."
+            }
           }
         }
       },
@@ -489,7 +500,7 @@
     "client-number-title": "Client number",
     "full-name-title": "Full name",
     "dental-title": "{{child}} access to dental insurance",
-    "dental-insurance-title": "Access to other dental insurance or coverage",
+    "dental-insurance-title": "Access to private dental insurance or coverage",
     "dental-insurance-change": "Change answer to dental insurance",
     "dental-benefit-title": "Access to government dental benefits",
     "dental-benefit-change": "Change answer to government dental benefits",
@@ -604,7 +615,7 @@
     "home-title": "Home address",
     "home-change": "Change home address",
     "dental-title": "Access to dental insurance",
-    "dental-insurance-title": "Access to other dental insurance or coverage",
+    "dental-insurance-title": "Access to private dental insurance or coverage",
     "dental-insurance-change": "Change answer to dental insurance",
     "dental-benefit-title": "Access to government dental benefits",
     "dental-benefit-change": "Change answer to government dental benefits",
