@@ -89,6 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasFederalProvincialTerritorialBenefitsChanged: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefitsChanged,
+      dentalBenefits: undefined,
     },
   });
 
