@@ -105,7 +105,7 @@
       "address-suggestion": {
         "address-selection-legend": "Please select an address option below:",
         "cancel-button": "Back",
-        "description": "There's a problem with the address you provided. Please select the address you want to use.If you live in an apartment or suite, make sure to include that information.",
+        "description": "There's a problem with the address you provided. Please select the address you want to use. If you live in an apartment or suite, make sure to include that information.",
         "entered-address-option": "Entered address:",
         "header": "Verify your address",
         "suggested-address-option": "Suggested corrected address:",
