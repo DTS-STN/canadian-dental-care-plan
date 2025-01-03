@@ -31,10 +31,10 @@ export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper
       coverageEndDate: applicationYear.BenefitApplicationYearCoveragePeriod.EndDate.date,
       intakeStartDate: applicationYear.BenefitApplicationYearIntakePeriod.StartDate.date,
       intakeEndDate: applicationYear.BenefitApplicationYearIntakePeriod.EndDate?.date,
-      intakeYearId: applicationYear.BenefitApplicationYearIdentification[0].IdentificationID,
+      intakeYearId: applicationYear.BenefitApplicationYearIdentification[0].IdentificationID, // TODO this is incorrect but tentatively used to make integration work; Interop may change/remove the application year endpoint
       renewalStartDate: applicationYear.BenefitApplicationYearRenewalPeriod.StartDate?.date,
       renewalEndDate: applicationYear.BenefitApplicationYearRenewalPeriod.EndDate?.date,
-      renewalYearId: applicationYear.BenefitApplicationYearNext.BenefitApplicationYearIdentification?.IdentificationID,
+      renewalYearId: applicationYear.BenefitApplicationYearIdentification[0].IdentificationID,
     }));
 
     return applicationYears;
