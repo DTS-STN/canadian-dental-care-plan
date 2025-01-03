@@ -297,7 +297,7 @@
     },
     "home-address": {
       "header": "Home address",
-      "use-mailing-address": "My home address is the same as my mailing address"
+      "use-mailing-address": "My mailing address is the same as my home address"
     },
     "address-field": {
       "address": "Address",

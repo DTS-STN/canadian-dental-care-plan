@@ -89,7 +89,7 @@
     "home-address": {
       "page-title": "Home address",
       "header": "Home address",
-      "use-mailing-address": "My home address is the same as my mailing address"
+      "use-mailing-address": "My mailing address is the same as my home address"
     },
     "address-field": {
       "address": "Address",
@@ -104,18 +104,18 @@
     "dialog": {
       "address-suggestion": {
         "address-selection-legend": "Please select an address option below:",
-        "cancel-button": "Cancel",
-        "description": "We found a suggested correction for the address you entered.",
+        "cancel-button": "Back",
+        "description": "There's a problem with the address you provided. Please select the address you want to use. If you live in an apartment or suite, make sure to include that information.",
         "entered-address-option": "Entered address:",
-        "header": "Address correction suggestion",
+        "header": "Verify your address",
         "suggested-address-option": "Suggested corrected address:",
         "use-selected-address-button": "Use selected address"
       },
       "address-invalid": {
-        "close-button": "Close",
-        "description": "The mailing address you entered appears to be invalid. Please review the details below.",
+        "close-button": "Back",
+        "description": "We could not verify your address. You can either update it or continue with the address you entered. If you live in an apartment or suite, make sure to include that information.",
         "entered-address": "Entered address:",
-        "header": "Invalid address",
+        "header": "Verify your address",
         "use-entered-address-button": "Use entered address"
       }
     },

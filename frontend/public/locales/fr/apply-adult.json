@@ -308,7 +308,7 @@
     },
     "home-address": {
       "header": "Adresse à domicile",
-      "use-mailing-address": "Mon adresse à domicile est la même que mon adresse postale"
+      "use-mailing-address": "Mon adresse postale est la même que mon adresse à domicile"
     },
     "address-field": {
       "address": "Adresse",
