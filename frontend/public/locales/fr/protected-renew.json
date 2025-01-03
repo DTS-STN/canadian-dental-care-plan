@@ -370,12 +370,12 @@
     "home-address": {
       "page-title": "Adresse à domicile",
       "header": "Adresse à domicile",
-      "use-mailing-address": "Mon adresse à domicile est la même que mon adresse postale"
+      "use-mailing-address": "Mon adresse postale est la même que mon adresse à domicile"
     },
     "address-field": {
       "address": "Adresse postale",
       "mailing-address": "Adresse postale",
-      "address-note": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple\u00a0: 4B - 123 Rue Main",
+      "address-note": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple\u00a0: 123, rue Main, app. 4B",
       "country": "Pays",
       "province": "Province, territoire, État ou région",
       "city": "Ville ou municipalité",
@@ -386,16 +386,16 @@
     "dialog": {
       "address-suggestion": {
         "address-selection-legend": "Veuillez sélectionner une option d'adresse ci\u2011dessous\u00a0:",
-        "cancel-button": "Annuler",
-        "description": "Nous avons trouvé une correction suggérée pour l'adresse que vous avez saisie.",
+        "cancel-button": "Retour",
+        "description": "Il y a un problème avec l'adresse que vous avez fournie. Veuillez sélectionner l'adresse que vous souhaitez utiliser. Si vous vivez dans un appartement ou une chambre, n'oubliez pas de le préciser.",
         "entered-address-option": "Adresse saisie\u00a0:",
         "header": "Suggestion de correction d'adresse",
         "suggested-address-option": "Adresse corrigée suggérée\u00a0:",
         "use-selected-address-button": "Utiliser l'adresse sélectionnée"
       },
       "address-invalid": {
-        "close-button": "Fermer",
-        "description": "L'adresse postale que vous avez saisie semble invalide. Veuillez vérifier les détails ci\u2011dessous.",
+        "close-button": "Retour",
+        "description": "Nous n'avons pas pu vérifier votre adresse. Vous pouvez soit la mettre à jour, soit continuer avec l'adresse que vous avez saisie. Si vous vivez dans un appartement ou une chambre, n'oubliez pas d'indiquer cette information.",
         "entered-address": "Adresse saisie\u00a0:",
         "header": "Adresse invalide",
         "use-entered-address-button": "Utiliser l'adresse saisie"
