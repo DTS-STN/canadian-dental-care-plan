@@ -113,9 +113,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('mailingAddress')),
     countryId: String(formData.get('mailingCountry')),
-    provinceStateId: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : '',
+    provinceStateId: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
     city: String(formData.get('mailingCity')),
-    postalZipCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : '',
+    postalZipCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
   });
 
   if (!validatedResult.success) {
