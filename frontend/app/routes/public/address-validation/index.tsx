@@ -324,8 +324,12 @@ export default function AddressValidationIndexRoute() {
                   {t('address-validation:index.submit-button')}
                 </LoadingButton>
               </DialogTrigger>
-              {addressDialogContent && addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
-              {addressDialogContent && addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+              {!fetcher.isSubmitting && addressDialogContent && (
+                <>
+                  {addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
+                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+                </>
+              )}
             </Dialog>
             <Button id="reset-button" endIcon={faRefresh} onClick={onResetClickHandler}>
               {t('address-validation:index.reset-button')}
