@@ -101,26 +101,31 @@ export default function RenewAdultChildChildrenDentalInsurance() {
 
   const helpMessage = (
     <div className="my-4 space-y-4">
-      <ul className="list-disc space-y-1 pl-7">
-        <li>{t('children.dental-insurance.list.employment')}</li>
-        <li>{t('children.dental-insurance.list.pension')}</li>
-        <li>{t('children.dental-insurance.list.purchased')}</li>
-        <li>{t('children.dental-insurance.list.professional')}</li>
-      </ul>
       <Collapsible summary={t('children.dental-insurance.detail.additional-info.title')}>
         <div className="space-y-4">
           <p>{t('children.dental-insurance.detail.additional-info.eligible')}</p>
           <ul className="list-disc space-y-1 pl-7">
-            <li>{t('children.dental-insurance.detail.additional-info.eligible-list.employer')}</li>
-            <li>{t('children.dental-insurance.detail.additional-info.eligible-list.pension')}</li>
-            <li>{t('children.dental-insurance.detail.additional-info.eligible-list.professional')}</li>
-          </ul>
-          <p>{t('children.dental-insurance.detail.additional-info.not-eligible')}</p>
-          <p>{t('children.dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
-          <p>{t('children.dental-insurance.detail.additional-info.excepton')}</p>
-          <ul className="list-disc space-y-1 pl-7">
-            <li>{t('children.dental-insurance.detail.additional-info.exception-list.opted-out')}</li>
-            <li>{t('children.dental-insurance.detail.additional-info.exception-list.opt-back')}</li>
+            <li>{t('children.dental-insurance.detail.additional-info.eligible-list.employment-benefits')}</li>
+            <li>{t('children.dental-insurance.detail.additional-info.eligible-list.organization.professional-student')}</li>
+            <p className="pl-4">{t('children.dental-insurance.detail.additional-info.eligible-list.organization.note')}</p>
+            <ul className="list-disc space-y-1 pl-12">
+              <li>{t('children.dental-insurance.detail.additional-info.eligible-list.organization.not-take')}</li>
+              <li>{t('children.dental-insurance.detail.additional-info.eligible-list.organization.pay-premium')}</li>
+              <li>{t('children.dental-insurance.detail.additional-info.eligible-list.organization.not-use')}</li>
+            </ul>
+            <li>{t('children.dental-insurance.detail.additional-info.eligible-list.pension.pension-benefits')}</li>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('children.dental-insurance.detail.additional-info.eligible-list.pension.federal-provincial-territorial')}</li>
+              <li>{t('children.dental-insurance.detail.additional-info.eligible-list.pension.exceptions.eligible')}</li>
+              <ul className="list-disc space-y-1 pl-7">
+                <li>{t('children.dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opted-out')}</li>
+                <li>{t('children.dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opt-back')}</li>
+              </ul>
+            </ul>
+            <li>{t('children.dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-through')}</li>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('children.dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-privately')}</li>
+            </ul>
           </ul>
         </div>
       </Collapsible>

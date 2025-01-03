@@ -15,7 +15,7 @@
       "continue-btn": "Poursuivre la demande",
       "cancel-btn": "Annuler",
       "save-btn": "Sauvegarder",
-      "dental-insurance-title": "Accès à d'autres assurances ou couvertures de soins dentaires",
+      "dental-insurance-title": "Accès à une assurance ou une couverture dentaire privée",
       "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
       "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
       "yes": "Oui",
@@ -80,8 +80,8 @@
       "continue-btn": "Retour à l'application"
     },
     "dental-insurance": {
-      "title": "{{childName}}\u00a0: accès à d'autres assurances dentaires",
-      "legend": "Est-ce que {{childName}} a accès à une assurance ou à une couverture dentaire\u00a0:",
+      "title": "{{childName}}\u00a0: accès à une assurance dentaire privée",
+      "legend": "Est-ce que {{childName}} a accès à une assurance dentaire privée ou une couverture dentaire\u00a0:",
       "list": {
         "employment": "dans le cadre des avantages sociaux de l'employeur d'un parent ou d'un tuteur légal, y compris les comptes de santé et de bien-être",
         "pension": "par le biais de prestations de retraite d'un parent ou d'un tuteur légal",
@@ -98,7 +98,7 @@
       },
       "detail": {
         "additional-info": {
-          "title": "Qu'entend-on par avoir accès à une assurance dentaire privée?",
+          "title": "Que signifie avoir accès à une assurance dentaire privée?",
           "eligible": "Cela signifie que l'enfant a accès à tout type d'assurance ou de couverture dentaire\u00a0:",
           "eligible-list": {
             "employment-benefits": "dans le cadre des avantages sociaux d'employeur d'un parent ou d'un tuteur légal, y compris les comptes de santé et de bien-être",
@@ -376,7 +376,7 @@
     "client-number-title": "Numéro de client",
     "full-name-title": "Nom complet",
     "dental-title": "Accès aux soins dentaires de {{child}}",
-    "dental-insurance-title": "Accès à d'autres assurances ou protections dentaires\u00a0:",
+    "dental-insurance-title": "Accès à une assurance ou une couverture dentaire privée\u00a0:",
     "dental-insurance-change": "Changer la réponse à «\u00a0assurance dentaire\u00a0»",
     "dental-benefit-title": "Accès à des prestations dentaires gouvernementales\u00a0: ",
     "dental-benefit-change": "Changer la réponse à «\u00a0prestations dentaires gouvernementales\u00a0»",
@@ -497,7 +497,7 @@
     "email": "Courriel",
     "mailing": "Adresse postale",
     "home": "Adresse à domicile",
-    "dental-private": "Accès à d'autres assurances ou couvertures de soins dentaires\u00a0:",
+    "dental-private": "Accès à une assurance ou une couverture dentaire privée\u00a0:",
     "dental-public": "Accès à des prestations dentaires gouvernementales\u00a0:",
     "child-number": "Renseignements sur l'enfant {{childNumber}}",
     "is-parent": "Parent ou tuteur légal de l'enfant\u00a0:",
