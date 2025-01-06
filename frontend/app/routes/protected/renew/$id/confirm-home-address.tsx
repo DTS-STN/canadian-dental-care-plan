@@ -440,7 +440,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
         <DialogTitle>
-          <FontAwesomeIcon icon={faTriangleExclamation} className="text-orange-500" />
+          <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 text-amber-700" />
           {t('protected-renew:update-address.dialog.address-suggestion.header')}
         </DialogTitle>
         <DialogDescription>{t('protected-renew:update-address.dialog.address-suggestion.description')}</DialogDescription>
@@ -523,7 +523,7 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
         <DialogTitle>
-          <FontAwesomeIcon icon={faTriangleExclamation} className="text-orange-500" />
+          <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 text-amber-700" />
           {t('protected-renew:update-address.dialog.address-invalid.header')}
         </DialogTitle>
         <DialogDescription>{t('protected-renew:update-address.dialog.address-invalid.description')}</DialogDescription>
