@@ -91,7 +91,7 @@
   },
   "confirm-address": {
     "page-title": "Address",
-    "have-you-moved": "Have you moved or changed your mailing address since you applied for the Canadian Dental Care Plan?",
+    "have-you-moved": "Would you like to update your home or mailing address?",
     "is-home-address-same-as-mailing-address": "Is your home address the same as your mailing address?",
     "radio-options": {
       "yes": "Yes",
@@ -99,7 +99,7 @@
     },
     "help-message": "The address we have on file can be found in the letter you received from Service Canada.",
     "error-message": {
-      "has-address-changed-required": "Select whether you have moved or changed your mailing address",
+      "has-address-changed-required": "Select whether you would like to update your mailing address",
       "is-home-address-same-as-mailing-address-required": "Select whether or not your mailing address and home address are the same"
     },
     "back-btn": "Back",
