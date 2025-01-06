@@ -78,7 +78,7 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
         {
           BenefitApplicationYearIdentification: [
             {
-              IdentificationID: '37e5aa05-813c-ef11-a317-000d3af4f3ef',
+              IdentificationID: '98f8ad43-4069-ee11-9ae7-000d3a09d1b8',
             },
           ],
           BenefitApplicationYearEffectivePeriod: {
@@ -94,13 +94,10 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
               date: '2024-05-01',
             },
             EndDate: {
-              date: '2025-03-31',
+              date: '2025-04-30',
             },
           },
-          BenefitApplicationYearRenewalPeriod: {
-            StartDate: {},
-            EndDate: {},
-          },
+          BenefitApplicationYearRenewalPeriod: {},
           BenefitApplicationYearNext: {
             BenefitApplicationYearIdentification: {
               IdentificationID: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
@@ -118,7 +115,7 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
         {
           BenefitApplicationYearIdentification: [
             {
-              IdentificationID: '37e5aa05-813c-ef11-a317-000d3af4f3ef',
+              IdentificationID: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
             },
           ],
           BenefitApplicationYearEffectivePeriod: {
@@ -131,28 +128,20 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
           },
           BenefitApplicationYearIntakePeriod: {
             StartDate: {
-              date: '2025-02-14',
-            },
-            EndDate: {
-              date: '2026-06-30',
+              date: '2025-05-01',
             },
           },
           BenefitApplicationYearRenewalPeriod: {
             StartDate: {
               date: '2024-12-01',
             },
-            EndDate: {
-              date: '2025-06-30',
-            },
           },
           BenefitApplicationYearNext: {
-            BenefitApplicationYearIdentification: {
-              IdentificationID: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
-            },
+            BenefitApplicationYearIdentification: {},
           },
           BenefitApplicationYearCoveragePeriod: {
             StartDate: {
-              date: '2025-04-01',
+              date: '2025-06-01',
             },
             EndDate: {
               date: '2026-06-30',

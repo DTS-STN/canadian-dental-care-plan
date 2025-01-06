@@ -6,18 +6,22 @@ import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
 export interface ApplicationYearDtoMapper {
   mapApplicationYearResultEntityToApplicationYearResultDtos(applicationYearResultEntity: ApplicationYearResultEntity): ReadonlyArray<ApplicationYearResultDto>;
 
-  mapApplicationYearResultDtoToRenewalApplicationYearResultDto(applicationYearResultDto: ApplicationYearResultDto): RenewalApplicationYearResultDto;
+  mapApplicationYearResultDtoToRenewalApplicationYearResultDto(toRenewalApplicationYearResultDtoArgs: ToRenewalApplicationYearResultDtoArgs): RenewalApplicationYearResultDto;
+}
+
+interface ToRenewalApplicationYearResultDtoArgs {
+  intakeYearId: string;
+  applicationYearResultDto: ApplicationYearResultDto;
 }
 
 @injectable()
 export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper {
-  mapApplicationYearResultDtoToRenewalApplicationYearResultDto(applicationYearResultDto: ApplicationYearResultDto): RenewalApplicationYearResultDto {
+  mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ intakeYearId, applicationYearResultDto }: ToRenewalApplicationYearResultDtoArgs): RenewalApplicationYearResultDto {
     return {
-      intakeYearId: applicationYearResultDto.intakeYearId,
+      intakeYearId: intakeYearId,
       taxYear: applicationYearResultDto.taxYear,
       coverageStartDate: applicationYearResultDto.coverageStartDate,
-      coverageEndDate: applicationYearResultDto.coverageEndDate,
-      renewalYearId: applicationYearResultDto.renewalYearId,
+      renewalYearId: applicationYearResultDto.applicationYearId,
     };
   }
 
@@ -26,15 +30,15 @@ export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper
 
     const applicationYears = applicationYearData.map((applicationYear) => ({
       applicationYear: applicationYear.BenefitApplicationYearEffectivePeriod.StartDate.YearDate,
-      taxYear: applicationYear.BenefitApplicationYearTaxYear.YearDate,
+      applicationYearId: applicationYear.BenefitApplicationYearIdentification[0].IdentificationID,
       coverageStartDate: applicationYear.BenefitApplicationYearCoveragePeriod.StartDate.date,
       coverageEndDate: applicationYear.BenefitApplicationYearCoveragePeriod.EndDate.date,
       intakeStartDate: applicationYear.BenefitApplicationYearIntakePeriod.StartDate.date,
       intakeEndDate: applicationYear.BenefitApplicationYearIntakePeriod.EndDate?.date,
-      intakeYearId: applicationYear.BenefitApplicationYearIdentification[0].IdentificationID, // TODO this is incorrect but tentatively used to make integration work; Interop may change/remove the application year endpoint
+      nextApplicationYearId: applicationYear.BenefitApplicationYearNext.BenefitApplicationYearIdentification?.IdentificationID,
       renewalStartDate: applicationYear.BenefitApplicationYearRenewalPeriod.StartDate?.date,
       renewalEndDate: applicationYear.BenefitApplicationYearRenewalPeriod.EndDate?.date,
-      renewalYearId: applicationYear.BenefitApplicationYearIdentification[0].IdentificationID,
+      taxYear: applicationYear.BenefitApplicationYearTaxYear.YearDate,
     }));
 
     return applicationYears;

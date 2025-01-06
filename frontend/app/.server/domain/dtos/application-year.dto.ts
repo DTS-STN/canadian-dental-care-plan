@@ -14,13 +14,13 @@ export type ApplicationYearRequestDto = Readonly<{
  */
 export type ApplicationYearResultDto = Readonly<{
   applicationYear: string;
+  applicationYearId: string;
   taxYear: string;
   intakeStartDate: string;
   intakeEndDate?: string;
-  intakeYearId: string;
+  nextApplicationYearId?: string;
   renewalStartDate?: string;
   renewalEndDate?: string;
-  renewalYearId?: string;
   coverageStartDate: string;
   coverageEndDate: string;
 }>;
@@ -28,7 +28,12 @@ export type ApplicationYearResultDto = Readonly<{
 /**
  * Represents a Data Transfer Object (DTO) for a renewal application year result.
  */
-export type RenewalApplicationYearResultDto = Omit<ApplicationYearResultDto, 'applicationYear' | 'intakeStartDate' | 'intakeEndDate' | 'renewalStartDate' | 'renewalEndDate'>;
+export type RenewalApplicationYearResultDto = Readonly<{
+  intakeYearId: string;
+  renewalYearId?: string;
+  taxYear: string;
+  coverageStartDate: string;
+}>;
 
 /**
  * Represents a Data Transfer Object (DTO) for an intake application year result.
