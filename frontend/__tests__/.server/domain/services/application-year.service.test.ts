@@ -15,44 +15,44 @@ describe('DefaultApplicationYearService', () => {
 
   const mockApplicationYearResultDtos: ApplicationYearResultDto[] = [
     {
-      // all fields set
+      // optional dates not set except nextApplicationYearId
       applicationYear: '2024',
+      applicationYearId: '2024',
       taxYear: '2024',
       coverageStartDate: '2024-01-01',
       coverageEndDate: '2024-12-31',
       intakeStartDate: '2024-01-01',
-      intakeEndDate: '2024-12-31',
-      intakeYearId: '2024',
-      renewalStartDate: '2024-01-01',
-      renewalEndDate: '2024-12-31',
-      renewalYearId: '2024',
+      nextApplicationYearId: '2025',
     },
+    // all fields set
     {
-      // optional dates not set
       applicationYear: '2025',
+      applicationYearId: '2025',
       taxYear: '2025',
       coverageStartDate: '2025-01-01',
       coverageEndDate: '2025-12-31',
       intakeStartDate: '2025-01-01',
-      intakeYearId: '2024',
+      intakeEndDate: '2025-12-31',
+      nextApplicationYearId: '2026',
+      renewalStartDate: '2025-01-01',
+      renewalEndDate: '2025-12-31',
     },
     {
       // optional end dates not set
       applicationYear: '2026',
+      applicationYearId: '2026',
       taxYear: '2026',
       coverageStartDate: '2026-01-01',
       coverageEndDate: '2026-12-31',
       intakeStartDate: '2026-01-01',
-      intakeYearId: '2024',
       renewalStartDate: '2026-01-01',
     },
   ];
 
   const mockRenewalApplicationYearResultDto: RenewalApplicationYearResultDto = {
     intakeYearId: '2024',
-    taxYear: '2024',
-    coverageStartDate: '2024-01-01',
-    coverageEndDate: '2024-12-31',
+    taxYear: '2025',
+    coverageStartDate: '2025-01-01',
   };
   const mockApplicationYearDtoMapper = mock<ApplicationYearDtoMapper>();
   mockApplicationYearDtoMapper.mapApplicationYearResultEntityToApplicationYearResultDtos.mockReturnValue(mockApplicationYearResultDtos);
@@ -93,11 +93,27 @@ describe('DefaultApplicationYearService', () => {
 
       const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService);
       const mockApplicationYearRequestDto: ApplicationYearRequestDto = {
-        date: '2024-01-01',
+        date: '2025-01-01',
         userId: 'userId',
       };
 
       const result = await service.findRenewalApplicationYear(mockApplicationYearRequestDto);
+
+      expect(mockApplicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto).toHaveBeenCalledWith({
+        intakeYearId: '2024',
+        applicationYearResultDto: {
+          applicationYear: '2025',
+          applicationYearId: '2025',
+          taxYear: '2025',
+          coverageStartDate: '2025-01-01',
+          coverageEndDate: '2025-12-31',
+          intakeStartDate: '2025-01-01',
+          intakeEndDate: '2025-12-31',
+          nextApplicationYearId: '2026',
+          renewalStartDate: '2025-01-01',
+          renewalEndDate: '2025-12-31',
+        },
+      });
       expect(result).toEqual(mockRenewalApplicationYearResultDto);
     });
 
@@ -111,6 +127,19 @@ describe('DefaultApplicationYearService', () => {
       };
 
       const result = await service.findRenewalApplicationYear(mockApplicationYearRequestDto);
+
+      expect(mockApplicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto).toHaveBeenCalledWith({
+        intakeYearId: '2025',
+        applicationYearResultDto: {
+          applicationYear: '2026',
+          applicationYearId: '2026',
+          taxYear: '2026',
+          coverageStartDate: '2026-01-01',
+          coverageEndDate: '2026-12-31',
+          intakeStartDate: '2026-01-01',
+          renewalStartDate: '2026-01-01',
+        },
+      });
       expect(result).toEqual(mockRenewalApplicationYearResultDto);
     });
 
@@ -119,7 +148,7 @@ describe('DefaultApplicationYearService', () => {
 
       const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService);
       const mockApplicationYearRequestDto: ApplicationYearRequestDto = {
-        date: '2025-01-01',
+        date: '2024-01-01',
         userId: 'userId',
       };
 

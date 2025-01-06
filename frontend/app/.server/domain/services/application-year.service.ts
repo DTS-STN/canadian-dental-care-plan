@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import invariant from 'tiny-invariant';
 
 import { TYPES } from '~/.server/constants';
 import type { ApplicationYearRequestDto, ApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
@@ -69,7 +70,14 @@ export class DefaultApplicationYearService implements ApplicationYearService {
       return null;
     }
 
-    const renewalApplicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto(matchingRenewalApplicationYear);
+    // Find the intake year corresponding to the matching renewal application year.
+    // This happens when the `nextApplicationYearId` of an application year matches the `applicationYearId` of the matching renewal application year.
+    const intakeYear = applicationYearResultDtos.find((applicationYear) => {
+      return applicationYear.nextApplicationYearId === matchingRenewalApplicationYear.applicationYearId;
+    });
+    invariant(intakeYear, 'Expected intakeYear to be defined');
+
+    const renewalApplicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ intakeYearId: intakeYear.applicationYearId, applicationYearResultDto: matchingRenewalApplicationYear });
 
     this.log.trace('Returning renewal application year result: [%j]', renewalApplicationYearResultDto);
     return renewalApplicationYearResultDto;
