@@ -5,7 +5,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { data, redirect } from '@remix-run/node';
 import { useLoaderData, useParams } from '@remix-run/react';
 
-import { faCheck, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronLeft, faChevronRight, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
@@ -445,7 +446,10 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copy
   return (
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
-        <DialogTitle>{t('renew-child:update-address.dialog.address-suggestion.header')}</DialogTitle>
+        <DialogTitle>
+          <FontAwesomeIcon icon={faTriangleExclamation} className="text-orange-500" />
+          {t('renew-child:update-address.dialog.address-suggestion.header')}
+        </DialogTitle>
         <DialogDescription>{t('renew-child:update-address.dialog.address-suggestion.description')}</DialogDescription>
       </DialogHeader>
       <InputRadios
@@ -481,7 +485,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copy
       />
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.corrected-address-close-button" disabled={fetcher.isSubmitting} variant="default" size="sm">
+          <Button id="dialog.corrected-address-close-button" startIcon={faChevronLeft} disabled={fetcher.isSubmitting} variant="alternative" size="sm">
             {t('renew-child:update-address.dialog.address-suggestion.cancel-button')}
           </Button>
         </DialogClose>
@@ -529,7 +533,10 @@ function AddressInvalidDialogContent({ invalidAddress, copyAddressToHome }: Addr
   return (
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
-        <DialogTitle>{t('renew-child:update-address.dialog.address-invalid.header')}</DialogTitle>
+        <DialogTitle>
+          <FontAwesomeIcon icon={faTriangleExclamation} className="text-orange-500" />
+          {t('renew-child:update-address.dialog.address-invalid.header')}
+        </DialogTitle>
         <DialogDescription>{t('renew-child:update-address.dialog.address-invalid.description')}</DialogDescription>
       </DialogHeader>
       <div className="space-y-2">
@@ -538,7 +545,7 @@ function AddressInvalidDialogContent({ invalidAddress, copyAddressToHome }: Addr
       </div>
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.address-invalid-close-button" variant="default" size="sm">
+          <Button id="dialog.address-invalid-close-button" startIcon={faChevronLeft} variant="alternative" size="sm">
             {t('renew-child:update-address.dialog.address-invalid.close-button')}
           </Button>
         </DialogClose>
