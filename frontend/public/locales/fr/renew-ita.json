@@ -68,8 +68,8 @@
   },
   "confirm-address": {
     "page-title": "Adresse",
-    "have-you-moved": "Avez-vous déménagé ou changé d'adresse postale depuis que vous avez présenté une demande au Régime canadien de soins dentaires?",
-    "is-home-address-same-as-mailing-address": "L'adresse de votre domicile est-elle la même que votre adresse postale?",
+    "have-you-moved": "Souhaitez-vous mettre à jour votre adresse postale?",
+    "is-home-address-same-as-mailing-address": "Mon adresse postale est la même que celle de mon adresse à domicile",
     "radio-options": {
       "yes": "Oui",
       "no": "Non"
