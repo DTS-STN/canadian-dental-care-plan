@@ -248,6 +248,7 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
     editMode: false,
     applicationYear,
     clientApplication,
+    dentalInsurance: clientApplication.dentalInsurance,
     contactInformation: {
       phoneNumber: clientApplication.contactInformation.phoneNumber,
       phoneNumberAlt: clientApplication.contactInformation.phoneNumberAlt,
@@ -263,6 +264,7 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
           id: randomUUID(),
           information: child.information,
           dentalInsurance: immutableChild?.dentalInsurance,
+          isParentOrLegalGuardian: immutableChild?.information.isParent,
         };
         return childStateObj;
       }),
@@ -356,11 +358,11 @@ export function loadProtectedRenewStateForReview({ params, session, demographicS
 }
 
 export function isPrimaryApplicantStateComplete(state: ProtectedRenewState, demographicSurveyEnabled: boolean) {
-  return state.dentalInsurance !== undefined && (demographicSurveyEnabled ? state.demographicSurvey !== undefined : true);
+  return state.previouslyReviewed && state.dentalInsurance !== undefined && (demographicSurveyEnabled ? state.demographicSurvey !== undefined : true);
 }
 
 export function isChildrenStateComplete(state: ProtectedRenewState, demographicSurveyEnabled: boolean) {
-  return state.children.every((child) => child.isParentOrLegalGuardian !== undefined && child.dentalInsurance !== undefined && (demographicSurveyEnabled ? child.demographicSurvey !== undefined : true));
+  return state.children.every((child) => child.previouslyReviewed && child.isParentOrLegalGuardian !== undefined && child.dentalInsurance !== undefined && (demographicSurveyEnabled ? child.demographicSurvey !== undefined : true));
 }
 
 interface ValidateProtectedRenewStateForReviewArgs {

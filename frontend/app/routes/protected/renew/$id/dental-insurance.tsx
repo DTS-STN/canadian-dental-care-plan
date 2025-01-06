@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:dental-insurance.title', { memberName }) }) };
 
-  return { id: state, meta, defaultState: state.dentalInsurance, hasAddressChanged: state.hasAddressChanged, editMode: state.editMode, i18nOptions: { memberName } };
+  return { id: state, meta, defaultState: state.dentalInsurance, editMode: state.editMode, i18nOptions: { memberName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
