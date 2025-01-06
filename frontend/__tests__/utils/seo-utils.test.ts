@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 
-import { useLocation } from '@remix-run/react';
+import { useLocation } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -10,7 +10,7 @@ import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCan
  * @vitest-environment jsdom
  */
 
-vi.mock('@remix-run/react');
+vi.mock('react-router');
 vi.mock('react-i18next');
 vi.mock('~/utils/env-utils');
 vi.mock('~/utils/route-utils');

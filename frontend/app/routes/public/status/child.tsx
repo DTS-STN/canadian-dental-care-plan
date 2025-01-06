@@ -1,9 +1,8 @@
 import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useParams } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useParams } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -231,7 +230,7 @@ export default function StatusCheckerChild() {
     dateOfBirthYear: 'date-picker-date-of-birth-year',
   });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -246,7 +245,7 @@ export default function StatusCheckerChild() {
       }
     }
 
-    fetcher.submit(formData, { method: 'POST' });
+    await fetcher.submit(formData, { method: 'POST' });
   }
 
   useEffect(() => {

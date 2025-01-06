@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
+import type { LoaderFunctionArgs } from 'react-router';
 
 import type { HealthCheckOptions } from '@dts-stn/health-checks';
 import { HealthCheckConfig, execute, getHttpStatusCode } from '@dts-stn/health-checks';

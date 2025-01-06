@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import { ApplicantRequestEntity, ApplicantResponseEntity } from '~/.server/domain/entities';
+import type { ApplicantRequestEntity, ApplicantResponseEntity } from '~/.server/domain/entities';
 
 export interface ApplicantDtoMapper {
   mapSinToApplicantRequestEntity(sin: string): ApplicantRequestEntity;

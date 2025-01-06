@@ -68,7 +68,7 @@ export class MockBenefitApplicationRepository implements BenefitApplicationRepos
     this.log = logFactory.createLogger('MockBenefitApplicationRepository');
   }
 
-  createBenefitApplication(benefitApplicationRequestEntity: BenefitApplicationRequestEntity): Promise<BenefitApplicationResponseEntity> {
+  async createBenefitApplication(benefitApplicationRequestEntity: BenefitApplicationRequestEntity): Promise<BenefitApplicationResponseEntity> {
     this.log.debug('Creating benefit application for request [%j]', benefitApplicationRequestEntity);
 
     const benefitApplicationResponseEntity: BenefitApplicationResponseEntity = {
@@ -83,6 +83,6 @@ export class MockBenefitApplicationRepository implements BenefitApplicationRepos
     };
 
     this.log.debug('Returning benefit application response [%j]', benefitApplicationResponseEntity);
-    return Promise.resolve(benefitApplicationResponseEntity);
+    return await Promise.resolve(benefitApplicationResponseEntity);
   }
 }

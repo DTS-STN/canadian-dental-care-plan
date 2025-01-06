@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useParams } from '@remix-run/react';
+import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { useParams } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
 

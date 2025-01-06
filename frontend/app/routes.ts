@@ -1,5 +1,5 @@
-import type { RouteConfig, RouteConfigEntry } from '@remix-run/route-config';
-import { index, layout, route } from '@remix-run/route-config';
+import type { RouteConfig, RouteConfigEntry } from '@react-router/dev/routes';
+import { index, layout, route } from '@react-router/dev/routes';
 
 // note: because the routes are processed at build time by vite,
 //       we cannot use aliased imports (ie: ~/) here

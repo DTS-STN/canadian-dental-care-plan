@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import { AdultBenefitRenewalDto, AdultChildBenefitRenewalDto, ChildBenefitRenewalDto, ItaBenefitRenewalDto, ProtectedBenefitRenewalDto } from '~/.server/domain/dtos';
+import type { AdultBenefitRenewalDto, AdultChildBenefitRenewalDto, ChildBenefitRenewalDto, ItaBenefitRenewalDto, ProtectedBenefitRenewalDto } from '~/.server/domain/dtos';
 import type { BenefitRenewalDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitRenewalRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';

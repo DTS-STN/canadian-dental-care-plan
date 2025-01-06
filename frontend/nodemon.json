@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/nodemon",
-  "exec": "tsx --env-file ./.env --import ./app/.server/express-server/opentelemetry.server.ts ./app/.server/express-server/express.server.ts",
+  "exec": "tsx --env-file-if-exists=.env --import ./app/.server/express-server/opentelemetry.server.ts ./app/.server/express-server/express.server.ts",
   "ext": "ts",
-  "watch": ["./.env", "./app/.server/express-server/**/*.ts"]
+  "watch": [".env", "./app/.server/express-server/**/*.ts"]
 }

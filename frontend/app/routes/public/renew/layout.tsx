@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Outlet, useLoaderData, useNavigate, useParams } from '@remix-run/react';
+import type { LoaderFunctionArgs } from 'react-router';
+import { Outlet, useLoaderData, useNavigate, useParams } from 'react-router';
 
 import { TYPES } from '~/.server/constants';
 import { getLocale } from '~/.server/utils/locale.utils';
@@ -38,18 +38,18 @@ export default function Route() {
     const flowState = sessionStorage.getItem('renew.state');
 
     if (flowState !== 'active') {
-      navigate(path, { replace: true });
+      void navigate(path, { replace: true });
     }
   }, [navigate, path]);
 
   const apiSession = useApiSession();
 
-  function handleOnSessionEnd() {
-    apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-status' });
+  async function handleOnSessionEnd() {
+    await apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-status' });
   }
 
-  function handleOnSessionExtend() {
-    apiSession.submit({ action: 'extend' });
+  async function handleOnSessionExtend() {
+    await apiSession.submit({ action: 'extend' });
   }
 
   return (

@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -17,35 +17,35 @@ describe('SkipNavigationLinks', () => {
   });
 
   it('renders without crashing', () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <SkipNavigationLinks />,
         path: '/',
       },
     ]);
-    render(<RemixStub />);
+    render(<RoutesStub />);
   });
 
   it('renders skip links', () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <SkipNavigationLinks />,
         path: '/',
       },
     ]);
-    const { getByText } = render(<RemixStub />);
+    const { getByText } = render(<RoutesStub />);
     expect(getByText('gcweb:nav.skip-to-content')).toBeInTheDocument();
     expect(getByText('gcweb:nav.skip-to-about')).toBeInTheDocument();
   });
 
   it('calls scrollAndFocusFromAnchorLink when skip link is clicked', () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <SkipNavigationLinks />,
         path: '/',
       },
     ]);
-    const { getByText } = render(<RemixStub />);
+    const { getByText } = render(<RoutesStub />);
     const skipToContentButton = getByText('gcweb:nav.skip-to-content');
     fireEvent.click(skipToContentButton);
     expect(scrollAndFocusFromAnchorLink).toHaveBeenCalled();

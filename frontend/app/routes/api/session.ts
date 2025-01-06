@@ -1,8 +1,8 @@
 /**
  * An API route that can be used to perform actions with user's server-side session.
  */
-import type { ActionFunctionArgs } from '@remix-run/node';
-import { redirectDocument } from '@remix-run/node';
+import type { ActionFunctionArgs } from 'react-router';
+import { redirectDocument } from 'react-router';
 
 import { z } from 'zod';
 

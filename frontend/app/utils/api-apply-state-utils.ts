@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useSubmit } from '@remix-run/react';
+import { useSubmit } from 'react-router';
 
 import type { ApiApplyStateAction } from '~/routes/api/apply-state';
 
@@ -13,7 +13,7 @@ interface ApiApplyStateSubmitFuncArgs {
  * A custom hook for submitting API requests to the apply state endpoint.
  */
 export function useApiApplyState() {
-  const remixSubmit = useSubmit();
+  const rrSubmit = useSubmit();
 
   /**
    * Submits a request to the apply state API endpoint.
@@ -22,8 +22,8 @@ export function useApiApplyState() {
    * submit({ action: ApiApplyStateAction.Extend, id: '00000000-0000-0000-0000-000000000000' });
    */
   const submit = useCallback(
-    ({ action, id }: ApiApplyStateSubmitFuncArgs) => {
-      remixSubmit(
+    async ({ action, id }: ApiApplyStateSubmitFuncArgs) => {
+      await rrSubmit(
         { action, id },
         {
           action: '/api/apply-state',
@@ -33,7 +33,7 @@ export function useApiApplyState() {
         },
       );
     },
-    [remixSubmit],
+    [rrSubmit],
   );
 
   return { submit };

@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { describe, expect, it, vi } from 'vitest';
 
@@ -49,14 +49,14 @@ describe('Button Component', () => {
 
 describe('ButtonLink Component', () => {
   it('renders link with default props', () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <ButtonLink to="/">Click me</ButtonLink>,
         path: '/',
       },
     ]);
 
-    const { getByText } = render(<RemixStub />);
+    const { getByText } = render(<RoutesStub />);
     const link = getByText('Click me');
     expect(link).toBeInTheDocument();
     expect(link.tagName).toEqual('A');
@@ -64,7 +64,7 @@ describe('ButtonLink Component', () => {
   });
 
   it('renders link with custom size and variant', () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => (
           <ButtonLink size="lg" variant="primary" to="/">
@@ -75,13 +75,13 @@ describe('ButtonLink Component', () => {
       },
     ]);
 
-    const { getByText } = render(<RemixStub />);
+    const { getByText } = render(<RoutesStub />);
     const link = getByText('Click me');
     expect(link).toHaveClass('px-5', 'py-3', 'text-base', 'bg-slate-700', 'text-white', 'hover:bg-sky-800');
   });
 
   it('renders pill link', () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => (
           <ButtonLink pill to="/">
@@ -92,7 +92,7 @@ describe('ButtonLink Component', () => {
       },
     ]);
 
-    const { getByText } = render(<RemixStub />);
+    const { getByText } = render(<RoutesStub />);
     const link = getByText('Click me');
     expect(link).toHaveClass('rounded-full');
   });

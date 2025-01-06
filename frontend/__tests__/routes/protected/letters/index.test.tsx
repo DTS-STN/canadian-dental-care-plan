@@ -1,4 +1,4 @@
-import type { AppLoadContext } from '@remix-run/node';
+import type { AppLoadContext } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
@@ -33,11 +33,11 @@ describe('Letters Page', () => {
         createAudit: vi.fn(),
       } satisfies Partial<AuditService>);
       mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.ApplicantService).mockReturnValue({
-        findClientNumberBySin: () => Promise.resolve('some-client-number'),
+        findClientNumberBySin: async () => await Promise.resolve('some-client-number'),
       } satisfies Partial<ApplicantService>);
       mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterService).mockReturnValue({
-        findLettersByClientId: () =>
-          Promise.resolve([
+        findLettersByClientId: async () =>
+          await Promise.resolve([
             { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
             { id: '2', date: '2004-02-29', letterTypeId: 'DEN' },
             { id: '3', date: '2004-02-29', letterTypeId: 'DEN' },
@@ -79,11 +79,11 @@ describe('Letters Page', () => {
       createAudit: vi.fn(),
     } satisfies Partial<AuditService>);
     mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.ApplicantService).mockReturnValue({
-      findClientNumberBySin: () => Promise.resolve('some-client-number'),
+      findClientNumberBySin: async () => await Promise.resolve('some-client-number'),
     } satisfies Partial<ApplicantService>);
     mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterService).mockReturnValue({
-      findLettersByClientId: () =>
-        Promise.resolve([
+      findLettersByClientId: async () =>
+        await Promise.resolve([
           { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
           { id: '2', date: '2004-02-29', letterTypeId: 'DEN' },
           { id: '3', date: '2004-02-29', letterTypeId: 'DEN' },

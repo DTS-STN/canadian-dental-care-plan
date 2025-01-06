@@ -22,7 +22,7 @@ vi.mock('node:crypto', () => ({
   },
 }));
 
-vi.mock('@remix-run/node', () => ({
+vi.mock('react-router', () => ({
   redirect: vi.fn((to: string) => `MockedRedirect(${to})`),
 }));
 
@@ -125,11 +125,11 @@ describe('DefaultRaoidcService', () => {
       const mockJwkSet = mock<JWKSet>();
 
       vi.mocked(generateCryptoKey).mockResolvedValueOnce(mockPrivateDecryptionKey).mockResolvedValueOnce(mockPrivateSigningKey);
-      vi.mocked(subtle.exportKey).mockImplementationOnce(() => {
+      vi.mocked(subtle.exportKey).mockImplementationOnce(async () => {
         const json = { name: 'Pankaj', age: 20 };
         const jsonString = JSON.stringify(json);
         const arrayBuffer = new TextEncoder().encode(jsonString).buffer;
-        return Promise.resolve(arrayBuffer);
+        return await Promise.resolve(arrayBuffer);
       });
       vi.mocked(generateJwkId).mockReturnValue(mockPrivateKeyId);
       vi.mocked(fetchServerMetadata).mockResolvedValue({ serverMetadata: mockServerMetadata, jwkSet: mockJwkSet });

@@ -1,9 +1,8 @@
 import type { SyntheticEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useLoaderData } from 'react-router';
 
 import { faCheck, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -182,10 +181,12 @@ export async function action({ context: { appContainer, session }, request, para
 
 function isAddressResponse(data: unknown): data is AddressResponse {
   return (
+    // Ensure status is a string
+    // Ensure 'status' exists on data
     typeof data === 'object' && // Ensure it's an object
     data !== null && // Ensure it's not null
-    'status' in data && // Ensure 'status' exists on data
-    typeof data.status === 'string' // Ensure status is a string
+    'status' in data &&
+    typeof data.status === 'string'
   );
 }
 
@@ -350,7 +351,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
   type AddressSelectionOption = typeof enteredAddressOptionValue | typeof suggestedAddressOptionValue;
   const [selectedAddressSuggestionOption, setSelectedAddressSuggestionOption] = useState<AddressSelectionOption>(enteredAddressOptionValue);
 
-  function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+  async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -367,7 +368,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
     formData.set('postalZipCode', selectedAddressSuggestion.postalZipCode);
     formData.set('provinceStateId', selectedAddressSuggestion.provinceStateId);
 
-    fetcher.submit(formData, { method: 'POST' });
+    await fetcher.submit(formData, { method: 'POST' });
   }
 
   return (
@@ -431,7 +432,7 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useEnhancedFetcher();
 
-  function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+  async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -447,7 +448,7 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
     formData.set('postalZipCode', invalidAddress.postalZipCode);
     formData.set('provinceStateId', invalidAddress.provinceStateId);
 
-    fetcher.submit(formData, { method: 'POST' });
+    await fetcher.submit(formData, { method: 'POST' });
   }
 
   return (

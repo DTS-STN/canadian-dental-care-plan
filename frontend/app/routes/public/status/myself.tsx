@@ -1,9 +1,8 @@
 import type { FormEvent } from 'react';
 import { useEffect } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { data, redirect } from '@remix-run/node';
-import { useParams } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { data, redirect, useParams } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -116,7 +115,7 @@ export default function StatusCheckerMyself() {
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, { code: 'code', sin: 'sin' });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -131,7 +130,7 @@ export default function StatusCheckerMyself() {
       }
     }
 
-    fetcher.submit(formData, { method: 'POST' });
+    await fetcher.submit(formData, { method: 'POST' });
   }
 
   useEffect(() => {

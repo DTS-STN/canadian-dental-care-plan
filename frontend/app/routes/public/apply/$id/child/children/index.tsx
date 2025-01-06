@@ -1,9 +1,8 @@
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { faChevronLeft, faChevronRight, faEdit, faPlus, faRemove } from '@fortawesome/free-solid-svg-icons';
 import { randomUUID } from 'crypto';
@@ -115,7 +114,7 @@ export default function ApplyFlowChildSummary() {
 
   const [submitAction, setSubmitAction] = useState<string>();
 
-  function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+  async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -127,7 +126,7 @@ export default function ApplyFlowChildSummary() {
 
     setSubmitAction(submitter.value);
 
-    fetcher.submit(formData, { method: 'POST' });
+    await fetcher.submit(formData, { method: 'POST' });
   }
 
   return (

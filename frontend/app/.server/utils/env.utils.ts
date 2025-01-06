@@ -11,10 +11,13 @@ const otelLogLevels = Object.keys(DiagLogLevel).map((key) => key.toLowerCase());
 /**
  * returns false if and only if the passed-in function throws
  */
-function tryOrElseFalse(fn: () => unknown) {
-  // prettier-ignore
-  try { fn(); return true; }
-  catch { return false; }
+function tryOrElseFalse(fn: () => void) {
+  try {
+    fn();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 const validMockNames = ['cct', 'power-platform', 'raoidc', 'status-check', 'wsaddress'] as const;
@@ -22,8 +25,14 @@ export type MockName = (typeof validMockNames)[number];
 
 // refiners
 const areValidMockNames = (arr: Array<string>): arr is Array<MockName> => arr.every((mockName) => validMockNames.includes(mockName as MockName));
-const isValidPublicKey = (val: string) => tryOrElseFalse(() => generateCryptoKey(val, 'verify'));
-const isValidPrivateKey = (val: string) => tryOrElseFalse(() => generateCryptoKey(val, 'sign'));
+const isValidPublicKey = (val: string) =>
+  tryOrElseFalse(async () => {
+    await generateCryptoKey(val, 'verify');
+  });
+const isValidPrivateKey = (val: string) =>
+  tryOrElseFalse(async () => {
+    await generateCryptoKey(val, 'sign');
+  });
 
 // transformers
 const csvToArray = (csv?: string) => csv?.split(',').map((str) => str.trim()) ?? [];

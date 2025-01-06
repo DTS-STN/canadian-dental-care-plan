@@ -1,6 +1,5 @@
-import { createRequestHandler } from '@remix-run/express';
-
 import { UTCDate } from '@date-fns/utc';
+import { createRequestHandler } from '@react-router/express';
 import type { ErrorRequestHandler, RequestHandler } from 'express';
 import path from 'node:path';
 import type { ViteDevServer } from 'vite';
@@ -37,7 +36,7 @@ export function globalErrorHandler(isProduction: boolean): ErrorRequestHandler {
   };
 }
 
-export function remixRequestHandler(mode: string, viteDevServer?: ViteDevServer): RequestHandler {
+export function rrRequestHandler(mode: string, viteDevServer?: ViteDevServer): RequestHandler {
   // dynamically declare the path to avoid static analysis errors 💩
   const remixServerBuild = './app.js';
 
@@ -47,8 +46,8 @@ export function remixRequestHandler(mode: string, viteDevServer?: ViteDevServer)
   return createRequestHandler({
     mode: serverConfig.NODE_ENV,
     build: viteDevServer //
-      ? () => viteDevServer.ssrLoadModule('virtual:remix/server-build')
-      : () => import(remixServerBuild),
+      ? async () => await viteDevServer.ssrLoadModule('virtual:react-router/server-build')
+      : async () => await import(remixServerBuild),
     getLoadContext: (request, response) => {
       const appContainer = getAppContainerProvider();
       const logFactory = appContainer.get(TYPES.factories.LogFactory);

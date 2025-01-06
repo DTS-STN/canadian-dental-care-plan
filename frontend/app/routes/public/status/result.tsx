@@ -1,8 +1,7 @@
 import type { SyntheticEvent } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useFetcher, useLoaderData } from 'react-router';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -90,7 +89,7 @@ export default function StatusCheckerResult() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+  async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -100,7 +99,7 @@ export default function StatusCheckerResult() {
     invariant(submitter, 'Expected submitter to be defined');
     formData.append(submitter.name, submitter.value);
 
-    fetcher.submit(formData, { method: 'POST' });
+    await fetcher.submit(formData, { method: 'POST' });
   }
 
   return (

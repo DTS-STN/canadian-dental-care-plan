@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Outlet, useLoaderData, useNavigate, useParams } from '@remix-run/react';
+import type { LoaderFunctionArgs } from 'react-router';
+import { Outlet, useLoaderData, useNavigate, useParams } from 'react-router';
 
 import { TYPES } from '~/.server/constants';
 import { getLocale } from '~/.server/utils/locale.utils';
@@ -39,27 +39,27 @@ export default function Layout() {
     const protectedRenewState = sessionStorage.getItem('protected.renew.state');
 
     if (protectedRenewState !== 'active') {
-      navigate(path, { replace: true });
+      void navigate(path, { replace: true });
     }
   }, [navigate, path]);
 
   const apiProtectedRenewState = useApiProtectedRenewState();
   const apiSession = useApiSession();
 
-  function handleOnSessionEnd() {
-    apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-apply' });
+  async function handleOnSessionEnd() {
+    await apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-apply' });
   }
 
-  function handleOnSessionExtend() {
+  async function handleOnSessionExtend() {
     // extends the protected renew state if 'id' param exists
     const id = params.id;
     if (typeof id === 'string') {
-      apiProtectedRenewState.submit({ action: 'extend', id });
+      await apiProtectedRenewState.submit({ action: 'extend', id });
       return;
     }
 
     // extends the user's session
-    apiSession.submit({ action: 'extend' });
+    await apiSession.submit({ action: 'extend' });
   }
 
   return (

@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -34,14 +34,14 @@ describe('ClientFriendlyStatusMarkdown Component', () => {
   it('renders inline-links from parsing anchors in markdown content', () => {
     const content = `[link text](https://www.example.com)`;
 
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <ClientFriendlyStatusMarkdown content={content} />,
         path: '/',
       },
     ]);
 
-    const { getByRole } = render(<RemixStub />);
+    const { getByRole } = render(<RoutesStub />);
     const link = getByRole('link');
     expect(link.className).toEqual('text-slate-700 underline hover:text-blue-700 focus:text-blue-700 external-link');
     expect(link.getAttribute('href')).toEqual('https://www.example.com');

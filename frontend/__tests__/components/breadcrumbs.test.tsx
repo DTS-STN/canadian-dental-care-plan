@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { describe, expect, it } from 'vitest';
 
@@ -14,14 +14,14 @@ describe('Breadcrumbs', () => {
       { content: 'Contact', to: '/contact' },
     ];
 
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <Breadcrumbs items={items} />,
         path: '/',
       },
     ]);
 
-    const { getByText, getAllByRole } = render(<RemixStub />);
+    const { getByText, getAllByRole } = render(<RoutesStub />);
 
     expect(getByText('Home')).toBeInTheDocument();
     expect(getByText('About')).toBeInTheDocument();

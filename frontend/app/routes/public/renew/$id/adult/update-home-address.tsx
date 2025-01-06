@@ -1,9 +1,8 @@
 import type { SyntheticEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { data, redirect } from '@remix-run/node';
-import { useLoaderData, useParams } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { data, redirect, useLoaderData, useParams } from 'react-router';
 
 import { faCheck, faChevronLeft, faChevronRight, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -428,7 +427,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
   type AddressSelectionOption = typeof enteredAddressOptionValue | typeof suggestedAddressOptionValue;
   const [selectedAddressSuggestionOption, setSelectedAddressSuggestionOption] = useState<AddressSelectionOption>(enteredAddressOptionValue);
 
-  function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+  async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -445,7 +444,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
     formData.set('homePostalCode', selectedAddressSuggestion.postalZipCode);
     formData.set('homeProvince', selectedAddressSuggestion.provinceStateId);
 
-    fetcher.submit(formData, { method: 'POST' });
+    await fetcher.submit(formData, { method: 'POST' });
   }
 
   return (
@@ -512,7 +511,7 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useEnhancedFetcher();
 
-  function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+  async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -528,7 +527,7 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
     formData.set('homePostalCode', invalidAddress.postalZipCode);
     formData.set('homeProvince', invalidAddress.provinceStateId);
 
-    fetcher.submit(formData, { method: 'POST' });
+    await fetcher.submit(formData, { method: 'POST' });
   }
 
   return (

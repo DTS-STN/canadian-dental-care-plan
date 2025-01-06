@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useSubmit } from '@remix-run/react';
+import { useSubmit } from 'react-router';
 
 import type { ApiProtectedRenewStateAction } from '~/routes/api/protected-renew-state';
 
@@ -13,7 +13,7 @@ interface ApiProtectedRenewStateSubmitFuncArgs {
  * A custom hook for submitting API requests to the protected renew state endpoint.
  */
 export function useApiProtectedRenewState() {
-  const remixSubmit = useSubmit();
+  const rrSubmit = useSubmit();
 
   /**
    * Submits a request to the protected renew state API endpoint.
@@ -22,8 +22,8 @@ export function useApiProtectedRenewState() {
    * submit({ action: ApiProtectedRenewStateAction.Extend, id: '00000000-0000-0000-0000-000000000000' });
    */
   const submit = useCallback(
-    ({ action, id }: ApiProtectedRenewStateSubmitFuncArgs) => {
-      remixSubmit(
+    async ({ action, id }: ApiProtectedRenewStateSubmitFuncArgs) => {
+      await rrSubmit(
         { action, id },
         {
           action: '/api/protected-renew-state',
@@ -33,7 +33,7 @@ export function useApiProtectedRenewState() {
         },
       );
     },
-    [remixSubmit],
+    [rrSubmit],
   );
 
   return { submit };

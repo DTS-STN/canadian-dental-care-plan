@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
-import { createRemixStub } from '@remix-run/testing';
+import { createRoutesStub } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
 import { useIdleTimer } from 'react-idle-timer';
@@ -38,14 +38,14 @@ describe('SessionTimeout', () => {
       onSessionExtend: vi.fn(),
     };
 
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         Component: () => <SessionTimeout {...defaultProps} {...props} />,
         path: '/',
       },
     ]);
 
-    return render(<RemixStub />);
+    return render(<RoutesStub />);
   };
 
   it('should render the session timeout dialog when prompted', () => {

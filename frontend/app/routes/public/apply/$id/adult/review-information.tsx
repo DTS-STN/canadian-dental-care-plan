@@ -1,9 +1,8 @@
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -188,7 +187,7 @@ export default function ReviewInformation() {
   const { captchaRef } = useHCaptcha();
   const [submitAction, setSubmitAction] = useState<string>();
 
-  function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+  async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -210,7 +209,7 @@ export default function ReviewInformation() {
       }
     }
 
-    fetcher.submit(formData, { method: 'POST' });
+    await fetcher.submit(formData, { method: 'POST' });
   }
 
   return (

@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
 import { forwardRef, useCallback, useMemo } from 'react';
 
-import { useFetcher } from '@remix-run/react';
+import { useFetcher } from 'react-router';
 
 import { useFetcherKey } from './use-fetcher-key.hook';
 import { CsrfTokenInput } from '~/components/csrf-token-input';

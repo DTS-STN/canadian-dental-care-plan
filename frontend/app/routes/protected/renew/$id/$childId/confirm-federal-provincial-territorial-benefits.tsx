@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';

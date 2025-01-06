@@ -70,7 +70,7 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
     this.log = logFactory.createLogger('MockApplicationYearRepository');
   }
 
-  listApplicationYears(date: string): Promise<ApplicationYearResultEntity> {
+  async listApplicationYears(date: string): Promise<ApplicationYearResultEntity> {
     this.log.debug('Fetching all application year entities for date: [%s]', date);
 
     const applicationYearResponseEntity: ApplicationYearResultEntity = {
@@ -153,6 +153,6 @@ export class MockApplicationYearRepository implements ApplicationYearRepository 
 
     this.log.debug('Application years: [%j]', applicationYearResponseEntity);
 
-    return Promise.resolve(applicationYearResponseEntity);
+    return await Promise.resolve(applicationYearResponseEntity);
   }
 }

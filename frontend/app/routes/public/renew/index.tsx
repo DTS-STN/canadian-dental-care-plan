@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 
-import { redirect } from '@remix-run/node';
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useLoaderData, useNavigate, useParams } from '@remix-run/react';
+import { redirect, useLoaderData, useNavigate, useParams } from 'react-router';
+import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
 
 import { randomUUID } from 'crypto';
 
@@ -65,7 +64,7 @@ export default function RenewIndex() {
 
   useEffect(() => {
     sessionStorage.setItem('renew.state', 'active');
-    navigate(path, { replace: true });
+    void navigate(path, { replace: true });
   }, [navigate, path]);
 
   return (

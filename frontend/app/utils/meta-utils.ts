@@ -1,4 +1,4 @@
-import type { LoaderFunction, MetaFunction } from '@remix-run/node';
+import type { LoaderFunction, MetaFunction } from 'react-router';
 
 /**
  * Merging helper {@link https://remix.run/docs/en/main/route/meta#meta-merging-helper}
@@ -14,15 +14,16 @@ export const mergeMeta = <Loader extends LoaderFunction | unknown = unknown, Par
 
     return args.matches.reduceRight((acc, match) => {
       for (const parentMeta of match.meta) {
-        const index = acc.findIndex((meta) => {
-          // prettier-ignore
-          return ('name' in meta && 'name' in parentMeta && meta.name === parentMeta.name)
+        const index =
+          acc?.findIndex((meta) => {
+            // prettier-ignore
+            return ('name' in meta && 'name' in parentMeta && meta.name === parentMeta.name)
             || ('property' in meta && 'property' in parentMeta && meta.property === parentMeta.property)
             || ('title' in meta && 'title' in parentMeta);
-        });
+          }) ?? -1;
         if (index === -1) {
           // Parent meta not found in acc, so add it
-          acc.push(parentMeta);
+          acc?.push(parentMeta);
         }
       }
       return acc;

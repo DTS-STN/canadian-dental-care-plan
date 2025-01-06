@@ -1,5 +1,5 @@
-import { redirect } from '@remix-run/node';
-import type { Params } from '@remix-run/react';
+import { redirect } from 'react-router';
+import type { Params } from 'react-router';
 
 import { z } from 'zod';
 

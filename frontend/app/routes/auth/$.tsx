@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { redirectDocument } from '@remix-run/node';
+import type { LoaderFunctionArgs } from 'react-router';
+import { redirectDocument } from 'react-router';
 
 import { TYPES } from '~/.server/constants';
 import { getLocale } from '~/.server/utils/locale.utils';

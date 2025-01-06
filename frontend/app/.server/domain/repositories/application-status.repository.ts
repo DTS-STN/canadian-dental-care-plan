@@ -125,7 +125,7 @@ export class MockApplicationStatusRepository implements ApplicationStatusReposit
     this.log = logFactory.createLogger('MockApplicationStatusRepository');
   }
 
-  getApplicationStatusByBasicInfo(applicationStatusBasicInfoRequestEntity: ApplicationStatusBasicInfoRequestEntity): Promise<ApplicationStatusEntity> {
+  async getApplicationStatusByBasicInfo(applicationStatusBasicInfoRequestEntity: ApplicationStatusBasicInfoRequestEntity): Promise<ApplicationStatusEntity> {
     this.log.debug('Fetching application status for basic info [%j]', applicationStatusBasicInfoRequestEntity);
 
     const statusCode = this.MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP[applicationStatusBasicInfoRequestEntity.BenefitApplication.Applicant.ClientIdentification[0].IdentificationID];
@@ -142,10 +142,10 @@ export class MockApplicationStatusRepository implements ApplicationStatusReposit
     };
 
     this.log.debug('Returning application status [%j]', applicationStatusEntity);
-    return Promise.resolve(applicationStatusEntity);
+    return await Promise.resolve(applicationStatusEntity);
   }
 
-  getApplicationStatusBySin(applicationStatusSinRequestEntity: ApplicationStatusSinRequestEntity): Promise<ApplicationStatusEntity> {
+  async getApplicationStatusBySin(applicationStatusSinRequestEntity: ApplicationStatusSinRequestEntity): Promise<ApplicationStatusEntity> {
     this.log.debug('Fetching application status for sin [%j]', applicationStatusSinRequestEntity);
 
     const statusCode = this.MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP[applicationStatusSinRequestEntity.BenefitApplication.Applicant.ClientIdentification[0].IdentificationID];
@@ -162,6 +162,6 @@ export class MockApplicationStatusRepository implements ApplicationStatusReposit
     };
 
     this.log.debug('Returning application status [%j]', applicationStatusEntity);
-    return Promise.resolve(applicationStatusEntity);
+    return await Promise.resolve(applicationStatusEntity);
   }
 }

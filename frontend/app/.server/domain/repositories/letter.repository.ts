@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import { LetterEntity, PdfEntity } from '~/.server/domain/entities';
+import type { LetterEntity, PdfEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
 import getPdfByLetterIdJson from '~/.server/resources/cct/get-pdf-by-letter-id.json';
@@ -114,7 +114,7 @@ export class MockLetterRepository implements LetterRepository {
     this.log = logFactory.createLogger('MockLetterRepository');
   }
 
-  findLettersByClientId(clientId: string): Promise<ReadonlyArray<LetterEntity>> {
+  async findLettersByClientId(clientId: string): Promise<ReadonlyArray<LetterEntity>> {
     this.log.debug('Fetching letters for clientId [%s]', clientId);
 
     const letterEntities: ReadonlyArray<LetterEntity> = [
@@ -126,15 +126,15 @@ export class MockLetterRepository implements LetterRepository {
     ];
 
     this.log.debug('Returning letters [%j]', letterEntities);
-    return Promise.resolve(letterEntities);
+    return await Promise.resolve(letterEntities);
   }
 
-  getPdfByLetterId(letterId: string): Promise<PdfEntity> {
+  async getPdfByLetterId(letterId: string): Promise<PdfEntity> {
     this.log.debug('Fetching PDF for letterId [%s]', letterId);
 
     const pdfEntity: PdfEntity = getPdfByLetterIdJson;
 
     this.log.debug('Returning PDF [%j]', pdfEntity);
-    return Promise.resolve(pdfEntity);
+    return await Promise.resolve(pdfEntity);
   }
 }

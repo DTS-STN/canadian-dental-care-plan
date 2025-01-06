@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
-import { DynatraceRumScriptDto } from '~/.server/web/dtos';
+import type { DynatraceRumScriptDto } from '~/.server/web/dtos';
 
 export interface DynatraceDtoMapper {
   /**

@@ -1,8 +1,7 @@
 import type { FormEvent } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -65,9 +64,9 @@ export default function ProtectedRenewFileYourTaxes() {
 
   const taxInfo = <InlineLink to={t('protected-renew:file-your-taxes.tax-info-href')} className="external-link" newTabIndicator target="_blank" />;
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    fetcher.submit(event.currentTarget, { method: 'POST' });
+    await fetcher.submit(event.currentTarget, { method: 'POST' });
     sessionStorage.removeItem('protected.renew.state');
   }
 
