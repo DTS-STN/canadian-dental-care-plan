@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { data, redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useLoaderData, useParams } from '@remix-run/react';
 
 import { faCheck, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -254,7 +254,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
   const { defaultState, countryList, regionList } = useLoaderData<typeof loader>();
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
   const params = useParams();
-  const fetcher = useFetcher<typeof action>();
+  const fetcher = useEnhancedFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.country);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
@@ -385,8 +385,12 @@ export default function ProtectedRenewConfirmHomeAddress() {
                   {t('protected-renew:update-address.save-btn')}
                 </LoadingButton>
               </DialogTrigger>
-              {addressDialogContent && addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
-              {addressDialogContent && addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+              {!fetcher.isSubmitting && addressDialogContent && (
+                <>
+                  {addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
+                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+                </>
+              )}
             </Dialog>
           </div>
           <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Update address click">

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { data, redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useLoaderData, useParams } from '@remix-run/react';
 
 import { faCheck, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -244,7 +244,7 @@ export default function RenewItaUpdateAddress() {
   const { defaultState, countryList, regionList, editMode } = useLoaderData<typeof loader>();
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
   const params = useParams();
-  const fetcher = useFetcher<typeof action>();
+  const fetcher = useEnhancedFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.homeAddress?.country ?? CANADA_COUNTRY_ID);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
@@ -390,8 +390,12 @@ export default function RenewItaUpdateAddress() {
                     {t('renew-ita:update-address.continue')}
                   </LoadingButton>
                 </DialogTrigger>
-                {addressDialogContent && addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
-                {addressDialogContent && addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+                {!fetcher.isSubmitting && addressDialogContent && (
+                  <>
+                    {addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
+                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+                  </>
+                )}
               </Dialog>
               <ButtonLink
                 id="back-button"
