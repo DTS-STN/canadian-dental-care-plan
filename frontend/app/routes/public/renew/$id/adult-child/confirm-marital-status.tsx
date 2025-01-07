@@ -130,7 +130,7 @@ export default function RenewAdultChildConfirmMaritalStatus() {
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button name="_action" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Confirm marital status click">
+              <Button name="_action" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Marital status click">
                 {t('renew-adult-child:marital-status.save-btn')}
               </Button>
               <ButtonLink
@@ -138,14 +138,14 @@ export default function RenewAdultChildConfirmMaritalStatus() {
                 routeId="public/renew/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Confirm marital status click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Marital status click"
               >
                 {t('dental-insurance.button.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Confirm marital status click">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Marital status click">
                 {t('renew-adult-child:confirm-marital-status.continue-btn')}
               </LoadingButton>
               <ButtonLink
@@ -154,7 +154,7 @@ export default function RenewAdultChildConfirmMaritalStatus() {
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Confirm marital status click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Marital status click"
               >
                 {t('renew-adult-child:confirm-marital-status.back-btn')}
               </ButtonLink>
