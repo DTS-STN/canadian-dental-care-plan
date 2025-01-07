@@ -153,7 +153,7 @@ export default function RenewTypeOfRenewal() {
             errorMessage={errors?.typeOfRenewal}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form:Continue - Type of renewal click">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Continue - Type of renewal click">
               {t('renew:type-of-renewal.continue-btn')}
             </LoadingButton>
             <ButtonLink
@@ -162,7 +162,7 @@ export default function RenewTypeOfRenewal() {
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form:Back - Type of renewal click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - Type of renewal click"
             >
               {t('renew:type-of-renewal.back-btn')}
             </ButtonLink>

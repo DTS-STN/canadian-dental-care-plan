@@ -106,17 +106,10 @@ export default function RenewFlowTaxFiling() {
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Renew:Continue - Tax filing click">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Continue - Tax filing click">
               {t('renew:tax-filing.continue-btn')}
             </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              routeId="public/renew/$id/applicant-information"
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Renew:Back - Tax filing click"
-            >
+            <ButtonLink id="back-button" routeId="public/renew/$id/applicant-information" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - Tax filing click">
               {t('renew:tax-filing.back-btn')}
             </ButtonLink>
           </div>

@@ -79,10 +79,17 @@ export default function RenewalDelegate() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
-        <ButtonLink type="button" routeId="public/renew/$id/type-renewal" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renewal Application Form:Back - Renewing on behalf of someone click">
+        <ButtonLink
+          type="button"
+          routeId="public/renew/$id/type-renewal"
+          params={params}
+          disabled={isSubmitting}
+          startIcon={faChevronLeft}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renewal Application Form:Back - Renewing on behalf of someone as a legal delegate or Power of Attorney click"
+        >
           {t('renew:renewal-delegate.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renewal Application Form:Exit - Renewing on behalf of someone click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renewal Application Form:Exit - Renewing on behalf of someone as a legal delegate or Power of Attorney click">
           {t('renew:renewal-delegate.return-btn')}
         </LoadingButton>
       </fetcher.Form>
