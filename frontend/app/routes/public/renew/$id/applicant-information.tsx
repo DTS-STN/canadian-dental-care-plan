@@ -269,7 +269,7 @@ export default function RenewApplicationInformation() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form:Save - Applicant information click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Save - Personal information click">
                 {t('renew:applicant-information.save-btn')}
               </Button>
               <ButtonLink
@@ -277,14 +277,14 @@ export default function RenewApplicationInformation() {
                 routeId={defaultState ? 'public/renew/$id/review-information' : 'public/renew/$id/terms-and-conditions'}
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form:Cancel - Applicant information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Cancel - Personal information click"
               >
                 {t('renew:applicant-information.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form:Continue - Applicant information click">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Continue - Personal information click">
                 {t('renew:applicant-information.continue-btn')}
               </LoadingButton>
               <ButtonLink
@@ -293,7 +293,7 @@ export default function RenewApplicationInformation() {
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form:Back - Applicant information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - Personal information click"
               >
                 {t('renew:applicant-information.back-btn')}
               </ButtonLink>
