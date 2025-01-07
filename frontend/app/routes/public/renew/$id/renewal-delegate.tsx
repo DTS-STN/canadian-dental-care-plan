@@ -85,11 +85,11 @@ export default function RenewalDelegate() {
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renewal Application Form:Back - Renewing on behalf of someone as a legal delegate or Power of Attorney click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - Renewing on behalf of someone as a legal delegate or Power of Attorney click"
         >
           {t('renew:renewal-delegate.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renewal Application Form:Exit - Renewing on behalf of someone as a legal delegate or Power of Attorney click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Exit - Renewing on behalf of someone as a legal delegate or Power of Attorney click">
           {t('renew:renewal-delegate.return-btn')}
         </LoadingButton>
       </fetcher.Form>

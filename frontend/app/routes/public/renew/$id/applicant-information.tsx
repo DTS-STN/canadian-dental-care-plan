@@ -277,7 +277,7 @@ export default function RenewApplicationInformation() {
                 routeId={defaultState ? 'public/renew/$id/review-information' : 'public/renew/$id/terms-and-conditions'}
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP ESDC-EDSC:CDCP Renew Application Form:Cancel - Personal information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Cancel - Personal information click"
               >
                 {t('renew:applicant-information.cancel-btn')}
               </ButtonLink>
