@@ -47,9 +47,8 @@
       "cancel-btn": "Annuler",
       "save-btn": "Enregistrer",
       "child-not-found": {
-        "heading": "(FR) We could not find your child's application with the information you gave us.",
-        "please-review": "(FR) Please make sure the information you entered for your child is correct.",
-        "contact-service-canada": "(FR) Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
+        "heading": "Nous n'avons pas pu retrouver le dossier de votre enfant avec les informations que vous nous avez fournies.",
+        "contact-service-canada": "Si vous devez mettre à jour les informations d'identité de votre enfant ou si ce problème persiste, contactez Service Canada en appelant le <noWrap>1-833-537-4342</noWrap>."
       },
       "error-message": {
         "first-name-required": "Entrez le prénom de l'enfant",

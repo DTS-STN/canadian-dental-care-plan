@@ -330,9 +330,8 @@
       "cancel-btn": "Cancel",
       "save-btn": "Save",
       "child-not-found": {
-        "heading": "We could not find your child's application with the information you gave us.",
-        "please-review": "Please make sure the information you entered for your child is correct.",
-        "contact-service-canada": "Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
+        "heading": "We could not find your child's file with the information you gave us.",
+        "contact-service-canada": "If you need to update your child's identity information, or if this issue continues contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>."
       },
       "error-message": {
         "first-name-required": "Enter child's first name",

@@ -359,7 +359,6 @@ function ChildNotFound() {
     <div ref={wrapperRef} id="child-not-found" className="mb-4">
       <ContextualAlert type="danger">
         <h2 className="mb-2 font-bold">{t('renew-child:children.information.child-not-found.heading')}</h2>
-        <p className="mb-2">{t('renew-child:children.information.child-not-found.please-review')}</p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="renew-child:children.information.child-not-found.contact-service-canada" components={{ noWrap }} />
         </p>
