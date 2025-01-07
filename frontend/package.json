@@ -14,7 +14,7 @@
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint ./",
-    "typecheck": "tsc",
+    "typecheck": "react-router typegen && tsc",
     "test:all": "npm run test:unit run && npm run test:e2e",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install chromium",
