@@ -32,7 +32,7 @@ export interface ProgressProps extends React.ComponentPropsWithoutRef<typeof Pro
   value: number;
 }
 
-const Progress = React.forwardRef<React.ElementRef<typeof ProgressPrimitive.Root>, ProgressProps>(({ className, size = 'base', variant = 'default', value, label, ...props }, ref) => {
+const Progress = React.forwardRef<React.ComponentRef<typeof ProgressPrimitive.Root>, ProgressProps>(({ className, size = 'base', variant = 'default', value, label, ...props }, ref) => {
   const { currentLanguage } = useCurrentLanguage();
   return (
     <>
