@@ -188,7 +188,7 @@ export default function ProtectedRenewReviewChildInformation() {
                           </ul>
                         </>
                         <div className="mt-4">
-                          <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits" params={childParams}>
+                          <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/children/$childId/confirm-federal-provincial-territorial-benefits" params={childParams}>
                             {t('protected-renew:review-child-information.dental-benefit-change')}
                           </InlineLink>
                         </div>
@@ -198,7 +198,7 @@ export default function ProtectedRenewReviewChildInformation() {
                       <DescriptionListItem term={t('protected-renew:review-child-information.dental-benefit-title')}>
                         <p>{t('protected-renew:review-child-information.no')}</p>
                         <div className="mt-4">
-                          <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits" params={childParams}>
+                          <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/children/$childId/confirm-federal-provincial-territorial-benefits" params={childParams}>
                             {t('protected-renew:review-child-information.dental-benefit-change')}
                           </InlineLink>
                         </div>
