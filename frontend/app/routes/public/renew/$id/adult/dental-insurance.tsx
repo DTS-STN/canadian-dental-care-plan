@@ -174,7 +174,7 @@ export default function RenewAdultAccessToDentalInsuranceQuestion() {
                 routeId="public/renew/$id/adult/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental insurance click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to private dental insurance click"
               >
                 {t('dental-insurance.button.cancel-btn')}
               </ButtonLink>

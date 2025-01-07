@@ -169,7 +169,7 @@ export default function RenewAdultConfirmFederalProvincialTerritorialBenefits() 
                 routeId="public/renew/$id/adult/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other federal, provincial or territorial dental benefits click"
               >
                 {t('renew-adult:confirm-dental-benefits.button.cancel-btn')}
               </ButtonLink>
