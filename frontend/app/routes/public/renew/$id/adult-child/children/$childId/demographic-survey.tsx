@@ -296,7 +296,7 @@ export default function RenewAdultChildChildrenDemographicSurveyQuestions() {
                 variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Child voluntary demographic questions click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Child voluntary demographic questions click"
               >
                 {t('renew-adult-child:children.demographic-survey.continue-btn')}
               </LoadingButton>
@@ -306,7 +306,7 @@ export default function RenewAdultChildChildrenDemographicSurveyQuestions() {
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Child voluntary demographic questions click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Child voluntary demographic questions click"
               >
                 {t('renew-adult-child:children.demographic-survey.back-btn')}
               </ButtonLink>

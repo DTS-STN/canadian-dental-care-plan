@@ -366,10 +366,10 @@ export default function RenewAdultChildUpdateAddress() {
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Update address click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Home address click">
                 {t('renew-adult-child:update-address.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/adult-child/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Update address click">
+              <ButtonLink id="back-button" routeId="public/renew/$id/adult-child/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Home address click">
                 {t('renew-adult-child:update-address.cancel-btn')}
               </ButtonLink>
             </div>
@@ -496,7 +496,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
             disabled={fetcher.isSubmitting}
             variant="alternative"
             size="sm"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Dialog Cancel - Home address click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Dialog Back - Home address click"
           >
             {t('renew-adult-child:update-address.dialog.address-suggestion.cancel-button')}
           </Button>
@@ -563,7 +563,7 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
       </div>
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.address-invalid-close-button" startIcon={faChevronLeft} variant="alternative" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Dialog Cancel - Home address click">
+          <Button id="dialog.address-invalid-close-button" startIcon={faChevronLeft} variant="alternative" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Dialog Back - Home address click">
             {t('renew-adult-child:update-address.dialog.address-invalid.close-button')}
           </Button>
         </DialogClose>

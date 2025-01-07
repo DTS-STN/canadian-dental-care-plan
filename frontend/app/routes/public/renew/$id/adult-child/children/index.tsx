@@ -238,7 +238,7 @@ export default function RenewFlowChildSummary() {
 
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
-          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Add child - Child(ren) renewal click">
+          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Renew child - Child(ren) renewal click">
             {children.length === 0 ? t('renew-adult-child:children.index.add-child') : t('renew-adult-child:children.index.add-another-child')}
           </Button>
 

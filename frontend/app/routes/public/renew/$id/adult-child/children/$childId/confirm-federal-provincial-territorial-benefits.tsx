@@ -195,7 +195,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
                 id="continue-button"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Child access to other federal, provincial or territorial dental benefits click click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Child access to other federal, provincial or territorial dental benefits click"
               >
                 {t('renew-adult-child:children.confirm-dental-benefits.button.continue')}
               </LoadingButton>

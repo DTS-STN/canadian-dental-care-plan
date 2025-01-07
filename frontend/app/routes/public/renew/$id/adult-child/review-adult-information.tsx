@@ -434,7 +434,7 @@ export default function RenewAdultChildReviewAdultInformation() {
             </>
           )}
 
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Exit - Review your information click">
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Review your information click">
             {t('renew-adult-child:review-adult-information.back-button')}
           </Button>
         </fetcher.Form>
