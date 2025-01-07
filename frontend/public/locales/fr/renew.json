@@ -90,7 +90,7 @@
     "last-name": "Nom de famille",
     "first-name": "Prénom",
     "single-legal-name": "Si vous utilisez un seul nom légal",
-    "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
+    "name-instructions": "Si vous utilisez un seul nom légal, indiquez-le dans les champs «\u00a0prénom\u00a0» et «\u00a0nom de famille\u00a0».",
     "no-client-number": "Je n'ai pas de numéro de client",
     "renew-client-number": "Pour renouveler votre adhésion, vous devez avoir un numéro de client.",
     "apply-to-cdcp": "Si vous n'en avez pas, vous devrez présenter une demande au Régime canadien de soins dentaires.",
@@ -101,7 +101,7 @@
     "cancel-btn": "Annuler",
     "save-btn": "Sauvegarder",
     "help-message": {
-      "client-number": "Vous trouverez votre numéro de client dans le coin supérieur droit de la lettre de renouvellement de Service Canada ou sur votre carte de membre de la Sun Life."
+      "client-number": "Vous trouverez votre numéro de client dans le coin supérieur droit de la lettre de renouvellement de Service Canada ou sur votre carte de membre du Régime canadien de soins dentaires."
     },
     "error-message": {
       "date-of-birth-day-number": "Le jour doit être un nombre",

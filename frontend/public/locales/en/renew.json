@@ -90,7 +90,7 @@
     "last-name": "Last name",
     "first-name": "First name",
     "single-legal-name": "If you have a single legal name",
-    "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
+    "name-instructions": "If you have only one legal name, enter it in both the first and last name fields.",
     "no-client-number": "I don't have a client number",
     "renew-client-number": "To renew your membership, you must have a client number.",
     "apply-to-cdcp": "If you don't have one, you will need to apply for the Canadian Dental Care Plan.",
@@ -101,7 +101,7 @@
     "cancel-btn": "Cancel",
     "save-btn": "Save",
     "help-message": {
-      "client-number": "You can find your client number in the upper right corner of the renewal letter from Service Canada or on your Sun Life member card."
+      "client-number": "You can find your client number in the upper right corner of the renewal letter from Service Canada or on your Canadian Dental Care Plan member card."
     },
     "error-message": {
       "date-of-birth-day-number": "Day must be a number",
