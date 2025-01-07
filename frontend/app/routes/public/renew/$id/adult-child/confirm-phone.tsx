@@ -216,10 +216,10 @@ export default function RenewAdultChildConfirmPhone() {
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Contact information click">
+              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Phone number click">
                 {t('renew-adult-child:confirm-phone.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Contact information click">
+              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Phone number click">
                 {t('renew-adult-child:confirm-phone.cancel-btn')}
               </Button>
             </div>
@@ -232,7 +232,7 @@ export default function RenewAdultChildConfirmPhone() {
                 variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Contact information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Phone number click"
               >
                 {t('renew-adult-child:confirm-phone.continue-btn')}
               </LoadingButton>
@@ -242,7 +242,7 @@ export default function RenewAdultChildConfirmPhone() {
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Contact information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Phone number click"
               >
                 {t('renew-adult-child:confirm-phone.back-btn')}
               </ButtonLink>

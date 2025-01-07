@@ -163,7 +163,7 @@ export default function RenewAdultChildChildrenDentalInsurance() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Child access to other dental insurance click">
+              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Child access to private dental insurance click">
                 {t('children.dental-insurance.button.save-btn')}
               </Button>
               <ButtonLink
@@ -171,14 +171,14 @@ export default function RenewAdultChildChildrenDentalInsurance() {
                 routeId="public/renew/$id/adult-child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Child access to other dental insurance click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Child access to private dental insurance click"
               >
                 {t('children.dental-insurance.button.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Child access to other dental insurance click">
+              <LoadingButton variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Child access to private dental insurance click">
                 {t('children.dental-insurance.button.continue')}
               </LoadingButton>
               <ButtonLink
@@ -187,7 +187,7 @@ export default function RenewAdultChildChildrenDentalInsurance() {
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child access to other dental insurance click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Child access to private dental insurance click"
               >
                 {t('children.dental-insurance.button.back')}
               </ButtonLink>

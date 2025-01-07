@@ -190,7 +190,7 @@ export default function RenewFlowChildSummary() {
                       routeId="public/renew/$id/adult-child/children/$childId/dental-insurance"
                       params={{ ...params, childId: child.id }}
                       startIcon={faEdit}
-                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Edit child - Child(ren) application click"
+                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Edit child - Child(ren) renewal click"
                     >
                       {t('renew-adult-child:children.index.edit-child')}
                     </ButtonLink>
@@ -221,7 +221,7 @@ export default function RenewFlowChildSummary() {
                               disabled={isSubmitting}
                               variant="primary"
                               size="sm"
-                              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Remove child - Child(ren) application click"
+                              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Remove child - Child(ren) renewal click"
                             >
                               {t('renew-adult-child:children.index.modal.remove-btn')}
                             </Button>
@@ -238,7 +238,7 @@ export default function RenewFlowChildSummary() {
 
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
-          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Add child - Child(ren) application click">
+          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Renew child - Child(ren) renewal click">
             {children.length === 0 ? t('renew-adult-child:children.index.add-child') : t('renew-adult-child:children.index.add-another-child')}
           </Button>
 
@@ -249,7 +249,7 @@ export default function RenewFlowChildSummary() {
                 routeId="public/renew/$id/adult-child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Child(ren) application click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Child(ren) renewal click"
                 variant="primary"
               >
                 {t('children.index.save-btn')}
@@ -259,7 +259,7 @@ export default function RenewFlowChildSummary() {
                 routeId="public/renew/$id/adult-child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Child(ren) application click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Child(ren) renewal click"
               >
                 {t('children.index.cancel-btn')}
               </ButtonLink>
@@ -273,11 +273,11 @@ export default function RenewFlowChildSummary() {
                 variant="primary"
                 loading={isSubmitting && submitAction === FormAction.Continue}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Child(ren) application click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Child(ren) renewal click"
               >
                 {t('renew-adult-child:children.index.continue-btn')}
               </LoadingButton>
-              <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child(ren) application click">
+              <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Child(ren) renewal click">
                 {t('renew-adult-child:children.index.back-btn')}
               </Button>
             </div>

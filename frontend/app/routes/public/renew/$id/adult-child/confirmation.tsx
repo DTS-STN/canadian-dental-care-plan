@@ -195,7 +195,7 @@ export default function RenewAdultChildConfirm() {
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Print top - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Print top - Your renewal for the Canadian Dental Care Plan is complete click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -338,7 +338,7 @@ export default function RenewAdultChildConfirm() {
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Print bottom - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child_Child:Print bottom - Your renewal for the Canadian Dental Care Plan is complete click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -346,7 +346,10 @@ export default function RenewAdultChildConfirm() {
 
       <Dialog>
         <DialogTrigger asChild>
-          <button className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Application successfully submitted click">
+          <button
+            className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child_Child:Exit - Your renewal for the Canadian Dental Care Plan is complete click"
+          >
             {t('confirm.close-application')}
           </button>
         </DialogTrigger>
@@ -358,7 +361,7 @@ export default function RenewAdultChildConfirm() {
           <p>{t('confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back exit modal - Application successfully submitted click">
+              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child_Child:Back exit modal - Your renewal for the Canadian Dental Care Plan is complete click">
                 {t('confirm.modal.back-btn')}
               </Button>
             </DialogClose>
@@ -371,7 +374,7 @@ export default function RenewAdultChildConfirm() {
                 name="_action"
                 value={FormAction.Close}
                 onClick={() => sessionStorage.removeItem('flow.state')}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Confirmation exit modal - Application successfully submitted click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child_Child:Confirmation exit modal - Your renewal for the Canadian Dental Care Plan is complete click"
               >
                 {t('confirm.modal.close-btn')}
               </Button>
