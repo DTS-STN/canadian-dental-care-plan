@@ -31,7 +31,7 @@
       "page-title": "{{childName}}\u00a0: Renseignements",
       "form-instructions-sin": "Saisissez le nom de l'enfant tel qu'il a été fourni lors de votre première demande pour l'enfant",
       "single-legal-name": "Si l'enfant a un seul nom légal",
-      "name-instructions": "Si l'enfant n'utilise qu'un seul nom, indiquez ce nom dans les champs «\u00a0prénom\u00a0» et «\u00a0nom\u00a0».",
+      "name-instructions": "Si l'enfant utilise un seul nom légal, indiquez ce nom dans les champs «\u00a0prénom\u00a0» et «\u00a0nom de famille\u00a0».",
       "last-name": "Nom de famille",
       "first-name": "Prénom",
       "date-of-birth": "Date de naissance",
