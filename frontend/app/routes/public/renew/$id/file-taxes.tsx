@@ -82,7 +82,7 @@ export default function RenewFileYourTaxes() {
         <ButtonLink id="back-button" routeId="public/renew/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - File your taxes click">
           {t('renew:file-your-taxes.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Exit - File your taxes click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Exit - File your taxes click">
           {t('renew:file-your-taxes.return-btn')}
         </LoadingButton>
       </fetcher.Form>

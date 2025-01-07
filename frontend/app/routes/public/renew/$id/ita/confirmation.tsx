@@ -164,7 +164,7 @@ export default function RenewFlowConfirm() {
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Print top - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-ITA:Print top - Confirmation click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -287,14 +287,14 @@ export default function RenewFlowConfirm() {
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Print bottom - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-ITA:Print bottom - Confirmation click"
         >
           {t('confirm.print-btn')}
         </Button>
       </div>
       <Dialog>
         <DialogTrigger asChild>
-          <button className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Application successfully submitted click">
+          <button className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-ITA:Close application - Confirmation click">
             {t('renew-ita:confirm.close-application')}
           </button>
         </DialogTrigger>
@@ -306,7 +306,7 @@ export default function RenewFlowConfirm() {
           <p>{t('renew-ita:confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back exit modal - Application successfully submitted click">
+              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-ITA:Back modal - Confirmation click">
                 {t('renew-ita:confirm.modal.back-btn')}
               </Button>
             </DialogClose>
@@ -319,7 +319,7 @@ export default function RenewFlowConfirm() {
                 name="_action"
                 value={FormAction.Close}
                 onClick={() => sessionStorage.removeItem('renew.state')}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Confirmation exit modal - Application successfully submitted click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-ITA:Close modal - Confirmation click"
               >
                 {t('renew-ita:confirm.modal.close-btn')}
               </Button>
