@@ -191,6 +191,7 @@ const serverEnv = clientEnvSchema.extend({
   HEALTH_AUTH_ROLE: z.string().default('HealthCheck.ViewDetails'),
   HEALTH_AUTH_TOKEN_AUDIENCE: z.string().default('00000000-0000-0000-0000-000000000000'), // intentional default to enforce an audience check when verifying JWTs
   HEALTH_AUTH_TOKEN_ISSUER: z.string().default('https://auth.example.com/'), // intentional default to enforce an issuer check when verifying JWTs
+  HEALTH_PLACEHOLDER_REQUEST_VALUE: z.string().default('CDCP_HEALTH_CHECK'),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;

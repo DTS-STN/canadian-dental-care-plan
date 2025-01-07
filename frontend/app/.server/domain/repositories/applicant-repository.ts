@@ -17,24 +17,42 @@ export interface ApplicantRepository {
    * @returns A Promise that resolves to the applicant entity if found, or `null` otherwise.
    */
   findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null>;
+
+  /**
+   * Retrieves metadata associated with the applicant repository.
+   *
+   * @returns A record where the keys and values are strings representing metadata information.
+   */
+  getMetadata(): Record<string, string>;
+
+  /**
+   * Performs a health check to ensure that the applicant repository is operational.
+   *
+   * @throws An error if the health check fails or the repository is unavailable.
+   * @returns A promise that resolves when the health check completes successfully.
+   */
+  checkHealth(): Promise<void>;
 }
 
 @injectable()
 export class DefaultApplicantRepository implements ApplicantRepository {
   private readonly log: Logger;
+  private readonly baseUrl: string;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_APPLICANT_API_BASE_URI' | 'INTEROP_APPLICANT_API_SUBSCRIPTION_KEY'>,
+    @inject(TYPES.configs.ServerConfig)
+    private readonly serverConfig: Pick<ServerConfig, 'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_APPLICANT_API_BASE_URI' | 'INTEROP_APPLICANT_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultApplicantRepository');
+    this.baseUrl = `${this.serverConfig.INTEROP_APPLICANT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant`;
   }
 
   async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null> {
     this.log.trace('Fetching applicant for sin [%j]', applicantRequestEntity);
 
-    const url = `${this.serverConfig.INTEROP_APPLICANT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant`;
+    const url = new URL(this.baseUrl);
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.client-application_by-sin.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
@@ -65,6 +83,22 @@ export class DefaultApplicantRepository implements ApplicantRepository {
     });
 
     throw new Error(`Failed to 'POST' for applicant. Status:  ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      baseUrl: this.baseUrl,
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    await this.findApplicantBySin({
+      Applicant: {
+        PersonSINIdentification: {
+          IdentificationID: this.serverConfig.HEALTH_PLACEHOLDER_REQUEST_VALUE,
+        },
+      },
+    });
   }
 }
 
@@ -173,5 +207,15 @@ export class MockApplicantRepository implements ApplicantRepository {
 
     this.log.debug('Returning applicant [%j]', applicantResponseEntity);
     return await Promise.resolve(applicantResponseEntity);
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      mockEnabled: 'true',
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    return await Promise.resolve();
   }
 }
