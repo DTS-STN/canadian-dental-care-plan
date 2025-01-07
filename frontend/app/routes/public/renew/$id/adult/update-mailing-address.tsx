@@ -359,10 +359,10 @@ export default function RenewAdultUpdateAddress() {
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Update address click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Mailing address click">
                 {t('renew-adult:update-address.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Update address click">
+              <ButtonLink id="back-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Mailing address click">
                 {t('renew-adult:update-address.cancel-btn')}
               </ButtonLink>
             </div>
@@ -378,7 +378,7 @@ export default function RenewAdultUpdateAddress() {
                     value={FormAction.Submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Update mailing address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Mailing address click"
                   >
                     {t('renew-adult:update-address.continue')}
                   </LoadingButton>
@@ -399,7 +399,7 @@ export default function RenewAdultUpdateAddress() {
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Update mailing address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Mailing address click"
               >
                 {t('renew-adult:update-address.back')}
               </ButtonLink>
@@ -490,12 +490,29 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copy
       />
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.corrected-address-close-button" startIcon={faChevronLeft} variant="alternative" disabled={fetcher.isSubmitting} size="sm">
+          <Button
+            id="dialog.corrected-address-close-button"
+            startIcon={faChevronLeft}
+            variant="alternative"
+            disabled={fetcher.isSubmitting}
+            size="sm"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Dialog Cancel - Mailing address click"
+          >
             {t('renew-adult:update-address.dialog.address-suggestion.cancel-button')}
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={FormAction.UseSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+          <LoadingButton
+            name="_action"
+            value={FormAction.UseSelectedAddress}
+            type="submit"
+            id="dialog.corrected-address-use-selected-address-button"
+            loading={fetcher.isSubmitting}
+            endIcon={faCheck}
+            variant="primary"
+            size="sm"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Dialog Use Selected Address - Mailing address click"
+          >
             {t('renew-adult:update-address.dialog.address-suggestion.use-selected-address-button')}
           </LoadingButton>
         </fetcher.Form>
