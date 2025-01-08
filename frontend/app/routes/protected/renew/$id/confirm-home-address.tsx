@@ -356,7 +356,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
               <DialogTrigger asChild>
-                <LoadingButton variant="primary" id="continue-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Update address click">
+                <LoadingButton variant="primary" id="continue-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Home address click">
                   {t('protected-renew:update-address.save-btn')}
                 </LoadingButton>
               </DialogTrigger>
@@ -368,7 +368,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
               )}
             </Dialog>
           </div>
-          <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Update address click">
+          <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Home address click">
             {t('protected-renew:update-address.cancel-btn')}
           </ButtonLink>
         </div>
@@ -508,12 +508,22 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
       </div>
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.address-invalid-close-button" startIcon={faChevronLeft} variant="alternative" size="sm">
+          <Button id="dialog.address-invalid-close-button" startIcon={faChevronLeft} variant="alternative" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Dialog Close - Home address click">
             {t('protected-renew:update-address.dialog.address-invalid.close-button')}
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={FormAction.UseInvalidAddress} type="submit" id="dialog.address-invalid-use-entered-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+          <LoadingButton
+            name="_action"
+            value={FormAction.UseInvalidAddress}
+            type="submit"
+            id="dialog.address-invalid-use-entered-address-button"
+            loading={fetcher.isSubmitting}
+            endIcon={faCheck}
+            variant="primary"
+            size="sm"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Dialog Use Selected Address - Home address click"
+          >
             {t('protected-renew:update-address.dialog.address-invalid.use-entered-address-button')}
           </LoadingButton>
         </fetcher.Form>

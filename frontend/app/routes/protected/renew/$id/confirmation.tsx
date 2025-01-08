@@ -206,7 +206,14 @@ export default function ProtectedRenewConfirm() {
       <div className="my-6 flex flex-wrap items-center gap-3">
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <LoadingButton name="_action" value={FormAction.Close} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Confirmation - close application click">
+          <LoadingButton
+            name="_action"
+            value={FormAction.Close}
+            variant="primary"
+            loading={isSubmitting}
+            endIcon={faChevronRight}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Return to my dashboard - Your renewal for the Canadian Dental Care Plan is complete click"
+          >
             {t('protected-renew:confirm.back-btn')}
           </LoadingButton>
         </fetcher.Form>

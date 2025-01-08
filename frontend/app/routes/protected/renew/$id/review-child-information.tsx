@@ -236,11 +236,11 @@ export default function ProtectedRenewReviewChildInformation() {
               disabled={isSubmitting}
               loading={isSubmitting}
               endIcon={faChevronRight}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Submit - Review child(ren) information click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Review child(ren) information click"
             >
               {t('protected-renew:review-child-information.continue-button')}
             </LoadingButton>
-            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Review child(ren) information click">
+            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Review child(ren) information click">
               {t('protected-renew:review-child-information.back-button')}
             </Button>
           </div>
