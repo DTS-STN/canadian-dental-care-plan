@@ -161,17 +161,10 @@ export default function RenewItaConfirmAddress() {
           </div>
 
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Confirm address click">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Address click">
               {t('renew-ita:confirm-address.continue-btn')}
             </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              routeId="public/renew/$id/ita/confirm-email"
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Confirm address click"
-            >
+            <ButtonLink id="back-button" routeId="public/renew/$id/ita/confirm-email" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Address click">
               {t('renew-ita:confirm-address.back-btn')}
             </ButtonLink>
           </div>

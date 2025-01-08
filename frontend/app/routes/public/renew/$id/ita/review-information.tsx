@@ -403,11 +403,11 @@ export default function RenewItaReviewInformation() {
             variant="green"
             disabled={isSubmitting}
             loading={isSubmitting && submitAction === FormAction.Submit}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Submit - Review your information click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Submit - Review your information click"
           >
             {t('renew-ita:review-information.submit-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Exit - Review your information click">
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Review your information click">
             {t('renew-ita:review-information.back-button')}
           </Button>
         </fetcher.Form>
