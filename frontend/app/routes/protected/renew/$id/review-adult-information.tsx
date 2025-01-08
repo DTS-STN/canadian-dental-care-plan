@@ -466,7 +466,7 @@ export default function ProtectedRenewReviewAdultInformation() {
               {t('protected-renew:review-adult-information.continue-button')}
             </LoadingButton>
           )}
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Exit - Review your information click">
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Review your information click">
             {t('protected-renew:review-adult-information.back-button')}
           </Button>
         </fetcher.Form>

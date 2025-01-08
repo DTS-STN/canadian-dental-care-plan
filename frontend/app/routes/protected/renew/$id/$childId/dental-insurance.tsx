@@ -167,7 +167,7 @@ export default function ProtectedRenewChildrenDentalInsurance() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application-Protected:Save - Child access to other dental insurance click">
+              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Child access to other dental insurance click">
                 {t('protected-renew:children.dental-insurance.button.save-btn')}
               </Button>
               <ButtonLink
@@ -175,7 +175,7 @@ export default function ProtectedRenewChildrenDentalInsurance() {
                 routeId="protected/renew/$id/review-child-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application-Protected:Cancel - Child access to other dental insurance click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Child access to other dental insurance click"
               >
                 {t('protected-renew:children.dental-insurance.button.cancel-btn')}
               </ButtonLink>

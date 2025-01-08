@@ -83,10 +83,10 @@ export default function ProtectedRenewFileYourTaxes() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
-        <ButtonLink id="back-button" routeId="protected/renew/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Applicationt-Protected:Back - File your taxes click">
+        <ButtonLink id="back-button" routeId="protected/renew/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Applicationt Form-Protected:Back - File your taxes click">
           {t('protected-renew:file-your-taxes.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Exit - File your taxes click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Return to dashboard - File your taxes click">
           {t('protected-renew:file-your-taxes.return-btn')}
         </LoadingButton>
       </fetcher.Form>

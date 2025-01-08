@@ -307,7 +307,7 @@ export default function ProtectedChildrenDemographicSurveyQuestions() {
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Child voluntary demographic questions click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Child voluntary demographic questions click"
               >
                 {t('protected-renew:children.demographic-survey.back-btn')}
               </ButtonLink>
