@@ -116,7 +116,7 @@ export default function RenewTypeOfRenewal() {
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={35} size="lg" label={t('apply:progress.label')} />
+        <Progress value={21} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 mt-8 italic">{t('apply:required-label')}</p>

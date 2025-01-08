@@ -169,7 +169,7 @@ export default function RenewAdultChildConfirmEmail() {
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={45} size="lg" label={t('renew:progress.label')} />
+        <Progress value={70} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('renew:required-label')}</p>

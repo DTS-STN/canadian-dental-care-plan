@@ -107,7 +107,7 @@ export default function RenewAdultConfirmMaritalStatus() {
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={22} size="lg" label={t('renew:progress.label')} />
+        <Progress value={33} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('renew:required-label')}</p>

@@ -19,7 +19,6 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
-import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
@@ -76,6 +75,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     provincialTerritorialSocialPrograms,
     provinceTerritoryStates,
+    i18nOptions: { childName },
   };
 }
 
@@ -226,9 +226,8 @@ export default function RenewChildUpdateFederalProvincialTerritorialBenefits() {
 
   return (
     <>
-      <AppPageTitle>{t('renew-child:children.update-dental-benefits.title', { childName })}</AppPageTitle>
       <div className="my-6 sm:my-8">
-        <Progress value={88} size="lg" label={t('renew:progress.label')} />
+        <Progress value={30} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('renew-child:children.update-dental-benefits.access-to-dental')}</p>

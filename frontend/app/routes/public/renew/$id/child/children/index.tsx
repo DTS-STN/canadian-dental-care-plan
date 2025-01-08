@@ -137,7 +137,7 @@ export default function RenewChildIndex() {
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={81} size="lg" label={t('renew:progress.label')} />
+        <Progress value={30} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('renew-child:children.index.in-this-section')}</p>

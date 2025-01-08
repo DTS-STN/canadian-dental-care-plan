@@ -16,6 +16,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
+import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -133,6 +134,9 @@ export default function RenewAdultChildChildrenDentalInsurance() {
 
   return (
     <>
+      <div className="my-6 sm:my-8">
+        <Progress value={81} size="lg" label={t('renew:progress.label')} />
+      </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />

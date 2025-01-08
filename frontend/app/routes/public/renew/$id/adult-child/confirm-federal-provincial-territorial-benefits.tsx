@@ -127,7 +127,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={88} size="lg" label={t('renew:progress.label')} />
+        <Progress value={72} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('renew-adult-child:confirm-dental-benefits.access-to-dental')}</p>

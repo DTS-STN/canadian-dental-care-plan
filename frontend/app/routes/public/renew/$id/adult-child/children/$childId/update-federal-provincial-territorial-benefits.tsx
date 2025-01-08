@@ -228,7 +228,7 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
     <>
       <AppPageTitle>{t('renew-adult-child:children.update-dental-benefits.title', { childName })}</AppPageTitle>
       <div className="my-6 sm:my-8">
-        <Progress value={88} size="lg" label={t('renew:progress.label')} />
+        <Progress value={81} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('renew-adult-child:children.update-dental-benefits.access-to-dental')}</p>
