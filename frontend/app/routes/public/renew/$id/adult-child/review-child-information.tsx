@@ -279,7 +279,7 @@ export default function RenewAdultChildReviewChildInformation() {
       </div>
       {payload && (
         <div className="mt-8">
-          <DebugPayload data={payload} enableCopy></DebugPayload>
+          <DebugPayload data={payload} enableCopy />
         </div>
       )}
     </>

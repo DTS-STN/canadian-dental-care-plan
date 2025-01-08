@@ -4,11 +4,12 @@ import { faCheck, faClipboard } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from './buttons';
 
-export type debugPayloadtProps = {
+export interface DebugPayloadProps {
   data?: unknown;
   enableCopy?: boolean;
-};
-export function DebugPayload({ data, enableCopy }: debugPayloadtProps) {
+}
+
+export function DebugPayload({ data, enableCopy }: DebugPayloadProps) {
   const [hasCopied, setHasCopied] = useState(false);
   const json = JSON.stringify(data, null, 2);
 

@@ -285,7 +285,7 @@ export default function ReviewInformation() {
       </div>
       {payload && (
         <div className="mt-8">
-          <DebugPayload data={payload} enableCopy></DebugPayload>
+          <DebugPayload data={payload} enableCopy />
         </div>
       )}
     </>
