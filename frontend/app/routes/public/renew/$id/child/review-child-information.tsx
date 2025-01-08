@@ -12,7 +12,7 @@ import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewChildState, validateChildrenStateForReview } from '~/.server/routes/helpers/renew-child-route-helpers';
-import { clearRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
+import { clearRenewState, getChildrenState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
 
-  const children = state.children.map((child) => {
+  const children = getChildrenState(state).map((child) => {
     // prettier-ignore
     const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
       ? federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)

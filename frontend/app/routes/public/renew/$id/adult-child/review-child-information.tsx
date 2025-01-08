@@ -13,7 +13,7 @@ import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewAdultChildStateForReview } from '~/.server/routes/helpers/renew-adult-child-route-helpers';
-import { clearRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
+import { clearRenewState, getChildrenState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
 
-  const children = state.children.map((child) => {
+  const children = getChildrenState(state).map((child) => {
     // prettier-ignore
     const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
       ? federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
@@ -80,11 +80,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
     return {
       id: child.id,
-      firstName: child.information.firstName,
-      lastName: child.information.lastName,
-      birthday: child.information.dateOfBirth,
-      clientNumber: child.information.clientNumber,
-      isParent: child.information.isParent,
+      firstName: child.information?.firstName,
+      lastName: child.information?.lastName,
+      birthday: child.information?.dateOfBirth,
+      clientNumber: child.information?.clientNumber,
+      isParent: child.information?.isParent,
       dentalInsurance: {
         acessToDentalInsurance: child.dentalInsurance,
         hasChanged: child.hasFederalProvincialTerritorialBenefitsChanged,
@@ -179,7 +179,7 @@ export default function RenewAdultChildReviewChildInformation() {
         <div className="space-y-10">
           {children.map((child) => {
             const childParams = { ...params, childId: child.id };
-            const dateOfBirth = toLocaleDateString(parseDateString(child.birthday), currentLanguage);
+            const dateOfBirth = toLocaleDateString(parseDateString(child.birthday ?? ''), currentLanguage);
             return (
               <section key={child.id} className="space-y-8">
                 <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>
