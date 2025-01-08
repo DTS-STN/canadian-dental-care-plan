@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Banner } from '../banner';
+
 import { Breadcrumbs } from '~/components/breadcrumbs';
 import { InlineLink } from '~/components/inline-link';
 import { PageDetails } from '~/components/page-details';

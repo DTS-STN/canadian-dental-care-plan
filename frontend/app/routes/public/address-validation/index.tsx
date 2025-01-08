@@ -1,13 +1,14 @@
 import type { SyntheticEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useLoaderData } from 'react-router';
+import { redirect } from 'react-router';
 
 import { faCheck, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
+
+import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -24,7 +25,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { useEnhancedFetcher } from '~/hooks';
 import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -63,11 +64,11 @@ export const handle = {
   pageTitleI18nKey: 'address-validation:index.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateFeatureEnabled('address-validation');
 
@@ -85,7 +86,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   return { countries, defaultMailingAddress, meta, provinceTerritoryStates };
 }
 
-export async function action({ context: { appContainer, session }, request, params }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -190,9 +191,10 @@ function isAddressResponse(data: unknown): data is AddressResponse {
   );
 }
 
-export default function AddressValidationIndexRoute() {
+export default function AddressValidationIndexRoute({ loaderData, actionData }: Route.ComponentProps) {
+  const { countries, defaultMailingAddress, provinceTerritoryStates } = loaderData;
+
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { countries, defaultMailingAddress, provinceTerritoryStates } = useLoaderData<typeof loader>();
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
   const fetcher = useEnhancedFetcher<typeof action>();
 
@@ -203,7 +205,7 @@ export default function AddressValidationIndexRoute() {
 
   const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
 
-  const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+  const errors = actionData && 'errors' in actionData ? actionData.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'address',
     city: 'city',
@@ -213,8 +215,8 @@ export default function AddressValidationIndexRoute() {
   });
 
   useEffect(() => {
-    setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
-  }, [fetcher, fetcher.data]);
+    setAddressDialogContent(isAddressResponse(actionData) ? actionData : null);
+  }, [actionData]);
 
   function onDialogOpenChangeHandler(open: boolean) {
     if (!open) {

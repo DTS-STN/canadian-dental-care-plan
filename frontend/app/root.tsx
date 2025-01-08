@@ -1,13 +1,14 @@
 import { useContext, useEffect } from 'react';
 
-import type { HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation, useRouteLoaderData } from 'react-router';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLocation, useRouteLoaderData } from 'react-router';
 
 import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
 import fontawesomeStyleSheet from '@fortawesome/fontawesome-svg-core/styles.css?url';
 import { Trans, useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css?url';
 import invariant from 'tiny-invariant';
+
+import type { Route } from './+types/root';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -26,7 +27,7 @@ import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCan
 // see: https://docs.fontawesome.com/web/dig-deeper/security#content-security-policy
 fontAwesomeConfig.autoAddCss = false;
 
-export const links: LinksFunction = () => [
+export const links: Route.LinksFunction = () => [
   { rel: 'stylesheet', href: fontLatoStyleSheet },
   { rel: 'stylesheet', href: fontNotoSansStyleSheet },
   { rel: 'stylesheet', href: reactPhoneNumberInputStyleSheet },
@@ -34,8 +35,7 @@ export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: tailwindStyleSheet },
 ];
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  if (!data) return [];
+export const meta: Route.MetaFunction = ({ data }) => {
   return [
     ...getTitleMetaTags(data.meta.title),
     ...getDescriptionMetaTags(data.meta.description),
@@ -53,13 +53,13 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
-export const headers: HeadersFunction = ({ loaderHeaders }) => {
+export const headers: Route.HeadersFunction = () => {
   return {
     'Cache-Control': `private, no-cache, no-store, must-revalidate, max-age=0`,
   };
 };
 
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const buildInfoService = appContainer.get(TYPES.core.BuildInfoService);
   const dynatraceService = appContainer.get(TYPES.web.services.DynatraceService);
   const requestUrl = new URL(request.url);
@@ -91,9 +91,10 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   };
 }
 
-export default function App() {
+export default function App({ loaderData }: Route.ComponentProps) {
+  const { dynatraceRumScript, env, origin } = loaderData;
+
   const { nonce } = useContext(NonceContext);
-  const { dynatraceRumScript, env, origin } = useLoaderData<typeof loader>();
   const location = useLocation();
   const ns = useI18nNamespaces();
   const { i18n } = useTranslation(ns);

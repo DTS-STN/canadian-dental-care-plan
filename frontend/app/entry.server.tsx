@@ -1,11 +1,12 @@
+import { renderToPipeableStream } from 'react-dom/server';
+import type { RenderToPipeableStreamOptions } from 'react-dom/server';
+
+import { createReadableStreamFromReadable } from '@react-router/node';
 import type { ActionFunctionArgs, AppLoadContext, EntryContext, LoaderFunctionArgs } from 'react-router';
 import { ServerRouter } from 'react-router';
 
-import { createReadableStreamFromReadable } from '@react-router/node';
 import { isbot } from 'isbot';
 import { PassThrough } from 'node:stream';
-import { renderToPipeableStream } from 'react-dom/server';
-import type { RenderToPipeableStreamOptions } from 'react-dom/server';
 import { I18nextProvider } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';

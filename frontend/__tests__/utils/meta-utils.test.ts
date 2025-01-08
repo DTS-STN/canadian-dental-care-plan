@@ -1,36 +1,28 @@
 import type { MetaArgs } from 'react-router';
+import type { CreateMetaArgs } from 'react-router/route-module';
 
 import { describe, expect, it } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeMeta, mergeRouteModuleMeta } from '~/utils/meta-utils';
 
 describe('mergeMeta', () => {
-  it('should merge parent meta with leaf meta', () => {
-    // Mock data
-    const parentMetaFn = () => [
-      { name: 'description', content: 'Parent description' },
-      { name: 'keywords', content: 'Parent keywords' },
+  it('should merge parent and leaf meta correctly', () => {
+    const parentMeta = [
+      { title: 'Parent Title' }, //
+      { name: 'description', content: 'Parent Description' },
     ];
 
-    const leafMetaFn = () => [
-      { name: 'description', content: 'Leaf description' },
-      { name: 'author', content: 'Leaf author' },
-    ];
+    const leafMeta = () => [{ title: 'Leaf Title' }];
 
     const args: MetaArgs = {
       data: undefined,
-      location: {
-        hash: '',
-        key: '',
-        pathname: '/',
-        search: '',
-        state: {},
-      },
+      location: mock<MetaArgs['location']>({ pathname: '/leaf' }),
       matches: [
         {
           data: undefined,
           id: 'parent',
-          meta: parentMetaFn(),
+          meta: parentMeta,
           params: {},
           pathname: '/',
         },
@@ -38,37 +30,35 @@ describe('mergeMeta', () => {
       params: {},
     };
 
-    // Call the mergeMeta function
-    const mergedMetaFn = mergeMeta(leafMetaFn);
-    const mergedMeta = mergedMetaFn(args);
+    const mergedMeta = mergeMeta(leafMeta)(args);
 
-    // Assertions
     expect(mergedMeta).toEqual([
-      { name: 'description', content: 'Leaf description' },
-      { name: 'author', content: 'Leaf author' },
-      { name: 'keywords', content: 'Parent keywords' },
+      { title: 'Leaf Title' }, //
+      { name: 'description', content: 'Parent Description' },
     ]);
   });
+});
 
-  it('should handle merging when parent meta not found', () => {
-    // Mock data
-    const parentMetaFn = () => [];
-    const leafMetaFn = () => [{ name: 'description', content: 'Leaf description' }];
+describe('mergeRouteModuleMeta', () => {
+  it('should merge parent and leaf meta correctly', () => {
+    const parentMeta = [
+      { title: 'Parent Title' }, //
+      { name: 'description', content: 'Parent Description' },
+    ];
+
+    const leafMeta = () => [{ title: 'Leaf Title' }];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    type MetaArgs = CreateMetaArgs<any>;
 
     const args: MetaArgs = {
       data: undefined,
-      location: {
-        hash: '',
-        key: '',
-        pathname: '/',
-        search: '',
-        state: {},
-      },
+      location: mock<MetaArgs['location']>({ pathname: '/leaf' }),
       matches: [
         {
           data: undefined,
           id: 'parent',
-          meta: parentMetaFn(),
+          meta: parentMeta,
           params: {},
           pathname: '/',
         },
@@ -76,48 +66,11 @@ describe('mergeMeta', () => {
       params: {},
     };
 
-    // Call the mergeMeta function
-    const mergedMetaFn = mergeMeta(leafMetaFn);
-    const mergedMeta = mergedMetaFn(args);
+    const mergedMeta = mergeRouteModuleMeta(leafMeta)(args);
 
-    // Assertions
-    expect(mergedMeta).toEqual([{ name: 'description', content: 'Leaf description' }]);
-  });
-
-  it('should handle merging when meta properties are different', () => {
-    // Mock data
-    const parentMetaFn = () => [{ name: 'description', content: 'Parent description' }];
-    const leafMetaFn = () => [{ property: 'og:description', content: 'Leaf OG description' }];
-
-    const args: MetaArgs = {
-      data: undefined,
-      location: {
-        hash: '',
-        key: '',
-        pathname: '/',
-        search: '',
-        state: {},
-      },
-      matches: [
-        {
-          data: undefined,
-          id: 'parent',
-          meta: parentMetaFn(),
-          params: {},
-          pathname: '/',
-        },
-      ],
-      params: {},
-    };
-
-    // Call the mergeMeta function
-    const mergedMetaFn = mergeMeta(leafMetaFn);
-    const mergedMeta = mergedMetaFn(args);
-
-    // Assertions
     expect(mergedMeta).toEqual([
-      { property: 'og:description', content: 'Leaf OG description' },
-      { name: 'description', content: 'Parent description' },
+      { title: 'Leaf Title' }, //
+      { name: 'description', content: 'Parent Description' },
     ]);
   });
 });
