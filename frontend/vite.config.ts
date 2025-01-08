@@ -1,4 +1,5 @@
 import { reactRouter } from '@react-router/dev/vite';
+
 import react from '@vitejs/plugin-react';
 import autoprefixer from 'autoprefixer';
 import tailwindcss from 'tailwindcss';

@@ -4,11 +4,11 @@
  * For more information, see https://remix.run/file-conventions/entry.client
  */
 import { StrictMode, startTransition } from 'react';
+import { hydrateRoot } from 'react-dom/client';
 
 import { HydratedRouter } from 'react-router/dom';
 
 import type { i18n } from 'i18next';
-import { hydrateRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 
 import { getNamespaces, initI18n } from '~/utils/locale-utils';

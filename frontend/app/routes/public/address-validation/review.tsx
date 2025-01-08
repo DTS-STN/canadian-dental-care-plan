@@ -1,8 +1,9 @@
-import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useLoaderData, useParams } from 'react-router';
+import { redirect, useParams } from 'react-router';
 
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+
+import type { Route } from './+types/review';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -10,7 +11,7 @@ import { Address } from '~/components/address';
 import { ButtonLink } from '~/components/buttons';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -19,11 +20,11 @@ export const handle = {
   pageTitleI18nKey: 'address-validation:review.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateFeatureEnabled('address-validation');
 
@@ -54,9 +55,10 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   };
 }
 
-export default function AddressValidationReviewRoute() {
+export default function AddressValidationReviewRoute({ loaderData }: Route.ComponentProps) {
+  const { mailingAddress } = loaderData;
+
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { mailingAddress } = useLoaderData<typeof loader>();
   const params = useParams();
 
   return (

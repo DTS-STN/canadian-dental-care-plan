@@ -144,11 +144,12 @@
     "singleQuote": true,
     "printWidth": 256,
     "importOrder": [
-      "^react$",
+      "^react(-dom/.*)?$",
       "^@testing-library/(.*)$",
-      "^react-router(.*)$",
+      "^[@]?react-router(/.*)?",
       "<THIRD_PARTY_MODULES>",
-      "^[(.|~)/]"
+      "^[\\.]",
+      "^[~]"
     ],
     "importOrderParserPlugins": [
       "typescript",
