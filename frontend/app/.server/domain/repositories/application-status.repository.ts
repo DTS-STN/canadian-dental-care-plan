@@ -26,24 +26,42 @@ export interface ApplicationStatusRepository {
    * @returns A Promise that resolves to the application status entity.
    */
   getApplicationStatusBySin(applicationStatusSinRequestEntity: ApplicationStatusSinRequestEntity): Promise<ApplicationStatusEntity>;
+
+  /**
+   * Retrieves metadata associated with the application status repository.
+   *
+   * @returns A record where the keys and values are strings representing metadata information.
+   */
+  getMetadata(): Record<string, string>;
+
+  /**
+   * Performs a health check to ensure that the application status repository is operational.
+   *
+   * @throws An error if the health check fails or the repository is unavailable.
+   * @returns A promise that resolves when the health check completes successfully.
+   */
+  checkHealth(): Promise<void>;
 }
 
 @injectable()
 export class DefaultApplicationStatusRepository implements ApplicationStatusRepository {
   private readonly log: Logger;
+  private readonly baseUrl: string;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_STATUS_CHECK_API_BASE_URI' | 'INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY'>,
+    @inject(TYPES.configs.ServerConfig)
+    private readonly serverConfig: Pick<ServerConfig, 'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_STATUS_CHECK_API_BASE_URI' | 'INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultApplicationStatusRepository');
+    this.baseUrl = `${this.serverConfig.INTEROP_STATUS_CHECK_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/status-check/v1`;
   }
 
   async getApplicationStatusByBasicInfo(applicationStatusBasicInfoRequestEntity: ApplicationStatusBasicInfoRequestEntity): Promise<ApplicationStatusEntity> {
     this.log.trace('Fetching application status for basic info [%j]', applicationStatusBasicInfoRequestEntity);
 
-    const url = `${this.serverConfig.INTEROP_STATUS_CHECK_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/status-check/v1/status_fnlndob`;
+    const url = `${this.baseUrl}/status_fnlndob`;
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.status-fnlndob.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
@@ -73,7 +91,7 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
   async getApplicationStatusBySin(applicationStatusSinRequestEntity: ApplicationStatusSinRequestEntity): Promise<ApplicationStatusEntity> {
     this.log.trace('Fetching application status for sin [%j]', applicationStatusSinRequestEntity);
 
-    const url = `${this.serverConfig.INTEROP_STATUS_CHECK_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/status-check/v1/status`;
+    const url = `${this.baseUrl}/status`;
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.status.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
@@ -98,6 +116,29 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
     const applicationStatusEntity: ApplicationStatusEntity = await response.json();
     this.log.trace('Returning application status [%j]', applicationStatusEntity);
     return applicationStatusEntity;
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      baseUrl: this.baseUrl,
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    await this.getApplicationStatusBySin({
+      BenefitApplication: {
+        Applicant: {
+          ClientIdentification: [
+            {
+              IdentificationID: this.serverConfig.HEALTH_PLACEHOLDER_REQUEST_VALUE,
+            },
+          ],
+          PersonSINIdentification: {
+            IdentificationID: this.serverConfig.HEALTH_PLACEHOLDER_REQUEST_VALUE,
+          },
+        },
+      },
+    });
   }
 }
 
@@ -163,5 +204,15 @@ export class MockApplicationStatusRepository implements ApplicationStatusReposit
 
     this.log.debug('Returning application status [%j]', applicationStatusEntity);
     return await Promise.resolve(applicationStatusEntity);
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      mockEnabled: 'true',
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    return await Promise.resolve();
   }
 }
