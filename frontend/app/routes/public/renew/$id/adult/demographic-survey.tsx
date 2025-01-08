@@ -259,7 +259,7 @@ export default function RenewAdultDemographicSurveyQuestions() {
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button name="_action" value={FormAction.Continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
+              <Button name="_action" value={FormAction.Continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Voluntary demographic questions click">
                 {t('renew-adult:demographic-survey.save-btn')}
               </Button>
               <ButtonLink
@@ -267,17 +267,25 @@ export default function RenewAdultDemographicSurveyQuestions() {
                 routeId="public/renew/$id/adult/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental insurance click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Voluntary demographic questions click"
               >
                 {t('renew-adult:demographic-survey.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
+              <LoadingButton
+                id="continue-button"
+                name="_action"
+                value={FormAction.Continue}
+                variant="primary"
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Voluntary demographic questions click"
+              >
                 {t('renew-adult:demographic-survey.continue-btn')}
               </LoadingButton>
-              <LoadingButton id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Cancel - Questions click">
+              <LoadingButton id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Voluntary demographic questions click">
                 {t('renew-adult:demographic-survey.back-btn')}
               </LoadingButton>
             </div>

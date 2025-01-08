@@ -161,7 +161,7 @@ export default function RenewAdultConfirmFederalProvincialTerritorialBenefits() 
           </fieldset>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental benefits click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other federal, provincial or territorial dental benefits click">
                 {t('renew-adult:confirm-dental-benefits.button.save-btn')}
               </Button>
               <ButtonLink
@@ -169,14 +169,20 @@ export default function RenewAdultConfirmFederalProvincialTerritorialBenefits() 
                 routeId="public/renew/$id/adult/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other federal, provincial or territorial dental benefits click"
               >
                 {t('renew-adult:confirm-dental-benefits.button.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Access to other dental benefits click">
+              <LoadingButton
+                variant="primary"
+                id="continue-button"
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Continue - Access to other federal, provincial or territorial dental benefits click"
+              >
                 {t('renew-adult:confirm-dental-benefits.button.continue')}
               </LoadingButton>
               <ButtonLink
@@ -185,7 +191,7 @@ export default function RenewAdultConfirmFederalProvincialTerritorialBenefits() 
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Access to other dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Access to other federal, provincial or territorial dental benefits click"
               >
                 {t('renew-adult:confirm-dental-benefits.button.back')}
               </ButtonLink>
