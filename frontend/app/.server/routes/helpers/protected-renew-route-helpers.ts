@@ -248,7 +248,6 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
     editMode: false,
     applicationYear,
     clientApplication,
-    dentalInsurance: clientApplication.dentalInsurance,
     contactInformation: {
       phoneNumber: clientApplication.contactInformation.phoneNumber,
       phoneNumberAlt: clientApplication.contactInformation.phoneNumberAlt,
@@ -259,12 +258,9 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
       // filter out children who will be 18 or older at the start of the coverage period as they are ineligible for renewal
       .filter((child) => getAgeFromDateString(child.information.dateOfBirth, applicationYear.coverageStartDate) < 18) //
       .map((child) => {
-        const immutableChild = clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information.socialInsuranceNumber);
         const childStateObj = {
           id: randomUUID(),
           information: child.information,
-          dentalInsurance: immutableChild?.dentalInsurance,
-          isParentOrLegalGuardian: immutableChild?.information.isParent,
         };
         return childStateObj;
       }),

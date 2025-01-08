@@ -59,8 +59,29 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-dental-benefits.title') }) };
 
+  const clientDentalBenefits = state.clientApplication.dentalBenefits.reduce((acc, id) => {
+    try {
+      appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getFederalGovernmentInsurancePlanById(id);
+      return {
+        ...acc,
+        hasFederalBenefits: true,
+        federalSocialProgram: id,
+      };
+    } catch {
+      const provincialProgram = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getProvincialGovernmentInsurancePlanById(id);
+      return {
+        ...acc,
+        hasProvincialTerritorialBenefits: true,
+        provincialTerritorialSocialProgram: id,
+        province: provincialProgram.provinceTerritoryStateId,
+      };
+    }
+  }, {}) as ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
+
+  const dentalBenefits = state.dentalBenefits ? state.dentalBenefits : clientDentalBenefits;
+
   return {
-    defaultState: state.dentalBenefits,
+    defaultState: dentalBenefits,
     federalSocialPrograms,
     id: state.id,
     meta,
@@ -156,7 +177,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById('protected/renew/$id/member-selection', params));
+  return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }
 
 export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefits() {
@@ -165,10 +186,10 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultState?.hasFederalBenefits);
-  const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(defaultState?.hasProvincialTerritorialBenefits);
-  const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(defaultState?.provincialTerritorialSocialProgram);
-  const [provinceValue, setProvinceValue] = useState(defaultState?.province);
+  const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultState.hasFederalBenefits);
+  const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(defaultState.hasProvincialTerritorialBenefits);
+  const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(defaultState.provincialTerritorialSocialProgram);
+  const [provinceValue, setProvinceValue] = useState(defaultState.province);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -229,7 +250,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
                       legendClassName="font-normal"
                       options={federalSocialPrograms.map((option) => ({
                         children: option.name,
-                        defaultChecked: defaultState?.federalSocialProgram === option.id,
+                        defaultChecked: defaultState.federalSocialProgram === option.id,
                         value: option.id,
                       }))}
                       errorMessage={errors?.federalSocialProgram}
@@ -304,7 +325,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:update-dental-benefits.provincial-territorial-benefits.option-no" />,
                   value: HasProvincialTerritorialBenefitsOption.No,
-                  defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
+                  defaultChecked: defaultState.hasProvincialTerritorialBenefits === false,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
                 },
               ]}

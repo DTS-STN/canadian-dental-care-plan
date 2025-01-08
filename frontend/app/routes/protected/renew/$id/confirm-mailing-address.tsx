@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { data, redirect, useLoaderData, useParams } from 'react-router';
 
-import { faCheck, faChevronLeft, faChevronRight, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronLeft, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
@@ -36,7 +36,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatAddressLine, isAllValidInputCharacters } from '~/utils/string-utils';
+import { isAllValidInputCharacters } from '~/utils/string-utils';
 
 enum FormAction {
   Submit = 'submit',
@@ -88,28 +88,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const mailingAddressInfo = state.mailingAddress
-    ? {
-        address: state.mailingAddress.address,
-        city: state.mailingAddress.city,
-        province: state.mailingAddress.province,
-        postalCode: state.mailingAddress.postalCode,
-        country: state.mailingAddress.country,
-      }
-    : {
-        address: formatAddressLine({ address: state.clientApplication.contactInformation.mailingAddress, apartment: state.clientApplication.contactInformation.mailingApartment }),
-        city: state.clientApplication.contactInformation.mailingCity,
-        province: state.clientApplication.contactInformation.mailingProvince,
-        postalCode: state.clientApplication.contactInformation.mailingPostalCode,
-        country: state.clientApplication.contactInformation.mailingCountry,
-      };
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-address.mailing-address.page-title') }) };
 
   return {
     meta,
     defaultState: {
-      ...mailingAddressInfo,
+      ...state.mailingAddress,
       isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
     },
     countryList,
@@ -277,7 +261,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
   const params = useParams();
   const fetcher = useEnhancedFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.country);
+  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.country ?? CANADA_COUNTRY_ID);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.isHomeAddressSameAsMailingAddress === true);
   const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
@@ -397,16 +381,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
               <DialogTrigger asChild>
-                <LoadingButton
-                  variant="primary"
-                  id="continue-button"
-                  type="submit"
-                  name="_action"
-                  value={FormAction.Submit}
-                  loading={isSubmitting}
-                  endIcon={faChevronRight}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Update address click"
-                >
+                <LoadingButton variant="primary" id="continue-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Update address click">
                   {t('protected-renew:update-address.save-btn')}
                 </LoadingButton>
               </DialogTrigger>

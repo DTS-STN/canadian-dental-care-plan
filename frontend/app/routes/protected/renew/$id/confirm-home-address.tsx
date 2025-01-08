@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { data, redirect, useLoaderData, useParams } from 'react-router';
 
-import { faCheck, faChevronLeft, faChevronRight, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronLeft, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
@@ -35,7 +35,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatAddressLine, isAllValidInputCharacters } from '~/utils/string-utils';
+import { isAllValidInputCharacters } from '~/utils/string-utils';
 
 enum FormAction {
   Submit = 'submit',
@@ -87,27 +87,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const homeAddressInfo = state.homeAddress
-    ? {
-        address: state.homeAddress.address,
-        city: state.homeAddress.city,
-        province: state.homeAddress.province,
-        postalCode: state.homeAddress.postalCode,
-        country: state.homeAddress.country,
-      }
-    : {
-        address: formatAddressLine({ address: state.clientApplication.contactInformation.homeAddress, apartment: state.clientApplication.contactInformation.homeApartment }),
-        city: state.clientApplication.contactInformation.homeCity,
-        province: state.clientApplication.contactInformation.homeProvince,
-        postalCode: state.clientApplication.contactInformation.homePostalCode,
-        country: state.clientApplication.contactInformation.homeCountry,
-      };
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-address.home-address.page-title') }) };
 
   return {
     meta,
-    defaultState: { ...homeAddressInfo },
+    defaultState: state.homeAddress,
     countryList,
     regionList,
   };
@@ -256,7 +240,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
   const params = useParams();
   const fetcher = useEnhancedFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.country);
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState?.country ?? CANADA_COUNTRY_ID);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
   const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
 
@@ -315,7 +299,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
             helpMessagePrimaryClassName="text-black"
             maxLength={30}
             autoComplete="address-line1"
-            defaultValue={defaultState.address}
+            defaultValue={defaultState?.address ?? ''}
             errorMessage={errors?.address}
             required
           />
@@ -327,7 +311,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
               label={t('protected-renew:update-address.address-field.city')}
               maxLength={100}
               autoComplete="address-level2"
-              defaultValue={defaultState.city}
+              defaultValue={defaultState?.city ?? ''}
               errorMessage={errors?.city}
               required
             />
@@ -338,7 +322,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
               label={homePostalCodeRequired ? t('protected-renew:update-address.address-field.postal-code') : t('protected-renew:update-address.address-field.postal-code-optional')}
               maxLength={100}
               autoComplete="postal-code"
-              defaultValue={defaultState.postalCode ?? ''}
+              defaultValue={defaultState?.postalCode ?? ''}
               errorMessage={errors?.postalCode}
               required={homePostalCodeRequired}
             />
@@ -349,7 +333,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
               name="homeProvince"
               className="w-full sm:w-1/2"
               label={t('protected-renew:update-address.address-field.province')}
-              defaultValue={defaultState.province}
+              defaultValue={defaultState?.province ?? ''}
               errorMessage={errors?.province}
               options={[dummyOption, ...homeRegions]}
               required
@@ -361,7 +345,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
             className="w-full sm:w-1/2"
             label={t('protected-renew:update-address.address-field.country')}
             autoComplete="country"
-            defaultValue={defaultState.country}
+            defaultValue={defaultState?.country ?? ''}
             errorMessage={errors?.country}
             options={countries}
             onChange={homeCountryChangeHandler}
@@ -372,16 +356,7 @@ export default function ProtectedRenewConfirmHomeAddress() {
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
               <DialogTrigger asChild>
-                <LoadingButton
-                  variant="primary"
-                  id="continue-button"
-                  type="submit"
-                  name="_action"
-                  value={FormAction.Submit}
-                  loading={isSubmitting}
-                  endIcon={faChevronRight}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Update address click"
-                >
+                <LoadingButton variant="primary" id="continue-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Update address click">
                   {t('protected-renew:update-address.save-btn')}
                 </LoadingButton>
               </DialogTrigger>

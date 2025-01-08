@@ -101,9 +101,9 @@ export const routes = [
                 paths: { en: '/:lang/protected/renew/:id/children/:childId/demographic-survey', fr: '/:lang/protege/renouveller/:id/enfants/:childId/questionnaire-demographique' },
               },
               {
-                id: 'protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits',
+                id: 'protected/renew/$id/children/$childId/confirm-federal-provincial-territorial-benefits',
                 file: 'routes/protected/renew/$id/$childId/confirm-federal-provincial-territorial-benefits.tsx',
-                paths: { en: '/:lang/protected/renew/:id/children/childId/confirm-federal-provincial-territorial-benefits', fr: '/:lang/protege/renouveller/:id/enfants/:childId/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
+                paths: { en: '/:lang/protected/renew/:id/:childId/confirm-federal-provincial-territorial-benefits', fr: '/:lang/protege/renouveller/:id/enfants/:childId/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
               },
             ],
           },

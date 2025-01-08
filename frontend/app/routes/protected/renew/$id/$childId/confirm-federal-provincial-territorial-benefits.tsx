@@ -9,7 +9,7 @@ import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewSingleChildState, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/renew-route-helpers';
+import type { ProtectedDentalFederalBenefitsState, ProtectedDentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -50,6 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   const state = loadProtectedRenewSingleChildState({ params, session });
+  const renewState = loadProtectedRenewState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -63,8 +64,30 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:children.update-dental-benefits.title', { childName }) }) };
 
+  const immutableChild = renewState.clientApplication.children.find((c) => c.information.socialInsuranceNumber === state.information?.socialInsuranceNumber);
+  const clientDentalBenefits = immutableChild?.dentalBenefits.reduce((acc, id) => {
+    try {
+      appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getFederalGovernmentInsurancePlanById(id);
+      return {
+        ...acc,
+        hasFederalBenefits: true,
+        federalSocialProgram: id,
+      };
+    } catch {
+      const provincialProgram = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getProvincialGovernmentInsurancePlanById(id);
+      return {
+        ...acc,
+        hasProvincialTerritorialBenefits: true,
+        provincialTerritorialSocialProgram: id,
+        province: provincialProgram.provinceTerritoryStateId,
+      };
+    }
+  }, {}) as ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
+
+  const dentalBenefits = state.dentalBenefits ? state.dentalBenefits : clientDentalBenefits;
+
   return {
-    defaultState: state.dentalBenefits,
+    defaultState: dentalBenefits,
     childName,
     federalSocialPrograms,
     id: state.id,
@@ -104,7 +127,7 @@ export async function action({ context: { appContainer, session }, params, reque
         ...val,
         federalSocialProgram: val.hasFederalBenefits ? val.federalSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<DentalFederalBenefitsState>;
+    }) satisfies z.ZodType<ProtectedDentalFederalBenefitsState>;
 
   const provincialTerritorialBenefitsSchema = z
     .object({
@@ -127,7 +150,7 @@ export async function action({ context: { appContainer, session }, params, reque
         province: val.hasProvincialTerritorialBenefits ? val.province : undefined,
         provincialTerritorialSocialProgram: val.hasProvincialTerritorialBenefits ? val.provincialTerritorialSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<DentalProvincialTerritorialBenefitsState>;
+    }) satisfies z.ZodType<ProtectedDentalProvincialTerritorialBenefitsState>;
 
   const dentalFederalBenefits = {
     hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes : undefined,
@@ -169,7 +192,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById('protected/renew/$id/member-selection', params));
+  return redirect(getPathById('protected/renew/$id/review-child-information', params));
 }
 
 export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefits() {
@@ -178,10 +201,10 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultState?.hasFederalBenefits);
-  const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(defaultState?.hasProvincialTerritorialBenefits);
-  const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(defaultState?.provincialTerritorialSocialProgram);
-  const [provinceValue, setProvinceValue] = useState(defaultState?.province);
+  const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultState.hasFederalBenefits);
+  const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(defaultState.hasProvincialTerritorialBenefits);
+  const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(defaultState.provincialTerritorialSocialProgram);
+  const [provinceValue, setProvinceValue] = useState(defaultState.province);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -243,7 +266,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
                       legendClassName="font-normal"
                       options={federalSocialPrograms.map((option) => ({
                         children: option.name,
-                        defaultChecked: defaultState?.federalSocialProgram === option.id,
+                        defaultChecked: defaultState.federalSocialProgram === option.id,
                         value: option.id,
                       }))}
                       errorMessage={errors?.federalSocialProgram}
@@ -318,7 +341,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:children.update-dental-benefits.provincial-territorial-benefits.option-no" />,
                   value: HasProvincialTerritorialBenefitsOption.No,
-                  defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
+                  defaultChecked: defaultState.hasProvincialTerritorialBenefits === false,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
                 },
               ]}
