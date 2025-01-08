@@ -127,7 +127,7 @@ export default function ProtectedRenewParentOrGuardian() {
           required
         />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton type="submit" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Child must be a parent or legal guardian click">
+          <LoadingButton type="submit" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Parent or legal guardian click">
             {t('protected-renew:children.parent-or-guardian.continue-btn')}
           </LoadingButton>
           <ButtonLink
@@ -136,7 +136,7 @@ export default function ProtectedRenewParentOrGuardian() {
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child must be a parent or legal guardian click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Parent or legal guardian click"
           >
             {t('protected-renew:children.parent-or-guardian.back-btn')}
           </ButtonLink>

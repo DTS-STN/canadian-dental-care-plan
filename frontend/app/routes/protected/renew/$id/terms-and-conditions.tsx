@@ -165,7 +165,7 @@ export default function RenewTermsAndConditions() {
             id="continue-button"
             loading={isSubmitting}
             endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Agree and Continue - Terms and Conditions click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Agree and Continue - Terms and conditions of use and privacy notice statement click"
           >
             {t('protected-renew:terms-and-conditions.apply.start-button')}
           </LoadingButton>
@@ -174,7 +174,7 @@ export default function RenewTermsAndConditions() {
             to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
             disabled={isSubmitting}
             startIcon={faChevronLeft}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - Terms and Conditions click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Terms and conditions of use and privacy notice statement click"
           >
             {t('protected-renew:terms-and-conditions.apply.back-button')}
           </ButtonLink>

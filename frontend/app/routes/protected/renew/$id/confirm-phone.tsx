@@ -148,10 +148,10 @@ export default function ProtectedRenewConfirmPhone() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Contact information click">
+            <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Phone Number click">
               {t('protected-renew:confirm-phone.save-btn')}
             </Button>
-            <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Contact information click">
+            <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Phone Number click">
               {t('protected-renew:confirm-phone.cancel-btn')}
             </Button>
           </div>

@@ -129,11 +129,18 @@ export default function ProtectedRenewMemberSelection() {
             variant="primary"
             loading={isSubmitting}
             endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Continue - Member selection click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Renew your Canadian Dental Care Plan benefits click"
           >
             {t('protected-renew:member-selection.continue-btn')}
           </LoadingButton>
-          <ButtonLink id="back-button" routeId="protected/renew/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Back - Member selection click">
+          <ButtonLink
+            id="back-button"
+            routeId="protected/renew/$id/tax-filing"
+            params={params}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Renew your Canadian Dental Care Plan benefits click"
+          >
             {t('protected-renew:member-selection.back-btn')}
           </ButtonLink>
         </div>

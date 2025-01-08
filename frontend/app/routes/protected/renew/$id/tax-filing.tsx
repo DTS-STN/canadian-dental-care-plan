@@ -107,7 +107,7 @@ export default function ProtectedRenewFlowTaxFiling() {
           required
         />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-protected-Renew:Continue - Tax filing click">
+          <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Tax filing click">
             {t('protected-renew:tax-filing.continue-btn')}
           </LoadingButton>
           <ButtonLink
@@ -116,7 +116,7 @@ export default function ProtectedRenewFlowTaxFiling() {
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-protected-Renew:Back - Tax filing click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Tax filing click"
           >
             {t('protected-renew:tax-filing.back-btn')}
           </ButtonLink>

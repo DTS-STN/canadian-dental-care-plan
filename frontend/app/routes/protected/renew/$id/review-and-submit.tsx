@@ -156,11 +156,11 @@ export default function ProtectedRenewReviewSubmit() {
             variant="green"
             loading={isSubmitting && submitAction === FormAction.Submit}
             endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Continue - Review and submit click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Submit application - Submit your renewal application click"
           >
             {t('protected-renew:review-submit.submit-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Renew Application Form:Back - Review and submit click">
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Submit your renewal application click">
             {t('protected-renew:review-submit.back-button')}
           </Button>
         </div>

@@ -216,10 +216,10 @@ export default function ProtectedRenewConfirmCommunicationPreference() {
           {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('protected-renew:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errors?.preferredMethod} required />}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew application:Save - Communication click">
+          <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Communication click">
             {t('protected-renew:communication-preference.save-btn')}
           </Button>
-          <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew application:Cancel - Communication click">
+          <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Communication click">
             {t('protected-renew:communication-preference.cancel-btn')}
           </ButtonLink>
         </div>

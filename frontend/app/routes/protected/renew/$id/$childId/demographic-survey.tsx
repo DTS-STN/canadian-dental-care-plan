@@ -239,7 +239,7 @@ export default function ProtectedChildrenDemographicSurveyQuestions() {
             <p>{t('protected-renew:children.demographic-survey.improve-cdcp')}</p>
             <p>{t('protected-renew:children.demographic-survey.confidential')}</p>
             <p>{t('protected-renew:children.demographic-survey.impact-enrollment')}</p>
-            <Button name="_action" value={FormAction.Save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application:Prefer not to answer - Demographic survey click">
+            <Button name="_action" value={FormAction.Save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Prefer not to answer - Child voluntary demographic questions click">
               {t('protected-renew:children.demographic-survey.prefer-not-to-answer-btn')}
             </Button>
             <p className="mb-4 italic">{t('renew:all-questions-optional-label')}</p>
@@ -275,7 +275,7 @@ export default function ProtectedChildrenDemographicSurveyQuestions() {
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <LoadingButton id="save-button" variant="primary" name="_action" value={FormAction.Continue} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other dental insurance click">
+              <LoadingButton id="save-button" variant="primary" name="_action" value={FormAction.Continue} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Child voluntary demographic questions click">
                 {t('protected-renew:children.demographic-survey.save-btn')}
               </LoadingButton>
               <ButtonLink
@@ -283,17 +283,32 @@ export default function ProtectedChildrenDemographicSurveyQuestions() {
                 routeId="protected/renew/$id/review-child-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Access to other dental insurance click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Child voluntary demographic questions click"
               >
                 {t('protected-renew:children.demographic-survey.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="continue-button" variant="primary" name="_action" value={FormAction.Continue} loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Save - Questions click">
+              <LoadingButton
+                id="continue-button"
+                variant="primary"
+                name="_action"
+                value={FormAction.Continue}
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Child voluntary demographic questions click"
+              >
                 {t('protected-renew:children.demographic-survey.continue-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId="protected/renew/$id/$childId/dental-insurance" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Demographic Survey:Cancel - Questions click">
+              <ButtonLink
+                id="back-button"
+                routeId="protected/renew/$id/$childId/dental-insurance"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Child voluntary demographic questions click"
+              >
                 {t('protected-renew:children.demographic-survey.back-btn')}
               </ButtonLink>
             </div>
