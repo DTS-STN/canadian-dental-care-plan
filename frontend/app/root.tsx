@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 
 import type { HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { Link, Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation, useRouteLoaderData } from 'react-router';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation, useRouteLoaderData } from 'react-router';
 
 import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
 import fontawesomeStyleSheet from '@fortawesome/fontawesome-svg-core/styles.css?url';
@@ -199,9 +199,9 @@ export function ErrorBoundary() {
             <div id="wb-bnr">
               <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
                 <div property="publisher" typeof="GovernmentOrganization">
-                  <Link to="https://canada.ca/" property="url">
+                  <a href="https://canada.ca/" property="url">
                     <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={`${en('gcweb:header.govt-of-canada.text')} / ${fr('gcweb:header.govt-of-canada.text')}`} property="logo" width="300" height="28" decoding="async" />
-                  </Link>
+                  </a>
                   <meta property="name" content={`${en('gcweb:header.govt-of-canada.text')} / ${fr('gcweb:header.govt-of-canada.text')}`} />
                   <meta property="areaServed" typeof="Country" content="Canada" />
                   <link property="logo" href="/assets/wmms-blk.svg" />
