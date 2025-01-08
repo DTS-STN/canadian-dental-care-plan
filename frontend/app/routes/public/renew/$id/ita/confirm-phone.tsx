@@ -164,27 +164,19 @@ export default function RenewAdultChildConfirmPhone() {
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Confirm phone click">
+              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Phone click">
                 {t('renew-ita:confirm-phone.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Confirm phone click">
+              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Phone click">
                 {t('renew-ita:confirm-phone.cancel-btn')}
               </Button>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton
-                id="continue-button"
-                name="_action"
-                value={FormAction.Continue}
-                variant="primary"
-                loading={isSubmitting}
-                endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Confirm phone click"
-              >
+              <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Phone click">
                 {t('renew-ita:confirm-phone.continue-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId="public/renew/$id/ita/marital-status" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Confirm phone click">
+              <ButtonLink id="back-button" routeId="public/renew/$id/ita/marital-status" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Phone click">
                 {t('renew-ita:confirm-phone.back-btn')}
               </ButtonLink>
             </div>
