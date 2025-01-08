@@ -400,7 +400,6 @@ export default function ProtectedRenewReviewAdultInformation() {
                   </div>
                 </DescriptionListItem>
               )}
-
               {dentalBenefits.length === 0 && (
                 <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
                   <p>{t('protected-renew:review-adult-information.no')}</p>
@@ -473,7 +472,7 @@ export default function ProtectedRenewReviewAdultInformation() {
       </div>
       {payload && (
         <div className="mt-8">
-          <DebugPayload data={payload} enableCopy></DebugPayload>
+          <DebugPayload data={payload} enableCopy />
         </div>
       )}
     </>

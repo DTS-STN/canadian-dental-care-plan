@@ -433,7 +433,6 @@ export default function RenewAdultChildReviewAdultInformation() {
               </LoadingButton>
             </>
           )}
-
           <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Review your information click">
             {t('renew-adult-child:review-adult-information.back-button')}
           </Button>
@@ -446,7 +445,7 @@ export default function RenewAdultChildReviewAdultInformation() {
       </div>
       {payload && (
         <div className="mt-8">
-          <DebugPayload data={payload} enableCopy></DebugPayload>
+          <DebugPayload data={payload} enableCopy />
         </div>
       )}
     </>
