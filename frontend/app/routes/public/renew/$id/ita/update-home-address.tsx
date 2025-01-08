@@ -366,10 +366,10 @@ export default function RenewItaUpdateAddress() {
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Update home address click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Home address click">
                 {t('renew-ita:update-address.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Update home address click">
+              <ButtonLink id="back-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Home address click">
                 {t('renew-ita:update-address.cancel-btn')}
               </ButtonLink>
             </div>
@@ -385,7 +385,7 @@ export default function RenewItaUpdateAddress() {
                     value={FormAction.Submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Update home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Home address click"
                   >
                     {t('renew-ita:update-address.continue')}
                   </LoadingButton>
@@ -403,7 +403,7 @@ export default function RenewItaUpdateAddress() {
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Update home address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Home address click"
               >
                 {t('renew-ita:update-address.back')}
               </ButtonLink>

@@ -228,7 +228,7 @@ export default function RenewAdultChildConfirmEmail() {
               <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Email click">
                 {t('renew-ita:confirm-email.continue-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId="public/renew/$id/ita/confirm-phone" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ItA:Back - Email click">
+              <ButtonLink id="back-button" routeId="public/renew/$id/ita/confirm-phone" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Email click">
                 {t('renew-ita:confirm-email.back-btn')}
               </ButtonLink>
             </div>
