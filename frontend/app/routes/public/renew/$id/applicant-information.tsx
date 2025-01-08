@@ -189,7 +189,7 @@ export default function RenewApplicationInformation() {
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={25} size="lg" label={t('apply:progress.label')} />
+        <Progress value={7} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         {fetcherStatus === 'status-not-found' && <StatusNotFound />}

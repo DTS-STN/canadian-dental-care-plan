@@ -160,7 +160,7 @@ export default function RenewChildReviewChildInformation() {
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={99} size="lg" label={t('renew:progress.label')} />
+        <Progress value={90} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="my-4 text-lg">{t('renew-child:review-child-information.read-carefully')}</p>

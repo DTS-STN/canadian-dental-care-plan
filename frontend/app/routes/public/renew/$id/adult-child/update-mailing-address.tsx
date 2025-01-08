@@ -331,7 +331,7 @@ export default function RenewAdultChildUpdateAddress() {
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={55} size="lg" label={t('renew:progress.label')} />
+        <Progress value={59} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('renew:optional-label')}</p>

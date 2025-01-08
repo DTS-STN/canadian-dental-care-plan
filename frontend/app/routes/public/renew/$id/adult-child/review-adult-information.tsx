@@ -221,7 +221,7 @@ export default function RenewAdultChildReviewAdultInformation() {
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={99} size="lg" label={t('renew:progress.label')} />
+        <Progress value={90} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-8 text-lg">{t('renew-adult-child:review-adult-information.read-carefully')}</p>

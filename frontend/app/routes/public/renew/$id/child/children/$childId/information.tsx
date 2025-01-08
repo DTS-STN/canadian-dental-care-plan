@@ -21,8 +21,8 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
-import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
+import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
@@ -65,7 +65,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('renew-child:children.information.page-title', { childName }) }),
   };
 
-  return { meta, defaultState: state.information, childName, editMode: state.editMode };
+  return { meta, defaultState: state.information, childName, editMode: state.editMode, i18nOptions: { childName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -213,7 +213,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewFlowChildInformation() {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, childName, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -233,8 +233,10 @@ export default function RenewFlowChildInformation() {
 
   return (
     <>
-      <AppPageTitle>{t('renew-child:children.information.page-title', { childName })}</AppPageTitle>
       {fetcherStatus === 'child-not-found' && <ChildNotFound />}
+      <div className="my-6 sm:my-8">
+        <Progress value={30} size="lg" label={t('renew:progress.label')} />
+      </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('renew-child:children.information.form-instructions-sin')}</p>
         <p className="mb-4 italic">{t('renew:required-label')}</p>

@@ -15,6 +15,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
+import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -28,7 +29,7 @@ enum FormAction {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('renew-child', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.child.parentIntro,
   pageTitleI18nKey: 'renew-child:parent-intro.page-title',
 } as const satisfies RouteHandleData;
@@ -84,29 +85,34 @@ export default function RenewChildParentIntro() {
   }
 
   return (
-    <div className="max-w-prose">
-      <div className="mb-8 space-y-4">
-        <p>{t('renew-child:parent-intro.description')}</p>
+    <>
+      <div className="my-6 sm:my-8">
+        <Progress value={40} size="lg" label={t('renew:progress.label')} />
       </div>
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <CsrfTokenInput />
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton
-            id="continue-button"
-            name="_action"
-            value={FormAction.Continue}
-            variant="primary"
-            loading={isSubmitting && submitAction === FormAction.Continue}
-            endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Parent intro click"
-          >
-            {t('renew-child:parent-intro.continue-btn')}
-          </LoadingButton>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Parent intro click">
-            {t('renew-child:parent-intro.back-btn')}
-          </Button>
+      <div className="max-w-prose">
+        <div className="mb-8 space-y-4">
+          <p>{t('renew-child:parent-intro.description')}</p>
         </div>
-      </fetcher.Form>
-    </div>
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
+          <CsrfTokenInput />
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton
+              id="continue-button"
+              name="_action"
+              value={FormAction.Continue}
+              variant="primary"
+              loading={isSubmitting && submitAction === FormAction.Continue}
+              endIcon={faChevronRight}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Parent intro click"
+            >
+              {t('renew-child:parent-intro.continue-btn')}
+            </LoadingButton>
+            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Parent intro click">
+              {t('renew-child:parent-intro.back-btn')}
+            </Button>
+          </div>
+        </fetcher.Form>
+      </div>
+    </>
   );
 }
