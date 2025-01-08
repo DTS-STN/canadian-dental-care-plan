@@ -3,7 +3,7 @@ import { ContainerModule } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import { AddressValidationHealthCheck, ApplicantHealthCheck, ApplicationStatusHealthCheck, RedisHealthCheck } from '~/.server/health';
+import { AddressValidationHealthCheck, ApplicantHealthCheck, ApplicationStatusHealthCheck, LetterHealthCheck, RedisHealthCheck } from '~/.server/health';
 
 function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
   return ({ parentContext }: interfaces.Request) => {
@@ -19,5 +19,6 @@ export const healthContainerModule = new ContainerModule((bind) => {
   bind(TYPES.health.HealthCheck).to(AddressValidationHealthCheck);
   bind(TYPES.health.HealthCheck).to(ApplicantHealthCheck);
   bind(TYPES.health.HealthCheck).to(ApplicationStatusHealthCheck);
+  bind(TYPES.health.HealthCheck).to(LetterHealthCheck);
   bind(TYPES.health.HealthCheck).to(RedisHealthCheck).when(sessionTypeIs('redis'));
 });
