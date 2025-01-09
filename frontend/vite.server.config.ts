@@ -27,10 +27,6 @@ export default defineConfig({
       // Specifies the entry point for the server runtime.
       // This is the TypeScript file that Vite will start buildin from.
       input: ['./app/.server/express-server/opentelemetry.server.ts', './app/.server/express-server/express.server.ts'],
-
-      // Integrates TypeScript path aliasing using the `vite-tsconfig-paths` plugin,
-      // which resolves paths defined in `tsconfig.json` for cleaner imports.
-      plugins: [tsconfigPaths()],
     },
 
     // Enables Server-Side Rendering (SSR) mode, optimizing the build process for Node.js.
@@ -42,6 +38,9 @@ export default defineConfig({
     target: 'node22',
   },
   plugins: [
+    // Integrates TypeScript path aliasing using the `vite-tsconfig-paths` plugin,
+    // which resolves paths defined in `tsconfig.json` for cleaner imports.
+    tsconfigPaths(),
     viteStaticCopy({
       // Copies static assets from the specified source directory to the build output directory.
       // This is necessary to bundle assets required by the server runtime, such as html templates
