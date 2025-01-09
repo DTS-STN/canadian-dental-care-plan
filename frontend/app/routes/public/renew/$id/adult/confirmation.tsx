@@ -154,7 +154,7 @@ export default function RenewAdultConfirm() {
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Print top - Your renewal for the Canadian Dental Care Plan is complete click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Print or save - Your renewal for the Canadian Dental Care Plan is complete click"
         >
           {t('confirm.print-or-save-btn')}
         </Button>
@@ -269,7 +269,7 @@ export default function RenewAdultConfirm() {
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Print bottom - Your renewal for the Canadian Dental Care Plan is complete click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Print - Your renewal for the Canadian Dental Care Plan is complete click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -279,7 +279,7 @@ export default function RenewAdultConfirm() {
         <DialogTrigger asChild>
           <button
             className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Exit - Your renewal for the Canadian Dental Care Plan is complete click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Close application - Your renewal for the Canadian Dental Care Plan is complete click"
           >
             {t('confirm.close-application')}
           </button>
@@ -292,7 +292,7 @@ export default function RenewAdultConfirm() {
           <p>{t('confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back exit modal - Your renewal for the Canadian Dental Care Plan is complete click">
+              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Modal Back - Your renewal for the Canadian Dental Care Plan is complete click">
                 {t('confirm.modal.back-btn')}
               </Button>
             </DialogClose>
@@ -305,7 +305,7 @@ export default function RenewAdultConfirm() {
                 name="_action"
                 value={FormAction.Close}
                 onClick={() => sessionStorage.removeItem('flow.state')}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Confirmation exit modal - Your renewal for the Canadian Dental Care Plan is complete click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Modal Close application - Your renewal for the Canadian Dental Care Plan is complete click"
               >
                 {t('confirm.modal.close-btn')}
               </Button>
