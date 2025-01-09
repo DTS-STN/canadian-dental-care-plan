@@ -86,10 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Back) {
-    if (state.hasFederalProvincialTerritorialBenefitsChanged) {
-      return redirect(getPathById('public/renew/$id/child/update-federal-provincial-territorial-benefits', params));
-    }
-    return redirect(getPathById('public/renew/$id/child/confirm-federal-provincial-territorial-benefits', params));
+    return redirect(getPathById('public/renew/$id/type-renewal', params));
   }
 
   if (formAction === FormAction.Add) {
