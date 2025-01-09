@@ -144,7 +144,7 @@ export default function RenewChildConfirmMaritalStatus() {
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/type-renewal"
+                routeId="public/renew/$id/child/parent-intro"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
