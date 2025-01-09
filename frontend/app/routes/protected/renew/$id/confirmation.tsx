@@ -7,6 +7,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, isPrimaryApplicantStateComplete, loadProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
@@ -99,6 +100,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm.page-title') }) };
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirmation', { userId: idToken.sub });
+
   return {
     primaryApplicantInfo,
     children,
@@ -117,6 +121,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
   clearProtectedRenewState({ params, session });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirmation', { userId: idToken.sub });
 
   return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }

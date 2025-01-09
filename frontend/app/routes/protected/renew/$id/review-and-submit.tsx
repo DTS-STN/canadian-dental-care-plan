@@ -14,7 +14,7 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, isPrimaryApplicantStateComplete, loadProtectedRenewState, loadProtectedRenewStateForReview, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
-import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
+import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -57,6 +57,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const primaryApplicantName = isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) ? `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}` : undefined;
   const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-and-submit', { userId: idToken.sub });
+
   return {
     meta,
     primaryApplicantName,
@@ -94,6 +97,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const submissionInfo = { submittedOn: new UTCDate().toISOString() };
   saveProtectedRenewState({ params, session, state: { submissionInfo } });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-and-submit', { userId: idToken.sub });
 
   return redirect(getPathById('protected/renew/$id/confirmation', params));
 }

@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   await securityHandler.validateAuthSession({ request, session });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.home', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.home', { userId: idToken.sub });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('index:page-title') }) };

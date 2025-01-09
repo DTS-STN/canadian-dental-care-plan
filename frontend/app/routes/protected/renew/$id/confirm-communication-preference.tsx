@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -53,6 +54,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:communication-preference.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-communication-preference', { userId: idToken.sub });
 
   return {
     communicationMethodEmail,
@@ -116,6 +120,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   saveProtectedRenewState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-communication-preference', { userId: idToken.sub });
 
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }

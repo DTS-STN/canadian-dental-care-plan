@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewSingleChildState, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -48,6 +49,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childName = state.information?.firstName ?? childNumber;
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:children.parent-or-guardian.page-title', { childName }) }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.child-parent-or-guardian', { userId: idToken.sub });
 
   return { meta, defaultState: state.isParentOrLegalGuardian, i18nOptions: { childName } };
 }
@@ -91,6 +95,9 @@ export async function action({ context: { appContainer, session }, params, reque
       }),
     },
   });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.child-parent-or-guardian', { userId: idToken.sub });
 
   if (parsedDataResult.data.parentOrGuardian === ParentOrGuardianOption.No) {
     return redirect(getPathById('protected/renew/$id/$childId/parent-or-guardian-required', params));

@@ -9,7 +9,7 @@ import invariant from 'tiny-invariant';
 import { TYPES } from '~/.server/constants';
 import { startProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
+import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { pageIds } from '~/page-ids';
 import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -63,6 +63,9 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:index.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.index', { userId: idToken.sub });
 
   return { id: state.id, locale, meta };
 }

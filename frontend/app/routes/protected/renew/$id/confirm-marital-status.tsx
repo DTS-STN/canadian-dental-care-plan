@@ -11,6 +11,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, renewStateHasPartner, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import type { PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -63,6 +64,9 @@ export async function loader({ context: { appContainer, session }, params, reque
         confirm: state.partnerInformation?.confirm ?? state.clientApplication.partnerInformation?.confirm,
       }
     : undefined;
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-marital-status', { userId: idToken.sub });
 
   return {
     defaultState: {
@@ -130,6 +134,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   saveProtectedRenewState({ params, session, state: { maritalStatus: parsedMaritalStatus.data.maritalStatus, partnerInformation: parsedPartnerInformation.data } });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-marital-status', { userId: idToken.sub });
 
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }

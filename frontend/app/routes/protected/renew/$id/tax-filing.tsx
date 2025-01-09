@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -45,6 +46,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:tax-filing.page-title') }) };
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.tax-filing', { userId: idToken.sub });
+
   return { id: state.id, meta, defaultState: state.taxFiling, taxYear: state.applicationYear.taxYear };
 }
 
@@ -72,6 +76,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   saveProtectedRenewState({ params, session, state: { taxFiling: parsedDataResult.data.taxFiling === TaxFilingOption.Yes } });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.tax-filing', { userId: idToken.sub });
 
   if (parsedDataResult.data.taxFiling === TaxFilingOption.No) {
     return redirect(getPathById('protected/renew/$id/file-taxes', params));
