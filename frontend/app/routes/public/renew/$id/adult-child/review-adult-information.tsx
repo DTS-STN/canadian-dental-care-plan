@@ -437,11 +437,6 @@ export default function RenewAdultChildReviewAdultInformation() {
             {t('renew-adult-child:review-adult-information.back-button')}
           </Button>
         </fetcher.Form>
-        <div className="mt-8">
-          <InlineLink routeId="public/renew/$id/adult-child/exit-application" params={params}>
-            {t('renew-adult-child:review-adult-information.exit-button')}
-          </InlineLink>
-        </div>
       </div>
       {payload && (
         <div className="mt-8">
