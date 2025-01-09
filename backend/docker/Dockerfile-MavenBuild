@@ -1,3 +1,0 @@
-# Dockerfile to create a Maven image that can be used in TeamCity
-# > docker build --file Dockerfile-MavenBuild . --tag dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/maven-builder:v1-mvn3.9-java21
-FROM docker.io/maven:3.9-eclipse-temurin-21
