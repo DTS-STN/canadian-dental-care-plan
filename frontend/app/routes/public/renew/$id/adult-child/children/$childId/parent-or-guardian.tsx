@@ -46,7 +46,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   loadRenewAdultSingleChildState({ params, request, session });
 
-  // TODO: The link is unsure at the moment. For now, the 'Proceed to apply for yourself' button will return to the chhildren index
   return redirect(getPathById('public/renew/$id/adult-child/children/index', params));
 }
 

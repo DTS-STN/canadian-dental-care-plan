@@ -64,7 +64,6 @@ export class DefaultLetterTypeService implements LetterTypeService {
 
   private init(): void {
     // Configure caching for letter type operations
-    // TODO new config for getLetterTypeById?
     const allLetterTypesCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS;
     const letterTypeCacheTTL = 1000 * this.serverConfig.LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS;
 
