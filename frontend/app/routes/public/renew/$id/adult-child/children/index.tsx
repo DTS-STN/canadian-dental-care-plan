@@ -198,7 +198,7 @@ export default function RenewFlowChildSummary() {
                       routeId="public/renew/$id/adult-child/children/$childId/dental-insurance"
                       params={{ ...params, childId: child.id }}
                       startIcon={faEdit}
-                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Edit child - Child(ren) renewal click"
+                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Edit child's information - Child(ren) renewal click"
                     >
                       {t('renew-adult-child:children.index.edit-child')}
                     </ButtonLink>
@@ -215,7 +215,7 @@ export default function RenewFlowChildSummary() {
                         <p>{t('renew-adult-child:children.index.modal.info', { childName })}</p>
                         <DialogFooter>
                           <DialogClose asChild>
-                            <Button id="confirm-modal-back" disabled={isSubmitting} variant="default" size="sm">
+                            <Button id="confirm-modal-back" disabled={isSubmitting} variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Return to summary page - Child(ren) renewal click">
                               {t('renew-adult-child:children.index.modal.back-btn')}
                             </Button>
                           </DialogClose>
