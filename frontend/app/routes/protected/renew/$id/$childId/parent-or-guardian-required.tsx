@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -34,6 +35,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:children.parent-or-guardian-required.page-title') }) };
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.child-parent-or-guardian-required', { userId: idToken.sub });
+
   return { meta };
 }
 
@@ -43,6 +47,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.child-parent-or-guardian-required', { userId: idToken.sub });
 
   return redirect(getPathById('protected/renew/$id/member-selection', params));
 }

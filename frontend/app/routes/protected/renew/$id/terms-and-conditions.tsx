@@ -7,6 +7,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -39,6 +40,9 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:terms-and-conditions.page-title') }) };
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.terms-and-conditions', { userId: idToken.sub });
+
   return { meta };
 }
 
@@ -50,6 +54,9 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   saveProtectedRenewState({ params, session, state: {} });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.terms-and-conditions', { userId: idToken.sub });
 
   return redirect(getPathById('protected/renew/$id/tax-filing', params));
 }

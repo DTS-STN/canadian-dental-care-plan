@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { TYPES } from '~/.server/constants';
 import { isChildrenStateComplete, isPrimaryApplicantStateComplete, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
 import { ButtonLink } from '~/components/buttons';
@@ -53,6 +54,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = state.children;
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.member-selection', { userId: idToken.sub });
+
   return { meta, externallyReviewed: state.externallyReviewed, previouslyReviewed: state.previouslyReviewed, clientApplication: state.clientApplication, children };
 }
 
@@ -66,6 +70,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewState({ params, session });
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.member-selection', { userId: idToken.sub });
 
   if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) && !isChildrenStateComplete(state, demographicSurveyEnabled)) {
     return { status: 'select-member' };

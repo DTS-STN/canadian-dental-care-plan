@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewSingleChildState, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -65,6 +66,9 @@ export async function loader({ context: { appContainer, session }, request, para
   const ethnicGroups = demographicSurveyService.listLocalizedEthnicGroups(locale);
   const locationBornStatuses = demographicSurveyService.listLocalizedLocationBornStatuses(locale);
   const genderStatuses = demographicSurveyService.listLocalizedGenderStatuses(locale);
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.child-demographic-survey', { userId: idToken.sub });
 
   return {
     meta,
@@ -148,6 +152,9 @@ export async function action({ context: { appContainer, session }, params, reque
       }),
     },
   });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.child-demographic-survey', { userId: idToken.sub });
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-child-information', params));

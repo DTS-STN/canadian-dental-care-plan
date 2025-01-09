@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, isPrimaryApplicantStateComplete, loadProtectedRenewState, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
+import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
@@ -93,6 +93,9 @@ export async function loader({ context: { appContainer, session }, params, reque
       ? [child.dentalBenefits.hasFederalBenefits && selectedFederalGovernmentInsurancePlan?.name, child.dentalBenefits.hasProvincialTerritorialBenefits && selectedProvincialBenefit?.name].filter(Boolean)
       : clientDentalBenefits;
 
+    const idToken: IdToken = session.get('idToken');
+    appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-child-information', { userId: idToken.sub });
+
     return {
       id: child.id,
       firstName: child.information?.firstName,
@@ -124,6 +127,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewState({ params, session });
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-child-information', { userId: idToken.sub });
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {

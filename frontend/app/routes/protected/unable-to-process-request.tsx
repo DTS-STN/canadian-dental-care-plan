@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -27,6 +28,9 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('unable-to-process-request:page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.unable-to-process-request', { userId: idToken.sub });
 
   return { meta };
 }

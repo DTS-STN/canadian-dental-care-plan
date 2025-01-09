@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -43,6 +44,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm-email.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-email', { userId: idToken.sub });
 
   return { meta, defaultState: { email: state.contactInformation?.email } };
 }
@@ -90,6 +94,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   saveProtectedRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-email', { userId: idToken.sub });
 
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }

@@ -16,6 +16,7 @@ import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/rout
 import type { MailingAddressState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/.server/utils/postal-zip-code.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -89,6 +90,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-address.mailing-address.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-mailing-address', { userId: idToken.sub });
 
   return {
     meta,
@@ -187,6 +191,10 @@ export async function action({ context: { appContainer, session }, params, reque
         ...(homeAddress && { homeAddress }), // Only include if homeAddress is defined
       },
     });
+
+    const idToken: IdToken = session.get('idToken');
+    appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-mailing-address', { userId: idToken.sub });
+
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 

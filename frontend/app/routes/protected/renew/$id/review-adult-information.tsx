@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, loadProtectedRenewStateForReview, renewStateHasPartner, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
+import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -176,6 +176,9 @@ export async function loader({ context: { appContainer, session }, params, reque
       .get(TYPES.domain.mappers.BenefitRenewalDtoMapper)
       .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub));
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-adult-information', { userId: idToken.sub });
+
   return {
     id: state.id,
     userInfo,
@@ -211,6 +214,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const state = loadProtectedRenewStateForReview({ params, session, demographicSurveyEnabled });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-adult-information', { userId: idToken.sub });
 
   if (validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).length === 0) {
     return redirect(getPathById('protected/renew/$id/review-and-submit', params));

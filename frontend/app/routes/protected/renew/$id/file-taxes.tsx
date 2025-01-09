@@ -9,6 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
@@ -38,6 +39,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:file-your-taxes.page-title') }) };
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.file-taxes', { userId: idToken.sub });
+
   return { id, meta, taxYear: applicationYear.taxYear };
 }
 
@@ -52,6 +56,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
   clearProtectedRenewState({ params, session });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.file-taxes', { userId: idToken.sub });
+
   return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 

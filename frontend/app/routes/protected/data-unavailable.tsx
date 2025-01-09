@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
@@ -33,6 +34,9 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const meta = { title: t('gcweb:meta.title.template', { title: t('data-unavailable:page-title') }) };
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.data-unavailable', { userId: idToken.sub });
 
   return { meta, SCCH_BASE_URI };
 }
