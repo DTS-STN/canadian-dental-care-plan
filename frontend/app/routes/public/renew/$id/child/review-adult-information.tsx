@@ -325,11 +325,11 @@ export default function RenewChildReviewAdultInformation() {
               variant="green"
               disabled={isSubmitting}
               loading={isSubmitting && submitAction === FormAction.Submit}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Submit - Review adult information click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Submit application - Review your information click"
             >
               {t('renew-child:review-adult-information.submit-button')}
             </LoadingButton>
-            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Review adult information click">
+            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Review your information click">
               {t('renew-child:review-adult-information.back-button')}
             </Button>
           </div>

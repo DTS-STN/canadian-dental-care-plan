@@ -76,11 +76,11 @@ export default function RenewFlowParentOrGuardian() {
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child must be a parent or legal guardian click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - You must be a parent or legal guardian click"
         >
           {t('renew-child:children.parent-or-guardian.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Child must be a parent or legal guardian click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Return to application - You must be a parent or legal guardian click">
           {t('renew-child:children.parent-or-guardian.continue-btn')}
         </LoadingButton>
       </fetcher.Form>
