@@ -82,11 +82,19 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadRenewAdultChildState({ params, request, session });
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Back) {
-    return redirect(getPathById('public/renew/$id/adult-child/demographic-survey', params));
+    if (demographicSurveyEnabled) {
+      return redirect(getPathById('public/renew/$id/adult-child/demographic-survey', params));
+    }
+    if (state.hasFederalProvincialTerritorialBenefitsChanged) {
+      return redirect(getPathById('public/renew/$id/adult-child/update-federal-provincial-territorial-benefits', params));
+    }
+    return redirect(getPathById('public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
   }
 
   if (formAction === FormAction.Add) {
