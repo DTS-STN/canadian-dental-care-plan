@@ -341,7 +341,7 @@ export default function RenewChildUpdateFederalProvincialTerritorialBenefits() {
           </fieldset>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Child access to private dental insurance click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Child access to other federal, provincial or territorial dental benefits click">
                 {t('renew-child:children.update-dental-benefits.button.save-btn')}
               </Button>
               <ButtonLink
@@ -349,14 +349,20 @@ export default function RenewChildUpdateFederalProvincialTerritorialBenefits() {
                 routeId="public/renew/$id/child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Child access to private dental insurance click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Child access to other federal, provincial or territorial dental benefits click"
               >
                 {t('renew-child:children.update-dental-benefits.button.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Child access to private dental insurance click">
+              <LoadingButton
+                variant="primary"
+                id="continue-button"
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Child access to other federal, provincial or territorial dental benefits click"
+              >
                 {t('renew-child:children.update-dental-benefits.button.continue')}
               </LoadingButton>
               <ButtonLink
@@ -365,7 +371,7 @@ export default function RenewChildUpdateFederalProvincialTerritorialBenefits() {
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Child access to private dental insurance click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Child access to other federal, provincial or territorial dental benefits click"
               >
                 {t('renew-child:children.update-dental-benefits.button.back')}
               </ButtonLink>
