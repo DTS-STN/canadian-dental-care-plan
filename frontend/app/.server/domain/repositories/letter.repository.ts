@@ -26,25 +26,45 @@ export interface LetterRepository {
    * @returns A Promise that resolves to the PDF entity for a letter id.
    */
   getPdfByLetterId(letterId: string): Promise<PdfEntity>;
+
+  /**
+   * Retrieves metadata associated with the letter repository.
+   *
+   * @returns A record where the keys and values are strings representing metadata information.
+   */
+  getMetadata(): Record<string, string>;
+
+  /**
+   * Performs a health check to ensure that the letter repository is operational.
+   *
+   * @throws An error if the health check fails or the repository is unavailable.
+   * @returns A promise that resolves when the health check completes successfully.
+   */
+  checkHealth(): Promise<void>;
 }
 
 @injectable()
 export class DefaultLetterRepository implements LetterRepository {
   private readonly log: Logger;
+  private readonly baseUrl: string;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
-    private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_BASE_URI' | 'INTEROP_CCT_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_COMMUNITY'>,
+    private readonly serverConfig: Pick<
+      ServerConfig,
+      'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_BASE_URI' | 'INTEROP_CCT_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_COMMUNITY'
+    >,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultLetterRepository');
+    this.baseUrl = `${this.serverConfig.INTEROP_CCT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1`;
   }
 
   async findLettersByClientId(clientId: string): Promise<ReadonlyArray<LetterEntity>> {
     this.log.trace('Fetching letters for clientId [%s]', clientId);
 
-    const url = new URL(`${this.serverConfig.INTEROP_CCT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`);
+    const url = new URL(`${this.baseUrl}/GetDocInfoByClientId`);
     url.searchParams.set('clientid', clientId);
 
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.get-doc-info-by-client-id.gets', url, {
@@ -76,7 +96,7 @@ export class DefaultLetterRepository implements LetterRepository {
   async getPdfByLetterId(letterId: string): Promise<PdfEntity> {
     this.log.trace('Fetching PDF for letterId [%s]', letterId);
 
-    const url = new URL(`${this.serverConfig.INTEROP_CCT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
+    const url = new URL(`${this.baseUrl}/GetPdfByLetterId`);
     url.searchParams.set('id', letterId);
 
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.get-pdf-by-client-id.gets', url, {
@@ -103,6 +123,16 @@ export class DefaultLetterRepository implements LetterRepository {
     const pdfEntity: PdfEntity = await response.json();
     this.log.trace('Returning PDF [%j]', pdfEntity);
     return pdfEntity;
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      baseUrl: this.baseUrl,
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    await this.findLettersByClientId(this.serverConfig.HEALTH_PLACEHOLDER_REQUEST_VALUE);
   }
 }
 
@@ -136,5 +166,15 @@ export class MockLetterRepository implements LetterRepository {
 
     this.log.debug('Returning PDF [%j]', pdfEntity);
     return await Promise.resolve(pdfEntity);
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      mockEnabled: 'true',
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    return await Promise.resolve();
   }
 }
