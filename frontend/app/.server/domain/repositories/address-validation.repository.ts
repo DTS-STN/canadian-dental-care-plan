@@ -16,8 +16,19 @@ export interface AddressValidationRepository {
    */
   getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity>;
 
+  /**
+   * Retrieves metadata associated with the address validation repository.
+   *
+   * @returns A record where the keys and values are strings representing metadata information.
+   */
   getMetadata(): Record<string, string>;
 
+  /**
+   * Performs a health check to ensure that the address validation repository is operational.
+   *
+   * @throws An error if the health check fails or the repository is unavailable.
+   * @returns A promise that resolves when the health check completes successfully.
+   */
   checkHealth(): Promise<void>;
 }
 
@@ -32,14 +43,14 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultAddressValidationRepository');
-    this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/address/validation/v1/CAN/correct`;
+    this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/address/validation/v1`;
   }
 
   async getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity> {
     this.log.trace('Checking correctness of address for addressCorrectionRequest: [%j]', addressCorrectionRequestEntity);
     const { address, city, postalCode, provinceCode } = addressCorrectionRequestEntity;
 
-    const url = new URL(this.baseUrl);
+    const url = new URL(`${this.baseUrl}/CAN/correct`);
     url.searchParams.set('AddressFullText', address);
     url.searchParams.set('AddressCityName', city);
     url.searchParams.set('AddressPostalCode', postalCode);

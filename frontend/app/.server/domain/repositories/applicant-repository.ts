@@ -46,13 +46,13 @@ export class DefaultApplicantRepository implements ApplicantRepository {
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultApplicantRepository');
-    this.baseUrl = `${this.serverConfig.INTEROP_APPLICANT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant`;
+    this.baseUrl = `${this.serverConfig.INTEROP_APPLICANT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1`;
   }
 
   async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null> {
     this.log.trace('Fetching applicant for sin [%j]', applicantRequestEntity);
 
-    const url = new URL(this.baseUrl);
+    const url = `${this.baseUrl}/applicant`;
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.client-application_by-sin.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
