@@ -15,24 +15,41 @@ export interface HCaptchaRepository {
    * @returns A Promise that resolves to the hCaptcha verify response entity that includes the success status and score if successful.
    */
   verifyHCaptchaResponse(hCaptchaVerifyRequestEntity: HCaptchaVerifyRequestEntity): Promise<HCaptchaVerifyResponseEntity>;
+
+  /**
+   * Retrieves metadata associated with the hCaptcha repository.
+   *
+   * @returns A record where the keys and values are strings representing metadata information.
+   */
+  getMetadata(): Record<string, string>;
+
+  /**
+   * Performs a health check to ensure that the hCaptcha repository is operational.
+   *
+   * @throws An error if the health check fails or the repository is unavailable.
+   * @returns A promise that resolves when the health check completes successfully.
+   */
+  checkHealth(): Promise<void>;
 }
 
 @injectable()
 export class DefaultHCaptchaRepository implements HCaptchaRepository {
   private readonly log: Logger;
+  private readonly baseUrl: string;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL'>,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL' | 'HEALTH_PLACEHOLDER_REQUEST_VALUE'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultHCaptchaRepository');
+    this.baseUrl = this.serverConfig.HCAPTCHA_VERIFY_URL;
   }
 
   async verifyHCaptchaResponse({ hCaptchaResponse, ipAddress }: HCaptchaVerifyRequestEntity): Promise<HCaptchaVerifyResponseEntity> {
     this.log.trace('Verifying hCaptchaResponse [%s] with ipAddress [%s]', hCaptchaResponse, ipAddress);
 
-    const url = new URL(this.serverConfig.HCAPTCHA_VERIFY_URL);
+    const url = new URL(this.baseUrl);
     url.searchParams.set('response', hCaptchaResponse);
     url.searchParams.set('secret', this.serverConfig.HCAPTCHA_SECRET_KEY);
     if (ipAddress) {
@@ -62,5 +79,15 @@ export class DefaultHCaptchaRepository implements HCaptchaRepository {
     }
 
     return hCaptchaVerifyResponseEntity;
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      baseUrl: this.baseUrl,
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    await this.verifyHCaptchaResponse({ hCaptchaResponse: this.serverConfig.HEALTH_PLACEHOLDER_REQUEST_VALUE });
   }
 }
