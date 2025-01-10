@@ -42,7 +42,7 @@ spec:
           # Note: image tag should be pinned to a specific version in overlays
           #       ex: 7.2 in nonprod; 7.2.3 in prod
           image: docker.io/redis:7
-          args: [/data/redis.conf, --requirepass $(REDIS_PASSWORD), --masterauth $(REDIS_PASSWORD)]
+          args: [/data/redis.conf, --requirepass, $(REDIS_PASSWORD), --masterauth, $(REDIS_PASSWORD)]
           envFrom:
             - secretRef:
                 name: redis
@@ -51,11 +51,11 @@ spec:
               containerPort: 6379
           livenessProbe:
             exec:
-              command: [sh, -c, redis-cli --pass $(REDIS_PASSWORD) ping]
+              command: [/usr/local/bin/redis-cli, --pass, $(REDIS_PASSWORD), ping]
             initialDelaySeconds: 10
           readinessProbe:
             exec:
-              command: [sh, -c, redis-cli --pass $(REDIS_PASSWORD) ping]
+              command: [/usr/local/bin/redis-cli, --pass, $(REDIS_PASSWORD), ping]
             initialDelaySeconds: 10
           resources:
             requests:
