@@ -41,6 +41,7 @@ enum HasProvincialTerritorialBenefitsOption {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.child.updateFederalProvincialTerritorialBenefits,
+  pageTitleI18nKey: 'renew-child:children.update-dental-benefits.title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -55,7 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
 
   const childNumber = t('renew-child:children.child-number', { childNumber: state.childNumber });
-  const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
+  const childName = state.information?.firstName ?? childNumber;
 
   const federalSocialPrograms = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
   const provinceTerritoryStates = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);

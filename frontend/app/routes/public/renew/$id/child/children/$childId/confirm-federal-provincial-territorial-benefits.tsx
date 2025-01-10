@@ -33,6 +33,7 @@ enum FederalBenefitsChangedOption {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.child.confirmFederalProvincialTerritorialBenefits,
+  pageTitleI18nKey: 'renew-child:children.confirm-dental-benefits.title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -44,7 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const childNumber = t('renew-child:children.child-number', { childNumber: state.childNumber });
-  const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
+  const childName = state.information?.firstName ?? childNumber;
 
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('renew-child:children.confirm-dental-benefits.title', { childName }) }),
