@@ -29,7 +29,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   securityHandler.validateFeatureEnabled('address-validation');
 
   const locale = getLocale(request);
-  const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
+  const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validationResult = await mailingAddressValidator.validateMailingAddress(session.find('route.address-validation') ?? {});
 
   if (!validationResult.success) {

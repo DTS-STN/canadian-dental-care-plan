@@ -27,29 +27,29 @@ export class DefaultMailingAddressValidator implements MailingAddressValidator {
   }
 
   private async buildMailingAddressSchemaErrorMessages(): Promise<AddressValidatorErrorMessages> {
-    const t = await getFixedT(this.locale, ['address-validation']);
+    const t = await getFixedT(this.locale, ['common']);
     return {
       address: {
-        invalidCharacters: t('address-validation:index.error-message.characters-valid'),
-        required: t('address-validation:index.error-message.address-required'),
+        invalidCharacters: t('common:error-message.characters-valid'),
+        required: t('common:error-message.address-required'),
       },
       city: {
-        required: t('address-validation:index.error-message.city-required'),
-        invalidCharacters: t('address-validation:index.error-message.characters-valid'),
+        required: t('common:error-message.city-required'),
+        invalidCharacters: t('common:error-message.characters-valid'),
       },
       country: {
-        required: t('address-validation:index.error-message.country-required'),
+        required: t('common:error-message.country-required'),
       },
       provinceState: {
-        required: t('address-validation:index.error-message.province-state-required'),
+        required: t('common:error-message.province-state-required'),
       },
       postalZipCode: {
-        invalidCharacters: t('address-validation:index.error-message.characters-valid'),
-        invalidPostalCode: t('address-validation:index.error-message.postal-zip-code-valid'),
-        invalidPostalCodeForProvince: t('address-validation:index.error-message.invalid-postal-zip-code-for-province'),
-        invalidPostalZipCodeForCountry: t('address-validation:index.error-message.invalid-postal-zip-code-for-country'),
-        invalidZipCode: t('address-validation:index.error-message.zip-code-valid'),
-        required: t('address-validation:index.error-message.postal-zip-code-required'),
+        invalidCharacters: t('common:error-message.characters-valid'),
+        invalidPostalCode: t('common:error-message.postal-zip-code-valid'),
+        invalidPostalCodeForProvince: t('common:error-message.invalid-postal-zip-code-for-province'),
+        invalidPostalZipCodeForCountry: t('common:error-message.invalid-postal-zip-code-for-country'),
+        invalidZipCode: t('common:error-message.zip-code-valid'),
+        required: t('common:error-message.postal-zip-code-required'),
       },
     };
   }

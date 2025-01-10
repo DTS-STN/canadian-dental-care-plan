@@ -109,7 +109,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('copyMailingAddress') === 'copy';
 
-  const mailingAddressValidator = appContainer.get(TYPES.routes.public.renew.child.MailingAddressValidatorFactoryChild).createMailingAddressValidator(locale);
+  const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('mailingAddress')),
     countryId: String(formData.get('mailingCountry')),
