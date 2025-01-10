@@ -72,9 +72,6 @@ import type { HttpClient } from '~/.server/http';
 import type { InstrumentationService } from '~/.server/observability';
 import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
 import type { MailingAddressValidatorFactory } from '~/.server/routes/public/address-validation';
-import type { MailingAddressValidatorFactoryAdult } from '~/.server/routes/public/renew/adult';
-import type { MailingAddressValidatorFactoryChild } from '~/.server/routes/public/renew/child';
-import type { MailingAddressValidatorFactoryIta } from '~/.server/routes/public/renew/ita';
 import type { SecurityHandler } from '~/.server/routes/security';
 import type { AddressValidatorFactory } from '~/.server/routes/validators';
 import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.server/utils/service-identifier.utils';
@@ -230,17 +227,6 @@ export const TYPES = assignServiceIdentifiers({
     public: {
       addressValidation: {
         MailingAddressValidatorFactory: serviceId<MailingAddressValidatorFactory>(),
-      },
-      renew: {
-        ita: {
-          MailingAddressValidatorFactoryIta: serviceId<MailingAddressValidatorFactoryIta>(),
-        },
-        child: {
-          MailingAddressValidatorFactoryChild: serviceId<MailingAddressValidatorFactoryChild>(),
-        },
-        adult: {
-          MailingAddressValidatorFactoryAdult: serviceId<MailingAddressValidatorFactoryAdult>(),
-        },
       },
     },
     security: {

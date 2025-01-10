@@ -97,6 +97,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const locale = getLocale(request);
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   const clientConfig = appContainer.get(TYPES.configs.ClientConfig);
   const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
@@ -109,8 +110,32 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('copyMailingAddress') === 'copy';
 
-  const mailingAddressValidator = appContainer.get(TYPES.routes.public.renew.child.MailingAddressValidatorFactoryChild).createMailingAddressValidator(locale);
-  const validatedResult = await mailingAddressValidator.validateMailingAddress({
+  // const mailingAddressValidator = appContainer.get(TYPES.routes.public.renew.child.MailingAddressValidatorFactoryChild).createMailingAddressValidator(locale);
+  const mailingAddressValidator = appContainer.get(TYPES.routes.public.addressValidation.MailingAddressValidatorFactory).createMailingAddressValidator({
+    address: {
+      invalidCharacters: t('renew-child:update-address.error-message.characters-valid'),
+      required: t('renew-child:update-address.error-message.mailing-address.address-required'),
+    },
+    city: {
+      required: t('renew-child:update-address.error-message.mailing-address.city-required'),
+      invalidCharacters: t('renew-child:update-address.error-message.characters-valid'),
+    },
+    country: {
+      required: t('renew-child:update-address.error-message.mailing-address.country-required'),
+    },
+    provinceState: {
+      required: t('renew-child:update-address.error-message.mailing-address.province-required'),
+    },
+    postalZipCode: {
+      invalidCharacters: t('renew-child:update-address.error-message.characters-valid'),
+      invalidPostalCode: t('renew-child:update-address.error-message.mailing-address.postal-code-valid'),
+      invalidPostalCodeForProvince: t('renew-child:update-address.error-message.mailing-address.invalid-postal-code-for-province'),
+      invalidPostalZipCodeForCountry: t('renew-child:update-address.error-message.mailing-address.invalid-postal-code-for-country'),
+      invalidZipCode: t('renew-child:update-address.error-message.mailing-address.zip-code-valid'),
+      required: t('renew-child:update-address.error-message.mailing-address.postal-code-required'),
+    },
+  });
+  const validatedResult = mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('mailingAddress')),
     countryId: String(formData.get('mailingCountry')),
     provinceStateId: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,

@@ -1,4 +1,3 @@
-import addressValidationEn from '~/../public/locales/en/address-validation.json';
 import applyAdultChildEn from '~/../public/locales/en/apply-adult-child.json';
 import applyAdultEn from '~/../public/locales/en/apply-adult.json';
 import applyChildEn from '~/../public/locales/en/apply-child.json';
@@ -16,7 +15,6 @@ import renewEn from '~/../public/locales/en/renew.json';
 import statusEn from '~/../public/locales/en/status.json';
 import stubLoginEn from '~/../public/locales/en/stub-login.json';
 import unableToProcessRequestEn from '~/../public/locales/en/unable-to-process-request.json';
-import addressValidationFr from '~/../public/locales/fr/address-validation.json';
 import applyAdultChildFr from '~/../public/locales/fr/apply-adult-child.json';
 import applyAdultFr from '~/../public/locales/fr/apply-adult.json';
 import applyChildFr from '~/../public/locales/fr/apply-child.json';
@@ -38,7 +36,6 @@ import unableToProcessRequestFr from '~/../public/locales/fr/unable-to-process-r
 type I18nResources = typeof i18nResourcesEn;
 
 const i18nResourcesEn = {
-  'address-validation': addressValidationEn,
   'apply-adult-child': applyAdultChildEn,
   'apply-adult': applyAdultEn,
   'apply-child': applyChildEn,
@@ -59,7 +56,6 @@ const i18nResourcesEn = {
 } as const;
 
 const i18nResourcesFr = {
-  'address-validation': addressValidationFr,
   'apply-adult-child': applyAdultChildFr,
   'apply-adult': applyAdultFr,
   'apply-child': applyChildFr,
