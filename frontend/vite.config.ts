@@ -7,6 +7,10 @@ import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { coverageConfigDefaults } from 'vitest/config';
 
+/**
+ * Application build and unit test configuration.
+ * See vite.server.config.ts for the server build config.
+ */
 export default defineConfig({
   build: {
     target: 'es2022',
@@ -43,17 +47,21 @@ export default defineConfig({
     //
     process.env.NODE_ENV === 'test' ? react() : reactRouter(),
   ],
+
+  //
+  // Vitest config. For more test configuration, see vitest.workspace.ts
+  // see: https://vitest.dev/config/
+  //
   test: {
-    setupFiles: ['./__tests__/setup-test-env.ts'],
-    include: ['./__tests__/**/*.test.{ts,tsx}'],
     coverage: {
       include: ['**/app/**/*.{ts,tsx}'],
-      exclude: ['!**/app/[.]client/**', '!**/app/[.]server/**', '**/app/mocks/**', ...coverageConfigDefaults.exclude],
+      exclude: [
+        '!**/app/[.]client/**', //
+        '!**/app/[.]server/**',
+        '**/app/mocks/**',
+        ...coverageConfigDefaults.exclude,
+      ],
     },
-    environmentMatchGlobs: [
-      ['__tests__/components/**', 'jsdom'],
-      ['__tests__/hooks/**', 'jsdom'],
-      ['__tests__/routes/**', 'jsdom'],
-    ],
+    setupFiles: ['./__tests__/setup-test-env.ts'],
   },
 });
