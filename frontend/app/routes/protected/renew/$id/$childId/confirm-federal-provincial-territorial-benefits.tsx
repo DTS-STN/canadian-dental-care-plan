@@ -18,6 +18,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
+import { AppPageTitle } from '~/components/layouts/protected-layout';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -245,6 +246,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
 
   return (
     <>
+      <AppPageTitle>{t('protected-renew:children.update-dental-benefits.title', { childName })}</AppPageTitle>
       <div className="max-w-prose">
         <p className="mb-4">{t('protected-renew:children.update-dental-benefits.access-to-dental')}</p>
         <p className="mb-4">{t('protected-renew:children.update-dental-benefits.eligibility-criteria')}</p>
