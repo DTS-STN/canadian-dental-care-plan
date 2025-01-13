@@ -176,6 +176,7 @@ export default function RenewAdultChildConfirm() {
   const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
 
   const cdcpLink = <InlineLink to={t('renew-adult-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLink = <InlineLink to={t('renew-adult-child:confirm.msca-link')} className="external-link" newTabIndicator target="_blank" />;
 
   // this link will be used in a future release
   // const cdcpLink = <InlineLink routeId="public/status/index" params={params} className="external-link" target='_blank' />;
@@ -211,7 +212,9 @@ export default function RenewAdultChildConfirm() {
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.register-msca-title')}</h2>
-        <p className="mt-4">{t('confirm.register-msca-text')}</p>
+        <p className="mt-4">
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink, noWrap: <span className="whitespace-nowrap" /> }} />
+        </p>
       </section>
 
       <section className="space-y-8">
