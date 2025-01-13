@@ -28,18 +28,6 @@
         "use-entered-address-button": "Use entered address"
       }
     },
-    "error-message": {
-      "address-required": "Enter mailing address, typically number and street",
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
-      "city-required": "Enter a city or town for your mailing address",
-      "country-required": "Select a country for your mailing address",
-      "invalid-postal-zip-code-for-country": "A Canadian postal code in the mailing address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
-      "invalid-postal-zip-code-for-province": "The postal code does not match the province or territory you selected",
-      "postal-zip-code-required": "Enter postal code or zip code for your mailing address",
-      "postal-zip-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
-      "province-state-required": "Select a province, territory, state or region for your mailing address",
-      "zip-code-valid": "Enter mailing address zip code in the correct format, such as 12345 or 12345-6789"
-    },
     "optional-label": "Complete all fields unless marked as optional.",
     "page-title": "Address validation",
     "reset-button": "Reset",

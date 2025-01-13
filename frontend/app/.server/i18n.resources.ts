@@ -3,6 +3,7 @@ import applyAdultChildEn from '~/../public/locales/en/apply-adult-child.json';
 import applyAdultEn from '~/../public/locales/en/apply-adult.json';
 import applyChildEn from '~/../public/locales/en/apply-child.json';
 import applyEn from '~/../public/locales/en/apply.json';
+import commonEn from '~/../public/locales/en/common.json';
 import dataUnavailableEn from '~/../public/locales/en/data-unavailable.json';
 import gcwebEn from '~/../public/locales/en/gcweb.json';
 import indexEn from '~/../public/locales/en/index.json';
@@ -21,6 +22,7 @@ import applyAdultChildFr from '~/../public/locales/fr/apply-adult-child.json';
 import applyAdultFr from '~/../public/locales/fr/apply-adult.json';
 import applyChildFr from '~/../public/locales/fr/apply-child.json';
 import applyFr from '~/../public/locales/fr/apply.json';
+import commonFr from '~/../public/locales/fr/common.json';
 import dataUnavailableFr from '~/../public/locales/fr/data-unavailable.json';
 import gcwebFr from '~/../public/locales/fr/gcweb.json';
 import indexFr from '~/../public/locales/fr/index.json';
@@ -43,6 +45,7 @@ const i18nResourcesEn = {
   'apply-adult': applyAdultEn,
   'apply-child': applyChildEn,
   apply: applyEn,
+  common: commonEn,
   'data-unavailable': dataUnavailableEn,
   gcweb: gcwebEn,
   index: indexEn,
@@ -64,6 +67,7 @@ const i18nResourcesFr = {
   'apply-adult': applyAdultFr,
   'apply-child': applyChildFr,
   apply: applyFr,
+  common: commonFr,
   'data-unavailable': dataUnavailableFr,
   gcweb: gcwebFr,
   index: indexFr,
