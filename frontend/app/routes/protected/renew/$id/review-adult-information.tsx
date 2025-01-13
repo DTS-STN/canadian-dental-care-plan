@@ -47,10 +47,15 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
-  const state = loadProtectedRenewStateForReview({ params, session, demographicSurveyEnabled });
+  const state = loadProtectedRenewStateForReview({ params, request, session, demographicSurveyEnabled });
 
   // renew state is valid then edit mode can be set to true
-  saveProtectedRenewState({ params, session, state: { editMode: true } });
+  saveProtectedRenewState({
+    params,
+    request,
+    session,
+    state: { editMode: true },
+  });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -200,7 +205,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
-    clearProtectedRenewState({ params, session });
+    clearProtectedRenewState({ params, request, session });
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
@@ -209,11 +214,16 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
-    saveProtectedRenewState({ params, session, state: { editMode: false } });
+    saveProtectedRenewState({
+      params,
+      request,
+      session,
+      state: { editMode: false },
+    });
     return redirect(getPathById('protected/renew/$id/member-selection', params));
   }
 
-  const state = loadProtectedRenewStateForReview({ params, session, demographicSurveyEnabled });
+  const state = loadProtectedRenewStateForReview({ params, request, session, demographicSurveyEnabled });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-adult-information', { userId: idToken.sub });

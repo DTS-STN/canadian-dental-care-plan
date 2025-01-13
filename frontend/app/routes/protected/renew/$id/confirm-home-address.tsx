@@ -81,7 +81,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -178,7 +178,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const canProceedToReview = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
 
   if (canProceedToReview) {
-    saveProtectedRenewState({ params, session, state: { homeAddress: parsedDataResult.data } });
+    saveProtectedRenewState({
+      params,
+      request,
+      session,
+      state: { homeAddress: parsedDataResult.data },
+    });
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
@@ -228,7 +233,12 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     } as const satisfies AddressSuggestionResponse;
   }
-  saveProtectedRenewState({ params, session, state: { homeAddress: parsedDataResult.data } });
+  saveProtectedRenewState({
+    params,
+    request,
+    session,
+    state: { homeAddress: parsedDataResult.data },
+  });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-home-address', { userId: idToken.sub });

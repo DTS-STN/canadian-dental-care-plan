@@ -151,6 +151,7 @@ export function getProtectedRenewStateIdFromUrl(url: string | URL) {
 
 interface LoadStateArgs {
   params: Params;
+  request: Request;
   session: Session;
 }
 
@@ -159,9 +160,10 @@ interface LoadStateArgs {
  * @param args - The arguments.
  * @returns The loaded state.
  */
-export function loadProtectedRenewState({ params, session }: LoadStateArgs) {
+export function loadProtectedRenewState({ params, request, session }: LoadStateArgs) {
   const log = getLogger('protected-renew-route-helpers.server/loadProtectedRenewState');
   const locale = getLocaleFromParams(params);
+  const { pathname } = new URL(request.url);
   const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
 
   const parsedId = idSchema.safeParse(params.id);
@@ -179,11 +181,21 @@ export function loadProtectedRenewState({ params, session }: LoadStateArgs) {
   }
 
   const state: ProtectedRenewState = session.get(sessionName);
+
+  // Redirect to the confirmation page if the application has been submitted and
+  // the current route is not the confirmation page.
+  const confirmationRouteUrl = getPathById('protected/renew/$id/confirmation', params);
+  if (state.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
+    log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', state.id, confirmationRouteUrl);
+    throw redirect(confirmationRouteUrl);
+  }
+
   return state;
 }
 
 interface SaveStateArgs {
   params: Params;
+  request: Request;
   session: Session;
   state: Partial<OmitStrict<ProtectedRenewState, 'id'>>;
   remove?: keyof OmitStrict<ProtectedRenewState, 'id'>;
@@ -194,9 +206,9 @@ interface SaveStateArgs {
  * @param args - The arguments.
  * @returns The new protected renew state.
  */
-export function saveProtectedRenewState({ params, session, state }: SaveStateArgs) {
+export function saveProtectedRenewState({ params, request, session, state }: SaveStateArgs) {
   const log = getLogger('protected-renew-route-helpers.server/saveProtectedRenewState');
-  const currentState = loadProtectedRenewState({ params, session });
+  const currentState = loadProtectedRenewState({ params, request, session });
 
   const newState = {
     ...currentState,
@@ -211,6 +223,7 @@ export function saveProtectedRenewState({ params, session, state }: SaveStateArg
 
 interface ClearStateArgs {
   params: Params;
+  request: Request;
   session: Session;
 }
 
@@ -218,9 +231,9 @@ interface ClearStateArgs {
  * Clears protected renew state.
  * @param args - The arguments.
  */
-export function clearProtectedRenewState({ params, session }: ClearStateArgs) {
+export function clearProtectedRenewState({ params, request, session }: ClearStateArgs) {
   const log = getLogger('protected-renew-route-helpers.server/clearProtectedRenewState');
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
   const sessionName = getSessionName(state.id);
   session.unset(sessionName);
   log.info('Renew session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
@@ -289,6 +302,7 @@ export function getProtectedChildrenState<TState extends Pick<ProtectedRenewStat
 
 interface LoadProtectedRenewSingleChildStateArgs {
   params: Params;
+  request: Request;
   session: Session;
 }
 
@@ -297,9 +311,9 @@ interface LoadProtectedRenewSingleChildStateArgs {
  * @param args - The arguments.
  * @returns The loaded child state.
  */
-export function loadProtectedRenewSingleChildState({ params, session }: LoadProtectedRenewSingleChildStateArgs) {
+export function loadProtectedRenewSingleChildState({ params, request, session }: LoadProtectedRenewSingleChildStateArgs) {
   const log = getLogger('protected-renew-route-helpers.server/loadProtectedRenewSingleChildState');
-  const protectedRenewState = loadProtectedRenewState({ params, session });
+  const protectedRenewState = loadProtectedRenewState({ params, request, session });
 
   const parsedChildId = z.string().uuid().safeParse(params.childId);
 
@@ -330,6 +344,7 @@ export function loadProtectedRenewSingleChildState({ params, session }: LoadProt
 
 interface LoadProtectedRenewStateForReviewArgs {
   params: Params;
+  request: Request;
   session: Session;
   demographicSurveyEnabled: boolean;
 }
@@ -340,14 +355,14 @@ interface LoadProtectedRenewStateForReviewArgs {
  * @param args - The arguments.
  * @returns The validated adult state.
  */
-export function loadProtectedRenewStateForReview({ params, session, demographicSurveyEnabled }: LoadProtectedRenewStateForReviewArgs) {
-  const state = loadProtectedRenewState({ params, session });
+export function loadProtectedRenewStateForReview({ params, request, session, demographicSurveyEnabled }: LoadProtectedRenewStateForReviewArgs) {
+  const state = loadProtectedRenewState({ params, request, session });
 
   try {
     return validateProtectedRenewStateForReview({ params, state, demographicSurveyEnabled });
   } catch (err) {
     if (isRedirectResponse(err)) {
-      saveProtectedRenewState({ params, session, state: { editMode: false } });
+      saveProtectedRenewState({ params, request, session, state: { editMode: false } });
     }
     throw err;
   }

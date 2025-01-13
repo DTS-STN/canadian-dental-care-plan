@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, request, para
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateFeatureEnabled('demographic-survey');
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
 
   const memberName = `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`;
 
@@ -100,7 +100,7 @@ export async function action({ context: { appContainer, session }, params, reque
   } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
 
   const demographicSurveySchema = z
     .object({
@@ -140,6 +140,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveProtectedRenewState({
     params,
+    request,
     session,
     state: {
       isSurveyCompleted: true,

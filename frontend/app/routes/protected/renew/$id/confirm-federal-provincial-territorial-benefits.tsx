@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -172,6 +172,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveProtectedRenewState({
     params,
+    request,
     session,
     state: {
       dentalBenefits: {

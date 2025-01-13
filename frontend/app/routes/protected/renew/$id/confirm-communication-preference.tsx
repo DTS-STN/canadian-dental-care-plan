@@ -42,7 +42,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const preferredLanguages = appContainer.get(TYPES.domain.services.PreferredLanguageService).listAndSortLocalizedPreferredLanguages(locale);
@@ -78,7 +78,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema = z
@@ -119,7 +119,12 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveProtectedRenewState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
+  saveProtectedRenewState({
+    params,
+    request,
+    session,
+    state: { communicationPreferences: parsedDataResult.data },
+  });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-communication-preference', { userId: idToken.sub });
