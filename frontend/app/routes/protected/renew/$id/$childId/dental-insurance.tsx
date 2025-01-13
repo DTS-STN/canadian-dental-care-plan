@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const state = loadProtectedRenewSingleChildState({ params, session });
+  const state = loadProtectedRenewSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
@@ -61,8 +61,8 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = loadProtectedRenewSingleChildState({ params, session });
-  const protectedRenewState = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewSingleChildState({ params, request, session });
+  const protectedRenewState = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
@@ -81,6 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveProtectedRenewState({
     params,
+    request,
     session,
     state: {
       children: protectedRenewState.children.map((child) => {

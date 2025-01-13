@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-submit.page-title') }) };
@@ -75,14 +75,14 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
-    clearProtectedRenewState({ params, session });
+    clearProtectedRenewState({ params, request, session });
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
-  const state = loadProtectedRenewStateForReview({ params, session, demographicSurveyEnabled });
+  const state = loadProtectedRenewStateForReview({ params, request, session, demographicSurveyEnabled });
   const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
@@ -96,7 +96,12 @@ export async function action({ context: { appContainer, session }, params, reque
   await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
 
   const submissionInfo = { submittedOn: new UTCDate().toISOString() };
-  saveProtectedRenewState({ params, session, state: { submissionInfo } });
+  saveProtectedRenewState({
+    params,
+    request,
+    session,
+    state: { submissionInfo },
+  });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-and-submit', { userId: idToken.sub });

@@ -39,7 +39,7 @@ export async function action({ context: { appContainer, session }, request }: Ac
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     case 'extend': {
       log.debug("Extending user's protected renew state; id: [%s], sessionId: [%s]", params.id, sessionId);
-      saveProtectedRenewState({ params, session, state: {} });
+      saveProtectedRenewState({ params, request, session, state: {} });
       return Response.json(null, { status: 204 });
     }
 

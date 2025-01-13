@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
@@ -120,7 +120,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
-  clearProtectedRenewState({ params, session });
+  clearProtectedRenewState({ params, request, session });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirmation', { userId: idToken.sub });

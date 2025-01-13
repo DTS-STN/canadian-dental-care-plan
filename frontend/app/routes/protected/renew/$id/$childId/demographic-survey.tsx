@@ -52,7 +52,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const state = loadProtectedRenewSingleChildState({ params, session });
+  const state = loadProtectedRenewSingleChildState({ params, request, session });
 
   const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
   const memberName = state.information?.firstName ?? childNumber;
@@ -92,8 +92,8 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = loadProtectedRenewSingleChildState({ params, session });
-  const protectedRenewState = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewSingleChildState({ params, request, session });
+  const protectedRenewState = loadProtectedRenewState({ params, request, session });
 
   const {
     IS_APPLICANT_FIRST_NATIONS_YES_OPTION,
@@ -144,6 +144,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveProtectedRenewState({
     params,
+    request,
     session,
     state: {
       children: protectedRenewState.children.map((child) => {

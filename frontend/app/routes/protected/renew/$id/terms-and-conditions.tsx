@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  loadProtectedRenewState({ params, session });
+  loadProtectedRenewState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:terms-and-conditions.page-title') }) };
@@ -53,7 +53,12 @@ export async function action({ context: { appContainer, session }, request, para
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  saveProtectedRenewState({ params, session, state: {} });
+  saveProtectedRenewState({
+    params,
+    request,
+    session,
+    state: {},
+  });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.terms-and-conditions', { userId: idToken.sub });

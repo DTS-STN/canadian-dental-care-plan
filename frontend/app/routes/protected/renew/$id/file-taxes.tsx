@@ -34,7 +34,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const { id, applicationYear } = loadProtectedRenewState({ params, session });
+  const { id, applicationYear } = loadProtectedRenewState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:file-your-taxes.page-title') }) };
@@ -55,7 +55,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
-  clearProtectedRenewState({ params, session });
+  clearProtectedRenewState({ params, request, session });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.file-taxes', { userId: idToken.sub });

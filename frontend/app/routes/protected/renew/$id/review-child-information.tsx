@@ -45,13 +45,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
   const validatedChildren = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
   // renew state is valid then edit mode can be set to true
-  saveProtectedRenewState({ params, session, state: { editMode: true } });
+  saveProtectedRenewState({
+    params,
+    request,
+    session,
+    state: { editMode: true },
+  });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -120,11 +125,11 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
-    clearProtectedRenewState({ params, session });
+    clearProtectedRenewState({ params, request, session });
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 

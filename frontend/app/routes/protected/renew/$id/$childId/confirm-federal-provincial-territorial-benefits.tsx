@@ -51,8 +51,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
-  const state = loadProtectedRenewSingleChildState({ params, session });
-  const renewState = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewSingleChildState({ params, request, session });
+  const renewState = loadProtectedRenewState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -109,8 +109,8 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = loadProtectedRenewSingleChildState({ params, session });
-  const renewState = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewSingleChildState({ params, request, session });
+  const renewState = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
@@ -182,6 +182,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveProtectedRenewState({
     params,
+    request,
     session,
     state: {
       children: renewState.children.map((child) => {

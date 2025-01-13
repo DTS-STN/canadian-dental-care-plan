@@ -41,7 +41,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const state = loadProtectedRenewState({ params, session });
+  const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:tax-filing.page-title') }) };
@@ -75,7 +75,12 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveProtectedRenewState({ params, session, state: { taxFiling: parsedDataResult.data.taxFiling === TaxFilingOption.Yes } });
+  saveProtectedRenewState({
+    params,
+    request,
+    session,
+    state: { taxFiling: parsedDataResult.data.taxFiling === TaxFilingOption.Yes },
+  });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.tax-filing', { userId: idToken.sub });
