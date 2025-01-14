@@ -177,7 +177,7 @@ export async function action({ context: { appContainer, session }, params, reque
     saveRenewState({ params, session, state: { homeAddress: parsedDataResult.data } });
 
     if (state.editMode) {
-      return redirect(getPathById('public/renew/$id/adult/review-information', params));
+      return redirect(getPathById('public/renew/$id/adult/review-adult-information', params));
     }
     return redirect(getPathById('public/renew/$id/adult/dental-insurance', params));
   }
@@ -365,10 +365,20 @@ export default function RenewAdultUpdateAddress() {
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Home address click">
-                {t('renew-adult:update-address.save-btn')}
-              </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Home address click">
+              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+                <DialogTrigger asChild>
+                  <LoadingButton variant="primary" id="continue-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Home address click">
+                    {t('renew-adult:update-address.save-btn')}
+                  </LoadingButton>
+                </DialogTrigger>
+                {!fetcher.isSubmitting && addressDialogContent && (
+                  <>
+                    {addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
+                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+                  </>
+                )}
+              </Dialog>
+              <ButtonLink id="back-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Home address click">
                 {t('renew-adult:update-address.cancel-btn')}
               </ButtonLink>
             </div>
