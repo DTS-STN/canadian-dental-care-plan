@@ -167,7 +167,7 @@ export default function RenewFlowConfirm() {
           }}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-ITA:Print or save - Your renewal for the Canadian Dental Care Plan is complete click"
         >
-          {t('confirm.print-btn')}
+          {t('confirm.print-or-save-btn')}
         </Button>
       </section>
 
