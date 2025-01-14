@@ -125,7 +125,14 @@ export default function ProtectedRenewMemberSelection() {
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
         <div className="mt-6 space-y-8">
-          <CardLink id="primary-applicant" key={applicantName} title={applicantName} previouslyReviewed={previouslyReviewed} routeId="protected/renew/$id/dental-insurance" params={params} />
+          <CardLink
+            id="primary-applicant"
+            key={applicantName}
+            title={applicantName}
+            previouslyReviewed={previouslyReviewed}
+            routeId={clientApplication.isInvitationToApplyClient ? 'protected/renew/$id/confirm-marital-status' : 'protected/renew/$id/dental-insurance'}
+            params={params}
+          />
           {children.map((child) => {
             const childName = `${child.information?.firstName} ${child.information?.lastName}`;
             return <CardLink key={childName} title={childName} previouslyReviewed={child.previouslyReviewed} routeId="protected/renew/$id/$childId/parent-or-guardian" params={{ ...params, childId: child.id }} />;
