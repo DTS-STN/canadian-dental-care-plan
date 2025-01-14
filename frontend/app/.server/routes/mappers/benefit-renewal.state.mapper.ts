@@ -462,7 +462,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   mapProtectedRenewStateToProtectedBenefitRenewalDto(
     { applicationYear, children, contactInformation, demographicSurvey, dentalBenefits, dentalInsurance, homeAddress, isHomeAddressSameAsMailingAddress, mailingAddress, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
     userId: string,
-    primaryApplicantStateCompleted: boolean,
+    applicantStateCompleted: boolean,
   ): ProtectedBenefitRenewalDto {
     return {
       ...clientApplication,
@@ -493,14 +493,14 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
       }),
-      dentalBenefits: primaryApplicantStateCompleted
+      dentalBenefits: applicantStateCompleted
         ? this.toDentalBenefits({
             existingDentalBenefits: clientApplication.dentalBenefits,
             hasFederalProvincialTerritorialBenefitsChanged: !!dentalBenefits,
             renewedDentalBenefits: dentalBenefits,
           })
         : [],
-      dentalInsurance: primaryApplicantStateCompleted ? dentalInsurance : undefined,
+      dentalInsurance: applicantStateCompleted ? dentalInsurance : undefined,
       partnerInformation: this.toPartnerInformation({
         existingPartnerInformation: clientApplication.partnerInformation,
         hasMaritalStatusChanged: !!maritalStatus,

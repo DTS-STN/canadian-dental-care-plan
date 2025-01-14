@@ -138,6 +138,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
+    saveProtectedRenewState({
+      params,
+      request,
+      session,
+      state: { editMode: false },
+    });
     if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
       return redirect(getPathById('protected/renew/$id/member-selection', params));
     }
