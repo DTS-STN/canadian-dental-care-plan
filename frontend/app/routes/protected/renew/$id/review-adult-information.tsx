@@ -247,7 +247,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   return redirect(getPathById('protected/renew/$id/review-child-information', params));
 }
-
 export default function ProtectedRenewReviewAdultInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
