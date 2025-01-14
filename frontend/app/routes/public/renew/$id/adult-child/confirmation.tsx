@@ -198,7 +198,7 @@ export default function RenewAdultChildConfirm() {
           }}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Print or save - Your renewal for the Canadian Dental Care Plan is complete click"
         >
-          {t('confirm.print-btn')}
+          {t('confirm.print-or-save-btn')}
         </Button>
       </section>
 
