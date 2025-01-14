@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -20,6 +21,7 @@ import { InputCheckbox } from '~/components/input-checkbox';
 import { InputPatternField } from '~/components/input-pattern-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
+import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -51,6 +53,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedRenewState({ params, request, session });
 
+  if (!state.clientApplication.isInvitationToApplyClient && !state.editMode) {
+    throw new Response('Not Found', { status: 404 });
+  }
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
@@ -75,6 +81,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     },
     maritalStatuses,
     meta,
+    editMode: state.editMode,
   };
 }
 
@@ -143,12 +150,16 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-marital-status', { userId: idToken.sub });
 
-  return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  if (state.editMode) {
+    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  }
+
+  return redirect(getPathById('protected/renew/$id/confirm-address', params));
 }
 
 export default function ProtectedRenewMaritalStatus() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, maritalStatuses } = useLoaderData<typeof loader>();
+  const { defaultState, maritalStatuses, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
@@ -214,14 +225,40 @@ export default function ProtectedRenewMaritalStatus() {
             </>
           )}
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Marital status click">
-            {t('protected-renew:marital-status.save-btn')}
-          </Button>
-          <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Marital status click">
-            {t('protected-renew:marital-status.cancel-btn')}
-          </ButtonLink>
-        </div>
+        {editMode ? (
+          <div className="flex flex-wrap items-center gap-3">
+            <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Marital status click">
+              {t('protected-renew:marital-status.save-btn')}
+            </Button>
+            <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Marital status click">
+              {t('protected-renew:marital-status.cancel-btn')}
+            </ButtonLink>
+          </div>
+        ) : (
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton
+              id="continue-button"
+              name="_action"
+              value={FormAction.Continue}
+              variant="primary"
+              loading={isSubmitting}
+              endIcon={faChevronRight}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Marital status click"
+            >
+              {t('protected-renew:marital-status.continue-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              routeId="protected/renew/$id/member-selection"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Marital status click"
+            >
+              {t('protected-renew:marital-status.back-btn')}
+            </ButtonLink>
+          </div>
+        )}
       </fetcher.Form>
     </div>
   );
