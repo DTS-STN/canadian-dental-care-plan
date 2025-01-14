@@ -164,6 +164,9 @@
     ]
   },
   "overrides": {
+    "vite": {
+      "rollup": "npm:@rollup/wasm-node@^4.30.1"
+    },
     "vitest": "^3.0.0-beta.4"
   }
 }
