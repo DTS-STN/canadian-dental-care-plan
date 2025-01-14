@@ -6,7 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import { clearProtectedRenewState, loadProtectedRenewStateForReview, renewStateHasPartner, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import {
+  clearProtectedRenewState,
+  isPrimaryApplicantStateComplete,
+  loadProtectedRenewState,
+  loadProtectedRenewStateForReview,
+  renewStateHasPartner,
+  saveProtectedRenewState,
+  validateProtectedChildrenStateForReview,
+} from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
@@ -48,6 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
   const state = loadProtectedRenewStateForReview({ params, request, session, demographicSurveyEnabled });
+  const primaryApplicantStateCompleted = isPrimaryApplicantStateComplete(loadProtectedRenewState({ params, request, session }), demographicSurveyEnabled);
 
   // renew state is valid then edit mode can be set to true
   saveProtectedRenewState({
@@ -179,7 +188,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     viewPayloadEnabled &&
     appContainer
       .get(TYPES.domain.mappers.BenefitRenewalDtoMapper)
-      .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub));
+      .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub, primaryApplicantStateCompleted));
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-adult-information', { userId: idToken.sub });
@@ -195,6 +204,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     payload,
     hasChildren: state.children.length > 0,
+    primaryApplicantStateCompleted,
   };
 }
 
@@ -212,6 +222,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
+  const state = loadProtectedRenewState({ params, request, session });
+
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
     saveProtectedRenewState({
@@ -220,15 +232,16 @@ export async function action({ context: { appContainer, session }, params, reque
       session,
       state: { editMode: false },
     });
+    if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
+      return redirect(getPathById('protected/renew/$id/review-child-information', params));
+    }
     return redirect(getPathById('protected/renew/$id/member-selection', params));
   }
-
-  const state = loadProtectedRenewStateForReview({ params, request, session, demographicSurveyEnabled });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-adult-information', { userId: idToken.sub });
 
-  if (validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).length === 0) {
+  if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) || validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).length === 0) {
     return redirect(getPathById('protected/renew/$id/review-and-submit', params));
   }
 
@@ -238,7 +251,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedRenewReviewAdultInformation() {
   const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefits, hasChildren, payload } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefits, hasChildren, payload, primaryApplicantStateCompleted } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -387,47 +400,49 @@ export default function ProtectedRenewReviewAdultInformation() {
               )}
             </dl>
           </section>
-          <section className="space-y-6">
-            <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.dental-title')}</h2>
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('protected-renew:review-adult-information.dental-insurance-title')}>
-                <p>{dentalInsurance ? t('protected-renew:review-adult-information.yes') : t('protected-renew:review-adult-information.no')}</p>
-                <div className="mt-4">
-                  <InlineLink id="change-access-dental" routeId="protected/renew/$id/dental-insurance" params={params}>
-                    {t('protected-renew:review-adult-information.dental-insurance-change')}
-                  </InlineLink>
-                </div>
-              </DescriptionListItem>
-              {dentalBenefits.length > 0 && (
-                <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
-                  <>
-                    <p>{t('protected-renew:review-adult-information.yes')}</p>
-                    <p>{t('protected-renew:review-adult-information.dental-benefit-has-access')}</p>
-                    <ul className="ml-6 list-disc">
-                      {dentalBenefits.map((benefit, index) => (
-                        <li key={index}>{benefit}</li>
-                      ))}
-                    </ul>
-                  </>
+          {primaryApplicantStateCompleted && (
+            <section className="space-y-6">
+              <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.dental-title')}</h2>
+              <dl className="divide-y border-y">
+                <DescriptionListItem term={t('protected-renew:review-adult-information.dental-insurance-title')}>
+                  <p>{dentalInsurance ? t('protected-renew:review-adult-information.yes') : t('protected-renew:review-adult-information.no')}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/confirm-federal-provincial-territorial-benefits" params={params}>
-                      {t('protected-renew:review-adult-information.dental-benefit-change')}
+                    <InlineLink id="change-access-dental" routeId="protected/renew/$id/dental-insurance" params={params}>
+                      {t('protected-renew:review-adult-information.dental-insurance-change')}
                     </InlineLink>
                   </div>
                 </DescriptionListItem>
-              )}
-              {dentalBenefits.length === 0 && (
-                <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
-                  <p>{t('protected-renew:review-adult-information.no')}</p>
-                  <div className="mt-4">
-                    <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/confirm-federal-provincial-territorial-benefits" params={params}>
-                      {t('protected-renew:review-adult-information.dental-benefit-change')}
-                    </InlineLink>
-                  </div>
-                </DescriptionListItem>
-              )}
-            </dl>
-          </section>
+                {dentalBenefits.length > 0 && (
+                  <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
+                    <>
+                      <p>{t('protected-renew:review-adult-information.yes')}</p>
+                      <p>{t('protected-renew:review-adult-information.dental-benefit-has-access')}</p>
+                      <ul className="ml-6 list-disc">
+                        {dentalBenefits.map((benefit, index) => (
+                          <li key={index}>{benefit}</li>
+                        ))}
+                      </ul>
+                    </>
+                    <div className="mt-4">
+                      <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/confirm-federal-provincial-territorial-benefits" params={params}>
+                        {t('protected-renew:review-adult-information.dental-benefit-change')}
+                      </InlineLink>
+                    </div>
+                  </DescriptionListItem>
+                )}
+                {dentalBenefits.length === 0 && (
+                  <DescriptionListItem term={t('protected-renew:review-adult-information.dental-benefit-title')}>
+                    <p>{t('protected-renew:review-adult-information.no')}</p>
+                    <div className="mt-4">
+                      <InlineLink id="change-dental-benefits" routeId="protected/renew/$id/confirm-federal-provincial-territorial-benefits" params={params}>
+                        {t('protected-renew:review-adult-information.dental-benefit-change')}
+                      </InlineLink>
+                    </div>
+                  </DescriptionListItem>
+                )}
+              </dl>
+            </section>
+          )}
           {demographicSurveyEnabled && (
             <section className="space-y-6">
               <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.demographic-title')}</h2>

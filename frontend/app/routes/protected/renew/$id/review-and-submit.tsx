@@ -83,16 +83,18 @@ export async function action({ context: { appContainer, session }, params, reque
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const state = loadProtectedRenewStateForReview({ params, request, session, demographicSurveyEnabled });
-  const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
+  const primaryApplicantStateCompleted = isPrimaryApplicantStateComplete(loadProtectedRenewState({ params, request, session }), demographicSurveyEnabled);
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
-    if (children.length > 0) return redirect(getPathById('protected/renew/$id/review-child-information', params));
-    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+    if (!primaryApplicantStateCompleted || validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).length === 0) {
+      return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+    }
+    return redirect(getPathById('protected/renew/$id/review-child-information', params));
   }
 
   const userInfoToken = session.get<UserinfoToken>('userInfoToken');
-  const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub);
+  const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub, primaryApplicantStateCompleted);
   await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
 
   const submissionInfo = { submittedOn: new UTCDate().toISOString() };

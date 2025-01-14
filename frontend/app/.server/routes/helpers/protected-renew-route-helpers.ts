@@ -369,11 +369,11 @@ export function loadProtectedRenewStateForReview({ params, request, session, dem
 }
 
 export function isPrimaryApplicantStateComplete(state: ProtectedRenewState, demographicSurveyEnabled: boolean) {
-  return state.previouslyReviewed && state.dentalInsurance !== undefined && (demographicSurveyEnabled ? state.demographicSurvey !== undefined : true);
+  return !!state.previouslyReviewed && state.dentalInsurance !== undefined && (demographicSurveyEnabled ? state.demographicSurvey !== undefined : true);
 }
 
 export function isChildrenStateComplete(state: ProtectedRenewState, demographicSurveyEnabled: boolean) {
-  return state.children.every((child) => child.previouslyReviewed && child.isParentOrLegalGuardian !== undefined && child.dentalInsurance !== undefined && (demographicSurveyEnabled ? child.demographicSurvey !== undefined : true));
+  return state.children.every((child) => !!child.previouslyReviewed && child.isParentOrLegalGuardian !== undefined && child.dentalInsurance !== undefined && (demographicSurveyEnabled ? child.demographicSurvey !== undefined : true));
 }
 
 interface ValidateProtectedRenewStateForReviewArgs {
