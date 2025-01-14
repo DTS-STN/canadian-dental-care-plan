@@ -125,7 +125,7 @@ export interface BenefitRenewalStateMapper {
   mapRenewAdultChildStateToAdultChildBenefitRenewalDto(renewAdultChildState: RenewAdultChildState): AdultChildBenefitRenewalDto;
   mapRenewItaStateToItaBenefitRenewalDto(renewItaState: RenewItaState): ItaBenefitRenewalDto;
   mapRenewChildStateToChildBenefitRenewalDto(renewChildSTate: RenewChildState): ChildBenefitRenewalDto;
-  mapProtectedRenewStateToProtectedBenefitRenewalDto(protectedRenewState: ProtectedRenewState, userId: string): ProtectedBenefitRenewalDto;
+  mapProtectedRenewStateToProtectedBenefitRenewalDto(protectedRenewState: ProtectedRenewState, userId: string, primaryApplicantStateCompleted: boolean): ProtectedBenefitRenewalDto;
 }
 
 interface ToApplicantInformationArgs {
@@ -462,6 +462,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   mapProtectedRenewStateToProtectedBenefitRenewalDto(
     { applicationYear, children, contactInformation, demographicSurvey, dentalBenefits, dentalInsurance, homeAddress, isHomeAddressSameAsMailingAddress, mailingAddress, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
     userId: string,
+    primaryApplicantStateCompleted: boolean,
   ): ProtectedBenefitRenewalDto {
     return {
       ...clientApplication,
@@ -492,12 +493,14 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
       }),
-      dentalBenefits: this.toDentalBenefits({
-        existingDentalBenefits: clientApplication.dentalBenefits,
-        hasFederalProvincialTerritorialBenefitsChanged: !!dentalBenefits,
-        renewedDentalBenefits: dentalBenefits,
-      }),
-      dentalInsurance,
+      dentalBenefits: primaryApplicantStateCompleted
+        ? this.toDentalBenefits({
+            existingDentalBenefits: clientApplication.dentalBenefits,
+            hasFederalProvincialTerritorialBenefitsChanged: !!dentalBenefits,
+            renewedDentalBenefits: dentalBenefits,
+          })
+        : [],
+      dentalInsurance: primaryApplicantStateCompleted ? dentalInsurance : undefined,
       partnerInformation: this.toPartnerInformation({
         existingPartnerInformation: clientApplication.partnerInformation,
         hasMaritalStatusChanged: !!maritalStatus,

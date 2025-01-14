@@ -78,6 +78,10 @@ export async function action({ context: { appContainer, session }, params, reque
     return { status: 'select-member' };
   }
 
+  if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
+    return redirect(getPathById('protected/renew/$id/review-child-information', params));
+  }
+
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }
 

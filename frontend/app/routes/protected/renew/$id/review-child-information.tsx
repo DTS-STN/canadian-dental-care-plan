@@ -71,7 +71,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     viewPayloadEnabled &&
     appContainer
       .get(TYPES.domain.mappers.BenefitRenewalDtoMapper)
-      .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub));
+      .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub, isPrimaryApplicantStateComplete(state,demographicSurveyEnabled)));
 
   const children = validatedChildren.map((child) => {
     const immutableChild = state.clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information?.socialInsuranceNumber);
@@ -141,6 +141,10 @@ export async function action({ context: { appContainer, session }, params, reque
     if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
       return redirect(getPathById('protected/renew/$id/member-selection', params));
     }
+    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  }
+
+  if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
