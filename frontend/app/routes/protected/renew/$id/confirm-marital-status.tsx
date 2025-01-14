@@ -76,7 +76,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     defaultState: {
-      maritalStatus: state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus,
+      maritalStatus: state.maritalStatus ? state.maritalStatus : state.clientApplication.isInvitationToApplyClient ? undefined : state.clientApplication.applicantInformation.maritalStatus,
       partnerInformation,
     },
     maritalStatuses,
