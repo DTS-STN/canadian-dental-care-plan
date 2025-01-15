@@ -8,16 +8,12 @@ import { faCheck, faChevronLeft, faChevronRight, faTriangleExclamation } from '@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
-import validator from 'validator';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewChildState } from '~/.server/routes/helpers/renew-child-route-helpers';
-import type { HomeAddressState } from '~/.server/routes/helpers/renew-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/.server/utils/postal-zip-code.utils';
-import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -37,7 +33,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { isAllValidInputCharacters } from '~/utils/string-utils';
 
 enum FormAction {
   Submit = 'submit',
@@ -111,70 +106,35 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadRenewChildState({ params, request, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
-  const homeAddressSchema = z
-    .object({
-      address: z.string().trim().max(30).refine(isAllValidInputCharacters, t('renew-child:update-address.error-message.characters-valid')),
-      country: z.string().trim(),
-      province: z.string().trim().optional(),
-      city: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-child:update-address.error-message.characters-valid')),
-      postalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('renew-child:update-address.error-message.characters-valid')).optional(),
-    })
-    .superRefine((val, ctx) => {
-      if (!val.address || validator.isEmpty(val.address)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.address-required'), path: ['address'] });
-      }
+  const homeAddressValidator = appContainer.get(TYPES.routes.validators.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
 
-      if (!val.country || validator.isEmpty(val.country)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.country-required'), path: ['country'] });
-      }
-
-      if (!val.city || validator.isEmpty(val.city)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.city-required'), path: ['city'] });
-      }
-
-      if (val.country === CANADA_COUNTRY_ID || val.country === USA_COUNTRY_ID) {
-        if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.province-required'), path: ['province'] });
-        }
-        if (!val.postalCode || validator.isEmpty(val.postalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.postal-code-required'), path: ['postalCode'] });
-        } else if (!isValidPostalCode(val.country, val.postalCode)) {
-          const message = val.country === CANADA_COUNTRY_ID ? t('renew-child:update-address.error-message.home-address.postal-code-valid') : t('renew-child:update-address.error-message.home-address.zip-code-valid');
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['postalCode'] });
-        } else if (val.country === CANADA_COUNTRY_ID && val.province && !isValidCanadianPostalCode(val.province, val.postalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.invalid-postal-code-for-province'), path: ['postalCode'] });
-        }
-      }
-
-      if (val.country && val.country !== CANADA_COUNTRY_ID && val.postalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.postalCode)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:update-address.error-message.home-address.invalid-postal-code-for-country'), path: ['country'] });
-      }
-    })
-    .transform((val) => ({
-      ...val,
-      postalCode: val.country && val.postalCode ? formatPostalCode(val.country, val.postalCode) : val.postalCode,
-    })) satisfies z.ZodType<HomeAddressState>;
-
-  const parsedDataResult = homeAddressSchema.safeParse({
+  const parsedDataResult = await homeAddressValidator.validateHomeAddress({
     address: String(formData.get('homeAddress')),
-    country: String(formData.get('homeCountry')),
-    province: formData.get('homeProvince') ? String(formData.get('homeProvince')) : undefined,
+    countryId: String(formData.get('homeCountry')),
+    provinceStateId: formData.get('homeProvince') ? String(formData.get('homeProvince')) : undefined,
     city: String(formData.get('homeCity')),
-    postalCode: formData.get('homePostalCode') ? String(formData.get('homePostalCode')) : undefined,
+    postalZipCode: formData.get('homePostalCode') ? String(formData.get('homePostalCode')) : undefined,
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: parsedDataResult.errors }, { status: 400 });
   }
-  const isNotCanada = parsedDataResult.data.country !== clientConfig.CANADA_COUNTRY_ID;
+
+  const homeAddress = {
+    address: parsedDataResult.data.address,
+    city: parsedDataResult.data.city,
+    country: parsedDataResult.data.countryId,
+    postalCode: parsedDataResult.data.postalZipCode,
+    province: parsedDataResult.data.provinceStateId,
+  };
+
+  const isNotCanada = parsedDataResult.data.countryId !== clientConfig.CANADA_COUNTRY_ID;
   const isUseInvalidAddressAction = formAction === 'use-invalid-address';
   const isUseSelectedAddressAction = formAction === 'use-selected-address';
-  const canProceedToReviewChild = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
-  if (canProceedToReviewChild) {
-    saveRenewState({ params, session, state: { homeAddress: parsedDataResult.data } });
+  const canProceedToDental = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
+  if (canProceedToDental) {
+    saveRenewState({ params, session, state: { homeAddress } });
 
     if (state.editMode) {
       return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
@@ -182,18 +142,18 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/child/review-child-information', params));
   }
 
-  invariant(parsedDataResult.data.postalCode, 'Postal zip code is required for Canadian addresses');
-  invariant(parsedDataResult.data.province, 'Province state is required for Canadian addresses');
+  invariant(parsedDataResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
+  invariant(parsedDataResult.data.provinceStateId, 'Province state is required for Canadian addresses');
 
   // Build the address object using validated data, transforming unique identifiers
   const formattedHomeAddress: CanadianAddress = {
     address: parsedDataResult.data.address,
     city: parsedDataResult.data.city,
-    countryId: parsedDataResult.data.country,
-    country: countryService.getLocalizedCountryById(parsedDataResult.data.country, locale).name,
-    postalZipCode: parsedDataResult.data.postalCode,
-    provinceStateId: parsedDataResult.data.province,
-    provinceState: parsedDataResult.data.province && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(parsedDataResult.data.province, locale).abbr,
+    countryId: parsedDataResult.data.countryId,
+    country: countryService.getLocalizedCountryById(parsedDataResult.data.countryId, locale).name,
+    postalZipCode: parsedDataResult.data.postalZipCode,
+    provinceStateId: parsedDataResult.data.provinceStateId,
+    provinceState: parsedDataResult.data.provinceStateId && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(parsedDataResult.data.provinceStateId, locale).abbr,
   };
 
   const addressCorrectionResult = await addressValidationService.getAddressCorrectionResult({
@@ -227,7 +187,7 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     } as const satisfies AddressSuggestionResponse;
   }
-  saveRenewState({ params, session, state: { homeAddress: parsedDataResult.data } });
+  saveRenewState({ params, session, state: { homeAddress } });
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
@@ -253,10 +213,10 @@ export default function RenewChildUpdateAddress() {
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'home-address',
-    province: 'home-province',
-    country: 'home-country',
+    provinceStateId: 'home-province',
+    countryId: 'home-country',
     city: 'home-city',
-    postalCode: 'home-postal-code',
+    postalZipCode: 'home-postal-code',
   });
 
   useEffect(() => {
@@ -332,7 +292,7 @@ export default function RenewChildUpdateAddress() {
                     maxLength={100}
                     autoComplete="postal-code"
                     defaultValue={defaultState.homeAddress?.postalCode ?? ''}
-                    errorMessage={errors?.postalCode}
+                    errorMessage={errors?.postalZipCode}
                     required={isPostalCodeRequired}
                   />
                 </div>
@@ -343,7 +303,7 @@ export default function RenewChildUpdateAddress() {
                     className="w-full sm:w-1/2"
                     label={t('renew-child:update-address.address-field.province')}
                     defaultValue={defaultState.homeAddress?.province}
-                    errorMessage={errors?.province}
+                    errorMessage={errors?.provinceStateId}
                     options={[dummyOption, ...homeRegions]}
                     required
                   />
@@ -355,7 +315,7 @@ export default function RenewChildUpdateAddress() {
                   label={t('renew-child:update-address.address-field.country')}
                   autoComplete="country"
                   defaultValue={defaultState.homeAddress?.country ?? ''}
-                  errorMessage={errors?.country}
+                  errorMessage={errors?.countryId}
                   options={countries}
                   onChange={homeCountryChangeHandler}
                   required
