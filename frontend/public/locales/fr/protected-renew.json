@@ -595,5 +595,20 @@
     "no": "Non",
     "back-btn": "Return to my dashboard",
     "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
+  },
+  "confirm-address": {
+    "page-title": "Adresse",
+    "is-home-address-same-as-mailing-address": "L'adresse de votre domicile est-elle la même que votre adresse postale?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "error-message": {
+      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Sauvegarder"
   }
 }

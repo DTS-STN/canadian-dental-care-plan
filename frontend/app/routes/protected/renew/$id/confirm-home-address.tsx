@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { data, redirect, useLoaderData, useParams } from 'react-router';
 
-import { faCheck, faChevronLeft, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronLeft, faChevronRight, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
@@ -40,6 +40,8 @@ import { isAllValidInputCharacters } from '~/utils/string-utils';
 
 enum FormAction {
   Submit = 'submit',
+  Cancel = 'cancel',
+  Save = 'save',
   UseInvalidAddress = 'use-invalid-address',
   UseSelectedAddress = 'use-selected-address',
 }
@@ -98,6 +100,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     defaultState: state.homeAddress,
     countryList,
     regionList,
+    editMode: state.editMode,
   };
 }
 
@@ -252,7 +255,7 @@ function isAddressResponse(data: unknown): data is AddressResponse {
 
 export default function ProtectedRenewConfirmHomeAddress() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, countryList, regionList } = useLoaderData<typeof loader>();
+  const { defaultState, countryList, regionList, editMode } = useLoaderData<typeof loader>();
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
   const params = useParams();
   const fetcher = useEnhancedFetcher<typeof action>();
@@ -369,26 +372,53 @@ export default function ProtectedRenewConfirmHomeAddress() {
             required
           />
         </div>
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
-              <DialogTrigger asChild>
-                <LoadingButton variant="primary" id="continue-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Home address click">
-                  {t('protected-renew:update-address.save-btn')}
-                </LoadingButton>
-              </DialogTrigger>
-              {!fetcher.isSubmitting && addressDialogContent && (
-                <>
-                  {addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
-                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
-                </>
-              )}
-            </Dialog>
+        {editMode ? (
+          <div className="flex flex-wrap items-center gap-3">
+            <LoadingButton id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Confirm home address click">
+              {t('protected-renew:update-address.save-btn')}
+            </LoadingButton>
+            <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Confirm home address click">
+              {t('protected-renew:update-address.cancel-btn')}
+            </ButtonLink>
           </div>
-          <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Home address click">
-            {t('protected-renew:update-address.cancel-btn')}
-          </ButtonLink>
-        </div>
+        ) : (
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+                <DialogTrigger asChild>
+                  <LoadingButton
+                    variant="primary"
+                    id="continue-button"
+                    type="submit"
+                    name="_action"
+                    value={FormAction.Submit}
+                    loading={isSubmitting}
+                    endIcon={faChevronRight}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Home address click"
+                  >
+                    {t('protected-renew:update-address.continue')}
+                  </LoadingButton>
+                </DialogTrigger>
+                {!fetcher.isSubmitting && addressDialogContent && (
+                  <>
+                    {addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
+                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+                  </>
+                )}
+              </Dialog>
+              <ButtonLink
+                id="back-button"
+                routeId="protected/renew/$id/confirm-address"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Home address click"
+              >
+                {t('protected-renew:update-address.back')}
+              </ButtonLink>
+            </div>
+          </div>
+        )}
       </fetcher.Form>
     </div>
   );
