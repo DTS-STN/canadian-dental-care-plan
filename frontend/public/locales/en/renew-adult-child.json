@@ -337,7 +337,7 @@
     },
     "dental-insurance": {
       "title": "{{childName}}: access to private dental insurance",
-      "legend": "Does {{childName}} have access to dental insurance or coverage:",
+      "legend": "Does {{childName}} have access to private dental insurance or coverage?",
       "list": {
         "employment": "Through a parent or legal guardian's employment benefits including health and wellness accounts",
         "pension": "Through a parent or legal guardian's pension benefits",
