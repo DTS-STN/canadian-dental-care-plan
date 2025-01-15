@@ -147,21 +147,7 @@
     "back": "Retour",
     "continue": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "sauvegarder",
-    "error-message": {
-      "home-address": {
-        "address-required": "Entrez l'adresse du domicile, normalement le numéro et le nom de la rue",
-        "city-required": "Entrez une ville ou une municipalité pour votre adresse du domicile",
-        "country-required": "Sélectionnez un pays pour votre adresse du domicile",
-        "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse du domicile",
-        "postal-code-valid": "Entrez un code postal pour l'adresse du domicile dans le bon format, par exemple A1A 1A1",
-        "province-required": "Sélectionnez une province, un territoire, un État ou une région pour votre adresse du domicile",
-        "zip-code-valid": "Entrez un code postal américain pour l'adresse du domicile dans le bon format, par exemple 12345 ou 12345-6789",
-        "invalid-postal-code-for-country": "Un code postal canadien a été saisi pour l'adresse du domicile, mais le Canada n'a pas été sélectionné comme pays. Veuillez sélectionner le Canada et la province appropriée, ou modifier le code postal",
-        "invalid-postal-code-for-province": "Le code postal ne correspond pas à la province ou au territoire sélectionné"
-      },
-      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et crochet ()"
-    }
+    "save-btn": "sauvegarder"
   },
   "dental-insurance": {
     "title": "Accès à une assurance dentaire privée",

@@ -30,26 +30,26 @@ export class DefaultMailingAddressValidator implements MailingAddressValidator {
     const t = await getFixedT(this.locale, ['common']);
     return {
       address: {
-        invalidCharacters: t('common:error-message.characters-valid'),
-        required: t('common:error-message.address-required'),
+        invalidCharacters: t('common:error-message.mailing.characters-valid'),
+        required: t('common:error-message.mailing.address-required'),
       },
       city: {
-        required: t('common:error-message.city-required'),
-        invalidCharacters: t('common:error-message.characters-valid'),
+        required: t('common:error-message.mailing.city-required'),
+        invalidCharacters: t('common:error-message.mailing.characters-valid'),
       },
       country: {
-        required: t('common:error-message.country-required'),
+        required: t('common:error-message.mailing.country-required'),
       },
       provinceState: {
-        required: t('common:error-message.province-state-required'),
+        required: t('common:error-message.mailing.province-state-required'),
       },
       postalZipCode: {
-        invalidCharacters: t('common:error-message.characters-valid'),
-        invalidPostalCode: t('common:error-message.postal-zip-code-valid'),
-        invalidPostalCodeForProvince: t('common:error-message.invalid-postal-zip-code-for-province'),
-        invalidPostalZipCodeForCountry: t('common:error-message.invalid-postal-zip-code-for-country'),
-        invalidZipCode: t('common:error-message.zip-code-valid'),
-        required: t('common:error-message.postal-zip-code-required'),
+        invalidCharacters: t('common:error-message.mailing.characters-valid'),
+        invalidPostalCode: t('common:error-message.mailing.postal-zip-code-valid'),
+        invalidPostalCodeForProvince: t('common:error-message.mailing.invalid-postal-zip-code-for-province'),
+        invalidPostalZipCodeForCountry: t('common:error-message.mailing.invalid-postal-zip-code-for-country'),
+        invalidZipCode: t('common:error-message.mailing.zip-code-valid'),
+        required: t('common:error-message.mailing.postal-zip-code-required'),
       },
     };
   }

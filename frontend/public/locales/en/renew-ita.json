@@ -122,21 +122,7 @@
     "back": "Back",
     "continue": "Continue",
     "cancel-btn": "Cancel",
-    "save-btn": "Save",
-    "error-message": {
-      "home-address": {
-        "address-required": "Enter home address, typically number and street",
-        "city-required": "Enter a city or town for your home address",
-        "country-required": "Select a country for your home address",
-        "postal-code-required": "Enter postal code or zip code for your home address",
-        "postal-code-valid": "Enter home address postal code in the correct format, such as A1A 1A1",
-        "province-required": "Select a province, territory, state or region for your home address",
-        "zip-code-valid": "Enter home address zip code in the correct format, such as 12345 or 12345-6789",
-        "invalid-postal-code-for-country": "A Canadian postal code in the home address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
-        "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
-      },
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
-    }
+    "save-btn": "Save"
   },
   "dental-benefits": {
     "title": "Access to other federal, provincial or territorial dental benefits",
