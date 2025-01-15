@@ -92,7 +92,7 @@
     "single-legal-name": "If you have a single legal name",
     "name-instructions": "If you have only one legal name, enter it in both the first and last name fields.",
     "no-client-number": "I don't have a client number",
-    "renew-client-number": "To renew your membership, you must have a client number.",
+    "renew-client-number": "To renew your coverage, you must have a client number.",
     "apply-to-cdcp": "If you don't have one, you will need to apply for the Canadian Dental Care Plan.",
     "check-eligibility": "<eligibilityLink>Check if you are eligible to apply for the CDCP.</eligibilityLink>",
     "eligibility-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
