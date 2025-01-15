@@ -36,7 +36,7 @@
       "confirm-required": "La case à cocher doit être sélectionnée",
       "date-of-birth-year-required": "Entrez l'année de naissance, par exemple 1950",
       "yob-is-future": "L'année de naissance doit être dans le passé",
-      "sin-required": "Entrez un NAS de 9 chiffres",
+      "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
