@@ -339,7 +339,7 @@
     },
     "dental-insurance": {
       "title": "{{childName}}\u00a0: accès à une assurance dentaire privée",
-      "legend": "Est-ce que {{childName}} a accès à une assurance dentaire privée ou une couverture dentaire\u00a0:",
+      "legend": "Est-ce que {{childName}} a accès à une assurance dentaire privée ou une couverture dentaire?",
       "list": {
         "employment": "dans le cadre des avantages sociaux de l'employeur d'un parent ou d'un tuteur légal, y compris les comptes de santé et de bien-être",
         "pension": "par le biais de prestations de retraite d'un parent ou d'un tuteur légal",
