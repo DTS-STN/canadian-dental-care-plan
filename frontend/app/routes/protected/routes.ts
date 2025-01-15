@@ -157,6 +157,11 @@ export const routes = [
             file: 'routes/protected/renew/$id/review-and-submit.tsx',
             paths: { en: '/:lang/protected/renew/:id/review-and-submit', fr: '/:lang/protege/renouveller/:id/revue-et-soumettre' },
           },
+          {
+            id: 'protected/renew/$id/confirm-address',
+            file: 'routes/protected/renew/$id/confirm-address.tsx',
+            paths: { en: '/:lang/protected/renew/:id/confirm-address', fr: '/:lang/protege/renouveller/:id/confirmer-adresse' },
+          },
         ],
       },
     ],

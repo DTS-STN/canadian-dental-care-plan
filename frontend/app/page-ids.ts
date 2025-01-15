@@ -25,6 +25,7 @@ export const pageIds = {
       reviewChildInformation: 'CDCP-RENW-ADCH-0018',
       reviewSubmit: 'CDCP-PROT-RENW-0019',
       confirmation: 'CDCP-PROT-RENW-0020',
+      confirmAddress: 'CDCP-PROT-RENW-0021',
     },
     dataUnavailable: 'CDCP-PROT-0099',
     unableToProcessRequest: 'CDCP-PROT-0999',
