@@ -42,6 +42,7 @@ enum YesNoOption {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew', 'renew-child', 'gcweb'),
   pageIdentifier: pageIds.public.renew.child.childInformation,
+  pageTitleI18nKey: 'renew-child:children.information.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
