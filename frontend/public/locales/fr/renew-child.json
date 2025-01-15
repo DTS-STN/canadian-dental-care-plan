@@ -278,7 +278,7 @@
       "date-of-birth-year-required": "Entrez l'année de naissance, par exemple 1950",
       "yob-is-future": "L'année de naissance doit être dans le passé",
       "sin-required": "Entrez un NAS de 9 chiffres",
-      "sin-valid": "Doit être un NAS valide",
+      "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
   },
