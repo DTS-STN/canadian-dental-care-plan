@@ -79,6 +79,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, request, session });
+
+  if (!state.clientApplication.isInvitationToApplyClient && !state.editMode) {
+    throw new Response('Not Found', { status: 404 });
+  }
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -108,6 +113,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const countryService = appContainer.get(TYPES.domain.services.CountryService);
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
+  const state = loadProtectedRenewState({ params, request, session });
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
@@ -141,6 +147,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const canProceedToReview = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
   if (canProceedToReview) {
     saveProtectedRenewState({ params, request, session, state: { homeAddress } });
+    if (state.clientApplication.isInvitationToApplyClient) {
+      return redirect(getPathById('protected/renew/$id/confirm-email', params));
+    }
+
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 

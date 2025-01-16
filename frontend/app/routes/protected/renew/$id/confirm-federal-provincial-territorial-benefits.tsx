@@ -193,6 +193,7 @@ export async function action({ context: { appContainer, session }, params, reque
         ...parsedFederalBenefitsResult.data,
         ...parsedProvincialTerritorialBenefitsResult.data,
       },
+      previouslyReviewed: true,
     },
   });
 
