@@ -25,7 +25,7 @@
   "dependencies": {
     "@date-fns/utc": "^2.1.0",
     "@dts-stn/health-checks": "^2.0.0",
-    "@faker-js/faker": "^9.3.0",
+    "@faker-js/faker": "^9.4.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -57,7 +57,7 @@
     "ioredis": "^5.4.2",
     "isbot": "^5.1.21",
     "jose": "^5.9.6",
-    "libphonenumber-js": "^1.11.17",
+    "libphonenumber-js": "^1.11.18",
     "markdown-to-jsx": "^7.7.3",
     "minimatch": "^10.0.1",
     "moderndash": "^4.0.0",
