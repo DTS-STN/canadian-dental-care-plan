@@ -430,8 +430,10 @@
         "invalid-postal-code-for-country": "A Canadian postal code in the home address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
         "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
       },
-      "phone-number-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
-      "phone-number-alt-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
+      "phone-number-valid": "Invalid phone number",
+      "phone-number-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
+      "phone-number-alt-valid": "Invalid phone number",
+      "phone-number-alt-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
       "email-match": "The email addresses entered do not match",
       "confirm-email-required": "Confirm email address",
       "email-required": "Enter email address",
