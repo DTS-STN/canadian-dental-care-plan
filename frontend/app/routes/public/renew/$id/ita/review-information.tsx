@@ -403,7 +403,7 @@ export default function RenewItaReviewInformation() {
             variant="green"
             disabled={isSubmitting}
             loading={isSubmitting && submitAction === FormAction.Submit}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Submit application - Review your information click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Submit renewal application - Review your information click"
           >
             {t('renew-ita:review-information.submit-button')}
           </LoadingButton>
