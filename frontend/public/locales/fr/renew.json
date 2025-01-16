@@ -2,8 +2,8 @@
   "progress": {
     "label": "Progression de la demande"
   },
-  "required-label": "Remplir tous les champs.",
-  "optional-label": "Remplir tous les champs sauf s'ils sont indiqués facultatifs.",
+  "required-label": "Remplissez tous les champs.",
+  "optional-label": "Remplissez tous les champs sauf s'ils sont indiqués facultatifs.",
   "all-optional-label": "Toutes les champs sont faculatives.",
   "all-questions-optional-label": "Toutes les questions sont facultatives.",
   "terms-and-conditions": {
