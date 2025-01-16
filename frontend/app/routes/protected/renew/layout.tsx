@@ -27,7 +27,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
 }
 
 export default function Layout() {
-  const { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
 
   const navigate = useNavigate();
   const params = useParams();
@@ -47,7 +47,7 @@ export default function Layout() {
   const apiSession = useApiSession();
 
   async function handleOnSessionEnd() {
-    await apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-apply' });
+    await navigate('/auth/logout');
   }
 
   async function handleOnSessionExtend() {
