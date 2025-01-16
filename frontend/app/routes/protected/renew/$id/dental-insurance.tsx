@@ -67,6 +67,13 @@ export async function action({ context: { appContainer, session }, params, reque
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  if (formAction === FormAction.Back) {
+    if (state.clientApplication.isInvitationToApplyClient) {
+      return redirect(getPathById('protected/renew/$id/confirm-email', params));
+    }
+  }
+
   // state validation schema
   const dentalInsuranceSchema = z.object({
     dentalInsurance: z.boolean({ errorMap: () => ({ message: t('protected-renew:dental-insurance.error-message.dental-insurance-required') }) }),
@@ -152,76 +159,67 @@ export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion(
   );
 
   return (
-    <>
-      <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew:required-label')}</p>
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="my-6">
-            <InputRadios
-              id="dental-insurance"
-              name="dentalInsurance"
-              legend={t('dental-insurance.legend')}
-              options={[
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-yes" />,
-                  value: 'yes',
-                  defaultChecked: defaultState === true,
-                },
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-no" />,
-                  value: 'no',
-                  defaultChecked: defaultState === false,
-                },
-              ]}
-              helpMessagePrimary={helpMessage}
-              helpMessagePrimaryClassName="text-black"
-              errorMessage={errors?.dentalInsurance}
-              required
-            />
+    <div className="max-w-prose">
+      <p className="mb-4 italic">{t('renew:required-label')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <div className="my-6">
+          <InputRadios
+            id="dental-insurance"
+            name="dentalInsurance"
+            legend={t('dental-insurance.legend')}
+            options={[
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-yes" />,
+                value: 'yes',
+                defaultChecked: defaultState === true,
+              },
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-no" />,
+                value: 'no',
+                defaultChecked: defaultState === false,
+              },
+            ]}
+            helpMessagePrimary={helpMessage}
+            helpMessagePrimaryClassName="text-black"
+            errorMessage={errors?.dentalInsurance}
+            required
+          />
+        </div>
+        {editMode ? (
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Access to private dental insurance click">
+              {t('dental-insurance.button.save-btn')}
+            </Button>
+            <ButtonLink
+              id="back-button"
+              routeId="protected/renew/$id/review-adult-information"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Access to private dental insurance click"
+            >
+              {t('dental-insurance.button.cancel-btn')}
+            </ButtonLink>
           </div>
-          {editMode ? (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Access to private dental insurance click">
-                {t('dental-insurance.button.save-btn')}
-              </Button>
-              <ButtonLink
-                id="back-button"
-                routeId="protected/renew/$id/review-adult-information"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Access to private dental insurance click"
-              >
-                {t('dental-insurance.button.cancel-btn')}
-              </ButtonLink>
-            </div>
-          ) : (
-            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton
-                name="_action"
-                value={FormAction.Continue}
-                variant="primary"
-                loading={isSubmitting}
-                endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Access to private dental insurance click"
-              >
-                {t('dental-insurance.button.continue')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="protected/renew/$id/member-selection"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Access to private dental insurance click"
-              >
-                {t('dental-insurance.button.back')}
-              </ButtonLink>
-            </div>
-          )}
-        </fetcher.Form>
-      </div>
-    </>
+        ) : (
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton
+              name="_action"
+              value={FormAction.Continue}
+              variant="primary"
+              loading={isSubmitting}
+              endIcon={faChevronRight}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Access to private dental insurance click"
+            >
+              {t('dental-insurance.button.continue')}
+            </LoadingButton>
+            <LoadingButton name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Access to private dental insurance click">
+              {t('dental-insurance.button.back')}
+            </LoadingButton>
+          </div>
+        )}
+      </fetcher.Form>
+    </div>
   );
 }

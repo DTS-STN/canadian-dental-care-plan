@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -13,16 +14,23 @@ import type { ProtectedDentalFederalBenefitsState, ProtectedDentalProvincialTerr
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
+import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+enum FormAction {
+  Submit = 'submit',
+  Cancel = 'cancel',
+  Save = 'save',
+}
 
 enum HasFederalBenefitsOption {
   No = 'no',
@@ -48,9 +56,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
-
   const state = loadProtectedRenewState({ params, request, session });
+
+  if (!state.clientApplication.isInvitationToApplyClient && !state.editMode) {
+    throw new Response('Not Found', { status: 404 });
+  }
+
+  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -79,7 +91,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     }
   }, {}) as ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
 
-  const dentalBenefits = state.dentalBenefits ? state.dentalBenefits : clientDentalBenefits;
+  const dentalBenefits = state.clientApplication.isInvitationToApplyClient ? state.dentalBenefits : clientDentalBenefits;
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
@@ -91,6 +103,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     provincialTerritorialSocialPrograms,
     provinceTerritoryStates,
+    editMode: state.editMode,
   };
 }
 
@@ -101,6 +114,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
@@ -185,19 +199,23 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
 
-  return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  if (state.editMode) {
+    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  }
+
+  return redirect(getPathById('protected/renew/$id/member-selection', params));
 }
 
 export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefits() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState } = useLoaderData<typeof loader>();
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultState.hasFederalBenefits);
-  const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(defaultState.hasProvincialTerritorialBenefits);
-  const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(defaultState.provincialTerritorialSocialProgram);
-  const [provinceValue, setProvinceValue] = useState(defaultState.province);
+  const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultState?.hasFederalBenefits);
+  const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(defaultState?.hasProvincialTerritorialBenefits);
+  const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(defaultState?.provincialTerritorialSocialProgram);
+  const [provinceValue, setProvinceValue] = useState(defaultState?.province);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -258,7 +276,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
                       legendClassName="font-normal"
                       options={federalSocialPrograms.map((option) => ({
                         children: option.name,
-                        defaultChecked: defaultState.federalSocialProgram === option.id,
+                        defaultChecked: defaultState?.federalSocialProgram === option.id,
                         value: option.id,
                       }))}
                       errorMessage={errors?.federalSocialProgram}
@@ -333,7 +351,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:update-dental-benefits.provincial-territorial-benefits.option-no" />,
                   value: HasProvincialTerritorialBenefitsOption.No,
-                  defaultChecked: defaultState.hasProvincialTerritorialBenefits === false,
+                  defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
                 },
               ]}
@@ -341,20 +359,51 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
               required
             />
           </fieldset>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Access to other federal, provincial or territorial dental benefits click">
-              {t('protected-renew:update-dental-benefits.button.save-btn')}
-            </Button>
-            <ButtonLink
-              id="back-button"
-              routeId="protected/renew/$id/review-adult-information"
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Access to other federal, provincial or territorial dental benefits click"
-            >
-              {t('protected-renew:update-dental-benefits.button.cancel-btn')}
-            </ButtonLink>
-          </div>
+          {editMode ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <LoadingButton
+                id="save-button"
+                name="_action"
+                value={FormAction.Save}
+                variant="primary"
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Access to other federal, provincial or territorial dental benefits click"
+              >
+                {t('protected-renew:update-dental-benefits.button.save-btn')}
+              </LoadingButton>
+              <ButtonLink
+                id="cancel-button"
+                routeId="protected/renew/$id/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Access to other federal, provincial or territorial dental benefits click"
+              >
+                {t('protected-renew:update-dental-benefits.button.cancel-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton
+                variant="primary"
+                id="continue-button"
+                disabled={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Access to other federal, provincial or territorial dental benefits click"
+              >
+                {t('protected-renew:update-dental-benefits.button.continue')}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                routeId="protected/renew/$id/dental-insurance"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Access to other federal, provincial or territorial dental benefits click"
+              >
+                {t('protected-renew:update-dental-benefits.button.back')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
       </div>
     </>
