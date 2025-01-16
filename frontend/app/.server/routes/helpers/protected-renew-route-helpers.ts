@@ -264,7 +264,7 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
     contactInformation: {
       phoneNumber: clientApplication.contactInformation.phoneNumber,
       phoneNumberAlt: clientApplication.contactInformation.phoneNumberAlt,
-      email: clientApplication.contactInformation.email,
+      email: clientApplication.isInvitationToApplyClient ? undefined : clientApplication.contactInformation.email,
     },
     communicationPreferences: clientApplication.communicationPreferences,
     children: clientApplication.children
