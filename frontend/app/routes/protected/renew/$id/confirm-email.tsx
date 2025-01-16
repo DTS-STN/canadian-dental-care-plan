@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { data, redirect, useFetcher, useLoaderData, useParams } from 'react-router';
+import { data, redirect, useFetcher, useLoaderData } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -12,7 +12,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { Button, ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
@@ -29,6 +29,7 @@ enum FormAction {
   Continue = 'continue',
   Cancel = 'cancel',
   Save = 'save',
+  Back = 'back',
 }
 
 enum ShouldReceiveEmailCommunicationOption {
@@ -78,6 +79,14 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  if (formAction === FormAction.Back) {
+    if (!state.isHomeAddressSameAsMailingAddress) {
+      return redirect(getPathById('protected/renew/$id/confirm-home-address', params));
+    }
+    return redirect(getPathById('protected/renew/$id/confirm-address', params));
+  }
 
   const emailSchema = z
     .object({
@@ -131,7 +140,6 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedRenewProtectedConfirmEmail() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode } = useLoaderData<typeof loader>();
-  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -232,9 +240,9 @@ export default function ProtectedRenewProtectedConfirmEmail() {
             >
               {t('protected-renew:confirm-email.continue-btn')}
             </LoadingButton>
-            <ButtonLink id="back-button" routeId="protected/renew/$id/confirm-address" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Email click">
+            <LoadingButton id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Email click">
               {t('protected-renew:confirm-email.back-btn')}
-            </ButtonLink>
+            </LoadingButton>
           </div>
         )}
       </fetcher.Form>
