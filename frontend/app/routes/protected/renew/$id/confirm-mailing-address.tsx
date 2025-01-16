@@ -354,15 +354,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
               <DialogTrigger asChild>
-                <LoadingButton
-                  variant="primary"
-                  id="continue-button"
-                  type="submit"
-                  name="_action"
-                  value={FormAction.Submit}
-                  loading={isSubmitting}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Mailing address click"
-                >
+                <LoadingButton variant="primary" id="save-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Mailing address click">
                   {t('protected-renew:update-address.save-btn')}
                 </LoadingButton>
               </DialogTrigger>
@@ -376,7 +368,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
               )}
             </Dialog>
           </div>
-          <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Mailing address click">
+          <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Mailing address click">
             {t('protected-renew:update-address.cancel-btn')}
           </ButtonLink>
         </div>
