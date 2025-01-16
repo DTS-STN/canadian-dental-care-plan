@@ -350,11 +350,20 @@
   },
   "confirm-email": {
     "page-title": "Email",
+    "add-email": "Email communication will help the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan coverage. Otherwise, we'll contact you by mail.",
+    "add-or-update": {
+      "legend": "Would you like to receive email communication from Sun Life and the Government of Canada about your Canadian Dental Care Plan coverage?"
+    },
     "email": "Email address",
     "confirm-email": "Confirm email address",
+    "back-btn": "Back",
+    "continue-btn": "Continue",
     "cancel-btn": "Cancel",
     "save-btn": "Save",
+    "option-yes": "Yes",
+    "option-no": "No",
     "error-message": {
+      "add-or-update-required": "Select whether you would like to add or update your email",
       "email-match": "The email addresses entered do not match",
       "confirm-email-required": "Confirm email address",
       "email-required": "Enter email address",
