@@ -15,8 +15,8 @@
   "progress": {
     "label": "Progression de la demande"
   },
-  "required-label": "Remplissez tous les champs.",
-  "optional-label": "Remplissez tous les champs sauf s'ils sont indiqués facultatifs.",
+  "required-label": "Remplir tous les champs.",
+  "optional-label": "Remplir tous les champs sauf s'ils sont indiqués facultatifs.",
   "terms-and-conditions": {
     "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires",
     "page-heading": "Conditions générales d'utilisation et énoncé de confidentialité",
