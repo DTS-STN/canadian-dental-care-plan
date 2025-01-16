@@ -89,7 +89,7 @@
     "date-of-birth": "Date de naissance",
     "last-name": "Nom de famille",
     "first-name": "Prénom",
-    "single-legal-name": "Si vous utilisez un seul nom légal",
+    "single-legal-name": "Si vous avez un seul nom légal",
     "name-instructions": "Si vous utilisez un seul nom légal, indiquez-le dans les champs «\u00a0prénom\u00a0» et «\u00a0nom de famille\u00a0».",
     "no-client-number": "Je n'ai pas de numéro de client",
     "renew-client-number": "Pour renouveler votre adhésion, vous devez avoir un numéro de client.",
