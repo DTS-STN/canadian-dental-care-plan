@@ -1,5 +1,5 @@
 import { getLogger } from '~/.server/utils/logging.utils';
-import { getCdcpWebsiteApplyUrl, getCdcpWebsiteStatusUrl, getCdcpWebsiteUrl } from '~/.server/utils/url.utils';
+import { getCdcpWebsiteApplyUrl, getCdcpWebsiteRenewUrl, getCdcpWebsiteStatusUrl, getCdcpWebsiteUrl } from '~/.server/utils/url.utils';
 import type { ApiSessionRedirectTo } from '~/routes/api/session';
 
 /**
@@ -24,6 +24,10 @@ export function getApiSessionRedirectToUrl(redirectTo: ApiSessionRedirectTo, loc
 
     case 'cdcp-website-apply': {
       return getCdcpWebsiteApplyUrl(locale);
+    }
+
+    case 'cdcp-website-renew': {
+      return getCdcpWebsiteRenewUrl(locale);
     }
 
     case 'cdcp-website-status': {

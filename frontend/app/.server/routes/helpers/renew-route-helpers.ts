@@ -1,19 +1,21 @@
 import { redirectDocument } from 'react-router';
 import type { Params } from 'react-router';
 
-import { merge } from 'moderndash';
+import { UTCDate } from '@date-fns/utc';
+import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getLogger } from '~/.server/utils/logging.utils';
-import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
+import { getCdcpWebsiteRenewUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 
 export interface RenewState {
   readonly id: string;
   readonly editMode: boolean;
+  lastUpdatedOn: string;
   readonly applicationYear: {
     intakeYearId: string;
     renewalYearId: string;
@@ -159,23 +161,35 @@ interface LoadStateArgs {
 export function loadRenewState({ params, session }: LoadStateArgs) {
   const log = getLogger('renew-route-helpers.server/loadRenewState');
   const locale = getLocaleFromParams(params);
-  const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
+  const cdcpWebsiteRenewUrl = getCdcpWebsiteRenewUrl(locale);
 
   const parsedId = idSchema.safeParse(params.id);
 
   if (!parsedId.success) {
-    log.warn('Invalid "id" query string format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, params.id, session.id);
-    throw redirectDocument(cdcpWebsiteApplyUrl);
+    log.warn('Invalid "id" query string format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteRenewUrl, params.id, session.id);
+    throw redirectDocument(cdcpWebsiteRenewUrl);
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
-    log.warn('Renew session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
-    throw redirectDocument(cdcpWebsiteApplyUrl);
+    log.warn('Renew session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteRenewUrl, sessionName, session.id);
+    throw redirectDocument(cdcpWebsiteRenewUrl);
   }
 
   const state: RenewState = session.get(sessionName);
+
+  // Checks if the elapsed time since the last update exceeds 20 minutes,
+  // and performs necessary actions if it does.
+  const lastUpdatedOn = new UTCDate(state.lastUpdatedOn);
+  const now = new UTCDate();
+
+  if (differenceInMinutes(now, lastUpdatedOn) >= 20) {
+    session.unset(sessionName);
+    log.warn('Renew session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteRenewUrl, sessionName, session.id);
+    throw redirectDocument(cdcpWebsiteRenewUrl);
+  }
+
   return state;
 }
 
@@ -195,9 +209,11 @@ export function saveRenewState({ params, session, state }: SaveStateArgs) {
   const log = getLogger('renew-route-helpers.server/saveRenewState');
   const currentState = loadRenewState({ params, session });
 
-  // https://moderndash.io/docs/merge
-  // Merges two objects without overwriting any unmentioned properties
-  const newState = merge({}, currentState, state) satisfies RenewState;
+  const newState = {
+    ...currentState,
+    ...state,
+    lastUpdatedOn: new UTCDate().toISOString(),
+  } satisfies RenewState;
 
   const sessionName = getSessionName(currentState.id);
   session.set(sessionName, newState);
@@ -240,6 +256,7 @@ export function startRenewState({ applicationYear, id, session }: StartArgs) {
   const initialState: RenewState = {
     id: parsedId,
     editMode: false,
+    lastUpdatedOn: new UTCDate().toISOString(),
     applicationYear,
     children: [],
   };
