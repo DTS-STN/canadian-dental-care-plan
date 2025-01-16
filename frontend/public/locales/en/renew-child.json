@@ -235,7 +235,7 @@
       "email-required": "Enter an email address in the correct format, such as name@example.com",
       "email-valid": "Enter an email address in the correct format, such as name@example.com",
       "confirm-email-valid": "Enter confirmation of email address in the correct format, such as name@example.com",
-      "receive-comms-required": "Select whether you would like to receive email communication"
+      "receive-comms-required": "Select if you would like to receive email communication"
     }
   },
   "confirm-marital-status": {
