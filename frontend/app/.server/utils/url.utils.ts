@@ -13,6 +13,18 @@ export function getCdcpWebsiteApplyUrl(locale: AppLocale) {
 }
 
 /**
+ * Returns the URL for renewing on the Canadian Dental Care Plan (CDCP) website
+ * based on the provided locale from the public environment variables.
+ *
+ * @param locale - The application locale ('en' or 'fr').
+ * @returns The URL for renewing on the CDCP website.
+ */
+export function getCdcpWebsiteRenewUrl(locale: AppLocale) {
+  const { CDCP_WEBSITE_RENEW_URL_EN, CDCP_WEBSITE_RENEW_URL_FR } = getEnv();
+  return locale === 'fr' ? CDCP_WEBSITE_RENEW_URL_FR : CDCP_WEBSITE_RENEW_URL_EN;
+}
+
+/**
  * Returns the URL for checking the status of an application on the CDCP website
  * based on the provided locale from the public environment variables.
  *

@@ -14,7 +14,7 @@ import { APP_LOCALES } from '~/utils/locale-utils';
 const API_SESSION_ACTIONS = ['end', 'extend'] as const;
 export type ApiSessionAction = (typeof API_SESSION_ACTIONS)[number];
 
-const API_SESSION_REDIRECT_TO_OPTIONS = ['cdcp-website', 'cdcp-website-apply', 'cdcp-website-status'] as const;
+const API_SESSION_REDIRECT_TO_OPTIONS = ['cdcp-website', 'cdcp-website-apply', 'cdcp-website-renew', 'cdcp-website-status'] as const;
 export type ApiSessionRedirectTo = (typeof API_SESSION_REDIRECT_TO_OPTIONS)[number];
 
 export async function action({ context: { appContainer, session }, request }: ActionFunctionArgs) {

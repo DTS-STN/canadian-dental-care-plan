@@ -8,6 +8,7 @@ import { getLocale } from '~/.server/utils/locale.utils';
 import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/renew-route-helpers';
+import { useApiRenewState } from '~/utils/api-renew-state-utils';
 import { useApiSession } from '~/utils/api-session-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -42,13 +43,22 @@ export default function Route() {
     }
   }, [navigate, path]);
 
+  const apiRenewState = useApiRenewState();
   const apiSession = useApiSession();
 
   async function handleOnSessionEnd() {
-    await apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-status' });
+    await apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-renew' });
   }
 
   async function handleOnSessionExtend() {
+    // extends the renew state if 'id' param exists
+    const id = params.id;
+    if (typeof id === 'string') {
+      await apiRenewState.submit({ action: 'extend', id });
+      return;
+    }
+
+    // extends the user's session
     await apiSession.submit({ action: 'extend' });
   }
 
