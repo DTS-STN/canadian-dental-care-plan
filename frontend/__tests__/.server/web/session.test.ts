@@ -140,7 +140,6 @@ describe('Session', () => {
         const session = new ExpressSession(mockLogFactory, mockRequestSession);
         session.destroy();
         expect(mockRequestSession.destroy).toHaveBeenCalledOnce();
-        expect(mockRequestSession.save).toHaveBeenCalledOnce();
       });
     });
 

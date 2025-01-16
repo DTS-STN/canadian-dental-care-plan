@@ -168,7 +168,6 @@ export class ExpressSession implements Session {
         this.log.trace('Session destroyed successfully: %s', this.id);
       }
     });
-    this.session.save();
   }
 
   protected sanitizeKey(key: string): string {
