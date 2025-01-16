@@ -60,7 +60,7 @@
       "add-or-update-required": "Select if you would like to receive email communication",
       "email-match": "The email addresses entered do not match",
       "confirm-email-required": "Confirm email address",
-      "email-required": "Enter email address",
+      "email-required": "Enter an email address in the correct format, such as name@example.com",
       "email-valid": "Enter an email address in the correct format, such as name@example.com",
       "confirm-email-valid": "Enter confirmation of email address in the correct format, such as name@example.com"
     }
