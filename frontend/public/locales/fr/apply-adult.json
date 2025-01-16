@@ -348,8 +348,10 @@
         "invalid-postal-code-for-country": "Un code postal canadien a été entré dans l'adresse du domicile mais le Canada n'a pas été choisi comme pays. Veuillez choisir Canada, et la bonne province, ou changer le code postal",
         "invalid-postal-code-for-province": "Le code postal ne correspond pas à la province ou au territoire que vous avez sélectionné"
       },
-      "phone-number-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
-      "phone-number-alt-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-valid": "Numéro de téléphone invalide",
+      "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-alt-valid": "Numéro de téléphone invalide",
+      "phone-number-alt-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
       "email-match": "Les adresses courriel entrées ne concordent pas",
       "confirm-email-required": "Confirmez l'adresse courriel",
       "email-required": "Entrez l'adresse courriel",

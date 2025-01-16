@@ -58,7 +58,9 @@
     "error-message": {
       "add-or-update-required": "Select whether you would like to add or update your phone number",
       "phone-number-valid": "Invalid phone number",
+      "phone-number-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
       "phone-number-alt-valid": "Invalid phone number",
+      "phone-number-alt-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
       "phone-required": "Enter a phone number"
     }
   },

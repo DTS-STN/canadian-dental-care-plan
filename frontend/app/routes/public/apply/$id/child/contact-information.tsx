@@ -83,13 +83,15 @@ export async function action({ context: { appContainer, session }, params, reque
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply-child:contact-information.error-message.phone-number-valid'))
+        .refine((val) => !val || (val.replace(/[^\d]/g, '').length <= 11 ? isValidPhoneNumber(val, 'CA') : true), t('apply-child:contact-information.error-message.phone-number-valid'))
+        .refine((val) => !val || (val.replace(/[^\d]/g, '').length > 11 ? isValidPhoneNumber(val) : true), t('apply-child:contact-information.error-message.phone-number-valid-international'))
         .optional(),
       phoneNumberAlt: z
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply-child:contact-information.error-message.phone-number-alt-valid'))
+        .refine((val) => !val || (val.replace(/[^\d]/g, '').length <= 11 ? isValidPhoneNumber(val, 'CA') : true), t('apply-child:contact-information.error-message.phone-number-alt-valid'))
+        .refine((val) => !val || (val.replace(/[^\d]/g, '').length > 11 ? isValidPhoneNumber(val) : true), t('apply-child:contact-information.error-message.phone-number-alt-valid-international'))
         .optional(),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
