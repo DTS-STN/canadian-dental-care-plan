@@ -404,32 +404,7 @@
     "back": "Back",
     "continue": "Continue",
     "cancel-btn": "Cancel",
-    "save-btn": "Save",
-    "error-message": {
-      "mailing-address": {
-        "address-required": "Address must be provided",
-        "city-required": "City must be provided",
-        "country-required": "Country must be selected",
-        "postal-code-required": "Postal code or Zip code must be provided",
-        "postal-code-valid": "Invalid postal code (A1A 1A1)",
-        "province-required": "Province must be selected",
-        "zip-code-valid": "Invalid zip code (12345)",
-        "invalid-postal-code-for-country": "A Canadian postal code in the mailing address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
-        "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
-      },
-      "home-address": {
-        "address-required": "Address must be provided",
-        "city-required": "City must be provided",
-        "country-required": "Country must be selected",
-        "postal-code-required": "Postal code or Zip code must be provided",
-        "postal-code-valid": "Invalid postal code (A1A 1A1)",
-        "province-required": "Province must be selected",
-        "zip-code-valid": "Invalid zip code (12345)",
-        "invalid-postal-code-for-country": "A Canadian postal code in the home address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
-        "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
-      },
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
-    }
+    "save-btn": "Save"
   },
   "communication-preference": {
     "page-title": "Communication",

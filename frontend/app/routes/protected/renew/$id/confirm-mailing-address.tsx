@@ -8,16 +8,12 @@ import { faCheck, faChevronLeft, faTriangleExclamation } from '@fortawesome/free
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
-import validator from 'validator';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import type { MailingAddressState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/.server/utils/postal-zip-code.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
-import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -37,7 +33,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { isAllValidInputCharacters } from '~/utils/string-utils';
 
 enum FormAction {
   Submit = 'submit',
@@ -107,7 +102,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const t = await getFixedT(request, handle.i18nNamespaces);
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   const locale = getLocale(request);
 
@@ -115,68 +109,37 @@ export async function action({ context: { appContainer, session }, params, reque
   const countryService = appContainer.get(TYPES.domain.services.CountryService);
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
+  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const mailingAddressSchema = z
-    .object({
-      address: z.string().trim().min(1, t('protected-renew:update-address.error-message.mailing-address.address-required')).max(30).refine(isAllValidInputCharacters, t('protected-renew:update-address.error-message.characters-valid')),
-      country: z.string().trim().min(1, t('protected-renew:update-address.error-message.mailing-address.country-required')),
-      province: z.string().trim().min(1, t('protected-renew:update-address.error-message.mailing-address.province-required')).optional(),
-      city: z.string().trim().min(1, t('protected-renew:update-address.error-message.mailing-address.city-required')).max(100).refine(isAllValidInputCharacters, t('protected-renew:update-address.error-message.characters-valid')),
-      postalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('protected-renew:update-address.error-message.characters-valid')).optional(),
-      copyMailingAddress: z.boolean().optional(),
-    })
-    .superRefine((val, ctx) => {
-      if (val.country === CANADA_COUNTRY_ID || val.country === USA_COUNTRY_ID) {
-        if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:update-address.error-message.mailing-address.province-required'), path: ['province'] });
-        }
-        if (!val.postalCode || validator.isEmpty(val.postalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:update-address.error-message.mailing-address.postal-code-required'), path: ['postalCode'] });
-        } else if (!isValidPostalCode(val.country, val.postalCode)) {
-          const message = val.country === CANADA_COUNTRY_ID ? t('protected-renew:update-address.error-message.mailing-address.postal-code-valid') : t('protected-renew:update-address.error-message.mailing-address.zip-code-valid');
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['postalCode'] });
-        } else if (val.country === CANADA_COUNTRY_ID && val.province && !isValidCanadianPostalCode(val.province, val.postalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:update-address.error-message.mailing-address.invalid-postal-code-for-province'), path: ['postalCode'] });
-        }
-      }
+  const isCopyMailingToHome = formData.get('copyMailingAddress') === 'copy';
 
-      if (val.country && val.country !== CANADA_COUNTRY_ID && val.postalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.postalCode)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:update-address.error-message.mailing-address.invalid-postal-code-for-country'), path: ['country'] });
-      }
-    })
-    .transform((val) => ({
-      ...val,
-      mailingPostalCode: val.country && val.postalCode ? formatPostalCode(val.country, val.postalCode) : val.postalCode,
-    })) satisfies z.ZodType<MailingAddressState>;
-
-  const parsedDataResult = mailingAddressSchema.safeParse({
+  const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
+  const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('mailingAddress')),
-    country: String(formData.get('mailingCountry')),
-    province: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
+    countryId: String(formData.get('mailingCountry')),
+    provinceStateId: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
     city: String(formData.get('mailingCity')),
-    postalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
-    copyMailingAddress: formData.get('copyMailingAddress') === 'copy',
+    postalZipCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
   });
 
-  if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+  if (!validatedResult.success) {
+    return data({ errors: validatedResult.errors }, { status: 400 });
   }
 
   const mailingAddress = {
-    address: parsedDataResult.data.address,
-    city: parsedDataResult.data.city,
-    country: parsedDataResult.data.country,
-    postalCode: parsedDataResult.data.postalCode,
-    province: parsedDataResult.data.province,
+    address: validatedResult.data.address,
+    city: validatedResult.data.city,
+    country: validatedResult.data.countryId,
+    postalCode: validatedResult.data.postalZipCode,
+    province: validatedResult.data.provinceStateId,
   };
 
-  const homeAddress = parsedDataResult.data.copyMailingAddress ? { ...mailingAddress } : undefined;
+  const homeAddress = isCopyMailingToHome ? { ...mailingAddress } : undefined;
 
-  const isNotCanada = parsedDataResult.data.country !== CANADA_COUNTRY_ID;
+  const isNotCanada = validatedResult.data.countryId !== CANADA_COUNTRY_ID;
   const isUseInvalidAddressAction = formAction === 'use-invalid-address';
   const isUseSelectedAddressAction = formAction === 'use-selected-address';
   const canProceedToReview = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
@@ -188,7 +151,7 @@ export async function action({ context: { appContainer, session }, params, reque
       session,
       state: {
         mailingAddress,
-        isHomeAddressSameAsMailingAddress: parsedDataResult.data.copyMailingAddress,
+        isHomeAddressSameAsMailingAddress: isCopyMailingToHome,
         ...(homeAddress && { homeAddress }), // Only include if homeAddress is defined
       },
     });
@@ -200,18 +163,18 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   // Validate Canadian adddress
-  invariant(parsedDataResult.data.postalCode, 'Postal zip code is required for Canadian addresses');
-  invariant(parsedDataResult.data.province, 'Province state is required for Canadian addresses');
+  invariant(validatedResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
+  invariant(validatedResult.data.provinceStateId, 'Province state is required for Canadian addresses');
 
   // Build the address object using validated data, transforming unique identifiers
   const formattedMailingAddress: CanadianAddress = {
-    address: parsedDataResult.data.address,
-    city: parsedDataResult.data.city,
-    countryId: parsedDataResult.data.country,
-    country: countryService.getLocalizedCountryById(parsedDataResult.data.country, locale).name,
-    postalZipCode: parsedDataResult.data.postalCode,
-    provinceStateId: parsedDataResult.data.province,
-    provinceState: parsedDataResult.data.province && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(parsedDataResult.data.province, locale).abbr,
+    address: validatedResult.data.address,
+    city: validatedResult.data.city,
+    countryId: validatedResult.data.countryId,
+    country: countryService.getLocalizedCountryById(validatedResult.data.countryId, locale).name,
+    postalZipCode: validatedResult.data.postalZipCode,
+    provinceStateId: validatedResult.data.provinceStateId,
+    provinceState: validatedResult.data.provinceStateId && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedResult.data.provinceStateId, locale).abbr,
   };
 
   const addressCorrectionResult = await addressValidationService.getAddressCorrectionResult({
@@ -252,7 +215,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       mailingAddress,
-      isHomeAddressSameAsMailingAddress: parsedDataResult.data.copyMailingAddress,
+      isHomeAddressSameAsMailingAddress: isCopyMailingToHome,
       ...(homeAddress && { homeAddress }), // Only include if homeAddress is defined
     },
   });
@@ -279,10 +242,10 @@ export default function ProtectedRenewConfirmMailingAddress() {
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'mailing-address',
-    province: 'mailing-province',
-    country: 'mailing-country',
+    provinceStateId: 'mailing-province',
+    countryId: 'mailing-country',
     city: 'mailing-city',
-    postalCode: 'mailing-postal-code',
+    postalZipCode: 'mailing-postal-code',
     copyMailingAddress: 'copy-mailing-address',
   });
   const checkHandler = () => {
@@ -355,7 +318,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
               maxLength={100}
               autoComplete="postal-code"
               defaultValue={defaultState.postalCode}
-              errorMessage={errors?.postalCode}
+              errorMessage={errors?.postalZipCode}
               required={mailingPostalCodeRequired}
             />
           </div>
@@ -366,7 +329,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
               className="w-full sm:w-1/2"
               label={t('protected-renew:update-address.address-field.province')}
               defaultValue={defaultState.province}
-              errorMessage={errors?.province}
+              errorMessage={errors?.provinceStateId}
               options={[dummyOption, ...mailingRegions]}
               required
             />
@@ -378,7 +341,7 @@ export default function ProtectedRenewConfirmMailingAddress() {
             label={t('protected-renew:update-address.address-field.country')}
             autoComplete="country"
             defaultValue={defaultState.country}
-            errorMessage={errors?.country}
+            errorMessage={errors?.countryId}
             options={countries}
             onChange={mailingCountryChangeHandler}
             required
