@@ -47,7 +47,7 @@
     "canada-terms-conditions": "https://www.canada.ca/fr/transparence/avis.html"
   },
   "form": {
-    "complete-fields": "Remplissez tous les champs.",
+    "complete-fields": "Remplir tous les champs.",
     "radio-legend": "Vérifiez-vous le statut pour vous-même ou pour votre enfant?",
     "radio-text": {
       "myself": "Je vérifie le statut pour <strong>moi-même</strong>",
@@ -66,7 +66,7 @@
     "page-title": "Vérificateur de l'état",
     "status-heading": "État",
     "form": {
-      "complete-fields": "Remplissez tous les champs",
+      "complete-fields": "Remplir tous les champs",
       "application-code-label": "Code de demande ou numéro de client",
       "application-code-description": "Entrez le numéro que vous avez reçu après avoir fait votre demande en ligne ou le numéro figurant dans le coin supérieur droit de la lettre que vous avez peut-être reçue de Service Canada.",
       "sin-label": "Numéro d'assurance sociale (NAS)",
@@ -85,7 +85,7 @@
     "page-title": "Vérificateur de l'état",
     "status-heading": "État",
     "form": {
-      "complete-fields": "Remplissez tous les champs",
+      "complete-fields": "Remplir tous les champs",
       "application-code-label": "Code de demande ou numéro de client",
       "application-code-description": "Le numéro que vous avez reçu après avoir présenté votre demande, ou le numéro de client de votre enfant dans le coin droit de la lettre RCSD qu'il a reçue de Service Canada",
       "radio-legend": "L'enfant a-t-il un numéro d'assurance sociale (NAS)?",
