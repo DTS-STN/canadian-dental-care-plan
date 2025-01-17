@@ -81,7 +81,7 @@ export function session(isProduction: boolean, serverConfig: ServerConfig): Requ
 
   const ignorePatterns = ['/api/buildinfo', '/api/health', '/api/readyz', '/.well-known/jwks.json'];
 
-  const { SESSION_STORAGE_TYPE, SESSION_COOKIE_DOMAIN, SESSION_COOKIE_NAME, SESSION_COOKIE_PATH, SESSION_COOKIE_SAME_SITE, SESSION_COOKIE_SECRET, SESSION_COOKIE_SECURE, SESSION_EXPIRES_SECONDS } = serverConfig;
+  const { SESSION_STORAGE_TYPE, SESSION_COOKIE_DOMAIN, SESSION_COOKIE_NAME, SESSION_COOKIE_PATH, SESSION_COOKIE_SAME_SITE, SESSION_COOKIE_SECRET, SESSION_COOKIE_SECURE } = serverConfig;
 
   const sessionStore =
     SESSION_STORAGE_TYPE === 'redis' //
@@ -102,7 +102,6 @@ export function session(isProduction: boolean, serverConfig: ServerConfig): Requ
       path: SESSION_COOKIE_PATH,
       secure: SESSION_COOKIE_SECURE ? isProduction : false,
       httpOnly: true,
-      maxAge: SESSION_EXPIRES_SECONDS * 1000,
       sameSite: SESSION_COOKIE_SAME_SITE,
     },
   });
