@@ -54,7 +54,7 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
       body: JSON.stringify(clientApplicationBasicInfoRequestEntity),
     });
 
-    if (response.ok) {
+    if (response.status === 200) {
       const data = await response.json();
       this.log.trace('Client application [%j]', data);
       return data;
@@ -89,7 +89,7 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
       body: JSON.stringify(clientApplicationSinRequestEntity),
     });
 
-    if (response.ok) {
+    if (response.status === 200) {
       const data = await response.json();
       this.log.trace('Client application [%j]', data);
       return data;
