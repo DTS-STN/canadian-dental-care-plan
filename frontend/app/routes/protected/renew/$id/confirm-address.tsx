@@ -96,7 +96,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
-  return redirect(getPathById('protected/renew/$id/confirm-email', params));
+  return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
 }
 
 export default function ProtectedRenewProtectedConfirmAddress() {

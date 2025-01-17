@@ -147,7 +147,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (canProceedToReview) {
     saveProtectedRenewState({ params, request, session, state: { homeAddress } });
     if (state.clientApplication.isInvitationToApplyClient) {
-      return redirect(getPathById('protected/renew/$id/confirm-email', params));
+      return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
     }
 
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
