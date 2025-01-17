@@ -434,10 +434,10 @@
         "save-btn": "Save"
       },
       "error-message": {
-        "federal-benefit-program-required": "Select which federal program you are covered under",
-        "federal-benefit-required": "Select whether you have federal dental benefits",
-        "provincial-benefit-program-required": "Select which provincial or territorial program you are covered under",
-        "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
+        "federal-benefit-program-required": "Select which federal program the child is covered under",
+        "federal-benefit-required": "Select whether the child has federal dental benefits",
+        "provincial-benefit-program-required": "Select which provincial or territorial program the child is covered under",
+        "provincial-benefit-required": "Select whether the child has provincial or territorial dental benefits",
         "provincial-territorial-required": "Select a province or territory"
       }
     },
