@@ -275,7 +275,7 @@ export default function RenewChildrenDemographicSurveyQuestions() {
                 {t('renew-child:demographic-survey.save-btn')}
               </LoadingButton>
               <ButtonLink
-                id="back-button"
+                id="cancel-button"
                 routeId="public/renew/$id/child/review-child-information"
                 params={params}
                 disabled={isSubmitting}

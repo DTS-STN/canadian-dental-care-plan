@@ -364,7 +364,7 @@ export default function RenewAdultChildUpdateAddress() {
                 <DialogTrigger asChild>
                   <LoadingButton
                     variant="primary"
-                    id="continue-button"
+                    id="save-button"
                     type="submit"
                     name="_action"
                     value={FormAction.Submit}
@@ -384,7 +384,7 @@ export default function RenewAdultChildUpdateAddress() {
                 )}
               </Dialog>
               <ButtonLink
-                id="back-button"
+                id="cancel-button"
                 routeId="public/renew/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}

@@ -356,7 +356,7 @@ export default function RenewItaUpdateAddress() {
             <div className="flex flex-wrap items-center gap-3">
               <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
-                  <LoadingButton variant="primary" id="continue-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Mailing address click">
+                  <LoadingButton variant="primary" id="save-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Mailing address click">
                     {t('renew-ita:update-address.save-btn')}
                   </LoadingButton>
                 </DialogTrigger>
@@ -369,7 +369,7 @@ export default function RenewItaUpdateAddress() {
                   </>
                 )}
               </Dialog>
-              <ButtonLink id="back-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Mailing address click">
+              <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Mailing address click">
                 {t('renew-ita:update-address.cancel-btn')}
               </ButtonLink>
             </div>

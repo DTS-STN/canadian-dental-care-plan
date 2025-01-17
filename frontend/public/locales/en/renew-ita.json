@@ -79,7 +79,9 @@
       "is-home-address-same-as-mailing-address-required": "Select whether or not your mailing address and home address are the same"
     },
     "back-btn": "Back",
-    "continue-btn": "Continue"
+    "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save"
   },
   "update-address": {
     "mailing-address": {

@@ -130,10 +130,10 @@ export default function RenewAdultConfirmMaritalStatus() {
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button name="_action" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Marital status click">
+              <Button id="save-button" name="_action" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Marital status click">
                 {t('renew-adult:confirm-marital-status.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Marital status click">
+              <ButtonLink id="cancel-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Marital status click">
                 {t('renew-adult:confirm-marital-status.cancel-btn')}
               </ButtonLink>
             </div>
