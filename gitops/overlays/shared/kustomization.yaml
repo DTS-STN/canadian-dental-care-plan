@@ -20,3 +20,9 @@ labels:
 resources:
   - ../../base/maintenance/
   - ../../base/squid-proxy/
+patches:
+  - path: ./patches/deployments.yaml
+configMapGenerator:
+  - name: squid-proxy
+    files:
+      - ./configs/squid-proxy/config.conf
