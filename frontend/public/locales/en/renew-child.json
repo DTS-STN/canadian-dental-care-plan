@@ -132,7 +132,7 @@
       "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social programs will not impact the child's eligibility for the Canadian Dental Care Plan.",
       "select-one": "Select one",
       "eligibility-criteria": "If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
-      "has-benefits-changed": "Does {{childName}} have dental benefits through a federal, provincial or territorial social program aside from the Canadian Dental Care Plan?",
+      "has-benefits-changed": "Does {{childName}} have other dental benefits through a federal, provincial or territorial social program aside from the Canadian Dental Care Plan?",
       "option-yes": "<strong>Yes</strong>, this child has federal, provincial or territorial dental benefits.",
       "option-no": "<strong>No</strong>, this child does not have federal, provincial or territorial dental benefits.",
       "button": {
@@ -152,7 +152,7 @@
       "eligibility-criteria": "If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
       "federal-benefits": {
         "title": "Federal benefits",
-        "legend": "Does {{childName}} have other dental benefits through a federal, provincial or territorial social program aside from the Canadian Dental Care Plan?",
+        "legend": "Does {{childName}} have other dental benefits through a federal social program aside from the Canadian Dental Care Plan?",
         "option-yes": "<strong>Yes</strong>, this child has <strong>federal</strong> benefits",
         "option-no": "<strong>No</strong>, this child does not have <strong>federal</strong> benefits",
         "social-programs": {
