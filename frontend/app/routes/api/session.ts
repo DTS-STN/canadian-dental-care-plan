@@ -52,12 +52,18 @@ export async function action({ context: { appContainer, session }, request }: Ac
         return redirectDocument(redirectToUrl);
       }
 
-      return Response.json(null, { status: 204 });
+      return Response.json({
+        status: 'success',
+        message: 'Session has been terminated.',
+      });
     }
 
     case 'extend': {
       log.debug("Extending user's server-side session lifetime; sessionId: [%s]", sessionId);
-      return Response.json(null, { status: 204 });
+      return Response.json({
+        status: 'success',
+        message: 'Session extended successfully.',
+      });
     }
 
     default: {
