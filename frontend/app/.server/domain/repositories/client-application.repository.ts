@@ -60,8 +60,7 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
       return data;
     }
 
-    // TODO this 404 should eventually be changed to a 204 by Interop
-    if (response.status === 404) {
+    if (response.status === 204) {
       this.log.trace('Client application not found for basic info [%j]', clientApplicationBasicInfoRequestEntity);
       return null;
     }
