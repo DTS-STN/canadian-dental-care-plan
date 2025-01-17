@@ -40,7 +40,10 @@ export async function action({ context: { appContainer, session }, request }: Ac
     case 'extend': {
       log.debug("Extending user's apply state; id: [%s], sessionId: [%s]", params.id, sessionId);
       saveApplyState({ params, session, state: {} });
-      return new Response(null, { status: 204 });
+      return Response.json({
+        status: 'success',
+        message: 'Apply state extended successfully.',
+      });
     }
 
     default: {

@@ -40,7 +40,10 @@ export async function action({ context: { appContainer, session }, request }: Ac
     case 'extend': {
       log.debug("Extending user's protected renew state; id: [%s], sessionId: [%s]", params.id, sessionId);
       saveProtectedRenewState({ params, request, session, state: {} });
-      return Response.json(null, { status: 204 });
+      return Response.json({
+        status: 'success',
+        message: 'Protected renew state extended successfully.',
+      });
     }
 
     default: {
