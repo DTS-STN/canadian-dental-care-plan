@@ -167,9 +167,9 @@ export default function RenewAdultChildConfirmPhone() {
               <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Phone click">
                 {t('renew-ita:confirm-phone.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Phone click">
+              <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Phone click">
                 {t('renew-ita:confirm-phone.cancel-btn')}
-              </Button>
+              </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">

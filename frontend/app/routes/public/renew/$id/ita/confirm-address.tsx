@@ -25,6 +25,12 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+enum FormAction {
+  Continue = 'continue',
+  Cancel = 'cancel',
+  Save = 'save',
+}
+
 enum AddressRadioOptions {
   No = 'no',
   Yes = 'yes',
@@ -46,7 +52,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:confirm-address.page-title') }) };
 
-  return { id: state.id, meta, defaultState: { hasAddressChanged: state.hasAddressChanged, isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress } };
+  return { id: state.id, meta, defaultState: { hasAddressChanged: state.hasAddressChanged, isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress }, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -106,7 +112,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewItaConfirmAddress() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = useLoaderData<typeof loader>();
+  const { defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -159,15 +165,25 @@ export default function RenewItaConfirmAddress() {
               />
             )}
           </div>
-
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Address click">
-              {t('renew-ita:confirm-address.continue-btn')}
-            </LoadingButton>
-            <ButtonLink id="back-button" routeId="public/renew/$id/ita/confirm-email" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Address click">
-              {t('renew-ita:confirm-address.back-btn')}
-            </ButtonLink>
-          </div>
+          {editMode ? (
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <LoadingButton id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Address click">
+                {t('renew-ita:confirm-address.save-btn')}
+              </LoadingButton>
+              <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Address click">
+                {t('renew-ita:confirm-address.cancel-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Address click">
+                {t('renew-ita:confirm-address.continue-btn')}
+              </LoadingButton>
+              <ButtonLink id="back-button" routeId="public/renew/$id/ita/confirm-email" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Address click">
+                {t('renew-ita:confirm-address.back-btn')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
       </div>
     </>

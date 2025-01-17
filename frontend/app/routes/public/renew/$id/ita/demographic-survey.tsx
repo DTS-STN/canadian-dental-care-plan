@@ -248,10 +248,10 @@ export default function RenewItaDemographicSurveyQuestions() {
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button name="_action" value={FormAction.Continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Voluntary demographic questions click">
+              <Button id="save-button" name="_action" value={FormAction.Continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Voluntary demographic questions click">
                 {t('renew-ita:demographic-survey.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Voluntary demographic questions click">
+              <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Voluntary demographic questions click">
                 {t('renew-ita:demographic-survey.cancel-btn')}
               </ButtonLink>
             </div>

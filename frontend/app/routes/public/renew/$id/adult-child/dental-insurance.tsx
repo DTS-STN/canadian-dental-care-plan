@@ -166,11 +166,11 @@ export default function RenewAdultChildAccessToDentalInsuranceQuestion() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Access to private dental insurance click">
+              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Access to private dental insurance click">
                 {t('dental-insurance.button.save-btn')}
               </Button>
               <ButtonLink
-                id="back-button"
+                id="cancel-button"
                 routeId="public/renew/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}

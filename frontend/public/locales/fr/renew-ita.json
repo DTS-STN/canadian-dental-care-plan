@@ -80,7 +80,9 @@
       "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
     },
     "back-btn": "Retour",
-    "continue-btn": "Continuer"
+    "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Sauvegarder"
   },
   "update-address": {
     "mailing-address": {

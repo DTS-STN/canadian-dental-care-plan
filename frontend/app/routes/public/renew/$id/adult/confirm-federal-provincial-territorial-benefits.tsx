@@ -161,11 +161,11 @@ export default function RenewAdultConfirmFederalProvincialTerritorialBenefits() 
           </fieldset>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other federal, provincial or territorial dental benefits click">
+              <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Access to other federal, provincial or territorial dental benefits click">
                 {t('renew-adult:confirm-dental-benefits.button.save-btn')}
               </Button>
               <ButtonLink
-                id="back-button"
+                id="cancel-button"
                 routeId="public/renew/$id/adult/review-adult-information"
                 params={params}
                 disabled={isSubmitting}

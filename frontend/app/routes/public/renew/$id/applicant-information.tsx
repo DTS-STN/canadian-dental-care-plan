@@ -269,11 +269,11 @@ export default function RenewApplicationInformation() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Save - Personal information click">
+              <Button variant="primary" id="save-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Save - Personal information click">
                 {t('renew:applicant-information.save-btn')}
               </Button>
               <ButtonLink
-                id="back-button"
+                id="cancel-button"
                 routeId={defaultState ? 'public/renew/$id/review-information' : 'public/renew/$id/terms-and-conditions'}
                 params={params}
                 disabled={isSubmitting}

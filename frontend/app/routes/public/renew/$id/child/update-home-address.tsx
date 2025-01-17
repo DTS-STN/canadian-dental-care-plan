@@ -327,7 +327,7 @@ export default function RenewChildUpdateAddress() {
             <div className="flex flex-wrap items-center gap-3">
               <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
-                  <LoadingButton variant="primary" id="continue-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Home address click">
+                  <LoadingButton variant="primary" id="save-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Home address click">
                     {t('renew-child:update-address.save-btn')}
                   </LoadingButton>
                 </DialogTrigger>
@@ -338,7 +338,7 @@ export default function RenewChildUpdateAddress() {
                   </>
                 )}
               </Dialog>
-              <ButtonLink id="back-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Home address click">
+              <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Home address click">
                 {t('renew-child:update-address.cancel-btn')}
               </ButtonLink>
             </div>

@@ -259,11 +259,11 @@ export default function RenewAdultDemographicSurveyQuestions() {
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button name="_action" value={FormAction.Continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Voluntary demographic questions click">
+              <Button id="save-button" name="_action" value={FormAction.Continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Voluntary demographic questions click">
                 {t('renew-adult:demographic-survey.save-btn')}
               </Button>
               <ButtonLink
-                id="back-button"
+                id="cancel-button"
                 routeId="public/renew/$id/adult/review-adult-information"
                 params={params}
                 disabled={isSubmitting}

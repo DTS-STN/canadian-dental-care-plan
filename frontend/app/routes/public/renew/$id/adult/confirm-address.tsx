@@ -137,9 +137,9 @@ export default function RenewAdultConfirmAddress() {
               <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Address click">
                 {t('renew-adult:confirm-address.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Address click">
+              <ButtonLink id="cancel-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Address click">
                 {t('renew-adult:confirm-address.cancel-btn')}
-              </Button>
+              </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
