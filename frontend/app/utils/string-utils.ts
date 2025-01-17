@@ -89,12 +89,14 @@ export function formatPercent(value: number, locale: string) {
 }
 
 /**
- *
- * @param input - A string
- * @returns The given string with removed spaces
+ * Extracts only digits from a string by removing all non-digit characters
+ * @param input - The input string to process
+ * @returns A string containing only digits (0-9)
+ * @example
+ * extractDigits("123-456-7890") // returns "1234567890"
  */
 export function extractDigits(input: string) {
-  return input.replace(/\D/g, '');
+  return input.match(/\d/g)?.join('') ?? '';
 }
 
 /**
