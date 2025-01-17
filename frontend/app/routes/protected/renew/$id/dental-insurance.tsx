@@ -70,7 +70,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
     if (state.clientApplication.isInvitationToApplyClient) {
-      return redirect(getPathById('protected/renew/$id/confirm-email', params));
+      return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
     }
   }
 

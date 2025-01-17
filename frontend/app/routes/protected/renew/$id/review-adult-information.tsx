@@ -108,6 +108,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationPreference: communicationPreference.name,
     preferredLanguage: preferredLanguage,
     clientApplicationEmail: state.clientApplication.communicationPreferences.email,
+    isItaClient: state.clientApplication.isInvitationToApplyClient,
   };
 
   const hasPartner = renewStateHasPartner(state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus);
@@ -333,7 +334,7 @@ export default function ProtectedRenewReviewAdultInformation() {
               <DescriptionListItem term={t('protected-renew:review-adult-information.email')}>
                 <p>{userInfo.contactInformationEmail}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-email" routeId="protected/renew/$id/confirm-email" params={params}>
+                  <InlineLink id="change-email" routeId={userInfo.isItaClient ? 'protected/renew/$id/ita/confirm-email' : 'protected/renew/$id/confirm-email'} params={params}>
                     {t('protected-renew:review-adult-information.email-change')}
                   </InlineLink>
                 </div>
