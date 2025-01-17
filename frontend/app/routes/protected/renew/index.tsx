@@ -28,7 +28,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
   const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.intakeYearId, userId: userInfoToken.sub });
   if (!clientApplication) {
-    throw redirect(getPathById('protected/data-unavailable'));
+    throw redirect(getPathById('protected/data-unavailable', params));
   }
 
   const id = randomUUID().toString();
