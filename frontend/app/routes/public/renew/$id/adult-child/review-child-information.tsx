@@ -142,6 +142,7 @@ export default function RenewAdultChildReviewChildInformation() {
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
   const [submitAction, setSubmitAction] = useState<string>();
+  const demographicSurveyEnabled = useFeature('demographic-survey');
 
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
@@ -228,19 +229,21 @@ export default function RenewAdultChildReviewChildInformation() {
                     </DescriptionListItem>
                   </dl>
                 </section>
-                <section className="space-y-6">
-                  <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-child-information.demographic-survey-title')}</h2>
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('renew-adult-child:review-child-information.demographic-survey-title')}>
-                      <p>{child.demographicSurvey ? t('renew-adult-child:review-child-information.demographic-survey-responded') : t('renew-adult-child:review-child-information.no')}</p>
-                      <div className="mt-4">
-                        <InlineLink id="change-demographic-survey" routeId="public/renew/$id/adult-child/children/$childId/demographic-survey" params={childParams}>
-                          {t('renew-adult-child:review-child-information.demographic-survey-change')}
-                        </InlineLink>
-                      </div>
-                    </DescriptionListItem>
-                  </dl>
-                </section>
+                {demographicSurveyEnabled && (
+                  <section className="space-y-6">
+                    <h2 className="font-lato text-2xl font-bold">{t('renew-adult-child:review-child-information.demographic-survey-title')}</h2>
+                    <dl className="divide-y border-y">
+                      <DescriptionListItem term={t('renew-adult-child:review-child-information.demographic-survey-title')}>
+                        <p>{child.demographicSurvey ? t('renew-adult-child:review-child-information.demographic-survey-responded') : t('renew-adult-child:review-child-information.no')}</p>
+                        <div className="mt-4">
+                          <InlineLink id="change-demographic-survey" routeId="public/renew/$id/adult-child/children/$childId/demographic-survey" params={childParams}>
+                            {t('renew-adult-child:review-child-information.demographic-survey-change')}
+                          </InlineLink>
+                        </div>
+                      </DescriptionListItem>
+                    </dl>
+                  </section>
+                )}
               </section>
             );
           })}
