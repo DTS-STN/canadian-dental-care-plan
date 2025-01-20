@@ -284,7 +284,8 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
   return initialState;
 }
 
-export function renewStateHasPartner(maritalStatus: string) {
+export function renewStateHasPartner(maritalStatus?: string) {
+  if (!maritalStatus) return false;
   const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
   return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
 }

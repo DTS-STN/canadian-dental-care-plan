@@ -74,7 +74,11 @@ export async function loader({ context: { appContainer, session }, params, reque
     : appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethod, locale);
   const maritalStatus = state.maritalStatus
     ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name
-    : appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.clientApplication.applicantInformation.maritalStatus, locale).name;
+    : state.clientApplication.applicantInformation.maritalStatus
+      ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.clientApplication.applicantInformation.maritalStatus, locale).name
+      : (() => {
+          throw new Error('Expected state.clientApplication.applicantInformation.maritalStatus to be defined');
+        })();
   const preferredLanguage = state.communicationPreferences?.preferredLanguage
     ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name
     : appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
@@ -93,7 +97,11 @@ export async function loader({ context: { appContainer, session }, params, reque
     : appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.mailingCountry, locale).name;
   const homeCountryAbbr = state.homeAddress?.country
     ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name
-    : appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale).name;
+    : state.clientApplication.contactInformation.homeCountry
+      ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale).name
+      : (() => {
+          throw new Error('Expected state.clientApplication.contactInformation.homeCountry to be defined');
+        })();
 
   const userInfo = {
     firstName: state.clientApplication.applicantInformation.firstName,
@@ -146,8 +154,16 @@ export async function loader({ context: { appContainer, session }, params, reque
         country: homeCountryAbbr,
       }
     : {
-        address: state.clientApplication.contactInformation.homeAddress,
-        city: state.clientApplication.contactInformation.homeCity,
+        address: state.clientApplication.contactInformation.homeAddress
+          ? state.clientApplication.contactInformation.homeAddress
+          : (() => {
+              throw new Error('Expected state.clientApplication.contactInformation.homeAddress to be defined');
+            })(),
+        city: state.clientApplication.contactInformation.homeCity
+          ? state.clientApplication.contactInformation.homeCity
+          : (() => {
+              throw new Error('Expected state.clientApplication.contactInformation.homeCity to be defined');
+            })(),
         province: clientApplicationMailingProvinceTerritoryStateAbbr,
         postalCode: state.clientApplication.contactInformation.homePostalCode,
         country: homeCountryAbbr,
