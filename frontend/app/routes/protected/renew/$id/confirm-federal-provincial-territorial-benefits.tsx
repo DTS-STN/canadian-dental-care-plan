@@ -114,6 +114,9 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -202,6 +205,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  }
+
+  if (demographicSurveyEnabled) {
+    return redirect(getPathById('protected/renew/$id/demographic-survey', params));
   }
 
   return redirect(getPathById('protected/renew/$id/member-selection', params));
