@@ -54,7 +54,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     const applicantInformation = {
       firstName: applicant.PersonName[0].PersonGivenName[0],
       lastName: applicant.PersonName[0].PersonSurName,
-      maritalStatus: applicant.PersonMaritalStatus.StatusCode.ReferenceDataID,
+      maritalStatus: applicant.PersonMaritalStatus.StatusCode?.ReferenceDataID,
       clientId:
         applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID ??
         (() => {
@@ -109,18 +109,30 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
 
     const contactInformation = {
       copyMailingAddress: applicant.MailingSameAsHomeIndicator,
-      homeAddress: homeAddress.AddressStreet.StreetName,
+      homeAddress: homeAddress.AddressStreet?.StreetName,
       homeApartment: homeAddress.AddressSecondaryUnitText,
       homeCity: homeAddress.AddressCityName,
-      homeCountry: homeAddress.AddressCountry.CountryCode.ReferenceDataID,
+      homeCountry: homeAddress.AddressCountry.CountryCode?.ReferenceDataID,
       homePostalCode: homeAddress.AddressPostalCode,
-      homeProvince: homeAddress.AddressProvince?.ProvinceCode.ReferenceDataID,
-      mailingAddress: mailingAddress.AddressStreet.StreetName,
+      homeProvince: homeAddress.AddressProvince?.ProvinceCode?.ReferenceDataID,
+      mailingAddress:
+        mailingAddress.AddressStreet?.StreetName ??
+        (() => {
+          throw new Error('Expected mailingAddress.AddressStreet.StreetName to be defined');
+        })(),
       mailingApartment: mailingAddress.AddressSecondaryUnitText,
-      mailingCity: mailingAddress.AddressCityName,
-      mailingCountry: mailingAddress.AddressCountry.CountryCode.ReferenceDataID,
+      mailingCity:
+        mailingAddress.AddressCityName ??
+        (() => {
+          throw new Error('Expected mailingAddress.AddressCityName to be defined');
+        })(),
+      mailingCountry:
+        mailingAddress.AddressCountry.CountryCode?.ReferenceDataID ??
+        (() => {
+          throw new Error('Expected mailingAddress.AddressCountry.CountryCode.ReferenceDataID to be defined');
+        })(),
       mailingPostalCode: mailingAddress.AddressPostalCode,
-      mailingProvince: mailingAddress.AddressProvince?.ProvinceCode.ReferenceDataID,
+      mailingProvince: mailingAddress.AddressProvince?.ProvinceCode?.ReferenceDataID,
       phoneNumber: applicant.PersonContactInformation[0].TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.TelephoneNumberCategoryCode.ReferenceDataID,
       phoneNumberAlt: applicant.PersonContactInformation[0].TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.TelephoneNumberCategoryCode.ReferenceDataID,
       email: applicant.PersonContactInformation[0].EmailAddress?.at(0)?.EmailAddressID,

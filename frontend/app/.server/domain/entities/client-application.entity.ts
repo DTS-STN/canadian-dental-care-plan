@@ -11,21 +11,21 @@ export type ClientApplicationEntity = ReadonlyDeep<{
           AddressCategoryCode: {
             ReferenceDataName: string;
           };
-          AddressCityName: string;
+          AddressCityName?: string;
           AddressCountry: {
-            CountryCode: {
-              ReferenceDataID: string;
+            CountryCode?: {
+              ReferenceDataID?: string;
             };
           };
           AddressPostalCode?: string;
           AddressProvince?: {
-            ProvinceCode: {
+            ProvinceCode?: {
               ReferenceDataID?: string;
             };
           };
           AddressSecondaryUnitText?: string;
-          AddressStreet: {
-            StreetName: string;
+          AddressStreet?: {
+            StreetName?: string;
           };
         }>;
         EmailAddress?: Array<{
@@ -45,8 +45,8 @@ export type ClientApplicationEntity = ReadonlyDeep<{
         PreferredIndicator: boolean;
       }>;
       PersonMaritalStatus: {
-        StatusCode: {
-          ReferenceDataID: string;
+        StatusCode?: {
+          ReferenceDataID?: string;
         };
       };
       PersonName: Array<{

@@ -12,9 +12,9 @@ import type {
   ClientApplicantInformationDto,
   ClientApplicationDto,
   ClientChildDto,
+  ClientContactInformationDto,
   ClientPartnerInformationDto,
   CommunicationPreferencesDto,
-  ContactInformationDto,
   ItaBenefitRenewalDto,
   ProtectedBenefitRenewalDto,
   RenewalApplicantInformationDto,
@@ -147,7 +147,7 @@ interface ToCommunicationPreferencesArgs {
 }
 
 interface ToContactInformationArgs {
-  existingContactInformation: ReadonlyObjectDeep<ContactInformationDto>;
+  existingContactInformation: ReadonlyObjectDeep<ClientContactInformationDto>;
   hasAddressChanged: boolean;
   hasEmailChanged: boolean;
   hasPhoneChanged: boolean;
@@ -164,14 +164,14 @@ interface ToDentalBenefitsArgs {
 }
 
 interface ToHomeAddressArgs {
-  existingContactInformation: ReadonlyObjectDeep<ContactInformationDto>;
+  existingContactInformation: ReadonlyObjectDeep<ClientContactInformationDto>;
   homeAddress?: ProtectedHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   mailingAddress?: ProtectedMailingAddressState;
 }
 
 interface ToMailingAddressArgs {
-  existingContactInformation: ReadonlyObjectDeep<ContactInformationDto>;
+  existingContactInformation: ReadonlyObjectDeep<ClientContactInformationDto>;
   mailingAddress?: ProtectedMailingAddressState;
 }
 
@@ -367,7 +367,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       children: [],
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
-        hasAddressChanged: !!homeAddress || !!mailingAddress, // use this derived value instead of the hasAddressChanged flag because the flag only indicates changes to the mailing address in the frontend
+        hasAddressChanged: !!homeAddress || !!mailingAddress || !!isHomeAddressSameAsMailingAddress, // use this derived value instead of the hasAddressChanged flag because the flag only indicates changes to the mailing address in the frontend
         hasEmailChanged: true,
         hasPhoneChanged: true,
         isHomeAddressSameAsMailingAddress,
@@ -485,7 +485,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
-        hasAddressChanged: !!homeAddress || !!mailingAddress,
+        hasAddressChanged: !!homeAddress || !!mailingAddress || !!isHomeAddressSameAsMailingAddress,
         hasEmailChanged: !!contactInformation?.email,
         hasPhoneChanged: !!contactInformation?.phoneNumber,
         isHomeAddressSameAsMailingAddress,
@@ -566,25 +566,55 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
   private toContactInformation({ existingContactInformation, hasAddressChanged, hasEmailChanged, hasPhoneChanged, isHomeAddressSameAsMailingAddress, renewedContactInformation, renewedHomeAddress, renewedMailingAddress }: ToContactInformationArgs) {
     return {
-      ...existingContactInformation,
       ...(hasAddressChanged
         ? {
-            copyMailingAddress: isHomeAddressSameAsMailingAddress,
+            copyMailingAddress: !!isHomeAddressSameAsMailingAddress,
             ...this.toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress, homeAddress: renewedHomeAddress, mailingAddress: renewedMailingAddress }),
             ...this.toMailingAddress({ existingContactInformation, mailingAddress: renewedMailingAddress }),
           }
-        : {}),
+        : {
+            copyMailingAddress: existingContactInformation.copyMailingAddress,
+            homeAddress:
+              existingContactInformation.homeAddress ??
+              (() => {
+                throw new Error('Expected existingContactInformation.homeAddress to be defined');
+              })(),
+            homeApartment: existingContactInformation.homeApartment,
+            homeCity:
+              existingContactInformation.homeCity ??
+              (() => {
+                throw new Error('Expected existingApplicantInformation.homeCity to be defined');
+              })(),
+            homeCountry:
+              existingContactInformation.homeCountry ??
+              (() => {
+                throw new Error('Expected existingApplicantInformation.homeCountry to be defined');
+              })(),
+            homePostalCode: existingContactInformation.homePostalCode,
+            homeProvince: existingContactInformation.homeProvince,
+            mailingAddress: existingContactInformation.mailingAddress,
+            mailingApartment: existingContactInformation.mailingApartment,
+            mailingCity: existingContactInformation.mailingCity,
+            mailingCountry: existingContactInformation.mailingCountry,
+            mailingPostalCode: existingContactInformation.mailingPostalCode,
+            mailingProvince: existingContactInformation.mailingProvince,
+          }),
       ...(hasPhoneChanged
         ? {
             phoneNumber: renewedContactInformation?.phoneNumber,
             phoneNumberAlt: renewedContactInformation?.phoneNumberAlt,
           }
-        : {}),
+        : {
+            phoneNumber: existingContactInformation.phoneNumber,
+            phoneNumberAlt: existingContactInformation.phoneNumberAlt,
+          }),
       ...(hasEmailChanged
         ? {
             email: renewedContactInformation?.email,
           }
-        : {}),
+        : {
+            email: existingContactInformation.email,
+          }),
     };
   }
 
@@ -619,10 +649,22 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
           homeProvince: homeAddress.province,
         }
       : {
-          homeAddress: existingContactInformation.homeAddress,
+          homeAddress:
+            existingContactInformation.homeAddress ??
+            (() => {
+              throw new Error('Expected existingContactInformation.homeAddress to be defined');
+            })(),
           homeApartment: existingContactInformation.homeApartment,
-          homeCity: existingContactInformation.homeCity,
-          homeCountry: existingContactInformation.homeCountry,
+          homeCity:
+            existingContactInformation.homeCity ??
+            (() => {
+              throw new Error('Expected existingApplicantInformation.homeCity to be defined');
+            })(),
+          homeCountry:
+            existingContactInformation.homeCountry ??
+            (() => {
+              throw new Error('Expected existingApplicantInformation.homeCountry to be defined');
+            })(),
           homePostalCode: existingContactInformation.homePostalCode,
           homeProvince: existingContactInformation.homeProvince,
         };

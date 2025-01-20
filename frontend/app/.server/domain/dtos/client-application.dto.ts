@@ -1,12 +1,12 @@
 import type { ReadonlyDeep } from 'type-fest';
 
-import type { ApplicantInformationDto, ChildDto, CommunicationPreferencesDto, ContactInformationDto } from '~/.server/domain/dtos/benefit-application.dto';
+import type { ChildDto, CommunicationPreferencesDto } from '~/.server/domain/dtos/benefit-application.dto';
 
 export type ClientApplicationDto = ReadonlyDeep<{
   applicantInformation: ClientApplicantInformationDto;
   children: ClientChildDto[];
   communicationPreferences: CommunicationPreferencesDto;
-  contactInformation: ContactInformationDto;
+  contactInformation: ClientContactInformationDto;
   dateOfBirth: string;
   dentalBenefits: string[];
   dentalInsurance?: boolean;
@@ -17,10 +17,14 @@ export type ClientApplicationDto = ReadonlyDeep<{
   partnerInformation?: ClientPartnerInformationDto;
 }>;
 
-export type ClientApplicantInformationDto = ApplicantInformationDto & {
+export type ClientApplicantInformationDto = Readonly<{
+  firstName: string;
+  lastName: string;
+  maritalStatus?: string; // optional because ITA clients initially have no marital status
+  socialInsuranceNumber: string;
   clientId: string;
   clientNumber?: string;
-};
+}>;
 
 export type ClientChildDto = Omit<ChildDto, 'information'> & {
   information: {
@@ -33,6 +37,26 @@ export type ClientChildDto = Omit<ChildDto, 'information'> & {
     socialInsuranceNumber: string;
   };
 };
+
+export type ClientContactInformationDto = ReadonlyDeep<{
+  copyMailingAddress: boolean;
+  // home address fields are optional because ITA clients initially have no home address
+  homeAddress?: string;
+  homeApartment?: string;
+  homeCity?: string;
+  homeCountry?: string;
+  homePostalCode?: string;
+  homeProvince?: string;
+  mailingAddress: string;
+  mailingApartment?: string;
+  mailingCity: string;
+  mailingCountry: string;
+  mailingPostalCode?: string;
+  mailingProvince?: string;
+  phoneNumber?: string;
+  phoneNumberAlt?: string;
+  email?: string;
+}>;
 
 export type ClientPartnerInformationDto = ReadonlyDeep<{
   confirm: boolean;
