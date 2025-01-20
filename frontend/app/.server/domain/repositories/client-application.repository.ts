@@ -5,6 +5,7 @@ import { TYPES } from '~/.server/constants';
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import type { LogFactory, Logger } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import clientApplicationItaJsonDataSource from '~/.server/resources/power-platform/client-application-ita.json';
 import clientApplicationJsonDataSource from '~/.server/resources/power-platform/client-application.json';
 
 /**
@@ -172,12 +173,14 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
       PreviousTaxesFiledIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
     };
 
+    const jsonDataSource = clientApplicationFlags.InvitationToApplyIndicator ? clientApplicationItaJsonDataSource : clientApplicationJsonDataSource;
+
     const clientApplicationEntity: ClientApplicationEntity = {
-      ...clientApplicationJsonDataSource,
+      ...jsonDataSource,
       BenefitApplication: {
-        ...clientApplicationJsonDataSource.BenefitApplication,
+        ...jsonDataSource.BenefitApplication,
         Applicant: {
-          ...clientApplicationJsonDataSource.BenefitApplication.Applicant,
+          ...jsonDataSource.BenefitApplication.Applicant,
           PersonName: [
             {
               PersonGivenName: [personGivenName],
@@ -188,7 +191,7 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
             date: personBirthDate,
           },
           ApplicantDetail: {
-            ...clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail,
+            ...jsonDataSource.BenefitApplication.Applicant.ApplicantDetail,
             ...clientApplicationFlags,
           },
         },
@@ -216,17 +219,19 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
       PreviousTaxesFiledIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
     };
 
+    const jsonDataSource = clientApplicationFlags.InvitationToApplyIndicator ? clientApplicationItaJsonDataSource : clientApplicationJsonDataSource;
+
     const clientApplicationEntity: ClientApplicationEntity = {
-      ...clientApplicationJsonDataSource,
+      ...jsonDataSource,
       BenefitApplication: {
-        ...clientApplicationJsonDataSource.BenefitApplication,
+        ...jsonDataSource.BenefitApplication,
         Applicant: {
-          ...clientApplicationJsonDataSource.BenefitApplication.Applicant,
+          ...jsonDataSource.BenefitApplication.Applicant,
           PersonSINIdentification: {
             IdentificationID: personSINIdentification,
           },
           ApplicantDetail: {
-            ...clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail,
+            ...jsonDataSource.BenefitApplication.Applicant.ApplicantDetail,
             ...clientApplicationFlags,
           },
         },

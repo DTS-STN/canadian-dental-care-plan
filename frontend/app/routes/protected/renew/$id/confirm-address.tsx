@@ -20,6 +20,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatAddressLine } from '~/utils/string-utils';
 
 enum FormAction {
   Cancel = 'cancel',
@@ -79,12 +80,26 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
+  const homeAddress =
+    parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes
+      ? state.mailingAddress
+        ? state.mailingAddress
+        : {
+            address: formatAddressLine({ address: state.clientApplication.contactInformation.mailingAddress, apartment: state.clientApplication.contactInformation.mailingApartment }),
+            country: state.clientApplication.contactInformation.mailingCountry,
+            province: state.clientApplication.contactInformation.mailingProvince,
+            city: state.clientApplication.contactInformation.mailingCity,
+            postalCode: state.clientApplication.contactInformation.mailingPostalCode,
+          }
+      : undefined;
+
   saveProtectedRenewState({
     params,
     request,
     session,
     state: {
       isHomeAddressSameAsMailingAddress: parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes,
+      homeAddress,
     },
   });
 
