@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import invariant from 'tiny-invariant';
 
+import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicationYearRequestDto, ApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
 import type { ApplicationYearDtoMapper } from '~/.server/domain/mappers';
@@ -36,6 +37,7 @@ export class DefaultApplicationYearService implements ApplicationYearService {
     @inject(TYPES.domain.mappers.ApplicationYearDtoMapper) private readonly applicationYearDtoMapper: ApplicationYearDtoMapper,
     @inject(TYPES.domain.repositories.ApplicationYearRepository) private readonly applicationYearRepository: ApplicationYearRepository,
     @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE'>,
   ) {
     this.log = logFactory.createLogger('DefaultApplicationYearService');
     this.init();
@@ -48,13 +50,16 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   async findRenewalApplicationYear(applicationYearRequestDto: ApplicationYearRequestDto): Promise<RenewalApplicationYearResultDto | null> {
     this.log.trace('Finding renewal application year results with applicationYearRequest: [%j]', applicationYearRequestDto);
 
+    const applicationYearRequestDate = this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? applicationYearRequestDto.date;
+    this.log.debug('Using application year request date [%s]', applicationYearRequestDate);
+
     this.auditService.createAudit('application-year.find-renewal-application-year', { userId: applicationYearRequestDto.userId });
 
     const applicationYearResultDtos = await this.listApplicationYears(applicationYearRequestDto);
 
     const matchingRenewalApplicationYear = applicationYearResultDtos.find((applicationYear) => {
       const { renewalStartDate, renewalEndDate } = applicationYear;
-      const requestDate = new Date(applicationYearRequestDto.date);
+      const requestDate = new Date(applicationYearRequestDate);
 
       const startDate = renewalStartDate ? new Date(renewalStartDate) : null;
       const endDate = renewalEndDate ? new Date(renewalEndDate) : null;
@@ -66,7 +71,7 @@ export class DefaultApplicationYearService implements ApplicationYearService {
     });
 
     if (!matchingRenewalApplicationYear) {
-      this.log.info('No matching renewal application year found for date: [%s]', applicationYearRequestDto.date);
+      this.log.info('No matching renewal application year found for date: [%s]', applicationYearRequestDate);
       return null;
     }
 
@@ -88,7 +93,8 @@ export class DefaultApplicationYearService implements ApplicationYearService {
 
     this.auditService.createAudit('application-year.get-application-year-result', { userId: applicationYearRequestDto.userId });
 
-    const applicationYearResultEntity = await this.applicationYearRepository.listApplicationYears(applicationYearRequestDto.date);
+    const applicationYearRequestDate = this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? applicationYearRequestDto.date;
+    const applicationYearResultEntity = await this.applicationYearRepository.listApplicationYears(applicationYearRequestDate);
     const applicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultEntityToApplicationYearResultDtos(applicationYearResultEntity);
 
     this.log.trace('Returning possible application years result: [%j]', applicationYearResultDto);
