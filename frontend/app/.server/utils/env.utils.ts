@@ -83,6 +83,9 @@ const serverEnv = clientEnvSchema.extend({
   INTEROP_STATUS_CHECK_API_BASE_URI: z.string().trim().transform(emptyToUndefined).optional(),
   INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY: z.string().trim().transform(emptyToUndefined).optional(),
 
+  // simulation/testing date settings
+  APPLICATION_YEAR_REQUEST_DATE: z.string().optional(),
+
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
   AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
