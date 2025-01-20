@@ -176,8 +176,8 @@ export async function action({ context: { appContainer, session }, params, reque
     (child) =>
       child.information.clientNumber === parsedDataResult.data.clientNumber &&
       child.information.dateOfBirth === parsedDataResult.data.dateOfBirth &&
-      child.information.lastName === parsedDataResult.data.lastName &&
-      child.information.firstName === parsedDataResult.data.firstName,
+      child.information.lastName.toLowerCase() === parsedDataResult.data.lastName.toLowerCase() &&
+      child.information.firstName.toLowerCase() === parsedDataResult.data.firstName.toLowerCase(),
   );
 
   if (matches && !matches.includes(true)) {
