@@ -118,7 +118,7 @@
       "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres",
       "client-number-required": "Entrez le numéro de client de 11 chiffres",
       "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
-      "client-number-valid": "Doit être un numéro de client valide. Votre saisie doit comporter 11, 13 chiffres"
+      "client-number-valid": "Le numéro de client doit être composé de 11 chiffres"
     },
     "status-not-found": {
       "heading": "Nous n'avons pas pu trouver votre demande avec les informations que vous nous avez fournies",

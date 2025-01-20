@@ -118,7 +118,7 @@
       "last-name-no-digits": "Last name must contain letters only",
       "client-number-required": "Enter 11 digit client number",
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
-      "client-number-valid": "Must be a valid client number. Your input must be 11 or 13 digits long."
+      "client-number-valid": "Client Number must be 11-digits"
     },
     "status-not-found": {
       "heading": "We could not find your application with the information you gave us.",
