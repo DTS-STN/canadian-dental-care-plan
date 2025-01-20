@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
+import type { ServerConfig } from '~/.server/configs';
 import type { ApplicationYearRequestDto, ApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
 import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
 import type { ApplicationYearDtoMapper } from '~/.server/domain/mappers';
@@ -90,8 +91,9 @@ describe('DefaultApplicationYearService', () => {
   describe('findRenewalApplicationYear', () => {
     it('should return the correct renewal application year if given date is within a renewal period', async () => {
       const mockAuditService = mock<AuditService>();
+      const mockServerConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE'> = { APPLICATION_YEAR_REQUEST_DATE: undefined };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService);
+      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService, mockServerConfig);
       const mockApplicationYearRequestDto: ApplicationYearRequestDto = {
         date: '2025-01-01',
         userId: 'userId',
@@ -119,8 +121,9 @@ describe('DefaultApplicationYearService', () => {
 
     it('should return the correct renewal application year when the given date is on or after the renewal start date and no renewal end date is provided', async () => {
       const mockAuditService = mock<AuditService>();
+      const mockServerConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE'> = { APPLICATION_YEAR_REQUEST_DATE: undefined };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService);
+      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService, mockServerConfig);
       const mockApplicationYearRequestDto: ApplicationYearRequestDto = {
         date: '2026-01-01',
         userId: 'userId',
@@ -145,8 +148,9 @@ describe('DefaultApplicationYearService', () => {
 
     it('should return null if given date is not within any renewal period', async () => {
       const mockAuditService = mock<AuditService>();
+      const mockServerConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE'> = { APPLICATION_YEAR_REQUEST_DATE: undefined };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService);
+      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService, mockServerConfig);
       const mockApplicationYearRequestDto: ApplicationYearRequestDto = {
         date: '2024-01-01',
         userId: 'userId',
