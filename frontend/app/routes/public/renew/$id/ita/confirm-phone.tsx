@@ -74,13 +74,15 @@ export async function action({ context: { appContainer, session }, params, reque
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('renew-ita:confirm-phone.error-message.phone-number-valid'))
+        .refine((val) => !val || (val.replace(/[^\d]/g, '').length <= 11 ? isValidPhoneNumber(val, 'CA') : true), t('renew-ita:confirm-phone.error-message.phone-number-valid'))
+        .refine((val) => !val || (val.replace(/[^\d]/g, '').length > 11 ? isValidPhoneNumber(val) : true), t('renew-ita:confirm-phone.error-message.phone-number-valid-international'))
         .optional(),
       phoneNumberAlt: z
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('renew-ita:confirm-phone.error-message.phone-number-alt-valid'))
+        .refine((val) => !val || (val.replace(/[^\d]/g, '').length <= 11 ? isValidPhoneNumber(val, 'CA') : true), t('renew-ita:confirm-phone.error-message.phone-number-alt-valid'))
+        .refine((val) => !val || (val.replace(/[^\d]/g, '').length > 11 ? isValidPhoneNumber(val) : true), t('renew-ita:confirm-phone.error-message.phone-number-alt-valid-international'))
         .optional(),
     })
     .transform((val) => ({
