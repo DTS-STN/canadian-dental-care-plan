@@ -16,6 +16,7 @@ updates:
         patterns:
           - '*'
         exclude-patterns:
+          - 'react-router'
           - '@react-router/*'
       prod-minor-versions:
         dependency-type: production
@@ -25,12 +26,14 @@ updates:
         patterns:
           - '*'
         exclude-patterns:
+          - 'react-router'
           - '@react-router/*'
       react-router-versions:
         update-types:
           - minor
           - patch
         patterns:
+          - 'react-router'
           - '@react-router/*'
 
   - package-ecosystem: docker
