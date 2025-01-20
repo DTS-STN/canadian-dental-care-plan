@@ -16,7 +16,7 @@ updates:
         patterns:
           - '*'
         exclude-patterns:
-          - '@remix-run/*'
+          - '@react-router/*'
       prod-minor-versions:
         dependency-type: production
         update-types:
@@ -25,13 +25,13 @@ updates:
         patterns:
           - '*'
         exclude-patterns:
-          - '@remix-run/*'
-      remix-versions:
+          - '@react-router/*'
+      react-router-versions:
         update-types:
           - minor
           - patch
         patterns:
-          - '@remix-run/*'
+          - '@react-router/*'
 
   - package-ecosystem: docker
     directory: /frontend
