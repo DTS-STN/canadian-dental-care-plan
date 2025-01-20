@@ -22,7 +22,7 @@ export class DefaultApplicationYearRepository implements ApplicationYearReposito
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
+    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultApplicationYearRepository');
@@ -32,7 +32,7 @@ export class DefaultApplicationYearRepository implements ApplicationYearReposito
     this.log.trace('Fetching all application year entities for date: [%s]', date);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/retrieve-benefit-application-config-dates`);
-    url.searchParams.set('date', date);
+    url.searchParams.set('date', this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? date);
 
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.retrieve-benefit-application-config-dates.gets', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
