@@ -374,7 +374,7 @@ export function isPrimaryApplicantStateComplete(state: ProtectedRenewState, demo
 }
 
 export function isChildrenStateComplete(state: ProtectedRenewState, demographicSurveyEnabled: boolean) {
-  return state.children.every((child) => !!child.previouslyReviewed && child.isParentOrLegalGuardian !== undefined && child.dentalInsurance !== undefined && (demographicSurveyEnabled ? child.demographicSurvey !== undefined : true));
+  return state.children.some((child) => !!child.previouslyReviewed && child.isParentOrLegalGuardian !== undefined && child.dentalInsurance !== undefined && (demographicSurveyEnabled ? child.demographicSurvey !== undefined : true));
 }
 
 interface ValidateProtectedRenewStateForReviewArgs {
