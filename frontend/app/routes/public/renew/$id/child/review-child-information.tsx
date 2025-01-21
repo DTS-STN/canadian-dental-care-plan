@@ -110,7 +110,15 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
-    saveRenewState({ params, session, state: {} });
+    saveRenewState({ params, session, state: { editMode: false } });
+
+    const state = loadRenewChildState({ params, request, session });
+    if (state.hasAddressChanged) {
+      if (state.isHomeAddressSameAsMailingAddress) {
+        return redirect(getPathById('public/renew/$id/child/update-mailing-address', params));
+      }
+      return redirect(getPathById('public/renew/$id/child/update-home-address', params));
+    }
     return redirect(getPathById('public/renew/$id/child/confirm-address', params));
   }
 
