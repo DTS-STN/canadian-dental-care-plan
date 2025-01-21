@@ -96,7 +96,7 @@
       "yes": "Yes",
       "no": "No"
     },
-    "help-message": "The address we have on file can be found in the letter you received from Service Canada.",
+    "help-message": "The address we have on file can also be found on the renewal letter you received from Service Canada.",
     "error-message": {
       "has-address-changed-required": "Select whether you would like to update your mailing address",
       "is-home-address-same-as-mailing-address-required": "Select whether or not your mailing address and home address are the same"
