@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react
 import { data, redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { isValidPhoneNumber, parsePhoneNumberWithError } from 'libphonenumber-js';
+import { parsePhoneNumberWithError } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -23,6 +23,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { phoneSchema } from '~/.server/validation/phone-schema';
 
 enum FormAction {
   Continue = 'continue',
@@ -74,15 +75,27 @@ export async function action({ context: { appContainer, session }, params, reque
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || (val.replace(/[^\d]/g, '').length <= 11 ? isValidPhoneNumber(val, 'CA') : true), t('renew-ita:confirm-phone.error-message.phone-number-valid'))
-        .refine((val) => !val || (val.replace(/[^\d]/g, '').length > 11 ? isValidPhoneNumber(val) : true), t('renew-ita:confirm-phone.error-message.phone-number-valid-international'))
+        .superRefine((val, ctx) => {
+          const result = phoneSchema({invalid_phone_canadian_error: t('renew-ita:confirm-phone.error-message.phone-number-valid'), invalid_phone_international_error: t('renew-ita:confirm-phone.error-message.phone-number-valid-international')}).safeParse(val);
+          if(!result.success){
+            result.error.errors.forEach((error) => {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: error.message, path: ['phoneNumber']});
+            })
+          }
+        })
         .optional(),
       phoneNumberAlt: z
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || (val.replace(/[^\d]/g, '').length <= 11 ? isValidPhoneNumber(val, 'CA') : true), t('renew-ita:confirm-phone.error-message.phone-number-alt-valid'))
-        .refine((val) => !val || (val.replace(/[^\d]/g, '').length > 11 ? isValidPhoneNumber(val) : true), t('renew-ita:confirm-phone.error-message.phone-number-alt-valid-international'))
+        .superRefine((val, ctx) => {
+          const result = phoneSchema({invalid_phone_canadian_error: t('renew-ita:confirm-phone.error-message.phone-number-alt-valid'), invalid_phone_international_error: t('renew-ita:confirm-phone.error-message.phone-number-alt-valid-international')}).safeParse(val);
+          if(!result.success){
+            result.error.errors.forEach((error) => {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: error.message, path: ['phoneNumber']});
+            })
+          }
+        })
         .optional(),
     })
     .transform((val) => ({

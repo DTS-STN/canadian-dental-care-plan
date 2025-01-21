@@ -4,7 +4,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react
 import { data, redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { isValidPhoneNumber, parsePhoneNumberWithError } from 'libphonenumber-js';
+import { parsePhoneNumberWithError } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -35,6 +35,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
+import { phoneSchema } from '~/.server/validation/phone-schema';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -83,15 +84,27 @@ export async function action({ context: { appContainer, session }, params, reque
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || (val.replace(/[^\d]/g, '').length <= 11 ? isValidPhoneNumber(val, 'CA') : true), t('apply-adult:contact-information.error-message.phone-number-valid'))
-        .refine((val) => !val || (val.replace(/[^\d]/g, '').length > 11 ? isValidPhoneNumber(val) : true), t('apply-adult:contact-information.error-message.phone-number-valid-international'))
+        .superRefine((val, ctx) => {
+          const result = phoneSchema({invalid_phone_canadian_error: t('apply-adult:contact-information.error-message.phone-number-valid'), invalid_phone_international_error: t('apply-adult:contact-information.error-message.phone-number-valid-international')}).safeParse(val);
+          if(!result.success){
+            result.error.errors.forEach((error) => {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: error.message, path: ['phoneNumber']});
+            })
+          }
+        })
         .optional(),
       phoneNumberAlt: z
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || (val.replace(/[^\d]/g, '').length <= 11 ? isValidPhoneNumber(val, 'CA') : true), t('apply-adult:contact-information.error-message.phone-number-alt-valid'))
-        .refine((val) => !val || (val.replace(/[^\d]/g, '').length > 11 ? isValidPhoneNumber(val) : true), t('apply-adult:contact-information.error-message.phone-number-alt-valid-international'))
+        .superRefine((val, ctx) => {
+          const result = phoneSchema({invalid_phone_canadian_error: t('apply-adult:contact-information.error-message.phone-number-alt-valid'), invalid_phone_international_error: t('apply-adult:contact-information.error-message.phone-number-alt-valid-international')}).safeParse(val);
+          if(!result.success){
+            result.error.errors.forEach((error) => {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: error.message, path: ['phoneNumber']});
+            })
+          }
+        })
         .optional(),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
