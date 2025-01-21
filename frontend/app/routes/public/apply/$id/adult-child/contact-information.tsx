@@ -4,7 +4,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react
 import { data, redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { isValidPhoneNumber, parsePhoneNumberWithError } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -35,6 +34,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
+import { phoneSchema } from '~/.server/validation/phone-schema';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -80,18 +80,14 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const personalInformationSchema = z
     .object({
-      phoneNumber: z
-        .string()
-        .trim()
-        .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply-adult-child:contact-information.error-message.phone-number-valid'))
-        .optional(),
-      phoneNumberAlt: z
-        .string()
-        .trim()
-        .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply-adult-child:contact-information.error-message.phone-number-alt-valid'))
-        .optional(),
+      phoneNumber: phoneSchema({
+        invalid_phone_canadian_error: t('apply-adult-child:contact-information.error-message.phone-number-valid'),
+        invalid_phone_international_error: t('apply-adult-child:contact-information.error-message.phone-number-valid-international'),
+      }).optional(),
+    phoneNumberAlt: phoneSchema({
+        invalid_phone_canadian_error: t('apply-adult-child:contact-information.error-message.phone-number-alt-valid'),
+        invalid_phone_international_error: t('apply-adult-child:contact-information.error-message.phone-number-alt-valid-international'),
+      }).optional(),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
       mailingAddress: z.string().trim().min(1, t('apply-adult-child:contact-information.error-message.mailing-address.address-required')).max(30).refine(isAllValidInputCharacters, t('apply-adult-child:contact-information.error-message.characters-valid')),
@@ -181,8 +177,6 @@ export async function action({ context: { appContainer, session }, params, reque
       ...val,
       homePostalCode: val.homeCountry && val.homePostalCode ? formatPostalCode(val.homeCountry, val.homePostalCode) : val.homePostalCode,
       mailingPostalCode: val.mailingCountry && val.mailingPostalCode ? formatPostalCode(val.mailingCountry, val.mailingPostalCode) : val.mailingPostalCode,
-      phoneNumber: val.phoneNumber ? parsePhoneNumberWithError(val.phoneNumber, 'CA').formatInternational() : val.phoneNumber,
-      phoneNumberAlt: val.phoneNumberAlt ? parsePhoneNumberWithError(val.phoneNumberAlt, 'CA').formatInternational() : val.phoneNumberAlt,
     })) satisfies z.ZodType<ContactInformationState>;
 
   const parsedDataResult = personalInformationSchema.safeParse({

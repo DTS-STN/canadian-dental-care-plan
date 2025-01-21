@@ -2,7 +2,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react
 import { data, redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { isValidPhoneNumber, parsePhoneNumberWithError } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -23,6 +22,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { phoneSchema } from '~/.server/validation/phone-schema';
 
 enum FormAction {
   Continue = 'continue',
@@ -70,23 +70,15 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const phoneNumberSchema = z
     .object({
-      phoneNumber: z
-        .string()
-        .trim()
-        .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('renew-ita:confirm-phone.error-message.phone-number-valid'))
-        .optional(),
-      phoneNumberAlt: z
-        .string()
-        .trim()
-        .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('renew-ita:confirm-phone.error-message.phone-number-alt-valid'))
-        .optional(),
-    })
-    .transform((val) => ({
-      phoneNumber: val.phoneNumber ? parsePhoneNumberWithError(val.phoneNumber, 'CA').formatInternational() : val.phoneNumber,
-      phoneNumberAlt: val.phoneNumberAlt ? parsePhoneNumberWithError(val.phoneNumberAlt, 'CA').formatInternational() : val.phoneNumberAlt,
-    }));
+      phoneNumber: phoneSchema({
+        invalid_phone_canadian_error: t('renew-ita:confirm-phone.error-message.phone-number-valid'),
+        invalid_phone_international_error: t('renew-ita:confirm-phone.error-message.phone-number-valid-international'),
+      }).optional(),
+      phoneNumberAlt: phoneSchema({
+        invalid_phone_canadian_error: t('renew-ita:confirm-phone.error-message.phone-number-alt-valid'),
+        invalid_phone_international_error: t('renew-ita:confirm-phone.error-message.phone-number-alt-valid-international'),
+      }).optional(),
+    });
 
   const parsedDataResult = phoneNumberSchema.safeParse({
     phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
