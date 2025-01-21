@@ -4,7 +4,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react
 import { data, redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { parsePhoneNumberWithError } from 'libphonenumber-js';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -84,32 +83,14 @@ export async function action({ context: { appContainer, session }, params, reque
       isNewOrUpdatedPhoneNumber: z.nativeEnum(AddOrUpdatePhoneOption, {
         errorMap: () => ({ message: t('renew-adult:confirm-phone.error-message.add-or-update-required') }),
       }),
-      phoneNumber: z
-        .string()
-        .trim()
-        .max(100)
-        .superRefine((val, ctx) => {
-          const result = phoneSchema({invalid_phone_canadian_error: t('renew-adult:confirm-phone.error-message.phone-number-valid'), invalid_phone_international_error: t('renew-adult:confirm-phone.error-message.phone-number-valid-international')}).safeParse(val);
-          if(!result.success){
-            result.error.errors.forEach((error) => {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: error.message, path: ['phoneNumber']});
-            })
-          }
-        })
-        .optional(),
-      phoneNumberAlt: z
-        .string()
-        .trim()
-        .max(100)
-        .superRefine((val, ctx) => {
-          const result = phoneSchema({invalid_phone_canadian_error: t('renew-adult:confirm-phone.error-message.phone-number-alt-valid'), invalid_phone_international_error: t('renew-adult:confirm-phone.error-message.phone-number-alt-valid-international')}).safeParse(val);
-          if(!result.success){
-            result.error.errors.forEach((error) => {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: error.message, path: ['phoneNumber']});
-            })
-          }
-        })
-        .optional(),
+      phoneNumber: phoneSchema({
+        invalid_phone_canadian_error: t('renew-adult:confirm-phone.error-message.phone-number-valid'),
+        invalid_phone_international_error: t('renew-adult:confirm-phone.error-message.phone-number-valid-international'),
+      }).optional(),
+      phoneNumberAlt: phoneSchema({
+        invalid_phone_canadian_error: t('renew-adult:confirm-phone.error-message.phone-number-alt-valid'),
+        invalid_phone_international_error: t('renew-adult:confirm-phone.error-message.phone-number-alt-valid-international'),
+      }).optional(),
     })
     .superRefine((val, ctx) => {
       if (val.isNewOrUpdatedPhoneNumber === AddOrUpdatePhoneOption.Yes) {
@@ -120,8 +101,6 @@ export async function action({ context: { appContainer, session }, params, reque
     })
     .transform((val) => ({
       isNewOrUpdatedPhoneNumber: val.isNewOrUpdatedPhoneNumber === AddOrUpdatePhoneOption.Yes,
-      phoneNumber: val.phoneNumber ? parsePhoneNumberWithError(val.phoneNumber, 'CA').formatInternational() : val.phoneNumber,
-      phoneNumberAlt: val.phoneNumberAlt ? parsePhoneNumberWithError(val.phoneNumberAlt, 'CA').formatInternational() : val.phoneNumberAlt,
     }));
 
   const parsedDataResult = phoneNumberSchema.safeParse({
