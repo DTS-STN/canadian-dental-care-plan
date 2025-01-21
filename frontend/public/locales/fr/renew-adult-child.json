@@ -268,7 +268,7 @@
       "each-child": "Chaque enfant doit avoir un numéro de client pour renouveler son adhésion. Si l'enfant n'a pas de numéro de client, vous devrez présenter une demande au Régime canadien de soins dentaires.",
       "dob-title": "Date de naissance",
       "client-number-title": "Numéro de client",
-      "edit-child": "Modifier les données de l'enfant",
+      "edit-child": "Modifier les renseignements sur l'enfant",
       "add-child": "Renouveler pour un enfant",
       "add-another-child": "Renouveler pour un autre enfant",
       "remove-child": "Retirer l'enfant",
