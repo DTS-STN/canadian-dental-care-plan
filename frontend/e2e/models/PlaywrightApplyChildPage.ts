@@ -129,7 +129,7 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
     //invalid phone number
     await this.page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Phone number (optional)', exact: true }).fill('111');
     await this.page.getByRole('button', { name: 'Continue' }).click();
-    await expect(this.page.getByRole('link', { name: "Phone number does not exist. If it's an international phone number, add '+' in front" })).toBeVisible();
+    await expect(this.page.getByRole('link', { name: 'Invalid phone number' })).toBeVisible();
 
     await this.page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Phone number (optional)', exact: true }).fill('2345678901');
     await this.page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Alternate phone number (optional)', exact: true }).fill('2345678902');

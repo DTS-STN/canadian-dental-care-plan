@@ -145,7 +145,7 @@ test.describe('Adult category', () => {
       //invalid phone number
       await page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Phone number (optional)', exact: true }).fill('111');
       await page.getByRole('button', { name: 'Continue' }).click();
-      await expect(page.getByRole('link', { name: "Phone number does not exist. If it's an international phone number, add '+' in front" })).toBeVisible();
+      await expect(page.getByRole('link', { name: 'Invalid phone number' })).toBeVisible();
 
       await page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Phone number (optional)', exact: true }).fill('2345678901');
       await page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Alternate phone number (optional)', exact: true }).fill('2345678902');
