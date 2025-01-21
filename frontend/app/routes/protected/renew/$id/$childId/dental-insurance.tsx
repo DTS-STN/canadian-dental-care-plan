@@ -117,26 +117,31 @@ export default function ProtectedRenewChildrenDentalInsurance() {
 
   const helpMessage = (
     <div className="my-4 space-y-4">
-      <ul className="list-disc space-y-1 pl-7">
-        <li>{t('protected-renew:children.dental-insurance.list.employment')}</li>
-        <li>{t('protected-renew:children.dental-insurance.list.pension')}</li>
-        <li>{t('protected-renew:children.dental-insurance.list.purchased')}</li>
-        <li>{t('protected-renew:children.dental-insurance.list.professional')}</li>
-      </ul>
       <Collapsible summary={t('protected-renew:children.dental-insurance.detail.additional-info.title')}>
         <div className="space-y-4">
           <p>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible')}</p>
           <ul className="list-disc space-y-1 pl-7">
-            <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.employer')}</li>
-            <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.pension')}</li>
-            <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.professional')}</li>
-          </ul>
-          <p>{t('protected-renew:children.dental-insurance.detail.additional-info.not-eligible')}</p>
-          <p>{t('protected-renew:children.dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
-          <p>{t('protected-renew:children.dental-insurance.detail.additional-info.excepton')}</p>
-          <ul className="list-disc space-y-1 pl-7">
-            <li>{t('protected-renew:children.dental-insurance.detail.additional-info.exception-list.opted-out')}</li>
-            <li>{t('protected-renew:children.dental-insurance.detail.additional-info.exception-list.opt-back')}</li>
+            <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.employment-benefits')}</li>
+            <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.organization.professional-student')}</li>
+            <p className="pl-4">{t('children.dental-insurance.detail.additional-info.eligible-list.organization.note')}</p>
+            <ul className="list-disc space-y-1 pl-12">
+              <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.organization.not-take')}</li>
+              <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.organization.pay-premium')}</li>
+              <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.organization.not-use')}</li>
+            </ul>
+            <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.pension.pension-benefits')}</li>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.pension.federal-provincial-territorial')}</li>
+              <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.pension.exceptions.eligible')}</li>
+              <ul className="list-disc space-y-1 pl-7">
+                <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opted-out')}</li>
+                <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opt-back')}</li>
+              </ul>
+            </ul>
+            <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-through')}</li>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('protected-renew:children.dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-privately')}</li>
+            </ul>
           </ul>
         </div>
       </Collapsible>
@@ -144,69 +149,67 @@ export default function ProtectedRenewChildrenDentalInsurance() {
   );
 
   return (
-    <>
-      <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew:required-label')}</p>
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="my-6">
-            <InputRadios
-              id="dental-insurance"
-              name="dentalInsurance"
-              legend={t('protected-renew:children.dental-insurance.legend', { childName: childName })}
-              options={[
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:children.dental-insurance.option-yes" />,
-                  value: 'yes',
-                  defaultChecked: defaultState === true,
-                },
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:children.dental-insurance.option-no" />,
-                  value: 'no',
-                  defaultChecked: defaultState === false,
-                },
-              ]}
-              helpMessagePrimary={helpMessage}
-              helpMessagePrimaryClassName="text-black"
-              errorMessage={errors?.dentalInsurance}
-              required
-            />
+    <div className="max-w-prose">
+      <p className="mb-4 italic">{t('renew:required-label')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <div className="my-6">
+          <InputRadios
+            id="dental-insurance"
+            name="dentalInsurance"
+            legend={t('protected-renew:children.dental-insurance.legend', { childName: childName })}
+            options={[
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:children.dental-insurance.option-yes" />,
+                value: 'yes',
+                defaultChecked: defaultState === true,
+              },
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:children.dental-insurance.option-no" />,
+                value: 'no',
+                defaultChecked: defaultState === false,
+              },
+            ]}
+            helpMessagePrimary={helpMessage}
+            helpMessagePrimaryClassName="text-black"
+            errorMessage={errors?.dentalInsurance}
+            required
+          />
+        </div>
+        {editMode ? (
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Child access to private dental insurance click">
+              {t('protected-renew:children.dental-insurance.button.save-btn')}
+            </Button>
+            <ButtonLink
+              id="back-button"
+              routeId="protected/renew/$id/review-child-information"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Child access to private dental insurance click"
+            >
+              {t('protected-renew:children.dental-insurance.button.cancel-btn')}
+            </ButtonLink>
           </div>
-          {editMode ? (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Child access to other dental insurance click">
-                {t('protected-renew:children.dental-insurance.button.save-btn')}
-              </Button>
-              <ButtonLink
-                id="back-button"
-                routeId="protected/renew/$id/review-child-information"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Child access to other dental insurance click"
-              >
-                {t('protected-renew:children.dental-insurance.button.cancel-btn')}
-              </ButtonLink>
-            </div>
-          ) : (
-            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Child access to other dental insurance click">
-                {t('protected-renew:children.dental-insurance.button.continue')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="protected/renew/$id/$childId/parent-or-guardian"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Child access to other dental insurance click"
-              >
-                {t('protected-renew:children.dental-insurance.button.back')}
-              </ButtonLink>
-            </div>
-          )}
-        </fetcher.Form>
-      </div>
-    </>
+        ) : (
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Child access to private dental insurance click">
+              {t('protected-renew:children.dental-insurance.button.continue')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              routeId="protected/renew/$id/$childId/parent-or-guardian"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Child access to private dental insurance click"
+            >
+              {t('protected-renew:children.dental-insurance.button.back')}
+            </ButtonLink>
+          </div>
+        )}
+      </fetcher.Form>
+    </div>
   );
 }
