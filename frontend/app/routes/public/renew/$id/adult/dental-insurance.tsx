@@ -66,7 +66,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
     if (state.hasAddressChanged) {
-      return redirect(getPathById('public/renew/$id/adult/update-mailing-address', params));
+      if (state.isHomeAddressSameAsMailingAddress) {
+        return redirect(getPathById('public/renew/$id/adult/update-mailing-address', params));
+      }
+      return redirect(getPathById('public/renew/$id/adult/update-home-address', params));
     }
     return redirect(getPathById('public/renew/$id/adult/confirm-address', params));
   }

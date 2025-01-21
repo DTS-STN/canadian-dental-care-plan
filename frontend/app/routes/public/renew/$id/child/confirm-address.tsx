@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-child:confirm-address.page-title') }) };
 
-  return { id: state.id, meta, defaultState: { hasAddressChanged: state.hasAddressChanged, isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress }, editMode: state.editMode };
+  return { id: state.id, meta, defaultState: { hasAddressChanged: state.hasAddressChanged }, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -70,7 +70,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedDataResult = confirmAddressSchema.safeParse({
     hasAddressChanged: formData.get('hasAddressChanged'),
-    isHomeAddressSameAsMailingAddress: formData.get('isHomeAddressSameAsMailingAddress') ?? '',
   });
 
   if (!parsedDataResult.success) {
