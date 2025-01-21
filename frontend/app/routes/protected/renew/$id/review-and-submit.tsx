@@ -17,6 +17,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { DebugPayload } from '~/components/debug-payload';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -54,11 +55,25 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-submit.page-title') }) };
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-and-submit', { userId: idToken.sub });
+
   const primaryApplicantName = isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) ? `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}` : undefined;
   const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
-  const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-and-submit', { userId: idToken.sub });
+  // we need to work with a copy of the state because a user could back navigate renew for another child and mutable data would have possibly filtered that child from state
+  const copiedState = JSON.parse(JSON.stringify(state));
+  copiedState.children = children;
+
+  const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
+  const userInfoToken = session.get<UserinfoToken>('userInfoToken');
+
+  // prettier-ignore
+  const payload =
+      viewPayloadEnabled &&
+      appContainer
+        .get(TYPES.domain.mappers.BenefitRenewalDtoMapper)
+        .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(copiedState, userInfoToken.sub, isPrimaryApplicantStateComplete(state,demographicSurveyEnabled)));
 
   return {
     meta,
@@ -66,6 +81,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     children,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
+    payload,
   };
 }
 
@@ -113,7 +129,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewReviewSubmit() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { primaryApplicantName, children, hCaptchaEnabled, siteKey } = useLoaderData<typeof loader>();
+  const { primaryApplicantName, children, hCaptchaEnabled, siteKey, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -146,38 +162,45 @@ export default function ProtectedRenewReviewSubmit() {
   }
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4">{t('protected-renew:review-submit.form-instructions')}</p>
-      <ul className="my-6 list-inside list-disc space-y-2">
-        {primaryApplicantName && <li>{primaryApplicantName}</li>}
-        {children.map((child) => {
-          const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-          return <li key={childName}>{childName}</li>;
-        })}
-      </ul>
-      <p className="mb-4">{t('protected-renew:review-submit.submit-p-proceed')}</p>
-      <p className="mb-4">{t('protected-renew:review-submit.submit-p-false-info')}</p>
-      <p className="mb-4">{t('protected-renew:review-submit.submit-p-repayment')}</p>
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-        <CsrfTokenInput />
-        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton
-            id="submit-button"
-            name="_action"
-            value={FormAction.Submit}
-            variant="green"
-            loading={isSubmitting && submitAction === FormAction.Submit}
-            endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Submit application - Submit your renewal application click"
-          >
-            {t('protected-renew:review-submit.submit-button')}
-          </LoadingButton>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Submit your renewal application click">
-            {t('protected-renew:review-submit.back-button')}
-          </Button>
+    <>
+      <div className="max-w-prose">
+        <p className="mb-4">{t('protected-renew:review-submit.form-instructions')}</p>
+        <ul className="my-6 list-inside list-disc space-y-2">
+          {primaryApplicantName && <li>{primaryApplicantName}</li>}
+          {children.map((child) => {
+            const childName = `${child.information?.firstName} ${child.information?.lastName}`;
+            return <li key={childName}>{childName}</li>;
+          })}
+        </ul>
+        <p className="mb-4">{t('protected-renew:review-submit.submit-p-proceed')}</p>
+        <p className="mb-4">{t('protected-renew:review-submit.submit-p-false-info')}</p>
+        <p className="mb-4">{t('protected-renew:review-submit.submit-p-repayment')}</p>
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+          <CsrfTokenInput />
+          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton
+              id="submit-button"
+              name="_action"
+              value={FormAction.Submit}
+              variant="green"
+              loading={isSubmitting && submitAction === FormAction.Submit}
+              endIcon={faChevronRight}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Submit application - Submit your renewal application click"
+            >
+              {t('protected-renew:review-submit.submit-button')}
+            </LoadingButton>
+            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Submit your renewal application click">
+              {t('protected-renew:review-submit.back-button')}
+            </Button>
+          </div>
+        </fetcher.Form>
+      </div>
+      {payload && (
+        <div className="mt-8">
+          <DebugPayload data={payload} enableCopy />
         </div>
-      </fetcher.Form>
-    </div>
+      )}
+    </>
   );
 }
