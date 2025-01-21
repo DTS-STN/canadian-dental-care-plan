@@ -171,14 +171,14 @@
   },
   "update-dental-benefits": {
     "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
-    "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
+    "access-to-dental": "L'accès à des prestations dentaires dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur l'admissibilité de l'enfant au Régime canadien de soins dentaires.",
     "select-one": "Sélectionnez une option",
     "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
     "federal-benefits": {
       "title": "Prestations fédérales",
       "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social fédéral autre que le Régime canadien de soins dentaires?",
-      "option-yes": "<strong>Oui</strong>, j'ai des prestations <strong>fédérales</strong> pour soins dentaires",
-      "option-no": "<strong>Non</strong>, je n'ai pas des prestations <strong>fédérales</strong> pour soins dentaires",
+      "option-yes": "<strong>Oui</strong>, l'enfant bénéficie de prestations dentaires fédérales",
+      "option-no": "<strong>Non</strong>, l'enfant ne bénéficie pas de prestations dentaires fédérales",
       "social-programs": {
         "legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
       }
@@ -186,8 +186,8 @@
     "provincial-territorial-benefits": {
       "title": "Prestations provinciales ou territoriales",
       "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social provincial ou territorial autre que le Régime canadien de soins dentaires?",
-      "option-yes": "<strong>Oui</strong>, j'ai des prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
-      "option-no": "<strong>Non</strong>, je n'ai pas des prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
+      "option-yes": "<strong>Oui</strong>, l'enfant bénéficie de prestations dentaires provinciales ou territoriales",
+      "option-no": "<strong>Non</strong>, l'enfant ne bénéficie pas de prestations dentaires provinciales ou territoriales",
       "social-programs": {
         "input-legend": "Par l'entremise de quelle province ou de quel territoire?",
         "radio-legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
