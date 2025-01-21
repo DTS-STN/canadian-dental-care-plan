@@ -208,7 +208,7 @@
     "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
     "has-benefits": "Bénéficiez-vous de prestations pour soins dentaires dans le cadre d'un programme social fédéral, provincial ou territorial autre que le Régime canadien de soins dentaires?",
     "option-yes": "<strong>Oui</strong>, j'ai des prestations fédérales, provincial ou territorial",
-    "option-no": "<strong>Non</strong>, Non, je n'ai pas des prestations fédérales, provincial ou territorial",
+    "option-no": "<strong>Non</strong>, je n'ai pas de prestations fédérales, provinciales ou territoriales",
     "button": {
       "back": "Retour",
       "continue": "Continuer",

@@ -10,6 +10,7 @@ import { loadRenewItaState } from '~/.server/routes/helpers/renew-ita-route-help
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { phoneSchema } from '~/.server/validation/phone-schema';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
@@ -22,7 +23,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { phoneSchema } from '~/.server/validation/phone-schema';
 
 enum FormAction {
   Continue = 'continue',
@@ -68,17 +68,16 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const phoneNumberSchema = z
-    .object({
-      phoneNumber: phoneSchema({
-        invalid_phone_canadian_error: t('renew-ita:confirm-phone.error-message.phone-number-valid'),
-        invalid_phone_international_error: t('renew-ita:confirm-phone.error-message.phone-number-valid-international'),
-      }).optional(),
-      phoneNumberAlt: phoneSchema({
-        invalid_phone_canadian_error: t('renew-ita:confirm-phone.error-message.phone-number-alt-valid'),
-        invalid_phone_international_error: t('renew-ita:confirm-phone.error-message.phone-number-alt-valid-international'),
-      }).optional(),
-    });
+  const phoneNumberSchema = z.object({
+    phoneNumber: phoneSchema({
+      invalid_phone_canadian_error: t('renew-ita:confirm-phone.error-message.phone-number-valid'),
+      invalid_phone_international_error: t('renew-ita:confirm-phone.error-message.phone-number-valid-international'),
+    }).optional(),
+    phoneNumberAlt: phoneSchema({
+      invalid_phone_canadian_error: t('renew-ita:confirm-phone.error-message.phone-number-alt-valid'),
+      invalid_phone_international_error: t('renew-ita:confirm-phone.error-message.phone-number-alt-valid-international'),
+    }).optional(),
+  });
 
   const parsedDataResult = phoneNumberSchema.safeParse({
     phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
