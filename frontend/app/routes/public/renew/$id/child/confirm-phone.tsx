@@ -12,6 +12,7 @@ import { loadRenewChildState } from '~/.server/routes/helpers/renew-child-route-
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { phoneSchema } from '~/.server/validation/phone-schema';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
@@ -25,7 +26,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { phoneSchema } from '~/.server/validation/phone-schema';
 
 enum FormAction {
   Continue = 'continue',
