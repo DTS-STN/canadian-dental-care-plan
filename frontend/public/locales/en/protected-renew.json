@@ -593,7 +593,7 @@
       "no": "No"
     },
     "error-message": {
-      "is-home-address-same-as-mailing-address-required": "Select whether or not your mailing address and home address are the same"
+      "is-home-address-same-as-mailing-address-required": "Select whether your home address is the same as your mailing address"
     },
     "back-btn": "Back",
     "continue-btn": "Continue",
