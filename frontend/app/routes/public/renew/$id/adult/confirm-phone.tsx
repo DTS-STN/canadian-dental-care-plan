@@ -100,9 +100,8 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     })
     .transform((val) => ({
+      ...val,
       isNewOrUpdatedPhoneNumber: val.isNewOrUpdatedPhoneNumber === AddOrUpdatePhoneOption.Yes,
-      phoneNumber: val.phoneNumber,
-      phoneNumberAlt: val.phoneNumberAlt,
     }));
 
   const parsedDataResult = phoneNumberSchema.safeParse({
