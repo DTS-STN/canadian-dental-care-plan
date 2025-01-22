@@ -186,7 +186,7 @@ export default function RenewAdultConfirm() {
             <DescriptionListItem term={t('confirm.client-number')}>
               <span className="text-nowrap">{formatSubmissionApplicationCode(userInfo.clientNumber)}</span>
             </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus ?? <p>{t('renew-adult:confirm.no-change')}</p>}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus ?? <p>{t('renew-adult:confirm.no-update')}</p>}</DescriptionListItem>
           </dl>
         </section>
 
@@ -218,7 +218,7 @@ export default function RenewAdultConfirm() {
                   }}
                 />
               ) : (
-                t('renew-adult:confirm.no-change')
+                t('renew-adult:confirm.no-update')
               )}
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.home')}>
@@ -233,7 +233,7 @@ export default function RenewAdultConfirm() {
                   }}
                 />
               ) : (
-                t('renew-adult:confirm.no-change')
+                t('renew-adult:confirm.no-update')
               )}
             </DescriptionListItem>
           </dl>

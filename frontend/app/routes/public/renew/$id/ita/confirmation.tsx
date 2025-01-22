@@ -238,7 +238,7 @@ export default function RenewFlowConfirm() {
                   }}
                 />
               ) : (
-                t('renew-ita:confirm.no-change')
+                t('renew-ita:confirm.no-update')
               )}
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.home')}>
@@ -253,7 +253,7 @@ export default function RenewFlowConfirm() {
                   }}
                 />
               ) : (
-                t('renew-ita:confirm.no-change')
+                t('renew-ita:confirm.no-update')
               )}
             </DescriptionListItem>
           </dl>
