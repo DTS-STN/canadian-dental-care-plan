@@ -19,10 +19,6 @@ export type ApplyState = ReadonlyDeep<{
   editMode: boolean;
   lastUpdatedOn: string;
   allChildrenUnder18?: boolean;
-  applicationYears: {
-    applicationYearId: string;
-    taxYear: string;
-  }[];
   applicantInformation?: {
     firstName: string;
     lastName: string;
@@ -106,7 +102,6 @@ export type ApplyState = ReadonlyDeep<{
 }>;
 
 export type ApplicantInformationState = NonNullable<ApplyState['applicantInformation']>;
-export type ApplicationYearsState = ApplyState['applicationYears'];
 export type ChildrenState = ApplyState['children'];
 export type ChildState = ChildrenState[number];
 export type ChildDentalBenefitsState = NonNullable<ChildState['dentalBenefits']>;
@@ -184,8 +179,8 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 interface SaveStateArgs {
   params: Params;
   session: Session;
-  state: Partial<OmitStrict<ApplyState, 'id' | 'lastUpdatedOn' | 'applicationYears'>>;
-  remove?: keyof OmitStrict<ApplyState, 'children' | 'editMode' | 'id' | 'lastUpdatedOn' | 'applicationYears'>;
+  state: Partial<OmitStrict<ApplyState, 'id' | 'lastUpdatedOn'>>;
+  remove?: keyof OmitStrict<ApplyState, 'children' | 'editMode' | 'id' | 'lastUpdatedOn'>;
 }
 
 /**
@@ -232,7 +227,6 @@ export function clearApplyState({ params, session }: ClearStateArgs) {
 }
 
 interface StartArgs {
-  applicationYears: ApplicationYearsState;
   id: string;
   session: Session;
 }
@@ -242,7 +236,7 @@ interface StartArgs {
  * @param args - The arguments.
  * @returns The initial apply state.
  */
-export function startApplyState({ applicationYears, id, session }: StartArgs) {
+export function startApplyState({ id, session }: StartArgs) {
   const log = getLogger('apply-route-helpers.server/startApplyState');
   const parsedId = idSchema.parse(id);
 
@@ -250,7 +244,6 @@ export function startApplyState({ applicationYears, id, session }: StartArgs) {
     id: parsedId,
     editMode: false,
     lastUpdatedOn: new UTCDate().toISOString(),
-    applicationYears,
     children: [],
   };
 

@@ -35,7 +35,6 @@ describe('apply-child-route-helpers', () => {
       id: '00000000-0000-0000-0000-000000000000',
       editMode: false,
       lastUpdatedOn: '2000-01-01',
-      applicationYears: [],
       children: [],
     } satisfies ApplyState;
 
