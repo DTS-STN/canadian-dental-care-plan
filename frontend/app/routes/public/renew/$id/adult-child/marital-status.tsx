@@ -139,8 +139,8 @@ export default function RenewAdultChildMaritalStatus() {
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     maritalStatus: 'input-radio-marital-status-option-0',
-    yearOfBirth: 'year-of-birth',
     socialInsuranceNumber: 'social-insurance-number',
+    yearOfBirth: 'year-of-birth',
     confirm: 'input-checkbox-confirm',
   });
 
