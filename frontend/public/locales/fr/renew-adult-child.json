@@ -12,7 +12,7 @@
       "no": "Non"
     },
     "error-message": {
-      "has-marital-status-changed-required": "Please indicate if your marital status has changed"
+      "has-marital-status-changed-required": "Sélectionnez si votre état civil à changé"
     }
   },
   "marital-status": {
