@@ -135,8 +135,8 @@ export default function RenewItaMaritalStatus() {
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     maritalStatus: 'input-radio-marital-status-option-0',
-    socialInsuranceNumber: 'social-insurance-number',
     yearOfBirth: 'year-of-birth',
+    socialInsuranceNumber: 'social-insurance-number',
     confirm: 'input-checkbox-confirm',
   });
 
@@ -166,6 +166,7 @@ export default function RenewItaMaritalStatus() {
                 <h2 className="mb-6 font-lato text-2xl font-bold">{t('renew-ita:marital-status.spouse-or-commonlaw')}</h2>
                 <p className="mb-4">{t('renew-ita:marital-status.provide-sin')}</p>
                 <p className="mb-6">{t('renew-ita:marital-status.required-information')}</p>
+                <InputPatternField id="year-of-birth" name="yearOfBirth" inputMode="numeric" format="####" defaultValue={defaultState.yearOfBirth ?? ''} label={t('renew-ita:marital-status.year-of-birth')} errorMessage={errors?.yearOfBirth} required />
                 <InputPatternField
                   id="social-insurance-number"
                   name="socialInsuranceNumber"
@@ -178,7 +179,6 @@ export default function RenewItaMaritalStatus() {
                   errorMessage={errors?.socialInsuranceNumber}
                   required
                 />
-                <InputPatternField id="year-of-birth" name="yearOfBirth" inputMode="numeric" format="####" defaultValue={defaultState.yearOfBirth ?? ''} label={t('renew-ita:marital-status.year-of-birth')} errorMessage={errors?.yearOfBirth} required />
                 <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={errors?.confirm} defaultChecked={defaultState.confirm === true} required>
                   {t('renew-ita:marital-status.confirm-checkbox')}
                 </InputCheckbox>
