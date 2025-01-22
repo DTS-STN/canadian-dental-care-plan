@@ -101,6 +101,8 @@ export async function action({ context: { appContainer, session }, params, reque
     })
     .transform((val) => ({
       isNewOrUpdatedPhoneNumber: val.isNewOrUpdatedPhoneNumber === AddOrUpdatePhoneOption.Yes,
+      phoneNumber: val.phoneNumber,
+      phoneNumberAlt: val.phoneNumberAlt,
     }));
 
   const parsedDataResult = phoneNumberSchema.safeParse({
@@ -112,6 +114,9 @@ export async function action({ context: { appContainer, session }, params, reque
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
+
+  console.log("parsed results");
+  console.log(parsedDataResult.data)
 
   saveRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
 

@@ -177,6 +177,8 @@ export async function action({ context: { appContainer, session }, params, reque
       ...val,
       homePostalCode: val.homeCountry && val.homePostalCode ? formatPostalCode(val.homeCountry, val.homePostalCode) : val.homePostalCode,
       mailingPostalCode: val.mailingCountry && val.mailingPostalCode ? formatPostalCode(val.mailingCountry, val.mailingPostalCode) : val.mailingPostalCode,
+      phoneNumber: val.phoneNumber,
+      phoneNumberAlt: val.phoneNumberAlt,
     })) satisfies z.ZodType<ContactInformationState>;
 
   const parsedDataResult = personalInformationSchema.safeParse({
