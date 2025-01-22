@@ -479,7 +479,7 @@
   "review-adult-information": {
     "read-carefully": "Review this information carefully. The information provided will be used to update your Canadian Dental Care Plan member account.",
     "page-title": "Review your information",
-    "page-sub-title": "Member information",
+    "page-sub-title": "Applicant information",
     "dob-title": "Date of birth",
     "dob-change": "Change date of birth",
     "client-number-title": "Client number",
@@ -573,7 +573,7 @@
     "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
     "applicant-summary": "Summary of updates",
     "applicant-title": "Applicant",
-    "member-info": "Member information",
+    "member-info": "Applicant information",
     "dental-insurance": "Access to dental insurance",
     "dental-benefit-has-access": "Has access to the following benefits:",
     "full-name": "Full name",
