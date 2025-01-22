@@ -115,9 +115,6 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  console.log("parsed results");
-  console.log(parsedDataResult.data)
-
   saveRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
 
   if (state.editMode) {
