@@ -449,6 +449,8 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
       }),
+      dentalBenefits: [],
+      dentalInsurance: undefined,
       partnerInformation: this.toPartnerInformation({
         existingPartnerInformation: clientApplication.partnerInformation,
         hasMaritalStatusChanged,
