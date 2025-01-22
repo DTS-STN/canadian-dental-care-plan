@@ -103,7 +103,7 @@
     "help-message": "L'adresse que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
     "error-message": {
       "has-address-changed-required": "Sélectionnez si vous souhaitez mettre à jour votre adresse postale",
-      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
+      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse à domicile est la même que votre adresse postale"
     },
     "back-btn": "Retour",
     "continue-btn": "Continuer",

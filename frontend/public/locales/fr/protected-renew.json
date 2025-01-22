@@ -593,7 +593,7 @@
       "no": "Non"
     },
     "error-message": {
-      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse postale et votre adresse domicile sont identiques ou non"
+      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse à domicile est la même que votre adresse postale"
     },
     "back-btn": "Retour",
     "continue-btn": "Continuer",
