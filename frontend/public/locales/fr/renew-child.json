@@ -206,7 +206,7 @@
     "option-yes": "Oui",
     "option-no": "Non",
     "error-message": {
-      "add-or-update-required": "Indiquez si vous souhaitez ajouter ou mettre à jour votre numéro de téléphone",
+      "add-or-update-required": "Sélectionnez si vous souhaitez mettre à jour ou ajouter un numéro de téléphone",
       "phone-number-valid": "Numéro de téléphone invalide",
       "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
       "phone-number-alt-valid": "Numéro de téléphone invalide",
