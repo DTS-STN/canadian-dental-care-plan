@@ -100,6 +100,7 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     })
     .transform((val) => ({
+      ...val,
       isNewOrUpdatedPhoneNumber: val.isNewOrUpdatedPhoneNumber === AddOrUpdatePhoneOption.Yes,
     }));
 
