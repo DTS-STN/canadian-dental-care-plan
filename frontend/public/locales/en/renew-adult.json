@@ -12,7 +12,7 @@
       "no": "No"
     },
     "error-message": {
-      "has-marital-status-changed-required": "Please indicate if your marital status has changed"
+      "has-marital-status-changed-required": "Select whether your marital status has changed"
     }
   },
   "marital-status": {
@@ -20,7 +20,7 @@
     "marital-status": "What is your current marital status?",
     "spouse-or-commonlaw": "Spouse or common-law partner information",
     "provide-sin": "Provide the Social Insurance Number (SIN) of your current spouse or common-law partner. The information is required to calculate your adjusted family net income.",
-    "required-information": "Your spouse or common-law partner must submit their own application or renewal for the Canadian Dental Care Plan.",
+    "required-information": "Your spouse or common-law partner must submit their own application for the Canadian Dental Care Plan.",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
