@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { data, redirect, useFetcher, useLoaderData } from 'react-router';
+import { data, redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
@@ -10,7 +10,7 @@ import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/rout
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { Button } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
@@ -111,6 +111,7 @@ export default function ProtectedRenewConfirmEmail() {
   const { defaultState } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+  const params = useParams();
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -158,9 +159,9 @@ export default function ProtectedRenewConfirmEmail() {
           <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Email click">
             {t('protected-renew:confirm-email.save-btn')}
           </Button>
-          <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Email click">
+          <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Email click">
             {t('protected-renew:confirm-email.cancel-btn')}
-          </Button>
+          </ButtonLink>
         </div>
       </fetcher.Form>
     </div>
