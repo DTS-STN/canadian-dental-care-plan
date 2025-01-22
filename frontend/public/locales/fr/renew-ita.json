@@ -261,12 +261,12 @@
     "submit-p-proceed": "En procédant à cette demande de renouvellement, vous acceptez d'attester la véracité des renseignements fournis.",
     "submit-p-false-info": "Si vous fournissez de faux renseignements dans votre demande de renouvellement, vous et les autres personnes pour lesquelles vous avez présenté une demande pourriez être exclus du régime.",
     "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles au renouvellement, vous pourriez avoir à rembourser la totalité des frais pour les soins reçus par l'intermédiaire du Régime canadien de soins dentaires.",
-    "submit-button": "Soumettre la demande de renouvellement ",
+    "submit-button": "Soumettre la demande de renouvellement",
     "exit-button": "Quitter la demande",
     "back-button": "Retour",
     "yes": "Oui",
     "no": "Non",
-    "no-change": "Aucun changement"
+    "no-update": "Pas de mise à jour"
   },
   "exit-application": {
     "page-title": "Quitter la demande",
@@ -311,7 +311,7 @@
     "dental-public": "Accès à des prestations dentaires gouvernementales\u00a0:",
     "yes": "Oui",
     "no": "Non",
-    "no-change": "Aucun changement",
+    "no-update": "Pas de mise à jour",
     "close-application": "Fermer la demande",
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
     "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
