@@ -101,7 +101,7 @@
     "cancel-btn": "Annuler",
     "save-btn": "Sauvegarder",
     "help-message": {
-      "client-number": "Vous trouverez votre numéro de client dans le coin supérieur droit de la lettre de renouvellement de Service Canada ou sur votre carte de membre du Régime canadien de soins dentaires."
+      "client-number": "Vous trouverez votre numéro de client dans le coin supérieur droit de la lettre de renouvellement de Service Canada ou sur votre carte de membre de la Sun Life."
     },
     "error-message": {
       "date-of-birth-day-number": "Le jour doit être un nombre",
