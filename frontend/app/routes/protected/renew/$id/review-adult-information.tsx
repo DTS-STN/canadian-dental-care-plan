@@ -328,7 +328,7 @@ export default function ProtectedRenewReviewAdultInformation() {
               <p>{userInfo.altPhoneNumber}</p>
               <div className="mt-4">
                 <InlineLink id="change-alternate-phone-number" routeId="protected/renew/$id/confirm-phone" params={params}>
-                  {t('protected-renew:review-adult-information.alt-phone-change')}
+                  {t('protected-renew:review-adult-information.phone-change')}
                 </InlineLink>
               </div>
             </DescriptionListItem>
@@ -457,14 +457,6 @@ export default function ProtectedRenewReviewAdultInformation() {
                 </p>
               </DescriptionListItem>
             </dl>
-          </section>
-        )}
-        {!hasChildren && (
-          <section className="space-y-4">
-            <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.submit-app-title')}</h2>
-            <p className="mb-4">{t('protected-renew:review-adult-information.submit-p-proceed')}</p>
-            <p className="mb-4">{t('protected-renew:review-adult-information.submit-p-false-info')}</p>
-            <p className="mb-4">{t('protected-renew:review-adult-information.submit-p-repayment')}</p>
           </section>
         )}
       </div>
