@@ -43,7 +43,7 @@
   },
   "confirm-phone": {
     "page-title": "Numéro de téléphone",
-    "add-phone": "Un numéro de téléphone à jour permet au gouvernement du Canada de communiquer avec vous en cas de problème avec votre renouvellement. Vous trouverez le numéro que nous avons en dossier dans la lettre de Service Canada. Si vous ne fournissez pas de numéro de téléphone, nous communiquerons avec vous par la poste.",
+    "add-phone": "Un numéro de téléphone à jour permet au gouvernement du Canada de communiquer avec vous en cas de problème avec votre renouvellement. Vous trouverez le numéro  la lettre de Service Canada. Si vous ne fournissez pas de numéro de téléphone, nous communiquerons avec vous par la poste.",
     "add-or-update": {
       "legend": "Souhaitez-vous mettre à jour ou ajouter votre numéro de téléphone?"
     },
