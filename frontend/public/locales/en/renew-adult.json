@@ -120,7 +120,7 @@
     },
     "address-field": {
       "address": "Address",
-      "address-note": "Include apartment number (if applicable), street number, street name. For example: 4B - 123 Main St.",
+      "address-note": "Include apartment number (if applicable), street number, street name. For example: 123 Main St. Suite 4B",
       "country": "Country",
       "province": "Province, territory, state, or region",
       "city": "City or town",
