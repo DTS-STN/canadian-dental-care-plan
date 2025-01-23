@@ -162,7 +162,7 @@
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
       "federal-benefit-required": "Sélectionnez si vous avez des prestations dentaires fédérales",
-      "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial sous lequel vous êtes couvert",
+      "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel vous êtes couvert",
       "provincial-benefit-required": "Sélectionnez si vous avez des prestations dentaires provinciales ou territoriales",
       "provincial-territorial-required": "Sélectionnez une province ou un territoire"
     }
