@@ -88,7 +88,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasFederalProvincialTerritorialBenefitsChanged: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefitsChanged,
-      dentalBenefits: state.editMode ? state.dentalBenefits : undefined,
+      dentalBenefits: state.editMode && parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefitsChanged ? state.dentalBenefits : undefined,
     },
   });
 
