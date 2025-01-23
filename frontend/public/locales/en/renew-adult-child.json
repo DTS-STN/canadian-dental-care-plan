@@ -56,7 +56,7 @@
     "option-yes": "Yes",
     "option-no": "No",
     "error-message": {
-      "add-or-update-required": "Select whether you would like to add or update your phone number",
+      "add-or-update-required": "Select whether you would like to update or add your phone number",
       "phone-number-valid": "Invalid phone number",
       "phone-number-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
       "phone-number-alt-valid": "Invalid phone number",
@@ -82,7 +82,7 @@
     "option-yes": "Yes",
     "option-no": "No",
     "error-message": {
-      "add-or-update-required": "Select whether you would like to add or update your email",
+      "add-or-update-required": "Select whether you would like to update or add your email",
       "email-match": "The email addresses entered do not match",
       "confirm-email-required": "Confirm email address",
       "email-required": "Enter an email address in the correct format, such as name@example.com",
