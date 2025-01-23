@@ -24,7 +24,7 @@ function getEnvValue(defaultValue: string, envVar?: string): string {
 }
 
 function getMetricExporter(): PushMetricExporter {
-  if (process.env.OTEL_USE_CONSOLE_EXPORTERS) {
+  if (process.env.OTEL_USE_CONSOLE_EXPORTERS === 'true') {
     log.info(`Exporting metrics to console every %s ms`, process.env.OTEL_METRICS_EXPORT_INTERVAL_MILLIS);
     return new ConsoleMetricExporter();
   }
