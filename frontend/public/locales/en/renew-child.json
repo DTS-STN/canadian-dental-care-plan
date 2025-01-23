@@ -142,7 +142,7 @@
         "save-btn": "Save"
       },
       "error-message": {
-        "federal-provincial-territorial-benefit-required": "Select whether you have federal, provincial or territorial dental benefits"
+        "federal-provincial-territorial-benefit-required": "Select whether the child has federal, provincial or territorial dental benefits"
       }
     },
     "update-dental-benefits": {
