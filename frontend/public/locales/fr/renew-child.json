@@ -48,6 +48,7 @@
       "save-btn": "Enregistrer",
       "child-not-found": {
         "heading": "Nous n'avons pas pu retrouver le dossier de votre enfant avec les informations que vous nous avez fournies.",
+        "please-review": "Assurez-vous que les informations que vous avez saisies sont correctes.",
         "contact-service-canada": "Si vous devez mettre à jour les informations d'identité de votre enfant ou si ce problème persiste, contactez Service Canada en appelant le <noWrap>1-833-537-4342</noWrap>."
       },
       "error-message": {
