@@ -142,7 +142,7 @@
     "continue-btn": "Continuer"
   },
   "renewal-delegate": {
-    "page-title": "Je présente une demande de renouvellement au nom d'une autre personne à titre de représentant légal ou mandataire",
+    "page-title": "Renouveler au nom de quelqu'un en tant que représentant légal ou mandataire",
     "contact-representative": "Vous devez parler à un agent de Service Canada si vous présentez une demande de renouvellement au nom d'une autre personne à titre de représentant légal ou mandataire. Vous pouvez communiquer avec Service Canada en téléphonant au <noWrap>1-833-537-4342</noWrap> ou en vous rendant dans un <contactServiceCanada>Centre Service Canada</contactServiceCanada> près de chez vous.",
     "prepare-to-apply": "<preparingToRenew>Se préparer à présenter une demande au nom de quelqu'un.</preparingToRenew>",
     "contact-service-canada-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
