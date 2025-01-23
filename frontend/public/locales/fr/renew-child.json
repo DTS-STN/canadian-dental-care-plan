@@ -36,7 +36,7 @@
       "first-name": "Prénom",
       "date-of-birth": "Date de naissance",
       "client-number": "Numéro de client de l'enfant",
-      "client-number-detail": "Vous trouverez le numéro de client de l'enfant dans le coin supérieur droit de la lettre de renouvellement de Service Canada ou sur la carte de membre de la Sun Life de l'enfant.",
+      "client-number-detail": "Vous trouverez le numéro de client de l'enfant dans le coin supérieur droit de la lettre de renouvellement de Service Canada ou sur la carte de membre du Régime canadien de soins dentaires de l'enfant.",
       "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
       "radio-options": {
         "yes": "Oui",
