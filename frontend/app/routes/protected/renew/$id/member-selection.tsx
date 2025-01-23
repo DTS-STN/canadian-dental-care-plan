@@ -153,7 +153,7 @@ export default function ProtectedRenewMemberSelection() {
           </LoadingButton>
           <ButtonLink
             id="back-button"
-            routeId={previouslyReviewed ? "protected/renew/$id/dental-insurance" : "protected/renew/$id/tax-filing"}
+            routeId={previouslyReviewed ? 'protected/renew/$id/dental-insurance' : 'protected/renew/$id/tax-filing'}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}
