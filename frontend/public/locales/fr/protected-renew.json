@@ -312,9 +312,9 @@
       },
       "error-message": {
         "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel l'enfant est couvert",
-        "federal-benefit-required": "Sélectionnez si cet enfant bénéficie d'une prestation dentaire fédérale",
-        "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial qui couvre cet enfant",
-        "provincial-benefit-required": "Sélectionnez si cet enfant bénéficie d'une prestation dentaire provinciale ou territoriale",
+        "federal-benefit-required": "Sélectionnez si l'enfant bénéficie de prestations dentaires fédérales",
+        "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel l'enfant est couvert",
+        "provincial-benefit-required": "Sélectionnez si l'enfant bénéficie de prestations dentaires provinciales ou territoriales",
         "provincial-territorial-required": "Sélectionnez une province ou un territoire"
       }
     },
