@@ -312,7 +312,7 @@ export default function RenewItaReviewInformation() {
                   t('renew-ita:review-information.no-update')
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="public/renew/$id/ita/update-mailing-address" params={params}>
+                  <InlineLink id="change-mailing-address" routeId="public/renew/$id/ita/confirm-address" params={params}>
                     {t('renew-ita:review-information.mailing-change')}
                   </InlineLink>
                 </div>
@@ -332,7 +332,7 @@ export default function RenewItaReviewInformation() {
                   t('renew-ita:review-information.no-update')
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-home-address" routeId="public/renew/$id/ita/update-home-address" params={params}>
+                  <InlineLink id="change-home-address" routeId="public/renew/$id/ita/confirm-address" params={params}>
                     {t('renew-ita:review-information.home-change')}
                   </InlineLink>
                 </div>
