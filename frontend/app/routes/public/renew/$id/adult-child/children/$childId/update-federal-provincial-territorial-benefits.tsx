@@ -29,6 +29,12 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+enum FormAction {
+  Continue = 'continue',
+  Cancel = 'cancel',
+  Save = 'save',
+}
+
 enum HasFederalBenefitsOption {
   No = 'no',
   Yes = 'yes',
@@ -90,6 +96,26 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  if (formAction === FormAction.Cancel) {
+    if (state.hasFederalProvincialTerritorialBenefitsChanged) {
+      saveRenewState({
+        params,
+        session,
+        state: {
+          children: renewState.children.map((child) => {
+            if (child.id !== state.id) return child;
+            return {
+              ...child,
+              hasFederalProvincialTerritorialBenefitsChanged: !!state.dentalBenefits,
+            };
+          }),
+        },
+      });
+    }
+    return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
+  }
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -342,24 +368,33 @@ export default function RenewAdultChildUpdateFederalProvincialTerritorialBenefit
           </fieldset>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="save-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Child access to other federal, provincial or territorial dental benefits click">
+              <Button
+                id="save-button"
+                name="_action"
+                value={FormAction.Save}
+                variant="primary"
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Child access to other federal, provincial or territorial dental benefits click"
+              >
                 {t('renew-adult-child:children.update-dental-benefits.button.save-btn')}
               </Button>
-              <ButtonLink
+              <LoadingButton
                 id="cancel-button"
-                routeId="public/renew/$id/child/review-child-information"
-                params={params}
+                name="_action"
+                value={FormAction.Cancel}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Child access to other federal, provincial or territorial dental benefits click"
               >
                 {t('renew-adult-child:children.update-dental-benefits.button.cancel-btn')}
-              </ButtonLink>
+              </LoadingButton>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <LoadingButton
-                variant="primary"
                 id="continue-button"
+                name="_action"
+                value={FormAction.Continue}
+                variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Child access to other federal, provincial or territorial dental benefits click"
