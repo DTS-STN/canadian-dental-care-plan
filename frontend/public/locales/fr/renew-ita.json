@@ -27,7 +27,7 @@
   },
   "confirm-phone": {
     "page-title": "Numéro de téléphone",
-    "add-phone": "L'ajout d'un numéro de téléphone à jour au dossier aidera le gouvernement du Canada à communiquer avec vous en cas de problème lié à votre demande de renouvellement. Sinon, nous communiquerons avec vous par la poste.",
+    "add-phone": "L'ajout d'un numéro de téléphone aidera le gouvernement du Canada à communiquer avec vous en cas de problème avec votre renouvellement. Sinon, nous communiquerons avec vous par la poste.",
     "phone-number": "Numéro de téléphone (facultatif)",
     "phone-number-alt": "Autre numéro de téléphone (facultatif)",
     "back-btn": "Retour",
