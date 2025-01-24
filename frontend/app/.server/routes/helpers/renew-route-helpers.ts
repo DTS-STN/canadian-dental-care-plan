@@ -1,5 +1,4 @@
 import { redirectDocument } from 'react-router';
-import type { Params } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
@@ -143,13 +142,13 @@ function getSessionName(id: string) {
   return `renew-flow-${idSchema.parse(id)}`;
 }
 
-export function getRenewStateIdFromUrl(url: string | URL) {
-  const { searchParams } = new URL(url);
-  return searchParams.get('id');
-}
+export type RenewStateParams = {
+  id: string;
+  lang: string;
+};
 
 interface LoadStateArgs {
-  params: Params;
+  params: RenewStateParams;
   session: Session;
 }
 
@@ -194,7 +193,7 @@ export function loadRenewState({ params, session }: LoadStateArgs) {
 }
 
 interface SaveStateArgs {
-  params: Params;
+  params: RenewStateParams;
   session: Session;
   state: Partial<OmitStrict<RenewState, 'id'>>;
   remove?: keyof OmitStrict<RenewState, 'id'>;
@@ -222,7 +221,7 @@ export function saveRenewState({ params, session, state }: SaveStateArgs) {
 }
 
 interface ClearStateArgs {
-  params: Params;
+  params: RenewStateParams;
   session: Session;
 }
 
