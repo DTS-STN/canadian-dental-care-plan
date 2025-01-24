@@ -1,7 +1,6 @@
 import { redirect } from 'react-router';
-import type { Params } from 'react-router';
 
-import type { ApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import type { ApplyState, ApplyStateParams } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
@@ -9,7 +8,7 @@ import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadApplyAdultStateArgs {
-  params: Params;
+  params: ApplyStateParams;
   request: Request;
   session: Session;
 }
@@ -48,7 +47,7 @@ export function loadApplyAdultState({ params, request, session }: LoadApplyAdult
 }
 
 interface LoadApplyAdultStateForReviewArgs {
-  params: Params;
+  params: ApplyStateParams;
   request: Request;
   session: Session;
 }
@@ -73,7 +72,7 @@ export function loadApplyAdultStateForReview({ params, request, session }: LoadA
 }
 
 interface ValidateApplyAdultStateForReviewArgs {
-  params: Params;
+  params: ApplyStateParams;
   state: ApplyState;
 }
 
