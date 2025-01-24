@@ -350,7 +350,9 @@
     "save-btn": "Sauvegarder",
     "error-message": {
       "phone-number-valid": "Numéro de téléphone invalide",
-      "phone-number-alt-valid": "Numéro de téléphone invalide"
+      "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-alt-valid": "Numéro de téléphone invalide",
+      "phone-number-alt-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant"
     }
   },
   "confirm-email": {

@@ -1,7 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { data, redirect, useFetcher, useLoaderData } from 'react-router';
+import { data, redirect, useFetcher, useLoaderData, useParams } from 'react-router';
 
-import { isValidPhoneNumber, parsePhoneNumberWithError } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -10,7 +9,8 @@ import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/rout
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { Button } from '~/components/buttons';
+import { phoneSchema } from '~/.server/validation/phone-schema';
+import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPhoneField } from '~/components/input-phone-field';
@@ -68,25 +68,16 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const phoneNumberSchema = z
-    .object({
-      phoneNumber: z
-        .string()
-        .trim()
-        .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('protected-renew:confirm-phone.error-message.phone-number-valid'))
-        .optional(),
-      phoneNumberAlt: z
-        .string()
-        .trim()
-        .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('protected-renew:confirm-phone.error-message.phone-number-alt-valid'))
-        .optional(),
-    })
-    .transform((val) => ({
-      phoneNumber: val.phoneNumber ? parsePhoneNumberWithError(val.phoneNumber, 'CA').formatInternational() : val.phoneNumber,
-      phoneNumberAlt: val.phoneNumberAlt ? parsePhoneNumberWithError(val.phoneNumberAlt, 'CA').formatInternational() : val.phoneNumberAlt,
-    }));
+  const phoneNumberSchema = z.object({
+    phoneNumber: phoneSchema({
+      invalid_phone_canadian_error: t('protected-renew:confirm-phone.error-message.phone-number-valid'),
+      invalid_phone_international_error: t('protected-renew:confirm-phone.error-message.phone-number-valid-international'),
+    }).optional(),
+    phoneNumberAlt: phoneSchema({
+      invalid_phone_canadian_error: t('protected-renew:confirm-phone.error-message.phone-number-alt-valid'),
+      invalid_phone_international_error: t('protected-renew:confirm-phone.error-message.phone-number-alt-valid-international'),
+    }).optional(),
+  });
 
   const parsedDataResult = phoneNumberSchema.safeParse({
     phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
@@ -115,6 +106,7 @@ export default function ProtectedRenewConfirmPhone() {
   const { defaultState } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+  const params = useParams();
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -163,9 +155,9 @@ export default function ProtectedRenewConfirmPhone() {
             <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Phone Number click">
               {t('protected-renew:confirm-phone.save-btn')}
             </Button>
-            <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Phone Number click">
+            <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Phone Number click">
               {t('protected-renew:confirm-phone.cancel-btn')}
-            </Button>
+            </ButtonLink>
           </div>
         </fetcher.Form>
       </div>

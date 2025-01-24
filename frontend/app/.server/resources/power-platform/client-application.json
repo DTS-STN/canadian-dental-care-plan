@@ -59,13 +59,13 @@
             {
               "TelephoneNumberCategoryCode": {
                 "ReferenceDataName": "Primary",
-                "ReferenceDataID": "555-555-5555"
+                "ReferenceDataID": "+15195555555"
               }
             },
             {
               "TelephoneNumberCategoryCode": {
                 "ReferenceDataName": "Alternate",
-                "ReferenceDataID": "555-555-5556"
+                "ReferenceDataID": "+15195555556"
               }
             }
           ]
