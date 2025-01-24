@@ -7,7 +7,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { BilingualNotFoundError, NotFoundError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import { pageIds } from '~/page-ids';
 import { isAppLocale } from '~/utils/locale-utils';
-import { mergeRouteModuleMeta } from '~/utils/meta-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -16,7 +16,7 @@ export const handle = {
   pageIdentifier: pageIds.public.notFound,
 } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 

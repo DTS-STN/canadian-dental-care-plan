@@ -21,7 +21,7 @@ import { useFeature } from '~/root';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeRouteModuleMeta } from '~/utils/meta-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
@@ -34,7 +34,7 @@ export const handle = {
   pageTitleI18nKey: 'apply-child:confirm.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 

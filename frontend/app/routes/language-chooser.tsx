@@ -1,5 +1,3 @@
-import type { MetaFunction } from 'react-router';
-
 import type { Route } from './+types/language-chooser';
 
 import { ButtonLink } from '~/components/buttons';
@@ -13,7 +11,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 // Meta tags are constructed for a bilingual page.
-export const meta: MetaFunction = mergeMeta((args) => {
+export const meta: Route.MetaFunction = mergeMeta((args) => {
   const title = 'Canadian Dental Care Plan | Régime canadien de soins dentaires - Canada.ca';
   const description =
     'The Canadian Dental Care Plan (CDCP) will help cover some of the cost of various ' +
