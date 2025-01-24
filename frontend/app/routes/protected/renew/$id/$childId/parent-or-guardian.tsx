@@ -53,7 +53,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.child-parent-or-guardian', { userId: idToken.sub });
 
-  return { meta, defaultState: state.isParentOrLegalGuardian, i18nOptions: { childName } };
+  return { meta, defaultState: state.isParentOrLegalGuardian, childName, i18nOptions: { childName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
@@ -109,7 +109,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewParentOrGuardian() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = useLoaderData<typeof loader>();
+  const { defaultState, childName } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -126,7 +126,7 @@ export default function ProtectedRenewParentOrGuardian() {
         <InputRadios
           id="parent-or-guardian"
           name="parentOrGuardian"
-          legend={t('protected-renew:children.parent-or-guardian.form-instructions')}
+          legend={t('protected-renew:children.parent-or-guardian.form-instructions', { childName })}
           options={[
             { value: ParentOrGuardianOption.Yes, children: t('protected-renew:children.parent-or-guardian.radio-options.yes'), defaultChecked: defaultState === true },
             { value: ParentOrGuardianOption.No, children: t('protected-renew:children.parent-or-guardian.radio-options.no'), defaultChecked: defaultState === false },
