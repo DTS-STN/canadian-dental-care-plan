@@ -66,10 +66,10 @@ function NavigationMenu() {
         <DropdownMenuTrigger asChild>
           <button className="inline-flex w-full items-center justify-between bg-slate-200 px-4 py-3 align-middle font-bold text-slate-700 outline-offset-2 hover:bg-neutral-300 focus:bg-neutral-300" id="dropdownNavbarLink" data-testid="menuButton">
             <span className="inline-flex w-full appearance-none items-center gap-4">
-              <FontAwesomeIcon icon={faCircleUser} className="size-9 flex-shrink-0" />
+              <FontAwesomeIcon icon={faCircleUser} className="size-9 shrink-0" />
               <span>{t('header.menu-title')}</span>
             </span>
-            <FontAwesomeIcon icon={faChevronDown} className="size-3 flex-shrink-0" />
+            <FontAwesomeIcon icon={faChevronDown} className="size-3 shrink-0" />
           </button>
         </DropdownMenuTrigger>
         {/* Use of a workaround (onFocusOutside={(e) => e.preventDefault()}) for the drowndownmenucontent with the resize issue raised by accessibility : https://github.com/radix-ui/primitives/issues/2754 */}
@@ -89,7 +89,7 @@ function NavigationMenu() {
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild className="cursor-pointer">
             <Link to="/auth/logout" className="flex items-center justify-between gap-2">
-              {t('gcweb:header.menu-sign-out.text')} <FontAwesomeIcon icon={faArrowRightFromBracket} className="size-4 flex-shrink-0" />
+              {t('gcweb:header.menu-sign-out.text')} <FontAwesomeIcon icon={faArrowRightFromBracket} className="size-4 shrink-0" />
             </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>

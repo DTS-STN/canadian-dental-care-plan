@@ -34,7 +34,7 @@ const DialogContent = React.forwardRef<React.ComponentRef<typeof DialogPrimitive
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-white data-[state=open]:text-black">
+        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-white data-[state=open]:text-black">
           <FontAwesomeIcon icon={faXmark} className="block size-4" />
           <span className="sr-only">{t('dialog.close')}</span>
         </DialogPrimitive.Close>

@@ -27,7 +27,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
     inset?: boolean;
   }
 >(({ className, inset, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubTrigger ref={ref} className={clsx('flex cursor-default select-none items-center rounded px-2 py-1.5 outline-none focus:bg-zinc-100 data-[state=open]:bg-zinc-100', inset && 'pl-8', className)} {...props}>
+  <DropdownMenuPrimitive.SubTrigger ref={ref} className={clsx('flex cursor-default select-none items-center rounded-sm px-2 py-1.5 outline-hidden focus:bg-zinc-100 data-[state=open]:bg-zinc-100', inset && 'pl-8', className)} {...props}>
     {children}
     <FontAwesomeIcon icon={faChevronRight} className="ml-auto size-4" />
   </DropdownMenuPrimitive.SubTrigger>
@@ -69,7 +69,7 @@ const DropdownMenuItem = React.forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
-    className={clsx('relative flex cursor-default select-none items-center rounded px-2 py-1.5 outline-none transition-colors focus:bg-zinc-100 focus:text-black data-[disabled]:pointer-events-none data-[disabled]:opacity-50', inset && 'pl-8', className)}
+    className={clsx('relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 outline-hidden transition-colors focus:bg-zinc-100 focus:text-black data-disabled:pointer-events-none data-disabled:opacity-50', inset && 'pl-8', className)}
     {...props}
   />
 ));
@@ -78,7 +78,7 @@ DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 const DropdownMenuCheckboxItem = React.forwardRef<React.ComponentRef<typeof DropdownMenuPrimitive.CheckboxItem>, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>>(({ className, children, checked, ...props }, ref) => (
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
-    className={clsx('relative flex cursor-default select-none items-center rounded py-1.5 pl-8 pr-2 outline-none transition-colors focus:bg-zinc-100 focus:text-black data-[disabled]:pointer-events-none data-[disabled]:opacity-50', className)}
+    className={clsx('relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 outline-hidden transition-colors focus:bg-zinc-100 focus:text-black data-disabled:pointer-events-none data-disabled:opacity-50', className)}
     checked={checked}
     {...props}
   >
@@ -95,7 +95,7 @@ DropdownMenuCheckboxItem.displayName = DropdownMenuPrimitive.CheckboxItem.displa
 const DropdownMenuRadioItem = React.forwardRef<React.ComponentRef<typeof DropdownMenuPrimitive.RadioItem>, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>>(({ className, children, ...props }, ref) => (
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
-    className={clsx('relative flex cursor-default select-none items-center rounded py-1.5 pl-8 pr-2 outline-none transition-colors focus:bg-zinc-100 focus:text-black data-[disabled]:pointer-events-none data-[disabled]:opacity-50', className)}
+    className={clsx('relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 outline-hidden transition-colors focus:bg-zinc-100 focus:text-black data-disabled:pointer-events-none data-disabled:opacity-50', className)}
     {...props}
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">

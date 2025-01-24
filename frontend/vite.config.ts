@@ -1,8 +1,7 @@
 import { reactRouter } from '@react-router/dev/vite';
 
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import autoprefixer from 'autoprefixer';
-import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { coverageConfigDefaults } from 'vitest/config';
@@ -14,13 +13,6 @@ import { coverageConfigDefaults } from 'vitest/config';
 export default defineConfig({
   build: {
     target: 'es2022',
-  },
-  css: {
-    postcss: {
-      // Configures PostCSS with Tailwind CSS and Autoprefixer.
-      // Tailwind CSS is used for utility-based styling, and Autoprefixer ensures styles work across browsers.
-      plugins: [tailwindcss, autoprefixer],
-    },
   },
   server: {
     hmr: {
@@ -41,6 +33,7 @@ export default defineConfig({
     exclude: ['@opentelemetry/otlp-exporter-base'],
   },
   plugins: [
+    tailwindcss(),
     tsconfigPaths(),
     //
     // see https://github.com/remix-run/remix/issues/9871

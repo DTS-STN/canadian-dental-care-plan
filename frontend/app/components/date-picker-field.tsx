@@ -14,7 +14,7 @@ import { extractDateParts, useMonths } from '~/utils/date-utils';
 import { padWithZero } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
-const inputBaseClassName = 'block rounded-lg border-gray-500 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500';
+const inputBaseClassName = 'block rounded-lg border-gray-500 focus:border-blue-500 focus:outline-hidden focus:ring-3 focus:ring-blue-500';
 const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 

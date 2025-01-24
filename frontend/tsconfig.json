@@ -18,7 +18,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "allowJs": true,
     "strictNullChecks": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
