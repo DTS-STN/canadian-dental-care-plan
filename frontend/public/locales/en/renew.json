@@ -89,7 +89,7 @@
     "date-of-birth": "Date of birth",
     "last-name": "Last name",
     "first-name": "First name",
-    "single-legal-name": "If you have a single legal name",
+    "single-legal-name": "If you have one legal name",
     "name-instructions": "If you have only one legal name, enter it in both the first and last name fields.",
     "no-client-number": "I don't have a client number",
     "renew-client-number": "To renew your coverage, you must have a client number.",
