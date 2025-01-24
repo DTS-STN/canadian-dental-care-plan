@@ -315,7 +315,7 @@ export default function RenewAdultChildReviewAdultInformation() {
                   <p>{t('renew-adult-child:review-adult-information.no-update')}</p>
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="public/renew/$id/adult-child/update-mailing-address" params={params}>
+                  <InlineLink id="change-mailing-address" routeId="public/renew/$id/adult-child/confirm-address" params={params}>
                     {t('renew-adult-child:review-adult-information.mailing-change')}
                   </InlineLink>
                 </div>
@@ -335,7 +335,7 @@ export default function RenewAdultChildReviewAdultInformation() {
                   <p>{t('renew-adult-child:review-adult-information.no-update')}</p>
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-home-address" routeId="public/renew/$id/adult-child/update-home-address" params={params}>
+                  <InlineLink id="change-home-address" routeId="public/renew/$id/adult-child/confirm-address" params={params}>
                     {t('renew-adult-child:review-adult-information.home-change')}
                   </InlineLink>
                 </div>
