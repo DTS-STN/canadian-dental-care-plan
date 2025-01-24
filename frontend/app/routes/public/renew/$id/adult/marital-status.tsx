@@ -1,12 +1,13 @@
 import type { ChangeEventHandler } from 'react';
 import { useMemo, useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useFetcher, useLoaderData, useParams } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+
+import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewAdultState } from '~/.server/routes/helpers/renew-adult-route-helpers';
@@ -26,7 +27,7 @@ import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -44,11 +45,11 @@ export const handle = {
   pageTitleI18nKey: 'renew-adult:marital-status.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadRenewAdultState({ params, request, session });
   if (!state.hasMaritalStatusChanged) {
     return redirect(getPathById('public/renew/$id/adult/confirm-marital-status', params));
@@ -63,7 +64,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return { defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -126,11 +127,11 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/renew/$id/adult/confirm-phone', params));
 }
 
-export default function RenewAdultMaritalStatus() {
+export default function RenewAdultMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode, maritalStatuses } = useLoaderData<typeof loader>();
+  const { defaultState, editMode, maritalStatuses } = loaderData;
   const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
-  const params = useParams();
+
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 

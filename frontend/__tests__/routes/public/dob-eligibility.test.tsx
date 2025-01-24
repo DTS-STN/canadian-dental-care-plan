@@ -24,7 +24,7 @@ describe('_public.apply.id.dob-eligibility', () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/dob-eligibility'),
         context: mock<AppLoadContext>(),
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toEqual({

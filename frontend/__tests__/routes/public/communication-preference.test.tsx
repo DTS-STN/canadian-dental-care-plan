@@ -53,7 +53,7 @@ describe('_public.apply.id.communication-preference', () => {
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/communication-preference'),
         context: mockAppLoadContext,
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toMatchObject({
@@ -90,7 +90,7 @@ describe('_public.apply.id.communication-preference', () => {
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
         context: mockAppLoadContext,
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toEqual({
@@ -119,7 +119,7 @@ describe('_public.apply.id.communication-preference', () => {
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
         context: mockAppLoadContext,
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toEqual({
@@ -150,7 +150,7 @@ describe('_public.apply.id.communication-preference', () => {
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
         context: mockAppLoadContext,
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toEqual({

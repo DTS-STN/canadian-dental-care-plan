@@ -1,14 +1,15 @@
 import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useParams } from 'react-router';
+import { redirect } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { randomUUID } from 'crypto';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
+
+import type { Route } from './+types/child';
 
 import { TYPES } from '~/.server/constants';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/.server/routes/helpers/status-route-helpers';
@@ -29,7 +30,7 @@ import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -47,11 +48,11 @@ export const handle = {
   pageTitleI18nKey: 'status:child.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateFeatureEnabled('status');
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -59,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return { meta };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -207,13 +208,13 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getStatusResultUrl({ id, params }));
 }
 
-export default function StatusCheckerChild() {
+export default function StatusCheckerChild({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { currentLanguage } = useCurrentLanguage();
   const hCaptchaEnabled = useFeature('hcaptcha');
   const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const { captchaRef } = useHCaptcha();
-  const params = useParams();
+
   const [childHasSinState, setChildHasSinState] = useState<boolean>();
 
   const fetcher = useEnhancedFetcher<typeof action>();

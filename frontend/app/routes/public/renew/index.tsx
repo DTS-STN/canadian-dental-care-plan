@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 
-import { redirect, useLoaderData, useNavigate, useParams } from 'react-router';
-import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { redirect, useNavigate } from 'react-router';
 
 import { randomUUID } from 'crypto';
+
+import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
 import { startRenewState } from '~/.server/routes/helpers/renew-route-helpers';
@@ -11,7 +12,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { pageIds } from '~/page-ids';
 import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -22,11 +23,11 @@ export const handle = {
   pageTitleI18nKey: 'renew:terms-and-conditions.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -55,9 +56,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   return { id: state.id, locale, meta };
 }
 
-export default function RenewIndex() {
-  const { id } = useLoaderData<typeof loader>();
-  const params = useParams();
+export default function RenewIndex({ loaderData, params }: Route.ComponentProps) {
+  const { id } = loaderData;
+
   const navigate = useNavigate();
 
   const path = getPathById('public/renew/$id/terms-and-conditions', { ...params, id });

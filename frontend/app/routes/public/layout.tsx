@@ -1,11 +1,12 @@
-import type { LoaderFunctionArgs } from 'react-router';
 import { Outlet, data, isRouteErrorResponse, useParams, useRouteError } from 'react-router';
+
+import type { Route } from './+types/layout';
 
 import { TYPES } from '~/.server/constants';
 import { BilingualNotFoundError, NotFoundError, ServerError } from '~/components/layouts/public-layout';
 import { isAppLocale } from '~/utils/locale-utils';
 
-export function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const logFactory = appContainer.get(TYPES.factories.LogFactory);
   const log = logFactory.createLogger('public/layout/loader');
 
@@ -34,6 +35,6 @@ export function ErrorBoundary() {
  * Do-nothing parent route.
  * (placeholder for future code)
  */
-export default function Route() {
+export default function Route({ loaderData, params }: Route.ComponentProps) {
   return <Outlet />;
 }

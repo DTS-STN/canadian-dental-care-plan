@@ -1,9 +1,10 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { data, redirect, useFetcher, useLoaderData } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+
+import type { Route } from './+types/stub-login';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -13,7 +14,7 @@ import { Button } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -24,12 +25,11 @@ export const handle = {
   pageTitleI18nKey: 'stub-login:index.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateFeatureEnabled('stub-login');
 
@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   return { meta, defaultValues };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateFeatureEnabled('stub-login');
 
@@ -114,9 +114,9 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('protected/home', params));
 }
 
-export default function StubLogin() {
+export default function StubLogin({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultValues } = useLoaderData<typeof loader>();
+  const { defaultValues } = loaderData;
   const fetcher = useFetcher<typeof action>();
 
   const errors = fetcher.data?.errors;

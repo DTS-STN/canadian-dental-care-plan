@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 
-import type { LoaderFunctionArgs } from 'react-router';
-import { Outlet, useLoaderData, useNavigate, useParams } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
+
+import type { Route } from './+types/layout';
 
 import { TYPES } from '~/.server/constants';
 import { getLocale } from '~/.server/utils/locale.utils';
@@ -20,17 +21,16 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const locale = getLocale(request);
   const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.configs.ClientConfig);
   return { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 
-export default function Route() {
-  const { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
+export default function Route({ loaderData, params }: Route.ComponentProps) {
+  const { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
 
   const navigate = useNavigate();
-  const params = useParams();
 
   const path = getPathById('public/renew/index', params);
 

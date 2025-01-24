@@ -191,7 +191,7 @@ function isAddressResponse(data: unknown): data is AddressResponse {
   );
 }
 
-export default function AddressValidationIndexRoute({ loaderData, actionData }: Route.ComponentProps) {
+export default function AddressValidationIndexRoute({ loaderData, params }: Route.ComponentProps) {
   const { countries, defaultMailingAddress, provinceTerritoryStates } = loaderData;
 
   const { t } = useTranslation(handle.i18nNamespaces);
@@ -205,7 +205,7 @@ export default function AddressValidationIndexRoute({ loaderData, actionData }: 
 
   const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
 
-  const errors = actionData && 'errors' in actionData ? actionData.errors : undefined;
+  const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'address',
     city: 'city',
@@ -215,8 +215,8 @@ export default function AddressValidationIndexRoute({ loaderData, actionData }: 
   });
 
   useEffect(() => {
-    setAddressDialogContent(isAddressResponse(actionData) ? actionData : null);
-  }, [actionData]);
+    setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
+  }, [fetcher.data]);
 
   function onDialogOpenChangeHandler(open: boolean) {
     if (!open) {

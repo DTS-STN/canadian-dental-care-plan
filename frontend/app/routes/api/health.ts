@@ -1,12 +1,12 @@
-import type { LoaderFunctionArgs } from 'react-router';
-
 import type { HealthCheckOptions } from '@dts-stn/health-checks';
 import { HealthCheckConfig, execute, getHttpStatusCode } from '@dts-stn/health-checks';
 import { isEmpty } from 'moderndash';
 
+import type { Route } from './+types/health';
+
 import { TYPES } from '~/.server/constants';
 
-export async function loader({ context, request }: LoaderFunctionArgs) {
+export async function loader({ context, request }: Route.LoaderArgs) {
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
 
   const allHealthChecks = context.appContainer.findAll(TYPES.health.HealthCheck);
@@ -34,7 +34,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
 /**
  * Returns true if the incoming request is authorized to view detailed responses.
  */
-async function isAuthorized({ context, request }: Omit<LoaderFunctionArgs, 'params'>): Promise<boolean> {
+async function isAuthorized({ context, request }: Omit<Route.LoaderArgs, 'params'>): Promise<boolean> {
   const bearerTokenResolver = context.appContainer.get(TYPES.auth.BearerTokenResolver);
   const serverConfig = context.appContainer.get(TYPES.configs.ServerConfig);
   const tokenRolesExtractor = context.appContainer.get(TYPES.auth.HealthTokenRolesExtractor);

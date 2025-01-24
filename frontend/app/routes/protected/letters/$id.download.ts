@@ -1,15 +1,16 @@
 import { data } from 'react-router';
-import type { LoaderFunctionArgs } from 'react-router';
 
 import { Buffer } from 'node:buffer';
 import { sanitize } from 'sanitize-filename-ts';
+
+import type { Route } from './+types/$id.download';
 
 import { TYPES } from '~/.server/constants';
 import type { LetterDto } from '~/.server/domain/dtos';
 import { getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateFeatureEnabled('view-letters');
   await securityHandler.validateAuthSession({ request, session });

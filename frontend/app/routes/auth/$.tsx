@@ -1,5 +1,6 @@
-import type { LoaderFunctionArgs } from 'react-router';
 import { redirectDocument } from 'react-router';
+
+import type { Route } from './+types/$';
 
 import { TYPES } from '~/.server/constants';
 import { getLocale } from '~/.server/utils/locale.utils';
@@ -12,7 +13,7 @@ const defaultProviderId = 'raoidc';
 /**
  * A do-all authentication handler for the application
  */
-export async function loader({ context, params, request }: LoaderFunctionArgs) {
+export async function loader({ context, params, request }: Route.LoaderArgs) {
   const log = getLogger('auth.$/loader');
   const { '*': slug } = params;
   const instrumentationService = context.appContainer.get(TYPES.observability.InstrumentationService);
@@ -42,7 +43,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 /**
  * Handler for /auth/login requests
  */
-function handleLoginRequest({ context: { appContainer }, request }: LoaderFunctionArgs) {
+function handleLoginRequest({ context: { appContainer }, request }: Route.LoaderArgs) {
   const log = getLogger('auth.$/handleLoginRequest');
   log.debug('Handling login request');
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
@@ -58,7 +59,7 @@ function handleLoginRequest({ context: { appContainer }, request }: LoaderFuncti
 /**
  * Handler for /auth/logout requests
  */
-function handleLogoutRequest({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+function handleLogoutRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const log = getLogger('auth.$/handleLogoutRequest');
   log.debug('Handling RAOIDC logout request');
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
@@ -89,7 +90,7 @@ function handleLogoutRequest({ context: { appContainer, session }, request }: Lo
 /**
  * Handler for /auth/login/raoidc requests
  */
-async function handleRaoidcLoginRequest({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+async function handleRaoidcLoginRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const log = getLogger('auth.$/handleRaoidcLoginRequest');
   log.debug('Handling RAOIDC login request');
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
@@ -124,7 +125,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
 /**
  * Handler for /auth/callback/raoidc requests
  */
-async function handleRaoidcCallbackRequest({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+async function handleRaoidcCallbackRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const log = getLogger('auth.$/handleRaoidcCallbackRequest');
   log.debug('Handling RAOIDC callback request');
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);

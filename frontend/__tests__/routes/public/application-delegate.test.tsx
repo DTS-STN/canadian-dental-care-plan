@@ -24,7 +24,7 @@ describe('_public.apply.id.application-delegate', () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/application-delegate'),
         context: mock<AppLoadContext>(),
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toEqual({

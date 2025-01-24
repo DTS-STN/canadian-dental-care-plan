@@ -53,7 +53,7 @@ describe('Letters Page', () => {
       const response = await loader({
         request: new Request('http://localhost/letters?sort=desc'),
         context: mockAppLoadContext,
-        params: {},
+        params: { lang: 'en' },
       });
 
       expect(response.letters).toHaveLength(3);
@@ -99,7 +99,7 @@ describe('Letters Page', () => {
     const response = await loader({
       request: new Request('http://localhost/letters'),
       context: mockAppLoadContext,
-      params: {},
+      params: { lang: 'en' },
     });
 
     expect(response.letterTypes.includes({ id: 'DEN', nameEn: 'DENIED', nameFr: '(FR) DENIED' }));

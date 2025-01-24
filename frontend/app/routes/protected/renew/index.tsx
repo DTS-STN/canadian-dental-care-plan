@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 
-import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useLoaderData, useNavigate, useParams } from 'react-router';
+import { redirect, useNavigate } from 'react-router';
 
 import { randomUUID } from 'crypto';
 import invariant from 'tiny-invariant';
+
+import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
 import { startProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
@@ -13,7 +14,7 @@ import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { pageIds } from '~/page-ids';
 import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -24,11 +25,11 @@ export const handle = {
   pageTitleI18nKey: 'protected-renew:terms-and-conditions.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -70,9 +71,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   return { id: state.id, locale, meta };
 }
 
-export default function ProtectedRenewIndex() {
-  const { id } = useLoaderData<typeof loader>();
-  const params = useParams();
+export default function ProtectedRenewIndex({ loaderData, params }: Route.ComponentProps) {
+  const { id } = loaderData;
+
   const navigate = useNavigate();
 
   const path = getPathById('protected/renew/$id/terms-and-conditions', { ...params, id });

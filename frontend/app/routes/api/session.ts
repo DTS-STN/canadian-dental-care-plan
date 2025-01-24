@@ -1,10 +1,11 @@
 /**
  * An API route that can be used to perform actions with user's server-side session.
  */
-import type { ActionFunctionArgs } from 'react-router';
 import { redirectDocument } from 'react-router';
 
 import { z } from 'zod';
+
+import type { Route } from './+types/session';
 
 import { TYPES } from '~/.server/constants';
 import { getApiSessionRedirectToUrl } from '~/.server/utils/api-session.utils';
@@ -17,7 +18,7 @@ export type ApiSessionAction = (typeof API_SESSION_ACTIONS)[number];
 const API_SESSION_REDIRECT_TO_OPTIONS = ['cdcp-website', 'cdcp-website-apply', 'cdcp-website-renew', 'cdcp-website-status'] as const;
 export type ApiSessionRedirectTo = (typeof API_SESSION_REDIRECT_TO_OPTIONS)[number];
 
-export async function action({ context: { appContainer, session }, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 

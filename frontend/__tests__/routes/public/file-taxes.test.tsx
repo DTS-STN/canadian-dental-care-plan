@@ -24,7 +24,7 @@ describe('_public.apply.id.file-your-taxes', () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/file-your-taxes'),
         context: mock<AppLoadContext>(),
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toEqual({

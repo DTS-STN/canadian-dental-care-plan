@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
 
-import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { useLoaderData, useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import { randomUUID } from 'crypto';
+
+import type { Route } from './+types/index';
 
 import { startApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -20,11 +21,11 @@ export const handle = {
   pageTitleI18nKey: 'apply:terms-and-conditions.page-heading',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -36,9 +37,9 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   return { id: state.id, locale, meta };
 }
 
-export default function ApplyIndex() {
-  const { id } = useLoaderData<typeof loader>();
-  const params = useParams();
+export default function ApplyIndex({ loaderData, params }: Route.ComponentProps) {
+  const { id } = loaderData;
+
   const navigate = useNavigate();
 
   const path = getPathById('public/apply/$id/terms-and-conditions', { ...params, id });
