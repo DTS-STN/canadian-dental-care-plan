@@ -1,12 +1,13 @@
 import { useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useFetcher, useLoaderData, useParams } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
+
+import type { Route } from './+types/confirm-federal-provincial-territorial-benefits';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
@@ -22,7 +23,7 @@ import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -48,11 +49,11 @@ export const handle = {
   pageTitleI18nKey: 'protected-renew:update-dental-benefits.title',
 };
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -107,7 +108,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -214,10 +215,10 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('protected/renew/$id/member-selection', params));
 }
 
-export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefits() {
+export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefits({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, editMode } = useLoaderData<typeof loader>();
-  const params = useParams();
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, editMode } = loaderData;
+
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultState?.hasFederalBenefits);

@@ -1,8 +1,9 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useFetcher, useParams } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+
+import type { Route } from './+types/apply-children';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
@@ -14,7 +15,7 @@ import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -25,11 +26,11 @@ export const handle = {
   pageTitleI18nKey: 'apply-adult-child:eligibility.apply-children.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -38,7 +39,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return { id: state.id, meta };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -49,9 +50,9 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/apply/$id/child/children/index', params));
 }
 
-export default function ApplyFlowApplyChildren() {
+export default function ApplyFlowApplyChildren({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const params = useParams();
+
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 

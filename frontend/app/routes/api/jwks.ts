@@ -1,6 +1,6 @@
-import type { LoaderFunctionArgs } from 'react-router';
-
 import { subtle } from 'node:crypto';
+
+import type { Route } from './+types/jwks';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -37,7 +37,7 @@ async function getJwks(serverConfig: Pick<ServerConfig, 'AUTH_JWT_PUBLIC_KEY'>) 
  * A JSON endpoint that contains a list of the application's public keys that
  * can be used by an auth provider to verify private key JWTs.
  */
-export async function loader({ context: { appContainer } }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer } }: Route.LoaderArgs) {
   const { AUTH_JWT_PUBLIC_KEY } = appContainer.get(TYPES.configs.ServerConfig);
   const keys = await getJwks({ AUTH_JWT_PUBLIC_KEY });
   const headers = { 'Content-Type': 'application/json' };

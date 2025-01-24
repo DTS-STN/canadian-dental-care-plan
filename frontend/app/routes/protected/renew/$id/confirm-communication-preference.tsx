@@ -1,12 +1,13 @@
 import type { ChangeEventHandler } from 'react';
 import { useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { data, redirect, useFetcher, useLoaderData, useParams } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
+
+import type { Route } from './+types/confirm-communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
@@ -21,7 +22,7 @@ import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -32,11 +33,11 @@ export const handle = {
   pageTitleI18nKey: 'protected-renew:communication-preference.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -69,7 +70,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -132,10 +133,10 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }
 
-export default function ProtectedRenewConfirmCommunicationPreference() {
+export default function ProtectedRenewConfirmCommunicationPreference({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, isReadOnlyEmail } = useLoaderData<typeof loader>();
-  const params = useParams();
+  const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, isReadOnlyEmail } = loaderData;
+
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [preferredMethodValue, setPreferredMethodValue] = useState(defaultState.preferredMethod);

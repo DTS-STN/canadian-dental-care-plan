@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react';
 
-import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { useParams } from 'react-router';
-
 import { useTranslation } from 'react-i18next';
+
+import type { Route } from './+types/home';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -13,7 +12,7 @@ import { AppLink } from '~/components/app-link';
 import { pageIds } from '~/page-ids';
 import { useFeature } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -23,12 +22,11 @@ export const handle = {
   pageTitleI18nKey: 'index:page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -41,9 +39,8 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   return { meta };
 }
 
-export default function Index() {
+export default function Index({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const params = useParams();
 
   return (
     <>

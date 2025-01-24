@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { data, redirect, useLoaderData, useParams } from 'react-router';
+import { data, redirect } from 'react-router';
 
 import { faCheck, faChevronLeft, faChevronRight, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
+
+import type { Route } from './+types/update-mailing-address';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewItaState } from '~/.server/routes/helpers/renew-ita-route-helpers';
@@ -30,7 +31,7 @@ import { useEnhancedFetcher } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -70,11 +71,11 @@ export const handle = {
   pageTitleI18nKey: 'renew-ita:update-address.mailing-address.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -94,7 +95,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
   const locale = getLocale(request);
 
@@ -221,11 +222,11 @@ function isAddressResponse(data: unknown): data is AddressResponse {
   return typeof data === 'object' && data !== null && 'status' in data && typeof data.status === 'string';
 }
 
-export default function RenewItaUpdateAddress() {
+export default function RenewItaUpdateAddress({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, countryList, regionList, editMode } = useLoaderData<typeof loader>();
+  const { defaultState, countryList, regionList, editMode } = loaderData;
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
-  const params = useParams();
+
   const fetcher = useEnhancedFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.mailingAddress?.country ?? CANADA_COUNTRY_ID);

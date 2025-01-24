@@ -1,6 +1,6 @@
-import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
-
 import { Trans, useTranslation } from 'react-i18next';
+
+import type { Route } from './+types/unable-to-process-request';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -8,7 +8,7 @@ import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -18,11 +18,11 @@ export const handle = {
   pageTitleI18nKey: 'unable-to-process-request:page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, request }: Lo
   return { meta };
 }
 
-export default function ProtectedUnableToProcessRequest() {
+export default function ProtectedUnableToProcessRequest({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const noWrap = <span className="whitespace-nowrap" />;

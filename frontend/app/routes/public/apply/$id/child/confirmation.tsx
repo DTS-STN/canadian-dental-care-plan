@@ -1,8 +1,9 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useFetcher, useLoaderData } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
+
+import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyChildState } from '~/.server/routes/helpers/apply-child-route-helpers';
@@ -20,7 +21,7 @@ import { useFeature } from '~/root';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
@@ -33,11 +34,11 @@ export const handle = {
   pageTitleI18nKey: 'apply-child:confirm.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -153,7 +154,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -166,11 +167,11 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(t('confirm.exit-link'));
 }
 
-export default function ApplyFlowConfirm() {
+export default function ApplyFlowConfirm({ loaderData, params }: Route.ComponentProps) {
   const viewLettersEnabled = useFeature('view-letters-online-application');
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo } = useLoaderData<typeof loader>();
+  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const mscaLinkChecker = <InlineLink to={t('confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;

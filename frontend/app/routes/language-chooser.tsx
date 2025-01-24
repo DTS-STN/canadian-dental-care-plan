@@ -1,5 +1,7 @@
 import type { MetaFunction } from 'react-router';
 
+import type { Route } from './+types/language-chooser';
+
 import { ButtonLink } from '~/components/buttons';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -39,7 +41,7 @@ export const meta: MetaFunction = mergeMeta((args) => {
   ];
 });
 
-export default function LanguageChooser() {
+export default function LanguageChooser({ loaderData, params }: Route.ComponentProps) {
   return (
     <main role="main" className="flex h-svh bg-splash-page bg-cover bg-center" property="mainContentOfPage">
       <div className="m-auto w-[300px] bg-white md:w-[400px] lg:w-[500px]">

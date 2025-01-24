@@ -1,8 +1,7 @@
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useFetcher, useLoaderData, useParams } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +9,8 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
+
+import type { Route } from './+types/review-child-information';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildStateForReview } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
@@ -28,7 +29,7 @@ import { useClientEnv, useFeature } from '~/root';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -45,11 +46,11 @@ export const handle = {
   pageTitleI18nKey: 'apply-adult-child:review-child-information.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadApplyAdultChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
@@ -106,7 +107,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return { id: state.id, children, meta, payload };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
@@ -131,11 +132,11 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/apply/$id/adult-child/confirmation', params));
 }
 
-export default function ReviewInformation() {
+export default function ReviewInformation({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
-  const params = useParams();
+
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { children, payload } = useLoaderData<typeof loader>();
+  const { children, payload } = loaderData;
   const hCaptchaEnabled = useFeature('hcaptcha');
   const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const fetcher = useFetcher<typeof action>();

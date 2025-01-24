@@ -32,7 +32,7 @@ describe('_public.apply.id.type-of-application', () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application'),
         context: mock<AppLoadContext>(),
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toMatchObject({
@@ -51,7 +51,7 @@ describe('_public.apply.id.type-of-application', () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: new FormData() }),
         context: mockContext,
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toEqual({

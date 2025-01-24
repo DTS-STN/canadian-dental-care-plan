@@ -1,4 +1,4 @@
-import { redirect, useParams } from 'react-router';
+import { redirect } from 'react-router';
 
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -55,11 +55,10 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   };
 }
 
-export default function AddressValidationReviewRoute({ loaderData }: Route.ComponentProps) {
+export default function AddressValidationReviewRoute({ loaderData, params }: Route.ComponentProps) {
   const { mailingAddress } = loaderData;
 
   const { t } = useTranslation(handle.i18nNamespaces);
-  const params = useParams();
 
   return (
     <PublicLayout>

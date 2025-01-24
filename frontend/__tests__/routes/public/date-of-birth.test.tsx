@@ -44,7 +44,7 @@ describe('_public.apply.id.date-of-birth', () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth'),
         context: mockContext,
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toMatchObject({
@@ -65,7 +65,7 @@ describe('_public.apply.id.date-of-birth', () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: new FormData() }),
         context: mockContext,
-        params: {},
+        params: { id: '123', lang: 'en' },
       });
 
       expect(response).toEqual({

@@ -1,10 +1,11 @@
 import type { FormEvent } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useFetcher, useParams } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+
+import type { Route } from './+types/parent-or-guardian';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplySingleChildState } from '~/.server/routes/helpers/apply-child-route-helpers';
@@ -15,7 +16,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -25,11 +26,11 @@ export const handle = {
   pageTitleI18nKey: 'apply-child:children.parent-or-guardian.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   loadApplySingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -38,7 +39,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return { meta };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -52,10 +53,9 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(t('apply-child:children.parent-or-guardian.return-btn-link'));
 }
 
-export default function ApplyFlowParentOrGuardian() {
+export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 

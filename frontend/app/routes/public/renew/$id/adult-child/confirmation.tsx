@@ -1,7 +1,8 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { redirect, useFetcher, useLoaderData } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
+
+import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewAdultChildState } from '~/.server/routes/helpers/renew-adult-child-route-helpers';
@@ -17,7 +18,7 @@ import { pageIds } from '~/page-ids';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
@@ -33,11 +34,11 @@ export const handle = {
   pageTitleI18nKey: 'renew-adult-child:confirm.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -158,7 +159,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -170,10 +171,10 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(t('confirm.exit-link'));
 }
 
-export default function RenewAdultChildConfirm() {
+export default function RenewAdultChildConfirm({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
+  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance } = loaderData;
 
   const cdcpLink = <InlineLink to={t('renew-adult-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
   const mscaLink = <InlineLink to={t('renew-adult-child:confirm.msca-link')} className="external-link" newTabIndicator target="_blank" />;

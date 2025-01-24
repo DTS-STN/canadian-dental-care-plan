@@ -1,9 +1,10 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from 'react-router';
-import { data, redirect, useFetcher, useLoaderData, useParams } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+
+import type { Route } from './+types/living-independently';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
@@ -18,7 +19,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -34,11 +35,11 @@ export const handle = {
   pageTitleI18nKey: 'apply-adult:living-independently.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { appContainer, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -47,7 +48,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return { id: state.id, meta, defaultState: state.livingIndependently, editMode: state.editMode };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -85,10 +86,10 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/apply/$id/adult/parent-or-guardian', params));
 }
 
-export default function ApplyFlowLivingIndependently() {
+export default function ApplyFlowLivingIndependently({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode } = useLoaderData<typeof loader>();
-  const params = useParams();
+  const { defaultState, editMode } = loaderData;
+
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 

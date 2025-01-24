@@ -1,5 +1,6 @@
-import type { LoaderFunctionArgs } from 'react-router';
-import { Outlet, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from 'react-router';
+import { Outlet, isRouteErrorResponse, useNavigate, useRouteError } from 'react-router';
+
+import type { Route } from './+types/layout';
 
 import { TYPES } from '~/.server/constants';
 import { NotFoundError, ProtectedLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
@@ -12,7 +13,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export async function loader({ context: { appContainer, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.configs.ClientConfig);
   return { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
@@ -27,8 +28,8 @@ export function ErrorBoundary() {
   return <ServerError error={error} />;
 }
 
-export default function Layout() {
-  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
+export default function Layout({ loaderData, params }: Route.ComponentProps) {
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
   const navigate = useNavigate();
   const apiSession = useApiSession();
 

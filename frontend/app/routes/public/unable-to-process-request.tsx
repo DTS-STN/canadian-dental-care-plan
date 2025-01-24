@@ -1,13 +1,13 @@
-import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
-
 import { Trans, useTranslation } from 'react-i18next';
+
+import type { Route } from './+types/unable-to-process-request';
 
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { InlineLink } from '~/components/inline-link';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeMeta } from '~/utils/meta-utils';
+import { mergeRouteModuleMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -17,18 +17,18 @@ export const handle = {
   pageTitleI18nKey: 'unable-to-process-request:page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+  return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('unable-to-process-request:page-title') }) };
 
   return { meta };
 }
 
-export default function UnableToProcessRequest() {
+export default function UnableToProcessRequest({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const noWrap = <span className="whitespace-nowrap" />;

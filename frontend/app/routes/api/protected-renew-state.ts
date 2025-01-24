@@ -1,9 +1,9 @@
 /**
  * An API route that can be used to perform actions with user's protected renew state.
  */
-import type { ActionFunctionArgs } from 'react-router';
-
 import { z } from 'zod';
+
+import type { Route } from './+types/protected-renew-state';
 
 import { TYPES } from '~/.server/constants';
 import { saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
@@ -12,7 +12,7 @@ import { getLogger } from '~/.server/utils/logging.utils';
 const API_PROTECTED_RENEW_STATE_ACTIONS = ['extend'] as const;
 export type ApiProtectedRenewStateAction = (typeof API_PROTECTED_RENEW_STATE_ACTIONS)[number];
 
-export async function action({ context: { appContainer, session }, request }: ActionFunctionArgs) {
+export async function action({ context: { appContainer, session }, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
