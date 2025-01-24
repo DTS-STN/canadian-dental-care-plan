@@ -11,7 +11,7 @@ import { Address } from '~/components/address';
 import { ButtonLink } from '~/components/buttons';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeRouteModuleMeta } from '~/utils/meta-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -20,7 +20,7 @@ export const handle = {
   pageTitleI18nKey: 'address-validation:review.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 

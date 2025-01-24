@@ -26,7 +26,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeRouteModuleMeta } from '~/utils/meta-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -44,7 +44,7 @@ export const handle = {
   pageTitleI18nKey: 'protected-renew:marital-status.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 

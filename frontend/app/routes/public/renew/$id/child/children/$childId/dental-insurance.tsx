@@ -20,7 +20,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { mergeRouteModuleMeta } from '~/utils/meta-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -30,7 +30,7 @@ export const handle = {
   pageTitleI18nKey: 'renew-child:children.dental-insurance.title',
 };
 
-export const meta: Route.MetaFunction = mergeRouteModuleMeta(({ data }) => {
+export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title, data.meta.dcTermsTitle);
 });
 
