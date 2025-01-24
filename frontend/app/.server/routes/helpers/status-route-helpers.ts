@@ -1,5 +1,4 @@
 import { redirectDocument } from 'react-router';
-import type { Params } from 'react-router';
 
 import { z } from 'zod';
 
@@ -28,6 +27,10 @@ function getSessionName(id: string) {
   return `status-flow-${idSchema.parse(id)}`;
 }
 
+export type StatusStateParams = {
+  lang: string;
+};
+
 export function getStatusStateIdFromUrl(url: string | URL) {
   const { searchParams } = new URL(url);
   return searchParams.get('id');
@@ -35,7 +38,7 @@ export function getStatusStateIdFromUrl(url: string | URL) {
 
 interface LoadStateArgs {
   id: string | null;
-  params: Params;
+  params: StatusStateParams;
   session: Session;
 }
 
@@ -68,7 +71,7 @@ export function loadStatusState({ id, params, session }: LoadStateArgs) {
 
 interface SaveStateArgs {
   id: string;
-  params: Params;
+  params: StatusStateParams;
   session: Session;
   state: Partial<OmitStrict<StatusState, 'id' | 'statusCheckResult'>>;
   remove?: keyof OmitStrict<StatusState, 'id' | 'statusCheckResult'>;
@@ -96,7 +99,7 @@ export function saveStatusState({ id, params, session, state }: SaveStateArgs) {
 
 interface ClearStateArgs {
   id: string;
-  params: Params;
+  params: StatusStateParams;
   session: Session;
 }
 
@@ -139,7 +142,7 @@ export function startStatusState({ id, session }: StartArgs) {
 
 interface GetStatusResultUrlArgs {
   id: string;
-  params: Params;
+  params: StatusStateParams;
 }
 
 export function getStatusResultUrl({ id, params }: GetStatusResultUrlArgs) {
