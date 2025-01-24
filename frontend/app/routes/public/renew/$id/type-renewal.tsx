@@ -30,7 +30,7 @@ enum RenewalType {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('renew', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.typeOfRenewal,
   pageTitleI18nKey: 'renew:type-of-renewal.page-title',
 } as const satisfies RouteHandleData;
@@ -116,10 +116,10 @@ export default function RenewTypeOfRenewal() {
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={21} size="lg" label={t('apply:progress.label')} />
+        <Progress value={21} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4 mt-8 italic">{t('apply:required-label')}</p>
+        <p className="mb-4 mt-8 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
