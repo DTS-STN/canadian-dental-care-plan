@@ -1,5 +1,4 @@
 import { redirectDocument } from 'react-router';
-import type { Params } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
@@ -131,8 +130,13 @@ function getSessionName(id: string) {
   return `apply-flow-${idSchema.parse(id)}`;
 }
 
+export type ApplyStateParams = {
+  id: string;
+  lang: string;
+};
+
 interface LoadStateArgs {
-  params: Params;
+  params: ApplyStateParams;
   session: Session;
 }
 
@@ -177,7 +181,7 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 }
 
 interface SaveStateArgs {
-  params: Params;
+  params: ApplyStateParams;
   session: Session;
   state: Partial<OmitStrict<ApplyState, 'id' | 'lastUpdatedOn'>>;
   remove?: keyof OmitStrict<ApplyState, 'children' | 'editMode' | 'id' | 'lastUpdatedOn'>;
@@ -209,7 +213,7 @@ export function saveApplyState({ params, session, state, remove = undefined }: S
 }
 
 interface ClearStateArgs {
-  params: Params;
+  params: ApplyStateParams;
   session: Session;
 }
 

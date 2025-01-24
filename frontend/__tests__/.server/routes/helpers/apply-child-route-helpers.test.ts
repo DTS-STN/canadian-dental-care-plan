@@ -26,7 +26,7 @@ describe('apply-child-route-helpers', () => {
   });
 
   describe('validateApplyChildStateForReview', () => {
-    const params: Params = {
+    const params = {
       lang: 'en',
       id: '00000000-0000-0000-0000-000000000000',
     };

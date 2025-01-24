@@ -7,6 +7,7 @@ import type { Route } from './+types/apply-state';
 
 import { TYPES } from '~/.server/constants';
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import type { ApplyStateParams } from '~/.server/routes/helpers/apply-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
 
 const API_APPLY_STATE_ACTIONS = ['extend'] as const;
@@ -33,7 +34,10 @@ export async function action({ context: { appContainer, session }, request }: Ro
     return Response.json({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
   }
 
-  const params = { id: parsedBody.data.id };
+  const params = {
+    id: parsedBody.data.id,
+    lang: 'en',
+  } as const satisfies ApplyStateParams;
 
   switch (parsedBody.data.action) {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

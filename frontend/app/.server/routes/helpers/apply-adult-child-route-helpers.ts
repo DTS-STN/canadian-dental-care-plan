@@ -1,9 +1,8 @@
 import { redirect } from 'react-router';
-import type { Params } from 'react-router';
 
 import { z } from 'zod';
 
-import type { ApplyState, ChildrenState } from '~/.server/routes/helpers/apply-route-helpers';
+import type { ApplyState, ApplyStateParams, ChildrenState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
@@ -11,7 +10,7 @@ import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadApplyAdultChildStateArgs {
-  params: Params;
+  params: ApplyStateParams;
   request: Request;
   session: Session;
 }
@@ -50,7 +49,7 @@ export function loadApplyAdultChildState({ params, request, session }: LoadApply
 }
 
 interface LoadApplyAdultSingleChildStateArgs {
-  params: Params;
+  params: ApplyStateParams & { childId: string };
   request: Request;
   session: Session;
 }
@@ -92,7 +91,7 @@ export function loadApplyAdultSingleChildState({ params, request, session }: Loa
 }
 
 interface LoadApplyAdultChildStateForReviewArgs {
-  params: Params;
+  params: ApplyStateParams;
   request: Request;
   session: Session;
 }
@@ -117,7 +116,7 @@ export function loadApplyAdultChildStateForReview({ params, request, session }: 
 }
 
 interface ValidateApplyAdultChildStateForReviewArgs {
-  params: Params;
+  params: ApplyStateParams;
   state: ApplyState;
 }
 
@@ -257,7 +256,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
 
 interface ValidateChildrenStateForReviewArgs {
   childrenState: ChildrenState;
-  params: Params;
+  params: ApplyStateParams;
 }
 
 function validateChildrenStateForReview({ childrenState, params }: ValidateChildrenStateForReviewArgs) {
