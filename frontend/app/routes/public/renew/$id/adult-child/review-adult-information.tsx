@@ -113,7 +113,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     : undefined;
 
   const dentalBenefit = {
-    hasChanged: state.hasFederalProvincialTerritorialBenefitsChanged,
     federalBenefit: {
       access: state.dentalBenefits?.hasFederalBenefits,
       benefit: selectedFederalGovernmentInsurancePlan?.name,
@@ -355,20 +354,18 @@ export default function RenewAdultChildReviewAdultInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-adult-child:review-adult-information.dental-benefit-title')}>
-                {!dentalBenefit.hasChanged && <p>{t('renew-adult-child:review-adult-information.no-update')}</p>}
-                {dentalBenefit.hasChanged &&
-                  (dentalBenefit.federalBenefit.access || dentalBenefit.provTerrBenefit.access ? (
-                    <>
-                      <p>{t('renew-adult-child:review-adult-information.yes')}</p>
-                      <p>{t('renew-adult-child:review-adult-information.dental-benefit-has-access')}</p>
-                      <ul className="ml-6 list-disc">
-                        {dentalBenefit.federalBenefit.access && <li>{dentalBenefit.federalBenefit.benefit}</li>}
-                        {dentalBenefit.provTerrBenefit.access && <li>{dentalBenefit.provTerrBenefit.benefit}</li>}
-                      </ul>
-                    </>
-                  ) : (
-                    <p>{t('renew-adult-child:review-adult-information.no')}</p>
-                  ))}
+                {dentalBenefit.federalBenefit.access || dentalBenefit.provTerrBenefit.access ? (
+                  <>
+                    <p>{t('renew-adult-child:review-adult-information.yes')}</p>
+                    <p>{t('renew-adult-child:review-adult-information.dental-benefit-has-access')}</p>
+                    <ul className="ml-6 list-disc">
+                      {dentalBenefit.federalBenefit.access && <li>{dentalBenefit.federalBenefit.benefit}</li>}
+                      {dentalBenefit.provTerrBenefit.access && <li>{dentalBenefit.provTerrBenefit.benefit}</li>}
+                    </ul>
+                  </>
+                ) : (
+                  <p>{t('renew-adult-child:review-adult-information.no')}</p>
+                )}
                 <div className="mt-4">
                   <InlineLink id="change-dental-benefits" routeId="public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits" params={params}>
                     {t('renew-adult-child:review-adult-information.dental-benefit-change')}
