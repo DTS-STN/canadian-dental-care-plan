@@ -1,5 +1,4 @@
 import { redirect, redirectDocument } from 'react-router';
-import type { Params } from 'react-router';
 
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
@@ -144,13 +143,13 @@ function getSessionName(id: string) {
   return `protected-renew-flow-${idSchema.parse(id)}`;
 }
 
-export function getProtectedRenewStateIdFromUrl(url: string | URL) {
-  const { searchParams } = new URL(url);
-  return searchParams.get('id');
-}
+export type ProtectedRenewStateParams = {
+  id: string;
+  lang: string;
+};
 
 interface LoadStateArgs {
-  params: Params;
+  params: ProtectedRenewStateParams;
   request: Request;
   session: Session;
 }
@@ -194,7 +193,7 @@ export function loadProtectedRenewState({ params, request, session }: LoadStateA
 }
 
 interface SaveStateArgs {
-  params: Params;
+  params: ProtectedRenewStateParams;
   request: Request;
   session: Session;
   state: Partial<OmitStrict<ProtectedRenewState, 'id'>>;
@@ -222,7 +221,7 @@ export function saveProtectedRenewState({ params, request, session, state }: Sav
 }
 
 interface ClearStateArgs {
-  params: Params;
+  params: ProtectedRenewStateParams;
   request: Request;
   session: Session;
 }
@@ -302,7 +301,7 @@ export function getProtectedChildrenState<TState extends Pick<ProtectedRenewStat
 }
 
 interface LoadProtectedRenewSingleChildStateArgs {
-  params: Params;
+  params: ProtectedRenewStateParams & { childId: string };
   request: Request;
   session: Session;
 }
@@ -344,7 +343,7 @@ export function loadProtectedRenewSingleChildState({ params, request, session }:
 }
 
 interface LoadProtectedRenewStateForReviewArgs {
-  params: Params;
+  params: ProtectedRenewStateParams;
   request: Request;
   session: Session;
   demographicSurveyEnabled: boolean;
@@ -378,7 +377,7 @@ export function isChildrenStateComplete(state: ProtectedRenewState, demographicS
 }
 
 interface ValidateProtectedRenewStateForReviewArgs {
-  params: Params;
+  params: ProtectedRenewStateParams;
   state: ProtectedRenewState;
   demographicSurveyEnabled: boolean;
 }

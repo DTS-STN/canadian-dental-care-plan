@@ -1,7 +1,6 @@
 import { redirect } from 'react-router';
-import type { Params } from 'react-router';
 
-import type { RenewState } from '~/.server/routes//helpers/renew-route-helpers';
+import type { RenewState, RenewStateParams } from '~/.server/routes//helpers/renew-route-helpers';
 import { loadRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
@@ -9,7 +8,7 @@ import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadRenewItaStateArgs {
-  params: Params;
+  params: RenewStateParams;
   request: Request;
   session: Session;
 }
@@ -48,7 +47,7 @@ export function loadRenewItaState({ params, request, session }: LoadRenewItaStat
 }
 
 interface LoadRenewItaStateForReviewArgs {
-  params: Params;
+  params: RenewStateParams;
   request: Request;
   session: Session;
 }
@@ -73,7 +72,7 @@ export function loadRenewItaStateForReview({ params, request, session }: LoadRen
 }
 
 interface ValidateRenewItaStateForReviewArgs {
-  params: Params;
+  params: RenewStateParams;
   state: RenewState;
 }
 

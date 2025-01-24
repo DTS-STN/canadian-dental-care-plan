@@ -1,9 +1,8 @@
 import { redirect } from 'react-router';
-import type { Params } from 'react-router';
 
 import { z } from 'zod';
 
-import type { ChildState, RenewState } from '~/.server/routes/helpers/renew-route-helpers';
+import type { ChildState, RenewState, RenewStateParams } from '~/.server/routes/helpers/renew-route-helpers';
 import { getChildrenState, isNewChildState, loadRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
@@ -11,7 +10,7 @@ import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
 interface LoadRenewChildStateArgs {
-  params: Params;
+  params: RenewStateParams;
   request: Request;
   session: Session;
 }
@@ -50,7 +49,7 @@ export function loadRenewChildState({ params, request, session }: LoadRenewChild
 }
 
 interface LoadRenewChildStateForReviewArgs {
-  params: Params;
+  params: RenewStateParams;
   request: Request;
   session: Session;
 }
@@ -75,7 +74,7 @@ export function loadRenewChildStateForReview({ params, request, session }: LoadR
 }
 
 interface LoadRenewSingleChildStateArgs {
-  params: Params;
+  params: RenewStateParams & { childId: string };
   request: Request;
   session: Session;
 }
@@ -117,7 +116,7 @@ export function loadRenewSingleChildState({ params, request, session }: LoadRene
 }
 
 interface ValidateStateForReviewArgs {
-  params: Params;
+  params: RenewStateParams;
   state: RenewState;
 }
 
@@ -214,7 +213,7 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
 
 interface ValidateChildrenStateForReviewArgs {
   childrenState: ChildState[];
-  params: Params;
+  params: RenewStateParams;
 }
 
 export function validateChildrenStateForReview({ childrenState, params }: ValidateChildrenStateForReviewArgs) {

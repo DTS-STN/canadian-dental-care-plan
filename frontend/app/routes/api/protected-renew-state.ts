@@ -7,6 +7,7 @@ import type { Route } from './+types/protected-renew-state';
 
 import { TYPES } from '~/.server/constants';
 import { saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import type { ProtectedRenewStateParams } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getLogger } from '~/.server/utils/logging.utils';
 
 const API_PROTECTED_RENEW_STATE_ACTIONS = ['extend'] as const;
@@ -33,7 +34,10 @@ export async function action({ context: { appContainer, session }, request }: Ro
     return Response.json({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
   }
 
-  const params = { id: parsedBody.data.id };
+  const params = {
+    id: parsedBody.data.id,
+    lang: 'en',
+  } as const satisfies ProtectedRenewStateParams;
 
   switch (parsedBody.data.action) {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
