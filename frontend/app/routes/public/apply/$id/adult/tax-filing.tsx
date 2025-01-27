@@ -24,10 +24,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum TaxFilingOption {
-  No = 'no',
-  Yes = 'yes',
-}
+const TAX_FILING_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -57,7 +57,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const taxFilingSchema = z.object({
-    taxFiling2023: z.nativeEnum(TaxFilingOption, {
+    taxFiling2023: z.nativeEnum(TAX_FILING_OPTION, {
       errorMap: () => ({ message: t('apply-adult:eligibility.tax-filing.error-message.tax-filing-required') }),
     }),
   });
@@ -70,9 +70,9 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { taxFiling2023: parsedDataResult.data.taxFiling2023 === TaxFilingOption.Yes } });
+  saveApplyState({ params, session, state: { taxFiling2023: parsedDataResult.data.taxFiling2023 === TAX_FILING_OPTION.yes } });
 
-  if (parsedDataResult.data.taxFiling2023 === TaxFilingOption.No) {
+  if (parsedDataResult.data.taxFiling2023 === TAX_FILING_OPTION.no) {
     return redirect(getPathById('public/apply/$id/adult/file-taxes', params));
   }
 
@@ -103,8 +103,8 @@ export default function ApplyFlowTaxFiling({ loaderData, params }: Route.Compone
             name="taxFiling2023"
             legend={t('apply-adult:eligibility.tax-filing.form-instructions')}
             options={[
-              { value: TaxFilingOption.Yes, children: t('apply-adult:eligibility.tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
-              { value: TaxFilingOption.No, children: t('apply-adult:eligibility.tax-filing.radio-options.no'), defaultChecked: defaultState === false },
+              { value: TAX_FILING_OPTION.yes, children: t('apply-adult:eligibility.tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
+              { value: TAX_FILING_OPTION.no, children: t('apply-adult:eligibility.tax-filing.radio-options.no'), defaultChecked: defaultState === false },
             ]}
             errorMessage={errors?.taxFiling2023}
             required

@@ -32,10 +32,10 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-enum FormAction {
-  Back = 'back',
-  Submit = 'submit',
-}
+const FORM_ACTION = {
+  back: 'back',
+  submit: 'submit',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -157,9 +157,9 @@ export async function action({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
-  if (formAction === FormAction.Back) {
+  if (formAction === FORM_ACTION.back) {
     saveApplyState({ params, session, state: { editMode: false } });
     return redirect(getPathById('public/apply/$id/adult-child/children/index', params));
   }
@@ -411,15 +411,15 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             variant="primary"
             id="continue-button"
             name="_action"
-            value={FormAction.Submit}
+            value={FORM_ACTION.submit}
             disabled={isSubmitting}
-            loading={isSubmitting && submitAction === FormAction.Submit}
+            loading={isSubmitting && submitAction === FORM_ACTION.submit}
             endIcon={faChevronRight}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Review adult information click"
           >
             {t('apply-adult-child:review-adult-information.continue-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Review adult information click">
+          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Review adult information click">
             {t('apply-adult-child:review-adult-information.back-button')}
           </Button>
         </fetcher.Form>

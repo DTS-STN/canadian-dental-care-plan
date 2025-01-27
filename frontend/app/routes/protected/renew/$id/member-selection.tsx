@@ -27,12 +27,12 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-  Back = 'back',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+  back: 'back',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -144,7 +144,7 @@ export default function ProtectedRenewMemberSelection({ loaderData, params }: Ro
           <LoadingButton
             id="continue-button"
             name="_action"
-            value={FormAction.Continue}
+            value={FORM_ACTION.continue}
             variant="primary"
             loading={isSubmitting}
             endIcon={faChevronRight}

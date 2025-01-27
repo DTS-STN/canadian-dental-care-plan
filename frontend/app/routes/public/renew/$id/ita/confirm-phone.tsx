@@ -25,11 +25,11 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
@@ -156,7 +156,7 @@ export default function RenewAdultChildConfirmPhone({ loaderData, params }: Rout
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Phone click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Phone click">
                 {t('renew-ita:confirm-phone.save-btn')}
               </Button>
               <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Phone click">
@@ -165,7 +165,15 @@ export default function RenewAdultChildConfirmPhone({ loaderData, params }: Rout
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Phone click">
+              <LoadingButton
+                id="continue-button"
+                name="_action"
+                value={FORM_ACTION.continue}
+                variant="primary"
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Phone click"
+              >
                 {t('renew-ita:confirm-phone.continue-btn')}
               </LoadingButton>
               <ButtonLink id="back-button" routeId="public/renew/$id/ita/marital-status" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Phone click">

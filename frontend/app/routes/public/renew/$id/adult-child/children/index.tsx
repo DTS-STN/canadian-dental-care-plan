@@ -30,14 +30,14 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Add = 'add',
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-  Remove = 'remove',
-  Back = 'back',
-}
+const FORM_ACTION = {
+  add: 'add',
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+  remove: 'remove',
+  back: 'back',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
@@ -86,9 +86,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
-  if (formAction === FormAction.Back) {
+  if (formAction === FORM_ACTION.back) {
     if (demographicSurveyEnabled) {
       return redirect(getPathById('public/renew/$id/adult-child/demographic-survey', params));
     }
@@ -98,14 +98,14 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
   }
 
-  if (formAction === FormAction.Add) {
+  if (formAction === FORM_ACTION.add) {
     const childId = randomUUID();
     const children = [...getChildrenState(state), { id: childId }];
     saveRenewState({ params, session, state: { children } });
     return redirect(getPathById('public/renew/$id/adult-child/children/$childId/information', { ...params, childId }));
   }
 
-  if (formAction === FormAction.Remove) {
+  if (formAction === FORM_ACTION.remove) {
     const removeChildId = formData.get('childId');
     const children = [...getChildrenState(state)].filter((child) => child.id !== removeChildId);
     saveRenewState({ params, session, state: { children } });
@@ -226,7 +226,7 @@ export default function RenewFlowChildSummary({ loaderData, params }: Route.Comp
                             <Button
                               id="remove-child"
                               name="_action"
-                              value={FormAction.Remove}
+                              value={FORM_ACTION.remove}
                               disabled={isSubmitting}
                               variant="primary"
                               size="sm"
@@ -247,7 +247,7 @@ export default function RenewFlowChildSummary({ loaderData, params }: Route.Comp
 
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
-          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Renew child - Child(ren) renewal click">
+          <Button className="my-10" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Renew child - Child(ren) renewal click">
             {children.length === 0 ? t('renew-adult-child:children.index.add-child') : t('renew-adult-child:children.index.add-another-child')}
           </Button>
 
@@ -278,15 +278,15 @@ export default function RenewFlowChildSummary({ loaderData, params }: Route.Comp
               <LoadingButton
                 id="continue-button"
                 name="_action"
-                value={FormAction.Continue}
+                value={FORM_ACTION.continue}
                 variant="primary"
-                loading={isSubmitting && submitAction === FormAction.Continue}
+                loading={isSubmitting && submitAction === FORM_ACTION.continue}
                 endIcon={faChevronRight}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Child(ren) renewal click"
               >
                 {t('renew-adult-child:children.index.continue-btn')}
               </LoadingButton>
-              <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Child(ren) renewal click">
+              <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Child(ren) renewal click">
                 {t('renew-adult-child:children.index.back-btn')}
               </Button>
             </div>

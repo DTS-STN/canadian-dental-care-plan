@@ -33,10 +33,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Back = 'back',
-  Submit = 'submit',
-}
+const FORM_ACTION = {
+  back: 'back',
+  submit: 'submit',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -228,8 +228,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedRenewState({ params, request, session });
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-  if (formAction === FormAction.Back) {
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  if (formAction === FORM_ACTION.back) {
     saveProtectedRenewState({
       params,
       request,
@@ -467,7 +467,7 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
             variant="primary"
             id="continue-button"
             name="_action"
-            value={FormAction.Submit}
+            value={FORM_ACTION.submit}
             disabled={isSubmitting}
             loading={isSubmitting}
             endIcon={faChevronRight}
@@ -480,7 +480,7 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
           <LoadingButton
             id="confirm-button"
             name="_action"
-            value={FormAction.Submit}
+            value={FORM_ACTION.submit}
             variant="primary"
             disabled={isSubmitting}
             loading={isSubmitting}
@@ -489,7 +489,7 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
             {t('protected-renew:review-adult-information.continue-button')}
           </LoadingButton>
         )}
-        <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Review your information click">
+        <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Review your information click">
           {t('protected-renew:review-adult-information.back-button')}
         </Button>
       </fetcher.Form>

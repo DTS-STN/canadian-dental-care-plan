@@ -32,10 +32,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Back = 'back',
-  Submit = 'submit',
-}
+const FORM_ACTION = {
+  back: 'back',
+  submit: 'submit',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
@@ -108,8 +108,8 @@ export async function action({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-  if (formAction === FormAction.Back) {
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  if (formAction === FORM_ACTION.back) {
     saveRenewState({ params, session, state: { editMode: false } });
 
     const state = loadRenewChildState({ params, request, session });
@@ -248,16 +248,16 @@ export default function RenewChildReviewChildInformation({ loaderData, params }:
             <LoadingButton
               id="confirm-button"
               name="_action"
-              value={FormAction.Submit}
+              value={FORM_ACTION.submit}
               variant="primary"
               endIcon={faChevronRight}
               disabled={isSubmitting}
-              loading={isSubmitting && submitAction === FormAction.Submit}
+              loading={isSubmitting && submitAction === FORM_ACTION.submit}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Review child(ren) information click"
             >
               {t('renew-child:review-child-information.continue-button')}
             </LoadingButton>
-            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Review child(ren) information click">
+            <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Review child(ren) information click">
               {t('renew-child:review-child-information.back-button')}
             </Button>
           </div>

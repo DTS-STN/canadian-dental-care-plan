@@ -30,11 +30,11 @@ import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Submit = 'submit',
-  UseInvalidAddress = 'use-invalid-address',
-  UseSelectedAddress = 'use-selected-address',
-}
+const FORM_ACTION = {
+  submit: 'submit',
+  useInvalidAddress: 'use-invalid-address',
+  useSelectedAddress: 'use-selected-address',
+} as const;
 
 interface CanadianAddress {
   address: string;
@@ -100,7 +100,7 @@ export async function action({ context: { appContainer, session }, request, para
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
   const locale = getLocale(request);
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
   const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
@@ -323,7 +323,7 @@ export default function AddressValidationIndexRoute({ loaderData, params }: Rout
           <div className="flex flex-wrap items-center gap-3">
             <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
               <DialogTrigger asChild>
-                <LoadingButton type="submit" id="submit-button" name="_action" value={FormAction.Submit} variant="primary" loading={fetcher.isSubmitting} endIcon={faCheck}>
+                <LoadingButton type="submit" id="submit-button" name="_action" value={FORM_ACTION.submit} variant="primary" loading={fetcher.isSubmitting} endIcon={faCheck}>
                   {t('address-validation:index.submit-button')}
                 </LoadingButton>
               </DialogTrigger>
@@ -417,7 +417,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={FormAction.UseSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+          <LoadingButton name="_action" value={FORM_ACTION.useSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
             {t('address-validation:index.dialog.address-suggestion.use-selected-address-button')}
           </LoadingButton>
         </fetcher.Form>
@@ -470,7 +470,7 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={FormAction.UseInvalidAddress} type="submit" id="dialog.address-invalid-use-entered-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+          <LoadingButton name="_action" value={FORM_ACTION.useInvalidAddress} type="submit" id="dialog.address-invalid-use-entered-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
             {t('address-validation:index.dialog.address-invalid.use-entered-address-button')}
           </LoadingButton>
         </fetcher.Form>

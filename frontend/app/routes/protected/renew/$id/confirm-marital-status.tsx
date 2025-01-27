@@ -32,11 +32,11 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -228,7 +228,7 @@ export default function ProtectedRenewMaritalStatus({ loaderData, params }: Rout
         </div>
         {editMode ? (
           <div className="flex flex-wrap items-center gap-3">
-            <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Marital status click">
+            <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Marital status click">
               {t('protected-renew:marital-status.save-btn')}
             </Button>
             <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Marital status click">
@@ -240,7 +240,7 @@ export default function ProtectedRenewMaritalStatus({ loaderData, params }: Rout
             <LoadingButton
               id="continue-button"
               name="_action"
-              value={FormAction.Continue}
+              value={FORM_ACTION.continue}
               variant="primary"
               loading={isSubmitting}
               endIcon={faChevronRight}

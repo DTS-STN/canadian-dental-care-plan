@@ -26,16 +26,16 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+} as const;
 
-enum AddressRadioOptions {
-  No = 'no',
-  Yes = 'yes',
-}
+const ADDRESS_RADIO_OPTIONS = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
@@ -65,13 +65,13 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const confirmAddressSchema = z
     .object({
-      hasAddressChanged: z.nativeEnum(AddressRadioOptions, {
+      hasAddressChanged: z.nativeEnum(ADDRESS_RADIO_OPTIONS, {
         errorMap: () => ({ message: t('renew-ita:confirm-address.error-message.has-address-changed-required') }),
       }),
-      isHomeAddressSameAsMailingAddress: z.nativeEnum(AddressRadioOptions).or(z.literal('')).optional(),
+      isHomeAddressSameAsMailingAddress: z.nativeEnum(ADDRESS_RADIO_OPTIONS).or(z.literal('')).optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.hasAddressChanged === AddressRadioOptions.No) {
+      if (val.hasAddressChanged === ADDRESS_RADIO_OPTIONS.no) {
         if (!val.isHomeAddressSameAsMailingAddress) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-address.error-message.is-home-address-same-as-mailing-address-required'), path: ['isHomeAddressSameAsMailingAddress'] });
         }
@@ -95,8 +95,8 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     session,
     state: {
-      hasAddressChanged: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes,
-      isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No ? parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes : undefined,
+      hasAddressChanged: parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.yes,
+      isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.no ? parsedDataResult.data.isHomeAddressSameAsMailingAddress === ADDRESS_RADIO_OPTIONS.yes : undefined,
       previousAddressState: {
         hasAddressChanged: state.hasAddressChanged,
         isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
@@ -104,8 +104,8 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No) {
-    if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.No) {
+  if (parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.no) {
+    if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === ADDRESS_RADIO_OPTIONS.no) {
       return redirect(getPathById('public/renew/$id/ita/update-home-address', params));
     }
     return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
@@ -129,7 +129,7 @@ export default function RenewItaConfirmAddress({ loaderData, params }: Route.Com
   const [hasAddressChangedRadioValue, setHasAddressChangeRadioValue] = useState(defaultState.hasAddressChanged);
 
   function handleHasAddressChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setHasAddressChangeRadioValue(e.target.value === AddressRadioOptions.Yes);
+    setHasAddressChangeRadioValue(e.target.value === ADDRESS_RADIO_OPTIONS.yes);
   }
 
   return (
@@ -148,8 +148,8 @@ export default function RenewItaConfirmAddress({ loaderData, params }: Route.Com
               name="hasAddressChanged"
               legend={t('renew-ita:confirm-address.have-you-moved')}
               options={[
-                { value: AddressRadioOptions.Yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState.hasAddressChanged === true, onChange: handleHasAddressChanged },
-                { value: AddressRadioOptions.No, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState.hasAddressChanged === false, onChange: handleHasAddressChanged },
+                { value: ADDRESS_RADIO_OPTIONS.yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState.hasAddressChanged === true, onChange: handleHasAddressChanged },
+                { value: ADDRESS_RADIO_OPTIONS.no, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState.hasAddressChanged === false, onChange: handleHasAddressChanged },
               ]}
               helpMessagePrimary={t('renew-ita:confirm-address.help-message')}
               errorMessage={errors?.hasAddressChanged}
@@ -161,8 +161,8 @@ export default function RenewItaConfirmAddress({ loaderData, params }: Route.Com
                 name="isHomeAddressSameAsMailingAddress"
                 legend={t('renew-ita:confirm-address.is-home-address-same-as-mailing-address')}
                 options={[
-                  { value: AddressRadioOptions.Yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === true },
-                  { value: AddressRadioOptions.No, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === false },
+                  { value: ADDRESS_RADIO_OPTIONS.yes, children: t('renew-ita:confirm-address.radio-options.yes'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === true },
+                  { value: ADDRESS_RADIO_OPTIONS.no, children: t('renew-ita:confirm-address.radio-options.no'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === false },
                 ]}
                 errorMessage={errors?.isHomeAddressSameAsMailingAddress}
                 required
@@ -171,7 +171,7 @@ export default function RenewItaConfirmAddress({ loaderData, params }: Route.Com
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <LoadingButton id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Address click">
+              <LoadingButton id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Address click">
                 {t('renew-ita:confirm-address.save-btn')}
               </LoadingButton>
               <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Address click">

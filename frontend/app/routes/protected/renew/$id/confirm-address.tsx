@@ -23,15 +23,15 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatAddressLine } from '~/utils/string-utils';
 
-enum FormAction {
-  Cancel = 'cancel',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  cancel: 'cancel',
+  save: 'save',
+} as const;
 
-enum AddressRadioOptions {
-  No = 'no',
-  Yes = 'yes',
-}
+const ADDRESS_RADIO_OPTIONS = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -70,7 +70,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const confirmAddressSchema = z.object({
-    isHomeAddressSameAsMailingAddress: z.nativeEnum(AddressRadioOptions, { errorMap: () => ({ message: t('protected-renew:confirm-address.error-message.is-home-address-same-as-mailing-address-required') }) }),
+    isHomeAddressSameAsMailingAddress: z.nativeEnum(ADDRESS_RADIO_OPTIONS, { errorMap: () => ({ message: t('protected-renew:confirm-address.error-message.is-home-address-same-as-mailing-address-required') }) }),
   });
 
   const parsedDataResult = confirmAddressSchema.safeParse({
@@ -82,7 +82,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const homeAddress =
-    parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes
+    parsedDataResult.data.isHomeAddressSameAsMailingAddress === ADDRESS_RADIO_OPTIONS.yes
       ? state.mailingAddress
         ? state.mailingAddress
         : {
@@ -99,12 +99,12 @@ export async function action({ context: { appContainer, session }, params, reque
     request,
     session,
     state: {
-      isHomeAddressSameAsMailingAddress: parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes,
+      isHomeAddressSameAsMailingAddress: parsedDataResult.data.isHomeAddressSameAsMailingAddress === ADDRESS_RADIO_OPTIONS.yes,
       homeAddress,
     },
   });
 
-  if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.No) {
+  if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === ADDRESS_RADIO_OPTIONS.no) {
     return redirect(getPathById('protected/renew/$id/confirm-home-address', params));
   }
 
@@ -138,8 +138,8 @@ export default function ProtectedRenewProtectedConfirmAddress({ loaderData, para
             name="isHomeAddressSameAsMailingAddress"
             legend={t('protected-renew:confirm-address.is-home-address-same-as-mailing-address')}
             options={[
-              { value: AddressRadioOptions.Yes, children: t('protected-renew:confirm-address.radio-options.yes'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === true },
-              { value: AddressRadioOptions.No, children: t('protected-renew:confirm-address.radio-options.no'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === false },
+              { value: ADDRESS_RADIO_OPTIONS.yes, children: t('protected-renew:confirm-address.radio-options.yes'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === true },
+              { value: ADDRESS_RADIO_OPTIONS.no, children: t('protected-renew:confirm-address.radio-options.no'), defaultChecked: defaultState.isHomeAddressSameAsMailingAddress === false },
             ]}
             errorMessage={errors?.isHomeAddressSameAsMailingAddress}
             required
@@ -147,7 +147,7 @@ export default function ProtectedRenewProtectedConfirmAddress({ loaderData, para
         </div>
         {editMode ? (
           <div className="flex flex-wrap items-center gap-3">
-            <LoadingButton id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Confirm address click">
+            <LoadingButton id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Confirm address click">
               {t('protected-renew:confirm-address.save-btn')}
             </LoadingButton>
             <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Confirm address click">

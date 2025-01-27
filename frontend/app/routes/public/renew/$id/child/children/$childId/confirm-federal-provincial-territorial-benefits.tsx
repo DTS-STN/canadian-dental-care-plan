@@ -26,10 +26,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FederalBenefitsChangedOption {
-  No = 'no',
-  Yes = 'yes',
-}
+const FEDERAL_BENEFITS_CHANGED_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
@@ -79,7 +79,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const dentalBenefits = {
-    hasFederalProvincialTerritorialBenefitsChanged: formData.get('hasFederalProvincialTerritorialBenefitsChanged') ? formData.get('hasFederalProvincialTerritorialBenefitsChanged') === FederalBenefitsChangedOption.Yes : undefined,
+    hasFederalProvincialTerritorialBenefitsChanged: formData.get('hasFederalProvincialTerritorialBenefitsChanged') ? formData.get('hasFederalProvincialTerritorialBenefitsChanged') === FEDERAL_BENEFITS_CHANGED_OPTION.yes : undefined,
   };
 
   const parsedDentalBenefitsResult = dentalBenefitsChangedSchema.safeParse(dentalBenefits);
@@ -136,7 +136,7 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
   });
 
   function handleOnFederalProvincialTerritorialBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setFederalProvincialTerrirorialBenefitChangedValue(e.target.value === FederalBenefitsChangedOption.Yes);
+    setFederalProvincialTerrirorialBenefitChangedValue(e.target.value === FEDERAL_BENEFITS_CHANGED_OPTION.yes);
   }
 
   return (
@@ -159,13 +159,13 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-child:children.confirm-dental-benefits.option-yes" />,
-                  value: FederalBenefitsChangedOption.Yes,
+                  value: FEDERAL_BENEFITS_CHANGED_OPTION.yes,
                   defaultChecked: federalProvincialTerritorialBenefitChangedValue === true,
                   onChange: handleOnFederalProvincialTerritorialBenefitChanged,
                 },
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-child:children.confirm-dental-benefits.option-no" />,
-                  value: FederalBenefitsChangedOption.No,
+                  value: FEDERAL_BENEFITS_CHANGED_OPTION.no,
                   defaultChecked: federalProvincialTerritorialBenefitChangedValue === false,
                   onChange: handleOnFederalProvincialTerritorialBenefitChanged,
                 },

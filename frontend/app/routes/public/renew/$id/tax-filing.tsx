@@ -23,10 +23,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum TaxFilingOption {
-  No = 'no',
-  Yes = 'yes',
-}
+const TAX_FILING_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew', 'gcweb'),
@@ -56,7 +56,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const taxFilingSchema = z.object({
-    taxFiling: z.nativeEnum(TaxFilingOption, {
+    taxFiling: z.nativeEnum(TAX_FILING_OPTION, {
       errorMap: () => ({ message: t('renew:tax-filing.error-message.tax-filing-required') }),
     }),
   });
@@ -67,9 +67,9 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveRenewState({ params, session, state: { taxFiling: parsedDataResult.data.taxFiling === TaxFilingOption.Yes } });
+  saveRenewState({ params, session, state: { taxFiling: parsedDataResult.data.taxFiling === TAX_FILING_OPTION.yes } });
 
-  if (parsedDataResult.data.taxFiling === TaxFilingOption.No) {
+  if (parsedDataResult.data.taxFiling === TAX_FILING_OPTION.no) {
     return redirect(getPathById('public/renew/$id/file-taxes', params));
   }
 
@@ -100,8 +100,8 @@ export default function RenewFlowTaxFiling({ loaderData, params }: Route.Compone
             name="taxFiling"
             legend={t('renew:tax-filing.form-instructions', { taxYear })}
             options={[
-              { value: TaxFilingOption.Yes, children: t('renew:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
-              { value: TaxFilingOption.No, children: t('renew:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
+              { value: TAX_FILING_OPTION.yes, children: t('renew:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
+              { value: TAX_FILING_OPTION.no, children: t('renew:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
             ]}
             errorMessage={errors?.taxFiling}
             required

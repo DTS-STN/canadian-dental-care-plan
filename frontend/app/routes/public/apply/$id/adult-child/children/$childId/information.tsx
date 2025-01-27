@@ -37,10 +37,10 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
-enum YesNoOption {
-  Yes = 'yes',
-  No = 'no',
-}
+const YES_NO_OPTION = {
+  yes: 'yes',
+  no: 'no',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'apply-adult-child', 'gcweb'),
@@ -172,11 +172,11 @@ export async function action({ context: { appContainer, session }, params, reque
     dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
     dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
     dateOfBirth: '',
-    isParent: formData.get('isParent') ? formData.get('isParent') === YesNoOption.Yes : undefined,
+    isParent: formData.get('isParent') ? formData.get('isParent') === YES_NO_OPTION.yes : undefined,
   });
 
   const parsedSinDataResult = childSinSchema.safeParse({
-    hasSocialInsuranceNumber: formData.get('hasSocialInsuranceNumber') ? formData.get('hasSocialInsuranceNumber') === YesNoOption.Yes : undefined,
+    hasSocialInsuranceNumber: formData.get('hasSocialInsuranceNumber') ? formData.get('hasSocialInsuranceNumber') === YES_NO_OPTION.yes : undefined,
     socialInsuranceNumber: formData.get('socialInsuranceNumber') ? String(formData.get('socialInsuranceNumber') ?? '') : undefined,
   });
 
@@ -244,13 +244,13 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
   });
 
   const handleSocialInsuranceNumberSelection: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setHasSocialInsuranceNumberValue(e.target.value === YesNoOption.Yes);
+    setHasSocialInsuranceNumberValue(e.target.value === YES_NO_OPTION.yes);
   };
 
   const options: InputRadiosProps['options'] = [
     {
       children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.information.sin-yes" components={{ bold: <strong /> }} />,
-      value: YesNoOption.Yes,
+      value: YES_NO_OPTION.yes,
       defaultChecked: defaultState?.hasSocialInsuranceNumber === true,
       append: hasSocialInsuranceNumberValue === true && (
         <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
@@ -270,7 +270,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
     },
     {
       children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.information.sin-no" components={{ bold: <strong /> }} />,
-      value: YesNoOption.No,
+      value: YES_NO_OPTION.no,
       defaultChecked: defaultState?.hasSocialInsuranceNumber === false,
       onChange: handleSocialInsuranceNumberSelection,
     },
@@ -340,8 +340,8 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               name="isParent"
               legend={t('apply-adult-child:children.information.parent-legend')}
               options={[
-                { value: YesNoOption.Yes, children: t('apply-adult-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
-                { value: YesNoOption.No, children: t('apply-adult-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
+                { value: YES_NO_OPTION.yes, children: t('apply-adult-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
+                { value: YES_NO_OPTION.no, children: t('apply-adult-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
               ]}
               errorMessage={errors?.isParent}
             />

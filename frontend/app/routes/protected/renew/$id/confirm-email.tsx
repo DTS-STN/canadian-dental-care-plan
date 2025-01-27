@@ -22,10 +22,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Cancel = 'cancel',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  cancel: 'cancel',
+  save: 'save',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -156,7 +156,7 @@ export default function ProtectedRenewConfirmEmail({ loaderData, params }: Route
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Email click">
+          <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Email click">
             {t('protected-renew:confirm-email.save-btn')}
           </Button>
           <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Email click">

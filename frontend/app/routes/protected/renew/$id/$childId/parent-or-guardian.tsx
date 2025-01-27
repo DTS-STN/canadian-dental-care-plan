@@ -23,10 +23,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum ParentOrGuardianOption {
-  No = 'no',
-  Yes = 'yes',
-}
+const PARENT_OR_GUARDIAN_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -70,7 +70,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const parentOrGuardianSchema = z.object({
-    parentOrGuardian: z.nativeEnum(ParentOrGuardianOption, {
+    parentOrGuardian: z.nativeEnum(PARENT_OR_GUARDIAN_OPTION, {
       errorMap: () => ({ message: t('protected-renew:children.parent-or-guardian.error-message.parent-or-guardian-required') }),
     }),
   });
@@ -92,7 +92,7 @@ export async function action({ context: { appContainer, session }, params, reque
         if (child.id !== state.id) return child;
         return {
           ...child,
-          isParentOrLegalGuardian: parsedDataResult.data.parentOrGuardian === ParentOrGuardianOption.Yes,
+          isParentOrLegalGuardian: parsedDataResult.data.parentOrGuardian === PARENT_OR_GUARDIAN_OPTION.yes,
         };
       }),
     },
@@ -101,7 +101,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.child-parent-or-guardian', { userId: idToken.sub });
 
-  if (parsedDataResult.data.parentOrGuardian === ParentOrGuardianOption.No) {
+  if (parsedDataResult.data.parentOrGuardian === PARENT_OR_GUARDIAN_OPTION.no) {
     return redirect(getPathById('protected/renew/$id/$childId/parent-or-guardian-required', params));
   }
 
@@ -129,8 +129,8 @@ export default function ProtectedRenewParentOrGuardian({ loaderData, params }: R
           name="parentOrGuardian"
           legend={t('protected-renew:children.parent-or-guardian.form-instructions', { childName })}
           options={[
-            { value: ParentOrGuardianOption.Yes, children: t('protected-renew:children.parent-or-guardian.radio-options.yes'), defaultChecked: defaultState === true },
-            { value: ParentOrGuardianOption.No, children: t('protected-renew:children.parent-or-guardian.radio-options.no'), defaultChecked: defaultState === false },
+            { value: PARENT_OR_GUARDIAN_OPTION.yes, children: t('protected-renew:children.parent-or-guardian.radio-options.yes'), defaultChecked: defaultState === true },
+            { value: PARENT_OR_GUARDIAN_OPTION.no, children: t('protected-renew:children.parent-or-guardian.radio-options.no'), defaultChecked: defaultState === false },
           ]}
           errorMessage={errors?.parentOrGuardian}
           required

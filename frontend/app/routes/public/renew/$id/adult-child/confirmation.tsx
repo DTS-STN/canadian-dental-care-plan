@@ -23,10 +23,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-enum FormAction {
-  Submit = 'submit',
-  Close = 'close',
-}
+const FORM_ACTION = {
+  submit: 'submit',
+  close: 'close',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
@@ -376,7 +376,7 @@ export default function RenewAdultChildConfirm({ loaderData, params }: Route.Com
                 variant="primary"
                 size="sm"
                 name="_action"
-                value={FormAction.Close}
+                value={FORM_ACTION.close}
                 onClick={() => sessionStorage.removeItem('flow.state')}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Modal Close application - Your renewal for the Canadian Dental Care Plan is complete click"
               >

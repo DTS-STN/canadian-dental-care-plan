@@ -35,11 +35,11 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Submit = 'submit',
-  UseInvalidAddress = 'use-invalid-address',
-  UseSelectedAddress = 'use-selected-address',
-}
+const FORM_ACTION = {
+  submit: 'submit',
+  useInvalidAddress: 'use-invalid-address',
+  useSelectedAddress: 'use-selected-address',
+} as const;
 
 interface CanadianAddress {
   address: string;
@@ -103,7 +103,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   const locale = getLocale(request);
 
   const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
@@ -355,7 +355,7 @@ export default function ProtectedRenewConfirmMailingAddress({ loaderData, params
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
               <DialogTrigger asChild>
-                <LoadingButton variant="primary" id="save-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Mailing address click">
+                <LoadingButton variant="primary" id="save-button" type="submit" name="_action" value={FORM_ACTION.submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Mailing address click">
                   {t('protected-renew:update-address.save-btn')}
                 </LoadingButton>
               </DialogTrigger>
@@ -462,7 +462,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copy
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={FormAction.UseSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+          <LoadingButton name="_action" value={FORM_ACTION.useSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
             {t('protected-renew:update-address.dialog.address-suggestion.use-selected-address-button')}
           </LoadingButton>
         </fetcher.Form>
@@ -524,7 +524,7 @@ function AddressInvalidDialogContent({ invalidAddress, copyAddressToHome }: Addr
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
           <LoadingButton
             name="_action"
-            value={FormAction.UseInvalidAddress}
+            value={FORM_ACTION.useInvalidAddress}
             type="submit"
             id="dialog.address-invalid-use-entered-address-button"
             loading={fetcher.isSubmitting}

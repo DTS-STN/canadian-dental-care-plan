@@ -35,10 +35,10 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { extractDigits, hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
-enum YesNoOption {
-  Yes = 'yes',
-  No = 'no',
-}
+const YES_NO_OPTION = {
+  yes: 'yes',
+  no: 'no',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew', 'renew-adult-child', 'gcweb'),
@@ -165,7 +165,7 @@ export async function action({ context: { appContainer, session }, params, reque
     dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
     dateOfBirth: '',
     clientNumber: String(formData.get('clientNumber') ?? ''),
-    isParent: formData.get('isParent') ? formData.get('isParent') === YesNoOption.Yes : undefined,
+    isParent: formData.get('isParent') ? formData.get('isParent') === YES_NO_OPTION.yes : undefined,
   });
 
   if (!parsedDataResult.success) {
@@ -304,8 +304,8 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
               name="isParent"
               legend={t('renew-adult-child:children.information.parent-legend')}
               options={[
-                { value: YesNoOption.Yes, children: t('renew-adult-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true, readOnly: false, tabIndex: 0 },
-                { value: YesNoOption.No, children: t('renew-adult-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: false, tabIndex: 0 },
+                { value: YES_NO_OPTION.yes, children: t('renew-adult-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true, readOnly: false, tabIndex: 0 },
+                { value: YES_NO_OPTION.no, children: t('renew-adult-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: false, tabIndex: 0 },
               ]}
               errorMessage={errors?.isParent}
             />

@@ -27,15 +27,15 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum HasFederalBenefitsOption {
-  No = 'no',
-  Yes = 'yes',
-}
+const HAS_FEDERAL_BENEFITS_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
-enum HasProvincialTerritorialBenefitsOption {
-  No = 'no',
-  Yes = 'yes',
-}
+const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -134,9 +134,9 @@ export async function action({ context: { appContainer, session }, params, reque
     }) satisfies z.ZodType<DentalProvincialTerritorialBenefitsState>;
 
   const dentalBenefits = {
-    hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes : undefined,
+    hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HAS_FEDERAL_BENEFITS_OPTION.yes : undefined,
     federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
-    hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') ? formData.get('hasProvincialTerritorialBenefits') === HasProvincialTerritorialBenefitsOption.Yes : undefined,
+    hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') ? formData.get('hasProvincialTerritorialBenefits') === HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes : undefined,
     provincialTerritorialSocialProgram: formData.get('provincialTerritorialSocialProgram') ? String(formData.get('provincialTerritorialSocialProgram')) : undefined,
     province: formData.get('province') ? String(formData.get('province')) : undefined,
   };
@@ -198,12 +198,12 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
   });
 
   function handleOnHasFederalBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setHasFederalBenefitValue(e.target.value === HasFederalBenefitsOption.Yes);
+    setHasFederalBenefitValue(e.target.value === HAS_FEDERAL_BENEFITS_OPTION.yes);
   }
 
   function handleOnHasProvincialTerritorialBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setHasProvincialTerritorialBenefitValue(e.target.value === HasProvincialTerritorialBenefitsOption.Yes);
-    if (e.target.value !== HasProvincialTerritorialBenefitsOption.Yes) {
+    setHasProvincialTerritorialBenefitValue(e.target.value === HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes);
+    if (e.target.value !== HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes) {
       setProvinceValue(undefined);
       setProvincialTerritorialSocialProgramValue(undefined);
     }
@@ -236,13 +236,13 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.dental-benefits.federal-benefits.option-no" />,
-                  value: HasFederalBenefitsOption.No,
+                  value: HAS_FEDERAL_BENEFITS_OPTION.no,
                   defaultChecked: hasFederalBenefitValue === false,
                   onChange: handleOnHasFederalBenefitChanged,
                 },
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.dental-benefits.federal-benefits.option-yes" />,
-                  value: HasFederalBenefitsOption.Yes,
+                  value: HAS_FEDERAL_BENEFITS_OPTION.yes,
                   defaultChecked: hasFederalBenefitValue === true,
                   onChange: handleOnHasFederalBenefitChanged,
                   append: hasFederalBenefitValue === true && (
@@ -274,13 +274,13 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.dental-benefits.provincial-territorial-benefits.option-no" />,
-                  value: HasProvincialTerritorialBenefitsOption.No,
+                  value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
                   defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
                 },
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.dental-benefits.provincial-territorial-benefits.option-yes" />,
-                  value: HasProvincialTerritorialBenefitsOption.Yes,
+                  value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes,
                   defaultChecked: defaultState?.hasProvincialTerritorialBenefits === true,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
                   append: hasProvincialTerritorialBenefitValue === true && (

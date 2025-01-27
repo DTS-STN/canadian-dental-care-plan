@@ -37,10 +37,10 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { extractDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
-enum ChildHasSin {
-  No = 'no',
-  Yes = 'yes',
-}
+const CHILD_HAS_SIN = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
@@ -148,7 +148,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedCodeResult = codeSchema.safeParse({ code: String(formData.get('code') ?? '') });
 
   const parsedChildHasSinResult = childHasSinSchema.safeParse({
-    childHasSin: formData.get('childHasSin') ? formData.get('childHasSin') === ChildHasSin.Yes : undefined,
+    childHasSin: formData.get('childHasSin') ? formData.get('childHasSin') === CHILD_HAS_SIN.yes : undefined,
   });
 
   // only validate if childHasSinSchema parsing is successful and parsed childHasSin is "true"
@@ -260,7 +260,7 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
   }, [fetcher.data]);
 
   function handleOnChildHasSinChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setChildHasSinState(e.target.value === ChildHasSin.Yes);
+    setChildHasSinState(e.target.value === CHILD_HAS_SIN.yes);
   }
 
   return (
@@ -287,12 +287,12 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
             legend={t('status:child.form.radio-legend')}
             options={[
               {
-                value: ChildHasSin.Yes,
+                value: CHILD_HAS_SIN.yes,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-yes" />,
                 onChange: handleOnChildHasSinChanged,
               },
               {
-                value: ChildHasSin.No,
+                value: CHILD_HAS_SIN.no,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-no" />,
                 onChange: handleOnChildHasSinChanged,
               },

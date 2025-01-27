@@ -30,11 +30,11 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Save = 'save',
-  Back = 'back',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  save: 'save',
+  back: 'back',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'gcweb'),
@@ -88,9 +88,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadRenewAdultChildState({ params, request, session });
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
-  if (formAction === FormAction.Back) {
+  if (formAction === FORM_ACTION.back) {
     if (state.hasFederalProvincialTerritorialBenefitsChanged) {
       return redirect(getPathById('public/renew/$id/adult-child/update-federal-provincial-territorial-benefits', params));
     }
@@ -128,7 +128,7 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     });
 
-  const preferNotToAnswer = formAction === FormAction.Save;
+  const preferNotToAnswer = formAction === FORM_ACTION.save;
 
   const parsedDataResult = demographicSurveySchema.safeParse({
     indigenousStatus: preferNotToAnswer ? INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('indigenousStatus') ?? ''),
@@ -230,7 +230,7 @@ export default function RenewAdultChildDemographicSurveyQuestions({ loaderData, 
             <p>{t('renew-adult-child:demographic-survey.improve-cdcp')}</p>
             <p>{t('renew-adult-child:demographic-survey.confidential')}</p>
             <p>{t('renew-adult-child:demographic-survey.impact-enrollment')}</p>
-            <Button name="_action" value={FormAction.Save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Prefer not to answer - Voluntary demographic questions click">
+            <Button name="_action" value={FORM_ACTION.save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Prefer not to answer - Voluntary demographic questions click">
               {t('renew-adult-child:demographic-survey.prefer-not-to-answer-btn')}
             </Button>
             <p className="mb-4 italic">{t('renew-adult-child:demographic-survey.optional')}</p>
@@ -259,7 +259,7 @@ export default function RenewAdultChildDemographicSurveyQuestions({ loaderData, 
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Voluntary demographic questions click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Voluntary demographic questions click">
                 {t('renew-adult-child:demographic-survey.save-btn')}
               </Button>
               <ButtonLink
@@ -277,7 +277,7 @@ export default function RenewAdultChildDemographicSurveyQuestions({ loaderData, 
               <LoadingButton
                 id="continue-button"
                 name="_action"
-                value={FormAction.Continue}
+                value={FORM_ACTION.continue}
                 variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
@@ -288,7 +288,7 @@ export default function RenewAdultChildDemographicSurveyQuestions({ loaderData, 
               <LoadingButton
                 id="back-button"
                 name="_action"
-                value={FormAction.Back}
+                value={FORM_ACTION.back}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Voluntary demographic questions click"

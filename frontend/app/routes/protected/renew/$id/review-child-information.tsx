@@ -25,10 +25,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Back = 'back',
-  Submit = 'submit',
-}
+const FORM_ACTION = {
+  back: 'back',
+  submit: 'submit',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
@@ -128,8 +128,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-child-information', { userId: idToken.sub });
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-  if (formAction === FormAction.Back) {
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  if (formAction === FORM_ACTION.back) {
     saveProtectedRenewState({
       params,
       request,
@@ -243,7 +243,7 @@ export default function ProtectedRenewReviewChildInformation({ loaderData, param
           <LoadingButton
             id="confirm-button"
             name="_action"
-            value={FormAction.Submit}
+            value={FORM_ACTION.submit}
             variant="primary"
             disabled={isSubmitting}
             loading={isSubmitting}
@@ -252,7 +252,7 @@ export default function ProtectedRenewReviewChildInformation({ loaderData, param
           >
             {t('protected-renew:review-child-information.continue-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Review child(ren) information click">
+          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Review child(ren) information click">
             {t('protected-renew:review-child-information.back-button')}
           </Button>
         </div>

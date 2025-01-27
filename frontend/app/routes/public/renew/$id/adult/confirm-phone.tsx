@@ -28,16 +28,16 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+} as const;
 
-enum AddOrUpdatePhoneOption {
-  Yes = 'yes',
-  No = 'no',
-}
+const ADD_OR_UPDATE_PHONE_OPTION = {
+  yes: 'yes',
+  no: 'no',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult', 'renew', 'gcweb'),
@@ -81,7 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const phoneNumberSchema = z
     .object({
-      isNewOrUpdatedPhoneNumber: z.nativeEnum(AddOrUpdatePhoneOption, {
+      isNewOrUpdatedPhoneNumber: z.nativeEnum(ADD_OR_UPDATE_PHONE_OPTION, {
         errorMap: () => ({ message: t('renew-adult:confirm-phone.error-message.add-or-update-required') }),
       }),
       phoneNumber: phoneSchema({
@@ -94,7 +94,7 @@ export async function action({ context: { appContainer, session }, params, reque
       }).optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.isNewOrUpdatedPhoneNumber === AddOrUpdatePhoneOption.Yes) {
+      if (val.isNewOrUpdatedPhoneNumber === ADD_OR_UPDATE_PHONE_OPTION.yes) {
         if (!val.phoneNumber) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:confirm-phone.error-message.phone-required'), path: ['phoneNumber'] });
         }
@@ -102,7 +102,7 @@ export async function action({ context: { appContainer, session }, params, reque
     })
     .transform((val) => ({
       ...val,
-      isNewOrUpdatedPhoneNumber: val.isNewOrUpdatedPhoneNumber === AddOrUpdatePhoneOption.Yes,
+      isNewOrUpdatedPhoneNumber: val.isNewOrUpdatedPhoneNumber === ADD_OR_UPDATE_PHONE_OPTION.yes,
     }));
 
   const parsedDataResult = phoneNumberSchema.safeParse({
@@ -141,7 +141,7 @@ export default function RenewAdultConfirmPhone({ loaderData, params }: Route.Com
   const [isNewOrUpdatedPhoneNumber, setIsNewOrUpdatedPhoneNumber] = useState(defaultState.isNewOrUpdatedPhoneNumber);
 
   function handleNewOrUpdatePhoneNumberChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setIsNewOrUpdatedPhoneNumber(e.target.value === AddOrUpdatePhoneOption.Yes);
+    setIsNewOrUpdatedPhoneNumber(e.target.value === ADD_OR_UPDATE_PHONE_OPTION.yes);
   }
 
   return (
@@ -165,7 +165,7 @@ export default function RenewAdultConfirmPhone({ loaderData, params }: Route.Com
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult:confirm-phone.option-yes" />,
-                  value: AddOrUpdatePhoneOption.Yes,
+                  value: ADD_OR_UPDATE_PHONE_OPTION.yes,
                   defaultChecked: isNewOrUpdatedPhoneNumber === true,
                   onChange: handleNewOrUpdatePhoneNumberChanged,
                   append: isNewOrUpdatedPhoneNumber === true && (
@@ -201,7 +201,7 @@ export default function RenewAdultConfirmPhone({ loaderData, params }: Route.Com
                 },
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult:confirm-phone.option-no" />,
-                  value: AddOrUpdatePhoneOption.No,
+                  value: ADD_OR_UPDATE_PHONE_OPTION.no,
                   defaultChecked: isNewOrUpdatedPhoneNumber === false,
                   onChange: handleNewOrUpdatePhoneNumberChanged,
                 },
@@ -212,7 +212,7 @@ export default function RenewAdultConfirmPhone({ loaderData, params }: Route.Com
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Phone Number click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Phone Number click">
                 {t('renew-adult:confirm-phone.save-btn')}
               </Button>
               <ButtonLink id="cancel-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Phone Number click">
@@ -224,7 +224,7 @@ export default function RenewAdultConfirmPhone({ loaderData, params }: Route.Com
               <LoadingButton
                 id="continue-button"
                 name="_action"
-                value={FormAction.Continue}
+                value={FORM_ACTION.continue}
                 variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
