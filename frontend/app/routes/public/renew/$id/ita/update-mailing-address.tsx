@@ -292,7 +292,7 @@ export default function RenewItaUpdateAddress({ loaderData, params }: Route.Comp
                 name="mailingAddress"
                 className="w-full"
                 label={t('renew-ita:update-address.address-field.address')}
-                maxLength={30}
+                maxLength={100}
                 helpMessagePrimary={t('renew-ita:update-address.address-field.address-note')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"

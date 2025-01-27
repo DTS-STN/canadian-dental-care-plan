@@ -260,7 +260,7 @@ export default function AddressValidationIndexRoute({ loaderData, params }: Rout
                 name="address"
                 className="w-full"
                 label={t('address-validation:index.address-field.address')}
-                maxLength={30}
+                maxLength={100}
                 helpMessagePrimary={t('address-validation:index.address-field.address-note')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"

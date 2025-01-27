@@ -266,7 +266,7 @@ export default function RenewAdultUpdateAddress({ loaderData, params }: Route.Co
                   label={t('renew-adult:update-address.address-field.address')}
                   helpMessagePrimary={t('renew-adult:update-address.address-field.address-note')}
                   helpMessagePrimaryClassName="text-black"
-                  maxLength={30}
+                  maxLength={100}
                   autoComplete="address-line1"
                   defaultValue={defaultState.homeAddress?.address}
                   errorMessage={errors?.address}
