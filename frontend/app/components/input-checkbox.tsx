@@ -4,7 +4,7 @@ import { InputError } from './input-error';
 
 import { cn } from '~/utils/tw-utils';
 
-const inputBaseClassName = 'h-4 w-4 rounded-sm border-gray-500 bg-gray-50 text-blue-600 focus:outline-hidden focus:ring-2 focus:ring-blue-500';
+const inputBaseClassName = 'h-4 w-4 rounded-sm border-gray-500 text-blue-600 focus:outline-hidden focus:ring-2 focus:ring-blue-500';
 const inputDisabledClassName = 'pointer-events-none cursor-not-allowed opacity-70';
 const inputErrorClassName = 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500';
 const inputReadOnlyClassName = 'pointer-events-none cursor-not-allowed opacity-70';
@@ -46,7 +46,7 @@ export function InputCheckbox({ errorMessage, append, appendClassName, children,
           {children}
         </label>
       </div>
-      {append && <div className={cn('ml-7 mt-4', appendClassName)}>{append}</div>}
+      {append && <div className={cn('mt-4 ml-7', appendClassName)}>{append}</div>}
     </div>
   );
 }
