@@ -26,7 +26,7 @@ const variants = {
   red: 'border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800',
 };
 
-const baseClassName = 'inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4';
+const baseClassName = 'cursor-pointer inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4';
 
 export interface ButtonProps extends ComponentProps<'button'> {
   endIcon?: ButtonEndIconProps['icon'];

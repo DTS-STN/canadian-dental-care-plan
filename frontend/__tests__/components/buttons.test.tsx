@@ -12,7 +12,7 @@ describe('Button Component', () => {
     const button = getByText('Click me');
     expect(button).toBeInTheDocument();
     expect(button.tagName).toEqual('BUTTON');
-    expect(button).toHaveClass('inline-flex', 'items-center', 'justify-center', 'rounded', 'border', 'align-middle', 'font-lato', 'outline-offset-4');
+    expect(button).toHaveClass('cursor-pointer', 'inline-flex', 'items-center', 'justify-center', 'rounded-sm', 'border', 'align-middle', 'font-lato', 'outline-offset-4');
   });
 
   it('renders button with custom size and variant', () => {
@@ -60,7 +60,7 @@ describe('ButtonLink Component', () => {
     const link = getByText('Click me');
     expect(link).toBeInTheDocument();
     expect(link.tagName).toEqual('A');
-    expect(link).toHaveClass('inline-flex', 'items-center', 'justify-center', 'rounded', 'border', 'align-middle', 'font-lato', 'outline-offset-4');
+    expect(link).toHaveClass('cursor-pointer', 'inline-flex', 'items-center', 'justify-center', 'rounded-sm', 'border', 'align-middle', 'font-lato', 'outline-offset-4');
   });
 
   it('renders link with custom size and variant', () => {
