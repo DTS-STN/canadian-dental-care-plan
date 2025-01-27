@@ -163,7 +163,7 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (state.editMode) {
-      return redirect(getPathById('public/renew/$id/ita/review-information', params));
+      return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/ita/review-information', params) : getPathById('public/renew/$id/ita/update-home-address', params));
     }
     return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/ita/dental-insurance', params) : getPathById('public/renew/$id/ita/update-home-address', params));
   }

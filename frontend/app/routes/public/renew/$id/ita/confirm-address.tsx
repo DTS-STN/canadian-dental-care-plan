@@ -111,12 +111,6 @@ export async function action({ context: { appContainer, session }, params, reque
         },
       },
     });
-    if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No) {
-      if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.No) {
-        return redirect(getPathById('public/renew/$id/ita/update-home-address', params));
-      }
-      return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
-    }
   }
 
   if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No) {
