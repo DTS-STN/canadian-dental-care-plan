@@ -579,8 +579,7 @@
     "is-parent": "Parent ou tuteur légal de l'enfant\u00a0:",
     "yes": "Oui",
     "no": "Non",
-    "back-btn": "Return to my dashboard",
-    "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
+    "back-btn": "Return to my dashboard"
   },
   "confirm-address": {
     "page-title": "Adresse",

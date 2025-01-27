@@ -135,7 +135,7 @@ export default function ProtectedRenewConfirm({ loaderData, params }: Route.Comp
   const isSubmitting = fetcher.state !== 'idle';
   const { primaryApplicantInfo, children } = loaderData;
 
-  const cdcpLink = <InlineLink to={t('protected-renew:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink routeId="public/status/index" params={params} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose space-y-10">
