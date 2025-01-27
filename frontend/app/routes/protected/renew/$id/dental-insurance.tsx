@@ -73,6 +73,7 @@ export async function action({ context: { appContainer, session }, params, reque
     if (state.clientApplication.isInvitationToApplyClient) {
       return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
     }
+    return redirect(getPathById('protected/renew/$id/member-selection', params));
   }
 
   // state validation schema
