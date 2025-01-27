@@ -97,21 +97,12 @@ export async function action({ context: { appContainer, session }, params, reque
     state: {
       hasAddressChanged: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes,
       isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No ? parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes : undefined,
+      previousAddressState: {
+        hasAddressChanged: state.hasAddressChanged,
+        isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
+      },
     },
   });
-
-  if (state.editMode) {
-    saveRenewState({
-      params,
-      session,
-      state: {
-        previousAddressState: {
-          hasAddressChanged: state.hasAddressChanged,
-          isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
-        },
-      },
-    });
-  }
 
   if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No) {
     if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.No) {
