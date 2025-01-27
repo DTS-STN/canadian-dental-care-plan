@@ -1,4 +1,13 @@
-@import 'tailwindcss';
+/*
+  We import Tailwind's layers explicitly to have better control over the
+  order and customization of styles. See the discussion for more context:
+  https://github.com/tailwindlabs/tailwindcss/discussions/15870
+*/
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme' layer(theme);
+@import 'tailwindcss/preflight' layer(base);
+@import 'tailwindcss/utilities';
 
 @config '../tailwind.config.ts';
 
