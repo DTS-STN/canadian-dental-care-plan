@@ -35,14 +35,18 @@ export interface HCaptchaRepository {
 @injectable()
 export class DefaultHCaptchaRepository implements HCaptchaRepository {
   private readonly log: Logger;
+  private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL' | 'HEALTH_PLACEHOLDER_REQUEST_VALUE'>;
+  private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL' | 'HEALTH_PLACEHOLDER_REQUEST_VALUE'>,
-    @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL' | 'HEALTH_PLACEHOLDER_REQUEST_VALUE'>,
+    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultHCaptchaRepository');
+    this.serverConfig = serverConfig;
+    this.httpClient = httpClient;
     this.baseUrl = this.serverConfig.HCAPTCHA_VERIFY_URL;
   }
 

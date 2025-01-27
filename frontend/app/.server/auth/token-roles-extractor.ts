@@ -11,14 +11,15 @@ export interface TokenRolesExtractor {
 @injectable()
 export class DefaultTokenRolesExtractor implements TokenRolesExtractor {
   private readonly log: Logger;
+  private readonly audience: string;
+  private readonly issuer: string;
+  private readonly jwksUrl?: string;
 
-  constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    private readonly audience: string,
-    private readonly issuer: string,
-    private readonly jwksUrl?: string,
-  ) {
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, audience: string, issuer: string, jwksUrl?: string) {
     this.log = logFactory.createLogger('DefaultTokenRolesExtractor');
+    this.audience = audience;
+    this.issuer = issuer;
+    this.jwksUrl = jwksUrl;
   }
 
   async extract(jwt?: string): Promise<string[]> {

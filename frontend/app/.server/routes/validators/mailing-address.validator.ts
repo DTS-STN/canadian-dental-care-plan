@@ -15,10 +15,13 @@ export interface MailingAddressValidator {
 }
 
 export class DefaultMailingAddressValidator implements MailingAddressValidator {
-  constructor(
-    private readonly locale: AppLocale,
-    private readonly addressValidatorFactory: AddressValidatorFactory,
-  ) {}
+  private readonly locale: AppLocale;
+  private readonly addressValidatorFactory: AddressValidatorFactory;
+
+  constructor(locale: AppLocale, addressValidatorFactory: AddressValidatorFactory) {
+    this.locale = locale;
+    this.addressValidatorFactory = addressValidatorFactory;
+  }
 
   async validateMailingAddress(data: Partial<Address>): Promise<InvalidResult<Address> | ValidResult<Address>> {
     const errorMessages = await this.buildMailingAddressSchemaErrorMessages();

@@ -243,14 +243,20 @@ export interface DemographicSurveyService {
 @injectable()
 export class DefaultDemographicSurveyServiceService implements DemographicSurveyService {
   private readonly log: Logger;
+  private readonly DemographicSurveyDtoMapper: DemographicSurveyDtoMapper;
+  private readonly DemographicSurveyRepository: DemographicSurveyRepository;
+  private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.DemographicSurveyDtoMapper) private readonly DemographicSurveyDtoMapper: DemographicSurveyDtoMapper,
-    @inject(TYPES.domain.repositories.DemographicSurveyRepository) private readonly DemographicSurveyRepository: DemographicSurveyRepository,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.domain.mappers.DemographicSurveyDtoMapper) DemographicSurveyDtoMapper: DemographicSurveyDtoMapper,
+    @inject(TYPES.domain.repositories.DemographicSurveyRepository) DemographicSurveyRepository: DemographicSurveyRepository,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('DefaultDemographicSurveyServiceService');
+    this.DemographicSurveyDtoMapper = DemographicSurveyDtoMapper;
+    this.DemographicSurveyRepository = DemographicSurveyRepository;
+    this.serverConfig = serverConfig;
     this.init();
   }
 

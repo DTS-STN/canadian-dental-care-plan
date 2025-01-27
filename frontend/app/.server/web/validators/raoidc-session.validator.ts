@@ -39,14 +39,16 @@ export interface RaoidcSessionValidator {
 @injectable()
 export class DefaultRaoidcSessionValidator implements RaoidcSessionValidator {
   private readonly log: Logger;
+  private readonly serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'HTTP_PROXY_URL'>;
   private readonly fetchFn: FetchFn;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'HTTP_PROXY_URL'>,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'HTTP_PROXY_URL'>,
     @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultRaoidcSessionValidator');
+    this.serverConfig = serverConfig;
     this.fetchFn = httpClient.getFetchFn({ proxyUrl: serverConfig.HTTP_PROXY_URL });
   }
 

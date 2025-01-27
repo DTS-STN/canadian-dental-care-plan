@@ -38,14 +38,20 @@ export type PreferredLanguageServiceImpl_ServerConfig = Pick<ServerConfig, 'ENGL
 @injectable()
 export class DefaultPreferredLanguageService implements PreferredLanguageService {
   private readonly log: Logger;
+  private readonly preferredLanguageDtoMapper: PreferredLanguageDtoMapper;
+  private readonly preferredLanguageRepository: PreferredLanguageRepository;
+  private readonly serverConfig: PreferredLanguageServiceImpl_ServerConfig;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.PreferredLanguageDtoMapper) private readonly preferredLanguageDtoMapper: PreferredLanguageDtoMapper,
-    @inject(TYPES.domain.repositories.PreferredLanguageRepository) private readonly preferredLanguageRepository: PreferredLanguageRepository,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: PreferredLanguageServiceImpl_ServerConfig,
+    @inject(TYPES.domain.mappers.PreferredLanguageDtoMapper) preferredLanguageDtoMapper: PreferredLanguageDtoMapper,
+    @inject(TYPES.domain.repositories.PreferredLanguageRepository) preferredLanguageRepository: PreferredLanguageRepository,
+    @inject(TYPES.configs.ServerConfig) serverConfig: PreferredLanguageServiceImpl_ServerConfig,
   ) {
     this.log = logFactory.createLogger('DefaultPreferredLanguageService');
+    this.preferredLanguageDtoMapper = preferredLanguageDtoMapper;
+    this.preferredLanguageRepository = preferredLanguageRepository;
+    this.serverConfig = serverConfig;
     this.init();
   }
 

@@ -118,15 +118,23 @@ export interface SecurityHandler {
 @injectable()
 export class DefaultSecurityHandler implements SecurityHandler {
   private readonly log: Logger;
+  private readonly serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>;
+  private readonly csrfTokenValidator: CsrfTokenValidator;
+  private readonly hCaptchaValidator: HCaptchaValidator;
+  private readonly raoidcSessionValidator: RaoidcSessionValidator;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
-    @inject(TYPES.web.validators.CsrfTokenValidator) private readonly csrfTokenValidator: CsrfTokenValidator,
-    @inject(TYPES.web.validators.HCaptchaValidator) private readonly hCaptchaValidator: HCaptchaValidator,
-    @inject(TYPES.web.validators.RaoidcSessionValidator) private readonly raoidcSessionValidator: RaoidcSessionValidator,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
+    @inject(TYPES.web.validators.CsrfTokenValidator) csrfTokenValidator: CsrfTokenValidator,
+    @inject(TYPES.web.validators.HCaptchaValidator) hCaptchaValidator: HCaptchaValidator,
+    @inject(TYPES.web.validators.RaoidcSessionValidator) raoidcSessionValidator: RaoidcSessionValidator,
   ) {
     this.log = logFactory.createLogger('DefaultSecurityHandler');
+    this.serverConfig = serverConfig;
+    this.csrfTokenValidator = csrfTokenValidator;
+    this.hCaptchaValidator = hCaptchaValidator;
+    this.raoidcSessionValidator = raoidcSessionValidator;
   }
 
   /**

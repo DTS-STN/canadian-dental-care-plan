@@ -79,14 +79,20 @@ export interface ProvinceTerritoryStateService {
 @injectable()
 export class DefaultProvinceTerritoryStateService implements ProvinceTerritoryStateService {
   private readonly log: Logger;
+  private readonly provinceTerritoryStateDtoMapper: ProvinceTerritoryStateDtoMapper;
+  private readonly provinceTerritoryStateRepository: ProvinceTerritoryStateRepository;
+  private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.ProvinceTerritoryStateDtoMapper) private readonly provinceTerritoryStateDtoMapper: ProvinceTerritoryStateDtoMapper,
-    @inject(TYPES.domain.repositories.ProvinceTerritoryStateRepository) private readonly provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.domain.mappers.ProvinceTerritoryStateDtoMapper) provinceTerritoryStateDtoMapper: ProvinceTerritoryStateDtoMapper,
+    @inject(TYPES.domain.repositories.ProvinceTerritoryStateRepository) provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('DefaultProvinceTerritoryStateService');
+    this.provinceTerritoryStateDtoMapper = provinceTerritoryStateDtoMapper;
+    this.provinceTerritoryStateRepository = provinceTerritoryStateRepository;
+    this.serverConfig = serverConfig;
     this.init();
   }
 

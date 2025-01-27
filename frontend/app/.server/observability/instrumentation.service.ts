@@ -56,14 +56,12 @@ export type DefaultInstrumentationServiceServerConfig = Pick<ServerConfig, 'OTEL
 @injectable()
 export class DefaultInstrumentationService implements InstrumentationService {
   private readonly log: Logger;
+  private readonly serverConfig: DefaultInstrumentationServiceServerConfig;
   private readonly buildInfo: BuildInfo;
 
-  constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: DefaultInstrumentationServiceServerConfig,
-    @inject(TYPES.core.BuildInfoService) buildInfoService: BuildInfoService,
-  ) {
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.configs.ServerConfig) serverConfig: DefaultInstrumentationServiceServerConfig, @inject(TYPES.core.BuildInfoService) buildInfoService: BuildInfoService) {
     this.log = logFactory.createLogger('DefaultInstrumentationService');
+    this.serverConfig = serverConfig;
     this.buildInfo = buildInfoService.getBuildInfo();
   }
 

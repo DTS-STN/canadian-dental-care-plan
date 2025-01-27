@@ -22,15 +22,23 @@ export interface DynatraceService {
 @injectable()
 export class DefaultDynatraceService implements DynatraceService {
   private readonly log: Logger;
+  private readonly dynatraceDtoMapper: DynatraceDtoMapper;
+  private readonly dynatraceRepository: DynatraceRepository;
+  private readonly auditService: AuditService;
+  private readonly serverConfig: Pick<ServerConfig, 'DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.web.mappers.DynatraceDtoMapper) private readonly dynatraceDtoMapper: DynatraceDtoMapper,
-    @inject(TYPES.web.repositories.DynatraceRepository) private readonly dynatraceRepository: DynatraceRepository,
-    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.web.mappers.DynatraceDtoMapper) dynatraceDtoMapper: DynatraceDtoMapper,
+    @inject(TYPES.web.repositories.DynatraceRepository) dynatraceRepository: DynatraceRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('DefaultDynatraceService');
+    this.dynatraceDtoMapper = dynatraceDtoMapper;
+    this.dynatraceRepository = dynatraceRepository;
+    this.auditService = auditService;
+    this.serverConfig = serverConfig;
     this.init();
   }
 

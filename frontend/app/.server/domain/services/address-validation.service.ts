@@ -20,14 +20,20 @@ export interface AddressValidationService {
 @injectable()
 export class DefaultAddressValidationService implements AddressValidationService {
   private readonly log: Logger;
+  private readonly addressValidationDtoMapper: AddressValidationDtoMapper;
+  private readonly addressValidationRepository: AddressValidationRepository;
+  private readonly auditService: AuditService;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.AddressValidationDtoMapper) private readonly addressValidationDtoMapper: AddressValidationDtoMapper,
-    @inject(TYPES.domain.repositories.AddressValidationRepository) private readonly addressValidationRepository: AddressValidationRepository,
-    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.domain.mappers.AddressValidationDtoMapper) addressValidationDtoMapper: AddressValidationDtoMapper,
+    @inject(TYPES.domain.repositories.AddressValidationRepository) addressValidationRepository: AddressValidationRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('DefaultAddressValidationService');
+    this.addressValidationDtoMapper = addressValidationDtoMapper;
+    this.addressValidationRepository = addressValidationRepository;
+    this.auditService = auditService;
     this.init();
   }
 

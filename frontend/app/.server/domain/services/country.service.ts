@@ -62,6 +62,9 @@ export type CountryServiceImpl_ServiceConfig = Pick<ServerConfig, 'CANADA_COUNTR
 @injectable()
 export class DefaultCountryService implements CountryService {
   private readonly log: Logger;
+  private readonly countryDtoMapper: CountryDtoMapper;
+  private readonly countryRepository: CountryRepository;
+  private readonly serverConfig: CountryServiceImpl_ServiceConfig;
 
   /**
    * Constructs a new DefaultCountryService instance.
@@ -73,11 +76,14 @@ export class DefaultCountryService implements CountryService {
    */
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.CountryDtoMapper) private readonly countryDtoMapper: CountryDtoMapper,
-    @inject(TYPES.domain.repositories.CountryRepository) private readonly countryRepository: CountryRepository,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: CountryServiceImpl_ServiceConfig,
+    @inject(TYPES.domain.mappers.CountryDtoMapper) countryDtoMapper: CountryDtoMapper,
+    @inject(TYPES.domain.repositories.CountryRepository) countryRepository: CountryRepository,
+    @inject(TYPES.configs.ServerConfig) serverConfig: CountryServiceImpl_ServiceConfig,
   ) {
     this.log = logFactory.createLogger('DefaultCountryService');
+    this.countryDtoMapper = countryDtoMapper;
+    this.countryRepository = countryRepository;
+    this.serverConfig = serverConfig;
     this.init();
   }
 

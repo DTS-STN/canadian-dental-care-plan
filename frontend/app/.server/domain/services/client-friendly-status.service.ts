@@ -45,6 +45,9 @@ export type ClientFriendlyStatusServiceImpl_ServerConfig = Pick<ServerConfig, 'L
 @injectable()
 export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusService {
   private readonly log: Logger;
+  private readonly clientFriendlyStatusDtoMapper: ClientFriendlyStatusDtoMapper;
+  private readonly clientFriendlyStatusRepository: ClientFriendlyStatusRepository;
+  private readonly serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig;
 
   /**
    * Constructs a new DefaultClientFriendlyStatusService instance.
@@ -56,11 +59,14 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
    */
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.ClientFriendlyStatusDtoMapper) private readonly clientFriendlyStatusDtoMapper: ClientFriendlyStatusDtoMapper,
-    @inject(TYPES.domain.repositories.ClientFriendlyStatusRepository) private readonly clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
+    @inject(TYPES.domain.mappers.ClientFriendlyStatusDtoMapper) clientFriendlyStatusDtoMapper: ClientFriendlyStatusDtoMapper,
+    @inject(TYPES.domain.repositories.ClientFriendlyStatusRepository) clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
+    @inject(TYPES.configs.ServerConfig) serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
   ) {
     this.log = logFactory.createLogger('DefaultClientFriendlyStatusService');
+    this.clientFriendlyStatusDtoMapper = clientFriendlyStatusDtoMapper;
+    this.clientFriendlyStatusRepository = clientFriendlyStatusRepository;
+    this.serverConfig = serverConfig;
     this.init();
   }
 

@@ -31,14 +31,20 @@ export interface ClientApplicationService {
 @injectable()
 export class DefaultClientApplicationService implements ClientApplicationService {
   private readonly log: Logger;
+  private readonly clientApplicationDtoMapper: ClientApplicationDtoMapper;
+  private readonly clientApplicationRepository: ClientApplicationRepository;
+  private readonly auditService: AuditService;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.ClientApplicationDtoMapper) private readonly clientApplicationDtoMapper: ClientApplicationDtoMapper,
-    @inject(TYPES.domain.repositories.ClientApplicationRepository) private readonly clientApplicationRepository: ClientApplicationRepository,
-    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.domain.mappers.ClientApplicationDtoMapper) clientApplicationDtoMapper: ClientApplicationDtoMapper,
+    @inject(TYPES.domain.repositories.ClientApplicationRepository) clientApplicationRepository: ClientApplicationRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('DefaultClientApplicationService');
+    this.clientApplicationDtoMapper = clientApplicationDtoMapper;
+    this.clientApplicationRepository = clientApplicationRepository;
+    this.auditService = auditService;
     this.init();
   }
 

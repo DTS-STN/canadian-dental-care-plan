@@ -23,14 +23,20 @@ export interface ApplicantService {
 @injectable()
 export class DefaultApplicantService implements ApplicantService {
   private readonly log: Logger;
+  private readonly applicantDtoMapper: ApplicantDtoMapper;
+  private readonly applicantRepository: ApplicantRepository;
+  private readonly auditService: AuditService;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.ApplicantDtoMapper) private readonly applicantDtoMapper: ApplicantDtoMapper,
-    @inject(TYPES.domain.repositories.ApplicantRepository) private readonly applicantRepository: ApplicantRepository,
-    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.domain.mappers.ApplicantDtoMapper) applicantDtoMapper: ApplicantDtoMapper,
+    @inject(TYPES.domain.repositories.ApplicantRepository) applicantRepository: ApplicantRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('DefaultApplicantService');
+    this.applicantDtoMapper = applicantDtoMapper;
+    this.applicantRepository = applicantRepository;
+    this.auditService = auditService;
     this.init();
   }
 

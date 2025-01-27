@@ -10,17 +10,20 @@ import type { LogFactory, Logger } from '~/.server/factories';
 @injectable()
 export class ApplicantHealthCheck implements HealthCheck {
   private readonly log: Logger;
-
+  private readonly serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>;
+  private readonly applicantRepository: ApplicantRepository;
   readonly name: string;
   readonly metadata?: Record<string, string>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
-    private readonly serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>,
-    @inject(TYPES.domain.repositories.ApplicantRepository) private readonly applicantRepository: ApplicantRepository,
+    serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>,
+    @inject(TYPES.domain.repositories.ApplicantRepository) applicantRepository: ApplicantRepository,
   ) {
     this.log = logFactory.createLogger('ApplicantHealthCheck');
+    this.serverConfig = serverConfig;
+    this.applicantRepository = applicantRepository;
     this.name = 'applicant';
     this.metadata = this.applicantRepository.getMetadata();
 

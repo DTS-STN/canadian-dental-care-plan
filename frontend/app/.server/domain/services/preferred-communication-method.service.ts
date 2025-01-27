@@ -19,14 +19,20 @@ export interface PreferredCommunicationMethodService {
 @injectable()
 export class DefaultPreferredCommunicationMethodService implements PreferredCommunicationMethodService {
   private readonly log: Logger;
+  private readonly preferredCommunicationMethodDtoMapper: PreferredCommunicationMethodDtoMapper;
+  private readonly preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository;
+  private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.PreferredCommunicationMethodDtoMapper) private readonly preferredCommunicationMethodDtoMapper: PreferredCommunicationMethodDtoMapper,
-    @inject(TYPES.domain.repositories.PreferredCommunicationMethodRepository) private readonly preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.domain.mappers.PreferredCommunicationMethodDtoMapper) preferredCommunicationMethodDtoMapper: PreferredCommunicationMethodDtoMapper,
+    @inject(TYPES.domain.repositories.PreferredCommunicationMethodRepository) preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('DefaultPreferredCommunicationMethodService');
+    this.preferredCommunicationMethodDtoMapper = preferredCommunicationMethodDtoMapper;
+    this.preferredCommunicationMethodRepository = preferredCommunicationMethodRepository;
+    this.serverConfig = serverConfig;
     this.init();
   }
 

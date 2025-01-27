@@ -54,7 +54,11 @@ export type DemographicSurveyDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'EN
 
 @injectable()
 export class DefaultDemographicSurveyDtoMapper implements DemographicSurveyDtoMapper {
-  constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: DemographicSurveyDtoMapperImpl_ServerConfig) {}
+  private readonly serverConfig: DemographicSurveyDtoMapperImpl_ServerConfig;
+
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DemographicSurveyDtoMapperImpl_ServerConfig) {
+    this.serverConfig = serverConfig;
+  }
 
   // Indigenous status
   mapIndigenousStatusDtoToIndigenousStatusLocalizedDto(indigenousStatusDto: IndigenousStatusDto, locale: AppLocale): IndigenousStatusLocalizedDto {

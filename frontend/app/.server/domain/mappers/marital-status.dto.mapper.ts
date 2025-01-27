@@ -16,7 +16,11 @@ export type MaritalStatusDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'ENGLIS
 
 @injectable()
 export class DefaultMaritalStatusDtoMapper implements MaritalStatusDtoMapper {
-  constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: MaritalStatusDtoMapperImpl_ServerConfig) {}
+  private readonly serverConfig: MaritalStatusDtoMapperImpl_ServerConfig;
+
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: MaritalStatusDtoMapperImpl_ServerConfig) {
+    this.serverConfig = serverConfig;
+  }
 
   mapMaritalStatusDtoToMaritalStatusLocalizedDto(maritalStatusDto: MaritalStatusDto, locale: AppLocale): MaritalStatusLocalizedDto {
     const { nameEn, nameFr, ...rest } = maritalStatusDto;

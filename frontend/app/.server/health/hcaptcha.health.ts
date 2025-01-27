@@ -10,17 +10,20 @@ import type { HCaptchaRepository } from '~/.server/web/repositories';
 @injectable()
 export class HCaptchaHealthCheck implements HealthCheck {
   private readonly log: Logger;
-
+  private readonly serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>;
+  private readonly hCaptchaRepository: HCaptchaRepository;
   readonly name: string;
   readonly metadata?: Record<string, string>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
-    private readonly serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>,
-    @inject(TYPES.web.repositories.HCaptchaRepository) private readonly hCaptchaRepository: HCaptchaRepository,
+    serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>,
+    @inject(TYPES.web.repositories.HCaptchaRepository) hCaptchaRepository: HCaptchaRepository,
   ) {
     this.log = logFactory.createLogger('HCaptchaHealthCheck');
+    this.serverConfig = serverConfig;
+    this.hCaptchaRepository = hCaptchaRepository;
     this.name = 'hCaptcha';
     this.metadata = this.hCaptchaRepository.getMetadata();
 

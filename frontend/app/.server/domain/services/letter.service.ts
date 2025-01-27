@@ -29,14 +29,20 @@ export interface LetterService {
 @injectable()
 export class DefaultLetterService implements LetterService {
   private readonly log: Logger;
+  private readonly letterDtoMapper: LetterDtoMapper;
+  private readonly letterRepository: LetterRepository;
+  private readonly auditService: AuditService;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.LetterDtoMapper) private readonly letterDtoMapper: LetterDtoMapper,
-    @inject(TYPES.domain.repositories.LetterRepository) private readonly letterRepository: LetterRepository,
-    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.domain.mappers.LetterDtoMapper) letterDtoMapper: LetterDtoMapper,
+    @inject(TYPES.domain.repositories.LetterRepository) letterRepository: LetterRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('DefaultLetterService');
+    this.letterDtoMapper = letterDtoMapper;
+    this.letterRepository = letterRepository;
+    this.auditService = auditService;
     this.init();
   }
 
