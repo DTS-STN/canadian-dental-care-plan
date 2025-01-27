@@ -339,7 +339,7 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
         </div>
         {editMode ? (
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <div className="flex flex-wrap items-center justify-end gap-3">
               <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
                   <LoadingButton variant="primary" id="save-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Home address click">
