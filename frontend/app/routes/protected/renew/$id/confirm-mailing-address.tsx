@@ -291,7 +291,7 @@ export default function ProtectedRenewConfirmMailingAddress({ loaderData, params
             name="mailingAddress"
             className="w-full"
             label={t('protected-renew:update-address.address-field.mailing-address')}
-            maxLength={30}
+            maxLength={100}
             helpMessagePrimary={t('protected-renew:update-address.address-field.address-note')}
             helpMessagePrimaryClassName="text-black"
             autoComplete="address-line1"

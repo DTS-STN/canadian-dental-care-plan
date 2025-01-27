@@ -266,7 +266,7 @@ export default function RenewAdultChildUpdateAddress({ loaderData, params }: Rou
                   label={t('renew-adult-child:update-address.address-field.address')}
                   helpMessagePrimary={t('renew-adult-child:update-address.address-field.address-note')}
                   helpMessagePrimaryClassName="text-black"
-                  maxLength={30}
+                  maxLength={100}
                   autoComplete="address-line1"
                   defaultValue={defaultState.homeAddress?.address}
                   errorMessage={errors?.address}

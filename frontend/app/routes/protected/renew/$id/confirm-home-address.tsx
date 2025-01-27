@@ -282,7 +282,7 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
             label={t('protected-renew:update-address.address-field.address')}
             helpMessagePrimary={t('protected-renew:update-address.address-field.address-note')}
             helpMessagePrimaryClassName="text-black"
-            maxLength={30}
+            maxLength={100}
             autoComplete="address-line1"
             defaultValue={defaultState?.address ?? ''}
             errorMessage={errors?.address}
