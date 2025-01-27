@@ -137,7 +137,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance } = loaderData;
 
-  const cdcpLink = <InlineLink to={t('renew-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink routeId="public/status/index" params={params} className="external-link" newTabIndicator target="_blank" />;
   const mscaLink = <InlineLink to={t('renew-adult:confirm.msca-link')} className="external-link" newTabIndicator target="_blank" />;
 
   return (

@@ -565,9 +565,8 @@
   "confirm": {
     "page-title": "Your renewal for the Canadian Dental Care Plan is complete!",
     "whats-next": "You will receive a letter in three weeks",
-    "begin-process": "We will begin processing your renewal application immediately. You can continue to use your Canadian Dental Care Plan benefits. You will receive a letter within three weeks of submitting your renewal application to let you know if you're eligible for the upcoming coverage year.",
+    "begin-process": "We will begin processing your renewal application immediately. You can continue to use your Canadian Dental Care Plan benefits. You will receive a letter within three weeks of submitting your renewal application to let you know if you're eligible for the upcoming coverage year.",
     "cdcp-checker": "You can use the <cdcpLink>Canadian Dental Care Plan Status Checker</cdcpLink> or call Service Canada at <noWrap>1-833-537-4342</noWrap> to track the progress of your renewal application or to receive more information.",
-    "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
     "applicant-summary": "Summary of updates",
     "applicant-title": "Applicant",
     "member-info": "Applicant information",
