@@ -41,7 +41,7 @@ export const meta: Route.MetaFunction = mergeMeta((args) => {
 
 export default function LanguageChooser({ loaderData, params }: Route.ComponentProps) {
   return (
-    <main role="main" className="flex h-svh bg-splash-page bg-cover bg-center" property="mainContentOfPage">
+    <main role="main" className="bg-splash-page flex h-svh bg-cover bg-center" property="mainContentOfPage">
       <div className="m-auto w-[300px] bg-white md:w-[400px] lg:w-[500px]">
         <div className="p-8">
           <h1 className="sr-only">
@@ -56,7 +56,7 @@ export default function LanguageChooser({ loaderData, params }: Route.ComponentP
               </span>
             </a>
           </div>
-          <div className="mb-2 mt-9 grid grid-cols-2 gap-8 md:mx-4 lg:mx-8">
+          <div className="mt-9 mb-2 grid grid-cols-2 gap-8 md:mx-4 lg:mx-8">
             <section lang="en">
               <h2 className="sr-only">Government of Canada</h2>
               <ButtonLink variant="primary" routeId="public/apply/index" id="english-button" lang="en" targetLang="en" size="lg" className="w-full" reloadDocument>

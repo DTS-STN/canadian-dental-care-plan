@@ -228,7 +228,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-child:children.dental-benefits.federal-benefits.title', { childName })}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('apply-child:children.dental-benefits.federal-benefits.title', { childName })}</legend>
             <InputRadios
               id="has-federal-benefits"
               name="hasFederalBenefits"
@@ -267,7 +267,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
             />
           </fieldset>
           <fieldset className="mb-8">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-child:children.dental-benefits.provincial-territorial-benefits.title')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('apply-child:children.dental-benefits.provincial-territorial-benefits.title')}</legend>
             <InputRadios
               id="has-provincial-territorial-benefits"
               name="hasProvincialTerritorialBenefits"

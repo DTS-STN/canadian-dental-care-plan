@@ -168,7 +168,7 @@ export default function RenewChildMaritalStatus({ loaderData, params }: Route.Co
 
             {(marriedOrCommonlaw === MARITAL_STATUS_CODE_COMMONLAW.toString() || marriedOrCommonlaw === MARITAL_STATUS_CODE_MARRIED.toString()) && (
               <>
-                <h2 className="mb-6 font-lato text-2xl font-bold">{t('renew-child:marital-status.spouse-or-commonlaw')}</h2>
+                <h2 className="font-lato mb-6 text-2xl font-bold">{t('renew-child:marital-status.spouse-or-commonlaw')}</h2>
                 <p className="mb-4">{t('renew-child:marital-status.provide-sin')}</p>
                 <p className="mb-6">{t('renew-child:marital-status.required-information')}</p>
                 <InputPatternField

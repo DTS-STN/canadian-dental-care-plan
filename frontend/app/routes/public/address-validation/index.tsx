@@ -253,7 +253,7 @@ export default function AddressValidationIndexRoute({ loaderData, params }: Rout
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('address-validation:index.address-header')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('address-validation:index.address-header')}</legend>
             <div className="space-y-6">
               <InputSanitizeField
                 id="address"

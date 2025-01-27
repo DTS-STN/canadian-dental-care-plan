@@ -194,7 +194,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
             {helpMessagePrimary}
           </InputHelp>
         )}
-        <div className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
           {currentLanguage === 'fr' ? (
             <>
               {datePickerDay}

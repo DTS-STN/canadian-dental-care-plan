@@ -141,7 +141,7 @@ export default function ApplyFlowTypeOfApplication({ loaderData, params }: Route
             </Collapsible>
           </section>
         </div>
-        <p className="mb-4 mt-8 italic">{t('apply:required-label')}</p>
+        <p className="mt-8 mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />

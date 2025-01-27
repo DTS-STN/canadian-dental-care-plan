@@ -219,7 +219,7 @@ export default function RenewItaFederalProvincialTerritorialBenefits({ loaderDat
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-ita:dental-benefits.federal-benefits.title')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('renew-ita:dental-benefits.federal-benefits.title')}</legend>
             <InputRadios
               id="has-federal-benefits"
               name="hasFederalBenefits"
@@ -258,7 +258,7 @@ export default function RenewItaFederalProvincialTerritorialBenefits({ loaderDat
             />
           </fieldset>
           <fieldset className="mb-8">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('renew-ita:dental-benefits.provincial-territorial-benefits.title')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('renew-ita:dental-benefits.provincial-territorial-benefits.title')}</legend>
             <InputRadios
               id="has-provincial-territorial-benefits"
               name="hasProvincialTerritorialBenefits"
