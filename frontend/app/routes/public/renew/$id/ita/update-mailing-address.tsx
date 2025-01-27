@@ -38,6 +38,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 enum FormAction {
   Submit = 'submit',
+  Cancel = 'cancel',
   UseInvalidAddress = 'use-invalid-address',
   UseSelectedAddress = 'use-selected-address',
 }
@@ -109,6 +110,18 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadRenewItaState({ params, request, session });
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('copyMailingAddress') === 'copy';
+
+  if (formAction === FormAction.Cancel) {
+    saveRenewState({
+      params,
+      session,
+      state: {
+        hasAddressChanged: state.previousAddressState?.hasAddressChanged,
+        isHomeAddressSameAsMailingAddress: state.previousAddressState?.isHomeAddressSameAsMailingAddress,
+      },
+    });
+    return redirect(getPathById('public/renew/$id/ita/review-information', params));
+  }
 
   const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
@@ -370,9 +383,9 @@ export default function RenewItaUpdateAddress({ loaderData, params }: Route.Comp
                   </>
                 )}
               </Dialog>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Mailing address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FormAction.Cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Mailing address click">
                 {t('renew-ita:update-address.cancel-btn')}
-              </ButtonLink>
+              </Button>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">

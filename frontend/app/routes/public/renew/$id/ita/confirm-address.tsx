@@ -58,10 +58,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
-
+  const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const confirmAddressSchema = z
@@ -100,6 +99,25 @@ export async function action({ context: { appContainer, session }, params, reque
       isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No ? parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.Yes : undefined,
     },
   });
+
+  if (state.editMode) {
+    saveRenewState({
+      params,
+      session,
+      state: {
+        previousAddressState: {
+          hasAddressChanged: state.hasAddressChanged,
+          isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
+        },
+      },
+    });
+    if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No) {
+      if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.No) {
+        return redirect(getPathById('public/renew/$id/ita/update-home-address', params));
+      }
+      return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
+    }
+  }
 
   if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No) {
     if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === AddressRadioOptions.No) {
