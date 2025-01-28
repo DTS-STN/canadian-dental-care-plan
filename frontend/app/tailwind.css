@@ -1,4 +1,10 @@
-@import 'tailwindcss';
+/*
+  Detecting classes in source files
+  https://tailwindcss.com/docs/detecting-classes-in-source-files
+
+  Related issue https://github.com/tailwindlabs/tailwindcss/issues/15722
+*/
+@import 'tailwindcss' source('../app');
 
 @plugin 'tailwindcss-animate';
 
