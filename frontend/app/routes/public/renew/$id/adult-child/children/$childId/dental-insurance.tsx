@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.dental-insurance.title', { childName: childNumber }) }),
   };
 
-  return { meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } };
+  return { meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, isNew: state.isNew, i18nOptions: { childName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -91,7 +91,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewAdultChildChildrenDentalInsurance({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, childName, editMode } = loaderData;
+  const { defaultState, childName, editMode, isNew } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -187,7 +187,7 @@ export default function RenewAdultChildChildrenDentalInsurance({ loaderData, par
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/children/$childId/information"
+                routeId={isNew ? 'public/renew/$id/adult-child/children/$childId/information' : 'public/renew/$id/adult-child/children/index'}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

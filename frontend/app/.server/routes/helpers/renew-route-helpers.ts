@@ -276,7 +276,7 @@ export function renewStateHasPartner(maritalStatus: string) {
 }
 
 export function isNewChildState(child: ChildState) {
-  return child.dentalInsurance === undefined || child.information === undefined;
+  return child.dentalInsurance === undefined || child.information === undefined || child.hasFederalProvincialTerritorialBenefitsChanged === undefined;
 }
 
 export function getChildrenState<TState extends Pick<RenewState, 'children'>>(state: TState, includesNewChildState: boolean = false) {
