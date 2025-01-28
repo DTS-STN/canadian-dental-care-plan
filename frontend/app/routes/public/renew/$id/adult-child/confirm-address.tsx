@@ -24,16 +24,16 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+} as const;
 
-enum AddressRadioOptions {
-  No = 'no',
-  Yes = 'yes',
-}
+const ADDRESS_RADIO_OPTIONS = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
@@ -64,7 +64,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const confirmAddressSchema = z.object({
-    hasAddressChanged: z.nativeEnum(AddressRadioOptions, {
+    hasAddressChanged: z.nativeEnum(ADDRESS_RADIO_OPTIONS, {
       errorMap: () => ({ message: t('renew-adult-child:confirm-address.error-message.has-address-changed-required') }),
     }),
   });
@@ -81,13 +81,13 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     session,
     state: {
-      hasAddressChanged: parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes,
-      homeAddress: state.editMode && parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No ? undefined : state.homeAddress,
-      mailingAddress: state.editMode && parsedDataResult.data.hasAddressChanged === AddressRadioOptions.No ? undefined : state.mailingAddress,
+      hasAddressChanged: parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.yes,
+      homeAddress: state.editMode && parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.no ? undefined : state.homeAddress,
+      mailingAddress: state.editMode && parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.no ? undefined : state.mailingAddress,
     },
   });
 
-  if (parsedDataResult.data.hasAddressChanged === AddressRadioOptions.Yes) {
+  if (parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.yes) {
     return redirect(getPathById('public/renew/$id/adult-child/update-mailing-address', params));
   }
 
@@ -124,8 +124,8 @@ export default function RenewAdultChildConfirmAddress({ loaderData, params }: Ro
               name="hasAddressChanged"
               legend={t('renew-adult-child:confirm-address.have-you-moved')}
               options={[
-                { value: AddressRadioOptions.Yes, children: t('renew-adult-child:confirm-address.radio-options.yes'), defaultChecked: defaultState.hasAddressChanged === true },
-                { value: AddressRadioOptions.No, children: t('renew-adult-child:confirm-address.radio-options.no'), defaultChecked: defaultState.hasAddressChanged === false },
+                { value: ADDRESS_RADIO_OPTIONS.yes, children: t('renew-adult-child:confirm-address.radio-options.yes'), defaultChecked: defaultState.hasAddressChanged === true },
+                { value: ADDRESS_RADIO_OPTIONS.no, children: t('renew-adult-child:confirm-address.radio-options.no'), defaultChecked: defaultState.hasAddressChanged === false },
               ]}
               helpMessagePrimary={t('renew-adult-child:confirm-address.help-message')}
               errorMessage={errors?.hasAddressChanged}
@@ -135,7 +135,7 @@ export default function RenewAdultChildConfirmAddress({ loaderData, params }: Ro
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Address click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Address click">
                 {t('renew-adult-child:confirm-address.save-btn')}
               </Button>
               <ButtonLink id="cancel-button" routeId="public/renew/$id/adult-child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Address click">

@@ -24,10 +24,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Cancel = 'cancel',
-  Exit = 'exit',
-}
+const FORM_ACTION = {
+  cancel: 'cancel',
+  exit: 'exit',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
@@ -74,9 +74,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
-  if (formAction === FormAction.Cancel) {
+  if (formAction === FORM_ACTION.cancel) {
     return redirect(getPathById('public/status/index', params));
   }
 
@@ -116,12 +116,12 @@ export default function StatusCheckerResult({ loaderData, params }: Route.Compon
           <StatusNotFound />
         )}
         <div className="mt-12">
-          <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} variant="primary" endIcon={faChevronRight}>
+          <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} variant="primary" endIcon={faChevronRight}>
             {t('status:result.check-another')}
           </Button>
         </div>
         <div className="mt-6">
-          <Button id="exit-button" name="_action" value={FormAction.Exit} disabled={isSubmitting} className="mt-6">
+          <Button id="exit-button" name="_action" value={FORM_ACTION.exit} disabled={isSubmitting} className="mt-6">
             {t('status:result.exit-btn')}
           </Button>
         </div>

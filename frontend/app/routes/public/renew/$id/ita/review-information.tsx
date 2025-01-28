@@ -35,10 +35,10 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-enum FormAction {
-  Back = 'back',
-  Submit = 'submit',
-}
+const FORM_ACTION = {
+  back: 'back',
+  submit: 'submit',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
@@ -160,8 +160,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-  if (formAction === FormAction.Back) {
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  if (formAction === FORM_ACTION.back) {
     saveRenewState({ params, session, state: { editMode: false } });
     if (demographicSurveyEnabled) {
       return redirect(getPathById('public/renew/$id/ita/demographic-survey', params));
@@ -399,15 +399,15 @@ export default function RenewItaReviewInformation({ loaderData, params }: Route.
           <LoadingButton
             id="confirm-button"
             name="_action"
-            value={FormAction.Submit}
+            value={FORM_ACTION.submit}
             variant="green"
             disabled={isSubmitting}
-            loading={isSubmitting && submitAction === FormAction.Submit}
+            loading={isSubmitting && submitAction === FORM_ACTION.submit}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Submit renewal application - Review your information click"
           >
             {t('renew-ita:review-information.submit-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Review your information click">
+          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Review your information click">
             {t('renew-ita:review-information.back-button')}
           </Button>
         </fetcher.Form>

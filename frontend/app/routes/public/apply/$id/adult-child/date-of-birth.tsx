@@ -29,10 +29,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum AllChildrenUnder18Option {
-  No = 'no',
-  Yes = 'yes',
-}
+const ALL_CHILDREN_UNDER18_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -77,7 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
         invalid_type_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-day-number'),
       }),
       dateOfBirth: z.string(),
-      allChildrenUnder18: z.nativeEnum(AllChildrenUnder18Option, {
+      allChildrenUnder18: z.nativeEnum(ALL_CHILDREN_UNDER18_OPTION, {
         errorMap: () => ({ message: t('apply-adult-child:eligibility.date-of-birth.error-message.child-age-required') }),
       }),
     })
@@ -133,7 +133,7 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     session,
     state: {
-      allChildrenUnder18: parsedDataResult.data.allChildrenUnder18 === AllChildrenUnder18Option.Yes,
+      allChildrenUnder18: parsedDataResult.data.allChildrenUnder18 === ALL_CHILDREN_UNDER18_OPTION.yes,
       dateOfBirth: parsedDataResult.data.dateOfBirth,
       disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
       livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
@@ -230,8 +230,8 @@ export default function ApplyFlowDateOfBirth({ loaderData, params }: Route.Compo
                 name="allChildrenUnder18"
                 legend={t('apply-adult-child:eligibility.date-of-birth.child-age-instruction')}
                 options={[
-                  { value: AllChildrenUnder18Option.Yes, children: t('apply-adult-child:eligibility.date-of-birth.yes'), defaultChecked: defaultState.allChildrenUnder18 === true },
-                  { value: AllChildrenUnder18Option.No, children: t('apply-adult-child:eligibility.date-of-birth.no'), defaultChecked: defaultState.allChildrenUnder18 === false },
+                  { value: ALL_CHILDREN_UNDER18_OPTION.yes, children: t('apply-adult-child:eligibility.date-of-birth.yes'), defaultChecked: defaultState.allChildrenUnder18 === true },
+                  { value: ALL_CHILDREN_UNDER18_OPTION.no, children: t('apply-adult-child:eligibility.date-of-birth.no'), defaultChecked: defaultState.allChildrenUnder18 === false },
                 ]}
                 errorMessage={errors?.allChildrenUnder18}
                 required

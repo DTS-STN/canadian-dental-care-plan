@@ -35,12 +35,12 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Submit = 'submit',
-  Cancel = 'cancel',
-  UseInvalidAddress = 'use-invalid-address',
-  UseSelectedAddress = 'use-selected-address',
-}
+const FORM_ACTION = {
+  submit: 'submit',
+  cancel: 'cancel',
+  useInvalidAddress: 'use-invalid-address',
+  useSelectedAddress: 'use-selected-address',
+} as const;
 
 interface CanadianAddress {
   address: string;
@@ -97,7 +97,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   const locale = getLocale(request);
 
   const clientConfig = appContainer.get(TYPES.configs.ClientConfig);
@@ -109,7 +109,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadRenewItaState({ params, request, session });
 
-  if (formAction === FormAction.Cancel) {
+  if (formAction === FORM_ACTION.cancel) {
     saveRenewState({
       params,
       session,
@@ -342,7 +342,7 @@ export default function RenewItaUpdateAddress({ loaderData, params }: Route.Comp
             <div className="flex flex-wrap items-center gap-3">
               <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
-                  <LoadingButton variant="primary" id="save-button" type="submit" name="_action" value={FormAction.Submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Home address click">
+                  <LoadingButton variant="primary" id="save-button" type="submit" name="_action" value={FORM_ACTION.submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Home address click">
                     {t('renew-ita:update-address.save-btn')}
                   </LoadingButton>
                 </DialogTrigger>
@@ -353,7 +353,7 @@ export default function RenewItaUpdateAddress({ loaderData, params }: Route.Comp
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FormAction.Cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Home address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Home address click">
                 {t('renew-ita:update-address.cancel-btn')}
               </Button>
             </div>
@@ -366,7 +366,7 @@ export default function RenewItaUpdateAddress({ loaderData, params }: Route.Comp
                     id="continue-button"
                     type="submit"
                     name="_action"
-                    value={FormAction.Submit}
+                    value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Home address click"
@@ -479,7 +479,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={FormAction.UseSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+          <LoadingButton name="_action" value={FORM_ACTION.useSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
             {t('renew-ita:update-address.dialog.address-suggestion.use-selected-address-button')}
           </LoadingButton>
         </fetcher.Form>
@@ -535,7 +535,7 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={FormAction.UseInvalidAddress} type="submit" id="dialog.address-invalid-use-entered-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+          <LoadingButton name="_action" value={FORM_ACTION.useInvalidAddress} type="submit" id="dialog.address-invalid-use-entered-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
             {t('renew-ita:update-address.dialog.address-invalid.use-entered-address-button')}
           </LoadingButton>
         </fetcher.Form>

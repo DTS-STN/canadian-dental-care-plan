@@ -24,12 +24,12 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Back = 'back',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  back: 'back',
+  save: 'save',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
@@ -64,8 +64,8 @@ export async function action({ context: { appContainer, session }, params, reque
     dentalInsurance: z.boolean({ errorMap: () => ({ message: t('renew-ita:dental-insurance.error-message.dental-insurance-required') }) }),
   });
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-  if (formAction === FormAction.Back) {
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  if (formAction === FORM_ACTION.back) {
     if (state.hasAddressChanged) {
       if (state.isHomeAddressSameAsMailingAddress) {
         return redirect(getPathById('public/renew/$id/ita/update-mailing-address', params));
@@ -173,7 +173,7 @@ export default function RenewItaAccessToDentalInsuranceQuestion({ loaderData, pa
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Access to private dental insurance click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Access to private dental insurance click">
                 {t('dental-insurance.button.save-btn')}
               </Button>
               <ButtonLink
@@ -190,7 +190,7 @@ export default function RenewItaAccessToDentalInsuranceQuestion({ loaderData, pa
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <LoadingButton
                 name="_action"
-                value={FormAction.Continue}
+                value={FORM_ACTION.continue}
                 variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
@@ -198,7 +198,7 @@ export default function RenewItaAccessToDentalInsuranceQuestion({ loaderData, pa
               >
                 {t('dental-insurance.button.continue')}
               </LoadingButton>
-              <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Access to private dental insurance click">
+              <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Access to private dental insurance click">
                 {t('dental-insurance.button.back')}
               </Button>
             </div>

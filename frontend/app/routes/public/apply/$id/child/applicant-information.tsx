@@ -37,11 +37,11 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
@@ -161,9 +161,9 @@ export async function action({ context: { appContainer, session }, params, reque
       .min(1, t('apply-child:applicant-information.error-message.marital-status-required')),
   }) satisfies z.ZodType<ApplicantInformationState>;
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
-  if (formAction === FormAction.Cancel) {
+  if (formAction === FORM_ACTION.cancel) {
     invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
 
     if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
@@ -328,10 +328,17 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Parent or legal guardian personal information click">
+              <Button
+                id="save-button"
+                name="_action"
+                value={FORM_ACTION.save}
+                variant="primary"
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Parent or legal guardian personal information click"
+              >
                 {t('apply-child:applicant-information.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Parent or legal guardian personal information click">
+              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Parent or legal guardian personal information click">
                 {t('apply-child:applicant-information.cancel-btn')}
               </Button>
             </div>
@@ -340,7 +347,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               <LoadingButton
                 id="continue-button"
                 name="_action"
-                value={FormAction.Continue}
+                value={FORM_ACTION.continue}
                 variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}

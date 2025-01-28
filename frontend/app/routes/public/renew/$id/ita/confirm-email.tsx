@@ -28,16 +28,16 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+} as const;
 
-enum AddOrUpdateEmailOption {
-  Yes = 'yes',
-  No = 'no',
-}
+const ADD_OR_UPDATE_EMAIL_OPTION = {
+  yes: 'yes',
+  no: 'no',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'renew', 'gcweb'),
@@ -78,14 +78,14 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const emailSchema = z
     .object({
-      isNewOrUpdatedEmail: z.nativeEnum(AddOrUpdateEmailOption, {
+      isNewOrUpdatedEmail: z.nativeEnum(ADD_OR_UPDATE_EMAIL_OPTION, {
         errorMap: () => ({ message: t('renew-ita:confirm-email.error-message.add-or-update-required') }),
       }),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.isNewOrUpdatedEmail === AddOrUpdateEmailOption.Yes) {
+      if (val.isNewOrUpdatedEmail === ADD_OR_UPDATE_EMAIL_OPTION.yes) {
         if (!val.email) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-email.error-message.email-required'), path: ['email'] });
         }
@@ -109,7 +109,7 @@ export async function action({ context: { appContainer, session }, params, reque
     })
     .transform((val) => ({
       ...val,
-      isNewOrUpdatedEmail: val.isNewOrUpdatedEmail === AddOrUpdateEmailOption.Yes,
+      isNewOrUpdatedEmail: val.isNewOrUpdatedEmail === ADD_OR_UPDATE_EMAIL_OPTION.yes,
     }));
 
   const parsedDataResult = emailSchema.safeParse({
@@ -148,7 +148,7 @@ export default function RenewAdultChildConfirmEmail({ loaderData, params }: Rout
   const [isNewOrUpdatedEmail, setIsNewOrUpdatedEmail] = useState(defaultState.isNewOrUpdatedEmail);
 
   function handleNewOrUpdateEmailChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setIsNewOrUpdatedEmail(e.target.value === AddOrUpdateEmailOption.Yes);
+    setIsNewOrUpdatedEmail(e.target.value === ADD_OR_UPDATE_EMAIL_OPTION.yes);
   }
 
   return (
@@ -170,7 +170,7 @@ export default function RenewAdultChildConfirmEmail({ loaderData, params }: Rout
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-ita:confirm-email.option-yes" />,
-                  value: AddOrUpdateEmailOption.Yes,
+                  value: ADD_OR_UPDATE_EMAIL_OPTION.yes,
                   defaultChecked: isNewOrUpdatedEmail === true,
                   onChange: handleNewOrUpdateEmailChanged,
                   append: isNewOrUpdatedEmail === true && (
@@ -206,7 +206,7 @@ export default function RenewAdultChildConfirmEmail({ loaderData, params }: Rout
                 },
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-ita:confirm-email.option-no" />,
-                  value: AddOrUpdateEmailOption.No,
+                  value: ADD_OR_UPDATE_EMAIL_OPTION.no,
                   defaultChecked: isNewOrUpdatedEmail === false,
                   onChange: handleNewOrUpdateEmailChanged,
                 },
@@ -217,7 +217,7 @@ export default function RenewAdultChildConfirmEmail({ loaderData, params }: Rout
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Email click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Email click">
                 {t('renew-ita:confirm-email.save-btn')}
               </Button>
               <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Email click">
@@ -226,7 +226,15 @@ export default function RenewAdultChildConfirmEmail({ loaderData, params }: Rout
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="continue-button" name="_action" value={FormAction.Continue} variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Email click">
+              <LoadingButton
+                id="continue-button"
+                name="_action"
+                value={FORM_ACTION.continue}
+                variant="primary"
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Email click"
+              >
                 {t('renew-ita:confirm-email.continue-btn')}
               </LoadingButton>
               <ButtonLink id="back-button" routeId="public/renew/$id/ita/confirm-phone" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Email click">

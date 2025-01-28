@@ -24,10 +24,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum MaritalStatusRadioOptions {
-  No = 'no',
-  Yes = 'yes',
-}
+const MARITAL_STATUS_RADIO_OPTIONS = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult', 'renew', 'gcweb'),
@@ -121,8 +121,8 @@ export default function RenewAdultConfirmMaritalStatus({ loaderData, params }: R
               name="hasMaritalStatusChanged"
               legend={t('renew-adult:confirm-marital-status.has-marital-status-changed')}
               options={[
-                { value: MaritalStatusRadioOptions.Yes, children: t('renew-adult:confirm-marital-status.radio-options.yes'), defaultChecked: defaultState === true },
-                { value: MaritalStatusRadioOptions.No, children: t('renew-adult:confirm-marital-status.radio-options.no'), defaultChecked: defaultState === false },
+                { value: MARITAL_STATUS_RADIO_OPTIONS.yes, children: t('renew-adult:confirm-marital-status.radio-options.yes'), defaultChecked: defaultState === true },
+                { value: MARITAL_STATUS_RADIO_OPTIONS.no, children: t('renew-adult:confirm-marital-status.radio-options.no'), defaultChecked: defaultState === false },
               ]}
               helpMessagePrimary={t('renew-adult:confirm-marital-status.help-message')}
               errorMessage={errors?.hasMaritalStatusChanged}

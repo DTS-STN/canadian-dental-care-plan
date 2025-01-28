@@ -27,21 +27,21 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Submit = 'submit',
-  Cancel = 'cancel',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  submit: 'submit',
+  cancel: 'cancel',
+  save: 'save',
+} as const;
 
-enum HasFederalBenefitsOption {
-  No = 'no',
-  Yes = 'yes',
-}
+const HAS_FEDERAL_BENEFITS_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
-enum HasProvincialTerritorialBenefitsOption {
-  No = 'no',
-  Yes = 'yes',
-}
+const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -166,12 +166,12 @@ export async function action({ context: { appContainer, session }, params, reque
     }) satisfies z.ZodType<ProtectedDentalProvincialTerritorialBenefitsState>;
 
   const dentalFederalBenefits = {
-    hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes : undefined,
+    hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HAS_FEDERAL_BENEFITS_OPTION.yes : undefined,
     federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
   };
 
   const dentalProvincialTerritorialBenefits = {
-    hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') ? formData.get('hasProvincialTerritorialBenefits') === HasProvincialTerritorialBenefitsOption.Yes : undefined,
+    hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') ? formData.get('hasProvincialTerritorialBenefits') === HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes : undefined,
     provincialTerritorialSocialProgram: formData.get('provincialTerritorialSocialProgram') ? String(formData.get('provincialTerritorialSocialProgram')) : undefined,
     province: formData.get('province') ? String(formData.get('province')) : undefined,
   };
@@ -236,12 +236,12 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
   });
 
   function handleOnHasFederalBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setHasFederalBenefitValue(e.target.value === HasFederalBenefitsOption.Yes);
+    setHasFederalBenefitValue(e.target.value === HAS_FEDERAL_BENEFITS_OPTION.yes);
   }
 
   function handleOnHasProvincialTerritorialBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setHasProvincialTerritorialBenefitValue(e.target.value === HasProvincialTerritorialBenefitsOption.Yes);
-    if (e.target.value !== HasProvincialTerritorialBenefitsOption.Yes) {
+    setHasProvincialTerritorialBenefitValue(e.target.value === HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes);
+    if (e.target.value !== HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes) {
       setProvinceValue(undefined);
       setProvincialTerritorialSocialProgramValue(undefined);
     }
@@ -274,7 +274,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:update-dental-benefits.federal-benefits.option-yes" />,
-                  value: HasFederalBenefitsOption.Yes,
+                  value: HAS_FEDERAL_BENEFITS_OPTION.yes,
                   defaultChecked: hasFederalBenefitValue === true,
                   onChange: handleOnHasFederalBenefitChanged,
                   append: hasFederalBenefitValue === true && (
@@ -295,7 +295,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
                 },
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:update-dental-benefits.federal-benefits.option-no" />,
-                  value: HasFederalBenefitsOption.No,
+                  value: HAS_FEDERAL_BENEFITS_OPTION.no,
                   defaultChecked: hasFederalBenefitValue === false,
                   onChange: handleOnHasFederalBenefitChanged,
                 },
@@ -313,7 +313,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:update-dental-benefits.provincial-territorial-benefits.option-yes" />,
-                  value: HasProvincialTerritorialBenefitsOption.Yes,
+                  value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes,
                   defaultChecked: hasProvincialTerritorialBenefitValue === true,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
                   append: hasProvincialTerritorialBenefitValue && (
@@ -359,7 +359,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
                 },
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:update-dental-benefits.provincial-territorial-benefits.option-no" />,
-                  value: HasProvincialTerritorialBenefitsOption.No,
+                  value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
                   defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
                 },
@@ -373,7 +373,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
               <LoadingButton
                 id="save-button"
                 name="_action"
-                value={FormAction.Save}
+                value={FORM_ACTION.save}
                 variant="primary"
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Access to other federal, provincial or territorial dental benefits click"

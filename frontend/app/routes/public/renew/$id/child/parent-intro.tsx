@@ -24,10 +24,10 @@ import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Back = 'back',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  back: 'back',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
@@ -54,9 +54,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
-  if (formAction === FormAction.Back) {
+  if (formAction === FORM_ACTION.back) {
     return redirect(getPathById('public/renew/$id/child/children/index', params));
   }
 
@@ -100,15 +100,15 @@ export default function RenewChildParentIntro({ loaderData, params }: Route.Comp
             <LoadingButton
               id="continue-button"
               name="_action"
-              value={FormAction.Continue}
+              value={FORM_ACTION.continue}
               variant="primary"
-              loading={isSubmitting && submitAction === FormAction.Continue}
+              loading={isSubmitting && submitAction === FORM_ACTION.continue}
               endIcon={faChevronRight}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Parent or legal guardian information click"
             >
               {t('renew-child:parent-intro.continue-btn')}
             </LoadingButton>
-            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Parent or legal guardian information click">
+            <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Parent or legal guardian information click">
               {t('renew-child:parent-intro.back-btn')}
             </Button>
           </div>

@@ -31,13 +31,13 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-enum FormAction {
-  Add = 'add',
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-  Remove = 'remove',
-}
+const FORM_ACTION = {
+  add: 'add',
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+  remove: 'remove',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
@@ -85,16 +85,16 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadApplyChildState({ params, request, session });
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
-  if (formAction === FormAction.Add) {
+  if (formAction === FORM_ACTION.add) {
     const childId = randomUUID();
     const children = [...getChildrenState(state), { id: childId }];
     saveApplyState({ params, session, state: { children } });
     return redirect(getPathById('public/apply/$id/child/children/$childId/information', { ...params, childId }));
   }
 
-  if (formAction === FormAction.Remove) {
+  if (formAction === FORM_ACTION.remove) {
     const removeChildId = formData.get('childId');
     const children = [...getChildrenState(state)].filter((child) => child.id !== removeChildId);
     saveApplyState({ params, session, state: { children } });
@@ -206,7 +206,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                             <Button
                               id="remove-child"
                               name="_action"
-                              value={FormAction.Remove}
+                              value={FORM_ACTION.remove}
                               disabled={isSubmitting}
                               variant="primary"
                               size="sm"
@@ -227,7 +227,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
 
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
-          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Child(ren) application click">
+          <Button className="my-10" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Child(ren) application click">
             {children.length === 0 ? t('apply-child:children.index.add-child') : t('apply-child:children.index.add-another-child')}
           </Button>
 
@@ -258,10 +258,10 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
               <LoadingButton
                 id="continue-button"
                 name="_action"
-                value={FormAction.Continue}
+                value={FORM_ACTION.continue}
                 variant="primary"
                 disabled={!hasChildren || isSubmitting}
-                loading={isSubmitting && submitAction === FormAction.Continue}
+                loading={isSubmitting && submitAction === FORM_ACTION.continue}
                 endIcon={faChevronRight}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child(ren) application click"
               >

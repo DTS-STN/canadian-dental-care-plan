@@ -24,10 +24,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum LivingIndependentlyOption {
-  No = 'no',
-  Yes = 'yes',
-}
+const LIVING_INDEPENDENTLY_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -60,7 +60,7 @@ export async function action({ context: { appContainer, session }, params, reque
    * Schema for living independently.
    */
   const livingIndependentlySchema = z.object({
-    livingIndependently: z.nativeEnum(LivingIndependentlyOption, {
+    livingIndependently: z.nativeEnum(LIVING_INDEPENDENTLY_OPTION, {
       errorMap: () => ({ message: t('apply-adult:living-independently.error-message.living-independently-required') }),
     }),
   });
@@ -73,13 +73,13 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data.livingIndependently === LivingIndependentlyOption.Yes } });
+  saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data.livingIndependently === LIVING_INDEPENDENTLY_OPTION.yes } });
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
-  if (parsedDataResult.data.livingIndependently === LivingIndependentlyOption.Yes) {
+  if (parsedDataResult.data.livingIndependently === LIVING_INDEPENDENTLY_OPTION.yes) {
     return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
@@ -113,12 +113,12 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
             legend={t('apply-adult:living-independently.form-instructions')}
             options={[
               {
-                value: LivingIndependentlyOption.Yes,
+                value: LIVING_INDEPENDENTLY_OPTION.yes,
                 children: t('apply-adult:living-independently.radio-options.yes'),
                 defaultChecked: defaultState === true,
               },
               {
-                value: LivingIndependentlyOption.No,
+                value: LIVING_INDEPENDENTLY_OPTION.no,
                 children: t('apply-adult:living-independently.radio-options.no'),
                 defaultChecked: defaultState === false,
               },

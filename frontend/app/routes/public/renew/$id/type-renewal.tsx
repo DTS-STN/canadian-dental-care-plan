@@ -23,12 +23,12 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum RenewalType {
-  Adult = 'adult',
-  AdultChild = 'adult-child',
-  Child = 'child',
-  Delegate = 'delegate',
-}
+const RENEWAL_TYPE = {
+  adult: 'adult',
+  adultChild: 'adult-child',
+  child: 'child',
+  delegate: 'delegate',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew', 'gcweb'),
@@ -61,7 +61,7 @@ export async function action({ context: { appContainer, session }, params, reque
    * Schema for application delegate.
    */
   const typeOfRenewalSchema = z.object({
-    typeOfRenewal: z.nativeEnum(RenewalType, {
+    typeOfRenewal: z.nativeEnum(RENEWAL_TYPE, {
       errorMap: () => ({ message: t('renew:type-of-renewal.error-message.type-of-renewal-required') }),
     }),
   });
@@ -83,21 +83,21 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  if (parsedDataResult.data.typeOfRenewal === RenewalType.Adult) {
+  if (parsedDataResult.data.typeOfRenewal === RENEWAL_TYPE.adult) {
     if (state.clientApplication?.isInvitationToApplyClient) {
       return redirect(getPathById('public/renew/$id/ita/marital-status', params));
     }
     return redirect(getPathById('public/renew/$id/adult/confirm-marital-status', params));
   }
 
-  if (parsedDataResult.data.typeOfRenewal === RenewalType.AdultChild) {
+  if (parsedDataResult.data.typeOfRenewal === RENEWAL_TYPE.adultChild) {
     if (state.clientApplication?.isInvitationToApplyClient) {
       return redirect(getPathById('public/renew/$id/ita/marital-status', params));
     }
     return redirect(getPathById('public/renew/$id/adult-child/confirm-marital-status', params));
   }
 
-  if (parsedDataResult.data.typeOfRenewal === RenewalType.Child) {
+  if (parsedDataResult.data.typeOfRenewal === RENEWAL_TYPE.child) {
     return redirect(getPathById('public/renew/$id/child/children/index', params));
   }
 
@@ -130,24 +130,24 @@ export default function RenewTypeOfRenewal({ loaderData, params }: Route.Compone
             legend={t('renew:type-of-renewal.form-instructions')}
             options={[
               {
-                value: RenewalType.Adult,
+                value: RENEWAL_TYPE.adult,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="renew:type-of-renewal.radio-options.personal" />,
-                defaultChecked: defaultState === RenewalType.Adult,
+                defaultChecked: defaultState === RENEWAL_TYPE.adult,
               },
               {
-                value: RenewalType.AdultChild,
+                value: RENEWAL_TYPE.adultChild,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="renew:type-of-renewal.radio-options.personal-and-child" />,
-                defaultChecked: defaultState === RenewalType.AdultChild,
+                defaultChecked: defaultState === RENEWAL_TYPE.adultChild,
               },
               {
-                value: RenewalType.Child,
+                value: RENEWAL_TYPE.child,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="renew:type-of-renewal.radio-options.child" />,
-                defaultChecked: defaultState === RenewalType.Child,
+                defaultChecked: defaultState === RENEWAL_TYPE.child,
               },
               {
-                value: RenewalType.Delegate,
+                value: RENEWAL_TYPE.delegate,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="renew:type-of-renewal.radio-options.delegate" />,
-                defaultChecked: defaultState === RenewalType.Delegate,
+                defaultChecked: defaultState === RENEWAL_TYPE.delegate,
               },
             ]}
             required

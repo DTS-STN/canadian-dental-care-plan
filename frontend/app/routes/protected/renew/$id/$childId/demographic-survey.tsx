@@ -30,10 +30,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  save: 'save',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -127,7 +127,7 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     });
 
-  const preferNotToAnswer = z.nativeEnum(FormAction).parse(formData.get('_action')) === FormAction.Save;
+  const preferNotToAnswer = z.nativeEnum(FORM_ACTION).parse(formData.get('_action')) === FORM_ACTION.save;
 
   const parsedDataResult = demographicSurveySchema.safeParse({
     indigenousStatus: preferNotToAnswer ? INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('indigenousStatus') ?? ''),
@@ -247,7 +247,7 @@ export default function ProtectedChildrenDemographicSurveyQuestions({ loaderData
             <p>{t('protected-renew:children.demographic-survey.improve-cdcp')}</p>
             <p>{t('protected-renew:children.demographic-survey.confidential')}</p>
             <p>{t('protected-renew:children.demographic-survey.impact-enrollment')}</p>
-            <Button name="_action" value={FormAction.Save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Prefer not to answer - Child voluntary demographic questions click">
+            <Button name="_action" value={FORM_ACTION.save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Prefer not to answer - Child voluntary demographic questions click">
               {t('protected-renew:children.demographic-survey.prefer-not-to-answer-btn')}
             </Button>
             <p className="mb-4 italic">{t('renew:all-questions-optional-label')}</p>
@@ -283,7 +283,7 @@ export default function ProtectedChildrenDemographicSurveyQuestions({ loaderData
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <LoadingButton id="save-button" variant="primary" name="_action" value={FormAction.Continue} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Child voluntary demographic questions click">
+              <LoadingButton id="save-button" variant="primary" name="_action" value={FORM_ACTION.continue} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Child voluntary demographic questions click">
                 {t('protected-renew:children.demographic-survey.save-btn')}
               </LoadingButton>
               <ButtonLink
@@ -302,7 +302,7 @@ export default function ProtectedChildrenDemographicSurveyQuestions({ loaderData
                 id="continue-button"
                 variant="primary"
                 name="_action"
-                value={FormAction.Continue}
+                value={FORM_ACTION.continue}
                 loading={isSubmitting}
                 endIcon={faChevronRight}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Child voluntary demographic questions click"

@@ -36,11 +36,11 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Submit = 'submit',
-  UseInvalidAddress = 'use-invalid-address',
-  UseSelectedAddress = 'use-selected-address',
-}
+const FORM_ACTION = {
+  submit: 'submit',
+  useInvalidAddress: 'use-invalid-address',
+  useSelectedAddress: 'use-selected-address',
+} as const;
 
 interface CanadianAddress {
   address: string;
@@ -107,7 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadRenewAdultChildState({ params, request, session });
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('copyMailingAddress') === 'copy';
 
   const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
@@ -368,7 +368,7 @@ export default function RenewAdultChildUpdateAddress({ loaderData, params }: Rou
                     id="save-button"
                     type="submit"
                     name="_action"
-                    value={FormAction.Submit}
+                    value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Mailing address click"
                   >
@@ -403,7 +403,7 @@ export default function RenewAdultChildUpdateAddress({ loaderData, params }: Rou
                     id="continue-button"
                     type="submit"
                     name="_action"
-                    value={FormAction.Submit}
+                    value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Mailing address click"
@@ -532,7 +532,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copy
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
           <LoadingButton
             name="_action"
-            value={FormAction.UseSelectedAddress}
+            value={FORM_ACTION.useSelectedAddress}
             type="submit"
             id="dialog.corrected-address-use-selected-address-button"
             loading={fetcher.isSubmitting}
@@ -602,7 +602,7 @@ function AddressInvalidDialogContent({ invalidAddress, copyAddressToHome }: Addr
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
           <LoadingButton
             name="_action"
-            value={FormAction.UseInvalidAddress}
+            value={FORM_ACTION.useInvalidAddress}
             type="submit"
             id="dialog.address-invalid-use-entered-address-button"
             loading={fetcher.isSubmitting}

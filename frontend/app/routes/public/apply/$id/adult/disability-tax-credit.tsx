@@ -26,10 +26,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum DisabilityTaxCreditOption {
-  No = 'no',
-  Yes = 'yes',
-}
+const DISABILITY_TAX_CREDIT_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -67,7 +67,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const disabilityTaxCreditSchema = z.object({
-    disabilityTaxCredit: z.nativeEnum(DisabilityTaxCreditOption, {
+    disabilityTaxCredit: z.nativeEnum(DISABILITY_TAX_CREDIT_OPTION, {
       errorMap: () => ({ message: t('apply-adult:disability-tax-credit.error-message.disability-tax-credit-required') }),
     }),
   });
@@ -80,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { disabilityTaxCredit: parsedDataResult.data.disabilityTaxCredit === DisabilityTaxCreditOption.Yes } });
+  saveApplyState({ params, session, state: { disabilityTaxCredit: parsedDataResult.data.disabilityTaxCredit === DISABILITY_TAX_CREDIT_OPTION.yes } });
 
   invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
@@ -93,7 +93,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/date-of-birth', params));
   }
 
-  if (parsedDataResult.data.disabilityTaxCredit === DisabilityTaxCreditOption.No) {
+  if (parsedDataResult.data.disabilityTaxCredit === DISABILITY_TAX_CREDIT_OPTION.no) {
     return redirect(getPathById('public/apply/$id/adult/dob-eligibility', params));
   }
 
@@ -129,8 +129,8 @@ export default function ApplyFlowDisabilityTaxCredit({ loaderData, params }: Rou
             name="disabilityTaxCredit"
             legend={t('apply-adult:disability-tax-credit.form-label')}
             options={[
-              { value: DisabilityTaxCreditOption.Yes, children: t('apply-adult:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === true },
-              { value: DisabilityTaxCreditOption.No, children: t('apply-adult:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === false },
+              { value: DISABILITY_TAX_CREDIT_OPTION.yes, children: t('apply-adult:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === true },
+              { value: DISABILITY_TAX_CREDIT_OPTION.no, children: t('apply-adult:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === false },
             ]}
             errorMessage={errors?.disabilityTaxCredit}
             required

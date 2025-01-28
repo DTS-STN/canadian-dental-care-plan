@@ -30,10 +30,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Save = 'save',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  save: 'save',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-ita', 'gcweb'),
@@ -116,7 +116,7 @@ export async function action({ context: { appContainer, session }, params, reque
       }
     });
 
-  const preferNotToAnswer = z.nativeEnum(FormAction).parse(formData.get('_action')) === FormAction.Save;
+  const preferNotToAnswer = z.nativeEnum(FORM_ACTION).parse(formData.get('_action')) === FORM_ACTION.save;
 
   const parsedDataResult = demographicSurveySchema.safeParse({
     indigenousStatus: preferNotToAnswer ? INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('indigenousStatus') ?? ''),
@@ -219,7 +219,7 @@ export default function RenewItaDemographicSurveyQuestions({ loaderData, params 
             <p>{t('renew-ita:demographic-survey.improve-cdcp')}</p>
             <p>{t('renew-ita:demographic-survey.confidential')}</p>
             <p>{t('renew-ita:demographic-survey.impact-enrollment')}</p>
-            <Button name="_action" value={FormAction.Save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Prefer not to answer - Voluntary demographic questions click">
+            <Button name="_action" value={FORM_ACTION.save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Prefer not to answer - Voluntary demographic questions click">
               {t('renew-ita:demographic-survey.prefer-not-to-answer-btn')}
             </Button>
             <p className="mb-4 italic">{t('renew-ita:demographic-survey.optional')}</p>
@@ -248,7 +248,7 @@ export default function RenewItaDemographicSurveyQuestions({ loaderData, params 
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Voluntary demographic questions click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Voluntary demographic questions click">
                 {t('renew-ita:demographic-survey.save-btn')}
               </Button>
               <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Voluntary demographic questions click">
@@ -260,7 +260,7 @@ export default function RenewItaDemographicSurveyQuestions({ loaderData, params 
               <LoadingButton
                 id="continue-button"
                 name="_action"
-                value={FormAction.Continue}
+                value={FORM_ACTION.continue}
                 variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}

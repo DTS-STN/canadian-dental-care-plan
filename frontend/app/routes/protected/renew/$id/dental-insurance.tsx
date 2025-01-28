@@ -23,11 +23,11 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Save = 'save',
-  Back = 'back',
-}
+const FORM_ACTION = {
+  continue: 'continue',
+  save: 'save',
+  back: 'back',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -68,8 +68,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-  if (formAction === FormAction.Back) {
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  if (formAction === FORM_ACTION.back) {
     if (state.clientApplication.isInvitationToApplyClient) {
       return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
     }
@@ -191,7 +191,7 @@ export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion(
         </div>
         {editMode ? (
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button name="_action" value={FormAction.Save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Access to private dental insurance click">
+            <Button name="_action" value={FORM_ACTION.save} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Access to private dental insurance click">
               {t('dental-insurance.button.save-btn')}
             </Button>
             <ButtonLink
@@ -208,7 +208,7 @@ export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion(
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton
               name="_action"
-              value={FormAction.Continue}
+              value={FORM_ACTION.continue}
               variant="primary"
               loading={isSubmitting}
               endIcon={faChevronRight}
@@ -216,7 +216,7 @@ export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion(
             >
               {t('dental-insurance.button.continue')}
             </LoadingButton>
-            <LoadingButton name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Access to private dental insurance click">
+            <LoadingButton name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Access to private dental insurance click">
               {t('dental-insurance.button.back')}
             </LoadingButton>
           </div>

@@ -27,10 +27,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum CheckFor {
-  Myself = 'Myself',
-  Child = 'Child',
-}
+const CHECK_FOR = {
+  myself: 'Myself',
+  child: 'Child',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
@@ -62,7 +62,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const formDataSchema = z.object({
-    checkFor: z.nativeEnum(CheckFor, { errorMap: () => ({ message: t('status:form.error-message.selection-required') }) }),
+    checkFor: z.nativeEnum(CHECK_FOR, { errorMap: () => ({ message: t('status:form.error-message.selection-required') }) }),
   });
 
   const parsedCheckFor = formDataSchema.safeParse({
@@ -75,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  if (parsedCheckFor.data.checkFor === CheckFor.Myself) {
+  if (parsedCheckFor.data.checkFor === CHECK_FOR.myself) {
     return redirect(getPathById('public/status/myself', { ...params }));
   }
   // Child selected
@@ -182,11 +182,11 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
           options={[
             {
               children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.myself" />,
-              value: CheckFor.Myself,
+              value: CHECK_FOR.myself,
             },
             {
               children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.child" />,
-              value: CheckFor.Child,
+              value: CHECK_FOR.child,
             },
           ]}
           required

@@ -19,10 +19,10 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum FormAction {
-  Submit = 'submit',
-  Close = 'close',
-}
+const FORM_ACTION = {
+  submit: 'submit',
+  close: 'close',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -216,7 +216,7 @@ export default function ProtectedRenewConfirm({ loaderData, params }: Route.Comp
           <CsrfTokenInput />
           <LoadingButton
             name="_action"
-            value={FormAction.Close}
+            value={FORM_ACTION.close}
             variant="primary"
             loading={isSubmitting}
             endIcon={faChevronRight}
