@@ -187,6 +187,7 @@ describe('DefaultClientApplicationService', () => {
     dentalBenefits: ['ID-123456'],
     hasFiledTaxes: true,
     isInvitationToApplyClient: false,
+    typeOfApplication: '111111111',
   };
 
   describe('findClientApplicationBySin', () => {

@@ -53,12 +53,16 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:member-selection.page-title') }) };
 
-  const children = state.children;
-
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.member-selection', { userId: idToken.sub });
 
-  return { meta, externallyReviewed: state.externallyReviewed, previouslyReviewed: state.previouslyReviewed, clientApplication: state.clientApplication, children };
+  const members = (
+    state.clientApplication.typeOfApplication === 'child'
+      ? []
+      : [{ id: state.id, applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`, previouslyReviewed: state.previouslyReviewed, typeOfApplicant: 'primary' }]
+  ).concat(state.children.map((child) => ({ id: child.id, applicantName: `${child.information?.firstName} ${child.information?.lastName}`, previouslyReviewed: child.previouslyReviewed, typeOfApplicant: 'child' })));
+
+  return { meta, members, isItaCandidate: state.clientApplication.isInvitationToApplyClient };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -88,56 +92,33 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewMemberSelection({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { externallyReviewed, previouslyReviewed, clientApplication, children } = loaderData;
+  const { members, isItaCandidate } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
   const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
-  const applicantName = `${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`;
-  const hasExternalReviews = externallyReviewed ?? children.filter((child) => child.externallyReviewed === true).length > 0;
 
   return (
     <div className="max-w-prose">
       {fetcherStatus === 'select-member' && <SelectMember />}
-      {hasExternalReviews && (
-        <>
-          <p className="mb-4">{t('protected-renew:member-selection.reviewed')}</p>
-          <ul className="list-disc space-y-2 pl-10">
-            {externallyReviewed && (
-              <li key={applicantName} className="mb-4">
-                {applicantName}
-              </li>
-            )}
-            {children
-              .filter((child) => child.externallyReviewed === true)
-              .map((child) => {
-                const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-                return (
-                  <li key={childName} className="mb-4">
-                    {childName}
-                  </li>
-                );
-              })}
-          </ul>
-        </>
-      )}
       <p className="mb-4">{t('protected-renew:member-selection.form-instructions')}</p>
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
         <div className="mt-6 space-y-8">
-          <CardLink
-            id="primary-applicant"
-            key={applicantName}
-            title={applicantName}
-            previouslyReviewed={previouslyReviewed}
-            routeId={clientApplication.isInvitationToApplyClient ? 'protected/renew/$id/confirm-marital-status' : 'protected/renew/$id/dental-insurance'}
-            params={params}
-          />
-          {children.map((child) => {
-            const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-            return <CardLink key={childName} title={childName} previouslyReviewed={child.previouslyReviewed} routeId="protected/renew/$id/$childId/parent-or-guardian" params={{ ...params, childId: child.id }} />;
-          })}
+          {members.map((member) =>
+            member.typeOfApplicant === 'primary' ? (
+              <CardLink
+                key={member.applicantName}
+                title={member.applicantName}
+                previouslyReviewed={member.previouslyReviewed}
+                routeId={isItaCandidate ? 'protected/renew/$id/confirm-marital-status' : 'protected/renew/$id/dental-insurance'}
+                params={params}
+              />
+            ) : (
+              <CardLink key={member.applicantName} title={member.applicantName} previouslyReviewed={member.previouslyReviewed} routeId="protected/renew/$id/$childId/parent-or-guardian" params={{ ...params, childId: member.id }} />
+            ),
+          )}
         </div>
         <p className="my-4">{t('protected-renew:member-selection.continue-help')}</p>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">

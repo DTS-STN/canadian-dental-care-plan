@@ -103,6 +103,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
       lastName: 'Doe',
       socialInsuranceNumber: '800011819',
     },
+    typeOfApplication: '111111111',
   };
 
   describe('mapRenewAdultChildStateToAdultChildBenefitRenewalDto', () => {

@@ -23,7 +23,6 @@ export interface ProtectedRenewState {
     coverageStartDate: string;
   };
   readonly clientApplication: ClientApplicationDto;
-  readonly externallyReviewed?: boolean;
   readonly previouslyReviewed?: boolean;
   readonly taxFiling?: boolean;
   readonly dentalInsurance?: boolean;
@@ -63,7 +62,6 @@ export interface ProtectedRenewState {
       readonly socialInsuranceNumber: string;
     };
     readonly isSurveyCompleted?: boolean;
-    readonly externallyReviewed?: boolean;
     readonly previouslyReviewed?: boolean;
     readonly demographicSurvey?: {
       readonly indigenousStatus?: string;

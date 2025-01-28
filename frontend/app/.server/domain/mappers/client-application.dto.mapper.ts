@@ -1,6 +1,8 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import invariant from 'tiny-invariant';
 
+import type { ServerConfig } from '~/.server/configs';
+import { TYPES } from '~/.server/constants';
 import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 
@@ -12,6 +14,8 @@ export interface ClientApplicationDtoMapper {
 
 @injectable()
 export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMapper {
+  constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>) {}
+
   mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto) {
     return {
       Applicant: {
@@ -170,6 +174,14 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       isInvitationToApplyClient: applicant.ApplicantDetail.InvitationToApplyIndicator,
       livingIndependently: applicant.ApplicantDetail.LivingIndependentlyIndicator,
       partnerInformation,
+      typeOfApplication: this.toBenefitApplicationCategoryCode(clientApplicationEntity.BenefitApplication.BenefitApplicationCategoryCode.ReferenceDataID),
     };
+  }
+
+  private toBenefitApplicationCategoryCode(typeOfApplication: string) {
+    const { APPLICANT_CATEGORY_CODE_INDIVIDUAL, APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY } = this.serverConfig;
+    if (typeOfApplication === APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY.toString()) return 'child';
+    if (typeOfApplication === APPLICANT_CATEGORY_CODE_INDIVIDUAL.toString()) return 'adult';
+    return 'adult-child';
   }
 }
