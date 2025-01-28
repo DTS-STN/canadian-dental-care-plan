@@ -1,147 +1,362 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+  Detecting classes in source files
+  https://tailwindcss.com/docs/detecting-classes-in-source-files
 
-@layer components {
-  button,
-  input,
-  optgroup,
-  select,
-  textarea {
-    font-feature-settings: inherit;
-    color: inherit;
-    font-family: inherit;
-    font-size: 100%;
-    font-variation-settings: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    margin: 0;
-    padding: 0;
+  Related issue https://github.com/tailwindlabs/tailwindcss/issues/15722
+*/
+@import 'tailwindcss' source('../app');
+
+@plugin 'tailwindcss-animate';
+
+@theme {
+  /*
+    Responsive design - Removing default breakpoints
+    https://tailwindcss.com/docs/responsive-design#removing-default-breakpoints
+    Web Experience Toolkit - Responsive options
+    https://wet-boew.github.io/wet-boew-styleguide/design/grids-en.html#responsive
+  */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 992px;
+  --breakpoint-lg: 1200px;
+
+  /*
+    font-family - Customizing your theme
+    https://tailwindcss.com/docs/font-family#customizing-your-theme
+  */
+  --font-lato: Lato, sans-serif;
+  --font-sans: 'Noto Sans', sans-serif;
+}
+
+/*
+  Upgrade guide - Container configuration
+  https://tailwindcss.com/docs/upgrade-guide#container-configuration
+*/
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
   }
+}
 
-  button,
-  select {
-    text-transform: none;
+/*
+  Buttons use the default cursor
+  https://tailwindcss.com/docs/upgrade-guide#buttons-use-the-default-cursor
+*/
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
   }
+}
 
-  [type='search'] {
-    -webkit-appearance: textfield;
-    outline-offset: -2px;
-  }
-
-  [multiple],
+/*
+  Flowbite`s checkbox and radio base style
+  https://flowbite.com/docs/main.css?v=3.0.0a
+*/
+@layer base {
+  [type='text'],
+  [type='email'],
+  [type='url'],
+  [type='password'],
+  [type='number'],
   [type='date'],
   [type='datetime-local'],
-  [type='email'],
   [type='month'],
-  [type='number'],
-  [type='password'],
   [type='search'],
   [type='tel'],
-  [type='text'],
   [type='time'],
-  [type='url'],
   [type='week'],
-  select,
-  textarea {
-    -webkit-appearance: none;
-    -moz-appearance: none;
+  [multiple],
+  textarea,
+  select {
     appearance: none;
     background-color: #fff;
-    border-radius: 0;
+    border-color: oklch(0.551 0.027 264.364);
     border-width: 1px;
+    border-radius: 0px;
+    padding-top: 0.5rem;
+    padding-right: 0.75rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
     font-size: 1rem;
     line-height: 1.5rem;
-    padding: 0.5rem 0.75rem;
+    --tw-shadow: 0 0 #0000;
+    &:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-color: oklch(0.546 0.245 262.881);
+      --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+      box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+      border-color: oklch(0.546 0.245 262.881);
+    }
   }
-
+  input::placeholder,
+  textarea::placeholder {
+    color: oklch(0.551 0.027 264.364);
+    opacity: 1;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  input[type='time']::-webkit-calendar-picker-indicator {
+    background: none;
+  }
+  select:not([size]) {
+    background-image: url("data:image/svg+xml,%3csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 10 6'%3e %3cpath stroke='oklch(0.551 0.027 264.364)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3e %3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 0.75em 0.75em;
+    padding-right: 2.5rem;
+    print-color-adjust: exact;
+  }
+  :is([dir='rtl']) select:not([size]) {
+    background-position: left 0.75rem center;
+    padding-right: 0.75rem;
+    padding-left: 0;
+  }
+  [multiple] {
+    background-image: initial;
+    background-position: initial;
+    background-repeat: unset;
+    background-size: initial;
+    padding-right: 0.75rem;
+    print-color-adjust: unset;
+  }
   [type='checkbox'],
   [type='radio'] {
-    --tw-shadow: 0 0 #0000;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    @apply appearance-none;
-    @apply bg-white;
-    @apply bg-origin-border;
-    @apply bg-origin-border;
-    @apply border-gray-500;
-    @apply border-black;
-    @apply border;
-    @apply text-blue-600;
-    @apply inline-block;
-    @apply shrink-0;
-    @apply h-4;
-    @apply p-0;
-    -webkit-print-color-adjust: exact;
+    appearance: none;
+    padding: 0;
     print-color-adjust: exact;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    @apply select-none;
-    @apply align-middle;
-    @apply w-4;
+    display: inline-block;
+    vertical-align: middle;
+    background-origin: border-box;
+    user-select: none;
+    flex-shrink: 0;
+    height: 1rem;
+    width: 1rem;
+    color: oklch(0.546 0.245 262.881);
+    background-color: #fff;
+    border-color: oklch(0.551 0.027 264.364);
+    border-width: 1px;
+    --tw-shadow: 0 0 #0000;
   }
-
-  [type='checkbox']:checked,
-  [type='radio']:checked {
-    background-color: currentColor;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: 0.55em 0.55em;
-    border-color: transparent;
+  [type='checkbox'] {
+    border-radius: 0px;
   }
-
+  [type='radio'] {
+    border-radius: 100%;
+  }
   [type='checkbox']:focus,
   [type='radio']:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
     --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
     --tw-ring-offset-width: 2px;
     --tw-ring-offset-color: #fff;
-    --tw-ring-color: #1c64f2;
+    --tw-ring-color: oklch(0.546 0.245 262.881);
     --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
     --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
     box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-    outline: 2px solid transparent;
-    outline-offset: 2px;
   }
-
+  [type='checkbox']:checked,
+  [type='radio']:checked {
+    border-color: transparent !important;
+    background-color: currentColor !important;
+    background-size: 0.55em 0.55em;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
   [type='checkbox']:checked {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M1 5.917 5.724 10.5 15 1.5'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3e %3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M1 5.917 5.724 10.5 15 1.5'/%3e %3c/svg%3e");
     background-repeat: no-repeat;
     background-size: 0.55em 0.55em;
-    -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-
   [type='radio']:checked {
     background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
     background-size: 1em 1em;
-    background-color: currentColor;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    border-color: transparent;
   }
-
-  [type='radio'] {
-    @apply rounded-full;
-  }
-
-  select:not([size]) {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='m20 9l-8 8l-8-8l1.414-1.414L12 14.172l6.586-6.586z'/%3E%3C/svg%3E");
-    background-position: right 0.75rem center;
+  [type='checkbox']:indeterminate {
+    background-image: url("data:image/svg+xml,%3csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3e %3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M0.5 6h14'/%3e %3c/svg%3e");
+    background-color: currentColor !important;
+    border-color: transparent !important;
+    background-position: center;
     background-repeat: no-repeat;
-    background-size: 1em 1em;
-    padding-right: 2.5rem;
-    -webkit-print-color-adjust: exact;
+    background-size: 0.55em 0.55em;
     print-color-adjust: exact;
   }
+  [type='checkbox']:indeterminate:hover,
+  [type='checkbox']:indeterminate:focus {
+    border-color: transparent !important;
+    background-color: currentColor !important;
+  }
+  [type='file'] {
+    background: unset;
+    border-color: inherit;
+    border-width: 0;
+    border-radius: 0;
+    padding: 0;
+    font-size: unset;
+    line-height: inherit;
+  }
+  [type='file']:focus {
+    outline: 1px auto inherit;
+  }
+  input[type='file']::file-selector-button {
+    color: white;
+    background: oklch(0.278 0.033 256.848);
+    border: 0;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    padding-left: 2rem;
+    padding-right: 1rem;
+    margin-inline-start: -1rem;
+    margin-inline-end: 1rem;
+    &:hover {
+      background: oklch(0.373 0.034 259.733);
+    }
+  }
+  :is([dir='rtl']) input[type='file']::file-selector-button {
+    padding-right: 2rem;
+    padding-left: 1rem;
+  }
+  input[type='range']::-webkit-slider-thumb {
+    height: 1.25rem;
+    width: 1.25rem;
+    background: oklch(0.546 0.245 262.881);
+    border-radius: 9999px;
+    border: 0;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+  input[type='range']:disabled::-webkit-slider-thumb {
+    background: oklch(0.707 0.022 261.325);
+  }
+  input[type='range']:focus::-webkit-slider-thumb {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+    --tw-ring-opacity: 1;
+    --tw-ring-color: rgb(164 202 254 / var(--tw-ring-opacity));
+  }
+  input[type='range']::-moz-range-thumb {
+    height: 1.25rem;
+    width: 1.25rem;
+    background: oklch(0.546 0.245 262.881);
+    border-radius: 9999px;
+    border: 0;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+  input[type='range']:disabled::-moz-range-thumb {
+    background: oklch(0.707 0.022 261.325);
+  }
+  input[type='range']::-moz-range-progress {
+    background: oklch(0.623 0.214 259.815);
+  }
+  input[type='range']::-ms-fill-lower {
+    background: oklch(0.623 0.214 259.815);
+  }
+  input[type='range'].range-sm::-webkit-slider-thumb {
+    height: 1rem;
+    width: 1rem;
+  }
+  input[type='range'].range-lg::-webkit-slider-thumb {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  input[type='range'].range-sm::-moz-range-thumb {
+    height: 1rem;
+    width: 1rem;
+  }
+  input[type='range'].range-lg::-moz-range-thumb {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  .toggle-bg:after {
+    content: '';
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    background: white;
+    border-color: oklch(0.872 0.01 258.338);
+    border-width: 1px;
+    border-radius: 9999px;
+    height: 1.25rem;
+    width: 1.25rem;
+    transition-property:
+      background-color,
+      border-color,
+      color,
+      fill,
+      stroke,
+      opacity,
+      box-shadow,
+      transform,
+      filter,
+      backdrop-filter,
+      -webkit-backdrop-filter;
+    transition-duration: 0.15s;
+    box-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  }
+  input:checked + .toggle-bg:after {
+    transform: translateX(100%);
+    border-color: white;
+  }
+  input:checked + .toggle-bg {
+    background: oklch(0.546 0.245 262.881);
+    border-color: oklch(0.546 0.245 262.881);
+  }
+}
 
+/*
+    Unselectable select option style
+  */
+@layer base {
   select:invalid {
-    @apply text-gray-400;
+    color: var(--color-gray-400);
   }
   option[value=''][disabled] {
     display: none;
   }
   option {
-    @apply text-black;
+    color: var(--color-black);
+  }
+}
+
+@layer components {
+  .bg-splash-page {
+    background-image: url('/assets/sp-bg-1.e0bf1ea7.jpg');
   }
 
   a.external-link:after {

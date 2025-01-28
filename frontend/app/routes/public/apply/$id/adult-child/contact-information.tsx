@@ -319,7 +319,7 @@ export default function ApplyFlowPersonalInformation({ loaderData, params }: Rou
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.phone-header')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('apply-adult-child:contact-information.phone-header')}</legend>
             <p className="mb-4" id="adding-phone">
               {t('apply-adult-child:contact-information.add-phone')}
             </p>
@@ -353,7 +353,7 @@ export default function ApplyFlowPersonalInformation({ loaderData, params }: Rou
             </div>
           </fieldset>
           <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.email-header')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('apply-adult-child:contact-information.email-header')}</legend>
             <p id="adding-email" className="mb-4">
               {t('apply-adult-child:contact-information.add-email')}
             </p>
@@ -387,7 +387,7 @@ export default function ApplyFlowPersonalInformation({ loaderData, params }: Rou
             </div>
           </fieldset>
           <fieldset className="mb-6">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.mailing-address.header')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('apply-adult-child:contact-information.mailing-address.header')}</legend>
             <div className="space-y-6">
               <InputSanitizeField
                 id="mailing-address"
@@ -463,7 +463,7 @@ export default function ApplyFlowPersonalInformation({ loaderData, params }: Rou
             </div>
           </fieldset>
           <fieldset className="mb-8">
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.home-address.header')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('apply-adult-child:contact-information.home-address.header')}</legend>
             <div className="space-y-6">
               <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
                 {t('apply-adult-child:contact-information.home-address.use-mailing-address')}

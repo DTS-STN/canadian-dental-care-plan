@@ -74,7 +74,7 @@ interface CardLinkProps extends OmitStrict<AppLinkProps, 'className' | 'title'> 
 function CardLink({ children, inProgress, title, ...props }: CardLinkProps) {
   return (
     <AppLink className="flex flex-col gap-4 rounded-xl border border-slate-300 bg-slate-50 p-6 hover:shadow-md" {...props}>
-      <h2 className="font-lato text-2xl font-semibold leading-8">{title}</h2>
+      <h2 className="font-lato text-2xl leading-8 font-semibold">{title}</h2>
       <p>{children}</p>
       {inProgress && (
         <div className="mt-auto">

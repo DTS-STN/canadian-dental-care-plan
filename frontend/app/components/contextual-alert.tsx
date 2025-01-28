@@ -35,10 +35,10 @@ export function ContextualAlert(props: ContextualAlertProps) {
 
   return (
     <div className={cn('relative pl-4 sm:pl-6', alertBackgroundColor)}>
-      <div className={cn('absolute left-1.5 top-3 pt-1 sm:left-3.5', alertBackgroundColor)}>
+      <div className={cn('absolute top-3 left-1.5 pt-1 sm:left-3.5', alertBackgroundColor)}>
         <Icon type={type} />
       </div>
-      <div className={cn('overflow-auto border-l-4 pb-2.5 pl-6 pt-4', alertBorderColor)}>{children}</div>
+      <div className={cn('overflow-auto border-l-4 pt-4 pb-2.5 pl-6', alertBorderColor)}>{children}</div>
     </div>
   );
 }

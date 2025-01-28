@@ -159,7 +159,7 @@ function CardLink({ routeId, title, previouslyReviewed, ...props }: CardLinkProp
   const { t } = useTranslation(handle.i18nNamespaces);
   return (
     <AppLink className="flex flex-row items-center gap-4 rounded-xl border border-slate-300 bg-slate-50 p-6 hover:shadow-md" routeId={routeId} {...props}>
-      <h2 className="font-lato text-2xl font-semibold leading-8 text-blue-600 underline">{title}</h2>
+      <h2 className="font-lato text-2xl leading-8 font-semibold text-blue-600 underline">{title}</h2>
       {previouslyReviewed && (
         <>
           <FontAwesomeIcon fixedWidth icon={faCircleCheck} className="ml-4 size-10 self-center" style={{ color: 'green' }} />
