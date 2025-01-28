@@ -19,13 +19,6 @@
     https://tailwindcss.com/docs/font-family#customizing-your-theme
   */
   --font-lato: Lato, sans-serif;
-}
-
-/*
-  Referencing other variables
-  https://tailwindcss.com/docs/theme#referencing-other-variables
-*/
-@theme inline {
   --font-sans: 'Noto Sans', sans-serif;
 }
 

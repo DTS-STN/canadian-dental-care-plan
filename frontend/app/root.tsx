@@ -3,9 +3,7 @@ import { useContext, useEffect } from 'react';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLocation, useRouteLoaderData } from 'react-router';
 
 import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
-import fontawesomeStyleSheet from '@fortawesome/fontawesome-svg-core/styles.css?url';
 import { Trans, useTranslation } from 'react-i18next';
-import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css?url';
 import invariant from 'tiny-invariant';
 
 import type { Route } from './+types/root';
@@ -16,8 +14,7 @@ import { ClientEnv } from '~/components/client-env';
 import { InlineLink } from '~/components/inline-link';
 import { NonceContext } from '~/components/nonce-context';
 import { PageTitle } from '~/components/page-title';
-import fontLatoStyleSheet from '~/fonts/lato.css?url';
-import fontNotoSansStyleSheet from '~/fonts/noto-sans.css?url';
+import indexStyleSheet from '~/index.css?url';
 import tailwindStyleSheet from '~/tailwind.css?url';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import type { FeatureName } from '~/utils/env-utils';
@@ -28,10 +25,7 @@ import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCan
 fontAwesomeConfig.autoAddCss = false;
 
 export const links: Route.LinksFunction = () => [
-  { rel: 'stylesheet', href: fontLatoStyleSheet },
-  { rel: 'stylesheet', href: fontNotoSansStyleSheet },
-  { rel: 'stylesheet', href: reactPhoneNumberInputStyleSheet },
-  { rel: 'stylesheet', href: fontawesomeStyleSheet },
+  { rel: 'stylesheet', href: indexStyleSheet }, //
   { rel: 'stylesheet', href: tailwindStyleSheet },
 ];
 
