@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
+import type { ServerConfig } from '~/.server/configs';
 import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import { DefaultClientApplicationDtoMapper } from '~/.server/domain/mappers';
 
 describe('DefaultClientApplicationDtoMapper', () => {
-  const mapper = new DefaultClientApplicationDtoMapper();
+  const mockServerConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'> = { APPLICANT_CATEGORY_CODE_INDIVIDUAL: 111111111, APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: 222222222 };
+  const mapper = new DefaultClientApplicationDtoMapper(mockServerConfig);
 
   describe('mapClientApplicationEntityToClientApplicationDto', () => {
     it('should map ClientApplicationEntity to ClientApplicationDto', () => {
@@ -228,6 +230,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
           lastName: 'Doe',
           socialInsuranceNumber: '80000002',
         },
+        typeOfApplication: 'adult-child',
       };
 
       // Act

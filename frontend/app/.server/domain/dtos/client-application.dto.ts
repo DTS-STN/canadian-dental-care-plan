@@ -15,6 +15,7 @@ export type ClientApplicationDto = ReadonlyDeep<{
   isInvitationToApplyClient: boolean;
   livingIndependently?: boolean;
   partnerInformation?: ClientPartnerInformationDto;
+  typeOfApplication: string;
 }>;
 
 export type ClientApplicantInformationDto = Readonly<{
