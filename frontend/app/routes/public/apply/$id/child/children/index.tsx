@@ -144,7 +144,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
               const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
               return (
                 <section key={child.id}>
-                  <h2 className="mb-4 font-lato text-2xl font-bold">{childName}</h2>
+                  <h2 className="font-lato mb-4 text-2xl font-bold">{childName}</h2>
                   <dl className="mb-6 divide-y border-y">
                     <DescriptionListItem term={t('apply-child:children.index.dob-title')}>
                       <p>{dateOfBirth}</p>

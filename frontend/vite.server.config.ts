@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -38,6 +39,7 @@ export default defineConfig({
     target: 'node22',
   },
   plugins: [
+    tailwindcss(),
     // Integrates TypeScript path aliasing using the `vite-tsconfig-paths` plugin,
     // which resolves paths defined in `tsconfig.json` for cleaner imports.
     tsconfigPaths(),

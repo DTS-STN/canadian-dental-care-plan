@@ -250,7 +250,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
           </section>
           {spouseInfo && (
             <section>
-              <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-adult-child:review-adult-information.spouse-title')}</h2>
+              <h2 className="font-lato mt-8 text-2xl font-bold">{t('apply-adult-child:review-adult-information.spouse-title')}</h2>
               <dl className="mt-6 divide-y border-y">
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.full-name-title')}>
                   {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
@@ -283,7 +283,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             </section>
           )}
           <section>
-            <h2 className="mt-2 font-lato text-2xl font-bold">{t('apply-adult-child:review-adult-information.contact-info-title')}</h2>
+            <h2 className="font-lato mt-2 text-2xl font-bold">{t('apply-adult-child:review-adult-information.contact-info-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.phone-title')}>
                 {userInfo.phoneNumber}
@@ -346,7 +346,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             </dl>
           </section>
           <section>
-            <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-adult-child:review-adult-information.comm-title')}</h2>
+            <h2 className="font-lato mt-8 text-2xl font-bold">{t('apply-adult-child:review-adult-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.comm-pref-title')}>
                 <p>{userInfo.communicationPreference}</p>
@@ -370,7 +370,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             </dl>
           </section>
           <section>
-            <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-adult-child:review-adult-information.dental-title')}</h2>
+            <h2 className="font-lato mt-8 text-2xl font-bold">{t('apply-adult-child:review-adult-information.dental-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.dental-insurance-title')}>
                 {dentalInsurance ? t('apply-adult-child:review-adult-information.yes') : t('apply-adult-child:review-adult-information.no')}

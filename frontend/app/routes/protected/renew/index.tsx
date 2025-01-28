@@ -87,18 +87,18 @@ export default function ProtectedRenewIndex({ loaderData, params }: Route.Compon
     <div className="max-w-prose animate-pulse">
       <div className="space-y-6">
         <div className="space-y-2">
-          <div className="h-5 w-full rounded bg-gray-200"></div>
-          <div className="h-5 w-full rounded bg-gray-200"></div>
-          <div className="h-5 w-2/3 rounded bg-gray-200"></div>
+          <div className="h-5 w-full rounded-sm bg-gray-200"></div>
+          <div className="h-5 w-full rounded-sm bg-gray-200"></div>
+          <div className="h-5 w-2/3 rounded-sm bg-gray-200"></div>
         </div>
-        <div className="h-5 w-1/2 rounded bg-gray-200"></div>
-        <div className="h-5 w-1/2 rounded bg-gray-200"></div>
+        <div className="h-5 w-1/2 rounded-sm bg-gray-200"></div>
+        <div className="h-5 w-1/2 rounded-sm bg-gray-200"></div>
       </div>
       <div className="my-8 space-y-2">
-        <div className="h-5 w-full rounded bg-gray-200"></div>
-        <div className="h-5 w-2/3 rounded bg-gray-200"></div>
+        <div className="h-5 w-full rounded-sm bg-gray-200"></div>
+        <div className="h-5 w-2/3 rounded-sm bg-gray-200"></div>
       </div>
-      <div className="h-10 w-2/5 rounded bg-gray-200"></div>
+      <div className="h-10 w-2/5 rounded-sm bg-gray-200"></div>
     </div>
   );
 }

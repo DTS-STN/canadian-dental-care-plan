@@ -120,7 +120,7 @@ export default function RenewTypeOfRenewal({ loaderData, params }: Route.Compone
         <Progress value={21} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4 mt-8 italic">{t('renew:required-label')}</p>
+        <p className="mt-8 mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />

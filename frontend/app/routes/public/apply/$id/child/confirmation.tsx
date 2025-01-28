@@ -287,7 +287,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
         ))}
 
         <section>
-          <h3 className="mb-6 font-lato text-2xl font-bold">{t('confirm.parent-legal-guardian')}</h3>
+          <h3 className="font-lato mb-6 text-2xl font-bold">{t('confirm.parent-legal-guardian')}</h3>
           <div className="space-y-8">
             <section className="space-y-6">
               <h4 className="font-lato text-xl font-bold">{t('confirm.parent-legal-guardian-info')}</h4>

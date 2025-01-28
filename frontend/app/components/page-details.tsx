@@ -13,7 +13,7 @@ export function PageDetails() {
   const pageIdentifier = usePageIdentifier();
 
   return (
-    <section className="mb-8 mt-16">
+    <section className="mt-16 mb-8">
       <h2 className="sr-only">{t('gcweb:page-details.page-details')}</h2>
       <dl id="wb-dtmd" className="space-y-1">
         {!!pageIdentifier && (

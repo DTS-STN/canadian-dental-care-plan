@@ -235,7 +235,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
           </div>
           {spouseInfo && (
             <div>
-              <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-child:review-adult-information.spouse-title')}</h2>
+              <h2 className="font-lato mt-8 text-2xl font-bold">{t('apply-child:review-adult-information.spouse-title')}</h2>
               <dl className="mt-6 divide-y border-y">
                 <DescriptionListItem term={t('apply-child:review-adult-information.full-name-title')}>
                   {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
@@ -268,7 +268,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             </div>
           )}
           <div>
-            <h2 className="mt-2 font-lato text-2xl font-bold">{t('apply-child:review-adult-information.contact-info-title')}</h2>
+            <h2 className="font-lato mt-2 text-2xl font-bold">{t('apply-child:review-adult-information.contact-info-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-child:review-adult-information.phone-title')}>
                 {userInfo.phoneNumber}
@@ -331,7 +331,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             </dl>
           </div>
           <div>
-            <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-child:review-adult-information.comm-title')}</h2>
+            <h2 className="font-lato mt-8 text-2xl font-bold">{t('apply-child:review-adult-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-child:review-adult-information.comm-pref-title')}>
                 <p>{userInfo.communicationPreference}</p>
@@ -353,7 +353,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             </dl>
           </div>
         </div>
-        <h2 className="mb-5 mt-8 font-lato text-2xl font-bold">{t('apply-child:review-adult-information.submit-app-title')}</h2>
+        <h2 className="font-lato mt-8 mb-5 text-2xl font-bold">{t('apply-child:review-adult-information.submit-app-title')}</h2>
         <p className="mb-4">{t('apply-child:review-adult-information.submit-p-proceed')}</p>
         <p className="mb-4">{t('apply-child:review-adult-information.submit-p-false-info')}</p>
         <p className="mb-4">{t('apply-child:review-adult-information.submit-p-repayment')}</p>
