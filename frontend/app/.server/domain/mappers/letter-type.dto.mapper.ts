@@ -16,7 +16,11 @@ export type LetterTypeDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'ENGLISH_L
 
 @injectable()
 export class DefaultLetterTypeDtoMapper implements LetterTypeDtoMapper {
-  constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: LetterTypeDtoMapperImpl_ServerConfig) {}
+  private readonly serverConfig: LetterTypeDtoMapperImpl_ServerConfig;
+
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: LetterTypeDtoMapperImpl_ServerConfig) {
+    this.serverConfig = serverConfig;
+  }
 
   mapLetterTypeDtoToLetterTypeLocalizedDto(LetterTypeDto: LetterTypeDto, locale: AppLocale): LetterTypeLocalizedDto {
     const { nameEn, nameFr, ...rest } = LetterTypeDto;

@@ -15,10 +15,13 @@ export interface HomeAddressValidator {
 }
 
 export class DefaultHomeAddressValidator implements HomeAddressValidator {
-  constructor(
-    private readonly locale: AppLocale,
-    private readonly addressValidatorFactory: AddressValidatorFactory,
-  ) {}
+  private readonly locale: AppLocale;
+  private readonly addressValidatorFactory: AddressValidatorFactory;
+
+  constructor(locale: AppLocale, addressValidatorFactory: AddressValidatorFactory) {
+    this.locale = locale;
+    this.addressValidatorFactory = addressValidatorFactory;
+  }
 
   async validateHomeAddress(data: Partial<Address>): Promise<InvalidResult<Address> | ValidResult<Address>> {
     const errorMessages = await this.buildHomeAddressSchemaErrorMessages();

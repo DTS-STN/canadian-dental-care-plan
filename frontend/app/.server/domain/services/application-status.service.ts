@@ -31,14 +31,20 @@ export interface ApplicationStatusService {
 @injectable()
 export class DefaultApplicationStatusService implements ApplicationStatusService {
   private readonly log: Logger;
+  private readonly applicationStatusDtoMapper: ApplicationStatusDtoMapper;
+  private readonly applicationStatusRepository: ApplicationStatusRepository;
+  private readonly auditService: AuditService;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.ApplicationStatusDtoMapper) private readonly applicationStatusDtoMapper: ApplicationStatusDtoMapper,
-    @inject(TYPES.domain.repositories.ApplicationStatusRepository) private readonly applicationStatusRepository: ApplicationStatusRepository,
-    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.domain.mappers.ApplicationStatusDtoMapper) applicationStatusDtoMapper: ApplicationStatusDtoMapper,
+    @inject(TYPES.domain.repositories.ApplicationStatusRepository) applicationStatusRepository: ApplicationStatusRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('DefaultApplicationStatusService');
+    this.applicationStatusDtoMapper = applicationStatusDtoMapper;
+    this.applicationStatusRepository = applicationStatusRepository;
+    this.auditService = auditService;
     this.init();
   }
 

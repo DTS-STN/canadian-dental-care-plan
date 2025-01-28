@@ -56,10 +56,13 @@ export interface AddressValidator {
 }
 
 export class DefaultAddressValidator {
-  constructor(
-    private readonly errorMessages: AddressValidatorErrorMessages,
-    private readonly serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID' | 'USA_COUNTRY_ID'>,
-  ) {}
+  private readonly errorMessages: AddressValidatorErrorMessages;
+  private readonly serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID' | 'USA_COUNTRY_ID'>;
+
+  constructor(errorMessages: AddressValidatorErrorMessages, serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID' | 'USA_COUNTRY_ID'>) {
+    this.errorMessages = errorMessages;
+    this.serverConfig = serverConfig;
+  }
 
   /**
    * Validates address data. Returns validation success and either parsed data or errors.

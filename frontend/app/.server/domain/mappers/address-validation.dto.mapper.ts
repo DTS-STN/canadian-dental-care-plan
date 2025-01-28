@@ -13,7 +13,11 @@ export interface AddressValidationDtoMapper {
 
 @injectable()
 export class DefaultAddressValidationDtoMapper implements AddressValidationDtoMapper {
-  constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID'>) {}
+  private readonly serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID'>;
+
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID'>) {
+    this.serverConfig = serverConfig;
+  }
 
   mapAddressCorrectionResultEntityToAddressCorrectionResultDto(addressCorrectionResultEntity: AddressCorrectionResultEntity): AddressCorrectionResultDto {
     const correctionResults = addressCorrectionResultEntity['wsaddr:CorrectionResults'];

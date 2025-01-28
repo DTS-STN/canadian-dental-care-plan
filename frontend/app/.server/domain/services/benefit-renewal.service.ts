@@ -47,14 +47,20 @@ export interface BenefitRenewalService {
 @injectable()
 export class DefaultBenefitRenewalService implements BenefitRenewalService {
   private readonly log: Logger;
+  private readonly benefitRenewalDtoMapper: BenefitRenewalDtoMapper;
+  private readonly benefitRenewalRepository: BenefitRenewalRepository;
+  private readonly auditService: AuditService;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.BenefitRenewalDtoMapper) private readonly benefitRenewalDtoMapper: BenefitRenewalDtoMapper,
-    @inject(TYPES.domain.repositories.BenefitRenewalRepository) private readonly benefitRenewalRepository: BenefitRenewalRepository,
-    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.domain.mappers.BenefitRenewalDtoMapper) benefitRenewalDtoMapper: BenefitRenewalDtoMapper,
+    @inject(TYPES.domain.repositories.BenefitRenewalRepository) benefitRenewalRepository: BenefitRenewalRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('DefaultBenefitRenewalService');
+    this.benefitRenewalDtoMapper = benefitRenewalDtoMapper;
+    this.benefitRenewalRepository = benefitRenewalRepository;
+    this.auditService = auditService;
     this.init();
   }
 

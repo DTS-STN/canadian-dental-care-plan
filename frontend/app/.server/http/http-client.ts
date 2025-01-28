@@ -60,12 +60,11 @@ export interface HttpClient {
 
 export class DefaultHttpClient implements HttpClient {
   private readonly log: Logger;
+  private readonly instrumentationService: InstrumentationService;
 
-  constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.observability.InstrumentationService) private readonly instrumentationService: InstrumentationService,
-  ) {
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.observability.InstrumentationService) instrumentationService: InstrumentationService) {
     this.log = logFactory.createLogger('DefaultHttpClient');
+    this.instrumentationService = instrumentationService;
   }
 
   getFetchFn(options: FetchOptions): FetchFn {

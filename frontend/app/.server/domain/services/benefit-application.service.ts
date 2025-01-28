@@ -20,14 +20,20 @@ export interface BenefitApplicationService {
 @injectable()
 export class DefaultBenefitApplicationService implements BenefitApplicationService {
   private readonly log: Logger;
+  private readonly benefitApplicationDtoMapper: BenefitApplicationDtoMapper;
+  private readonly benefitApplicationRepository: BenefitApplicationRepository;
+  private readonly auditService: AuditService;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.BenefitApplicationDtoMapper) private readonly benefitApplicationDtoMapper: BenefitApplicationDtoMapper,
-    @inject(TYPES.domain.repositories.BenefitApplicationRepository) private readonly benefitApplicationRepository: BenefitApplicationRepository,
-    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.domain.mappers.BenefitApplicationDtoMapper) benefitApplicationDtoMapper: BenefitApplicationDtoMapper,
+    @inject(TYPES.domain.repositories.BenefitApplicationRepository) benefitApplicationRepository: BenefitApplicationRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('DefaultBenefitApplicationService');
+    this.benefitApplicationDtoMapper = benefitApplicationDtoMapper;
+    this.benefitApplicationRepository = benefitApplicationRepository;
+    this.auditService = auditService;
     this.init();
   }
 

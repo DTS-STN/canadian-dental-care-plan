@@ -20,14 +20,20 @@ export interface HCaptchaService {
 @injectable()
 export class DefaultHCaptchaService implements HCaptchaService {
   private readonly log: Logger;
+  private readonly hCaptchaDtoMapper: HCaptchaDtoMapper;
+  private readonly hCaptchaRepository: HCaptchaRepository;
+  private readonly auditService: AuditService;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.web.mappers.HCaptchaDtoMapper) private readonly hCaptchaDtoMapper: HCaptchaDtoMapper,
-    @inject(TYPES.web.repositories.HCaptchaRepository) private readonly hCaptchaRepository: HCaptchaRepository,
-    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
+    @inject(TYPES.web.mappers.HCaptchaDtoMapper) hCaptchaDtoMapper: HCaptchaDtoMapper,
+    @inject(TYPES.web.repositories.HCaptchaRepository) hCaptchaRepository: HCaptchaRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
     this.log = logFactory.createLogger('DefaultHCaptchaService');
+    this.hCaptchaDtoMapper = hCaptchaDtoMapper;
+    this.hCaptchaRepository = hCaptchaRepository;
+    this.auditService = auditService;
   }
 
   async verifyHCaptchaResponse(hCaptchaVerifyRequestDto: HCaptchaVerifyRequestDto): Promise<HCaptchaVerifyResponseDto> {

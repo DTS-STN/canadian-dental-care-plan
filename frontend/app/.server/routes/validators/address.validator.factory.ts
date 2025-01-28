@@ -20,7 +20,11 @@ export interface AddressValidatorFactory {
 @injectable()
 /** Default implementation of the AddressValidatorFactory interface. */
 export class DefaultAddressValidatorFactory {
-  constructor(@inject(TYPES.configs.ServerConfig) private readonly serverConfig: ServerConfig) {}
+  private readonly serverConfig: ServerConfig;
+
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig) {
+    this.serverConfig = serverConfig;
+  }
 
   createAddressValidator(errorMessages: AddressValidatorErrorMessages): AddressValidator {
     return new DefaultAddressValidator(errorMessages, this.serverConfig);

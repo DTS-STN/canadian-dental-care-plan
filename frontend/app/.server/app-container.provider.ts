@@ -38,9 +38,11 @@ export interface AppContainerProvider {
 }
 
 export class DefaultAppContainerProvider implements AppContainerProvider {
+  private readonly container: interfaces.Container;
   private readonly log: Logger;
 
-  constructor(private readonly container: interfaces.Container) {
+  constructor(container: interfaces.Container) {
+    this.container = container;
     const logFactory = container.get(TYPES.factories.LogFactory);
     this.log = logFactory.createLogger('DefaultAppContainerProvider');
   }

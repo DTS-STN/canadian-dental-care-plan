@@ -31,15 +31,23 @@ export interface ApplicationYearService {
 @injectable()
 export class DefaultApplicationYearService implements ApplicationYearService {
   private readonly log: Logger;
+  private readonly applicationYearDtoMapper: ApplicationYearDtoMapper;
+  private readonly applicationYearRepository: ApplicationYearRepository;
+  private readonly auditService: AuditService;
+  private readonly serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE'>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.ApplicationYearDtoMapper) private readonly applicationYearDtoMapper: ApplicationYearDtoMapper,
-    @inject(TYPES.domain.repositories.ApplicationYearRepository) private readonly applicationYearRepository: ApplicationYearRepository,
-    @inject(TYPES.domain.services.AuditService) private readonly auditService: AuditService,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE'>,
+    @inject(TYPES.domain.mappers.ApplicationYearDtoMapper) applicationYearDtoMapper: ApplicationYearDtoMapper,
+    @inject(TYPES.domain.repositories.ApplicationYearRepository) applicationYearRepository: ApplicationYearRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE'>,
   ) {
     this.log = logFactory.createLogger('DefaultApplicationYearService');
+    this.applicationYearDtoMapper = applicationYearDtoMapper;
+    this.applicationYearRepository = applicationYearRepository;
+    this.auditService = auditService;
+    this.serverConfig = serverConfig;
     this.init();
   }
 

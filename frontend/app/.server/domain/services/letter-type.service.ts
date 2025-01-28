@@ -51,14 +51,20 @@ export interface LetterTypeService {
 @injectable()
 export class DefaultLetterTypeService implements LetterTypeService {
   private readonly log: Logger;
+  private readonly letterTypeDtoMapper: LetterTypeDtoMapper;
+  private readonly letterTypeRepository: LetterTypeRepository;
+  private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.LetterTypeDtoMapper) private readonly letterTypeDtoMapper: LetterTypeDtoMapper,
-    @inject(TYPES.domain.repositories.LetterTypeRepository) private readonly letterTypeRepository: LetterTypeRepository,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.domain.mappers.LetterTypeDtoMapper) letterTypeDtoMapper: LetterTypeDtoMapper,
+    @inject(TYPES.domain.repositories.LetterTypeRepository) letterTypeRepository: LetterTypeRepository,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('DefaultLetterTypeService');
+    this.letterTypeDtoMapper = letterTypeDtoMapper;
+    this.letterTypeRepository = letterTypeRepository;
+    this.serverConfig = serverConfig;
     this.init();
   }
 

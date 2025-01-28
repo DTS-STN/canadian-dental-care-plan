@@ -19,13 +19,17 @@ export interface ApplicationYearRepository {
 @injectable()
 export class DefaultApplicationYearRepository implements ApplicationYearRepository {
   private readonly log: Logger;
+  private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
+  private readonly httpClient: HttpClient;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
-    @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
+    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultApplicationYearRepository');
+    this.serverConfig = serverConfig;
+    this.httpClient = httpClient;
   }
 
   async listApplicationYears(date: string): Promise<ApplicationYearResultEntity> {

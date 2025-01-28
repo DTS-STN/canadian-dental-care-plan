@@ -87,14 +87,15 @@ export interface Session {
  * Wrapper around the Express session object. Provides a type-safe and convenient API for session management.
  */
 export class ExpressSession implements Session {
+  readonly logFactory: LogFactory;
+  private readonly session: RequestSession;
   static readonly SESSION_RESERVED_KEYS = ['id', 'cookie', 'regenerate', 'destroy', 'reload', 'resetMaxAge', 'save', 'touch'] as const;
 
   private readonly log: Logger;
 
-  constructor(
-    readonly logFactory: LogFactory,
-    private readonly session: RequestSession,
-  ) {
+  constructor(logFactory: LogFactory, session: RequestSession) {
+    this.logFactory = logFactory;
+    this.session = session;
     assert(session, 'Session object is undefined. Ensure session middleware is properly configured.');
     this.log = logFactory.createLogger('~/.server/web/Session');
     this.log.trace('Session initialized with ID: %s', this.id);

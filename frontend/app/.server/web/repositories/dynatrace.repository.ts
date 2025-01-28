@@ -18,13 +18,17 @@ export interface DynatraceRepository {
 @injectable()
 export class DefaultDynatraceRepository implements DynatraceRepository {
   private readonly log: Logger;
+  private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'DYNATRACE_API_RUM_SCRIPT_TOKEN' | 'DYNATRACE_API_RUM_SCRIPT_URI'>;
+  private readonly httpClient: HttpClient;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'DYNATRACE_API_RUM_SCRIPT_TOKEN' | 'DYNATRACE_API_RUM_SCRIPT_URI'>,
-    @inject(TYPES.http.HttpClient) private readonly httpClient: HttpClient,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'DYNATRACE_API_RUM_SCRIPT_TOKEN' | 'DYNATRACE_API_RUM_SCRIPT_URI'>,
+    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultDynatraceRepository');
+    this.serverConfig = serverConfig;
+    this.httpClient = httpClient;
   }
 
   async findDynatraceRumScript(): Promise<string | null> {

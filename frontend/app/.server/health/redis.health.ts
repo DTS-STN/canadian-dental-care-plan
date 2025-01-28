@@ -10,17 +10,20 @@ import type { LogFactory, Logger } from '~/.server/factories';
 @injectable()
 export class RedisHealthCheck implements HealthCheck {
   private readonly log: Logger;
-
+  private readonly serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL' | 'REDIS_USERNAME' | 'REDIS_STANDALONE_HOST' | 'REDIS_STANDALONE_PORT' | 'REDIS_SENTINEL_NAME' | 'REDIS_SENTINEL_HOST' | 'REDIS_SENTINEL_PORT' | 'REDIS_COMMAND_TIMEOUT_SECONDS'>;
+  private readonly redisService: RedisService;
   readonly name: string;
   readonly metadata?: Record<string, string>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
-    private readonly serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL' | 'REDIS_USERNAME' | 'REDIS_STANDALONE_HOST' | 'REDIS_STANDALONE_PORT' | 'REDIS_SENTINEL_NAME' | 'REDIS_SENTINEL_HOST' | 'REDIS_SENTINEL_PORT' | 'REDIS_COMMAND_TIMEOUT_SECONDS'>,
-    @inject(TYPES.data.services.RedisService) private readonly redisService: RedisService,
+    serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL' | 'REDIS_USERNAME' | 'REDIS_STANDALONE_HOST' | 'REDIS_STANDALONE_PORT' | 'REDIS_SENTINEL_NAME' | 'REDIS_SENTINEL_HOST' | 'REDIS_SENTINEL_PORT' | 'REDIS_COMMAND_TIMEOUT_SECONDS'>,
+    @inject(TYPES.data.services.RedisService) redisService: RedisService,
   ) {
     this.log = logFactory.createLogger('RedisHealthCheck');
+    this.serverConfig = serverConfig;
+    this.redisService = redisService;
     this.name = 'redis';
     this.metadata = {
       REDIS_USERNAME: this.serverConfig.REDIS_USERNAME ?? '',

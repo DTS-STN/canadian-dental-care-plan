@@ -22,12 +22,11 @@ export interface HomeAddressValidatorFactory {
 @injectable()
 export class DefaultHomeAddressValidatorFactory implements HomeAddressValidatorFactory {
   private readonly log: Logger;
+  private readonly addressValidatorFactory: AddressValidatorFactory;
 
-  constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.routes.validators.AddressValidatorFactory) private readonly addressValidatorFactory: AddressValidatorFactory,
-  ) {
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.routes.validators.AddressValidatorFactory) addressValidatorFactory: AddressValidatorFactory) {
     this.log = logFactory.createLogger('DefaultHomeAddressValidatorFactory');
+    this.addressValidatorFactory = addressValidatorFactory;
     this.init();
   }
 
