@@ -83,15 +83,13 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const homeAddress =
     parsedDataResult.data.isHomeAddressSameAsMailingAddress === ADDRESS_RADIO_OPTIONS.yes
-      ? state.mailingAddress
-        ? state.mailingAddress
-        : {
-            address: formatAddressLine({ address: state.clientApplication.contactInformation.mailingAddress, apartment: state.clientApplication.contactInformation.mailingApartment }),
-            country: state.clientApplication.contactInformation.mailingCountry,
-            province: state.clientApplication.contactInformation.mailingProvince,
-            city: state.clientApplication.contactInformation.mailingCity,
-            postalCode: state.clientApplication.contactInformation.mailingPostalCode,
-          }
+      ? (state.mailingAddress ?? {
+          address: formatAddressLine({ address: state.clientApplication.contactInformation.mailingAddress, apartment: state.clientApplication.contactInformation.mailingApartment }),
+          country: state.clientApplication.contactInformation.mailingCountry,
+          province: state.clientApplication.contactInformation.mailingProvince,
+          city: state.clientApplication.contactInformation.mailingCity,
+          postalCode: state.clientApplication.contactInformation.mailingPostalCode,
+        })
       : undefined;
 
   saveProtectedRenewState({

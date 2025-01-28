@@ -63,7 +63,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:marital-status.page-title') }) };
 
-  const hasPartner = renewStateHasPartner(state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus);
+  const hasPartner = renewStateHasPartner(state.maritalStatus ?? state.clientApplication.applicantInformation.maritalStatus);
   const partnerInformation = hasPartner
     ? (state.clientApplication.partnerInformation ?? state.partnerInformation) && {
         yearOfBirth: state.partnerInformation?.yearOfBirth ?? state.clientApplication.partnerInformation?.yearOfBirth,
@@ -77,7 +77,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     defaultState: {
-      maritalStatus: state.maritalStatus ? state.maritalStatus : state.clientApplication.isInvitationToApplyClient ? undefined : state.clientApplication.applicantInformation.maritalStatus,
+      maritalStatus: state.maritalStatus ?? (state.clientApplication.isInvitationToApplyClient ? undefined : state.clientApplication.applicantInformation.maritalStatus),
       partnerInformation,
     },
     maritalStatuses,

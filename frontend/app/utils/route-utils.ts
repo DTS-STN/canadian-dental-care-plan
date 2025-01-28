@@ -95,7 +95,6 @@ export function useTransformAdobeAnalyticsUrl() {
   return useMatches()
     .map(({ handle }) => handle as RouteHandleData | undefined)
     .map((handle) => handle?.transformAdobeAnalyticsUrl)
-    .map((transformAdobeAnalyticsUrl) => (transformAdobeAnalyticsUrl ? transformAdobeAnalyticsUrl : undefined))
     .reduce(coalesce);
 }
 

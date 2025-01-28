@@ -2,6 +2,7 @@ import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-adult-information';
@@ -19,6 +20,7 @@ import {
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
+import type { AddressDetails } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -118,7 +120,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     isItaClient: state.clientApplication.isInvitationToApplyClient,
   };
 
-  const hasPartner = renewStateHasPartner(state.maritalStatus ? state.maritalStatus : state.clientApplication.applicantInformation.maritalStatus);
+  const hasPartner = renewStateHasPartner(state.maritalStatus ?? state.clientApplication.applicantInformation.maritalStatus);
   const spouseInfo = hasPartner
     ? (state.clientApplication.partnerInformation ?? state.partnerInformation) && {
         yearOfBirth: state.partnerInformation?.yearOfBirth ?? state.clientApplication.partnerInformation?.yearOfBirth,
@@ -144,30 +146,29 @@ export async function loader({ context: { appContainer, session }, params, reque
         apartment: state.clientApplication.contactInformation.mailingApartment,
       };
 
-  const homeAddressInfo = state.homeAddress
-    ? {
-        address: state.homeAddress.address,
-        city: state.homeAddress.city,
-        province: homeProvinceTerritoryStateAbbr,
-        postalCode: state.homeAddress.postalCode,
-        country: homeCountryAbbr,
-      }
-    : {
-        address: state.clientApplication.contactInformation.homeAddress
-          ? state.clientApplication.contactInformation.homeAddress
-          : (() => {
-              throw new Error('Expected state.clientApplication.contactInformation.homeAddress to be defined');
-            })(),
-        city: state.clientApplication.contactInformation.homeCity
-          ? state.clientApplication.contactInformation.homeCity
-          : (() => {
-              throw new Error('Expected state.clientApplication.contactInformation.homeCity to be defined');
-            })(),
-        province: clientApplicationMailingProvinceTerritoryStateAbbr,
-        postalCode: state.clientApplication.contactInformation.homePostalCode,
-        country: homeCountryAbbr,
-        apartment: state.clientApplication.contactInformation.homeApartment,
-      };
+  let homeAddressInfo: AddressDetails;
+
+  if (state.homeAddress) {
+    homeAddressInfo = {
+      address: state.homeAddress.address,
+      city: state.homeAddress.city,
+      provinceState: homeProvinceTerritoryStateAbbr,
+      postalZipCode: state.homeAddress.postalCode,
+      country: homeCountryAbbr,
+    };
+  } else {
+    invariant(state.clientApplication.contactInformation.homeAddress, 'Expected state.clientApplication.contactInformation.homeAddress to be defined');
+    invariant(state.clientApplication.contactInformation.homeCity, 'Expected state.clientApplication.contactInformation.homeCity to be defined');
+
+    homeAddressInfo = {
+      address: state.clientApplication.contactInformation.homeAddress,
+      city: state.clientApplication.contactInformation.homeCity,
+      provinceState: clientApplicationMailingProvinceTerritoryStateAbbr,
+      postalZipCode: state.clientApplication.contactInformation.homePostalCode,
+      country: homeCountryAbbr,
+      apartment: state.clientApplication.contactInformation.homeApartment,
+    };
+  }
 
   const dentalInsurance = state.dentalInsurance;
 
@@ -363,8 +364,8 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
                   address={{
                     address: homeAddressInfo.address,
                     city: homeAddressInfo.city,
-                    provinceState: homeAddressInfo.province,
-                    postalZipCode: homeAddressInfo.postalCode,
+                    provinceState: homeAddressInfo.provinceState,
+                    postalZipCode: homeAddressInfo.postalZipCode,
                     country: homeAddressInfo.country,
                     apartment: homeAddressInfo.apartment,
                   }}

@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react';
 import { formatAddress } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
-interface Address {
+export interface AddressDetails {
   address: string;
   apartment?: string;
   city: string;
@@ -13,7 +13,7 @@ interface Address {
 }
 
 export interface AddressProps extends ComponentProps<'address'> {
-  address: Address;
+  address: AddressDetails;
   /**
    * The format of the address
    *
