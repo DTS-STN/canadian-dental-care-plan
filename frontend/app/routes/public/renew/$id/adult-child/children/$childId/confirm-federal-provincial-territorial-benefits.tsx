@@ -100,7 +100,7 @@ export async function action({ context: { appContainer, session }, params, reque
         return {
           ...child,
           hasFederalProvincialTerritorialBenefitsChanged: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefitsChanged,
-          dentalBenefits: state.editMode && parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefitsChanged ? state.dentalBenefits : undefined,
+          dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefitsChanged ? state.dentalBenefits : undefined,
         };
       }),
     },
