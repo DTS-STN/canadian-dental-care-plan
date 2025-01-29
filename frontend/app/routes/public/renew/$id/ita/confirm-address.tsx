@@ -65,26 +65,18 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const confirmAddressSchema = z
     .object({
-      hasAddressChanged: z.nativeEnum(ADDRESS_RADIO_OPTIONS, {
-        errorMap: () => ({ message: t('renew-ita:confirm-address.error-message.has-address-changed-required') }),
-      }),
-      isHomeAddressSameAsMailingAddress: z.nativeEnum(ADDRESS_RADIO_OPTIONS).or(z.literal('')).optional(),
+      hasAddressChanged: z.boolean({ errorMap: () => ({ message: t('renew-ita:confirm-address.error-message.has-address-changed-required') }) }),
+      isHomeAddressSameAsMailingAddress: z.boolean().optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.hasAddressChanged === ADDRESS_RADIO_OPTIONS.no) {
-        if (!val.isHomeAddressSameAsMailingAddress) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-address.error-message.is-home-address-same-as-mailing-address-required'), path: ['isHomeAddressSameAsMailingAddress'] });
-        }
+      if (val.hasAddressChanged && val.isHomeAddressSameAsMailingAddress === undefined) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-address.error-message.is-home-address-same-as-mailing-address-required'), path: ['isHomeAddressSameAsMailingAddress'] });
       }
-    })
-    .transform((val) => ({
-      ...val,
-      isHomeAddressSameAsMailingAddress: val.isHomeAddressSameAsMailingAddress ? val.isHomeAddressSameAsMailingAddress : undefined,
-    }));
+    });
 
   const parsedDataResult = confirmAddressSchema.safeParse({
-    hasAddressChanged: formData.get('hasAddressChanged'),
-    isHomeAddressSameAsMailingAddress: formData.get('isHomeAddressSameAsMailingAddress') ?? '',
+    hasAddressChanged: formData.get('hasAddressChanged') ? String(formData.get('hasAddressChanged')) === ADDRESS_RADIO_OPTIONS.yes : undefined,
+    isHomeAddressSameAsMailingAddress: formData.get('isHomeAddressSameAsMailingAddress') ? String(formData.get('isHomeAddressSameAsMailingAddress')) === ADDRESS_RADIO_OPTIONS.yes : undefined,
   });
 
   if (!parsedDataResult.success) {
@@ -95,8 +87,8 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     session,
     state: {
-      hasAddressChanged: parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.yes,
-      isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.no ? parsedDataResult.data.isHomeAddressSameAsMailingAddress === ADDRESS_RADIO_OPTIONS.yes : undefined,
+      hasAddressChanged: parsedDataResult.data.hasAddressChanged,
+      isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged ? undefined : parsedDataResult.data.isHomeAddressSameAsMailingAddress,
       previousAddressState: {
         hasAddressChanged: state.hasAddressChanged,
         isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
@@ -104,14 +96,15 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  if (parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.no) {
-    if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === ADDRESS_RADIO_OPTIONS.no) {
-      return redirect(getPathById('public/renew/$id/ita/update-home-address', params));
-    }
-    return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
+  if (parsedDataResult.data.hasAddressChanged) {
+    return redirect(getPathById('public/renew/$id/ita/update-mailing-address', params));
   }
 
-  return redirect(getPathById('public/renew/$id/ita/update-mailing-address', params));
+  if (!parsedDataResult.data.isHomeAddressSameAsMailingAddress) {
+    return redirect(getPathById('public/renew/$id/ita/update-home-address', params));
+  }
+
+  return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
 }
 
 export default function RenewItaConfirmAddress({ loaderData, params }: Route.ComponentProps) {

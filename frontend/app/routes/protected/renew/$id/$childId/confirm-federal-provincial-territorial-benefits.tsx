@@ -87,7 +87,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     }
   }, {}) as ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
 
-  const dentalBenefits = state.dentalBenefits ? state.dentalBenefits : clientDentalBenefits;
+  const dentalBenefits = state.dentalBenefits ?? clientDentalBenefits;
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.child-confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
