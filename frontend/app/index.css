@@ -16,5 +16,4 @@
 
 @import './fonts/lato.css' layer(theme);
 @import './fonts/noto-sans.css' layer(theme);
-@import 'react-phone-number-input/style.css' layer(vendor);
 @import '@fortawesome/fontawesome-svg-core/styles.css' layer(vendor);
