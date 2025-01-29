@@ -76,7 +76,6 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasMaritalStatusChanged: parsedDataResult.data.hasMaritalStatusChanged,
-      maritalStatus: undefined,
     },
   });
 
