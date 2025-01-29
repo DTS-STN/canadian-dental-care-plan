@@ -73,6 +73,20 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadRenewChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  if (formAction === FORM_ACTION.cancel) {
+    if (state.hasMaritalStatusChanged) {
+      saveRenewState({
+        params,
+        session,
+        state: {
+          hasMaritalStatusChanged: !!state.maritalStatus,
+        },
+      });
+    }
+    return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
+  }
+
   // state validation schema
   const maritalStatusSchema = z.object({
     maritalStatus: z
@@ -195,9 +209,9 @@ export default function RenewChildMaritalStatus({ loaderData, params }: Route.Co
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Marital status click">
                 {t('renew-child:marital-status.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Marital status click">
+              <LoadingButton id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Marital status click">
                 {t('renew-child:marital-status.cancel-btn')}
-              </ButtonLink>
+              </LoadingButton>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
