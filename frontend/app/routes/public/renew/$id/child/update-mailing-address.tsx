@@ -38,6 +38,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const FORM_ACTION = {
   submit: 'submit',
+  cancel: 'cancel',
   useInvalidAddress: 'use-invalid-address',
   useSelectedAddress: 'use-selected-address',
 } as const;
@@ -110,6 +111,18 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('copyMailingAddress') === 'copy';
 
+  if (formAction === FORM_ACTION.cancel) {
+    saveRenewState({
+      params,
+      session,
+      state: {
+        hasAddressChanged: state.previousAddressState?.hasAddressChanged,
+        isHomeAddressSameAsMailingAddress: state.previousAddressState?.isHomeAddressSameAsMailingAddress,
+      },
+    });
+    return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
+  }
+
   const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('mailingAddress')),
@@ -150,7 +163,7 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (state.editMode) {
-      return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
+      return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/child/review-adult-information', params) : getPathById('public/renew/$id/child/update-home-address', params));
     }
     return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/child/review-child-information', params) : getPathById('public/renew/$id/child/update-home-address', params));
   }
@@ -369,9 +382,9 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
                   </>
                 )}
               </Dialog>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Mailing address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Mailing address click">
                 {t('renew-child:update-address.cancel-btn')}
-              </ButtonLink>
+              </Button>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
