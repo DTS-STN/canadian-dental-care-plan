@@ -84,6 +84,10 @@ export async function action({ context: { appContainer, session }, params, reque
       hasAddressChanged: parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.yes,
       homeAddress: state.editMode && parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.no ? undefined : state.homeAddress,
       mailingAddress: state.editMode && parsedDataResult.data.hasAddressChanged === ADDRESS_RADIO_OPTIONS.no ? undefined : state.mailingAddress,
+      previousAddressState: {
+        hasAddressChanged: state.hasAddressChanged,
+        isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
+      },
     },
   });
 

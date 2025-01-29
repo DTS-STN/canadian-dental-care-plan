@@ -37,6 +37,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const FORM_ACTION = {
   submit: 'submit',
+  cancel: 'cancel',
   useInvalidAddress: 'use-invalid-address',
   useSelectedAddress: 'use-selected-address',
 } as const;
@@ -107,6 +108,19 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadRenewAdultChildState({ params, request, session });
+
+  if (formAction === FORM_ACTION.cancel) {
+    saveRenewState({
+      params,
+      session,
+      state: {
+        hasAddressChanged: state.previousAddressState?.hasAddressChanged,
+        isHomeAddressSameAsMailingAddress: state.previousAddressState?.isHomeAddressSameAsMailingAddress,
+      },
+    });
+    return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
+  }
+
   const homeAddressValidator = appContainer.get(TYPES.routes.validators.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
 
   const parsedDataResult = await homeAddressValidator.validateHomeAddress({
@@ -136,7 +150,7 @@ export async function action({ context: { appContainer, session }, params, reque
     saveRenewState({ params, session, state: { homeAddress } });
 
     if (state.editMode) {
-      return redirect(getPathById('public/renew/$id/adult-child/review-information', params));
+      return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
     }
     return redirect(getPathById('public/renew/$id/adult-child/dental-insurance', params));
   }
@@ -338,9 +352,9 @@ export default function RenewAdultChildUpdateAddress({ loaderData, params }: Rou
                   </>
                 )}
               </Dialog>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/adult-child/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Home address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Home address click">
                 {t('renew-adult-child:update-address.cancel-btn')}
-              </ButtonLink>
+              </Button>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
