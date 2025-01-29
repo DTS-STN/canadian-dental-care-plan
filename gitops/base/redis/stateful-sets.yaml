@@ -51,11 +51,11 @@ spec:
               containerPort: 6379
           livenessProbe:
             exec:
-              command: [/usr/local/bin/redis-cli, --pass, $(REDIS_PASSWORD), ping]
+              command: [/bin/sh, -c, /usr/local/bin/redis-cli --pass $REDIS_PASSWORD ping]
             initialDelaySeconds: 10
           readinessProbe:
             exec:
-              command: [/usr/local/bin/redis-cli, --pass, $(REDIS_PASSWORD), ping]
+              command: [/bin/sh, -c, /usr/local/bin/redis-cli --pass $REDIS_PASSWORD ping]
             initialDelaySeconds: 10
           resources:
             requests:
