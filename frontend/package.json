@@ -57,7 +57,7 @@
     "ioredis": "^5.4.2",
     "isbot": "^5.1.22",
     "jose": "^5.9.6",
-    "libphonenumber-js": "^1.11.18",
+    "libphonenumber-js": "^1.11.19",
     "markdown-to-jsx": "^7.7.3",
     "minimatch": "^10.0.1",
     "moderndash": "^4.0.0",
