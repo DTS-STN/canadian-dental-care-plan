@@ -69,7 +69,7 @@ export async function action({ context: { appContainer, session }, params, reque
       isHomeAddressSameAsMailingAddress: z.boolean().optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.hasAddressChanged && val.isHomeAddressSameAsMailingAddress === undefined) {
+      if (!val.hasAddressChanged && val.isHomeAddressSameAsMailingAddress === undefined) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-address.error-message.is-home-address-same-as-mailing-address-required'), path: ['isHomeAddressSameAsMailingAddress'] });
       }
     });
@@ -87,6 +87,8 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     session,
     state: {
+      mailingAddress: parsedDataResult.data.hasAddressChanged ? state.mailingAddress : undefined,
+      homeAddress: parsedDataResult.data.isHomeAddressSameAsMailingAddress ? undefined : state.homeAddress,
       hasAddressChanged: parsedDataResult.data.hasAddressChanged,
       isHomeAddressSameAsMailingAddress: parsedDataResult.data.hasAddressChanged ? undefined : parsedDataResult.data.isHomeAddressSameAsMailingAddress,
       previousAddressState: {
@@ -104,6 +106,9 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/ita/update-home-address', params));
   }
 
+  if (state.editMode) {
+    return redirect(getPathById('public/renew/$id/ita/review-information', params));
+  }
   return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
 }
 
