@@ -36,7 +36,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { extractDigits, hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('renew', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.applicantInformation,
   pageTitleI18nKey: 'renew:applicant-information.page-title',
 } as const satisfies RouteHandleData;
@@ -190,11 +190,11 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={7} size="lg" label={t('apply:progress.label')} />
+        <Progress value={7} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         {fetcherStatus === 'status-not-found' && <StatusNotFound />}
-        <p className="mb-4 italic">{t('apply:required-label')}</p>
+        <p className="mb-4 italic">{t('renew:required-label')}</p>
         <p className="mb-6">{t('renew:applicant-information.required-information')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
