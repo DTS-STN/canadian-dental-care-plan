@@ -190,8 +190,8 @@ export default function RenewFlowConfirm({ loaderData, params }: Route.Component
       <section className="space-y-8">
         <h2 className="font-lato text-3xl font-bold">{t('confirm.applicant-summary')}</h2>
         <section className="space-y-6">
-          <span className="font-lato text-3xl font-bold">{t('confirm.applicant-title')}</span>
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.member-info')}</h3>
+          <h3 className="font-lato text-3xl font-bold">{t('confirm.applicant-title')}</h3>
+          <h4 className="font-lato text-2xl font-bold">{t('confirm.member-info')}</h4>
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dob')}>{userInfo.birthday}</DescriptionListItem>
@@ -204,7 +204,7 @@ export default function RenewFlowConfirm({ loaderData, params }: Route.Component
 
         {spouseInfo && (
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
+            <h4 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h4>
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('confirm.sin')}>
                 <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
@@ -216,7 +216,7 @@ export default function RenewFlowConfirm({ loaderData, params }: Route.Component
         )}
 
         <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
+          <h4 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h4>
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.phone-number')}>
               <span className="text-nowrap">{userInfo.phoneNumber}</span>
@@ -261,7 +261,7 @@ export default function RenewFlowConfirm({ loaderData, params }: Route.Component
         </section>
 
         <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
+          <h4 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h4>
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dental-public')}>

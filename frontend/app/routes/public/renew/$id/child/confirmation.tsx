@@ -206,7 +206,7 @@ export default function RenewAdultChildConfirm({ loaderData, params }: Route.Com
         {children.map((child, index) => (
           <section className="space-y-6" key={child.id}>
             <section>
-              <h4 className="font-lato text-xl font-bold">{t('confirm.child-number', { childNumber: index + 1 })}</h4>
+              <h3 className="font-lato text-xl font-bold">{t('confirm.child-number', { childNumber: index + 1 })}</h3>
               <dl className="mt-6 divide-y border-y">
                 <DescriptionListItem term={t('confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DescriptionListItem>
                 <DescriptionListItem term={t('confirm.dental-private')}>{child.dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
@@ -230,8 +230,8 @@ export default function RenewAdultChildConfirm({ loaderData, params }: Route.Com
           </section>
         ))}
         <section className="space-y-6">
-          <span className="font-lato text-3xl font-bold">{t('confirm.parent-or-guardian-title')}</span>
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.parent-or-guardian-info')}</h3>
+          <h3 className="font-lato text-3xl font-bold">{t('confirm.parent-or-guardian-title')}</h3>
+          <h4 className="font-lato text-2xl font-bold">{t('confirm.parent-or-guardian-info')}</h4>
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dob')}>{userInfo.birthday}</DescriptionListItem>
