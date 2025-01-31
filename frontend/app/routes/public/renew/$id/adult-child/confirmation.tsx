@@ -221,8 +221,8 @@ export default function RenewAdultChildConfirm({ loaderData, params }: Route.Com
       <section className="space-y-8">
         <h2 className="font-lato text-3xl font-bold">{t('confirm.applicant-summary')}</h2>
         <section className="space-y-6">
-          <span className="font-lato text-3xl font-bold">{t('confirm.applicant-title')}</span>
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.member-info')}</h3>
+          <h3 className="font-lato text-3xl font-bold">{t('confirm.applicant-title')}</h3>
+          <h4 className="font-lato text-2xl font-bold">{t('confirm.member-info')}</h4>
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dob')}>{userInfo.birthday}</DescriptionListItem>
@@ -235,7 +235,7 @@ export default function RenewAdultChildConfirm({ loaderData, params }: Route.Com
 
         {spouseInfo && (
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
+            <h4 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h4>
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('confirm.sin')}>
                 <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
@@ -247,7 +247,7 @@ export default function RenewAdultChildConfirm({ loaderData, params }: Route.Com
         )}
 
         <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
+          <h4 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h4>
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.mailing')}>
               {mailingAddressInfo ? (
@@ -283,7 +283,7 @@ export default function RenewAdultChildConfirm({ loaderData, params }: Route.Com
         </section>
 
         <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
+          <h4 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h4>
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dental-public')}>
@@ -306,9 +306,9 @@ export default function RenewAdultChildConfirm({ loaderData, params }: Route.Com
         {/* CHILDREN DETAILS */}
         {children.map((child) => (
           <section className="space-y-6" key={child.id}>
-            <h3 className="font-lato text-2xl font-bold">{child.firstName}</h3>
+            <h4 className="font-lato text-2xl font-bold">{child.firstName}</h4>
             <section>
-              <h4 className="font-lato text-xl font-bold">{t('confirm.child-title', { childName: child.firstName })}</h4>
+              <h5 className="font-lato text-xl font-bold">{t('confirm.child-title', { childName: child.firstName })}</h5>
               <dl className="mt-6 divide-y border-y">
                 <DescriptionListItem term={t('confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DescriptionListItem>
                 <DescriptionListItem term={t('confirm.dental-private')}>{child.dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
