@@ -208,10 +208,10 @@ export default function AddressValidationIndexRoute({ loaderData, params }: Rout
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'address',
-    city: 'city',
     countryId: 'country',
-    postalZipCode: 'postal-zip-code',
     provinceStateId: 'province-state',
+    city: 'city',
+    postalZipCode: 'postal-zip-code',
   });
 
   useEffect(() => {

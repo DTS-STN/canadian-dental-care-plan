@@ -251,10 +251,10 @@ export default function RenewAdultChildUpdateAddress({ loaderData, params }: Rou
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'mailing-address',
-    provinceStateId: 'mailing-province',
-    countryId: 'mailing-country',
     city: 'mailing-city',
     postalZipCode: 'mailing-postal-code',
+    provinceStateId: 'mailing-province',
+    countryId: 'mailing-country',
     copyMailingAddress: 'copy-mailing-address',
   });
 
