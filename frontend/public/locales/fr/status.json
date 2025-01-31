@@ -113,7 +113,7 @@
         "date-of-birth-is-past": "La date de naissance doit être dans le passé",
         "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
         "date-of-birth-month-required": "La date de naissance doit inclure un mois",
-        "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
+        "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisis",
         "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
         "date-of-birth-year-required": "La date de naissance doit inclure une année",
         "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
