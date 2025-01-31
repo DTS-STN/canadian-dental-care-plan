@@ -81,7 +81,7 @@
                   "HasChanged": null
                 },
                 {
-                  "Label": "Lettre de détermination - Éligible",
+                  "Label": "Lettre de détermination - Admissible",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
@@ -135,7 +135,7 @@
                   "HasChanged": null
                 },
                 {
-                  "Label": "Lettre de détermination - Non-éligible",
+                  "Label": "Lettre de détermination - Non admissible",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
@@ -385,7 +385,6 @@
               }
             }
           },
-
           {
             "Value": "775170002-775170002",
             "Color": null,
@@ -461,6 +460,382 @@
                 },
                 {
                   "Label": "Lettre de validation - Enfant en double",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "invite-775170013",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Invitation Letter - Invitation to Renew Letter - Primary",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre d'invitation - Lettre d'invitation à renouveler  - Principal",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "775170001-775170002",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Determination Letter - Eligible Renewal - Primary",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de détermination - Renouvellement Admissible - Principal",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "775170001-775170003",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Determination Letter - Eligible Renewal - Dependant",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de détermination - Renouvellement Admissible - Personne à charge",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "775170001-775170004",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Determination Letter - Ineligible Renewal - Primary",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de détermination - Renouvellement Non admissible - Principal",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "775170001-775170005",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Determination Letter - Ineligible Renewal - Dependant",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de détermination - Renouvellement Non admissible - Personne à charge",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "invite-775170014",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Invitation Letter - Invitation to Renew Letter Dependant",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre d'invitation - Lettre d'invitation à renouveler dependant",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "invite-775170016",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Invitation Letter - Renewal Reminder Primary",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre d'invitation - Rappel de renouvellement pour le demandeur principal",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "notice-775170020",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Notice letter - Pre-Renewal SIR Account Revision Letter",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de préavis - Lettre de révision du compte au RAS avant le renouvellement",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
