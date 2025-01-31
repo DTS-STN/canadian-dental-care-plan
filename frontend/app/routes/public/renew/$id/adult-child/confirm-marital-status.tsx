@@ -123,9 +123,7 @@ export default function RenewAdultChildConfirmMaritalStatus({ loaderData, params
                 { value: MARITAL_STATUS_RADIO_OPTIONS.yes, children: t('renew-adult-child:confirm-marital-status.radio-options.yes'), defaultChecked: defaultState === true },
                 { value: MARITAL_STATUS_RADIO_OPTIONS.no, children: t('renew-adult-child:confirm-marital-status.radio-options.no'), defaultChecked: defaultState === false },
               ]}
-              helpMessagePrimary={t('renew-adult-child:confirm-marital-status.help-message')}
               errorMessage={errors?.hasMaritalStatusChanged}
-              required
             />
           </div>
           {editMode ? (
