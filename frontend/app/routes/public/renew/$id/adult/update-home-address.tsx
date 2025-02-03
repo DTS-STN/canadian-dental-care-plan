@@ -541,7 +541,9 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
         <DialogDescription>{t('renew-adult:update-address.dialog.address-invalid.description')}</DialogDescription>
       </DialogHeader>
       <div className="space-y-2">
-        <p className="font-semibold">{t('renew-adult:update-address.dialog.address-invalid.entered-address')}</p>
+        <p className="font-semibold">
+          <strong>{t('renew-adult:update-address.dialog.address-invalid.entered-address')}</strong>
+        </p>
         <Address address={invalidAddress} />
       </div>
       <DialogFooter>

@@ -460,7 +460,9 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
         <DialogDescription>{t('address-validation:index.dialog.address-invalid.description')}</DialogDescription>
       </DialogHeader>
       <div className="space-y-2">
-        <p className="font-semibold">{t('address-validation:index.dialog.address-invalid.entered-address')}</p>
+        <p className="font-semibold">
+          <strong>{t('address-validation:index.dialog.address-invalid.entered-address')}</strong>
+        </p>
         <Address address={invalidAddress} />
       </div>
       <DialogFooter>
