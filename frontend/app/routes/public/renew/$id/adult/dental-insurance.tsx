@@ -107,28 +107,36 @@ export default function RenewAdultAccessToDentalInsuranceQuestion({ loaderData, 
       <Collapsible summary={t('dental-insurance.detail.additional-info.title')}>
         <div className="space-y-4">
           <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
-          <ul className="list-disc space-y-1 pl-7">
+          <ul className="list-disc space-y-4 pl-7">
             <li>{t('dental-insurance.detail.additional-info.eligible-list.employment-benefits')}</li>
-            <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.professional-student')}</li>
-            <p className="pl-4">{t('dental-insurance.detail.additional-info.eligible-list.organization.note')}</p>
-            <ul className="list-disc space-y-1 pl-12">
-              <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.not-take')}</li>
-              <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.pay-premium')}</li>
-              <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.not-use')}</li>
-            </ul>
-            <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.pension-benefits')}</li>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.federal-provincial-territorial')}</li>
-              <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.eligible')}</li>
+            <li>
+              {t('dental-insurance.detail.additional-info.eligible-list.organization.professional-student')}
+              <li className="list-none pl-4">{t('dental-insurance.detail.additional-info.eligible-list.organization.note')}</li>
               <ul className="list-disc space-y-1 pl-7">
-                <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opted-out')}</li>
-                <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opt-back')}</li>
+                <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.not-take')}</li>
+                <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.pay-premium')}</li>
+                <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.not-use')}</li>
               </ul>
-            </ul>
-            <li>{t('dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-through')}</li>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-privately')}</li>
-            </ul>
+            </li>
+            <li>
+              {t('dental-insurance.detail.additional-info.eligible-list.pension.pension-benefits')}
+              <ul className="list-disc space-y-1 pl-7">
+                <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.federal-provincial-territorial')}</li>
+                <li>
+                  {t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.eligible')}
+                  <ul className="list-disc space-y-1 pl-7">
+                    <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opted-out')}</li>
+                    <li>{t('dental-insurance.detail.additional-info.eligible-list.pension.exceptions.opt-back')}</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              {t('dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-through')}
+              <ul className="list-disc space-y-1 pl-7">
+                <li>{t('dental-insurance.detail.additional-info.eligible-list.purchased-coverage.purchased-privately')}</li>
+              </ul>
+            </li>
           </ul>
         </div>
       </Collapsible>
