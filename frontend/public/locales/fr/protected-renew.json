@@ -536,7 +536,7 @@
     "form-instructions": "Vous soumettez une demande de renouvellement pour les personnes suivantes\u00a0:",
     "submit-p-proceed": "En procédant à cette demande de renouvellement, vous acceptez d'attester la véracité des renseignements fournis.",
     "submit-p-false-info": "Si vous fournissez de faux renseignements dans votre demande de renouvellement, vous et les autres personnes pour lesquelles vous avez présenté une demande pourriez être exclus du Régime canadien de soins dentaires.",
-    "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles au renouvellement, vous pourriez avoir à rembourser la totalité des frais pour les soins reçus par l'intermédiaire du Régime canadien de soins dentaires.",
+    "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles au renouvellement, vous pourriez avoir à rembourser la totalité des frais pour les soins reçus par l'intermédiaire du Régime canadien de soins dentaires. ",
     "back-button": "Retour",
     "submit-button": "Soumettre la demande de renouvellement"
   },
