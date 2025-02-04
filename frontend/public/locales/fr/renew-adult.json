@@ -84,9 +84,9 @@
       "add-or-update-required": "Sélectionnez si vous souhaitez mettre à jour ou ajouter une adresse courriel",
       "email-match": "Les adresses courriel entrées ne concordent pas",
       "confirm-email-required": "Confirmez l'adresse courriel",
-      "email-required": "Entrez l'adresse courriel dans le bon format, par exemple nom@example.com",
-      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@example.com",
-      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@example.com",
+      "email-required": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "receive-comms-required": "Sélectionnez si vous souhaitez recevoir des communications par courriel"
     }
   },
