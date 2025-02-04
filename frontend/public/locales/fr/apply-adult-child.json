@@ -55,7 +55,8 @@
         "info": "Voulez-vous retirer {{childName}} de cette demande?",
         "back-btn": "Retour à la page d'aperçu",
         "remove-btn": "Retirer l'enfant"
-      }
+      },
+      "removed-child": "{{childName}} a été supprimé de l'application"
     },
     "information": {
       "page-title": "{{childName}}\u00a0: Renseignements",

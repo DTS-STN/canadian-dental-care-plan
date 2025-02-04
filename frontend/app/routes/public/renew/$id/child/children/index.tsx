@@ -116,6 +116,7 @@ export default function RenewChildIndex({ loaderData, params }: Route.ComponentP
   const isSubmitting = fetcher.state !== 'idle';
   const hasChildren = children.length > 0;
   const [submitAction, setSubmitAction] = useState<string>();
+  const [srMessage, setSrMessage] = useState<string>('');
 
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
@@ -214,6 +215,7 @@ export default function RenewChildIndex({ loaderData, params }: Route.ComponentP
                               variant="primary"
                               size="sm"
                               data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Remove child - Child(ren) renewal click"
+                              onClick={() => setSrMessage(t('renew-child:children.index.removed-child', { childName }))}
                             >
                               {t('renew-child:children.index.modal.remove-btn')}
                             </Button>
@@ -276,6 +278,9 @@ export default function RenewChildIndex({ loaderData, params }: Route.ComponentP
             </div>
           )}
         </fetcher.Form>
+        <span aria-atomic="true" aria-live="polite" className="visually-hidden">
+          {srMessage}
+        </span>
       </div>
     </>
   );

@@ -284,7 +284,8 @@
         "info": "Do you want to remove {{childName}} from this application?",
         "back-btn": "Return to summary page",
         "remove-btn": "Remove child"
-      }
+      },
+      "removed-child": "{{childName}} has been removed from the application"
     },
     "information": {
       "page-title": "{{childName}}: information",

@@ -114,6 +114,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
   const hasChildren = children.length > 0;
 
   const [submitAction, setSubmitAction] = useState<string>();
+  const [srMessage, setSrMessage] = useState<string>('');
 
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
@@ -211,6 +212,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                               variant="primary"
                               size="sm"
                               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Remove child - Child(ren) application click"
+                              onClick={() => setSrMessage(t('apply-child:children.index.removed-child', { childName }))}
                             >
                               {t('apply-child:children.index.modal.remove-btn')}
                             </Button>
@@ -280,6 +282,9 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
             </div>
           )}
         </fetcher.Form>
+        <span aria-atomic="true" aria-live="polite" className="visually-hidden">
+          {srMessage}
+        </span>
       </div>
     </>
   );
