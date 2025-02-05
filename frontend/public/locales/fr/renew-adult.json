@@ -227,7 +227,7 @@
       "title": "Prestations fédérales",
       "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social fédéral autre que le Régime canadien de soins dentaires?",
       "option-yes": "<strong>Oui</strong>, j'ai des prestations <strong>fédérales</strong> pour soins dentaires",
-      "option-no": "<strong>Non</strong>, je n'ai pas des prestations <strong>fédérales</strong> pour soins dentaires",
+      "option-no": "<strong>Non</strong>, je n'ai pas de prestations <strong>fédérales</strong> pour soins dentaires",
       "social-programs": {
         "legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
       }
@@ -236,7 +236,7 @@
       "title": "Prestations provinciales ou territoriales",
       "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social provincial ou territorial autre que le Régime canadien de soins dentaires?",
       "option-yes": "<strong>Oui</strong>, j'ai des prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
-      "option-no": "<strong>Non</strong>, je n'ai pas des prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
+      "option-no": "<strong>Non</strong>, je n'ai pas de prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
       "social-programs": {
         "input-legend": "Par l'entremise de quelle province ou de quel territoire?",
         "radio-legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
