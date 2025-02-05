@@ -30,9 +30,10 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
   const inputWrapperId = `input-radios-${id}`;
 
   function getAriaDescribedby() {
+    if (disableSR) return undefined;
     const ariaDescribedby = [];
-    if (helpMessagePrimary && !disableSR) ariaDescribedby.push(inputHelpMessagePrimaryId);
-    if (helpMessageSecondary && !disableSR) ariaDescribedby.push(inputHelpMessageSecondaryId);
+    if (helpMessagePrimary) ariaDescribedby.push(inputHelpMessagePrimaryId);
+    if (helpMessageSecondary) ariaDescribedby.push(inputHelpMessageSecondaryId);
     return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
   }
 
