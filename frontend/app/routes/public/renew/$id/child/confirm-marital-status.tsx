@@ -123,7 +123,7 @@ export default function RenewChildConfirmMaritalStatus({ loaderData, params }: R
                 { value: MARITAL_STATUS_RADIO_OPTIONS.yes, children: t('renew-child:confirm-marital-status.radio-options.yes'), defaultChecked: defaultState === true },
                 { value: MARITAL_STATUS_RADIO_OPTIONS.no, children: t('renew-child:confirm-marital-status.radio-options.no'), defaultChecked: defaultState === false },
               ]}
-              helpMessagePrimary={t('renew-adult:confirm-marital-status.help-message')}
+              helpMessagePrimary={t('renew-child:confirm-marital-status.help-message')}
               errorMessage={errors?.hasMaritalStatusChanged}
               disableSR
             />
