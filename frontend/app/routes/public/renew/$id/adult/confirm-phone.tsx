@@ -162,6 +162,8 @@ export default function RenewAdultConfirmPhone({ loaderData, params }: Route.Com
               id="is-new-or-updated-phone-number"
               name="isNewOrUpdatedPhoneNumber"
               legend={t('renew-adult:confirm-phone.add-or-update.legend')}
+              helpMessagePrimary={t('renew-adult:confirm-phone.add-phone')}
+              helpMessagePrimaryClassName="sr-only" // sr-only to not display helpMessagePrimary but enables screenreaders to read it.
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult:confirm-phone.option-yes" />,
@@ -181,7 +183,6 @@ export default function RenewAdultConfirmPhone({ loaderData, params }: Route.Com
                         errorMessage={errors?.phoneNumber}
                         label={t('renew-adult:confirm-phone.phone-number')}
                         maxLength={100}
-                        aria-describedby="adding-phone"
                       />
                       <InputPhoneField
                         id="phone-number-alt"
@@ -194,7 +195,6 @@ export default function RenewAdultConfirmPhone({ loaderData, params }: Route.Com
                         errorMessage={errors?.phoneNumberAlt}
                         label={t('renew-adult:confirm-phone.phone-number-alt')}
                         maxLength={100}
-                        aria-describedby="adding-phone"
                       />
                     </div>
                   ),
