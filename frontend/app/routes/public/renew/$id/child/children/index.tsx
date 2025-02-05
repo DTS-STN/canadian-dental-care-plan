@@ -278,7 +278,7 @@ export default function RenewChildIndex({ loaderData, params }: Route.ComponentP
             </div>
           )}
         </fetcher.Form>
-        <span aria-atomic="true" aria-live="polite" className="visually-hidden">
+        <span aria-atomic="true" aria-live="polite" className="sr-only">
           {srMessage}
         </span>
       </div>
