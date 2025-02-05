@@ -14,29 +14,16 @@ labels:
       app.kubernetes.io/environment: dev
       app.kubernetes.io/tier: nonprod
 resources:
-  - ../../base/backend/
   - ../../base/frontend/
-  - ../../base/fluentd-archiver/
-  - ../../base/redis/
   - ./ingresses.yaml
 patches:
   - path: ./patches/deployments.yaml
   - path: ./patches/services.yaml
-  - path: ./patches/stateful-sets.yaml
 configMapGenerator:
   - name: frontend
     behavior: merge
     envs:
       - ./configs/frontend/config.conf
-  - name: frontend-fluentd
-    behavior: create
-    files:
-      - ./configs/frontend/fluentd.conf
-  - name: redis
-    behavior: merge
-    files:
-      - ./configs/redis/replica.conf
-      - ./configs/redis/sentinel.conf
   - name: oauth-proxy
     behavior: create
     files:
@@ -50,7 +37,3 @@ secretGenerator:
     behavior: create
     envs:
       - ./configs/oauth-proxy/secrets.conf
-  - name: redis
-    behavior: replace
-    envs:
-      - ./configs/redis/secrets.conf
