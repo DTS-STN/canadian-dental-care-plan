@@ -19,9 +19,10 @@ export interface InputRadiosProps {
   name: string;
   required?: boolean;
   legendClassName?: string;
+  disableSR?: boolean;
 }
 
-const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required, legendClassName }: InputRadiosProps) => {
+const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required, legendClassName, disableSR }: InputRadiosProps) => {
   const inputErrorId = `input-radios-${id}-error`;
   const inputHelpMessagePrimaryId = `input-radios-${id}-help-primary`;
   const inputHelpMessageSecondaryId = `input-radios-${id}-help-secondary`;
@@ -29,6 +30,7 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
   const inputWrapperId = `input-radios-${id}`;
 
   function getAriaDescribedby() {
+    if (disableSR) return undefined;
     const ariaDescribedby = [];
     if (helpMessagePrimary) ariaDescribedby.push(inputHelpMessagePrimaryId);
     if (helpMessageSecondary) ariaDescribedby.push(inputHelpMessageSecondaryId);
