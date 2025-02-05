@@ -15,7 +15,6 @@ labels:
       app.kubernetes.io/tier: nonprod
 resources:
   - ../../base/frontend/
-  - ../../base/fluentd-archiver/
   - ../../base/redis/
   - ./ingresses.yaml
 patches:
@@ -27,10 +26,6 @@ configMapGenerator:
     behavior: merge
     envs:
       - ./configs/frontend/config.conf
-  - name: frontend-fluentd
-    behavior: create
-    files:
-      - ./configs/frontend/fluentd.conf
   - name: redis
     behavior: merge
     files:

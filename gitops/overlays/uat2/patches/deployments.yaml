@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
         - name: canada-dental-care-plan-frontend
-          image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:0.0.0-a8d37676-008fe
+          image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:0.0.0-1dd86a43-0096f
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
@@ -56,26 +56,7 @@ spec:
             - name: oauth-proxy-conf
               mountPath: /etc/oauth-proxy.conf
               subPath: config.conf
-        - name: fluentd
-          image: docker.io/fluentd
-          args: [--config, /etc/fluentd.conf]
-          resources:
-            requests:
-              cpu: 50m
-              memory: 100Mi
-            limits:
-              cpu: 100m
-              memory: 200Mi
-          volumeMounts:
-            - name: audit-logs
-              mountPath: /logs
-            - name: fluentd-conf
-              mountPath: /etc/fluentd.conf
-              subPath: fluentd.conf
       volumes:
-        - name: fluentd-conf
-          configMap:
-            name: frontend-fluentd
         - name: oauth-proxy-conf
           configMap:
             name: oauth-proxy
