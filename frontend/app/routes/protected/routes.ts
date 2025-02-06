@@ -169,6 +169,21 @@ export const routes = [
           },
         ],
       },
+      {
+        file: 'routes/protected/apply/layout.tsx',
+        children: [
+          {
+            id: 'protected/apply/index',
+            file: 'routes/protected/apply/index.tsx',
+            paths: { en: '/:lang/apply', fr: '/:lang/demander' },
+          },
+          {
+            id: 'protected/apply/$id/terms-and-conditions',
+            file: 'routes/protected/apply/$id/terms-and-conditions.tsx',
+            paths: { en: '/:lang/apply/:id/terms-and-conditions', fr: '/:lang/demander/:id/conditions-utilisation' },
+          },
+        ],
+      },
     ],
   },
 ] as const satisfies I18nRoute[];
