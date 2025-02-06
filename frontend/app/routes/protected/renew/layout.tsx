@@ -16,6 +16,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 
 export const handle = {
+  breadcrumbs: [{ labelI18nKey: 'protected-renew:index.page-title' }],
   i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces),
   transformAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
