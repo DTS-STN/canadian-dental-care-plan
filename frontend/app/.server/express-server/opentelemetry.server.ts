@@ -25,7 +25,7 @@ function getEnvValue(defaultValue: string, envVar?: string): string {
 
 function getMetricExporter(): PushMetricExporter {
   if (process.env.OTEL_USE_CONSOLE_EXPORTERS === 'true') {
-    log.info(`Exporting metrics to console every %s ms`, process.env.OTEL_METRICS_EXPORT_INTERVAL_MILLIS);
+    log.info('Exporting metrics to console');
     return new ConsoleMetricExporter();
   }
 
@@ -34,7 +34,7 @@ function getMetricExporter(): PushMetricExporter {
       throw new Error('OTEL_API_KEY must be configured when OTEL_METRICS_ENDPOINT is set');
     }
 
-    log.info(`Exporting metrics to %s every %s ms`, process.env.OTEL_METRICS_ENDPOINT, process.env.OTEL_METRICS_EXPORT_INTERVAL_MILLIS);
+    log.info(`Exporting metrics to %s`, process.env.OTEL_METRICS_ENDPOINT);
 
     return new OTLPMetricExporter({
       compression: CompressionAlgorithm.GZIP,
@@ -56,7 +56,7 @@ function getMetricExporter(): PushMetricExporter {
 
 function getTraceExporter(): SpanExporter {
   if (process.env.OTEL_USE_CONSOLE_EXPORTERS === 'true') {
-    log.info(`Exporting traces to console every 30000 ms`);
+    log.info('Exporting traces to console');
     return new ConsoleSpanExporter();
   }
 
@@ -65,8 +65,7 @@ function getTraceExporter(): SpanExporter {
       throw new Error('OTEL_API_KEY must be configured when OTEL_TRACES_ENDPOINT is set');
     }
 
-    // TODO :: GjB :: can this 30000 ms be configured? (spoiler: I don't think so...)
-    log.info(`Exporting traces to %s every 30000 ms`, process.env.OTEL_TRACES_ENDPOINT);
+    log.info('Exporting traces to %s', process.env.OTEL_TRACES_ENDPOINT);
 
     return new OTLPTraceExporter({
       compression: CompressionAlgorithm.GZIP,
@@ -82,6 +81,15 @@ function getTraceExporter(): SpanExporter {
     export: (spans, resultCallback) => resultCallback({ code: ExportResultCode.SUCCESS }),
     shutdown: async () => {},
   };
+}
+
+/**
+ * Transforms a string into an ingeger.
+ * Will return undefined if the string can't be transformed.
+ */
+function toNumber(str?: string): number | undefined {
+  const num = parseInt(str ?? '');
+  return isNaN(num) ? undefined : num;
 }
 
 log.info('Initializing instrumentation');
@@ -102,8 +110,8 @@ new NodeSDK({
 
   metricReader: new PeriodicExportingMetricReader({
     exporter: getMetricExporter(),
-    exportIntervalMillis: Number(process.env.OTEL_METRICS_EXPORT_INTERVAL_MILLIS),
-    exportTimeoutMillis: Number(process.env.OTEL_METRICS_EXPORT_TIMEOUT_MILLIS),
+    exportIntervalMillis: toNumber(process.env.OTEL_METRICS_EXPORT_INTERVAL_MILLIS),
+    exportTimeoutMillis: toNumber(process.env.OTEL_METRICS_EXPORT_TIMEOUT_MILLIS),
   }),
   traceExporter: getTraceExporter(),
 }).start();
