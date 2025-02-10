@@ -17,7 +17,6 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
-import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
@@ -35,6 +34,7 @@ const FEDERAL_BENEFITS_CHANGED_OPTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.adultChild.confirmFederalProvincialTerritorialBenefits,
+  pageTitleI18nKey: 'renew-adult-child:children.confirm-dental-benefits.title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const childNumber = t('renew-adult-child:children.child-number', { childNumber: state.childNumber });
-  const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
+  const childName = state.information?.firstName ?? childNumber;
 
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.confirm-dental-benefits.title', { childName }) }),
@@ -58,6 +58,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     childName,
     editMode: state.editMode,
     meta,
+    i18nOptions: { childName },
   };
 }
 
@@ -140,7 +141,6 @@ export default function RenewAdultChildConfirmFederalProvincialTerritorialBenefi
 
   return (
     <>
-      <AppPageTitle>{t('renew-adult-child:children.confirm-dental-benefits.title', { childName })}</AppPageTitle>
       <div className="my-6 sm:my-8">
         <Progress value={81} size="lg" label={t('renew:progress.label')} />
       </div>
