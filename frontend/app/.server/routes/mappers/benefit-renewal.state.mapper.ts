@@ -23,6 +23,7 @@ import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsuran
 import type {
   ProtectedApplicationYearState,
   ProtectedChildState,
+  ProtectedConmmunicationPreferenceState,
   ProtectedContactInformationState,
   ProtectedDemographicSurveyState,
   ProtectedDentalFederalBenefitsState,
@@ -118,6 +119,7 @@ export interface ProtectedRenewState {
   mailingAddress?: ProtectedMailingAddressState;
   maritalStatus?: string;
   partnerInformation?: ProtectedPartnerInformationState;
+  communicationPreferences?: ProtectedConmmunicationPreferenceState;
 }
 
 export interface BenefitRenewalStateMapper {
@@ -141,6 +143,8 @@ interface ToChildrenArgs {
 
 interface ToCommunicationPreferencesArgs {
   existingCommunicationPreferences: ReadonlyObjectDeep<CommunicationPreferencesDto>;
+  hasPreferredLanguageChanged?: boolean;
+  renewedPreferredLanguage?: string;
   hasEmailChanged: boolean;
   renewedEmail?: string;
   renewedReceiveEmailCommunication?: boolean;
@@ -470,7 +474,21 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }
 
   mapProtectedRenewStateToProtectedBenefitRenewalDto(
-    { applicationYear, children, contactInformation, demographicSurvey, dentalBenefits, dentalInsurance, homeAddress, isHomeAddressSameAsMailingAddress, mailingAddress, maritalStatus, partnerInformation, clientApplication }: ProtectedRenewState,
+    {
+      applicationYear,
+      children,
+      contactInformation,
+      demographicSurvey,
+      dentalBenefits,
+      dentalInsurance,
+      homeAddress,
+      isHomeAddressSameAsMailingAddress,
+      mailingAddress,
+      maritalStatus,
+      partnerInformation,
+      clientApplication,
+      communicationPreferences,
+    }: ProtectedRenewState,
     userId: string,
     applicantStateCompleted: boolean,
   ): ProtectedBenefitRenewalDto {
@@ -489,6 +507,8 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       communicationPreferences: this.toCommunicationPreferences({
         existingCommunicationPreferences: clientApplication.communicationPreferences,
+        hasPreferredLanguageChanged: !!communicationPreferences?.preferredLanguage,
+        renewedPreferredLanguage: communicationPreferences?.preferredLanguage,
         hasEmailChanged: !!contactInformation?.email,
         renewedEmail: contactInformation?.email,
         renewedReceiveEmailCommunication: contactInformation?.shouldReceiveEmailCommunication,
@@ -700,12 +720,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         };
   }
 
-  private toCommunicationPreferences({ existingCommunicationPreferences, hasEmailChanged, renewedEmail, renewedReceiveEmailCommunication }: ToCommunicationPreferencesArgs) {
-    if (!hasEmailChanged) return existingCommunicationPreferences;
+  private toCommunicationPreferences({ existingCommunicationPreferences, hasEmailChanged, renewedEmail, renewedReceiveEmailCommunication, hasPreferredLanguageChanged, renewedPreferredLanguage }: ToCommunicationPreferencesArgs) {
+    if (!hasEmailChanged && !hasPreferredLanguageChanged) return existingCommunicationPreferences;
 
     return {
       email: renewedReceiveEmailCommunication ? renewedEmail : undefined,
-      preferredLanguage: existingCommunicationPreferences.preferredLanguage,
+      preferredLanguage: renewedPreferredLanguage ?? existingCommunicationPreferences.preferredLanguage,
       preferredMethod: renewedReceiveEmailCommunication ? this.serverConfig.COMMUNICATION_METHOD_EMAIL_ID : this.serverConfig.COMMUNICATION_METHOD_MAIL_ID,
     };
   }
