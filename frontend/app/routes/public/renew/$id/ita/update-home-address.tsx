@@ -271,7 +271,6 @@ export default function RenewItaUpdateAddress({ loaderData, params }: Route.Comp
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-8">
-            <legend className="font-lato mb-4 text-2xl font-bold">{t('renew-ita:update-address.home-address.header')}</legend>
             <div className="space-y-6">
               <>
                 <InputSanitizeField

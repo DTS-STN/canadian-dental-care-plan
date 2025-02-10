@@ -270,7 +270,6 @@ export default function RenewAdultChildUpdateAddress({ loaderData, params }: Rou
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-8">
-            <legend className="font-lato mb-4 text-2xl font-bold">{t('renew-adult-child:update-address.home-address.header')}</legend>
             <div className="space-y-6">
               <>
                 <InputSanitizeField
