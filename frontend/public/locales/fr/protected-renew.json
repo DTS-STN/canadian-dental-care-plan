@@ -480,6 +480,7 @@
   },
   "review-adult-information": {
     "read-carefully": "Examinez attentivement ces renseignements. Les renseignements fournis seront utilisés pour mettre à jour votre compte de membre du Régime canadien de soins dentaires.",
+    "contact-service-canada": "Si vous avez besoin de mettre à jour les informations de votre demande, contactez Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
     "page-title": "Vérifiez vos renseignements",
     "page-sub-title": "Renseignements sur le membre",
     "dob-title": "Date de naissance",
@@ -542,6 +543,8 @@
   },
   "review-child-information": {
     "page-title": "Vérifiez les renseignements sur le ou les enfants",
+    "read-carefully": "Examinez attentivement ces renseignements. Les renseignements fournis seront utilisés pour mettre à jour votre compte de membre du Régime canadien de soins dentaires.",
+    "contact-service-canada": "Si vous avez besoin de mettre à jour les informations de votre enfant, contactez Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
     "page-sub-title": "Renseignement sur {{child}}",
     "dob-title": "Date de naissance",
     "client-number-title": "Numéro de client",

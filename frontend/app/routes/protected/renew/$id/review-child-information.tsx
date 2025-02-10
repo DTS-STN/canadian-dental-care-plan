@@ -1,7 +1,7 @@
 import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-child-information';
@@ -161,6 +161,10 @@ export default function ProtectedRenewReviewChildInformation({ loaderData, param
 
   return (
     <div className="max-w-prose">
+      <p className="mb-4 text-lg">{t('protected-renew:review-child-information.read-carefully')}</p>
+      <p className="mb-8 text-lg">
+        <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:review-child-information.contact-service-canada" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+      </p>
       <div className="space-y-10">
         {children.map((child) => {
           const childParams = { ...params, childId: child.id };

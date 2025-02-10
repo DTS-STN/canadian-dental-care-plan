@@ -1,7 +1,7 @@
 import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
@@ -262,7 +262,10 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
 
   return (
     <div className="max-w-prose">
-      <p className="mb-8 text-lg">{t('protected-renew:review-adult-information.read-carefully')}</p>
+      <p className="mb-4 text-lg">{t('protected-renew:review-adult-information.read-carefully')}</p>
+      <p className="mb-8 text-lg">
+        <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:review-adult-information.contact-service-canada" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+      </p>
       <div className="space-y-10">
         <section className="space-y-6">
           <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.page-sub-title')}</h2>

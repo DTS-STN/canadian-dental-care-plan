@@ -480,6 +480,7 @@
   },
   "review-adult-information": {
     "read-carefully": "Review this information carefully. The information provided will be used to update your Canadian Dental Care Plan member account.",
+    "contact-service-canada": "If you need to update your applicant information, contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
     "page-title": "Review your information",
     "page-sub-title": "Applicant information",
     "dob-title": "Date of birth",
@@ -542,6 +543,8 @@
   },
   "review-child-information": {
     "page-title": "Review child(ren) information",
+    "read-carefully": "Review this information carefully. The information provided will be used to update your Canadian Dental Care Plan member account.",
+    "contact-service-canada": "If you need to update your child's information, contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
     "page-sub-title": "{{child}} information",
     "dob-title": "Date of birth",
     "client-number-title": "Client number",
