@@ -126,6 +126,7 @@ export type ProtectedDentalFederalBenefitsState = Pick<NonNullable<ProtectedRene
 export type ProtectedDentalProvincialTerritorialBenefitsState = Pick<NonNullable<ProtectedRenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ProtectedContactInformationState = NonNullable<ProtectedRenewState['contactInformation']>;
 export type ProtectedDemographicSurveyState = NonNullable<ProtectedRenewState['demographicSurvey']>;
+export type ProtectedConmmunicationPreferenceState = NonNullable<ProtectedRenewState['communicationPreferences']>;
 
 /**
  * Schema for validating UUID.
