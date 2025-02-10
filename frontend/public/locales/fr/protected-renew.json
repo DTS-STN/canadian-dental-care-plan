@@ -567,8 +567,8 @@
   },
   "confirm": {
     "page-title": "Votre demande de renouvellement au Régime canadien de soins dentaires est terminée!",
-    "whats-next": "Vous recevrez une lettre dans les trois prochaines semaines",
-    "begin-process": "Nous commencerons à traiter votre demande de renouvellement immédiatement. Vous pouvez continuer d'utiliser vos prestations du Régime canadien de soins dentaires. Vous recevrez une lettre dans les trois semaines suivant la présentation de votre demande de renouvellement pour vous informer si vous êtes admissible à la prochaine année de couverture.",
+    "whats-next": "Vous recevrez une lettre confirmant votre admissibilité",
+    "begin-process": "Nous commencerons à traiter votre demande de renouvellement immédiatement. Vous pouvez continuer d'utiliser vos prestations du Régime canadien de soins dentaires. Vous recevrez une lettre dans les 20 jours ouvrables suivant la présentation de votre demande de renouvellement pour vous informer si vous êtes admissible à la prochaine année de couverture.",
     "cdcp-checker": "Vous pouvez utiliser le <cdcpLink>vérificateur de l'état de votre demande du Régime canadien de soins dentaires</cdcpLink> ou appeler Service Canada au <noWrap>1-833-537-4342</noWrap> pour suivre l'évolution de votre demande de renouvellement ou pour recevoir plus de renseignements.",
     "applicant-summary": "Résumé de la mise à jour",
     "applicant-title": "Demandeur",
