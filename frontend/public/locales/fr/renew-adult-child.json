@@ -121,7 +121,7 @@
       "use-mailing-address": "Mon adresse postale est la même que mon adresse à domicile"
     },
     "address-field": {
-      "address": "Adresse postale",
+      "address": "Adresse",
       "address-note": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple\u00a0: 123, rue Main, app. 4B",
       "country": "Pays",
       "province": "Province, territoire, état ou région",
