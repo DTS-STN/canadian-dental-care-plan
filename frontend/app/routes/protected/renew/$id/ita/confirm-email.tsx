@@ -92,7 +92,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const emailSchema = z
     .object({
       shouldReceiveEmailCommunication: z.nativeEnum(SHOULD_RECEIVE_EMAIL_COMMUNICATION_OPTION, {
-        errorMap: () => ({ message: t('protected-renew:confirm-email.error-message.add-or-update-required') }),
+        errorMap: () => ({ message: t('protected-renew:confirm-email.error-message.ita-add-or-update-required') }),
       }),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
