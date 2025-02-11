@@ -34,8 +34,8 @@ export const clientEnvSchema = z.object({
   HEADER_LOGO_URL_EN: z.string().url().default('https://canada.ca/en'),
   HEADER_LOGO_URL_FR: z.string().url().default('https://canada.ca/fr'),
 
-  // hCaptcha settings
-  HCAPTCHA_SITE_KEY: z.string().trim().min(1),
+  // hCaptcha settings (@see https://docs.hcaptcha.com/#test-key-set-enterprise-account-safe-end-user)
+  HCAPTCHA_SITE_KEY: z.string().trim().min(1).default('20000000-ffff-ffff-ffff-000000000002'),
 
   SESSION_TIMEOUT_SECONDS: z.coerce.number().min(0).default(19 * 60),
   SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce.number().min(0).default(5 * 60),
