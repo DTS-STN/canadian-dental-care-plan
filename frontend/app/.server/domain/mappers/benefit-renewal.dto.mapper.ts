@@ -409,7 +409,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         IdentificationID: child.information.socialInsuranceNumber ?? '',
       },
       ApplicantDetail: {
-        AttestParentOrGuardianIndicator: child.information.isParent,
+        AttestParentOrGuardianIndicator: true,
         PrivateDentalInsuranceIndicator: child.dentalInsurance,
         InsurancePlan: this.toInsurancePlan(child.dentalBenefits),
       },
