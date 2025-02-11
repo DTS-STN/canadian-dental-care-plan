@@ -371,6 +371,7 @@
     "option-no": "No",
     "error-message": {
       "add-or-update-required": "Select whether you would like to update or add your email",
+      "ita-add-or-update-required": "Select if you would like to receive email communication",
       "email-match": "The email addresses entered do not match",
       "confirm-email-required": "Confirm email address",
       "email-required": "Enter an email address in the correct format, such as name@example.com",
