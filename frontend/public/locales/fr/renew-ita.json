@@ -71,7 +71,7 @@
   "confirm-address": {
     "page-title": "Adresse",
     "have-you-moved": "Souhaitez-vous mettre à jour votre adresse postale?",
-    "is-home-address-same-as-mailing-address": "Mon adresse postale est la même que celle de mon adresse à domicile",
+    "is-home-address-same-as-mailing-address": "L'adresse de votre domicile est-elle la même que votre adresse postale?",
     "radio-options": {
       "yes": "Oui",
       "no": "Non"
