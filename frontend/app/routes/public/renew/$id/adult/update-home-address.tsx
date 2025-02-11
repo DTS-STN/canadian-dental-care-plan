@@ -266,7 +266,7 @@ export default function RenewAdultUpdateAddress({ loaderData, params }: Route.Co
         <Progress value={74} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew:optional-label')}</p>
+        <p className="mb-4 italic">{t('renew:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
