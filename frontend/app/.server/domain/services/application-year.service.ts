@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import moize from 'moize';
 import invariant from 'tiny-invariant';
 
 import type { ServerConfig } from '~/.server/configs';
@@ -34,14 +35,14 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   private readonly applicationYearDtoMapper: ApplicationYearDtoMapper;
   private readonly applicationYearRepository: ApplicationYearRepository;
   private readonly auditService: AuditService;
-  private readonly serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE'>;
+  private readonly serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE' | 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.ApplicationYearDtoMapper) applicationYearDtoMapper: ApplicationYearDtoMapper,
     @inject(TYPES.domain.repositories.ApplicationYearRepository) applicationYearRepository: ApplicationYearRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE'>,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE' | 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('DefaultApplicationYearService');
     this.applicationYearDtoMapper = applicationYearDtoMapper;
@@ -52,9 +53,29 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   }
 
   private init(): void {
+    this.log.debug('Cache TTL value: %d ms', 1000 * this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS);
+
+    this.findRenewalApplicationYear = moize(this.findRenewalApplicationYear, {
+      matchesKey: (cacheKey, key) => cacheKey.every((item, idx) => item.date === key[idx].date),
+      maxAge: this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS * 1000,
+      maxSize: Infinity,
+      isPromise: true,
+      onCacheAdd: () => this.log.info('Creating new findRenewalApplicationYear memo'),
+    });
+
+    this.listApplicationYears = moize(this.listApplicationYears, {
+      matchesKey: (cacheKey, key) => cacheKey.every((item, idx) => item.date === key[idx].date),
+      maxAge: this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS * 1000,
+      maxSize: Infinity,
+      isPromise: true,
+      onCacheAdd: () => this.log.info('Creating new listApplicationYears memo'),
+    });
+
     this.log.debug('DefaultApplicationYearService initiated.');
   }
 
+  // TODO :: GjB :: remove user id from ApplicationYearRequestDto
+  //                there's no need to audit application year lookups per user id
   async findRenewalApplicationYear(applicationYearRequestDto: ApplicationYearRequestDto): Promise<RenewalApplicationYearResultDto | null> {
     this.log.trace('Finding renewal application year results with applicationYearRequest: [%j]', applicationYearRequestDto);
 
@@ -96,6 +117,8 @@ export class DefaultApplicationYearService implements ApplicationYearService {
     return renewalApplicationYearResultDto;
   }
 
+  // TODO :: GjB :: remove user id from ApplicationYearRequestDto
+  //                there's no need to audit application year lookups per user id
   async listApplicationYears(applicationYearRequestDto: ApplicationYearRequestDto): Promise<ReadonlyArray<ApplicationYearResultDto>> {
     this.log.trace('Getting possible application years results with applicationYearRequest: [%j]', applicationYearRequestDto);
 
