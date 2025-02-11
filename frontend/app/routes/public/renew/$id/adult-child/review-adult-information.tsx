@@ -335,7 +335,7 @@ export default function RenewAdultChildReviewAdultInformation({ loaderData, para
                   <p>{t('renew-adult-child:review-adult-information.no-update')}</p>
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-home-address" routeId="public/renew/$id/adult-child/confirm-address" params={params}>
+                  <InlineLink id="change-home-address" routeId="public/renew/$id/adult-child/update-home-address" params={params}>
                     {t('renew-adult-child:review-adult-information.home-change')}
                   </InlineLink>
                 </div>
