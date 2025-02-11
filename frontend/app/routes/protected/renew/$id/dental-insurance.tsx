@@ -95,7 +95,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       dentalInsurance: parsedDataResult.data.dentalInsurance,
-      previouslyReviewed: state.clientApplication.isInvitationToApplyClient || demographicSurveyEnabled ? undefined : true,
+      previouslyReviewed: state.editMode === false && (state.clientApplication.isInvitationToApplyClient || demographicSurveyEnabled) ? undefined : true,
     },
   });
 
