@@ -95,9 +95,9 @@ const serverEnv = clientEnvSchema.extend({
   AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   AUTH_RASCL_LOGOUT_URL: z.string().trim().min(1),
 
-  // hCaptcha settings
+  // hCaptcha settings (@see https://docs.hcaptcha.com)
   HCAPTCHA_MAX_SCORE: z.coerce.number().default(0.79),
-  HCAPTCHA_SECRET_KEY: z.string().trim().min(1),
+  HCAPTCHA_SECRET_KEY: z.string().trim().min(1).default('0x0000000000000000000000000000000000000000'),
   HCAPTCHA_VERIFY_URL: z.string().url().default('https://api.hcaptcha.com/siteverify'),
 
   // http proxy settings
