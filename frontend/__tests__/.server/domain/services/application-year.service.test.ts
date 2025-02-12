@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ApplicationYearRequestDto, ApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
+import type { ApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
 import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
 import type { ApplicationYearDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicationYearRepository } from '~/.server/domain/repositories';
-import type { AuditService } from '~/.server/domain/services';
 import { DefaultApplicationYearService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
@@ -72,13 +71,10 @@ describe('DefaultApplicationYearService', () => {
 
   describe('findRenewalApplicationYear', () => {
     it('should return the correct renewal application year if given date is within a renewal period', async () => {
-      const mockAuditService = mock<AuditService>();
       const mockServerConfig = { APPLICATION_YEAR_REQUEST_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService, mockServerConfig);
-      const mockApplicationYearRequestDto: ApplicationYearRequestDto = { date: '2025-01-01', userId: 'userId' };
-
-      const result = await service.findRenewalApplicationYear(mockApplicationYearRequestDto);
+      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
+      const result = await service.findRenewalApplicationYear('2025-01-01');
 
       expect(mockApplicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto).toHaveBeenCalledWith({
         intakeYearId: '2024',
@@ -99,13 +95,10 @@ describe('DefaultApplicationYearService', () => {
     });
 
     it('should return the correct renewal application year when the given date is on or after the renewal start date and no renewal end date is provided', async () => {
-      const mockAuditService = mock<AuditService>();
       const mockServerConfig = { APPLICATION_YEAR_REQUEST_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService, mockServerConfig);
-      const mockApplicationYearRequestDto: ApplicationYearRequestDto = { date: '2026-01-01', userId: 'userId' };
-
-      const result = await service.findRenewalApplicationYear(mockApplicationYearRequestDto);
+      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
+      const result = await service.findRenewalApplicationYear('2026-01-01');
 
       expect(mockApplicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto).toHaveBeenCalledWith({
         intakeYearId: '2025',
@@ -115,13 +108,11 @@ describe('DefaultApplicationYearService', () => {
     });
 
     it('should return null if given date is not within any renewal period', async () => {
-      const mockAuditService = mock<AuditService>();
       const mockServerConfig = { APPLICATION_YEAR_REQUEST_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockAuditService, mockServerConfig);
-      const mockApplicationYearRequestDto: ApplicationYearRequestDto = { date: '2024-01-01', userId: 'userId' };
+      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
 
-      const result = await service.findRenewalApplicationYear(mockApplicationYearRequestDto);
+      const result = await service.findRenewalApplicationYear('2024-01-01');
       expect(result).toEqual(null);
     });
   });

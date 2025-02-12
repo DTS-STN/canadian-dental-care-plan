@@ -41,7 +41,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
-  const applicationYear = await applicationYearService.findRenewalApplicationYear({ date: currentDate, userId: userInfoToken.sub });
+  const applicationYear = await applicationYearService.findRenewalApplicationYear(currentDate);
   invariant(applicationYear?.renewalYearId, 'Expected applicationYear.renewalYearId to be defined'); // TODO this should redirect to the protected apply flow when introduced
 
   const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
