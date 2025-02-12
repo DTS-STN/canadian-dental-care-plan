@@ -45,7 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   invariant(applicationYear?.renewalYearId, 'Expected applicationYear.renewalYearId to be defined'); // TODO this should redirect to the protected apply flow when introduced
 
   const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
-  const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.intakeYearId, userId: userInfoToken.sub });
+  const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.renewalYearId, userId: userInfoToken.sub });
   if (!clientApplication) {
     throw redirect(getPathById('protected/data-unavailable', params));
   }
@@ -53,7 +53,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const id = randomUUID().toString();
   const state = startProtectedRenewState({
     applicationYear: {
-      intakeYearId: applicationYear.intakeYearId,
       renewalYearId: applicationYear.renewalYearId,
       taxYear: applicationYear.taxYear,
       coverageStartDate: applicationYear.coverageStartDate,

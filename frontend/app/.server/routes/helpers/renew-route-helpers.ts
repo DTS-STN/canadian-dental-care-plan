@@ -16,7 +16,6 @@ export interface RenewState {
   readonly editMode: boolean;
   lastUpdatedOn: string;
   readonly applicationYear: {
-    intakeYearId: string;
     renewalYearId: string;
     taxYear: string;
     coverageStartDate: string;

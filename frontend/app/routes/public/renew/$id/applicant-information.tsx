@@ -144,7 +144,7 @@ export async function action({ context: { appContainer, session }, params, reque
     lastName: parsedDataResult.data.lastName,
     dateOfBirth: parsedDataResult.data.dateOfBirth,
     clientNumber: parsedDataResult.data.clientNumber,
-    applicationYearId: state.applicationYear.intakeYearId,
+    applicationYearId: state.applicationYear.renewalYearId,
     userId: 'anonymous',
   });
 

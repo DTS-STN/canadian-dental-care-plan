@@ -17,7 +17,6 @@ export interface ProtectedRenewState {
   readonly id: string;
   readonly editMode: boolean;
   readonly applicationYear: {
-    intakeYearId: string;
     renewalYearId: string;
     taxYear: string;
     coverageStartDate: string;
