@@ -332,7 +332,7 @@ export default function RenewItaReviewInformation({ loaderData, params }: Route.
                   t('renew-ita:review-information.no-update')
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-home-address" routeId="public/renew/$id/ita/confirm-address" params={params}>
+                  <InlineLink id="change-home-address" routeId="public/renew/$id/ita/update-home-address" params={params}>
                     {t('renew-ita:review-information.home-change')}
                   </InlineLink>
                 </div>
