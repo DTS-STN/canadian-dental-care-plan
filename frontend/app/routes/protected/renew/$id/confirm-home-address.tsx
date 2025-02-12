@@ -439,7 +439,7 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
         <DialogTitle>
-          <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 text-amber-700" />
+          <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 inline-block text-amber-700" />
           {t('protected-renew:update-address.dialog.address-suggestion.header')}
         </DialogTitle>
         <DialogDescription>{t('protected-renew:update-address.dialog.address-suggestion.description')}</DialogDescription>
@@ -453,7 +453,9 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
             value: enteredAddressOptionValue,
             children: (
               <>
-                <p className="mb-2 font-semibold">{t('protected-renew:update-address.dialog.address-suggestion.entered-address-option')}</p>
+                <p className="mb-2">
+                  <strong>{t('protected-renew:update-address.dialog.address-suggestion.entered-address-option')}</strong>
+                </p>
                 <Address address={enteredAddress} />
               </>
             ),
@@ -462,7 +464,9 @@ function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: Ad
             value: suggestedAddressOptionValue,
             children: (
               <>
-                <p className="mb-2 font-semibold">{t('protected-renew:update-address.dialog.address-suggestion.suggested-address-option')}</p>
+                <p className="mb-2">
+                  <strong>{t('protected-renew:update-address.dialog.address-suggestion.suggested-address-option')}</strong>
+                </p>
                 <Address address={suggestedAddress} />
               </>
             ),
@@ -522,13 +526,13 @@ function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogCon
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
         <DialogTitle>
-          <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 text-amber-700" />
+          <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 inline-block text-amber-700" />
           {t('protected-renew:update-address.dialog.address-invalid.header')}
         </DialogTitle>
         <DialogDescription>{t('protected-renew:update-address.dialog.address-invalid.description')}</DialogDescription>
       </DialogHeader>
       <div className="space-y-2">
-        <p className="font-semibold">
+        <p>
           <strong>{t('protected-renew:update-address.dialog.address-invalid.entered-address')}</strong>
         </p>
         <Address address={invalidAddress} />
