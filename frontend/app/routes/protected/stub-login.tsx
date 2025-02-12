@@ -13,11 +13,13 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { InputPatternField } from '~/components/input-pattern-field';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { sinInputPatternFormat } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('stub-login', 'gcweb'),
@@ -130,7 +132,7 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
     <div className="max-w-prose">
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate className="space-y-6">
-        <InputField id="sin" name="sin" label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} />
+        <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} />
         <fieldset>
           <legend className="mb-2 text-xl font-semibold">{t('stub-login:index.raoidc')}</legend>
           <div className="space-y-6">
