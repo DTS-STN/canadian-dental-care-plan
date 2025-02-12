@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
-  const applicationYear = await applicationYearService.findRenewalApplicationYear({ date: currentDate, userId: 'anonymous' });
+  const applicationYear = await applicationYearService.findRenewalApplicationYear(currentDate);
   if (!applicationYear?.renewalYearId) {
     throw redirect(getPathById('public/apply/index', params));
   }

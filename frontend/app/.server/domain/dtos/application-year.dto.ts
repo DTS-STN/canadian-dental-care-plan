@@ -1,15 +1,4 @@
 /**
- * Represents a Data Transfer Object (DTO) for an application year request.
- */
-export type ApplicationYearRequestDto = Readonly<{
-  /** The date sent to get the application year(s) in ISO 8601 format (e.g., "2024-12-25"). */
-  date: string;
-
-  /** A unique identifier for the user making the request - used for auditing */
-  userId: string;
-}>;
-
-/**
  * Represents a Data Transfer Object (DTO) for an application year result.
  */
 export type ApplicationYearResultDto = Readonly<{

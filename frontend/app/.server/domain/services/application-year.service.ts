@@ -4,29 +4,28 @@ import invariant from 'tiny-invariant';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { ApplicationYearRequestDto, ApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
+import type { ApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
 import type { ApplicationYearDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicationYearRepository } from '~/.server/domain/repositories';
-import type { AuditService } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface ApplicationYearService {
   /**
-   * Fetches the renewal application year DTO using the data passed in the `ApplicationYearRequest` object.
+   * Fetches the renewal application year DTO for a given date
    *
-   * @param applicationYearRequestDto The request DTO object containing the current date and user id
-   * @returns A promise that resolves to a `RenewalApplicationYearResultDto` object containing the renewal application year result DTO
+   * @param date The date sent to get the renewal application year result in ISO 8601 format (e.g., "2024-12-25").
+   * @returns A promise that resolves to an `RenewalApplicationYearResultDto` object containing the renewal application year result DTO
    *   or `null` if no matching renewal application year is found.
    */
-  findRenewalApplicationYear(applicationYearRequestDto: ApplicationYearRequestDto): Promise<RenewalApplicationYearResultDto | null>;
+  findRenewalApplicationYear(date: string): Promise<RenewalApplicationYearResultDto | null>;
 
   /**
-   * fetches possible application year(s) using the data passed in the `ApplicationYearRequest` object.
+   * Fetches possible application years for a given date
    *
-   * @param applicationYearRequestDto The request DTO object containing the current date and user id
-   * @returns A promise that resolves to a `ApplicationYearResultDto` object containing possible application years results
+   * @param date The date sent to get the application years in ISO 8601 format (e.g., "2024-12-25").
+   * @returns A promise that resolves to an `ApplicationYearResultDto` object containing possible application year results
    */
-  listApplicationYears(applicationYearRequestDto: ApplicationYearRequestDto): Promise<ReadonlyArray<ApplicationYearResultDto>>;
+  listApplicationYears(date: string): Promise<ReadonlyArray<ApplicationYearResultDto>>;
 }
 
 @injectable()
@@ -34,20 +33,17 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   private readonly log: Logger;
   private readonly applicationYearDtoMapper: ApplicationYearDtoMapper;
   private readonly applicationYearRepository: ApplicationYearRepository;
-  private readonly auditService: AuditService;
   private readonly serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE' | 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.ApplicationYearDtoMapper) applicationYearDtoMapper: ApplicationYearDtoMapper,
     @inject(TYPES.domain.repositories.ApplicationYearRepository) applicationYearRepository: ApplicationYearRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE' | 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('DefaultApplicationYearService');
     this.applicationYearDtoMapper = applicationYearDtoMapper;
     this.applicationYearRepository = applicationYearRepository;
-    this.auditService = auditService;
     this.serverConfig = serverConfig;
     this.init();
   }
@@ -74,17 +70,13 @@ export class DefaultApplicationYearService implements ApplicationYearService {
     this.log.debug('DefaultApplicationYearService initiated.');
   }
 
-  // TODO :: GjB :: remove user id from ApplicationYearRequestDto
-  //                there's no need to audit application year lookups per user id
-  async findRenewalApplicationYear(applicationYearRequestDto: ApplicationYearRequestDto): Promise<RenewalApplicationYearResultDto | null> {
-    this.log.trace('Finding renewal application year results with applicationYearRequest: [%j]', applicationYearRequestDto);
+  async findRenewalApplicationYear(date: string): Promise<RenewalApplicationYearResultDto | null> {
+    this.log.trace('Finding renewal application year results with date: [%s]', date);
 
-    const applicationYearRequestDate = this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? applicationYearRequestDto.date;
+    const applicationYearRequestDate = this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? date;
     this.log.debug('Using application year request date [%s]', applicationYearRequestDate);
 
-    this.auditService.createAudit('application-year.find-renewal-application-year', { userId: applicationYearRequestDto.userId });
-
-    const applicationYearResultDtos = await this.listApplicationYears(applicationYearRequestDto);
+    const applicationYearResultDtos = await this.listApplicationYears(date);
 
     const matchingRenewalApplicationYear = applicationYearResultDtos.find((applicationYear) => {
       const { renewalStartDate, renewalEndDate } = applicationYear;
@@ -117,14 +109,10 @@ export class DefaultApplicationYearService implements ApplicationYearService {
     return renewalApplicationYearResultDto;
   }
 
-  // TODO :: GjB :: remove user id from ApplicationYearRequestDto
-  //                there's no need to audit application year lookups per user id
-  async listApplicationYears(applicationYearRequestDto: ApplicationYearRequestDto): Promise<ReadonlyArray<ApplicationYearResultDto>> {
-    this.log.trace('Getting possible application years results with applicationYearRequest: [%j]', applicationYearRequestDto);
+  async listApplicationYears(date: string): Promise<ReadonlyArray<ApplicationYearResultDto>> {
+    this.log.trace('Getting possible application years results with date: [%j]', date);
 
-    this.auditService.createAudit('application-year.get-application-year-result', { userId: applicationYearRequestDto.userId });
-
-    const applicationYearRequestDate = this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? applicationYearRequestDto.date;
+    const applicationYearRequestDate = this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? date;
     const applicationYearResultEntity = await this.applicationYearRepository.listApplicationYears(applicationYearRequestDate);
     const applicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultEntityToApplicationYearResultDtos(applicationYearResultEntity);
 
