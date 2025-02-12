@@ -90,7 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
     locale: 'en-CA',
   };
 
-  const userinfoTokenPayload = {
+  const userInfoTokenPayload = {
     aud: 'CDCP',
     birthdate: '2000-01-01',
     iss: 'GC-ECAS-MOCK',
@@ -100,14 +100,17 @@ export async function action({ context: { appContainer, session }, params, reque
     sub,
     mocked: true,
   };
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  if (!session.has('userInfoToken')) {
-    session.set('userInfoToken', userinfoTokenPayload);
-  } else {
+
+  if (session.has('userInfoToken')) {
+    const userInfoToken: UserinfoToken = session.get('userInfoToken');
     userInfoToken.sin = sin;
     userInfoToken.sub = sub;
+
     session.set('userInfoToken', userInfoToken);
+  } else {
+    session.set('userInfoToken', userInfoTokenPayload);
   }
+
   session.set('idToken', idToken);
   session.unset('clientNumber');
 

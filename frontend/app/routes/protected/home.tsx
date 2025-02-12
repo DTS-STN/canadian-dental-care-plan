@@ -43,25 +43,26 @@ export default function Index({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
 
   return (
-    <>
-      <div className="grid gap-4">
-        {useFeature('view-letters') && (
-          <CardLink title={t('index:view-letters')} routeId="protected/letters/index" params={params}>
-            {t('index:view-letters-desc')}
-          </CardLink>
-        )}
-        {useFeature('doc-upload') && (
-          <CardLink title={t('index:upload')} routeId="protected/home" params={params}>
-            {t('index:upload-desc')}
-          </CardLink>
-        )}
-        {useFeature('view-messages') && (
-          <CardLink title={t('index:view-cdcp')} routeId="protected/home" params={params}>
-            {t('index:view-cdcp-desc')}
-          </CardLink>
-        )}
-      </div>
-    </>
+    <div className="grid gap-4">
+      {useFeature('view-letters') && (
+        <CardLink title={t('index:view-letters')} routeId="protected/letters/index" params={params}>
+          {t('index:view-letters-desc')}
+        </CardLink>
+      )}
+      <CardLink title={t('index:renew')} routeId="protected/renew/index" params={params}>
+        {t('index:renew-desc')}
+      </CardLink>
+      {useFeature('doc-upload') && (
+        <CardLink title={t('index:upload')} routeId="protected/home" params={params}>
+          {t('index:upload-desc')}
+        </CardLink>
+      )}
+      {useFeature('view-messages') && (
+        <CardLink title={t('index:view-cdcp')} routeId="protected/home" params={params}>
+          {t('index:view-cdcp-desc')}
+        </CardLink>
+      )}
+    </div>
   );
 }
 
