@@ -114,8 +114,8 @@ export async function action({ context: { appContainer, session }, params, reque
       params,
       session,
       state: {
-        hasAddressChanged: state.previousAddressState?.hasAddressChanged,
-        isHomeAddressSameAsMailingAddress: state.previousAddressState?.isHomeAddressSameAsMailingAddress,
+        hasAddressChanged: state.previousAddressState?.hasAddressChanged ?? state.hasAddressChanged,
+        isHomeAddressSameAsMailingAddress: state.previousAddressState?.isHomeAddressSameAsMailingAddress ?? state.isHomeAddressSameAsMailingAddress,
       },
     });
     return redirect(getPathById('public/renew/$id/adult/review-adult-information', params));
