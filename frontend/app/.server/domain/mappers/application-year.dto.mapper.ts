@@ -10,17 +10,16 @@ export interface ApplicationYearDtoMapper {
 }
 
 interface ToRenewalApplicationYearResultDtoArgs {
-  intakeYearId: string;
+  coverageStartDate: string;
   applicationYearResultDto: ApplicationYearResultDto;
 }
 
 @injectable()
 export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper {
-  mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ intakeYearId, applicationYearResultDto }: ToRenewalApplicationYearResultDtoArgs): RenewalApplicationYearResultDto {
+  mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ coverageStartDate, applicationYearResultDto }: ToRenewalApplicationYearResultDtoArgs): RenewalApplicationYearResultDto {
     return {
-      intakeYearId: intakeYearId,
       taxYear: applicationYearResultDto.taxYear,
-      coverageStartDate: applicationYearResultDto.coverageStartDate,
+      coverageStartDate,
       renewalYearId: applicationYearResultDto.applicationYearId,
     };
   }

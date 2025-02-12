@@ -42,7 +42,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = startRenewState({
     applicationYear: {
-      intakeYearId: applicationYear.intakeYearId,
       renewalYearId: applicationYear.renewalYearId,
       taxYear: applicationYear.taxYear,
       coverageStartDate: applicationYear.coverageStartDate,

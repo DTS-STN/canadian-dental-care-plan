@@ -103,7 +103,7 @@ export class DefaultApplicationYearService implements ApplicationYearService {
     });
     invariant(intakeYear, 'Expected intakeYear to be defined');
 
-    const renewalApplicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ intakeYearId: intakeYear.applicationYearId, applicationYearResultDto: matchingRenewalApplicationYear });
+    const renewalApplicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ coverageStartDate: intakeYear.coverageEndDate, applicationYearResultDto: matchingRenewalApplicationYear });
 
     this.log.trace('Returning renewal application year result: [%j]', renewalApplicationYearResultDto);
     return renewalApplicationYearResultDto;

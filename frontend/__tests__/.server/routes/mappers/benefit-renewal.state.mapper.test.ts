@@ -110,7 +110,6 @@ describe('DefaultBenefitRenewalStateMapper', () => {
     it('should map a valid RenewAdultChildState to AdultChildBenefitRenewalDto with information changed', () => {
       const renewAdultChildState: RenewAdultChildState = {
         applicationYear: {
-          intakeYearId: '2024',
           renewalYearId: '2024',
           taxYear: '2024',
           coverageStartDate: '2024-01-01',
