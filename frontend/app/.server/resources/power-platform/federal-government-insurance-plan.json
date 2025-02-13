@@ -18,18 +18,18 @@
       "esdc_nameenglish": "Non-Insured Health Benefits Program by Indigenous Services Canada"
     },
     {
-      "@odata.etag": "W/\"65532806\"",
+      "@odata.etag": "W/\"134778955\"",
       "esdc_code": "83",
       "esdc_governmentinsuranceplanid": "e174250d-26c5-ee11-9079-000d3a09d640",
-      "esdc_namefrench": "Anciens Combattants Canada (ACC) - Couverture des soins dentaires de base",
+      "esdc_namefrench": "Programme de services dentaires d'Anciens Combattants Canada",
       "_esdc_provinceterritorystateid_value": null,
-      "esdc_nameenglish": "Veterans Affairs Canada (VAC) – Basic dental coverage"
+      "esdc_nameenglish": "Veterans Affairs Canada (VAC) – Dental Services Program"
     },
     {
       "@odata.etag": "W/\"65532808\"",
       "esdc_code": "84",
       "esdc_governmentinsuranceplanid": "758bb862-26c5-ee11-9079-000d3a09d640",
-      "esdc_namefrench": "Programme fédéral de santé intérimaire pour les personnes demandant l’asile ou les personnes revendiquant le statut de réfugié",
+      "esdc_namefrench": "Programme fédéral de santé intérimaire pour les personnes demandant l'asile ou les personnes revendiquant le statut de réfugié",
       "_esdc_provinceterritorystateid_value": null,
       "esdc_nameenglish": "Interim Federal Health Program for asylum seekers or refugee claimants"
     },
