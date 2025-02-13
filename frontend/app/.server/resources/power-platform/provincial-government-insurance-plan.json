@@ -2,36 +2,36 @@
   "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_governmentinsuranceplans(esdc_code,esdc_governmentinsuranceplanid,esdc_nameenglish,esdc_namefrench,_esdc_provinceterritorystateid_value)",
   "value": [
     {
-      "@odata.etag": "W/\"65532791\"",
+      "@odata.etag": "W/\"134779170\"",
       "esdc_code": "45",
       "esdc_governmentinsuranceplanid": "440f45ea-bdd5-ee11-904d-000d3a09d132",
-      "esdc_namefrench": "Programme à domicile (PAD)",
+      "esdc_namefrench": "Programme à domicile",
       "_esdc_provinceterritorystateid_value": "9c440baa-35b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "At Home Program (AHP)"
+      "esdc_nameenglish": "At Home Program"
     },
     {
-      "@odata.etag": "W/\"65532812\"",
+      "@odata.etag": "W/\"134779107\"",
       "esdc_code": "01",
       "esdc_governmentinsuranceplanid": "b3f25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Programme d'enfants en santé",
+      "esdc_namefrench": "Programme d'eEnfants en bonne santé",
       "_esdc_provinceterritorystateid_value": "9c440baa-35b3-eb11-8236-0022486d8d5f",
       "esdc_nameenglish": "Healthy Kids Program"
     },
     {
-      "@odata.etag": "W/\"65532813\"",
+      "@odata.etag": "W/\"134779101\"",
       "esdc_code": "02",
       "esdc_governmentinsuranceplanid": "b5f25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Programme d'emploi et d'assistance de la Colombie-Britannique",
+      "esdc_namefrench": "Programme d'emploi et de soutien de la Colombie-Britannique, incluant Aide aux personnes handicapées et Aide au revenu",
       "_esdc_provinceterritorystateid_value": "9c440baa-35b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "BC Employment and Assistance (BCEA) Program"
+      "esdc_nameenglish": "BC Employment and Assistance (BCEA) Program, including Disability Assistance and Income Assistance"
     },
     {
-      "@odata.etag": "W/\"65532814\"",
+      "@odata.etag": "W/\"134779146\"",
       "esdc_code": "03",
       "esdc_governmentinsuranceplanid": "b7f25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Accords sur les enfants pris en charge et les jeunes – Après l'âge de majorité (MDEF)",
+      "esdc_namefrench": "Accords sur les enfants pris en charge et les jeunes après l'âge de majorité",
       "_esdc_provinceterritorystateid_value": "9c440baa-35b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Children in Care and Youth Agreements – Post Majority (MCFD)"
+      "esdc_nameenglish": "Children in Care and Youth Agreements – Post Majority"
     },
     {
       "@odata.etag": "W/\"65532815\"",
@@ -66,12 +66,12 @@
       "esdc_nameenglish": "Child Intervention Services"
     },
     {
-      "@odata.etag": "W/\"65532824\"",
+      "@odata.etag": "W/\"134779192\"",
       "esdc_code": "08",
       "esdc_governmentinsuranceplanid": "c3f25fea-a7a9-ee11-a569-000d3af4f898",
       "esdc_namefrench": "Programme de revenu assuré pour les personnes gravement handicapées",
       "_esdc_provinceterritorystateid_value": "3b17d494-35b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Assured Income for the Severely Handicapped"
+      "esdc_nameenglish": "Assured Income for the Severely Handicapped (AISH)"
     },
     {
       "@odata.etag": "W/\"65532825\"",
@@ -82,10 +82,10 @@
       "esdc_nameenglish": "Family Support for Children with Disabilities"
     },
     {
-      "@odata.etag": "W/\"65532830\"",
+      "@odata.etag": "W/\"134779216\"",
       "esdc_code": "10",
       "esdc_governmentinsuranceplanid": "c7f25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Soutien des services permanents – orthodontique",
+      "esdc_namefrench": "Soutien des services permanents (Orthodontique)",
       "_esdc_provinceterritorystateid_value": "3b17d494-35b3-eb11-8236-0022486d8d5f",
       "esdc_nameenglish": "Supports for Permanency (orthodontic)"
     },
@@ -114,60 +114,60 @@
       "esdc_nameenglish": "Family Health (FH) Benefits"
     },
     {
-      "@odata.etag": "W/\"65532840\"",
+      "@odata.etag": "W/\"134779237\"",
       "esdc_code": "14",
       "esdc_governmentinsuranceplanid": "cff25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Aide à l'emploi et au revenu - Soins dentaires",
+      "esdc_namefrench": "Soins dentaires pour le Programme de l'Aide à l'emploi et au revenu et Soutien au revenu pour personne handicapée",
       "_esdc_provinceterritorystateid_value": "6d861c55-36b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Employment and Income Assistance (EIA) - Dental Services"
+      "esdc_nameenglish": "Dental services for Employment and Income Assistance (EIA) and Manitoba Supports for Persons with Disabilities (MSPD)"
     },
     {
-      "@odata.etag": "W/\"65532841\"",
+      "@odata.etag": "W/\"134779288\"",
       "esdc_code": "15",
       "esdc_governmentinsuranceplanid": "d3f25fea-a7a9-ee11-a569-000d3af4f898",
       "esdc_namefrench": "Beaux sourires Ontario",
       "_esdc_provinceterritorystateid_value": "daf4d05b-37b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Healthy Smiles Ontario"
+      "esdc_nameenglish": "Healthy Smiles Ontario (HSO)"
     },
     {
-      "@odata.etag": "W/\"65532842\"",
+      "@odata.etag": "W/\"134779365\"",
       "esdc_code": "16",
       "esdc_governmentinsuranceplanid": "d5f25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Programme ontarien de soins dentaires pour les aînés",
+      "esdc_namefrench": "Programme ontarien de soins dentaires pour les aînés (POSDA)",
       "_esdc_provinceterritorystateid_value": "daf4d05b-37b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Ontario Senior Dental Care Program"
+      "esdc_nameenglish": "Ontario Seniors Dental Care Program (OSDCP)"
     },
     {
-      "@odata.etag": "W/\"65532843\"",
+      "@odata.etag": "W/\"134779382\"",
       "esdc_code": "17",
       "esdc_governmentinsuranceplanid": "d7f25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Ontario au travail",
+      "esdc_namefrench": "L'Ontario au travail",
       "_esdc_provinceterritorystateid_value": "daf4d05b-37b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Ontario Works"
+      "esdc_nameenglish": "Ontario Works (OW)"
     },
     {
-      "@odata.etag": "W/\"65532844\"",
+      "@odata.etag": "W/\"134779518\"",
       "esdc_code": "18",
       "esdc_governmentinsuranceplanid": "d9f25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Programme ontarien de soutien aux personnes handicapées",
+      "esdc_namefrench": "Programme ontarien de soutien aux personnes handicapées (POSPH)",
       "_esdc_provinceterritorystateid_value": "daf4d05b-37b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Ontario Disability Support Program"
+      "esdc_nameenglish": "Ontario Disability Support Program (ODSP)"
     },
     {
-      "@odata.etag": "W/\"65532845\"",
+      "@odata.etag": "W/\"134779578\"",
       "esdc_code": "19",
       "esdc_governmentinsuranceplanid": "dbf25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Régie de l'assurance maladie du Québec (RAMQ) - Services dentaires - prestataires d'un programme d'aide financière avec carnet de réclamation et les personnes à leur charge",
+      "esdc_namefrench": "Régie de l'assurance maladie du Québec (RAMQ) - Services dentaires - prestataires d'un programme de l'aide financière avec carnet de réclamation et les personnes à charge",
       "_esdc_provinceterritorystateid_value": "39449f70-37b3-eb11-8236-0022486d8d5f",
       "esdc_nameenglish": "Quebec Health Insurance Board (QHIB) - Dental Services - recipients of a financial assistance program with claim slip and their dependants"
     },
     {
-      "@odata.etag": "W/\"65532846\"",
+      "@odata.etag": "W/\"134779584\"",
       "esdc_code": "20",
       "esdc_governmentinsuranceplanid": "ddf25fea-a7a9-ee11-a569-000d3af4f898",
       "esdc_namefrench": "Régie de l'assurance maladie du Québec (RAMQ) - Services dentaires - Enfants de moins de 10 ans",
       "_esdc_provinceterritorystateid_value": "39449f70-37b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Quebec Health Insurance Board (QHIB) - Dental services - Children under 10"
+      "esdc_nameenglish": "Quebec Health Insurance Board (QHIB) - Dental services - Children under age 10"
     },
     {
       "@odata.etag": "W/\"65532850\"",
@@ -178,28 +178,28 @@
       "esdc_nameenglish": "Healthy Smiles Clear Vision"
     },
     {
-      "@odata.etag": "W/\"65532851\"",
+      "@odata.etag": "W/\"134779642\"",
       "esdc_code": "25",
       "esdc_governmentinsuranceplanid": "e7f25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Programme de soins dentaires des Services de santé",
+      "esdc_namefrench": "Services de santé - Programme de soins dentaires",
       "_esdc_provinceterritorystateid_value": "23dc27a2-36b3-eb11-8236-0022486d8d5f",
       "esdc_nameenglish": "Health Services Dental Program"
     },
     {
-      "@odata.etag": "W/\"65532852\"",
+      "@odata.etag": "W/\"134779721\"",
       "esdc_code": "26",
       "esdc_governmentinsuranceplanid": "e9f25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Soutien à l'emploi et aide au revenu – 19 ans et plus",
+      "esdc_namefrench": "Soutien à l'emploi et aide au revenu",
       "_esdc_provinceterritorystateid_value": "fc2243c9-36b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Employment Support and Income Assistance (19+)"
+      "esdc_nameenglish": "Employment Support and Income Assistance (ESIA)"
     },
     {
-      "@odata.etag": "W/\"65532853\"",
+      "@odata.etag": "W/\"134779766\"",
       "esdc_code": "27",
       "esdc_governmentinsuranceplanid": "ebf25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Programme de soins de santé pour les personnes ayant des besoins particuliers",
+      "esdc_namefrench": "Programme de santé buccodentaire pour les personnes ayant des besoins particuliers",
       "_esdc_provinceterritorystateid_value": "fc2243c9-36b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Individuals with Special Needs Health Program"
+      "esdc_nameenglish": "Individuals with Special Needs Oral Health Program"
     },
     {
       "@odata.etag": "W/\"65532854\"",
@@ -226,12 +226,12 @@
       "esdc_nameenglish": "Maxillofacial Prosthodontics Program"
     },
     {
-      "@odata.etag": "W/\"65532857\"",
+      "@odata.etag": "W/\"134779848\"",
       "esdc_code": "31",
       "esdc_governmentinsuranceplanid": "f3f25fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Programme de soutien aux personnes en situation de handicap",
+      "esdc_namefrench": "Programme de soutien aux personnes handicapées",
       "_esdc_provinceterritorystateid_value": "fc2243c9-36b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Disability Support Program"
+      "esdc_nameenglish": "Disability Support Program (DSP)"
     },
     {
       "@odata.etag": "W/\"65532858\"",
@@ -290,52 +290,52 @@
       "esdc_nameenglish": "Cleft Palate Orthodontic Funding Program"
     },
     {
-      "@odata.etag": "W/\"65532865\"",
+      "@odata.etag": "W/\"134779920\"",
       "esdc_code": "39",
       "esdc_governmentinsuranceplanid": "03f35fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Régime d'assurance-maladie du Yukon",
+      "esdc_namefrench": "Programme yukonnais de soins dentaires",
       "_esdc_provinceterritorystateid_value": "8fef32b7-39b3-eb11-8236-0022486d8d5f",
       "esdc_nameenglish": "Yukon Dental Program"
     },
     {
-      "@odata.etag": "W/\"65532866\"",
+      "@odata.etag": "W/\"134779926\"",
       "esdc_code": "40",
       "esdc_governmentinsuranceplanid": "05f35fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Programme de soins dentaires pour enfants du Yukon",
+      "esdc_namefrench": "Programme yukonnais de soins dentaires pour enfants",
       "_esdc_provinceterritorystateid_value": "8fef32b7-39b3-eb11-8236-0022486d8d5f",
       "esdc_nameenglish": "Yukon Children's Dental Program"
     },
     {
-      "@odata.etag": "W/\"65532867\"",
+      "@odata.etag": "W/\"134779961\"",
       "esdc_code": "41",
       "esdc_governmentinsuranceplanid": "07f35fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Régime d'assurance-maladie complémentaire pour les personnes âgées (65 ans et plus)",
+      "esdc_namefrench": "Régime d'assurance-santé complémentaire pour les personnes âgées",
       "_esdc_provinceterritorystateid_value": "8fef32b7-39b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Extended Health Care Benefits for Seniors (65+)"
+      "esdc_nameenglish": "Extended Health Care Benefits for Seniors"
     },
     {
-      "@odata.etag": "W/\"65532868\"",
+      "@odata.etag": "W/\"134779967\"",
       "esdc_code": "42",
       "esdc_governmentinsuranceplanid": "09f35fea-a7a9-ee11-a569-000d3af4f898",
       "esdc_namefrench": "Régime d'assurance-maladie pour les Métis",
       "_esdc_provinceterritorystateid_value": "6026aca2-39b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Métis Health Benefits Program"
+      "esdc_nameenglish": "Métis Health Benefits"
     },
     {
-      "@odata.etag": "W/\"65532869\"",
+      "@odata.etag": "W/\"134780025\"",
       "esdc_code": "43",
       "esdc_governmentinsuranceplanid": "0bf35fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Régime d'assurance-maladie complémentaire pour les personnes âgées",
+      "esdc_namefrench": "Régime d'assurance-maladie complémentaire",
       "_esdc_provinceterritorystateid_value": "6026aca2-39b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Extended Health Benefits for Seniors Program"
+      "esdc_nameenglish": "Extended Health Benefits"
     },
     {
-      "@odata.etag": "W/\"65532870\"",
+      "@odata.etag": "W/\"134780055\"",
       "esdc_code": "44",
       "esdc_governmentinsuranceplanid": "0df35fea-a7a9-ee11-a569-000d3af4f898",
-      "esdc_namefrench": "Prestations d'assurance-maladie complémentaire (protection complète)",
+      "esdc_namefrench": "Prestations d'assurance-maladie complémentaire (PAMC)",
       "_esdc_provinceterritorystateid_value": "9936c08e-39b3-eb11-8236-0022486d8d5f",
-      "esdc_nameenglish": "Extended Health Benefits Full Coverage Plan"
+      "esdc_nameenglish": "Extended Health Benefits (EHB)"
     }
   ]
 }
