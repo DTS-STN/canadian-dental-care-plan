@@ -13,6 +13,7 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { InputSelect } from '~/components/input-select';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -41,6 +42,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
 
   const defaultValues = {
     sin: userInfoToken?.sin ?? '',
+    destinationRouteId: 'protected/letters/index',
     sid: idToken?.sid ?? '00000000-0000-0000-0000-000000000000',
     sub: idToken?.sub ?? '00000000-0000-0000-0000-000000000000',
   };
@@ -56,6 +58,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const stubLoginSchema = z.object({
     sin: z.string().trim().min(1, t('stub-login:index.error-message.sin-required')),
+    destinationRouteId: z.string().trim().min(1, t('stub-login:index.error-message.sin-required')), // TODO
     sid: z.string().trim().min(1, t('stub-login:index.error-message.sid-required')),
     sub: z.string().trim().min(1, t('stub-login:index.error-message.sub-required')),
   });
@@ -64,6 +67,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedDataResult = stubLoginSchema.safeParse({
     sin: String(formData.get('sin') ?? ''),
+    destinationRouteId: String(formData.get('destinationRouteId') ?? ''),
     sid: String(formData.get('sid') ?? ''),
     sub: String(formData.get('sub') ?? ''),
   });
@@ -114,7 +118,7 @@ export async function action({ context: { appContainer, session }, params, reque
   session.set('idToken', idToken);
   session.unset('clientNumber');
 
-  return redirect(getPathById('protected/home', params));
+  throw redirect(getPathById(parsedDataResult.data.destinationRouteId, params));
 }
 
 export default function StubLogin({ loaderData, params }: Route.ComponentProps) {
@@ -125,6 +129,7 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     sin: 'sin',
+    destinationRouteId: 'destination-page',
     sid: 'sid',
     sub: 'sub',
   });
@@ -134,6 +139,22 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate className="space-y-6">
         <InputField id="sin" name="sin" label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} />
+        <InputSelect
+          id="destination-page"
+          name="destinationRouteId"
+          label="Destination Page"
+          defaultValue={defaultValues.destinationRouteId}
+          options={[
+            {
+              children: 'Letters',
+              value: 'protected/letters/index',
+            },
+            {
+              children: 'Renew my coverage',
+              value: 'protected/renew/index',
+            },
+          ]}
+        />
         <fieldset>
           <legend className="mb-2 text-xl font-semibold">{t('stub-login:index.raoidc')}</legend>
           <div className="space-y-6">
