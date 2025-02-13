@@ -204,7 +204,7 @@ export default function ProtectedRenewConfirm({ loaderData, params }: Route.Comp
                     <p>{t('confirm.no')}</p>
                   )}
                 </DescriptionListItem>
-                <DescriptionListItem term={t('confirm.is-parent')}>{child.isParent ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.is-parent')}>{t('confirm.yes')}</DescriptionListItem>
               </dl>
             </section>
           </section>
