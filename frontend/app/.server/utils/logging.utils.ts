@@ -11,13 +11,47 @@ import { z } from 'zod';
 // see https://github.com/winstonjs/winston?tab=readme-ov-file#using-custom-logging-levels
 const logLevels = { audit: 0, error: 1, warn: 2, info: 3, debug: 4, trace: 5 } as const;
 
-// prettier-ignore
 const env = {
-  logLevel: z.string().refine(((val: string) => Object.keys(logLevels).includes(val)), { message: 'Invalid log level' }).default('info').parse(process.env.LOG_LEVEL),
-  auditLogEnabled: z.string().transform((val: string) => val === 'true').default('true').parse(process.env.AUDIT_LOG_ENABLED),
-  auditLogDirname: z.string().trim().min(1, { message: 'Invalid audit log directory name' }).default('logs').parse(process.env.AUDIT_LOG_DIRNAME),
-  auditLogFilename: z.string().trim().min(1, { message: 'Invalid audit log file name' }).default('audit').parse(process.env.AUDIT_LOG_FILENAME),
+  logLevel: z //
+    .string()
+    .refine((val: string) => Object.keys(logLevels).includes(val), { message: 'Invalid log level' })
+    .default('info')
+    .parse(process.env.LOG_LEVEL),
+  auditLogEnabled: z //
+    .string()
+    .transform((val: string) => val === 'true')
+    .default('true')
+    .parse(process.env.AUDIT_LOG_ENABLED),
+  auditLogDirname: z //
+    .string()
+    .trim()
+    .min(1, { message: 'Invalid audit log directory name' })
+    .default('logs')
+    .parse(process.env.AUDIT_LOG_DIRNAME),
+  auditLogFilename: z //
+    .string()
+    .trim()
+    .min(1, { message: 'Invalid audit log file name' })
+    .default('audit')
+    .parse(process.env.AUDIT_LOG_FILENAME),
 } as const;
+
+/**
+ * A winston transport for logging messages to the console.
+ */
+const consoleTransport = new transports.Console();
+
+/**
+ * A winston transport for logging messages to a file that is rotated daily.
+ */
+const dailyRotateFileTransport = new transports.DailyRotateFile({
+  level: 'audit',
+  dirname: env.auditLogDirname,
+  filename: env.auditLogFilename,
+  format: format.printf((info) => `${info.message}`),
+  extension: `_${os.hostname()}.log`,
+  utc: true,
+});
 
 /**
  * Formats a log label string to be a fixed length. When the label string
@@ -61,7 +95,7 @@ export const getLogger = (category: string): Logger => {
         return formattedInfo;
       }),
     ),
-    transports: [new transports.Console()],
+    transports: [consoleTransport],
   });
 
   //
@@ -69,16 +103,7 @@ export const getLogger = (category: string): Logger => {
   // can retain a history record of important system events
   //
   if (env.auditLogEnabled) {
-    logger.add(
-      new transports.DailyRotateFile({
-        level: 'audit',
-        dirname: env.auditLogDirname,
-        filename: env.auditLogFilename,
-        format: format.printf((info) => `${info.message}`),
-        extension: `_${os.hostname()}.log`,
-        utc: true,
-      }),
-    );
+    logger.add(dailyRotateFileTransport);
   }
 
   return logger as Logger;
