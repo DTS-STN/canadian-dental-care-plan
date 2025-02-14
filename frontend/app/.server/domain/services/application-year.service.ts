@@ -4,12 +4,22 @@ import invariant from 'tiny-invariant';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { ApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
+import type { ApplicationYearResultDto, IntakeApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
+import { ApplicationYearNotFoundException } from '~/.server/domain/exceptions/application-year-not-found.exception';
 import type { ApplicationYearDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicationYearRepository } from '~/.server/domain/repositories';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface ApplicationYearService {
+  /**
+   * Fetches the intake application year DTO for a given date
+   *
+   * @param date The date sent to get the intake application year result in ISO 8601 format (e.g., "2024-12-25").
+   * @returns A promise that resolves to an `IntakeApplicationYearResultDto` object containing the intake application year result DTO
+   * @throws {ApplicationYearNotFoundException} If no matching intake application year is found for the given date
+   */
+  getIntakeApplicationYear(date: string): Promise<IntakeApplicationYearResultDto>;
+
   /**
    * Fetches the renewal application year DTO for a given date
    *
@@ -51,6 +61,14 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   private init(): void {
     this.log.debug('Cache TTL value: %d ms', 1000 * this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS);
 
+    this.getIntakeApplicationYear = moize(this.getIntakeApplicationYear, {
+      matchesKey: (cacheKey, key) => cacheKey.every((item, idx) => item.date === key[idx].date),
+      maxAge: this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS * 1000,
+      maxSize: Infinity,
+      isPromise: true,
+      onCacheAdd: () => this.log.info('Creating new getIntakeApplicationYear memo'),
+    });
+
     this.findRenewalApplicationYear = moize(this.findRenewalApplicationYear, {
       matchesKey: (cacheKey, key) => cacheKey.every((item, idx) => item.date === key[idx].date),
       maxAge: this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS * 1000,
@@ -68,6 +86,37 @@ export class DefaultApplicationYearService implements ApplicationYearService {
     });
 
     this.log.debug('DefaultApplicationYearService initiated.');
+  }
+
+  async getIntakeApplicationYear(date: string): Promise<IntakeApplicationYearResultDto> {
+    this.log.trace('Finding intake application year results with date: [%s]', date);
+
+    const applicationYearRequestDate = this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? date;
+    this.log.debug('Using application year request date [%s]', applicationYearRequestDate);
+
+    const applicationYearResultDtos = await this.listApplicationYears(date);
+
+    const matchingIntakeApplicationYear = applicationYearResultDtos.find((applicationYear) => {
+      const { intakeStartDate, intakeEndDate } = applicationYear;
+      const requestDate = new Date(applicationYearRequestDate);
+
+      const startDate = new Date(intakeStartDate);
+      const endDate = intakeEndDate ? new Date(intakeEndDate) : null;
+
+      // Determine if the request date falls within the intake period;
+      // Treat end date as open-ended (they represent an indefinite period)
+      return requestDate >= startDate && (!endDate || requestDate <= endDate);
+    });
+
+    if (!matchingIntakeApplicationYear) {
+      this.log.error('No matching intake application year found for date: [%s]', applicationYearRequestDate);
+      throw new ApplicationYearNotFoundException(`No matching intake application year found for date: [${applicationYearRequestDate}]`);
+    }
+
+    const intakeApplicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultDtoToIntakeApplicationYearResultDto(matchingIntakeApplicationYear);
+
+    this.log.trace('Returning intake application year result: [%j]', intakeApplicationYearResultDto);
+    return intakeApplicationYearResultDto;
   }
 
   async findRenewalApplicationYear(date: string): Promise<RenewalApplicationYearResultDto | null> {
