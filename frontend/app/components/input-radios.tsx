@@ -19,11 +19,25 @@ export interface InputRadiosProps {
   name: string;
   required?: boolean;
   legendClassName?: string;
-  disableSR?: boolean;
-  disableErrorSR?: boolean;
+  disableScreenReader?: boolean;
+  disableScreenReaderErrors?: boolean;
 }
 
-const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required, legendClassName, disableSR, disableErrorSR }: InputRadiosProps) => {
+const InputRadios = ({
+  errorMessage,
+  helpMessagePrimary,
+  helpMessagePrimaryClassName,
+  helpMessageSecondary,
+  helpMessageSecondaryClassName,
+  id,
+  legend,
+  name,
+  options,
+  required,
+  legendClassName,
+  disableScreenReader,
+  disableScreenReaderErrors,
+}: InputRadiosProps) => {
   const inputErrorId = `input-radios-${id}-error`;
   const inputHelpMessagePrimaryId = `input-radios-${id}-help-primary`;
   const inputHelpMessageSecondaryId = `input-radios-${id}-help-secondary`;
@@ -31,7 +45,7 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
   const inputWrapperId = `input-radios-${id}`;
 
   function getAriaDescribedby() {
-    if (disableSR) return undefined;
+    if (disableScreenReader) return undefined;
     const ariaDescribedby = [];
     if (helpMessagePrimary) ariaDescribedby.push(inputHelpMessagePrimaryId);
     if (helpMessageSecondary) ariaDescribedby.push(inputHelpMessageSecondaryId);
@@ -45,7 +59,7 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
       </InputLegend>
       {errorMessage && (
         <p className="mb-2">
-          <InputError aria-hidden={disableErrorSR} id={inputErrorId}>
+          <InputError aria-hidden={disableScreenReaderErrors} id={inputErrorId}>
             {errorMessage}
           </InputError>
         </p>

@@ -263,7 +263,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
             defaultValue={defaultState?.socialInsuranceNumber ?? ''}
             errorMessage={errors?.socialInsuranceNumber}
             required
-            disableErrorSR
+            disableScreenReaderErrors
           />
         </div>
       ),
@@ -302,7 +302,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
-                disableErrorSR
+                disableScreenReaderErrors
               />
               <InputSanitizeField
                 id="last-name"
@@ -315,7 +315,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 errorMessage={errors?.lastName}
                 aria-description={t('apply-child:children.information.name-instructions')}
                 required
-                disableErrorSR
+                disableScreenReaderErrors
               />
             </div>
             <DatePickerField
@@ -334,10 +334,10 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 day: errors?.dateOfBirthDay,
               }}
               required
-              disableErrorSR
+              disableScreenReaderErrors
             />
 
-            <InputRadios id="has-social-insurance-number" legend={t('apply-child:children.information.sin-legend')} name="hasSocialInsuranceNumber" options={options} errorMessage={errors?.hasSocialInsuranceNumber} required disableErrorSR />
+            <InputRadios id="has-social-insurance-number" legend={t('apply-child:children.information.sin-legend')} name="hasSocialInsuranceNumber" options={options} errorMessage={errors?.hasSocialInsuranceNumber} required disableScreenReaderErrors />
 
             <InputRadios
               id="is-parent-radios"
@@ -349,7 +349,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               ]}
               errorMessage={errors?.isParent}
               required
-              disableErrorSR
+              disableScreenReaderErrors
             />
           </div>
           {editMode ? (
