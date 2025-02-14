@@ -24,6 +24,10 @@ export type ApplyState = ReadonlyDeep<{
     maritalStatus: string;
     socialInsuranceNumber: string;
   };
+  applicationYear: {
+    intakeYearId: string;
+    taxYear: string;
+  };
   children: {
     id: string;
     dentalBenefits?: {
@@ -101,6 +105,7 @@ export type ApplyState = ReadonlyDeep<{
 }>;
 
 export type ApplicantInformationState = NonNullable<ApplyState['applicantInformation']>;
+export type ApplicationYearState = ApplyState['applicationYear'];
 export type ChildrenState = ApplyState['children'];
 export type ChildState = ChildrenState[number];
 export type ChildDentalBenefitsState = NonNullable<ChildState['dentalBenefits']>;
@@ -183,8 +188,8 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 interface SaveStateArgs {
   params: ApplyStateParams;
   session: Session;
-  state: Partial<OmitStrict<ApplyState, 'id' | 'lastUpdatedOn'>>;
-  remove?: keyof OmitStrict<ApplyState, 'children' | 'editMode' | 'id' | 'lastUpdatedOn'>;
+  state: Partial<OmitStrict<ApplyState, 'id' | 'lastUpdatedOn' | 'applicationYear'>>;
+  remove?: keyof OmitStrict<ApplyState, 'children' | 'editMode' | 'id' | 'lastUpdatedOn' | 'applicationYear'>;
 }
 
 /**
@@ -231,6 +236,7 @@ export function clearApplyState({ params, session }: ClearStateArgs) {
 }
 
 interface StartArgs {
+  applicationYear: ApplicationYearState;
   id: string;
   session: Session;
 }
@@ -240,7 +246,7 @@ interface StartArgs {
  * @param args - The arguments.
  * @returns The initial apply state.
  */
-export function startApplyState({ id, session }: StartArgs) {
+export function startApplyState({ applicationYear, id, session }: StartArgs) {
   const log = getLogger('apply-route-helpers.server/startApplyState');
   const parsedId = idSchema.parse(id);
 
@@ -248,6 +254,7 @@ export function startApplyState({ id, session }: StartArgs) {
     id: parsedId,
     editMode: false,
     lastUpdatedOn: new UTCDate().toISOString(),
+    applicationYear,
     children: [],
   };
 
