@@ -1,10 +1,12 @@
 import { injectable } from 'inversify';
 
-import type { ApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
+import type { ApplicationYearResultDto, IntakeApplicationYearResultDto, RenewalApplicationYearResultDto } from '~/.server/domain/dtos';
 import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
 
 export interface ApplicationYearDtoMapper {
   mapApplicationYearResultEntityToApplicationYearResultDtos(applicationYearResultEntity: ApplicationYearResultEntity): ReadonlyArray<ApplicationYearResultDto>;
+
+  mapApplicationYearResultDtoToIntakeApplicationYearResultDto(applicationYearResultDto: ApplicationYearResultDto): IntakeApplicationYearResultDto;
 
   mapApplicationYearResultDtoToRenewalApplicationYearResultDto(toRenewalApplicationYearResultDtoArgs: ToRenewalApplicationYearResultDtoArgs): RenewalApplicationYearResultDto;
 }
@@ -16,6 +18,13 @@ interface ToRenewalApplicationYearResultDtoArgs {
 
 @injectable()
 export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper {
+  mapApplicationYearResultDtoToIntakeApplicationYearResultDto(applicationYearResultDto: ApplicationYearResultDto): IntakeApplicationYearResultDto {
+    return {
+      taxYear: applicationYearResultDto.taxYear,
+      intakeYearId: applicationYearResultDto.applicationYearId,
+    };
+  }
+
   mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ coverageStartDate, applicationYearResultDto }: ToRenewalApplicationYearResultDtoArgs): RenewalApplicationYearResultDto {
     return {
       taxYear: applicationYearResultDto.taxYear,

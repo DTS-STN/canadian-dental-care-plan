@@ -26,4 +26,7 @@ export type RenewalApplicationYearResultDto = Readonly<{
 /**
  * Represents a Data Transfer Object (DTO) for an intake application year result.
  */
-export type IntakeApplicationYearResultDto = Omit<ApplicationYearResultDto, 'applicationYear' | 'intakeStartDate' | 'intakeEndDate' | 'renewalStartDate' | 'renewalEndDate' | 'renewalYearId' | 'coverageStartDate' | 'coverageEndDate'>;
+export type IntakeApplicationYearResultDto = Readonly<{
+  intakeYearId: string;
+  taxYear: string;
+}>;
