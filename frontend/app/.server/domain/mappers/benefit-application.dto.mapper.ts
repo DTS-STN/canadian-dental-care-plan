@@ -38,6 +38,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
 
   mapBenefitApplicationDtoToBenefitApplicationRequestEntity({
     applicantInformation,
+    applicationYearId,
     children,
     communicationPreferences,
     contactInformation,
@@ -99,6 +100,13 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         },
         BenefitApplicationChannelCode: {
           ReferenceDataID: '775170001', // PP's static value for "Online"
+        },
+        BenefitApplicationYear: {
+          BenefitApplicationYearIdentification: [
+            {
+              IdentificationID: applicationYearId,
+            },
+          ],
         },
       },
     };

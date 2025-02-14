@@ -6,6 +6,7 @@ import type { BenefitApplicationDto } from '~/.server/domain/dtos';
 import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 import type {
   ApplicantInformationState,
+  ApplicationYearState,
   ChildState,
   CommunicationPreferencesState,
   ContactInformationState,
@@ -17,6 +18,7 @@ import type {
 
 export interface ApplyAdultState {
   applicantInformation: ApplicantInformationState;
+  applicationYear: ApplicationYearState;
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   dateOfBirth: string;
@@ -30,6 +32,7 @@ export interface ApplyAdultState {
 
 export interface ApplyAdultChildState {
   applicantInformation: ApplicantInformationState;
+  applicationYear: ApplicationYearState;
   children: Required<ChildState>[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
@@ -44,6 +47,7 @@ export interface ApplyAdultChildState {
 
 export interface ApplyChildState {
   applicantInformation: ApplicantInformationState;
+  applicationYear: ApplicationYearState;
   children: Required<ChildState>[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
@@ -56,6 +60,7 @@ export interface ApplyChildState {
 
 interface ToBenefitApplicationDtoArgs {
   applicantInformation: ApplicantInformationState;
+  applicationYear: ApplicationYearState;
   children?: Required<ChildState>[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
@@ -118,6 +123,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
 
   private toBenefitApplicationDto({
     applicantInformation,
+    applicationYear,
     children,
     communicationPreferences,
     dateOfBirth,
@@ -131,6 +137,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
   }: ToBenefitApplicationDtoArgs) {
     return {
       applicantInformation,
+      applicationYearId: applicationYear.intakeYearId,
       children: this.toChildren(children),
       communicationPreferences,
       contactInformation: this.toContactInformation(contactInformation),
