@@ -34,6 +34,10 @@ describe('apply-adult-route-helpers', () => {
       id: '00000000-0000-0000-0000-000000000000',
       editMode: true,
       lastUpdatedOn: '2000-01-01',
+      applicationYear: {
+        intakeYearId: '2025',
+        taxYear: '2025',
+      },
       children: [],
     } satisfies ApplyState;
 
@@ -428,6 +432,10 @@ describe('apply-adult-route-helpers', () => {
           lastName: 'Last Name',
           maritalStatus: '1',
           socialInsuranceNumber: '000-000-001',
+        },
+        applicationYear: {
+          intakeYearId: '2025',
+          taxYear: '2025',
         },
         communicationPreferences: {
           preferredLanguage: 'en',

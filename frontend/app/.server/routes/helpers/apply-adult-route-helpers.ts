@@ -79,6 +79,7 @@ interface ValidateApplyAdultStateForReviewArgs {
 export function validateApplyAdultStateForReview({ params, state }: ValidateApplyAdultStateForReviewArgs) {
   const {
     applicantInformation,
+    applicationYear,
     communicationPreferences,
     dateOfBirth,
     dentalBenefits,
@@ -172,6 +173,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
   return {
     ageCategory,
     applicantInformation,
+    applicationYear,
     communicationPreferences,
     contactInformation,
     dateOfBirth,

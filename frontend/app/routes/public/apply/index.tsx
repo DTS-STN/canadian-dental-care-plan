@@ -6,9 +6,11 @@ import { randomUUID } from 'crypto';
 
 import type { Route } from './+types/index';
 
+import { TYPES } from '~/.server/constants';
 import { startApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { pageIds } from '~/page-ids';
+import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -30,7 +32,10 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const locale = getLocale(request);
 
   const id = randomUUID().toString();
-  const state = startApplyState({ id, session });
+  const currentDate = getCurrentDateString(locale);
+  const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
+  const applicationYear = await applicationYearService.getIntakeApplicationYear(currentDate);
+  const state = startApplyState({ id, session, applicationYear });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:index.page-title') }) };
 

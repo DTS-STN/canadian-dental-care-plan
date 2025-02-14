@@ -35,6 +35,10 @@ describe('apply-child-route-helpers', () => {
       id: '00000000-0000-0000-0000-000000000000',
       editMode: false,
       lastUpdatedOn: '2000-01-01',
+      applicationYear: {
+        intakeYearId: '2025',
+        taxYear: '2025',
+      },
       children: [],
     } satisfies ApplyState;
 
@@ -522,6 +526,10 @@ describe('apply-child-route-helpers', () => {
           maritalStatus: '1',
           socialInsuranceNumber: '000-000-001',
         },
+        applicationYear: {
+          intakeYearId: '2025',
+          taxYear: '2025',
+        },
         partnerInformation: {
           confirm: true,
           dateOfBirth: '1900-01-01',
@@ -554,6 +562,10 @@ describe('apply-child-route-helpers', () => {
           lastName: 'Last Name',
           maritalStatus: '1',
           socialInsuranceNumber: '000-000-001',
+        },
+        applicationYear: {
+          intakeYearId: '2025',
+          taxYear: '2025',
         },
         children: [
           {

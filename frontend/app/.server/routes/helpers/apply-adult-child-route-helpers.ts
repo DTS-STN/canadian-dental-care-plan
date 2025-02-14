@@ -124,6 +124,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
   const {
     allChildrenUnder18,
     applicantInformation,
+    applicationYear,
     communicationPreferences,
     dateOfBirth,
     dentalBenefits,
@@ -236,6 +237,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     ageCategory,
     allChildrenUnder18,
     applicantInformation,
+    applicationYear,
     children,
     communicationPreferences,
     contactInformation,
