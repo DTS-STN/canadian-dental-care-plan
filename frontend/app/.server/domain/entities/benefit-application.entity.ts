@@ -102,6 +102,11 @@ export type BenefitApplicationRequestEntity = ReadonlyDeep<{
     BenefitApplicationChannelCode: {
       ReferenceDataID: string;
     };
+    BenefitApplicationYear: {
+      BenefitApplicationYearIdentification: {
+        IdentificationID: string;
+      }[];
+    };
   };
 }>;
 
