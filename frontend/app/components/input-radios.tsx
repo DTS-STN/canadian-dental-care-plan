@@ -20,9 +20,10 @@ export interface InputRadiosProps {
   required?: boolean;
   legendClassName?: string;
   disableSR?: boolean;
+  disableErrorSR?: boolean;
 }
 
-const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required, legendClassName, disableSR }: InputRadiosProps) => {
+const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required, legendClassName, disableSR, disableErrorSR }: InputRadiosProps) => {
   const inputErrorId = `input-radios-${id}-error`;
   const inputHelpMessagePrimaryId = `input-radios-${id}-help-primary`;
   const inputHelpMessageSecondaryId = `input-radios-${id}-help-secondary`;
@@ -44,7 +45,9 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
       </InputLegend>
       {errorMessage && (
         <p className="mb-2">
-          <InputError id={inputErrorId}>{errorMessage}</InputError>
+          <InputError aria-hidden={disableErrorSR} id={inputErrorId}>
+            {errorMessage}
+          </InputError>
         </p>
       )}
       {helpMessagePrimary && (

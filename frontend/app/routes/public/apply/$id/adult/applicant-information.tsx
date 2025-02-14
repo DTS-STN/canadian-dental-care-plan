@@ -206,6 +206,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
+                disableErrorSR
               />
               <InputSanitizeField
                 id="last-name"
@@ -218,6 +219,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errors?.lastName}
                 required
+                disableErrorSR
               />
             </div>
             <InputPatternField
@@ -231,8 +233,9 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
               required
+              disableErrorSR
             />
-            <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required />
+            <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required disableErrorSR />
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">

@@ -22,10 +22,11 @@ export interface InputSanitizeFieldProps
   id: string;
   label: string;
   name: string;
+  disableErrorSR?: boolean;
 }
 
 export function InputSanitizeField(props: InputSanitizeFieldProps) {
-  const { 'aria-describedby': ariaDescribedby, className, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, ...restProps } = props;
+  const { 'aria-describedby': ariaDescribedby, className, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, disableErrorSR, ...restProps } = props;
 
   const inputWrapperId = `input-sanitize-field-${id}`;
   const inputErrorId = `${inputWrapperId}-error`;
@@ -48,7 +49,9 @@ export function InputSanitizeField(props: InputSanitizeFieldProps) {
       </InputLabel>
       {errorMessage && (
         <p className="mb-2">
-          <InputError id={inputErrorId}>{errorMessage}</InputError>
+          <InputError aria-hidden={disableErrorSR} id={inputErrorId}>
+            {errorMessage}
+          </InputError>
         </p>
       )}
       {helpMessagePrimary && (

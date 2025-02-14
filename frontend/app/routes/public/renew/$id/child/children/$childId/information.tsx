@@ -260,6 +260,7 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
                 errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
+                disableErrorSR
               />
               <InputSanitizeField
                 id="last-name"
@@ -272,6 +273,7 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
                 errorMessage={errors?.lastName}
                 aria-description={t('renew-child:children.information.name-instructions')}
                 required
+                disableErrorSR
               />
             </div>
             <DatePickerField
@@ -290,6 +292,7 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
                 day: errors?.dateOfBirthDay,
               }}
               required
+              disableErrorSR
             />
             <InputPatternField
               id="client-number"
@@ -302,6 +305,7 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
               defaultValue={defaultState?.clientNumber ?? ''}
               errorMessage={errors?.clientNumber}
               required
+              disableErrorSR
             />
             <InputRadios
               id="is-parent-radios"
@@ -312,6 +316,7 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
                 { value: YES_NO_OPTION.no, children: t('renew-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: false, tabIndex: 0 },
               ]}
               errorMessage={errors?.isParent}
+              disableErrorSR
             />
           </div>
           {editMode ? (

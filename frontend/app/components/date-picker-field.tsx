@@ -39,9 +39,10 @@ export interface DatePickerFieldProps {
     year: string;
   };
   required?: boolean;
+  disableErrorSR?: boolean;
 }
 
-export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, names, required }: DatePickerFieldProps) => {
+export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, names, required, disableErrorSR }: DatePickerFieldProps) => {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(['gcweb']);
   const [value] = useState(extractDateParts(defaultValue));
@@ -140,25 +141,25 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
     return {
       all:
         typeof errorMessages?.all === 'string' ? (
-          <InputError id={inputErrorIdAll} data-testid="date-picker-error-all">
+          <InputError aria-hidden={disableErrorSR} id={inputErrorIdAll} data-testid="date-picker-error-all">
             {errorMessages.all}
           </InputError>
         ) : undefined,
       month:
         typeof errorMessages?.month === 'string' ? (
-          <InputError id={inputErrorIdMonth} data-testid="date-picker-error-month">
+          <InputError aria-hidden={disableErrorSR} id={inputErrorIdMonth} data-testid="date-picker-error-month">
             {errorMessages.month}
           </InputError>
         ) : undefined,
       day:
         typeof errorMessages?.day === 'string' ? (
-          <InputError id={inputErrorIdDay} data-testid="date-picker-error-day">
+          <InputError aria-hidden={disableErrorSR} id={inputErrorIdDay} data-testid="date-picker-error-day">
             {errorMessages.day}
           </InputError>
         ) : undefined,
       year:
         typeof errorMessages?.year === 'string' ? (
-          <InputError id={inputErrorIdYear} data-testid="date-picker-error-year">
+          <InputError aria-hidden={disableErrorSR} id={inputErrorIdYear} data-testid="date-picker-error-year">
             {errorMessages.year}
           </InputError>
         ) : undefined,

@@ -281,6 +281,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
+                disableErrorSR
               />
               <InputSanitizeField
                 id="last-name"
@@ -293,6 +294,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 errorMessage={errors?.lastName}
                 aria-description={t('applicant-information.name-instructions')}
                 required
+                disableErrorSR
               />
             </div>
             <DatePickerField
@@ -311,6 +313,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 day: errors?.dateOfBirthDay,
               }}
               required
+              disableErrorSR
             />
             <InputPatternField
               id="social-insurance-number"
@@ -323,8 +326,9 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
               required
+              disableErrorSR
             />
-            <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required />
+            <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required disableErrorSR />
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">

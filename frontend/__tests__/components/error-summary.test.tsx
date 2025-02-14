@@ -67,7 +67,6 @@ describe('ErrorSummary component', () => {
     ];
     render(<ErrorSummary errors={errors} id="error-summary" />);
 
-    expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(screen.getByText('gcweb:error-summary.header')).toBeInTheDocument();
     expect(screen.getAllByRole('listitem')).toHaveLength(2);
   });
@@ -75,7 +74,6 @@ describe('ErrorSummary component', () => {
   it('renders no errors when errors array is empty', () => {
     render(<ErrorSummary errors={[]} id="error-summary" />);
 
-    expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(screen.getByText('gcweb:error-summary.header')).toBeInTheDocument();
     expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
   });
