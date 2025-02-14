@@ -97,6 +97,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         },
         BenefitApplicationCategoryCode: {
           ReferenceDataID: this.toBenefitApplicationCategoryCode(typeOfApplication),
+          ReferenceDataName: 'New',
         },
         BenefitApplicationChannelCode: {
           ReferenceDataID: '775170001', // PP's static value for "Online"
