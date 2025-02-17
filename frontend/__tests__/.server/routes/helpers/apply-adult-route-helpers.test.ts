@@ -6,18 +6,11 @@ import { validateApplyAdultStateForReview } from '~/.server/routes/helpers/apply
 import type { ApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 
-vi.mock('react-router', () => ({
-  redirect: vi.fn((to: string) => `MockedRedirect(${to})`),
-}));
+vi.mock('react-router', () => ({ redirect: vi.fn((to: string) => `MockedRedirect(${to})`) }));
 
-vi.mock('~/utils/route-utils', () => ({
-  getPathById: vi.fn((path: string, params: Params) => `MockedPath(${path}, ${JSON.stringify(params)})`),
-}));
+vi.mock('~/utils/route-utils', () => ({ getPathById: vi.fn((path: string, params: Params) => `MockedPath(${path}, ${JSON.stringify(params)})`) }));
 
-vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
-  applicantInformationStateHasPartner: vi.fn(),
-  getAgeCategoryFromDateString: vi.fn(),
-}));
+vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({ applicantInformationStateHasPartner: vi.fn(), getAgeCategoryFromDateString: vi.fn() }));
 
 describe('apply-adult-route-helpers', () => {
   afterEach(() => {
@@ -25,91 +18,42 @@ describe('apply-adult-route-helpers', () => {
   });
 
   describe('validateApplyAdultStateForReview', () => {
-    const params = {
-      lang: 'en',
-      id: '00000000-0000-0000-0000-000000000000',
-    };
+    const params = { lang: 'en', id: '00000000-0000-0000-0000-000000000000' };
 
-    const baseState = {
-      id: '00000000-0000-0000-0000-000000000000',
-      editMode: true,
-      lastUpdatedOn: '2000-01-01',
-      applicationYear: {
-        intakeYearId: '2025',
-        taxYear: '2025',
-      },
-      children: [],
-    } satisfies ApplyState;
+    const baseState = { id: '00000000-0000-0000-0000-000000000000', editMode: true, lastUpdatedOn: '2000-01-01', applicationYear: { intakeYearId: '2025', taxYear: '2025' }, children: [] } satisfies ApplyState;
 
     it('should redirect if typeOfApplication is undefined', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: undefined,
-      };
+      const mockState = { ...baseState, typeOfApplication: undefined };
 
       expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if typeOfApplication is delegate', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'delegate',
-      } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'delegate' } satisfies ApplyState;
 
       expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/application-delegate, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if typeOfApplication is not adult', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'child',
-      } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'child' } satisfies ApplyState;
 
       expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it('should redirect if taxFiling2023 is undefined', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'adult',
-        editMode: false,
-        taxFiling2023: undefined,
-      } satisfies ApplyState;
-
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/tax-filing, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
-    });
-
     it('should redirect if taxFiling2023 is no', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'adult',
-        editMode: false,
-        taxFiling2023: false,
-      } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult', editMode: false, taxFiling2023: false } satisfies ApplyState;
 
       expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if dateOfBirth is undefined', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'adult',
-        editMode: false,
-        taxFiling2023: true,
-        dateOfBirth: undefined,
-      } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult', editMode: false, taxFiling2023: true, dateOfBirth: undefined } satisfies ApplyState;
 
       expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/date-of-birth, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if age category is "children"', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'adult',
-        editMode: false,
-        taxFiling2023: true,
-        dateOfBirth: '2020-01-01',
-      } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult', editMode: false, taxFiling2023: true, dateOfBirth: '2020-01-01' } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
 
@@ -117,14 +61,7 @@ describe('apply-adult-route-helpers', () => {
     });
 
     it('should redirect if age category is "youth" and livingIndependently is undefined', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'adult',
-        editMode: false,
-        taxFiling2023: true,
-        dateOfBirth: '2008-01-01',
-        livingIndependently: undefined,
-      } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult', editMode: false, taxFiling2023: true, dateOfBirth: '2008-01-01', livingIndependently: undefined } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('youth');
 
@@ -132,14 +69,7 @@ describe('apply-adult-route-helpers', () => {
     });
 
     it('should redirect if age category is "youth" and livingIndependently is false', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'adult',
-        editMode: false,
-        taxFiling2023: true,
-        dateOfBirth: '2008-01-01',
-        livingIndependently: false,
-      } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult', editMode: false, taxFiling2023: true, dateOfBirth: '2008-01-01', livingIndependently: false } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('youth');
 
@@ -147,14 +77,7 @@ describe('apply-adult-route-helpers', () => {
     });
 
     it('should redirect if age category is "adult" and disabilityTaxCredit is undefined', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'adult',
-        editMode: false,
-        taxFiling2023: true,
-        dateOfBirth: '1985-01-10',
-        disabilityTaxCredit: undefined,
-      } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult', editMode: false, taxFiling2023: true, dateOfBirth: '1985-01-10', disabilityTaxCredit: undefined } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('adults');
 
@@ -162,14 +85,7 @@ describe('apply-adult-route-helpers', () => {
     });
 
     it('should redirect if age category is "adult" and disabilityTaxCredit is false', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'adult',
-        editMode: false,
-        taxFiling2023: true,
-        dateOfBirth: '1985-01-10',
-        disabilityTaxCredit: false,
-      } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult', editMode: false, taxFiling2023: true, dateOfBirth: '1985-01-10', disabilityTaxCredit: false } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('adults');
 
@@ -177,14 +93,7 @@ describe('apply-adult-route-helpers', () => {
     });
 
     it('should redirect if applicantInformation is undefined', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'adult',
-        editMode: false,
-        taxFiling2023: true,
-        dateOfBirth: '1900-01-01',
-        applicantInformation: undefined,
-      } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult', editMode: false, taxFiling2023: true, dateOfBirth: '1900-01-01', applicantInformation: undefined } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
 
@@ -198,12 +107,7 @@ describe('apply-adult-route-helpers', () => {
         editMode: false,
         taxFiling2023: true,
         dateOfBirth: '1900-01-01',
-        applicantInformation: {
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          maritalStatus: '1',
-          socialInsuranceNumber: '000-000-001',
-        },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
         partnerInformation: undefined,
       } satisfies ApplyState;
 
@@ -220,19 +124,8 @@ describe('apply-adult-route-helpers', () => {
         editMode: false,
         taxFiling2023: true,
         dateOfBirth: '1900-01-01',
-        applicantInformation: {
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          maritalStatus: '99',
-          socialInsuranceNumber: '000-000-001',
-        },
-        partnerInformation: {
-          confirm: true,
-          dateOfBirth: '1900-01-01',
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          socialInsuranceNumber: '000-000-002',
-        },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '99', socialInsuranceNumber: '000-000-001' },
+        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
       } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
@@ -248,19 +141,8 @@ describe('apply-adult-route-helpers', () => {
         editMode: false,
         taxFiling2023: true,
         dateOfBirth: '1900-01-01',
-        applicantInformation: {
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          maritalStatus: '1',
-          socialInsuranceNumber: '000-000-001',
-        },
-        partnerInformation: {
-          confirm: true,
-          dateOfBirth: '1900-01-01',
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          socialInsuranceNumber: '000-000-002',
-        },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
         contactInformation: undefined,
       } satisfies ApplyState;
 
@@ -277,25 +159,9 @@ describe('apply-adult-route-helpers', () => {
         editMode: false,
         taxFiling2023: true,
         dateOfBirth: '1900-01-01',
-        applicantInformation: {
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          maritalStatus: '1',
-          socialInsuranceNumber: '000-000-001',
-        },
-        partnerInformation: {
-          confirm: true,
-          dateOfBirth: '1900-01-01',
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          socialInsuranceNumber: '000-000-002',
-        },
-        contactInformation: {
-          copyMailingAddress: true,
-          mailingAddress: '123 rue Peuplier',
-          mailingCity: 'City',
-          mailingCountry: 'Country',
-        },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: undefined,
       } satisfies ApplyState;
 
@@ -312,29 +178,10 @@ describe('apply-adult-route-helpers', () => {
         editMode: false,
         taxFiling2023: true,
         dateOfBirth: '1900-01-01',
-        applicantInformation: {
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          maritalStatus: '1',
-          socialInsuranceNumber: '000-000-001',
-        },
-        partnerInformation: {
-          confirm: true,
-          dateOfBirth: '1900-01-01',
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          socialInsuranceNumber: '000-000-002',
-        },
-        contactInformation: {
-          copyMailingAddress: true,
-          mailingAddress: '123 rue Peuplier',
-          mailingCity: 'City',
-          mailingCountry: 'Country',
-        },
-        communicationPreferences: {
-          preferredLanguage: 'en',
-          preferredMethod: 'email',
-        },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
+        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: undefined,
       } satisfies ApplyState;
 
@@ -351,29 +198,10 @@ describe('apply-adult-route-helpers', () => {
         editMode: false,
         taxFiling2023: true,
         dateOfBirth: '1900-01-01',
-        applicantInformation: {
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          maritalStatus: '1',
-          socialInsuranceNumber: '000-000-001',
-        },
-        partnerInformation: {
-          confirm: true,
-          dateOfBirth: '1900-01-01',
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          socialInsuranceNumber: '000-000-002',
-        },
-        contactInformation: {
-          copyMailingAddress: true,
-          mailingAddress: '123 rue Peuplier',
-          mailingCity: 'City',
-          mailingCountry: 'Country',
-        },
-        communicationPreferences: {
-          preferredLanguage: 'en',
-          preferredMethod: 'email',
-        },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
+        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
         dentalBenefits: undefined,
       } satisfies ApplyState;
@@ -390,34 +218,12 @@ describe('apply-adult-route-helpers', () => {
         typeOfApplication: 'adult',
         taxFiling2023: true,
         dateOfBirth: '1900-01-01',
-        applicantInformation: {
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          maritalStatus: '1',
-          socialInsuranceNumber: '000-000-001',
-        },
-        partnerInformation: {
-          confirm: true,
-          dateOfBirth: '1900-01-01',
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          socialInsuranceNumber: '000-000-002',
-        },
-        contactInformation: {
-          copyMailingAddress: true,
-          mailingAddress: '123 rue Peuplier',
-          mailingCity: 'City',
-          mailingCountry: 'Country',
-        },
-        communicationPreferences: {
-          preferredLanguage: 'en',
-          preferredMethod: 'email',
-        },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
+        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
-        dentalBenefits: {
-          hasFederalBenefits: false,
-          hasProvincialTerritorialBenefits: false,
-        },
+        dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
       } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
@@ -427,44 +233,19 @@ describe('apply-adult-route-helpers', () => {
 
       expect(act).toEqual({
         ageCategory: 'seniors',
-        applicantInformation: {
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          maritalStatus: '1',
-          socialInsuranceNumber: '000-000-001',
-        },
-        applicationYear: {
-          intakeYearId: '2025',
-          taxYear: '2025',
-        },
-        communicationPreferences: {
-          preferredLanguage: 'en',
-          preferredMethod: 'email',
-        },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        applicationYear: { intakeYearId: '2025', taxYear: '2025' },
+        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dateOfBirth: '1900-01-01',
-        dentalBenefits: {
-          hasFederalBenefits: false,
-          hasProvincialTerritorialBenefits: false,
-        },
+        dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         dentalInsurance: false,
         disabilityTaxCredit: undefined,
         editMode: true,
         id: '00000000-0000-0000-0000-000000000000',
         lastUpdatedOn: '2000-01-01',
         livingIndependently: undefined,
-        partnerInformation: {
-          confirm: true,
-          dateOfBirth: '1900-01-01',
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          socialInsuranceNumber: '000-000-002',
-        },
-        contactInformation: {
-          copyMailingAddress: true,
-          mailingAddress: '123 rue Peuplier',
-          mailingCity: 'City',
-          mailingCountry: 'Country',
-        },
+        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         submissionInfo: undefined,
         taxFiling2023: true,
         typeOfApplication: 'adult',

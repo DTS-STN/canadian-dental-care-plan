@@ -82,12 +82,7 @@ export function loadApplyAdultSingleChildState({ params, request, session }: Loa
   const isNew = isNewChildState(childState);
   const editMode = !isNew && applyState.editMode;
 
-  return {
-    ...childState,
-    childNumber: childStateIndex + 1,
-    editMode,
-    isNew,
-  };
+  return { ...childState, childNumber: childStateIndex + 1, editMode, isNew };
 }
 
 interface LoadApplyAdultChildStateForReviewArgs {
@@ -154,7 +149,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
   }
 
   if (taxFiling2023 === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult-child/tax-filing', params));
+    throw redirect(getPathById('public/apply/$id/tax-filing', params));
   }
 
   if (taxFiling2023 === false) {
@@ -293,12 +288,6 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
     }
 
-    return {
-      ageCategory,
-      id,
-      dentalBenefits,
-      dentalInsurance,
-      information,
-    };
+    return { ageCategory, id, dentalBenefits, dentalInsurance, information };
   });
 }

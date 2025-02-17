@@ -29,10 +29,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-const ALL_CHILDREN_UNDER18_OPTION = {
-  no: 'no',
-  yes: 'yes',
-} as const;
+const ALL_CHILDREN_UNDER18_OPTION = { no: 'no', yes: 'yes' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -65,21 +62,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const dateOfBirthSchema = z
     .object({
-      dateOfBirthYear: z.number({
-        required_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-year-required'),
-        invalid_type_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-year-number'),
-      }),
-      dateOfBirthMonth: z.number({
-        required_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-month-required'),
-      }),
-      dateOfBirthDay: z.number({
-        required_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-day-required'),
-        invalid_type_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-day-number'),
-      }),
+      dateOfBirthYear: z.number({ required_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-year-required'), invalid_type_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-year-number') }),
+      dateOfBirthMonth: z.number({ required_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-month-required') }),
+      dateOfBirthDay: z.number({ required_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-day-required'), invalid_type_error: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-day-number') }),
       dateOfBirth: z.string(),
-      allChildrenUnder18: z.nativeEnum(ALL_CHILDREN_UNDER18_OPTION, {
-        errorMap: () => ({ message: t('apply-adult-child:eligibility.date-of-birth.error-message.child-age-required') }),
-      }),
+      allChildrenUnder18: z.nativeEnum(ALL_CHILDREN_UNDER18_OPTION, { errorMap: () => ({ message: t('apply-adult-child:eligibility.date-of-birth.error-message.child-age-required') }) }),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
@@ -87,32 +74,17 @@ export async function action({ context: { appContainer, session }, params, reque
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
 
       if (!isValidDateString(dateOfBirth)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-valid'),
-          path: ['dateOfBirth'],
-        });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
       } else if (!isPastDateString(dateOfBirth)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-is-past'),
-          path: ['dateOfBirth'],
-        });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-is-past-valid'),
-          path: ['dateOfBirth'],
-        });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:eligibility.date-of-birth.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
       }
     })
     .transform((val) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
-      return {
-        ...val,
-        dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`,
-      };
+      return { ...val, dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}` };
     });
 
   const parsedDataResult = dateOfBirthSchema.safeParse({
@@ -207,19 +179,10 @@ export default function ApplyFlowDateOfBirth({ loaderData, params }: Route.Compo
               <legend className="font-lato text-2xl font-bold">{t('apply-adult-child:eligibility.date-of-birth.age-heading')}</legend>
               <DatePickerField
                 id="date-of-birth"
-                names={{
-                  day: 'dateOfBirthDay',
-                  month: 'dateOfBirthMonth',
-                  year: 'dateOfBirthYear',
-                }}
+                names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
                 defaultValue={defaultState.dateOfBirth ?? ''}
                 legend={t('apply-adult-child:eligibility.date-of-birth.form-instructions')}
-                errorMessages={{
-                  all: errors?.dateOfBirth,
-                  year: errors?.dateOfBirthYear,
-                  month: errors?.dateOfBirthMonth,
-                  day: errors?.dateOfBirthDay,
-                }}
+                errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
                 required
               />
             </fieldset>
@@ -262,7 +225,7 @@ export default function ApplyFlowDateOfBirth({ loaderData, params }: Route.Compo
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult-child/tax-filing"
+                routeId="public/apply/$id/type-application" // This file will be removed after the refactoring.
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

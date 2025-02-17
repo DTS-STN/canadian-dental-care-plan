@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/tax-filing';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyChildState } from '~/.server/routes/helpers/apply-child-route-helpers';
+import { loadApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -24,26 +24,19 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-const TAX_FILING_OPTION = {
-  no: 'no',
-  yes: 'yes',
-} as const;
+const TAX_FILING_OPTION = { no: 'no', yes: 'yes' } as const;
 
-export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.child.taxFiling,
-  pageTitleI18nKey: 'apply-child:eligibility.tax-filing.page-title',
-} as const satisfies RouteHandleData;
+export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.taxFiling, pageTitleI18nKey: 'apply:tax-filing.page-title' } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const state = loadApplyChildState({ params, request, session });
+  const state = loadApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:eligibility.tax-filing.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:tax-filing.page-title') }) };
 
   return { id: state.id, meta, defaultState: state.taxFiling2023 };
 }
@@ -56,15 +49,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const taxFilingSchema = z.object({
-    taxFiling2023: z.nativeEnum(TAX_FILING_OPTION, {
-      errorMap: () => ({ message: t('apply-child:eligibility.tax-filing.error-message.tax-filing-required') }),
-    }),
-  });
+  const taxFilingSchema = z.object({ taxFiling2023: z.nativeEnum(TAX_FILING_OPTION, { errorMap: () => ({ message: t('apply:tax-filing.error-message.tax-filing-required') }) }) });
 
-  const parsedDataResult = taxFilingSchema.safeParse({
-    taxFiling2023: formData.get('taxFiling2023'),
-  });
+  const parsedDataResult = taxFilingSchema.safeParse({ taxFiling2023: formData.get('taxFiling2023') });
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
@@ -73,10 +60,10 @@ export async function action({ context: { appContainer, session }, params, reque
   saveApplyState({ params, session, state: { taxFiling2023: parsedDataResult.data.taxFiling2023 === TAX_FILING_OPTION.yes } });
 
   if (parsedDataResult.data.taxFiling2023 === TAX_FILING_OPTION.no) {
-    return redirect(getPathById('public/apply/$id/child/file-taxes', params));
+    return redirect(getPathById('public/apply/$id/file-taxes', params));
   }
 
-  return redirect(getPathById('public/apply/$id/child/children/index', params));
+  return redirect(getPathById('public/apply/$id/type-application', params));
 }
 
 export default function ApplyFlowTaxFiling({ loaderData, params }: Route.ComponentProps) {
@@ -85,14 +72,13 @@ export default function ApplyFlowTaxFiling({ loaderData, params }: Route.Compone
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, { taxFiling2023: 'input-radio-tax-filing-2023-option-0' });
 
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={25} size="lg" label={t('apply:progress.label')} />
+        <Progress value={22} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('apply:required-label')}</p>
@@ -102,20 +88,20 @@ export default function ApplyFlowTaxFiling({ loaderData, params }: Route.Compone
           <InputRadios
             id="tax-filing-2023"
             name="taxFiling2023"
-            legend={t('apply-child:eligibility.tax-filing.form-instructions')}
+            legend={t('apply:tax-filing.form-instructions')}
             options={[
-              { value: TAX_FILING_OPTION.yes, children: t('apply-child:eligibility.tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
-              { value: TAX_FILING_OPTION.no, children: t('apply-child:eligibility.tax-filing.radio-options.no'), defaultChecked: defaultState === false },
+              { value: TAX_FILING_OPTION.yes, children: t('apply:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
+              { value: TAX_FILING_OPTION.no, children: t('apply:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
             ]}
             errorMessage={errors?.taxFiling2023}
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Tax filing click">
-              {t('apply-child:eligibility.tax-filing.continue-btn')}
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Tax filing click">
+              {t('apply:tax-filing.continue-btn')}
             </LoadingButton>
-            <ButtonLink id="back-button" routeId="public/apply/$id/type-application" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Tax filing click">
-              {t('apply-child:eligibility.tax-filing.back-btn')}
+            <ButtonLink id="back-button" routeId="public/apply/$id/type-application" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Tax filing click">
+              {t('apply:tax-filing.back-btn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

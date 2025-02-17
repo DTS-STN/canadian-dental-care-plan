@@ -23,6 +23,7 @@ export function loadApplyAdultState({ params, request, session }: LoadApplyAdult
   const { pathname } = new URL(request.url);
   const applyState = loadApplyState({ params, session });
 
+  console.log('####################@#$%^&*(*&^%$#@$%^%$#@#$#@#$');
   if (applyState.typeOfApplication !== 'adult') {
     throw redirect(getPathById('public/apply/$id/type-application', params));
   }
@@ -109,7 +110,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
   }
 
   if (taxFiling2023 === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult/tax-filing', params));
+    throw redirect(getPathById('public/apply/$id/tax-filing', params));
   }
 
   if (taxFiling2023 === false) {

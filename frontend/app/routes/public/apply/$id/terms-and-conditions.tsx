@@ -20,11 +20,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.termsAndConditions,
-  pageTitleI18nKey: 'apply:terms-and-conditions.page-heading',
-} as const satisfies RouteHandleData;
+export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.termsAndConditions, pageTitleI18nKey: 'apply:terms-and-conditions.page-heading' } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
@@ -44,8 +40,8 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   saveApplyState({ params, session, state: {} });
-
-  return redirect(getPathById('public/apply/$id/type-application', params));
+  console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@s');
+  return redirect(getPathById('public/apply/$id/tax-filing', params));
 }
 
 export default function ApplyIndex({ loaderData, params }: Route.ComponentProps) {
