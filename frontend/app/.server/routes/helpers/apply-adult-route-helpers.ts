@@ -23,7 +23,6 @@ export function loadApplyAdultState({ params, request, session }: LoadApplyAdult
   const { pathname } = new URL(request.url);
   const applyState = loadApplyState({ params, session });
 
-  console.log('####################@#$%^&*(*&^%$#@$%^%$#@#$#@#$');
   if (applyState.typeOfApplication !== 'adult') {
     throw redirect(getPathById('public/apply/$id/type-application', params));
   }

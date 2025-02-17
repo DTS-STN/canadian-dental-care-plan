@@ -7,7 +7,7 @@ import { TYPES } from '~/.server/constants';
 import type { SecurityHandler } from '~/.server/routes/security';
 import { action, loader } from '~/routes/public/apply/$id/tax-filing';
 
-vi.mock('~/.server/routes/helpers/apply-adult-route-helpers', () => ({ loadApplyAdultState: vi.fn().mockReturnValue({ id: '123', taxFiling2023: true }) }));
+vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({ loadApplyState: vi.fn().mockReturnValue({ id: '123', taxFiling2023: true }) }));
 
 vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({ saveApplyState: vi.fn().mockReturnValue({ headers: { 'Set-Cookie': 'some-set-cookie-header' } }) }));
 

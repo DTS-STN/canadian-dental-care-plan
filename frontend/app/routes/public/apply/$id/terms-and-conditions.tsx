@@ -40,7 +40,6 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   saveApplyState({ params, session, state: {} });
-  console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@s');
   return redirect(getPathById('public/apply/$id/tax-filing', params));
 }
 
