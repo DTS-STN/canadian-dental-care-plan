@@ -191,19 +191,6 @@
     }
   },
   "eligibility": {
-    "tax-filing": {
-      "page-title": "Déclaration de revenus",
-      "form-instructions": "Est-ce que vous et votre époux/épouse ou conjoint/conjointe de fait (s'il y a lieu) avez produit votre déclaration de revenus pour 2023 et avez reçu votre avis de cotisation?",
-      "radio-options": {
-        "yes": "Oui",
-        "no": "Non"
-      },
-      "error-message": {
-        "tax-filing-required": "Sélectionnez si vous avez fait votre déclaration de revenus ou non"
-      },
-      "back-btn": "Retour",
-      "continue-btn": "Continuer"
-    },
     "date-of-birth": {
       "page-title": "Date de naissance",
       "description": "Les demandes au titre du Régime canadien de soins dentaires seront acceptées progressivement. Votre date de naissance détermine le moment où vous pouvez présenter une demande.",
@@ -222,18 +209,6 @@
       "continue-btn": "Continuer",
       "cancel-btn": "Annuler",
       "save-btn": "Enregistrer"
-    },
-    "file-your-taxes": {
-      "page-title": "Produire votre déclaration de revenus",
-      "ineligible-to-apply": "Vous n'êtes pas admissible au Régime canadien de soins dentaires pour le moment.",
-      "tax-not-filed": "Vous, votre épouse/époux ou conjoint/conjointe de fait n'avez pas produit de déclaration de revenus pour l'année 2023 auprès de l'Agence du revenu du Canada.",
-      "unable-to-assess": "Nous utilisons les renseignements de votre déclaration de revenus pour nous assurer que les critères d'admissibilité relatifs au revenu et à la résidence sont remplis. Tant que vous n'aurez pas produit votre déclaration de revenus de 2023, nous ne pourrons pas évaluer votre admissibilité.",
-      "tax-info": "Pour en savoir plus sur la façon de produire votre déclaration de revenus, consultez la page <taxInfo>Préparez-vous à faire vos impôts</taxInfo>.",
-      "apply-after": "Vous pouvez vous inscrire au régime après que vous ou votre époux/épouse ou conjoint/conjointe de fait avez produit vos déclarations de revenus et reçu votre avis de cotisation.",
-      "tax-info-href": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
-      "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale",
-      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     },
     "dob-eligibility": {
       "page-title": "Découvrez quand vous pouvez présenter une demande",

@@ -107,12 +107,7 @@ export function loadApplySingleChildState({ params, request, session }: LoadAppl
   const isNew = isNewChildState(childState);
   const editMode = !isNew && applyState.editMode;
 
-  return {
-    ...childState,
-    childNumber: childStateIndex + 1,
-    editMode,
-    isNew,
-  };
+  return { ...childState, childNumber: childStateIndex + 1, editMode, isNew };
 }
 
 interface ValidateStateForReviewArgs {
@@ -136,7 +131,7 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
   }
 
   if (taxFiling2023 === undefined) {
-    throw redirect(getPathById('public/apply/$id/child/tax-filing', params));
+    throw redirect(getPathById('public/apply/$id/tax-filing', params));
   }
 
   if (taxFiling2023 === false) {
@@ -171,22 +166,7 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('public/apply/$id/child/communication-preference', params));
   }
 
-  return {
-    ageCategory,
-    applicantInformation,
-    applicationYear,
-    children,
-    communicationPreferences,
-    contactInformation,
-    dateOfBirth,
-    editMode,
-    id,
-    lastUpdatedOn,
-    partnerInformation,
-    submissionInfo,
-    taxFiling2023,
-    typeOfApplication,
-  };
+  return { ageCategory, applicantInformation, applicationYear, children, communicationPreferences, contactInformation, dateOfBirth, editMode, id, lastUpdatedOn, partnerInformation, submissionInfo, taxFiling2023, typeOfApplication };
 }
 
 interface ValidateChildrenStateForReviewArgs {
@@ -226,12 +206,6 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
     }
 
-    return {
-      ageCategory,
-      dentalBenefits,
-      dentalInsurance,
-      id,
-      information,
-    };
+    return { ageCategory, dentalBenefits, dentalInsurance, id, information };
   });
 }

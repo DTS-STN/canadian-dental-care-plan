@@ -31,19 +31,9 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-const FORM_ACTION = {
-  add: 'add',
-  continue: 'continue',
-  cancel: 'cancel',
-  save: 'save',
-  remove: 'remove',
-} as const;
+const FORM_ACTION = { add: 'add', continue: 'continue', cancel: 'cancel', save: 'save', remove: 'remove' } as const;
 
-export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.child.childInformation,
-  pageTitleI18nKey: 'apply-child:children.index.page-title',
-} as const satisfies RouteHandleData;
+export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'), pageIdentifier: pageIds.public.apply.child.childInformation, pageTitleI18nKey: 'apply-child:children.index.page-title' } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
@@ -65,14 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
-    return {
-      ...child,
-      dentalBenefits: {
-        ...child.dentalBenefits,
-        federalSocialProgram: federalGovernmentInsurancePlanService?.name,
-        provincialTerritorialSocialProgram: provincialTerritorialSocialProgram?.name,
-      },
-    };
+    return { ...child, dentalBenefits: { ...child.dentalBenefits, federalSocialProgram: federalGovernmentInsurancePlanService?.name, provincialTerritorialSocialProgram: provincialTerritorialSocialProgram?.name } };
   });
 
   return { meta, children, editMode: state.editMode };
@@ -271,7 +254,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/child/tax-filing"
+                routeId="public/apply/$id/type-application"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

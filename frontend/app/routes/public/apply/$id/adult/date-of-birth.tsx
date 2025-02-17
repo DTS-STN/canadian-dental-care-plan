@@ -57,17 +57,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const dateOfBirthSchema = z
     .object({
-      dateOfBirthYear: z.number({
-        required_error: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-year-required'),
-        invalid_type_error: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-year-number'),
-      }),
-      dateOfBirthMonth: z.number({
-        required_error: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-month-required'),
-      }),
-      dateOfBirthDay: z.number({
-        required_error: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-day-required'),
-        invalid_type_error: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-day-number'),
-      }),
+      dateOfBirthYear: z.number({ required_error: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-year-required'), invalid_type_error: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-year-number') }),
+      dateOfBirthMonth: z.number({ required_error: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-month-required') }),
+      dateOfBirthDay: z.number({ required_error: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-day-required'), invalid_type_error: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-day-number') }),
       dateOfBirth: z.string(),
     })
     .superRefine((val, ctx) => {
@@ -76,32 +68,17 @@ export async function action({ context: { appContainer, session }, params, reque
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
 
       if (!isValidDateString(dateOfBirth)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-valid'),
-          path: ['dateOfBirth'],
-        });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
       } else if (!isPastDateString(dateOfBirth)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-is-past'),
-          path: ['dateOfBirth'],
-        });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-is-past-valid'),
-          path: ['dateOfBirth'],
-        });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:eligibility.date-of-birth.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
       }
     })
     .transform((val) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
-      return {
-        ...val,
-        dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`,
-      };
+      return { ...val, dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}` };
     });
 
   const parsedDataResult = dateOfBirthSchema.safeParse({
@@ -120,11 +97,7 @@ export async function action({ context: { appContainer, session }, params, reque
   saveApplyState({
     params,
     session,
-    state: {
-      dateOfBirth: parsedDataResult.data.dateOfBirth,
-      disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
-      livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
-    },
+    state: { dateOfBirth: parsedDataResult.data.dateOfBirth, disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined, livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined },
   });
 
   if (state.editMode) {
@@ -176,19 +149,10 @@ export default function ApplyFlowDateOfBirth({ loaderData, params }: Route.Compo
           <div className="mb-6 space-y-4">
             <DatePickerField
               id="date-of-birth"
-              names={{
-                day: 'dateOfBirthDay',
-                month: 'dateOfBirthMonth',
-                year: 'dateOfBirthYear',
-              }}
+              names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
               defaultValue={defaultState.dateOfBirth ?? ''}
               legend={t('apply-adult:eligibility.date-of-birth.form-instructions')}
-              errorMessages={{
-                all: errors?.dateOfBirth,
-                year: errors?.dateOfBirthYear,
-                month: errors?.dateOfBirthMonth,
-                day: errors?.dateOfBirthDay,
-              }}
+              errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
               required
             />
           </div>
@@ -208,7 +172,7 @@ export default function ApplyFlowDateOfBirth({ loaderData, params }: Route.Compo
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/tax-filing"
+                routeId="public/apply/$id/type-application" // returning to type/application... This file will be removed when all routes are refactored.
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

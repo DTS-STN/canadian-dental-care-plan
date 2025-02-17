@@ -1,9 +1,7 @@
 export const pageIds = {
   protected: {
     home: 'CDCP-PROT-0001',
-    letters: {
-      index: 'CDCP-PROT-0015',
-    },
+    letters: { index: 'CDCP-PROT-0015' },
     renew: {
       index: 'CDCP-PROT-RENW-0001',
       termsAndConditions: 'CDCP-PROT-RENW-0002',
@@ -34,11 +32,11 @@ export const pageIds = {
     apply: {
       index: 'CDCP-APPL-0001',
       termsAndConditions: 'CDCP-APPL-0002',
-      typeOfApplication: 'CDCP-APPL-0003',
-      applicationDelegate: 'CDCP-APPL-0004',
+      taxFiling: 'CDCP-APPL-0003',
+      fileYourTaxes: 'CDCP-APPL-0004',
+      typeOfApplication: 'CDCP-APPL-0005',
+      applicationDelegate: 'CDCP-APPL-0006',
       adult: {
-        taxFiling: 'CDCP-APPL-AD-0002',
-        fileYourTaxes: 'CDCP-APPL-AD-0003',
         dateOfBirth: 'CDCP-APPL-AD-0004',
         dateOfBirthEligibility: 'CDCP-APPL-AD-0005',
         applicantInformation: 'CDCP-APPL-AD-0006',
@@ -55,8 +53,6 @@ export const pageIds = {
         livingIndependently: 'CDCP-APPL-AD-0017',
       },
       adultChild: {
-        taxFiling: 'CDCP-APPL-ADCH-0002',
-        fileYourTaxes: 'CDCP-APPL-ADCH-0003',
         dateOfBirth: 'CDCP-APPL-ADCH-0004',
         dateOfBirthEligibility: 'CDCP-APPL-ADCH-0005',
         applicantInformation: 'CDCP-APPL-ADCH-0006',
@@ -79,8 +75,6 @@ export const pageIds = {
         contactApplyChild: 'CDCP-APPL-ADCH-0024',
       },
       child: {
-        taxFiling: 'CDCP-APPL-CH-0002',
-        fileYourTaxes: 'CDCP-APPL-CH-0003',
         dateOfBirthEligibility: 'CDCP-APPL-CH-0004',
         applicantInformation: 'CDCP-APPL-CH-0005',
         partnerInformation: 'CDCP-APPL-CH-0006',
@@ -98,12 +92,7 @@ export const pageIds = {
         contactApplyChild: 'CDCP-APPL-ADCH-0018',
       },
     },
-    status: {
-      index: 'CDCP-STAT-0001',
-      myself: 'CDCP-STAT-0002',
-      child: 'CDCP-STAT-0003',
-      result: 'CDCP-STAT-0004',
-    },
+    status: { index: 'CDCP-STAT-0001', myself: 'CDCP-STAT-0002', child: 'CDCP-STAT-0003', result: 'CDCP-STAT-0004' },
     renew: {
       index: 'CDCP-RENW-0001',
       termsAndConditions: 'CDCP-RENW-0002',

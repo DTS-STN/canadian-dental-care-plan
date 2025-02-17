@@ -303,33 +303,6 @@
     "return-btn": "Return to main page",
     "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   },
-  "eligibility": {
-    "tax-filing": {
-      "page-title": "Tax filing",
-      "form-instructions": "Have you and your spouse or common-law partner (if applicable) filed your tax return for 2023 and received your Notice of Assessment?",
-      "radio-options": {
-        "yes": "Yes",
-        "no": "No"
-      },
-      "error-message": {
-        "tax-filing-required": "Select whether or not you have filed your taxes"
-      },
-      "back-btn": "Back",
-      "continue-btn": "Continue"
-    },
-    "file-your-taxes": {
-      "page-title": "File your taxes",
-      "ineligible-to-apply": "You are not eligible to apply for the Canadian Dental Care Plan at this time.",
-      "tax-not-filed": "You, your spouse or common-law partner have not filed a tax return for 2023 with the Canada Revenue Agency.",
-      "unable-to-assess": "We use the information from your tax file to verify that the income and residency eligibility requirements are met for the plan.",
-      "tax-info": "For more information on how to file your taxes, visit <taxInfo>Get ready to do your taxes</taxInfo>.",
-      "apply-after": "You can apply for the plan after you or your spouse or common-law partner have filed your taxes and received your Notice of Assessment.",
-      "tax-info-href": "https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax/get-ready-taxes.html",
-      "back-btn": "Back",
-      "return-btn": "Return to main page",
-      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
-    }
-  },
   "exit-application": {
     "page-title": "Exiting the application",
     "are-you-sure": "Are you sure you want to exit this application? If you click \"Exit\", the form will reset and the information will be lost.",
