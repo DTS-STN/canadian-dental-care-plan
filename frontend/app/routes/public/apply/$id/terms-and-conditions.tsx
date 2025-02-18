@@ -52,19 +52,34 @@ export async function action({ context: { appContainer, session }, request, para
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const consentSchema = z.object({
-    acknowledgeTerms: z.nativeEnum(CheckboxValue, {
-      errorMap: () => ({ message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required') }),
-    }),
-    acknowledgePrivacy: z.nativeEnum(CheckboxValue, {
-      errorMap: () => ({ message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required') }),
-    }),
-    shareData: z.nativeEnum(CheckboxValue, {
-      errorMap: () => ({ message: t('apply:terms-and-conditions.checkboxes.error-message.share-data-required') }),
-    }),
-  });
+  const doNotConsent = formData.get('doNotConsent') ?? '';
 
-  const parsedDataResult = consentSchema.safeParse({ acknowledgeTerms: formData.get('acknowledgeTerms'), acknowledgePrivacy: formData.get('acknowledgePrivacy'), shareData: formData.get('shareData') });
+  //TODO: Instead of redirecting immediately, display a confirmation popup modal that redirects the user back to the CDCP main page. Update the code to include the modal once the design is finalized
+  if (doNotConsent) {
+    return redirect(t('apply:terms-and-conditions.apply.link'));
+  }
+
+  const consentSchema = z
+    .object({
+      doNotConsent: z.string().trim().optional(),
+      acknowledgeTerms: z.string().trim().optional(),
+      acknowledgePrivacy: z.string().trim().optional(),
+      shareData: z.string().trim().optional(),
+    })
+    .superRefine((val, ctx) => {
+      if (!val.doNotConsent) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required'), path: ['acknowledgeTerms'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required'), path: ['acknowledgePrivacy'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.share-data-required'), path: ['shareData'] });
+      }
+    });
+
+  const parsedDataResult = consentSchema.safeParse({
+    acknowledgeTerms: formData.get('acknowledgeTerms') ?? '',
+    acknowledgePrivacy: formData.get('acknowledgePrivacy') ?? '',
+    shareData: formData.get('shareData') ?? '',
+    doNotConsent: formData.get('doNotConsent') ?? '',
+  });
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
@@ -85,6 +100,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
     acknowledgeTerms: 'input-checkbox-acknowledge-terms',
     acknowledgePrivacy: 'input-checkbox-acknowledge-privacy',
     shareData: 'input-checkbox-share-data',
+    doNotConsent: 'input-checkbox-do-not-consent"',
   });
 
   const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link" newTabIndicator target="_blank" />;
@@ -186,14 +202,17 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       </p>
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
-        <InputCheckbox id="acknowledgeTerms" name="acknowledgeTerms" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgeTerms} required>
+        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgeTerms} required>
           {t('apply:terms-and-conditions.checkboxes.acknowledge-terms')}
         </InputCheckbox>
-        <InputCheckbox id="acknowledgePrivacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgePrivacy} required>
+        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgePrivacy} required>
           {t('apply:terms-and-conditions.checkboxes.acknowledge-privacy')}
         </InputCheckbox>
-        <InputCheckbox id="shareData" name="shareData" value={CheckboxValue.Yes} errorMessage={errors?.shareData} required>
+        <InputCheckbox id="share-data" name="shareData" value={CheckboxValue.Yes} errorMessage={errors?.shareData} required>
           {t('apply:terms-and-conditions.checkboxes.share-data')}
+        </InputCheckbox>
+        <InputCheckbox id="do-not-consent" name="doNotConsent" value={CheckboxValue.Yes} className="my-8">
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.checkboxes.do-not-consent" />
         </InputCheckbox>
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
