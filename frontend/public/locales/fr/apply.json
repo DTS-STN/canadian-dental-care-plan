@@ -91,6 +91,17 @@
       "info-source": "https://www.canada.ca/fr/emploi-developpement-social/ministere/transparence/aai/rapports/infosource.html",
       "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy",
       "sun-life": "https://www.sunlife.ca/fr/"
+    },
+    "checkboxes": {
+      "acknowledge-terms": "Je reconnais avoir lu et compris les conditions générales d'utilisation",
+      "acknowledge-privacy": "Je reconnais avoir lu et compris l'énoncé de confidentialité",
+      "share-data": "Je consens à l'échange des données",
+      "do-not-consent": "Je ne consens pas à la divulgation de mes renseignements dans le cadre du RCSD",
+      "error-message": {
+        "acknowledge-terms-required": "(FR) Terms and Conditions checkbox must be selected",
+        "acknowledge-privacy-required": "(FR) Privacy Notice Statement checkbox must be selected",
+        "share-data-required": "(FR) Sharing of data checkbox must be selected"
+      }
     }
   },
   "tax-filing": {
@@ -118,6 +129,7 @@
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
+
   "type-of-application": {
     "page-title": "Type de demande",
     "page-description": "La présentation des demandes au titre du Régime canadien de soins dentaires se fait par étapes.",

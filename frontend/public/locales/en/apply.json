@@ -91,6 +91,17 @@
       "info-source": "https://www.canada.ca/en/employment-social-development/corporate/transparency/access-information/reports/infosource.html",
       "microsoft-data-privacy-policy": "https://www.microsoft.com/en-ca/trust-center/privacy",
       "sun-life": "https://www.sunlife.ca/en/"
+    },
+    "checkboxes": {
+      "acknowledge-terms": "I acknowledge that I've read the Terms and Conditions",
+      "acknowledge-privacy": "I acknowledge that I have read the Privacy Notice Statement",
+      "share-data": "I consent to the sharing of data",
+      "do-not-consent": "I <strong>do not consent</strong> to the disclosure of my information for the purposes of the CDCP",
+      "error-message": {
+        "acknowledge-terms-required": "Terms and Conditions checkbox must be selected",
+        "acknowledge-privacy-required": "Privacy Notice Statement checkbox must be selected",
+        "share-data-required": "Sharing of data checkbox must be selected"
+      }
     }
   },
   "tax-filing": {

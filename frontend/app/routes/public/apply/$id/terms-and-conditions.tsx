@@ -1,17 +1,21 @@
-import { redirect, useFetcher } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import type { Route } from './+types/terms-and-conditions';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
+import { InputCheckbox } from '~/components/input-checkbox';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -20,7 +24,15 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.termsAndConditions, pageTitleI18nKey: 'apply:terms-and-conditions.page-heading' } as const satisfies RouteHandleData;
+enum CheckboxValue {
+  Yes = 'yes',
+}
+
+export const handle = {
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
+  pageIdentifier: pageIds.public.apply.termsAndConditions,
+  pageTitleI18nKey: 'apply:terms-and-conditions.page-heading',
+} as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
@@ -35,9 +47,28 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const formData = await request.formData();
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
+
+  const consentSchema = z.object({
+    acknowledgeTerms: z.nativeEnum(CheckboxValue, {
+      errorMap: () => ({ message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required') }),
+    }),
+    acknowledgePrivacy: z.nativeEnum(CheckboxValue, {
+      errorMap: () => ({ message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required') }),
+    }),
+    shareData: z.nativeEnum(CheckboxValue, {
+      errorMap: () => ({ message: t('apply:terms-and-conditions.checkboxes.error-message.share-data-required') }),
+    }),
+  });
+
+  const parsedDataResult = consentSchema.safeParse({ acknowledgeTerms: formData.get('acknowledgeTerms'), acknowledgePrivacy: formData.get('acknowledgePrivacy'), shareData: formData.get('shareData') });
+
+  if (!parsedDataResult.success) {
+    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+  }
 
   saveApplyState({ params, session, state: {} });
   return redirect(getPathById('public/apply/$id/tax-filing', params));
@@ -48,6 +79,13 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    acknowledgeTerms: 'input-checkbox-acknowledge-terms',
+    acknowledgePrivacy: 'input-checkbox-acknowledge-privacy',
+    shareData: 'input-checkbox-share-data',
+  });
 
   const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link" newTabIndicator target="_blank" />;
   const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} className="external-link" newTabIndicator target="_blank" />;
@@ -60,6 +98,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
     <div className="max-w-prose">
       <div className="space-y-6">
         <p>{t('apply:terms-and-conditions.intro-text')}</p>
+        <errorSummary.ErrorSummary />
         <Collapsible summary={t('apply:terms-and-conditions.terms-and-conditions-of-use.summary')}>
           <div className="space-y-6">
             <div className="space-y-4">
@@ -147,6 +186,15 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       </p>
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
+        <InputCheckbox id="acknowledgeTerms" name="acknowledgeTerms" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgeTerms} required>
+          {t('apply:terms-and-conditions.checkboxes.acknowledge-terms')}
+        </InputCheckbox>
+        <InputCheckbox id="acknowledgePrivacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgePrivacy} required>
+          {t('apply:terms-and-conditions.checkboxes.acknowledge-privacy')}
+        </InputCheckbox>
+        <InputCheckbox id="shareData" name="shareData" value={CheckboxValue.Yes} errorMessage={errors?.shareData} required>
+          {t('apply:terms-and-conditions.checkboxes.share-data')}
+        </InputCheckbox>
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
             aria-describedby="application-consent"
