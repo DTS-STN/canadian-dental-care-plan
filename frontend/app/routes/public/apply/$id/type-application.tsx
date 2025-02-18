@@ -24,18 +24,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-const APPLICANT_TYPE = {
-  adult: 'adult',
-  adultChild: 'adult-child',
-  child: 'child',
-  delegate: 'delegate',
-} as const;
+const APPLICANT_TYPE = { adult: 'adult', adultChild: 'adult-child', child: 'child', delegate: 'delegate' } as const;
 
-export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.typeOfApplication,
-  pageTitleI18nKey: 'apply:type-of-application.page-title',
-} as const satisfies RouteHandleData;
+export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.typeOfApplication, pageTitleI18nKey: 'apply:type-of-application.page-title' } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
@@ -61,39 +52,26 @@ export async function action({ context: { appContainer, session }, params, reque
   /**
    * Schema for application delegate.
    */
-  const typeOfApplicationSchema = z.object({
-    typeOfApplication: z.nativeEnum(APPLICANT_TYPE, {
-      errorMap: () => ({ message: t('apply:type-of-application.error-message.type-of-application-required') }),
-    }),
-  });
+  const typeOfApplicationSchema = z.object({ typeOfApplication: z.nativeEnum(APPLICANT_TYPE, { errorMap: () => ({ message: t('apply:type-of-application.error-message.type-of-application-required') }) }) });
 
-  const parsedDataResult = typeOfApplicationSchema.safeParse({
-    typeOfApplication: String(formData.get('typeOfApplication') ?? ''),
-  });
+  const parsedDataResult = typeOfApplicationSchema.safeParse({ typeOfApplication: String(formData.get('typeOfApplication') ?? '') });
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({
-    params,
-    session,
-    state: {
-      editMode: false,
-      typeOfApplication: parsedDataResult.data.typeOfApplication,
-    },
-  });
+  saveApplyState({ params, session, state: { editMode: false, typeOfApplication: parsedDataResult.data.typeOfApplication } });
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.adult) {
-    return redirect(getPathById('public/apply/$id/adult/tax-filing', params));
+    return redirect(getPathById('public/apply/$id/adult/date-of-birth', params));
   }
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.adultChild) {
-    return redirect(getPathById('public/apply/$id/adult-child/tax-filing', params));
+    return redirect(getPathById('public/apply/$id/adult-child/date-of-birth', params));
   }
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.child) {
-    return redirect(getPathById('public/apply/$id/child/tax-filing', params));
+    return redirect(getPathById('public/apply/$id/child/applicant-information', params));
   }
 
   return redirect(getPathById('public/apply/$id/application-delegate', params));
@@ -150,26 +128,10 @@ export default function ApplyFlowTypeOfApplication({ loaderData, params }: Route
             name="typeOfApplication"
             legend={t('apply:type-of-application.form-instructions')}
             options={[
-              {
-                value: APPLICANT_TYPE.adult,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.personal" />,
-                defaultChecked: defaultState === APPLICANT_TYPE.adult,
-              },
-              {
-                value: APPLICANT_TYPE.child,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.child" />,
-                defaultChecked: defaultState === APPLICANT_TYPE.child,
-              },
-              {
-                value: APPLICANT_TYPE.adultChild,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.personal-and-child" />,
-                defaultChecked: defaultState === APPLICANT_TYPE.adultChild,
-              },
-              {
-                value: APPLICANT_TYPE.delegate,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.delegate" />,
-                defaultChecked: defaultState === APPLICANT_TYPE.delegate,
-              },
+              { value: APPLICANT_TYPE.adult, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.personal" />, defaultChecked: defaultState === APPLICANT_TYPE.adult },
+              { value: APPLICANT_TYPE.child, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.child" />, defaultChecked: defaultState === APPLICANT_TYPE.child },
+              { value: APPLICANT_TYPE.adultChild, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.personal-and-child" />, defaultChecked: defaultState === APPLICANT_TYPE.adultChild },
+              { value: APPLICANT_TYPE.delegate, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.delegate" />, defaultChecked: defaultState === APPLICANT_TYPE.delegate },
             ]}
             required
             errorMessage={errors?.typeOfApplication}
@@ -178,14 +140,7 @@ export default function ApplyFlowTypeOfApplication({ loaderData, params }: Route
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Type of application click">
               {t('apply:type-of-application.continue-btn')}
             </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              routeId="public/apply/$id/terms-and-conditions"
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Type of application click"
-            >
+            <ButtonLink id="back-button" routeId="public/apply/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Type of application click">
               {t('apply:type-of-application.back-btn')}
             </ButtonLink>
           </div>

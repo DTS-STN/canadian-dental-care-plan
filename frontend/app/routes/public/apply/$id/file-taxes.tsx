@@ -8,8 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/file-taxes';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyChildState } from '~/.server/routes/helpers/apply-child-route-helpers';
-import { clearApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { clearApplyState, loadApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -21,23 +20,19 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.child.fileYourTaxes,
-  pageTitleI18nKey: 'apply-child:eligibility.file-your-taxes.page-title',
-} as const satisfies RouteHandleData;
+export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.fileYourTaxes, pageTitleI18nKey: 'apply:file-your-taxes.page-title' } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const { id } = loadApplyChildState({ params, request, session });
+  const { id, applicationYear } = loadApplyState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:eligibility.file-your-taxes.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:file-your-taxes.page-title') }) };
 
-  return { id, meta };
+  return { id, meta, taxYear: applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -49,16 +44,16 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearApplyState({ params, session });
-  return redirect(t('apply-child:eligibility.file-your-taxes.return-btn-link'));
+  return redirect(t('apply:file-your-taxes.return-btn-link'));
 }
 
 export default function ApplyFlowFileYourTaxes({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-
+  const { taxYear } = loaderData;
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const taxInfo = <InlineLink to={t('apply-child:eligibility.file-your-taxes.tax-info-href')} className="external-link" newTabIndicator target="_blank" />;
+  const taxInfo = <InlineLink to={t('apply:file-your-taxes.tax-info-href')} className="external-link" newTabIndicator target="_blank" />;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -69,21 +64,21 @@ export default function ApplyFlowFileYourTaxes({ loaderData, params }: Route.Com
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('apply-child:eligibility.file-your-taxes.ineligible-to-apply')}</p>
-        <p>{t('apply-child:eligibility.file-your-taxes.tax-not-filed')}</p>
-        <p>{t('apply-child:eligibility.file-your-taxes.unable-to-assess')}</p>
+        <p>{t('apply:file-your-taxes.ineligible-to-apply')}</p>
+        <p>{t('apply:file-your-taxes.tax-not-filed', { taxYear })}</p>
+        <p>{t('apply:file-your-taxes.unable-to-assess')}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:eligibility.file-your-taxes.tax-info" components={{ taxInfo }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply:file-your-taxes.tax-info" components={{ taxInfo }} />
         </p>
-        <p>{t('apply-child:eligibility.file-your-taxes.apply-after')}</p>
+        <p>{t('apply:file-your-taxes.apply-after')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
-        <ButtonLink id="back-button" routeId="public/apply/$id/child/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - File your taxes click">
-          {t('apply-child:eligibility.file-your-taxes.back-btn')}
+        <ButtonLink id="back-button" routeId="public/apply/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - File your taxes click">
+          {t('apply:file-your-taxes.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - File your taxes click">
-          {t('apply-child:eligibility.file-your-taxes.return-btn')}
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - File your taxes click">
+          {t('apply:file-your-taxes.return-btn')}
         </LoadingButton>
       </fetcher.Form>
     </div>
