@@ -27,12 +27,12 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const { id } = loadApplyState({ params, session });
+  const { id, applicationYear } = loadApplyState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:file-your-taxes.page-title') }) };
 
-  return { id, meta };
+  return { id, meta, taxYear: applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -49,7 +49,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowFileYourTaxes({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-
+  const { taxYear } = loaderData;
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -65,7 +65,7 @@ export default function ApplyFlowFileYourTaxes({ loaderData, params }: Route.Com
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>{t('apply:file-your-taxes.ineligible-to-apply')}</p>
-        <p>{t('apply:file-your-taxes.tax-not-filed')}</p>
+        <p>{t('apply:file-your-taxes.tax-not-filed', { taxYear })}</p>
         <p>{t('apply:file-your-taxes.unable-to-assess')}</p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="apply:file-your-taxes.tax-info" components={{ taxInfo }} />

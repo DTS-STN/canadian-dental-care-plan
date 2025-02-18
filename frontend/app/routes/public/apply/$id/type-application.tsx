@@ -140,14 +140,7 @@ export default function ApplyFlowTypeOfApplication({ loaderData, params }: Route
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Type of application click">
               {t('apply:type-of-application.continue-btn')}
             </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              routeId="public/apply/$id/terms-and-conditions"
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Type of application click"
-            >
+            <ButtonLink id="back-button" routeId="public/apply/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Type of application click">
               {t('apply:type-of-application.back-btn')}
             </ButtonLink>
           </div>

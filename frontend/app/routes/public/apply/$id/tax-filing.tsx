@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:tax-filing.page-title') }) };
 
-  return { id: state.id, meta, defaultState: state.taxFiling2023 };
+  return { id: state.id, meta, defaultState: state.taxFiling2023, taxYear: state.applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -67,7 +67,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowTaxFiling({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = loaderData;
+  const { defaultState, taxYear } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -87,7 +87,7 @@ export default function ApplyFlowTaxFiling({ loaderData, params }: Route.Compone
           <InputRadios
             id="tax-filing-2023"
             name="taxFiling2023"
-            legend={t('apply:tax-filing.form-instructions')}
+            legend={t('apply:tax-filing.form-instructions', { taxYear })}
             options={[
               { value: TAX_FILING_OPTION.yes, children: t('apply:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
               { value: TAX_FILING_OPTION.no, children: t('apply:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
