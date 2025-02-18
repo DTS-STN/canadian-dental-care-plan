@@ -263,6 +263,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
             defaultValue={defaultState?.socialInsuranceNumber ?? ''}
             errorMessage={errors?.socialInsuranceNumber}
             required
+            disableScreenReaderErrors
           />
         </div>
       ),
@@ -301,6 +302,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
+                disableScreenReaderErrors
               />
               <InputSanitizeField
                 id="last-name"
@@ -313,6 +315,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 errorMessage={errors?.lastName}
                 aria-description={t('apply-child:children.information.name-instructions')}
                 required
+                disableScreenReaderErrors
               />
             </div>
             <DatePickerField
@@ -331,9 +334,10 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 day: errors?.dateOfBirthDay,
               }}
               required
+              disableScreenReaderErrors
             />
 
-            <InputRadios id="has-social-insurance-number" legend={t('apply-child:children.information.sin-legend')} name="hasSocialInsuranceNumber" options={options} errorMessage={errors?.hasSocialInsuranceNumber} required />
+            <InputRadios id="has-social-insurance-number" legend={t('apply-child:children.information.sin-legend')} name="hasSocialInsuranceNumber" options={options} errorMessage={errors?.hasSocialInsuranceNumber} required disableScreenReaderErrors />
 
             <InputRadios
               id="is-parent-radios"
@@ -345,6 +349,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               ]}
               errorMessage={errors?.isParent}
               required
+              disableScreenReaderErrors
             />
           </div>
           {editMode ? (
