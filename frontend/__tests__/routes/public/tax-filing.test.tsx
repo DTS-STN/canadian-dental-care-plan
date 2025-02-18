@@ -7,10 +7,17 @@ import { TYPES } from '~/.server/constants';
 import type { SecurityHandler } from '~/.server/routes/security';
 import { action, loader } from '~/routes/public/apply/$id/tax-filing';
 
-vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({ loadApplyState: vi.fn().mockReturnValue({ id: '123', taxFiling2023: true }) }));
-
-vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({ saveApplyState: vi.fn().mockReturnValue({ headers: { 'Set-Cookie': 'some-set-cookie-header' } }) }));
-
+vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
+  loadApplyState: vi.fn().mockReturnValue({
+    id: '123',
+    applicationYear: {
+      intakeYearId: '2025',
+      taxYear: '2025',
+    },
+    taxFiling2023: true,
+  }),
+  saveApplyState: vi.fn().mockReturnValue({ headers: { 'Set-Cookie': 'some-set-cookie-header' } }),
+}));
 vi.mock('~/.server/utils/locale.utils');
 
 describe('_public.apply.id.tax-filing', () => {
