@@ -1,17 +1,21 @@
-import { redirect, useFetcher } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import type { Route } from './+types/terms-and-conditions';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
+import { InputCheckbox } from '~/components/input-checkbox';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -19,6 +23,10 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+enum CheckboxValue {
+  Yes = 'yes',
+}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -39,9 +47,43 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const formData = await request.formData();
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
+
+  const doNotConsent = formData.get('doNotConsent') ?? '';
+
+  //TODO: Instead of redirecting immediately, display a confirmation popup modal that redirects the user back to the CDCP main page. Update the code to include the modal once the design is finalized
+  if (doNotConsent) {
+    return redirect(t('apply:terms-and-conditions.apply.link'));
+  }
+
+  const consentSchema = z
+    .object({
+      doNotConsent: z.string().trim().optional(),
+      acknowledgeTerms: z.string().trim().optional(),
+      acknowledgePrivacy: z.string().trim().optional(),
+      shareData: z.string().trim().optional(),
+    })
+    .superRefine((val, ctx) => {
+      if (!val.doNotConsent) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required'), path: ['acknowledgeTerms'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required'), path: ['acknowledgePrivacy'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.share-data-required'), path: ['shareData'] });
+      }
+    });
+
+  const parsedDataResult = consentSchema.safeParse({
+    acknowledgeTerms: formData.get('acknowledgeTerms') ?? '',
+    acknowledgePrivacy: formData.get('acknowledgePrivacy') ?? '',
+    shareData: formData.get('shareData') ?? '',
+    doNotConsent: formData.get('doNotConsent') ?? '',
+  });
+
+  if (!parsedDataResult.success) {
+    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+  }
 
   saveApplyState({ params, session, state: {} });
 
@@ -54,6 +96,14 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    acknowledgeTerms: 'input-checkbox-acknowledge-terms',
+    acknowledgePrivacy: 'input-checkbox-acknowledge-privacy',
+    shareData: 'input-checkbox-share-data',
+    doNotConsent: 'input-checkbox-do-not-consent"',
+  });
+
   const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link" newTabIndicator target="_blank" />;
   const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} className="external-link" newTabIndicator target="_blank" />;
   const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} className="external-link" newTabIndicator target="_blank" />;
@@ -65,6 +115,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
     <div className="max-w-prose">
       <div className="space-y-6">
         <p>{t('apply:terms-and-conditions.intro-text')}</p>
+        <errorSummary.ErrorSummary />
         <Collapsible summary={t('apply:terms-and-conditions.terms-and-conditions-of-use.summary')}>
           <div className="space-y-6">
             <div className="space-y-4">
@@ -152,6 +203,18 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       </p>
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
+        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgeTerms} required>
+          {t('apply:terms-and-conditions.checkboxes.acknowledge-terms')}
+        </InputCheckbox>
+        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgePrivacy} required>
+          {t('apply:terms-and-conditions.checkboxes.acknowledge-privacy')}
+        </InputCheckbox>
+        <InputCheckbox id="share-data" name="shareData" value={CheckboxValue.Yes} errorMessage={errors?.shareData} required>
+          {t('apply:terms-and-conditions.checkboxes.share-data')}
+        </InputCheckbox>
+        <InputCheckbox id="do-not-consent" name="doNotConsent" value={CheckboxValue.Yes} className="my-8">
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.checkboxes.do-not-consent" />
+        </InputCheckbox>
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
             aria-describedby="application-consent"
