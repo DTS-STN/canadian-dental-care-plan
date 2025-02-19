@@ -365,7 +365,7 @@ function ChildNotFound() {
   }, []);
 
   return (
-    <div ref={wrapperRef} id="child-not-found" className="mb-4" role="region" aria-live="polite">
+    <div ref={wrapperRef} id="child-not-found" className="mb-4" role="region" aria-live="assertive" tabIndex={-1}>
       <ContextualAlert type="danger">
         <h2 className="mb-2 font-bold">{t('renew-adult-child:children.information.child-not-found.heading')}</h2>
         <p className="mb-2">{t('renew-adult-child:children.information.child-not-found.please-review')}</p>
