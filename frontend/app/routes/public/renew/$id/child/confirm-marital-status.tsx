@@ -125,7 +125,7 @@ export default function RenewChildConfirmMaritalStatus({ loaderData, params }: R
               ]}
               helpMessagePrimary={t('renew-child:confirm-marital-status.help-message')}
               errorMessage={errors?.hasMaritalStatusChanged}
-              disableSR
+              disableScreenReader
             />
           </div>
           {editMode ? (
