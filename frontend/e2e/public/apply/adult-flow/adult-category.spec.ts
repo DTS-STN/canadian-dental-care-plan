@@ -13,6 +13,10 @@ test.describe('Adult category', () => {
     await applyPage.isLoaded('terms-and-conditions');
     await page.getByRole('button', { name: 'Agree and continue' }).click();
 
+    await applyPage.isLoaded('tax-filing');
+    await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+    await page.getByRole('button', { name: 'Continue' }).click();
+
     await applyPage.isLoaded('type-application');
     await page.getByRole('button', { name: 'Continue' }).click();
 
@@ -20,35 +24,8 @@ test.describe('Adult category', () => {
     await page.getByRole('button', { name: 'Continue' }).click();
   });
 
-  test('Should return to CDCP main page if applicant has not filed taxes', async ({ page }) => {
-    const applyAdultPage = new PlaywrightApplyAdultPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultPage.isLoaded('tax-filing');
-
-      await page.getByRole('radio', { name: 'No', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to file your tax page', async () => {
-      await applyAdultPage.isLoaded('file-taxes');
-    });
-
-    await test.step('Should return to CDCP main page', async () => {
-      await page.getByRole('button', { name: 'Return to main page' }).click();
-      await expect(page).toHaveURL('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html');
-    });
-  });
-
   test('Should return to CDCP main page if applicant is 18 - 64, and no DTC', async ({ page }) => {
     const applyAdultPage = new PlaywrightApplyAdultPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultPage.isLoaded('tax-filing');
-
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
 
     await test.step('Should navigate to date of birth page', async () => {
       await applyAdultPage.isLoaded('date-of-birth');
@@ -81,13 +58,6 @@ test.describe('Adult category', () => {
 
   test('Should complete flow as adult applicant', async ({ page }) => {
     const applyAdultPage = new PlaywrightApplyAdultPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultPage.isLoaded('tax-filing');
-
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
 
     await test.step('Should navigate to date of birth page', async () => {
       await applyAdultPage.isLoaded('date-of-birth');

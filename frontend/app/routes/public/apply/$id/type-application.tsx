@@ -71,7 +71,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.child) {
-    return redirect(getPathById('public/apply/$id/child/applicant-information', params));
+    return redirect(getPathById('public/apply/$id/child/children/index', params));
   }
 
   return redirect(getPathById('public/apply/$id/application-delegate', params));

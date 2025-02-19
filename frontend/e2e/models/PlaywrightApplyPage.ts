@@ -5,12 +5,20 @@ export class PlaywrightApplyPage extends PlaywrightBasePage {
     await this.page.goto('/en/apply');
   }
 
-  async isLoaded(applyPage: 'index' | 'terms-and-conditions' | 'type-application', heading?: string | RegExp) {
+  async isLoaded(applyPage: 'index' | 'file-taxes' | 'tax-filing' | 'terms-and-conditions' | 'type-application', heading?: string | RegExp) {
     let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
 
     switch (applyPage) {
       case 'index':
         pageInfo = { url: /\/en\/apply/, heading: 'Terms and conditions of use and privacy notice statement' };
+        break;
+
+      case 'file-taxes':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/file-taxes/, heading: 'File your taxes' };
+        break;
+
+      case 'tax-filing':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/tax-filing/, heading: 'Tax filing' };
         break;
 
       case 'terms-and-conditions':

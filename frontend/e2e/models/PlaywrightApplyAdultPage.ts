@@ -12,12 +12,10 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
       | 'disability-tax-credit'
       | 'dob-eligibility'
       | 'federal-provincial-territorial-benefits'
-      | 'file-taxes'
       | 'living-independently'
       | 'parent-or-guardian'
       | 'partner-information'
-      | 'review-information'
-      | 'tax-filing',
+      | 'review-information',
     heading?: string | RegExp,
   ) {
     let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
@@ -59,10 +57,6 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/federal-provincial-territorial-benefits/, heading: 'Access to other federal, provincial or territorial dental benefits' };
         break;
 
-      case 'file-taxes':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/file-taxes/, heading: 'File your taxes' };
-        break;
-
       case 'living-independently':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/living-independently/, heading: 'Living independently' };
         break;
@@ -77,10 +71,6 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
 
       case 'review-information':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/review-information/, heading: 'Review your information' };
-        break;
-
-      case 'tax-filing':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/tax-filing/, heading: 'Tax filing' };
         break;
 
       default:

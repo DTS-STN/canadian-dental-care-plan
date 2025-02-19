@@ -12,36 +12,17 @@ test.describe('Children application', () => {
     await applyPage.isLoaded('terms-and-conditions');
     await page.getByRole('button', { name: 'Agree and continue' }).click();
 
+    await applyPage.isLoaded('tax-filing');
+    await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+    await page.getByRole('button', { name: 'Continue' }).click();
+
     await applyPage.isLoaded('type-application');
     await page.getByRole('radio', { name: 'I am applying for my child(ren)', exact: true }).check();
     await page.getByRole('button', { name: 'Continue' }).click();
   });
 
-  test('Should return to CDCP main page if applicant has not filed taxes', async ({ page }) => {
-    const applyChildPage = new PlaywrightApplyChildPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyChildPage.fillTaxFilingForm('No');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to file your tax page', async () => {
-      await applyChildPage.isLoaded('file-taxes');
-    });
-
-    await test.step('Should return to CDCP main page', async () => {
-      await page.getByRole('button', { name: 'Return to main page' }).click();
-      await expect(page).toHaveURL('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html');
-    });
-  });
-
   test('Should return to CDCP main page if child is over 18', async ({ page }) => {
     const applyChildPage = new PlaywrightApplyChildPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
 
     await test.step('Should navigate to children application page', async () => {
       await applyChildPage.isLoaded('children');
@@ -66,11 +47,6 @@ test.describe('Children application', () => {
   test('Should return to CDCP main page if applicant is not legal guardian', async ({ page }) => {
     const applyChildPage = new PlaywrightApplyChildPage(page);
 
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
     await test.step('Should navigate to children application page', async () => {
       await applyChildPage.isLoaded('children');
       await page.getByRole('button', { name: 'Add a child' }).click();
@@ -93,11 +69,6 @@ test.describe('Children application', () => {
 
   test('Should complete application for children', async ({ page }) => {
     const applyChildPage = new PlaywrightApplyChildPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
 
     await test.step('Should navigate to children application page', async () => {
       await applyChildPage.isLoaded('children');

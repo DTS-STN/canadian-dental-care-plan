@@ -14,6 +14,10 @@ test.describe('Adult category', () => {
     await applyPage.isLoaded('terms-and-conditions');
     await page.getByRole('button', { name: 'Agree and continue' }).click();
 
+    await applyPage.isLoaded('tax-filing');
+    await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+    await page.getByRole('button', { name: 'Continue' }).click();
+
     await applyPage.isLoaded('type-application');
     await page.getByRole('button', { name: 'Continue' }).click();
 
@@ -21,31 +25,8 @@ test.describe('Adult category', () => {
     await page.getByRole('button', { name: 'Continue' }).click();
   });
 
-  test('Should return to CDCP main page if applicant has not filed taxes', async ({ page }) => {
-    const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.fillTaxFilingForm('No');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to file your tax page', async () => {
-      await applyAdultChildPage.isLoaded('file-taxes');
-    });
-
-    await test.step('Should return to CDCP main page', async () => {
-      await page.getByRole('button', { name: 'Return to main page' }).click();
-      await expect(page).toHaveURL('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html');
-    });
-  });
-
   test('Should return to CDCP main page if applicant and child are not eligible', async ({ page }) => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
 
     await test.step('Should navigate to date of birth page', async () => {
       const { year, month, day } = calculateDOB(35);
@@ -74,11 +55,6 @@ test.describe('Adult category', () => {
   test('Should navigate to child flow if applicant is not eligible but wish to apply for children', async ({ page }) => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
 
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
     await test.step('Should navigate to date of birth page', async () => {
       const { year, month, day } = calculateDOB(35);
       await applyAdultChildPage.fillDateOfBirthForm({ allChildrenUnder18: 'Yes', day: day, month: month, year: year });
@@ -106,11 +82,6 @@ test.describe('Adult category', () => {
 
   test('Should navigate to adult flow if child is not eligible but applicant wish to apply for themself', async ({ page }) => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
 
     await test.step('Should navigate to date of birth page', async () => {
       const { year, month, day } = calculateDOB(35);
