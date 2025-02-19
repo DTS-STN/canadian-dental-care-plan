@@ -14,6 +14,10 @@ test.describe('Children application', () => {
     await applyPage.isLoaded('terms-and-conditions');
     await page.getByRole('button', { name: 'Agree and continue' }).click();
 
+    await applyPage.isLoaded('tax-filing');
+    await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+    await page.getByRole('button', { name: 'Continue' }).click();
+
     await applyPage.isLoaded('type-application');
     await page.getByRole('button', { name: 'Continue' }).click();
 
@@ -23,11 +27,6 @@ test.describe('Children application', () => {
 
   test('Child is not eligible, applicant want tp apply for themself', async ({ page }) => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
 
     await test.step('Should navigate to date of birth page', async () => {
       const { year, month, day } = calculateDOB(70);
@@ -103,11 +102,6 @@ test.describe('Children application', () => {
   test('applicant is not eligible to apply for children, but want to apply for themself', async ({ page }) => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
 
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
     await test.step('Should navigate to date of birth page', async () => {
       const { year, month, day } = calculateDOB(70);
       await applyAdultChildPage.fillDateOfBirthForm({ allChildrenUnder18: 'Yes', day: day, month: month, year: year });
@@ -181,11 +175,6 @@ test.describe('Children application', () => {
 
   test('Should complete application if applicant is senior and child is under 18', async ({ page }) => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
 
     await test.step('Should navigate to date of birth page', async () => {
       const { year, month, day } = calculateDOB(70);

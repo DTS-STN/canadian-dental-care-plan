@@ -15,11 +15,9 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
       | 'contact-information'
       | 'children-dental-insurance'
       | 'children-federal-provincial-territorial-benefits'
-      | 'file-taxes'
       | 'parent-or-guardian'
       | 'review-adult-information'
-      | 'review-child-information'
-      | 'tax-filing',
+      | 'review-child-information',
     heading?: string | RegExp,
   ) {
     let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
@@ -61,10 +59,6 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/federal-provincial-territorial-benefits/, heading: 'Access to other federal, provincial or territorial dental benefits' };
         break;
 
-      case 'file-taxes':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/file-taxes/, heading: 'File your taxes' };
-        break;
-
       case 'parent-or-guardian':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/parent-or-guardian/, heading: 'You must be a parent or legal guardian' };
         break;
@@ -77,10 +71,6 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/review-child-information/, heading: 'Review child(ren) information' };
         break;
 
-      case 'tax-filing':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/tax-filing/, heading: 'Tax filing' };
-        break;
-
       default:
         pageInfo = undefined;
         break;
@@ -88,11 +78,6 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
 
     if (!pageInfo) throw Error(`applyChildPage '${applyChildPage}' not implemented.`);
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
-  }
-
-  async fillTaxFilingForm(fileTaxes: string) {
-    await this.isLoaded('tax-filing');
-    await this.page.getByRole('radio', { name: fileTaxes, exact: true }).check();
   }
 
   async fillChildInformationForm(age: number, isParentOrGuardian: string) {

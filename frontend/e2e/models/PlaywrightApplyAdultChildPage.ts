@@ -31,13 +31,11 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'disability-tax-credit'
       | 'dob-eligibility'
       | 'federal-provincial-territorial-benefits'
-      | 'file-taxes'
       | 'living-independently'
       | 'parent-or-guardian'
       | 'partner-information'
       | 'review-adult-information'
-      | 'review-child-information'
-      | 'tax-filing',
+      | 'review-child-information',
     heading?: string | RegExp,
   ) {
     let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
@@ -115,10 +113,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/federal-provincial-territorial-benefits/, heading: 'Access to other federal, provincial or territorial dental benefits' };
         break;
 
-      case 'file-taxes':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/file-taxes/, heading: 'File your taxes' };
-        break;
-
       case 'living-independently':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/living-independently/, heading: 'Living independently' };
         break;
@@ -139,10 +133,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/review-child-information/, heading: 'Review child(ren) information' };
         break;
 
-      case 'tax-filing':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/tax-filing/, heading: 'Tax filing' };
-        break;
-
       default:
         pageInfo = undefined;
         break;
@@ -150,11 +140,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
 
     if (!pageInfo) throw Error(`applyAdultChildPage '${applyAdultChildPage}' not implemented.`);
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
-  }
-
-  async fillTaxFilingForm(fileTaxes: string) {
-    await this.isLoaded('tax-filing');
-    await this.page.getByRole('radio', { name: fileTaxes, exact: true }).check();
   }
 
   async fillDateOfBirthForm({ allChildrenUnder18, day, month, year }: FillDateOfBirthFormArgs) {
