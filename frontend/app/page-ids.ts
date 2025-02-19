@@ -1,7 +1,8 @@
 export const pageIds = {
   protected: {
-    home: 'CDCP-PROT-0001',
-    letters: { index: 'CDCP-PROT-0015' },
+    letters: {
+      index: 'CDCP-PROT-0015',
+    },
     renew: {
       index: 'CDCP-PROT-RENW-0001',
       termsAndConditions: 'CDCP-PROT-RENW-0002',
