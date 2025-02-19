@@ -39,6 +39,7 @@
       "org.springframework.test.web.servlet.result.MockMvcResultHandlers.*",
       "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*"
     ],
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "tailwindCSS.experimental.configFile": "frontend/app/tailwind.css"
   }
 }
