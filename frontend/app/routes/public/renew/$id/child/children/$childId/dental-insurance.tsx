@@ -108,8 +108,8 @@ export default function RenewChildChildrenDentalInsurance({ loaderData, params }
             <li>{t('children.dental-insurance.detail.additional-info.eligible-list.employment-benefits')}</li>
             <li>
               {t('children.dental-insurance.detail.additional-info.eligible-list.organization.professional-student')}
+              <p className="pl-4">{t('children.dental-insurance.detail.additional-info.eligible-list.organization.note')}</p>
               <ul className="list-disc space-y-1 pl-7">
-                <li className="-ml-7 list-none pl-4">{t('children.dental-insurance.detail.additional-info.eligible-list.organization.note')}</li>
                 <li>{t('children.dental-insurance.detail.additional-info.eligible-list.organization.not-take')}</li>
                 <li>{t('children.dental-insurance.detail.additional-info.eligible-list.organization.pay-premium')}</li>
                 <li>{t('children.dental-insurance.detail.additional-info.eligible-list.organization.not-use')}</li>
