@@ -152,8 +152,8 @@ export default function ProtectedRenewConfirm({ loaderData, params }: Route.Comp
           <>
             <h2 className="font-lato text-3xl font-bold">{t('confirm.applicant-summary')}</h2>
             <section className="space-y-6">
-              <span className="font-lato text-3xl font-bold">{t('confirm.applicant-title')}</span>
-              <h3 className="font-lato text-2xl font-bold">{t('confirm.member-info')}</h3>
+              <h3 className="font-lato text-3xl font-bold">{t('confirm.applicant-title')}</h3>
+              <h4 className="font-lato text-2xl font-bold">{t('confirm.member-info')}</h4>
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('confirm.full-name')}>{`${primaryApplicantInfo.firstName} ${primaryApplicantInfo.lastName}`}</DescriptionListItem>
               </dl>
