@@ -4,7 +4,7 @@ import { index, layout, route } from '@react-router/dev/routes';
 // note: because the routes are processed at build time by vite,
 //       we cannot use aliased imports (ie: ~/) here
 import type { I18nPageRoute, I18nRoute } from './routes/routes';
-import { routes as i18nRoutes, isI18nPageRoute } from './routes/routes';
+import { i18nRoutes, isI18nPageRoute, routes } from './routes/routes';
 
 /**
  * Generates a route id by combining a base id and a language code.
@@ -53,5 +53,6 @@ function toRouteConfigEntries(routes: I18nRoute[]): RouteConfigEntry[] {
 export default [
   index('routes/language-chooser.tsx'), //
   route('/:lang/*', 'routes/catchall.tsx'),
+  ...routes,
   ...toRouteConfigEntries(i18nRoutes),
 ] satisfies RouteConfig;
