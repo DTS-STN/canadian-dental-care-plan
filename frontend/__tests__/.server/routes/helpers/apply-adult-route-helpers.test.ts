@@ -43,7 +43,7 @@ describe('apply-adult-route-helpers', () => {
     it('should redirect if taxFiling2023 is no', () => {
       const mockState = { ...baseState, typeOfApplication: 'adult', editMode: false, taxFiling2023: false } satisfies ApplyState;
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if dateOfBirth is undefined', () => {
