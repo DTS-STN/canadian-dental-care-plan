@@ -130,7 +130,7 @@
       }
     },
     "confirm-dental-benefits": {
-      "title": "{{childName}}: access to other federal, provincial or territorial dental benefits",
+      "title": "{{childName}}: access to other government dental benefits",
       "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social programs will not impact the child's eligibility for the Canadian Dental Care Plan.",
       "select-one": "Select one",
       "eligibility-criteria": "If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
