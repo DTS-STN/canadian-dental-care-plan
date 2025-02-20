@@ -140,7 +140,7 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
   }
 
   if (taxFiling2023 === false) {
-    throw redirect(getPathById('public/apply/$id/file-taxes', params));
+    throw redirect(getPathById('public/apply/$id/child/file-taxes', params));
   }
 
   const children = validateChildrenStateForReview({ childrenState: state.children, params });
