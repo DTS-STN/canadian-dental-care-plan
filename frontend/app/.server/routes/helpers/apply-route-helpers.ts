@@ -24,7 +24,7 @@ export type ApplyState = ReadonlyDeep<{
     maritalStatus: string;
     socialInsuranceNumber: string;
   };
-  applicationYear: {
+  applicationYear?: {
     intakeYearId: string;
     taxYear: string;
   };
@@ -236,7 +236,7 @@ export function clearApplyState({ params, session }: ClearStateArgs) {
 }
 
 interface StartArgs {
-  applicationYear: ApplicationYearState;
+  applicationYear?: ApplicationYearState;
   id: string;
   session: Session;
 }

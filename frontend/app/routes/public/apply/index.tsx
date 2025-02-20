@@ -7,6 +7,7 @@ import { randomUUID } from 'crypto';
 import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
+import type { IntakeApplicationYearResultDto } from '~/.server/domain/dtos';
 import { startApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { pageIds } from '~/page-ids';
@@ -32,10 +33,18 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const locale = getLocale(request);
 
   const id = randomUUID().toString();
-  const currentDate = getCurrentDateString(locale);
-  const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
-  const applicationYear = await applicationYearService.getIntakeApplicationYear(currentDate);
-  const state = startApplyState({ id, session, applicationYear });
+
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const applyApplicationYearEnabled = ENABLED_FEATURES.includes('apply-application-year');
+
+  let applicationYear: IntakeApplicationYearResultDto | undefined;
+  if (applyApplicationYearEnabled) {
+    const currentDate = getCurrentDateString(locale);
+    const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
+    applicationYear = await applicationYearService.getIntakeApplicationYear(currentDate);
+  }
+
+  const state = startApplyState({ id, session, ...(applyApplicationYearEnabled ? { applicationYear } : {}) });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:index.page-title') }) };
 

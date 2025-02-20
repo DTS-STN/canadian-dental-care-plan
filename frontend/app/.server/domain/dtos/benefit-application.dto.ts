@@ -2,7 +2,7 @@ import type { ReadonlyDeep } from 'type-fest';
 
 export type BenefitApplicationDto = ReadonlyDeep<{
   applicantInformation: ApplicantInformationDto;
-  applicationYearId: string;
+  applicationYearId?: string;
   children: ChildDto[];
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
