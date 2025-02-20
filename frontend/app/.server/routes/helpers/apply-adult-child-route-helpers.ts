@@ -158,7 +158,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
   }
 
   if (taxFiling2023 === false) {
-    throw redirect(getPathById('public/apply/$id/adult-child/file-taxes', params));
+    throw redirect(getPathById('public/apply/$id/file-taxes', params));
   }
 
   if (dateOfBirth === undefined || allChildrenUnder18 === undefined) {

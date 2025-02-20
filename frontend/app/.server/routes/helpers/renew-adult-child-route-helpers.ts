@@ -180,11 +180,11 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
   }
 
   if (contactInformation?.isNewOrUpdatedPhoneNumber === undefined) {
-    throw redirect(getPathById('public/renew/$id/confirm-phone', params));
+    throw redirect(getPathById('public/renew/$id/adult-child/confirm-phone', params));
   }
 
   if (contactInformation.isNewOrUpdatedEmail === undefined) {
-    throw redirect(getPathById('public/renew/$id/confirm-email', params));
+    throw redirect(getPathById('public/renew/$id/adult-child/confirm-email', params));
   }
 
   if (dentalInsurance === undefined) {

@@ -13,7 +13,7 @@ import type { ApplicantInformationState } from '~/.server/routes/helpers/renew-r
 import { loadRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:applicant-information.page-title') }) };
 
-  return { id: state.id, meta, defaultState: state.applicantInformation, editMode: state.editMode };
+  return { id: state.id, meta, defaultState: state.applicantInformation };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -152,11 +152,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return { status: 'status-not-found' } as const;
   }
 
-  saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data, clientApplication } });
-
-  if (state.editMode) {
-    return redirect(getPathById('public/renew/$id/review-information', params));
-  }
+  saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data, clientApplication, editMode: false } });
 
   if (clientApplication.hasFiledTaxes) {
     return redirect(getPathById('public/renew/$id/type-renewal', params));
@@ -168,7 +164,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewApplicationInformation({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode } = loaderData;
+  const { defaultState } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -268,38 +264,21 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
               </div>
             </Collapsible>
           </div>
-          {editMode ? (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="save-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Save - Personal information click">
-                {t('renew:applicant-information.save-btn')}
-              </Button>
-              <ButtonLink
-                id="cancel-button"
-                routeId={defaultState ? 'public/renew/$id/review-information' : 'public/renew/$id/terms-and-conditions'}
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Cancel - Personal information click"
-              >
-                {t('renew:applicant-information.cancel-btn')}
-              </ButtonLink>
-            </div>
-          ) : (
-            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Continue - Personal information click">
-                {t('renew:applicant-information.continue-btn')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="public/renew/$id/terms-and-conditions"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - Personal information click"
-              >
-                {t('renew:applicant-information.back-btn')}
-              </ButtonLink>
-            </div>
-          )}
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Continue - Personal information click">
+              {t('renew:applicant-information.continue-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              routeId="public/renew/$id/terms-and-conditions"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Back - Personal information click"
+            >
+              {t('renew:applicant-information.back-btn')}
+            </ButtonLink>
+          </div>
         </fetcher.Form>
       </div>
     </>
