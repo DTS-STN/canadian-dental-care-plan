@@ -1,4 +1,4 @@
-import { data, redirect, useFetcher } from 'react-router';
+import { data, redirectDocument, useFetcher } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { InputSelect } from '~/components/input-select';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -56,6 +57,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const stubLoginSchema = z.object({
     sin: z.string().trim().min(1, t('stub-login:index.error-message.sin-required')),
+    destinationRouteId: z.string().trim().min(1, t('stub-login:index.error-message.destination-required')),
     sid: z.string().trim().min(1, t('stub-login:index.error-message.sid-required')),
     sub: z.string().trim().min(1, t('stub-login:index.error-message.sub-required')),
   });
@@ -64,6 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedDataResult = stubLoginSchema.safeParse({
     sin: String(formData.get('sin') ?? ''),
+    destinationRouteId: String(formData.get('destinationRouteId') ?? ''),
     sid: String(formData.get('sid') ?? ''),
     sub: String(formData.get('sub') ?? ''),
   });
@@ -90,7 +93,7 @@ export async function action({ context: { appContainer, session }, params, reque
     locale: 'en-CA',
   };
 
-  const userinfoTokenPayload = {
+  const userInfoTokenPayload = {
     aud: 'CDCP',
     birthdate: '2000-01-01',
     iss: 'GC-ECAS-MOCK',
@@ -100,18 +103,21 @@ export async function action({ context: { appContainer, session }, params, reque
     sub,
     mocked: true,
   };
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  if (!session.has('userInfoToken')) {
-    session.set('userInfoToken', userinfoTokenPayload);
-  } else {
+
+  if (session.has('userInfoToken')) {
+    const userInfoToken: UserinfoToken = session.get('userInfoToken');
     userInfoToken.sin = sin;
     userInfoToken.sub = sub;
+
     session.set('userInfoToken', userInfoToken);
+  } else {
+    session.set('userInfoToken', userInfoTokenPayload);
   }
+
   session.set('idToken', idToken);
   session.unset('clientNumber');
 
-  return redirect(getPathById('protected/home', params));
+  return redirectDocument(getPathById(parsedDataResult.data.destinationRouteId, params));
 }
 
 export default function StubLogin({ loaderData, params }: Route.ComponentProps) {
@@ -122,6 +128,7 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     sin: 'sin',
+    destinationRouteId: 'destination-page',
     sid: 'sid',
     sub: 'sub',
   });
@@ -131,6 +138,21 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate className="space-y-6">
         <InputField id="sin" name="sin" label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} />
+        <InputSelect
+          id="destination-page"
+          name="destinationRouteId"
+          label={t('stub-login:index.destination')}
+          options={[
+            {
+              children: 'Letters',
+              value: 'protected/letters/index',
+            },
+            {
+              children: 'Renew my coverage',
+              value: 'protected/renew/index',
+            },
+          ]}
+        />
         <fieldset>
           <legend className="mb-2 text-xl font-semibold">{t('stub-login:index.raoidc')}</legend>
           <div className="space-y-6">

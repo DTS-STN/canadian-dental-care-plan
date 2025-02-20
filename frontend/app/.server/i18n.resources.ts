@@ -6,7 +6,6 @@ import applyEn from '~/../public/locales/en/apply.json';
 import commonEn from '~/../public/locales/en/common.json';
 import dataUnavailableEn from '~/../public/locales/en/data-unavailable.json';
 import gcwebEn from '~/../public/locales/en/gcweb.json';
-import indexEn from '~/../public/locales/en/index.json';
 import lettersEn from '~/../public/locales/en/letters.json';
 import protectedRenewEn from '~/../public/locales/en/protected-renew.json';
 import renewAdultChildEn from '~/../public/locales/en/renew-adult-child.json';
@@ -25,7 +24,6 @@ import applyFr from '~/../public/locales/fr/apply.json';
 import commonFr from '~/../public/locales/fr/common.json';
 import dataUnavailableFr from '~/../public/locales/fr/data-unavailable.json';
 import gcwebFr from '~/../public/locales/fr/gcweb.json';
-import indexFr from '~/../public/locales/fr/index.json';
 import lettersFr from '~/../public/locales/fr/letters.json';
 import protectedRenewFr from '~/../public/locales/fr/protected-renew.json';
 import renewAdultChildFr from '~/../public/locales/fr/renew-adult-child.json';
@@ -48,7 +46,6 @@ const i18nResourcesEn = {
   common: commonEn,
   'data-unavailable': dataUnavailableEn,
   gcweb: gcwebEn,
-  index: indexEn,
   letters: lettersEn,
   'protected-renew': protectedRenewEn,
   'renew-adult-child': renewAdultChildEn,
@@ -70,7 +67,6 @@ const i18nResourcesFr = {
   common: commonFr,
   'data-unavailable': dataUnavailableFr,
   gcweb: gcwebFr,
-  index: indexFr,
   letters: lettersFr,
   'protected-renew': protectedRenewFr,
   'renew-adult-child': renewAdultChildFr,

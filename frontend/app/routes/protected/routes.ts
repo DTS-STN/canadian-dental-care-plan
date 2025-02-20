@@ -15,11 +15,6 @@ export const routes = [
         paths: { en: '/:lang/protected/unable-to-process-request', fr: '/:lang/protege/impossible-de-traiter-la-demande' },
       },
       {
-        id: 'protected/home',
-        file: 'routes/protected/home.tsx',
-        paths: { en: '/:lang/protected/home', fr: '/:lang/protege/accueil' },
-      },
-      {
         id: 'protected/letters/index',
         file: 'routes/protected/letters/index.tsx',
         paths: { en: '/:lang/protected/letters', fr: '/:lang/protege/lettres' },
