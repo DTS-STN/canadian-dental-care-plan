@@ -1,9 +1,9 @@
-import type { I18nRoute } from '~/routes/routes';
+import type { RouteConfig } from '@react-router/dev/routes';
 
 export const routes = [
   {
     id: 'oidc/$',
     file: 'routes/oidc/$.tsx',
-    paths: { en: '/oidc/*', fr: '/oidc/*' },
+    path: '/oidc/*',
   },
-] as const satisfies I18nRoute[];
+] as const satisfies RouteConfig;
