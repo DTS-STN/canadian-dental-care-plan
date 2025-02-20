@@ -7,7 +7,7 @@ import validator from 'validator';
 import { z } from 'zod';
 
 import type { I18nPageRoute, I18nRoute, Language } from '~/routes/routes';
-import { routes as i18nRoutes, isI18nLayoutRoute, isI18nPageRoute } from '~/routes/routes';
+import { i18nRoutes, isI18nLayoutRoute, isI18nPageRoute } from '~/routes/routes';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
