@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
@@ -357,15 +357,16 @@ function ChildNotFound() {
   const noWrap = <span className="whitespace-nowrap" />;
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (wrapperRef.current) {
-      wrapperRef.current.scrollIntoView({ behavior: 'smooth' });
-      wrapperRef.current.focus();
+  const setWrapperRef = (node: HTMLDivElement | null) => {
+    if (node) {
+      node.scrollIntoView({ behavior: 'smooth' });
+      node.focus();
     }
-  }, []);
+    wrapperRef.current = node;
+  };
 
   return (
-    <div ref={wrapperRef} id="child-not-found" className="mb-4" role="region" aria-live="assertive" tabIndex={-1}>
+    <div ref={setWrapperRef} id="child-not-found" className="mb-4" role="region" aria-live="assertive" tabIndex={-1}>
       <ContextualAlert type="danger">
         <h2 className="mb-2 font-bold">{t('renew-adult-child:children.information.child-not-found.heading')}</h2>
         <p className="mb-2">{t('renew-adult-child:children.information.child-not-found.please-review')}</p>
