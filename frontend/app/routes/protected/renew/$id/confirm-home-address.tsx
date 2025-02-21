@@ -375,6 +375,7 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
             <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
               <DialogTrigger asChild>
                 <LoadingButton
+                  aria-expanded={undefined}
                   variant="primary"
                   id="continue-button"
                   type="submit"
