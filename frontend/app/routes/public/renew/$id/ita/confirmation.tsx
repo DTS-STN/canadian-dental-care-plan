@@ -299,6 +299,7 @@ export default function RenewFlowConfirm({ loaderData, params }: Route.Component
       <Dialog>
         <DialogTrigger asChild>
           <button
+            aria-expanded={undefined}
             className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-ITA:Close application - Your renewal for the Canadian Dental Care Plan is complete click"
           >
