@@ -157,9 +157,12 @@ interface CardLinkProps extends OmitStrict<AppLinkProps, 'className' | 'title'> 
 
 function CardLink({ routeId, title, previouslyReviewed, ...props }: CardLinkProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
+
   return (
     <AppLink className="flex flex-row items-center gap-4 rounded-xl border border-slate-300 bg-slate-50 p-6 hover:shadow-md focus:ring-2 focus:ring-blue-600 focus:outline-none" routeId={routeId} {...props}>
-      <span className="font-lato text-2xl leading-8 font-semibold text-blue-600 underline">{title}</span>
+      <span aria-description={t('protected-renew:member-selection.select-member-help')} className="font-lato text-2xl leading-8 font-semibold text-blue-600 underline">
+        {title}
+      </span>
       {previouslyReviewed && (
         <>
           <FontAwesomeIcon fixedWidth icon={faCircleCheck} className="ml-4 size-10 self-center" style={{ color: 'green' }} />

@@ -113,7 +113,8 @@
     "select-member": {
       "heading": "Select a member",
       "to-continue": "You must select a member to continue."
-    }
+    },
+    "select-member-help": "Select member"
   },
   "dental-insurance": {
     "title": "{{memberName}}: access to private dental insurance",
