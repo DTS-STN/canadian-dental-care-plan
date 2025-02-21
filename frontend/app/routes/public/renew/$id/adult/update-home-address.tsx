@@ -341,7 +341,16 @@ export default function RenewAdultUpdateAddress({ loaderData, params }: Route.Co
             <div className="flex flex-wrap items-center gap-3">
               <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
-                  <LoadingButton variant="primary" id="save-button" type="submit" name="_action" value={FORM_ACTION.submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Home address click">
+                  <LoadingButton
+                    aria-expanded={undefined}
+                    variant="primary"
+                    id="save-button"
+                    type="submit"
+                    name="_action"
+                    value={FORM_ACTION.submit}
+                    loading={isSubmitting}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Home address click"
+                  >
                     {t('renew-adult:update-address.save-btn')}
                   </LoadingButton>
                 </DialogTrigger>
@@ -361,6 +370,7 @@ export default function RenewAdultUpdateAddress({ loaderData, params }: Route.Co
               <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
                   <LoadingButton
+                    aria-expanded={undefined}
                     variant="primary"
                     id="continue-button"
                     type="submit"

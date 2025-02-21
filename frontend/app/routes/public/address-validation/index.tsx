@@ -323,7 +323,7 @@ export default function AddressValidationIndexRoute({ loaderData, params }: Rout
           <div className="flex flex-wrap items-center gap-3">
             <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
               <DialogTrigger asChild>
-                <LoadingButton type="submit" id="submit-button" name="_action" value={FORM_ACTION.submit} variant="primary" loading={fetcher.isSubmitting} endIcon={faCheck}>
+                <LoadingButton aria-expanded={undefined} type="submit" id="submit-button" name="_action" value={FORM_ACTION.submit} variant="primary" loading={fetcher.isSubmitting} endIcon={faCheck}>
                   {t('address-validation:index.submit-button')}
                 </LoadingButton>
               </DialogTrigger>

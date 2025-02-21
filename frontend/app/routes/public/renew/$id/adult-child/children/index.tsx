@@ -206,7 +206,7 @@ export default function RenewFlowChildSummary({ loaderData, params }: Route.Comp
                     </ButtonLink>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button id="remove-child" disabled={isSubmitting} size="sm" variant="alternative" startIcon={faRemove}>
+                        <Button aria-expanded={undefined} id="remove-child" disabled={isSubmitting} size="sm" variant="alternative" startIcon={faRemove}>
                           {t('renew-adult-child:children.index.modal.remove-btn')}
                         </Button>
                       </DialogTrigger>
