@@ -17,7 +17,7 @@
     },
     "error-message": {
       "marital-status-required": "Sélectionnez l'état civil",
-      "confirm-required": "La case à cocher doit être sélectionnée",
+      "confirm-required": "Le consentement de l'époux/épouse ou du conjoint de fait est requis pour procéder",
       "date-of-birth-year-required": "Entrez l'année de naissance, par exemple 1950",
       "yob-is-future": "L'année de naissance doit être dans le passé",
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
