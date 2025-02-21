@@ -113,7 +113,8 @@
     "select-member": {
       "heading": "Sélectionner un membre",
       "to-continue": "Vous devez sélectionner un membre pour continuer."
-    }
+    },
+    "select-member-help": "Sélectionner un membre"
   },
   "dental-insurance": {
     "title": "{{memberName}}\u00a0: accès à une assurance dentaire privée",
