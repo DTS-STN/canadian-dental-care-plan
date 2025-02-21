@@ -596,7 +596,7 @@
       "sin": "Entrez un NAS de 9 chiffres"
     },
     "error-message": {
-      "confirm-required": "La case à cocher doit être sélectionnée",
+      "confirm-required": "Le consentement de l'époux/épouse ou du conjoint de fait est requis pour procéder",
       "date-of-birth-day-number": "Le jour doit être un nombre",
       "date-of-birth-day-required": "La date de naissance doit inclure un jour",
       "date-of-birth-is-past": "La date de naissance doit être dans le passé",
