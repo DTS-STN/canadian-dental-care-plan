@@ -377,6 +377,7 @@ export default function RenewAdultChildUpdateAddress({ loaderData, params }: Rou
               <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
                   <LoadingButton
+                    aria-expanded={undefined}
                     variant="primary"
                     id="save-button"
                     type="submit"
@@ -406,6 +407,7 @@ export default function RenewAdultChildUpdateAddress({ loaderData, params }: Rou
               <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
                   <LoadingButton
+                    aria-expanded={undefined}
                     variant="primary"
                     id="continue-button"
                     type="submit"
