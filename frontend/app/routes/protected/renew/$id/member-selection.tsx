@@ -185,10 +185,10 @@ function SelectMember() {
   }, []);
 
   return (
-    <div ref={wrapperRef} id="select-member" className="mb-4" role="region" aria-live="polite">
+    <div ref={wrapperRef} id="select-member" className="mb-4">
       <ContextualAlert type="danger">
         <h2 className="mb-2 font-bold">{t('protected-renew:member-selection.select-member.heading')}</h2>
-        <InlineLink to="#primary-applicant" className="mb-2">
+        <InlineLink role="alert" aria-live="polite" to="#primary-applicant" className="mb-2">
           {t('protected-renew:member-selection.select-member.to-continue')}
         </InlineLink>
       </ContextualAlert>
