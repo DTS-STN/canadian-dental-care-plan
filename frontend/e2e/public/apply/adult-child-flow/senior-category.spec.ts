@@ -12,7 +12,7 @@ test.describe('Senior category', () => {
     await applyPage.gotoIndexPage();
 
     await applyPage.isLoaded('terms-and-conditions');
-    await page.getByRole('checkbox', { name: "I have read the Terms and Conditions" }).check();
+    await page.getByRole('checkbox', { name: 'I have read the Terms and Conditions' }).check();
     await page.getByRole('checkbox', { name: 'I have read the Privacy Notice Statement' }).check();
     await page.getByRole('checkbox', { name: 'I consent to the sharing of data' }).check();
     await page.getByRole('button', { name: 'Agree and continue' }).click();
