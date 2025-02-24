@@ -278,7 +278,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
                 size="sm"
                 type="submit"
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit application - Terms and Conditions click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Modal Exit application - Terms and Conditions click"
               >
                 {t('apply:terms-and-conditions.dialog.exit-btn')}
               </Button>
