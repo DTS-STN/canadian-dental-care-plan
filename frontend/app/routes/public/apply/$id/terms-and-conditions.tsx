@@ -9,7 +9,7 @@ import { z } from 'zod';
 import type { Route } from './+types/terms-and-conditions';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { clearApplyState, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -30,6 +30,11 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 enum CheckboxValue {
   Yes = 'yes',
 }
+
+const FORM_ACTION = {
+  continue: 'continue',
+  exit: 'exit',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -54,10 +59,10 @@ export async function action({ context: { appContainer, session }, request, para
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
-  const doNotConsent = formData.get('doNotConsent') ?? '';
-
-  if (doNotConsent) {
+  if (formAction === FORM_ACTION.exit) {
+    clearApplyState({ params, session });
     return redirect(t('apply:terms-and-conditions.dialog.exit-btn-link'));
   }
 
@@ -238,6 +243,8 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             aria-describedby="application-consent"
             variant="primary"
             id="continue-button"
+            name="_action"
+            value={FORM_ACTION.continue}
             loading={isSubmitting}
             endIcon={faChevronRight}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Agree and Continue - Terms and Conditions click"
@@ -257,14 +264,22 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
           <DialogDescription>{t('apply:terms-and-conditions.dialog.description')}</DialogDescription>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" disabled={isSubmitting} startIcon={faChevronLeft} variant="default" size="sm">
+              <Button id="confirm-modal-back" disabled={isSubmitting} startIcon={faChevronLeft} variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Modal Back - Terms and Conditions click">
                 {t('apply:terms-and-conditions.dialog.back-btn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
-              <input type="hidden" name="doNotConsent" value={CheckboxValue.Yes} />
-              <Button id="exit-application" variant="primary" size="sm" type="submit" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit application - Terms and Conditions click">
+              <Button
+                id="exit-application"
+                name="_action"
+                value={FORM_ACTION.exit}
+                variant="primary"
+                size="sm"
+                type="submit"
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit application - Terms and Conditions click"
+              >
                 {t('apply:terms-and-conditions.dialog.exit-btn')}
               </Button>
             </fetcher.Form>
