@@ -95,20 +95,9 @@
   },
   "type-of-application": {
     "page-title": "Type de demande",
-    "page-description": "La présentation des demandes au titre du Régime canadien de soins dentaires se fait par étapes.",
-    "apply-self": "Présenter une demande pour vous-même",
-    "apply-self-eligibility": "Vous pouvez actuellement présenter une demande pour vous-même si vous êtes\u00a0:",
-    "senior": "65 ans ou plus;",
-    "valid-disability-tax-credit": "18 à 64 ans et avez un certificat valide de crédit d'impôt pour personnes handicapées;",
-    "live-independently": "16 ou 17 ans et vivez indépendamment de vos parents ou avez un enfant pour lequel vous faites également une demande.",
-    "apply-child": "Présenter une demande pour votre enfant",
-    "apply-child-eligibility": "Vous pouvez présenter une demande au nom de votre enfant si les deux conditions suivantes sont remplies\u00a0:",
-    "sixteen-or-older": "vous avez 16 ans ou plus et êtes le parent ou le tuteur légal de cet enfant;",
-    "under-eighteen": "l'enfant est âgé de moins de 18 ans.",
+    
     "form-instructions": "Pour qui présentez-vous la demande?",
-    "split-custody-summary": "Si vous partagez la garde d'un enfant",
-    "split-custody-detail": "Si vous avez une entente de garde partagée pour l'enfant, l'admissibilité au régime et le montant de la couverture sont déterminés par le parent ou le tuteur légal qui présente la demande. L'admissibilité de l'enfant et le montant couvert peuvent changer si un autre parent ou tuteur légal présente une demande pour cet enfant.",
-    "multiple-application": "Ne soumettez pas plusieurs demandes pour un même enfant\u00a0: un seul parent devrait présenter la demande, et ce, pour chaque enfant.",
+  
     "radio-options": {
       "personal": "Je présente une demande pour <strong>moi-même</strong>",
       "child": "Je présente une demande pour <strong>mon (mes) enfant(s)</strong>",
