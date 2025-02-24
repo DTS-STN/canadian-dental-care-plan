@@ -93,8 +93,8 @@
       "sun-life": "https://www.sunlife.ca/en/"
     },
     "checkboxes": {
-      "acknowledge-terms": "I acknowledge that I've read the Terms and Conditions",
-      "acknowledge-privacy": "I acknowledge that I have read the Privacy Notice Statement",
+      "acknowledge-terms": "I have read the Terms and Conditions",
+      "acknowledge-privacy": "I have read the Privacy Notice Statement",
       "share-data": "I consent to the sharing of data",
       "do-not-consent": "I have <strong>not read</strong> the Terms and Conditions and Privacy Notice Statement and <strong>do not consent</strong> to the sharing of my information for the purposes of CDCP",
       "error-message": {
