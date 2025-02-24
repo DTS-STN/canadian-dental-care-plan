@@ -11,7 +11,6 @@ import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-r
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
-import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
@@ -93,32 +92,6 @@ export default function ApplyFlowTypeOfApplication({ loaderData, params }: Route
         <Progress value={10} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-6">{t('apply:type-of-application.page-description')}</p>
-        <div className="space-y-6">
-          <section className="space-y-4">
-            <h2 className="font-lato text-lg font-bold">{t('apply:type-of-application.apply-self')}</h2>
-            <p>{t('apply:type-of-application.apply-self-eligibility')}</p>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('apply:type-of-application.senior')}</li>
-              <li>{t('apply:type-of-application.valid-disability-tax-credit')}</li>
-              <li>{t('apply:type-of-application.live-independently')}</li>
-            </ul>
-          </section>
-          <section className="space-y-4">
-            <h2 className="font-lato text-lg font-bold">{t('apply:type-of-application.apply-child')}</h2>
-            <p>{t('apply:type-of-application.apply-child-eligibility')}</p>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('apply:type-of-application.sixteen-or-older')}</li>
-              <li>{t('apply:type-of-application.under-eighteen')}</li>
-            </ul>
-            <Collapsible summary={t('apply:type-of-application.split-custody-summary')}>
-              <div className="space-y-4">
-                <p>{t('apply:type-of-application.multiple-application')}</p>
-                <p>{t('apply:type-of-application.split-custody-detail')}</p>
-              </div>
-            </Collapsible>
-          </section>
-        </div>
         <p className="mt-8 mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
