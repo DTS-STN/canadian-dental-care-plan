@@ -102,6 +102,13 @@
         "acknowledge-privacy-required": "(FR) Privacy Notice Statement checkbox must be selected",
         "share-data-required": "(FR) Sharing of data checkbox must be selected"
       }
+    },
+    "dialog": {
+      "title": "(FR) You must read the Terms and Conditions and Privacy Notice Statement, and consent to the sharing of your information",
+      "description": "(FR) To apply for the Canadian Dental Care Plan you must acknowledge that you have read and accept the Terms and Conditions and Privacy Notice Statement. You must also consent to the sharing of your personal information for the purposes listed.",
+      "back-btn": "(FR) Back",
+      "exit-btn": "(FR) Exit application",
+      "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     }
   },
   "tax-filing": {

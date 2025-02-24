@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -10,9 +12,10 @@ import { TYPES } from '~/.server/constants';
 import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { ButtonLink } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -54,9 +57,8 @@ export async function action({ context: { appContainer, session }, request, para
 
   const doNotConsent = formData.get('doNotConsent') ?? '';
 
-  //TODO: Instead of redirecting immediately, display a confirmation popup modal that redirects the user back to the CDCP main page. Update the code to include the modal once the design is finalized
   if (doNotConsent) {
-    return redirect(t('apply:terms-and-conditions.apply.link'));
+    return redirect(t('apply:terms-and-conditions.dialog.exit-btn-link'));
   }
 
   const consentSchema = z
@@ -67,9 +69,13 @@ export async function action({ context: { appContainer, session }, request, para
       shareData: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
-      if (!val.doNotConsent) {
+      if (!val.doNotConsent && !val.acknowledgeTerms) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required'), path: ['acknowledgeTerms'] });
+      }
+      if (!val.doNotConsent && !val.acknowledgePrivacy) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required'), path: ['acknowledgePrivacy'] });
+      }
+      if (!val.doNotConsent && !val.shareData) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.share-data-required'), path: ['shareData'] });
       }
     });
@@ -91,6 +97,8 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function ApplyIndex({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
+  const [showDialog, setShowDialog] = useState(false);
+  const [doNotConsentChecked, setDoNotConsentChecked] = useState(false);
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -102,6 +110,17 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
     shareData: 'input-checkbox-share-data',
     doNotConsent: 'input-checkbox-do-not-consent"',
   });
+
+  const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDoNotConsentChecked(event.target.checked);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    if (doNotConsentChecked) {
+      event.preventDefault();
+      setShowDialog(true);
+    }
+  };
 
   const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link" newTabIndicator target="_blank" />;
   const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} className="external-link" newTabIndicator target="_blank" />;
@@ -200,7 +219,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       <p className="my-8" id="application-consent">
         {t('apply:terms-and-conditions.apply.application-consent')}
       </p>
-      <fetcher.Form method="post" noValidate>
+      <fetcher.Form method="post" noValidate onSubmit={handleSubmit}>
         <CsrfTokenInput />
         <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgeTerms} required>
           {t('apply:terms-and-conditions.checkboxes.acknowledge-terms')}
@@ -211,7 +230,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
         <InputCheckbox id="share-data" name="shareData" value={CheckboxValue.Yes} errorMessage={errors?.shareData} required>
           {t('apply:terms-and-conditions.checkboxes.share-data')}
         </InputCheckbox>
-        <InputCheckbox id="do-not-consent" name="doNotConsent" value={CheckboxValue.Yes} className="my-8">
+        <InputCheckbox id="do-not-consent" name="doNotConsent" value={CheckboxValue.Yes} className="my-8" onChange={handleChecked}>
           <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.checkboxes.do-not-consent" />
         </InputCheckbox>
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
@@ -230,6 +249,28 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
           </ButtonLink>
         </div>
       </fetcher.Form>
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('apply:terms-and-conditions.dialog.title')}</DialogTitle>
+          </DialogHeader>
+          <DialogDescription>{t('apply:terms-and-conditions.dialog.description')}</DialogDescription>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button id="confirm-modal-back" disabled={isSubmitting} startIcon={faChevronLeft} variant="default" size="sm">
+                {t('apply:terms-and-conditions.dialog.back-btn')}
+              </Button>
+            </DialogClose>
+            <fetcher.Form method="post" noValidate>
+              <CsrfTokenInput />
+              <input type="hidden" name="doNotConsent" value={CheckboxValue.Yes} />
+              <Button id="exit-application" variant="primary" size="sm" type="submit" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit application - Terms and Conditions click">
+                {t('apply:terms-and-conditions.dialog.exit-btn')}
+              </Button>
+            </fetcher.Form>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
