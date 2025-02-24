@@ -95,9 +95,9 @@
   },
   "type-of-application": {
     "page-title": "Type de demande",
-    
+
     "form-instructions": "Pour qui présentez-vous la demande?",
-  
+
     "radio-options": {
       "personal": "Je présente une demande pour <strong>moi-même</strong>",
       "child": "Je présente une demande pour <strong>mon (mes) enfant(s)</strong>",
