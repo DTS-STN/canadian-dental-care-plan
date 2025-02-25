@@ -91,6 +91,24 @@
       "info-source": "https://www.canada.ca/fr/emploi-developpement-social/ministere/transparence/aai/rapports/infosource.html",
       "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy",
       "sun-life": "https://www.sunlife.ca/fr/"
+    },
+    "checkboxes": {
+      "acknowledge-terms": "Je reconnais avoir lu et compris les conditions générales d'utilisation",
+      "acknowledge-privacy": "Je reconnais avoir lu et compris l'énoncé de confidentialité",
+      "share-data": "Je consens à l'échange des données",
+      "do-not-consent": "Je <strong>ne consens pas</strong> à la divulgation de mes renseignements dans le cadre du RCSD",
+      "error-message": {
+        "acknowledge-terms-required": "(FR) Terms and Conditions checkbox must be selected",
+        "acknowledge-privacy-required": "(FR) Privacy Notice Statement checkbox must be selected",
+        "share-data-required": "(FR) Sharing of data checkbox must be selected"
+      }
+    },
+    "dialog": {
+      "title": "(FR) You must read the Terms and Conditions and Privacy Notice Statement, and consent to the sharing of your information",
+      "description": "(FR) To apply for the Canadian Dental Care Plan you must acknowledge that you have read and accept the Terms and Conditions and Privacy Notice Statement. You must also consent to the sharing of your personal information for the purposes listed.",
+      "back-btn": "(FR) Back",
+      "exit-btn": "(FR) Exit application",
+      "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     }
   },
   "tax-filing": {
@@ -118,6 +136,7 @@
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
+
   "type-of-application": {
     "page-title": "Type de demande",
     "form-instructions": "Pour qui présentez-vous la demande?",

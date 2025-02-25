@@ -91,6 +91,24 @@
       "info-source": "https://www.canada.ca/en/employment-social-development/corporate/transparency/access-information/reports/infosource.html",
       "microsoft-data-privacy-policy": "https://www.microsoft.com/en-ca/trust-center/privacy",
       "sun-life": "https://www.sunlife.ca/en/"
+    },
+    "checkboxes": {
+      "acknowledge-terms": "I have read the Terms and Conditions",
+      "acknowledge-privacy": "I have read the Privacy Notice Statement",
+      "share-data": "I consent to the sharing of data",
+      "do-not-consent": "I have <strong>not read</strong> the Terms and Conditions and Privacy Notice Statement and <strong>do not consent</strong> to the sharing of my information for the purposes of CDCP",
+      "error-message": {
+        "acknowledge-terms-required": "Terms and Conditions checkbox must be selected",
+        "acknowledge-privacy-required": "Privacy Notice Statement checkbox must be selected",
+        "share-data-required": "Sharing of data checkbox must be selected"
+      }
+    },
+    "dialog": {
+      "title": "You must read the Terms and Conditions and Privacy Notice Statement, and consent to the sharing of your information",
+      "description": "To apply for the Canadian Dental Care Plan you must acknowledge that you have read and accept the Terms and Conditions and Privacy Notice Statement. You must also consent to the sharing of your personal information for the purposes listed.",
+      "back-btn": "Back",
+      "exit-btn": "Exit application",
+      "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     }
   },
   "tax-filing": {
