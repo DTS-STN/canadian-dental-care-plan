@@ -30,9 +30,9 @@ interface ToEmailAddressArgs {
 
 @injectable()
 export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDtoMapper {
-  private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENABLED_FEATURES'>;
+  private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENABLED_FEATURES' | 'APPLICATION_YEAR_2024_ID'>;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENABLED_FEATURES'>) {
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENABLED_FEATURES' | 'APPLICATION_YEAR_2024_ID'>) {
     this.serverConfig = serverConfig;
   }
 
@@ -120,7 +120,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
               BenefitApplicationYear: {
                 BenefitApplicationYearIdentification: [
                   {
-                    IdentificationID: '98f8ad43-4069-ee11-9ae7-000d3a09d1b8',
+                    IdentificationID: this.applicationYear2024Id(),
                   },
                 ],
               },
@@ -131,6 +131,10 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
 
   private applyApplicationYearEnabled() {
     return this.serverConfig.ENABLED_FEATURES.includes('apply-application-year');
+  }
+
+  private applicationYear2024Id() {
+    return this.serverConfig.APPLICATION_YEAR_2024_ID;
   }
 
   private toInsurancePlan(dentalBenefits: readonly string[]) {
