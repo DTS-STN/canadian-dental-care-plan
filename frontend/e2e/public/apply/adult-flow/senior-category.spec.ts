@@ -124,6 +124,12 @@ test.describe('Senior category', () => {
     await test.step('Should navigate to other dental benefits page', async () => {
       await applyAdultPage.isLoaded('federal-provincial-territorial-benefits');
 
+      await page
+        .getByRole('group', { name: 'Do you have other dental benefits through a federal, provincial or territorial social program other than the Canadian Dental Care Plan?' })
+        .getByRole('radio', { name: 'Yes, I have federal, provincial or territorial dental benefits' })
+        .check();
+      await page.getByRole('button', { name: 'Continue' }).click();
+
       await page.getByRole('group', { name: 'Federal benefits' }).getByRole('radio', { name: 'Yes, I have federal dental benefits' }).check();
       await page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Yes, I have provincial or territorial dental benefits' }).check();
 
