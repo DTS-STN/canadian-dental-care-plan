@@ -97,7 +97,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         },
         BenefitApplicationCategoryCode: {
           ReferenceDataID: this.toBenefitApplicationCategoryCode(typeOfApplication),
-          ...(this.applyApplicationYearEnabled() ? { ReferenceDataName: 'New' } : {}),
+          ReferenceDataName: 'New',
         },
         BenefitApplicationChannelCode: {
           ReferenceDataID: '775170001', // PP's static value for "Online"
@@ -116,7 +116,15 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
                 ],
               },
             }
-          : {}),
+          : {
+              BenefitApplicationYear: {
+                BenefitApplicationYearIdentification: [
+                  {
+                    IdentificationID: '98f8ad43-4069-ee11-9ae7-000d3a09d1b8',
+                  },
+                ],
+              },
+            }),
       },
     };
   }
