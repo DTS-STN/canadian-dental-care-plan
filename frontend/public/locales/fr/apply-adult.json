@@ -120,6 +120,11 @@
     "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
     "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
     "select-one": "Choisissez une option",
+    "federal-provincial-territorial-benefits": {
+      "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social fédéral, provincial ou territorial autre que le Régime canadien de soins dentaires?",
+      "option-yes": "<strong>Oui</strong>, j'ai des prestations fédérales, provinciales ou territoriales",
+      "option-no": "<strong>Non</strong>, je n'ai pas de prestations fédérales, provinciales ou territoriales"
+    },
     "federal-benefits": {
       "title": "Prestations fédérales",
       "legend": "Bénéficiez-vous d'une assurance dentaire dans le cadre d'un programme social offert par un programme fédéral?",
@@ -148,6 +153,7 @@
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
       "federal-benefit-required": "Sélectionnez si vous avez la prestation dentaire fédérale",
+      "federal-provincial-territorial-benefit-required": "Sélectionnez si vous avez la prestation dentaire fédérale, provincial ou territorial",
       "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel vous êtes couvert",
       "provincial-benefit-required": "Sélectionnez si vous avez la prestation dentaire provinciale ou territoriale",
       "provincial-territorial-required": "Sélectionnez une province ou territoire"
