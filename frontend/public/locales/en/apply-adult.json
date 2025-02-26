@@ -121,8 +121,8 @@
     "select-one": "Select one",
     "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
     "has-benefits": "Do you have other dental benefits through a federal, provincial or territorial social program other than the Canadian Dental Care Plan?",
-    "option-yes": "<strong>Yes</strong>, I have federal, provincial or territorial dental benefits.",
-    "option-no": "<strong>No</strong>, I do not have federal, provincial or territorial dental benefits.",
+    "option-yes": "<strong>Yes</strong>, I have federal, provincial or territorial dental benefits",
+    "option-no": "<strong>No</strong>, I do not have federal, provincial or territorial dental benefits",
     "button": {
       "back": "Back",
       "continue": "Continue",
