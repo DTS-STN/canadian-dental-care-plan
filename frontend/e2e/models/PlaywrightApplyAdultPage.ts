@@ -55,7 +55,7 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
         break;
 
       case 'confirm-federal-provincial-territorial-benefits':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/federal-provincial-territorial-benefits/, heading: 'Access to other government dental benefits' };
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/confirm-federal-provincial-territorial-benefits/, heading: 'Access to other government dental benefits' };
         break;
 
       case 'federal-provincial-territorial-benefits':
