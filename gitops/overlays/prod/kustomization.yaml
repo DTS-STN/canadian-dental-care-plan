@@ -9,6 +9,7 @@ labels:
       app.kubernetes.io/environment: prod
       app.kubernetes.io/tier: prod
 resources:
+  - ../../base/error-pages/404
   - ../../base/frontend/
   - ../../base/fluentd-archiver/
   - ../../base/maintenance/
@@ -21,13 +22,15 @@ resources:
   #   2. uncomment the appropriate maintenance mode file:
   #      - for full application maintenance, uncomment ./ingresses-maintenance.yaml
   #      - for online application maintenance, uncomment ./ingresses-apply-maintenance.yaml
-  #      - for renewal application maintenance, uncomment ./ingresses-renew-maintenance.yaml
+  #
+  # For renewal application downtime with a 404 response, uncomment ./ingresses-renew-error-404.yaml
   #
   - ./ingresses.yaml
   # - ./ingresses-maintenance.yaml
   # - ./ingresses-apply-maintenance.yaml
-  # - ./ingresses-renew-maintenance.yaml
+  # - ./ingresses-renew-error-404.yaml
 patches:
+  - path: ./patches/deployments-error-404.yaml
   - path: ./patches/deployments-frontend.yaml
   - path: ./patches/deployments-maintenance.yaml
   - path: ./patches/pvcs.yaml

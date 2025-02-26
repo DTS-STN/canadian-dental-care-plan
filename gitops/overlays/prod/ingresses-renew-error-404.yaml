@@ -29,7 +29,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: maintenance
+                name: error-404
                 port:
                   name: http
 
