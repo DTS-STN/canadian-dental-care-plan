@@ -16,6 +16,7 @@ import {
   DefaultLetterDtoMapper,
   DefaultLetterTypeDtoMapper,
   DefaultMaritalStatusDtoMapper,
+  DefaultNotificationDtoMapper,
   DefaultPreferredCommunicationMethodDtoMapper,
   DefaultPreferredLanguageDtoMapper,
   DefaultProvinceTerritoryStateDtoMapper,
@@ -42,6 +43,7 @@ export const mappersContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.mappers.LetterDtoMapper).to(DefaultLetterDtoMapper);
   bind(TYPES.domain.mappers.LetterTypeDtoMapper).to(DefaultLetterTypeDtoMapper);
   bind(TYPES.domain.mappers.MaritalStatusDtoMapper).to(DefaultMaritalStatusDtoMapper);
+  bind(TYPES.domain.mappers.NotificationDtoMapper).to(DefaultNotificationDtoMapper);
   bind(TYPES.domain.mappers.PreferredCommunicationMethodDtoMapper).to(DefaultPreferredCommunicationMethodDtoMapper);
   bind(TYPES.domain.mappers.PreferredLanguageDtoMapper).to(DefaultPreferredLanguageDtoMapper);
   bind(TYPES.domain.mappers.ProvinceTerritoryStateDtoMapper).to(DefaultProvinceTerritoryStateDtoMapper);

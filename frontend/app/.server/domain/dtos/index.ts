@@ -12,6 +12,7 @@ export type * from './federal-government-insurance-plan.dto';
 export type * from './letter-type.dto';
 export type * from './letter.dto';
 export type * from './marital-status.dto';
+export type * from './notification.dto';
 export type * from './preferred-communication-method.dto';
 export type * from './preferred-language.dto';
 export type * from './province-territory-state.dto';

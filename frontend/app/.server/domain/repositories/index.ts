@@ -12,6 +12,7 @@ export * from './federal-government-insurance-plan.repository';
 export * from './letter-type.repository';
 export * from './letter.repository';
 export * from './marital-status.repository';
+export * from './notification.repository';
 export * from './preferred-communication-method.repository';
 export * from './preferred-language.repository';
 export * from './province-territory-state.repository';

@@ -95,6 +95,12 @@ const serverEnv = clientEnvSchema.extend({
   AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   AUTH_RASCL_LOGOUT_URL: z.string().trim().min(1),
 
+  // GC Notify settings (@see https://documentation.notification.canada.ca/en/)
+  GC_NOTIFY_EMAIL_NOTIFICATIONS_URL: z.string().url().default('https://api.notification.canada.ca/v2/notifications/email'),
+  GC_NOTIFY_API_KEY: z.string().trim().min(1),
+  GC_NOTIFY_ENGLISH_TEMPLATE_ID: z.string().trim().min(1).default('8b77428b-56a5-415c-9b48-ef1f10c128e7'),
+  GC_NOTIFY_FRENCH_TEMPLATE_ID: z.string().trim().min(1).default('2991903c-56f9-4c4e-af2e-db3ecf04b44c'),
+
   // hCaptcha settings (@see https://docs.hcaptcha.com)
   HCAPTCHA_MAX_SCORE: z.coerce.number().default(0.79),
   HCAPTCHA_SECRET_KEY: z.string().trim().min(1).default('0x0000000000000000000000000000000000000000'),
