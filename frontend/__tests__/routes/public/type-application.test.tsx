@@ -60,7 +60,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       expect(response).toBeInstanceOf(Response);
       expect((response as Response).status).toBe(302);
-      expect((response as Response).headers.get('location')).toBe('/en/apply/123/adult/date-of-birth');
+      expect((response as Response).headers.get('location')).toBe('/en/apply/123/adult/applicant-information');
     });
   });
 });

@@ -42,7 +42,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'children' && ageCategory !== 'youth') {
-    return redirect(getPathById('public/apply/$id/adult/date-of-birth', params));
+    return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
   return { ageCategory, defaultState: state.disabilityTaxCredit, id: state.id, meta };
@@ -74,7 +74,7 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
       return 'public/apply/$id/adult/living-independently';
     }
 
-    return 'public/apply/$id/adult/date-of-birth';
+    return 'public/apply/$id/adult/applicant-information';
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {

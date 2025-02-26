@@ -6,9 +6,9 @@
     "sin": "Social Insurance Number (SIN)",
     "last-name": "Last name",
     "first-name": "First name",
-    "single-legal-name": "If you have a single legal name",
-    "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
-    "marital-status": "Marital status",
+    "dob": "Date of birth",
+    "single-legal-name": "If you have one legal name",
+    "name-instructions": "If using one legal name, please enter that name in BOTH the first name and last name fields.",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
@@ -19,14 +19,20 @@
     "error-message": {
       "first-name-required": "Enter first name",
       "last-name-required": "Enter last name",
-      "marital-status-required": "Select marital status",
-      "marital-status-no-partner-information": "If you are married or in a common-law relationship you must enter their information on the next page. Select your marital status and press 'Save'.",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "The Social Insurance Number (SIN) must be unique",
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
       "first-name-no-digits": "First name must contain letters only",
-      "last-name-no-digits": "Last name must contain letters only"
+      "last-name-no-digits": "Last name must contain letters only",
+      "date-of-birth-day-number": "Day must be a number",
+      "date-of-birth-day-required": "Date of birth must include a day",
+      "date-of-birth-is-past": "Date of birth must be in the past",
+      "date-of-birth-is-past-valid": "Date of birth too far in the past",
+      "date-of-birth-month-required": "Date of birth must include a month",
+      "date-of-birth-valid": "Day must be valid for the given month and year",
+      "date-of-birth-year-number": "Year must be a number, for example 1950",
+      "date-of-birth-year-required": "Date of birth must include a year"
     }
   },
   "communication-preference": {
@@ -206,38 +212,6 @@
     },
     "error-message": {
       "dental-insurance-required": "Select whether you have access to dental insurance"
-    }
-  },
-  "eligibility": {
-    "date-of-birth": {
-      "page-title": "Date of birth",
-      "description": "Applications for the Canadian Dental Care Plan will open in phases. Your date of birth determines when you can apply.",
-      "form-instructions": "Please enter your date of birth",
-      "error-message": {
-        "date-of-birth-day-number": "Day must be a number",
-        "date-of-birth-day-required": "Date of birth must include a day",
-        "date-of-birth-is-past": "Date of birth must be in the past",
-        "date-of-birth-is-past-valid": "Date of birth too far in the past",
-        "date-of-birth-month-required": "Date of birth must include a month",
-        "date-of-birth-valid": "Day must be valid for the given month and year",
-        "date-of-birth-year-number": "Year must be a number, for example 1950",
-        "date-of-birth-year-required": "Date of birth must include a year"
-      },
-      "back-btn": "Back",
-      "continue-btn": "Continue",
-      "cancel-btn": "Cancel",
-      "save-btn": "Save"
-    },
-    "dob-eligibility": {
-      "page-title": "Find out when you can apply",
-      "ineligible-to-apply": "You are not currently eligible to apply for the Canadian Dental Care Plan.",
-      "currently-accepting": "The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults with a valid disability tax credit.",
-      "later-date": "Adults 18 to 64 who do not have a disability tax credit will be able to apply for the Canadian Dental Care Plan in 2025.",
-      "eligibility-info": "<eligibilityInfo>Find out when you can apply for the Canadian Dental Care Plan</eligibilityInfo>",
-      "eligibility-info-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
-      "back-btn": "Back",
-      "return-btn": "Return to main page",
-      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     }
   },
   "exit-application": {

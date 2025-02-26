@@ -142,7 +142,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/date-of-birth"
+                routeId="public/apply/$id/adult/applicant-information"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

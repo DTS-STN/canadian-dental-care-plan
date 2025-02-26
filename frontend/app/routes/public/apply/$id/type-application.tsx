@@ -62,7 +62,7 @@ export async function action({ context: { appContainer, session }, params, reque
   saveApplyState({ params, session, state: { editMode: false, typeOfApplication: parsedDataResult.data.typeOfApplication } });
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.adult) {
-    return redirect(getPathById('public/apply/$id/adult/date-of-birth', params));
+    return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.adultChild) {

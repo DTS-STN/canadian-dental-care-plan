@@ -234,7 +234,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
               <DescriptionListItem term={t('apply-adult:review-information.dob-title')}>
                 <p>{userInfo.birthday}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-date-of-birth" routeId="public/apply/$id/adult/date-of-birth" params={params}>
+                  <InlineLink id="change-date-of-birth" routeId="public/apply/$id/adult/applicant-information" params={params}>
                     {t('apply-adult:review-information.dob-change')}
                   </InlineLink>
                 </div>

@@ -6,9 +6,9 @@
     "sin": "Numéro d'assurance sociale (NAS)",
     "last-name": "Nom de famille",
     "first-name": "Prénom",
+    "dob": "Date de naissance",
     "single-legal-name": "Si vous utilisez un seul nom légal",
     "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
-    "marital-status": "État civil",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
@@ -19,14 +19,20 @@
     "error-message": {
       "first-name-required": "Entrez le prénom",
       "last-name-required": "Entrez le nom de famille",
-      "marital-status-required": "Sélectionnez l'état civil",
-      "marital-status-no-partner-information": "Si vous êtes marié ou vivez en conjoint de fait, vous devez saisir leurs informations sur la page suivante. Sélectionnez votre état civil et appuyez sur «\u00a0Enregistrer\u00a0».",
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
       "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
       "first-name-no-digits": "Le prénom doit contenir uniquement des lettres",
-      "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres"
+      "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres",
+      "date-of-birth-day-number": "Le jour doit être un nombre",
+      "date-of-birth-day-required": "La date de naissance doit inclure un jour",
+      "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+      "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
+      "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+      "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisis",
+      "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+      "date-of-birth-year-required": "La date de naissance doit inclure une année"
     }
   },
   "communication-preference": {
@@ -206,38 +212,6 @@
     },
     "error-message": {
       "dental-insurance-required": "Sélectionnez si vous avez une assurance dentaire"
-    }
-  },
-  "eligibility": {
-    "date-of-birth": {
-      "page-title": "Date de naissance",
-      "description": "Les demandes au titre du Régime canadien de soins dentaires seront acceptées progressivement. Votre date de naissance détermine le moment où vous pouvez présenter une demande.",
-      "form-instructions": "Veuillez entrer votre date de naissance",
-      "error-message": {
-        "date-of-birth-day-number": "Le jour doit être un nombre",
-        "date-of-birth-day-required": "La date de naissance doit inclure un jour",
-        "date-of-birth-is-past": "La date de naissance doit être dans le passé",
-        "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
-        "date-of-birth-month-required": "La date de naissance doit inclure un mois",
-        "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisis",
-        "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
-        "date-of-birth-year-required": "La date de naissance doit inclure une année"
-      },
-      "back-btn": "Retour",
-      "continue-btn": "Continuer",
-      "cancel-btn": "Annuler",
-      "save-btn": "Enregistrer"
-    },
-    "dob-eligibility": {
-      "page-title": "Découvrez quand vous pouvez présenter une demande",
-      "ineligible-to-apply": "Vous n'êtes actuellement pas admissible au Régime canadien de soins dentaires.",
-      "currently-accepting": "Le Régime canadien de soins dentaires accepte actuellement les demandes d'adhésion des personnes âgées de 65 ans et plus, des enfants de moins de 18 ans et des adultes qui reçoivent le crédit d'impôt pour personnes handicapées.",
-      "later-date": "Les adultes âgés de 18 à 64 ans qui n'ont pas de crédit d'impôt pour personnes handicapées valide pourront demander leur adhésion au Régime canadien de soins dentaires en 2025.",
-      "eligibility-info": "<eligibilityInfo>Découvrez quand vous pouvez faire une demande au Régime canadien de soins dentaires.</eligibilityInfo>",
-      "eligibility-info-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
-      "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale",
-      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     }
   },
   "exit-application": {
