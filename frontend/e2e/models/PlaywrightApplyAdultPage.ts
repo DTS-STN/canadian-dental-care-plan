@@ -11,6 +11,7 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
       | 'dental-insurance'
       | 'disability-tax-credit'
       | 'dob-eligibility'
+      | 'confirm-federal-provincial-territorial-benefits'
       | 'federal-provincial-territorial-benefits'
       | 'living-independently'
       | 'parent-or-guardian'
@@ -51,6 +52,10 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
 
       case 'dob-eligibility':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/dob-eligibility/, heading: 'Find out when you can apply' };
+        break;
+
+      case 'confirm-federal-provincial-territorial-benefits':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/federal-provincial-territorial-benefits/, heading: 'Access to other government dental benefits' };
         break;
 
       case 'federal-provincial-territorial-benefits':
