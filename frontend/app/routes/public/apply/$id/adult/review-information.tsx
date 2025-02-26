@@ -165,7 +165,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveApplyState({ params, session, state: { editMode: false } });
-    return redirect(getPathById('public/apply/$id/adult/federal-provincial-territorial-benefits', params));
+    return redirect(getPathById('public/apply/$id/adult/confirm-federal-provincial-territorial-benefits', params));
   }
 
   const state = loadApplyAdultStateForReview({ params, request, session });
@@ -401,7 +401,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   <p>{t('apply-adult:review-information.no')}</p>
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-dental-benefits" routeId="public/apply/$id/adult/federal-provincial-territorial-benefits" params={params}>
+                  <InlineLink id="change-dental-benefits" routeId="public/apply/$id/adult/confirm-federal-provincial-territorial-benefits" params={params}>
                     {t('apply-adult:review-information.dental-benefit-change')}
                   </InlineLink>
                 </div>

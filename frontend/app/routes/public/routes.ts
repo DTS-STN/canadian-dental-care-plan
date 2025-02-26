@@ -22,6 +22,11 @@ export const routes = [
           { id: 'public/apply/$id/adult/dob-eligibility', file: 'routes/public/apply/$id/adult/dob-eligibility.tsx', paths: { en: '/:lang/apply/:id/adult/dob-eligibility', fr: '/:lang/demander/:id/adulte/ddn-admissibilite' } },
           { id: 'public/apply/$id/adult/exit-application', file: 'routes/public/apply/$id/adult/exit-application.tsx', paths: { en: '/:lang/apply/:id/adult/exit-application', fr: '/:lang/demander/:id/adulte/quitter-demande' } },
           {
+            id: 'public/apply/$id/adult/confirm-federal-provincial-territorial-benefits',
+            file: 'routes/public/apply/$id/adult/confirm-federal-provincial-territorial-benefits.tsx',
+            paths: { en: '/:lang/apply/:id/adult/confirm-federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/adulte/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
+          },
+          {
             id: 'public/apply/$id/adult/federal-provincial-territorial-benefits',
             file: 'routes/public/apply/$id/adult/federal-provincial-territorial-benefits.tsx',
             paths: { en: '/:lang/apply/:id/adult/federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/adulte/prestations-dentaires-federales-provinciales-territoriales' },
