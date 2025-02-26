@@ -159,7 +159,7 @@ export default function ApplyAdultConfirmFederalProvincialTerritorialBenefits({ 
           </fieldset>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Save - Access to other federal, provincial or territorial dental benefits click">
+              <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Save - Access to other government dental benefits click">
                 {t('apply-adult:confirm-dental-benefits.button.save-btn')}
               </Button>
               <ButtonLink
@@ -167,20 +167,14 @@ export default function ApplyAdultConfirmFederalProvincialTerritorialBenefits({ 
                 routeId="public/apply/$id/adult/review-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Cancel - Access to other federal, provincial or territorial dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Cancel - Access to other government dental benefits click"
               >
                 {t('apply-adult:confirm-dental-benefits.button.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton
-                variant="primary"
-                id="continue-button"
-                loading={isSubmitting}
-                endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Continue - Access to other federal, provincial or territorial dental benefits click"
-              >
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Continue - Access to other government dental benefits click">
                 {t('apply-adult:confirm-dental-benefits.button.continue')}
               </LoadingButton>
               <ButtonLink
@@ -189,7 +183,7 @@ export default function ApplyAdultConfirmFederalProvincialTerritorialBenefits({ 
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Back - Access to other federal, provincial or territorial dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Back - Access to other government dental benefits click"
               >
                 {t('apply-adult:confirm-dental-benefits.button.back')}
               </ButtonLink>
