@@ -223,6 +223,7 @@ describe('apply-adult-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
       } satisfies ApplyState;
 
@@ -237,6 +238,7 @@ describe('apply-adult-route-helpers', () => {
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dateOfBirth: '1900-01-01',
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         dentalInsurance: false,
         disabilityTaxCredit: undefined,
