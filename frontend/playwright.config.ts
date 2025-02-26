@@ -32,6 +32,7 @@ export default defineConfig({
       AUTH_RASCL_LOGOUT_URL: 'http://localhost:3000/',
       ENABLED_FEATURES: "hcaptcha,view-letters,view-letters-online-application,status,show-prototype-banner",
       ENABLED_MOCKS: 'cct,power-platform,raoidc,status-check,wsaddress',
+      GC_NOTIFY_API_KEY: '00000000000000000000000000000000',
       HCAPTCHA_SECRET_KEY: '0x0000000000000000000000000000000000000000',
       HCAPTCHA_SITE_KEY: '10000000-ffff-ffff-ffff-000000000001',
       INTEROP_API_BASE_URI: 'https://api.example.com',

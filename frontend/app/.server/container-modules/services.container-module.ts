@@ -22,6 +22,7 @@ import {
   DefaultLetterService,
   DefaultLetterTypeService,
   DefaultMaritalStatusService,
+  DefaultNotificationService,
   DefaultPreferredCommunicationMethodService,
   DefaultPreferredLanguageService,
   DefaultProvinceTerritoryStateService,
@@ -61,6 +62,7 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.services.LetterService).to(DefaultLetterService);
   bind(TYPES.domain.services.LetterTypeService).to(DefaultLetterTypeService);
   bind(TYPES.domain.services.MaritalStatusService).to(DefaultMaritalStatusService);
+  bind(TYPES.domain.services.NotificationService).to(DefaultNotificationService);
   bind(TYPES.domain.services.PreferredCommunicationMethodService).to(DefaultPreferredCommunicationMethodService);
   bind(TYPES.domain.services.PreferredLanguageService).to(DefaultPreferredLanguageService);
   bind(TYPES.domain.services.ProvinceTerritoryStateService).to(DefaultProvinceTerritoryStateService);

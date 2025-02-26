@@ -17,6 +17,7 @@ import {
   DefaultLetterRepository,
   DefaultLetterTypeRepository,
   DefaultMaritalStatusRepository,
+  DefaultNotificationRepository,
   DefaultPreferredCommunicationMethodRepository,
   DefaultPreferredLanguageRepository,
   DefaultProvinceTerritoryStateRepository,
@@ -93,6 +94,7 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
 
   bind(TYPES.domain.repositories.LetterTypeRepository).to(DefaultLetterTypeRepository);
   bind(TYPES.domain.repositories.MaritalStatusRepository).to(DefaultMaritalStatusRepository);
+  bind(TYPES.domain.repositories.NotificationRepository).to(DefaultNotificationRepository);
   bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(DefaultPreferredCommunicationMethodRepository);
   bind(TYPES.domain.repositories.PreferredLanguageRepository).to(DefaultPreferredLanguageRepository);
   bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(DefaultProvinceTerritoryStateRepository);
