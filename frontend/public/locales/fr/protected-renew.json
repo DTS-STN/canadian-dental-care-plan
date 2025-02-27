@@ -118,6 +118,7 @@
   },
   "dental-insurance": {
     "title": "{{memberName}}\u00a0: accès à une assurance dentaire privée",
+    "member": "Membre",
     "legend": "Avez-vous accès à une assurance dentaire privée ou une couverture dentaire?",
     "list": {
       "employment": "dans le cadre des avantages sociaux de l'employeur d'un parent ou d'un tuteur légal, y compris les comptes de santé et de bien-être",
@@ -168,6 +169,7 @@
   },
   "demographic-survey": {
     "page-title": "Questions démographiques facultatives pour {{memberName}}",
+    "member": "Membre",
     "improve-cdcp": "La réponse à ces questions est facultative. Vos réponses aideront Santé Canada à améliorer le Régime canadien de soins dentaires et à s'assurer que nos services sont accessibles à tous.",
     "confidential": "Les renseignements recueillis ne serviront qu'à des fins statistiques et resteront confidentiels.",
     "impact-enrollment": "Le fait de répondre aux questions d'ordre démographique n'aura pas d'incidence sur votre adhésion au Régime canadien de soins dentaires.",
@@ -216,7 +218,7 @@
     }
   },
   "children": {
-    "child-number": "Child {{childNumber}}",
+    "child-number": "Enfant {{childNumber}}",
     "parent-or-guardian": {
       "page-title": "{{childName}}\u00a0: parent ou tuteur légal",
       "back-btn": "Retour",

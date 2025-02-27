@@ -118,6 +118,7 @@
   },
   "dental-insurance": {
     "title": "{{memberName}}: access to private dental insurance",
+    "member": "Member",
     "legend": "Do you have access to private dental insurance or coverage?",
     "list": {
       "employment": "Through a parent or legal guardian's employment benefits including health and wellness accounts",
@@ -168,6 +169,7 @@
   },
   "demographic-survey": {
     "page-title": "Voluntary demographic questions for {{memberName}}",
+    "member": "Member",
     "improve-cdcp": "Answering these questions is optional. Your answers will help Health Canada improve the Canadian Dental Care Plan and make sure our services are accessible to everyone.",
     "confidential": "The information collected will only be used for statistical purposes and will be kept confidential.",
     "impact-enrollment": "Your completion of the demographic questions will not impact your enrolment in the Canadian Dental Care Plan.",
