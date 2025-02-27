@@ -163,7 +163,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     throw redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
   }
 
-  if (dentalBenefits === undefined) {
+  if (dentalBenefits === undefined || hasFederalProvincialTerritorialBenefits === undefined) {
     throw redirect(getPathById('public/apply/$id/adult/confirm-federal-provincial-territorial-benefits', params));
   }
 
