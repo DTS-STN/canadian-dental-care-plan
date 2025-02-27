@@ -287,7 +287,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
     }
 
     if (dentalBenefits === undefined) {
-      throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
+      throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits', { ...params, childId }));
     }
 
     return { ageCategory, id, dentalBenefits, dentalInsurance, information };
