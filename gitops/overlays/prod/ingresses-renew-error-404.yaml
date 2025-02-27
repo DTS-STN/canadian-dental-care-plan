@@ -61,6 +61,6 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: frontend
+                name: error-404
                 port:
-                  name: oauth-proxy
+                  name: http
