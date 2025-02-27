@@ -56,7 +56,10 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:demographic-survey.page-title', { memberName }) }) };
+  const meta = {
+    title: t('gcweb:meta.title.template', { title: t('protected-renew:demographic-survey.page-title', { memberName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-renew:demographic-survey.page-title', { memberName: t('protected-renew:demographic-survey.member') }) }),
+  };
 
   const demographicSurveyService = appContainer.get(TYPES.domain.services.DemographicSurveyService);
   const indigenousStatuses = demographicSurveyService.listLocalizedIndigenousStatuses(locale);
