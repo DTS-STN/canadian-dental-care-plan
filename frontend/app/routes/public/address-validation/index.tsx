@@ -1,4 +1,3 @@
-import type { SyntheticEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
 import { redirect } from 'react-router';
@@ -12,12 +11,12 @@ import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import { Address } from '~/components/address';
+import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
+import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
 import { Button } from '~/components/buttons';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
+import { Dialog, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputOptionProps } from '~/components/input-option';
-import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { PublicLayout } from '~/components/layouts/public-layout';
@@ -35,29 +34,6 @@ const FORM_ACTION = {
   useInvalidAddress: 'use-invalid-address',
   useSelectedAddress: 'use-selected-address',
 } as const;
-
-interface CanadianAddress {
-  address: string;
-  city: string;
-  country: string;
-  countryId: string;
-  postalZipCode: string;
-  provinceState: string;
-  provinceStateId: string;
-}
-
-interface AddressSuggestionResponse {
-  enteredAddress: CanadianAddress;
-  status: 'address-suggestion';
-  suggestedAddress: CanadianAddress;
-}
-
-interface AddressInvalidResponse {
-  invalidAddress: CanadianAddress;
-  status: 'address-invalid';
-}
-
-type AddressResponse = AddressSuggestionResponse | AddressInvalidResponse;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('address-validation', 'gcweb'),
@@ -118,8 +94,8 @@ export async function action({ context: { appContainer, session }, request, para
   const validatedMailingAddress = validatedResult.data;
 
   const isNotCanada = validatedMailingAddress.countryId !== clientConfig.CANADA_COUNTRY_ID;
-  const isUseInvalidAddressAction = formAction === 'use-invalid-address';
-  const isUseSelectedAddressAction = formAction === 'use-selected-address';
+  const isUseInvalidAddressAction = formAction === FORM_ACTION.useInvalidAddress;
+  const isUseSelectedAddressAction = formAction === FORM_ACTION.useSelectedAddress;
   const canProceedToReview = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
 
   if (canProceedToReview) {
@@ -327,8 +303,10 @@ export default function AddressValidationIndexRoute({ loaderData, params }: Rout
                   {t('address-validation:index.submit-button')}
                 </LoadingButton>
               </DialogTrigger>
-              {addressDialogContent && addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
-              {addressDialogContent && addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+              {addressDialogContent && addressDialogContent.status === 'address-suggestion' && (
+                <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
+              )}
+              {addressDialogContent && addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
             </Dialog>
             <Button id="reset-button" endIcon={faRefresh} onClick={onResetClickHandler}>
               {t('address-validation:index.reset-button')}
@@ -337,150 +315,5 @@ export default function AddressValidationIndexRoute({ loaderData, params }: Rout
         </fetcher.Form>
       </div>
     </PublicLayout>
-  );
-}
-
-interface AddressSuggestionDialogContentProps {
-  enteredAddress: CanadianAddress;
-  suggestedAddress: CanadianAddress;
-}
-
-function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: AddressSuggestionDialogContentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const fetcher = useEnhancedFetcher();
-  const enteredAddressOptionValue = 'entered-address';
-  const suggestedAddressOptionValue = 'suggested-address';
-  type AddressSelectionOption = typeof enteredAddressOptionValue | typeof suggestedAddressOptionValue;
-  const [selectedAddressSuggestionOption, setSelectedAddressSuggestionOption] = useState<AddressSelectionOption>(enteredAddressOptionValue);
-
-  async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-
-    // Get the clicked button's value and append it to the FormData object
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.set(submitter.name, submitter.value);
-
-    // Append selected address suggestion to form data
-    const selectedAddressSuggestion = selectedAddressSuggestionOption === enteredAddressOptionValue ? enteredAddress : suggestedAddress;
-    formData.set('address', selectedAddressSuggestion.address);
-    formData.set('city', selectedAddressSuggestion.city);
-    formData.set('countryId', selectedAddressSuggestion.countryId);
-    formData.set('postalZipCode', selectedAddressSuggestion.postalZipCode);
-    formData.set('provinceStateId', selectedAddressSuggestion.provinceStateId);
-
-    await fetcher.submit(formData, { method: 'POST' });
-  }
-
-  return (
-    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>{t('address-validation:index.dialog.address-suggestion.header')}</DialogTitle>
-        <DialogDescription>{t('address-validation:index.dialog.address-suggestion.description')}</DialogDescription>
-      </DialogHeader>
-      <InputRadios
-        id="addressSelection"
-        name="addressSelection"
-        legend={t('address-validation:index.dialog.address-suggestion.address-selection-legend')}
-        options={[
-          {
-            value: enteredAddressOptionValue,
-            children: (
-              <>
-                <p className="mb-2">
-                  <strong>{t('address-validation:index.dialog.address-suggestion.entered-address-option')}</strong>
-                </p>
-                <Address address={enteredAddress} />
-              </>
-            ),
-          },
-          {
-            value: suggestedAddressOptionValue,
-            children: (
-              <>
-                <p className="mb-2">
-                  <strong>{t('address-validation:index.dialog.address-suggestion.suggested-address-option')}</strong>
-                </p>
-                <Address address={suggestedAddress} />
-              </>
-            ),
-          },
-        ].map((option) => ({
-          ...option,
-          onChange: (e) => {
-            setSelectedAddressSuggestionOption(e.target.value as AddressSelectionOption);
-          },
-          checked: option.value === selectedAddressSuggestionOption,
-        }))}
-      />
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button id="dialog.corrected-address-close-button" disabled={fetcher.isSubmitting} variant="default" size="sm">
-            {t('address-validation:index.dialog.address-suggestion.cancel-button')}
-          </Button>
-        </DialogClose>
-        <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={FORM_ACTION.useSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
-            {t('address-validation:index.dialog.address-suggestion.use-selected-address-button')}
-          </LoadingButton>
-        </fetcher.Form>
-      </DialogFooter>
-    </DialogContent>
-  );
-}
-
-interface AddressInvalidDialogContentProps {
-  invalidAddress: CanadianAddress;
-}
-
-function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogContentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const fetcher = useEnhancedFetcher();
-
-  async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-
-    // Get the clicked button's value and append it to the FormData object
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.set(submitter.name, submitter.value);
-
-    // Append selected address suggestion to form data
-    formData.set('address', invalidAddress.address);
-    formData.set('city', invalidAddress.city);
-    formData.set('countryId', invalidAddress.countryId);
-    formData.set('postalZipCode', invalidAddress.postalZipCode);
-    formData.set('provinceStateId', invalidAddress.provinceStateId);
-
-    await fetcher.submit(formData, { method: 'POST' });
-  }
-
-  return (
-    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>{t('address-validation:index.dialog.address-invalid.header')}</DialogTitle>
-        <DialogDescription>{t('address-validation:index.dialog.address-invalid.description')}</DialogDescription>
-      </DialogHeader>
-      <div className="space-y-2">
-        <p>
-          <strong>{t('address-validation:index.dialog.address-invalid.entered-address')}</strong>
-        </p>
-        <Address address={invalidAddress} />
-      </div>
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button id="dialog.address-invalid-close-button" variant="default" size="sm">
-            {t('address-validation:index.dialog.address-invalid.close-button')}
-          </Button>
-        </DialogClose>
-        <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={FORM_ACTION.useInvalidAddress} type="submit" id="dialog.address-invalid-use-entered-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
-            {t('address-validation:index.dialog.address-invalid.use-entered-address-button')}
-          </LoadingButton>
-        </fetcher.Form>
-      </DialogFooter>
-    </DialogContent>
   );
 }
