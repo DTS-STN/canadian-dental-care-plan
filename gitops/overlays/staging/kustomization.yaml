@@ -14,11 +14,14 @@ labels:
       app.kubernetes.io/environment: staging
       app.kubernetes.io/tier: nonprod
 resources:
+  - ../../base/error-pages/404
   - ../../base/frontend/
   - ../../base/fluentd-archiver/
   - ../../base/redis/
   - ./hpas.yaml
-  - ./ingresses.yaml
+  # For renewal application downtime with a 404 response, uncomment ./ingresses-renew-error-404.yaml and comment ./ingresses.yaml
+  # - ./ingresses.yaml
+  - ./ingresses-renew-error-404.yaml
 patches:
   - path: ./patches/deployments.yaml
   - path: ./patches/services.yaml

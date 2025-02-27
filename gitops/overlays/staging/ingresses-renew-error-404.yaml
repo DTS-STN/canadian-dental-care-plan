@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 32k # required for OAuth proxy
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  labels:
+    app.kubernetes.io/name: frontend
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: cdcp-staging.dev-dp.dts-stn.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  name: oauth-proxy
+          - path: /.+/(protected/renew|protege/renouveller|renew|renouveller)(/.+)?
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: error-404
+                port:
+                  name: http
+    - host: cdcp-staging.dev-dp-internal.dts-stn.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  name: application
+          - path: /.+/(protected/renew|protege/renouveller|renew|renouveller)(/.+)?
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: error-404
+                port:
+                  name: http
