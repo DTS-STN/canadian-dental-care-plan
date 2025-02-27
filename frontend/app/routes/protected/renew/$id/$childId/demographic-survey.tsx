@@ -42,7 +42,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
-  return getTitleMetaTags(data.meta.title);
+  return getTitleMetaTags(data.meta.title, data.meta.dcTermsTitle);
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
