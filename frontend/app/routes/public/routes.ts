@@ -39,7 +39,7 @@ export const routes = [
           },
           { id: 'public/apply/$id/adult/parent-or-guardian', file: 'routes/public/apply/$id/adult/parent-or-guardian.tsx', paths: { en: '/:lang/apply/:id/adult/parent-or-guardian', fr: '/:lang/demander/:id/adulte/parent-ou-tuteur' } },
           { id: 'public/apply/$id/adult/living-independently', file: 'routes/public/apply/$id/adult/living-independently.tsx', paths: { en: '/:lang/apply/:id/adult/living-independently', fr: '/:lang/demander/:id/adulte/vivre-maniere-independante' } },
-          { id: 'public/apply/$id/adult/new-or-existing-member', file: 'routes/public/apply/$id/adult/new-or-existing-member.tsx', paths: { en: '/:lang/apply/:id/adult/new-or-existing-member', fr: '/:lang/demander/:id/adulte/new-or-existing-member' } },
+          { id: 'public/apply/$id/adult/new-or-existing-member', file: 'routes/public/apply/$id/adult/new-or-existing-member.tsx', paths: { en: '/:lang/apply/:id/adult/new-or-existing-member', fr: '/:lang/demander/:id/adulte/new-or-existing-member' } }, // TODO: Update French route
           { id: 'public/apply/$id/adult-child/children/index', file: 'routes/public/apply/$id/adult-child/children/index.tsx', paths: { en: '/:lang/apply/:id/adult-child/children', fr: '/:lang/demander/:id/adulte-enfant/enfants' } },
           {
             file: 'routes/public/apply/$id/adult-child/children/$childId/layout.tsx',
