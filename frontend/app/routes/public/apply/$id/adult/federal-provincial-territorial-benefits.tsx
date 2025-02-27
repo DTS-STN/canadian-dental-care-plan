@@ -337,7 +337,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/dental-insurance"
+                routeId="public/apply/$id/adult/confirm-federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

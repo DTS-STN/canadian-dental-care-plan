@@ -209,7 +209,7 @@ describe('apply-adult-route-helpers', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult/confirm-federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should not redirect if state is valid', () => {
@@ -223,6 +223,7 @@ describe('apply-adult-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
       } satisfies ApplyState;
 
@@ -237,6 +238,7 @@ describe('apply-adult-route-helpers', () => {
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dateOfBirth: '1900-01-01',
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         dentalInsurance: false,
         disabilityTaxCredit: undefined,

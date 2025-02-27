@@ -160,6 +160,13 @@ test.describe('Adult category', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
+    await test.step('Should navigate to confirm other dental benefits page', async () => {
+      await applyAdultPage.isLoaded('confirm-federal-provincial-territorial-benefits');
+
+      await page.getByRole('radio', { name: 'Yes, I have federal, provincial or territorial dental benefits', exact: true }).check();
+      await page.getByRole('button', { name: 'Continue' }).click();
+    });
+
     await test.step('Should navigate to other dental benefits page', async () => {
       await applyAdultPage.isLoaded('federal-provincial-territorial-benefits');
 

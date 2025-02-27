@@ -82,6 +82,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     applicationYear,
     communicationPreferences,
     dateOfBirth,
+    hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,
     disabilityTaxCredit,
@@ -167,7 +168,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
   }
 
   if (dentalBenefits === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('public/apply/$id/adult/confirm-federal-provincial-territorial-benefits', params));
   }
 
   return {
@@ -177,6 +178,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     communicationPreferences,
     contactInformation,
     dateOfBirth,
+    hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,
     disabilityTaxCredit,

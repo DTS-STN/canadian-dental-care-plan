@@ -71,7 +71,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult/federal-provincial-territorial-benefits', params));
+  return redirect(getPathById('public/apply/$id/adult/confirm-federal-provincial-territorial-benefits', params));
 }
 
 export default function AccessToDentalInsuranceQuestion({ loaderData, params }: Route.ComponentProps) {

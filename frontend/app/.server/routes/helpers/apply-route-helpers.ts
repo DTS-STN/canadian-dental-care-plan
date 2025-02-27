@@ -53,6 +53,7 @@ export type ApplyState = ReadonlyDeep<{
     preferredMethod: string;
   };
   dateOfBirth?: string;
+  hasFederalProvincialTerritorialBenefits?: boolean;
   dentalBenefits?: {
     hasFederalBenefits: boolean;
     federalSocialProgram?: string;
