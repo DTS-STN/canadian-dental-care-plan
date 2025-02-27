@@ -247,7 +247,9 @@ describe('apply-adult-child-route-helpers', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult-child/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow(
+        'MockedRedirect(MockedPath(public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))',
+      );
     });
 
     it('should redirect if children is empty', () => {
@@ -395,7 +397,7 @@ describe('apply-adult-child-route-helpers', () => {
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow(
-        'MockedRedirect(MockedPath(public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+        'MockedRedirect(MockedPath(public/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
       );
     });
 

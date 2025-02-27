@@ -246,6 +246,13 @@ test.describe('Children application', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
+    await test.step('Should navigate to children confirm other dental benefits page', async () => {
+      await applyAdultChildPage.isLoaded('children-confirm-federal-provincial-territorial-benefits');
+
+      await page.getByRole('radio', { name: 'Yes, this child has federal, provincial or territorial dental benefits', exact: true }).check();
+      await page.getByRole('button', { name: 'Continue' }).click();
+    });
+
     await test.step('Should navigate to children other dental benefits page', async () => {
       await applyAdultChildPage.isLoaded('children-federal-provincial-territorial-benefits');
 
