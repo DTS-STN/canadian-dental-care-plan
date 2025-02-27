@@ -156,6 +156,9 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  if (parsedDataResult.data.dateOfBirthYear >= 2006) {
+    return redirect(getPathById('public/apply/$id/adult/new-or-existing-member', params));
+  }
   if (ageCategory === 'youth') {
     return redirect(getPathById('public/apply/$id/adult/living-independently', params));
   }
