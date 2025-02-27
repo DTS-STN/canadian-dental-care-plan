@@ -264,6 +264,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [],
       } satisfies ApplyState;
@@ -286,6 +287,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [{ id: '1', information: undefined }],
       } satisfies ApplyState;
@@ -310,6 +312,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: false, lastName: 'Doe' } }],
       } satisfies ApplyState;
@@ -338,6 +341,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [{ id: '1', information: { dateOfBirth: childDateOfBirth, firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' } }],
       } satisfies ApplyState;
@@ -363,6 +367,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, dentalInsurance: undefined }],
       } satisfies ApplyState;
@@ -388,6 +393,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, dentalInsurance: true, dentalBenefits: undefined }],
       } satisfies ApplyState;
@@ -414,12 +420,14 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [
           {
             id: '1',
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
             dentalInsurance: true,
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
@@ -439,6 +447,7 @@ describe('apply-adult-child-route-helpers', () => {
         children: [
           {
             ageCategory: 'children',
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
             dentalInsurance: true,
             id: '1',
@@ -447,6 +456,7 @@ describe('apply-adult-child-route-helpers', () => {
         ],
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dateOfBirth: '1900-01-01',
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         dentalInsurance: false,
         disabilityTaxCredit: undefined,

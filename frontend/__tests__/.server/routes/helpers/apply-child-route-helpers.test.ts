@@ -91,7 +91,7 @@ describe('apply-child-route-helpers', () => {
         ...baseState,
         typeOfApplication: 'child',
         taxFiling2023: true,
-        children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, dentalInsurance: undefined }],
+        children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, hasFederalProvincialTerritorialBenefits: false, dentalInsurance: undefined }],
       } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
@@ -105,14 +105,16 @@ describe('apply-child-route-helpers', () => {
         ...baseState,
         typeOfApplication: 'child',
         taxFiling2023: true,
-        children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, dentalInsurance: true, dentalBenefits: undefined }],
+        children: [
+          { id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, dentalInsurance: true, hasFederalProvincialTerritorialBenefits: false, dentalBenefits: undefined },
+        ],
       } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
-        'MockedRedirect(MockedPath(public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+        'MockedRedirect(MockedPath(public/apply/$id/child/children/$childId/confirm-federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
       );
     });
 
@@ -126,6 +128,7 @@ describe('apply-child-route-helpers', () => {
             id: '1',
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
             dentalInsurance: true,
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
@@ -145,6 +148,7 @@ describe('apply-child-route-helpers', () => {
             id: '1',
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
             dentalInsurance: true,
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
@@ -165,6 +169,7 @@ describe('apply-child-route-helpers', () => {
             id: '1',
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
             dentalInsurance: true,
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
@@ -188,6 +193,7 @@ describe('apply-child-route-helpers', () => {
             id: '1',
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
             dentalInsurance: true,
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
@@ -213,6 +219,7 @@ describe('apply-child-route-helpers', () => {
             id: '1',
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
             dentalInsurance: true,
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
@@ -238,6 +245,7 @@ describe('apply-child-route-helpers', () => {
             id: '1',
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
             dentalInsurance: true,
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
@@ -264,6 +272,7 @@ describe('apply-child-route-helpers', () => {
             id: '1',
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
             dentalInsurance: true,
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
@@ -291,6 +300,7 @@ describe('apply-child-route-helpers', () => {
             id: '1',
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
             dentalInsurance: true,
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
@@ -315,6 +325,7 @@ describe('apply-child-route-helpers', () => {
         children: [
           {
             ageCategory: 'children',
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
             dentalInsurance: true,
             id: '1',
