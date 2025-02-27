@@ -38,7 +38,6 @@ export const pageIds = {
       typeOfApplication: 'CDCP-APPL-0005',
       applicationDelegate: 'CDCP-APPL-0006',
       adult: {
-        dateOfBirth: 'CDCP-APPL-AD-0004',
         dateOfBirthEligibility: 'CDCP-APPL-AD-0005',
         applicantInformation: 'CDCP-APPL-AD-0006',
         partnerInformation: 'CDCP-APPL-AD-0007',

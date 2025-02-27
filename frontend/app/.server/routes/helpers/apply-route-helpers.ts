@@ -52,8 +52,8 @@ export type ApplyState = ReadonlyDeep<{
     preferredLanguage: string;
     preferredMethod: string;
   };
-  dateOfBirth?: string;
   hasFederalProvincialTerritorialBenefits?: boolean;
+  dateOfBirth?: string; // TODO: once all pages are re-worked, this can be removed. (We will use applicantInformation.dateOfBirth)
   dentalBenefits?: {
     hasFederalBenefits: boolean;
     federalSocialProgram?: string;

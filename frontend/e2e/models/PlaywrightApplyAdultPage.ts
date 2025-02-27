@@ -7,10 +7,8 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
       | 'communication-preference'
       | 'confirmation'
       | 'contact-information'
-      | 'date-of-birth'
       | 'dental-insurance'
       | 'disability-tax-credit'
-      | 'dob-eligibility'
       | 'confirm-federal-provincial-territorial-benefits'
       | 'federal-provincial-territorial-benefits'
       | 'living-independently'
@@ -38,20 +36,12 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/contact-information/, heading: 'Contact information' };
         break;
 
-      case 'date-of-birth':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/date-of-birth/, heading: 'Date of birth' };
-        break;
-
       case 'dental-insurance':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/dental-insurance/, heading: 'Access to other dental insurance' };
         break;
 
       case 'disability-tax-credit':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/disability-tax-credit/, heading: 'Disability tax credit' };
-        break;
-
-      case 'dob-eligibility':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/dob-eligibility/, heading: 'Find out when you can apply' };
         break;
 
       case 'confirm-federal-provincial-territorial-benefits':

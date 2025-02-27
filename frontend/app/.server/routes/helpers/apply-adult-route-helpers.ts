@@ -118,7 +118,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
   }
 
   if (dateOfBirth === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult/date-of-birth', params));
+    throw redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
   const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
@@ -137,10 +137,6 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
 
   if (ageCategory === 'adults' && disabilityTaxCredit === undefined) {
     throw redirect(getPathById('public/apply/$id/adult/disability-tax-credit', params));
-  }
-
-  if (ageCategory === 'adults' && disabilityTaxCredit === false) {
-    throw redirect(getPathById('public/apply/$id/adult/dob-eligibility', params));
   }
 
   if (applicantInformation === undefined) {

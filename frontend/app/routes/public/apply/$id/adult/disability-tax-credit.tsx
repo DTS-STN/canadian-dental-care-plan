@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'adults') {
-    return redirect(getPathById('public/apply/$id/adult/date-of-birth', params));
+    return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
   return { id: state.id, meta, defaultState: state.disabilityTaxCredit, editMode: state.editMode };
@@ -90,11 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (ageCategory !== 'adults') {
-    return redirect(getPathById('public/apply/$id/adult/date-of-birth', params));
-  }
-
-  if (parsedDataResult.data.disabilityTaxCredit === DISABILITY_TAX_CREDIT_OPTION.no) {
-    return redirect(getPathById('public/apply/$id/adult/dob-eligibility', params));
+    return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
   return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
@@ -151,7 +147,7 @@ export default function ApplyFlowDisabilityTaxCredit({ loaderData, params }: Rou
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/date-of-birth"
+                routeId="public/apply/$id/adult/applicant-information"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

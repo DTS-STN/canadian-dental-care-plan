@@ -17,9 +17,7 @@ export const routes = [
             paths: { en: '/:lang/apply/:id/adult/communication-preference', fr: '/:lang/demander/:id/adult/preference-communication' },
           },
           { id: 'public/apply/$id/adult/confirmation', file: 'routes/public/apply/$id/adult/confirmation.tsx', paths: { en: '/:lang/apply/:id/adult/confirmation', fr: '/:lang/demander/:id/adulte/confirmation' } },
-          { id: 'public/apply/$id/adult/date-of-birth', file: 'routes/public/apply/$id/adult/date-of-birth.tsx', paths: { en: '/:lang/apply/:id/adult/date-of-birth', fr: '/:lang/demander/:id/adulte/date-de-naissance' } },
           { id: 'public/apply/$id/adult/dental-insurance', file: 'routes/public/apply/$id/adult/dental-insurance.tsx', paths: { en: '/:lang/apply/:id/adult/dental-insurance', fr: '/:lang/demander/:id/adulte/assurance-dentaire' } },
-          { id: 'public/apply/$id/adult/dob-eligibility', file: 'routes/public/apply/$id/adult/dob-eligibility.tsx', paths: { en: '/:lang/apply/:id/adult/dob-eligibility', fr: '/:lang/demander/:id/adulte/ddn-admissibilite' } },
           { id: 'public/apply/$id/adult/exit-application', file: 'routes/public/apply/$id/adult/exit-application.tsx', paths: { en: '/:lang/apply/:id/adult/exit-application', fr: '/:lang/demander/:id/adulte/quitter-demande' } },
           {
             id: 'public/apply/$id/adult/confirm-federal-provincial-territorial-benefits',
