@@ -155,8 +155,12 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  if (getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth) === 'youth') {
+  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  if (ageCategory === 'youth') {
     return redirect(getPathById('public/apply/$id/adult/living-independently', params));
+  }
+  if (ageCategory === 'children') {
+    return redirect(getPathById('public/apply/$id/adult/parent-or-guardian', params));
   }
 
   if (state.editMode) {
