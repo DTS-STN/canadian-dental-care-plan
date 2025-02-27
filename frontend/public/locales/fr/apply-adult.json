@@ -417,5 +417,21 @@
     "back-btn": "Retour",
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
+  "new-or-existing-member": {
+    "page-title": "New or existing member",
+    "previously-enrolled": "Have you ever been enrolled in the Canadian Dental Care Plan?",
+    "client-number-label": "Client Number",
+    "client-number-description": "You can find your 11-digit Client Number in the upper right corner of the letter from Service Canada or on your Canadian Dental Care Plan member card.",
+    "yes": "Oui",
+    "no": "Non",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "save-btn": "Enregistrer",
+    "error-message": {
+      "is-new-or-existing-member-required": "(FR) Please select whether you are new or existing member of CDCP",
+      "client-number-required": "Entrez le numéro de client de 11 chiffres",
+      "client-number-valid": "Le numéro de client doit être composé de 11 chiffres"
+    }
   }
 }
