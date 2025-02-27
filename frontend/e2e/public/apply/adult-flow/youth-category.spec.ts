@@ -44,22 +44,6 @@ test.describe('Youth category', () => {
 
       await page.getByRole('button', { name: 'Continue' }).click();
     });
-
-    await test.step('Should navigate to living independently page', async () => {
-      await applyAdultPage.isLoaded('living-independently');
-
-      await page.getByRole('radio', { name: 'No' }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to parent or guardian page', async () => {
-      await applyAdultPage.isLoaded('parent-or-guardian');
-    });
-
-    await test.step('Should return to CDCP main page', async () => {
-      await page.getByRole('button', { name: 'Return to main page' }).click();
-      await expect(page).toHaveURL('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html');
-    });
   });
 
   test('Should complete flow as youth applicant', async ({ page }) => {
@@ -77,13 +61,6 @@ test.describe('Youth category', () => {
       await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
       await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
 
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to living independently page', async () => {
-      await applyAdultPage.isLoaded('living-independently');
-
-      await page.getByRole('radio', { name: 'Yes' }).check();
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
