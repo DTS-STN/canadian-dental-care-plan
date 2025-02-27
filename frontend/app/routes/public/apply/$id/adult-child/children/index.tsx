@@ -286,7 +286,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult-child/federal-provincial-territorial-benefits"
+                routeId="public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

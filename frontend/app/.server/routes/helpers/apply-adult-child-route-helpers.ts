@@ -122,6 +122,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     applicationYear,
     communicationPreferences,
     dateOfBirth,
+    hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,
     disabilityTaxCredit,
@@ -223,7 +224,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
   }
 
   if (dentalBenefits === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult-child/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
   }
 
   const children = validateChildrenStateForReview({ childrenState: state.children, params });
@@ -237,6 +238,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     communicationPreferences,
     contactInformation,
     dateOfBirth,
+    hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,
     disabilityTaxCredit,

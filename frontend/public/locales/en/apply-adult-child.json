@@ -139,6 +139,24 @@
         "dental-insurance-required": "Select whether the child has access to dental insurance"
       }
     },
+    "confirm-dental-benefits": {
+      "title": "Access to other government dental benefits",
+      "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
+      "select-one": "Select one",
+      "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
+      "has-benefits": "Do you have other dental benefits through a federal, provincial or territorial social program other than the Canadian Dental Care Plan?",
+      "option-yes": "<strong>Yes</strong>, I have federal, provincial or territorial dental benefits",
+      "option-no": "<strong>No</strong>, I do not have federal, provincial or territorial dental benefits",
+      "button": {
+        "back": "Back",
+        "continue": "Continue",
+        "cancel-btn": "Cancel",
+        "save-btn": "Save"
+      },
+      "error-message": {
+        "federal-provincial-territorial-benefit-required": "Select whether you have federal, provincial or territorial dental benefits"
+      }
+    },
     "dental-benefits": {
       "title": "{{childName}}: access to other federal, provincial or territorial dental benefits",
       "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact the child's eligibility for the Canadian Dental Care Plan.",
@@ -348,6 +366,24 @@
       "email-valid": "Enter an email address in the correct format, such as name@example.com",
       "confirm-email-valid": "Enter confirmation of email address in the correct format, such as name@example.com",
       "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
+    }
+  },
+  "confirm-dental-benefits": {
+    "title": "Access to other government dental benefits",
+    "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
+    "select-one": "Select one",
+    "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
+    "has-benefits": "Do you have other dental benefits through a federal, provincial or territorial social program other than the Canadian Dental Care Plan?",
+    "option-yes": "<strong>Yes</strong>, I have federal, provincial or territorial dental benefits",
+    "option-no": "<strong>No</strong>, I do not have federal, provincial or territorial dental benefits",
+    "button": {
+      "back": "Back",
+      "continue": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save"
+    },
+    "error-message": {
+      "federal-provincial-territorial-benefit-required": "Select whether you have federal, provincial or territorial dental benefits"
     }
   },
   "dental-benefits": {
