@@ -29,6 +29,7 @@ export type ApplyState = ReadonlyDeep<{
   };
   children: {
     id: string;
+    hasFederalProvincialTerritorialBenefits?: boolean;
     dentalBenefits?: {
       hasFederalBenefits: boolean;
       federalSocialProgram?: string;

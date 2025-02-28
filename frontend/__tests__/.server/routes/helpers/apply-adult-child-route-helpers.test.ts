@@ -201,7 +201,9 @@ describe('apply-adult-child-route-helpers', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult-child/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow(
+        'MockedRedirect(MockedPath(public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))',
+      );
     });
 
     it('should redirect if children is empty', () => {
@@ -216,6 +218,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [],
       } satisfies ApplyState;
@@ -238,6 +241,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [{ id: '1', information: undefined }],
       } satisfies ApplyState;
@@ -262,6 +266,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: false, lastName: 'Doe' } }],
       } satisfies ApplyState;
@@ -286,6 +291,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, dentalInsurance: undefined }],
       } satisfies ApplyState;
@@ -311,6 +317,7 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, dentalInsurance: true, dentalBenefits: undefined }],
       } satisfies ApplyState;
@@ -320,7 +327,7 @@ describe('apply-adult-child-route-helpers', () => {
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow(
-        'MockedRedirect(MockedPath(public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+        'MockedRedirect(MockedPath(public/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
       );
     });
 
@@ -337,12 +344,14 @@ describe('apply-adult-child-route-helpers', () => {
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dentalInsurance: false,
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         children: [
           {
             id: '1',
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
             dentalInsurance: true,
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
@@ -362,6 +371,7 @@ describe('apply-adult-child-route-helpers', () => {
         children: [
           {
             ageCategory: 'children',
+            hasFederalProvincialTerritorialBenefits: false,
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
             dentalInsurance: true,
             id: '1',
@@ -370,6 +380,7 @@ describe('apply-adult-child-route-helpers', () => {
         ],
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dateOfBirth: '1900-01-01',
+        hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         dentalInsurance: false,
         disabilityTaxCredit: undefined,

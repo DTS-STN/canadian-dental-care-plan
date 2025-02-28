@@ -55,6 +55,11 @@ export const routes = [
                 paths: { en: '/:lang/apply/:id/adult-child/children/:childId/dental-insurance', fr: '/:lang/demander/:id/adulte-enfant/enfants/:childId/assurance-dentaire' },
               },
               {
+                id: 'public/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits',
+                file: 'routes/public/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits.tsx',
+                paths: { en: '/:lang/apply/:id/adult-child/children/:childId/confirm-federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/adulte-enfant/enfants/:childId/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
+              },
+              {
                 id: 'public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits',
                 file: 'routes/public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits.tsx',
                 paths: { en: '/:lang/apply/:id/adult-child/children/:childId/federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/adulte-enfant/enfants/:childId/prestations-dentaires-federales-provinciales-territoriales' },
@@ -73,6 +78,11 @@ export const routes = [
           },
           { id: 'public/apply/$id/adult-child/apply-children', file: 'routes/public/apply/$id/adult-child/apply-children.tsx', paths: { en: '/:lang/apply/:id/adult-child/apply-children', fr: '/:lang/demander/:id/adult-child/demande-enfant' } },
           { id: 'public/apply/$id/adult-child/confirmation', file: 'routes/public/apply/$id/adult-child/confirmation.tsx', paths: { en: '/:lang/apply/:id/adult-child/confirmation', fr: '/:lang/demander/:id/adulte-enfant/confirmation' } },
+          {
+            id: 'public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits',
+            file: 'routes/public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits.tsx',
+            paths: { en: '/:lang/apply/:id/adult-child/confirm-federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/adulte-enfant/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
+          },
           {
             id: 'public/apply/$id/adult-child/federal-provincial-territorial-benefits',
             file: 'routes/public/apply/$id/adult-child/federal-provincial-territorial-benefits.tsx',
@@ -149,6 +159,11 @@ export const routes = [
                 id: 'public/apply/$id/child/children/$childId/dental-insurance',
                 file: 'routes/public/apply/$id/child/children/$childId/dental-insurance.tsx',
                 paths: { en: '/:lang/apply/:id/child/children/:childId/dental-insurance', fr: '/:lang/demander/:id/enfant/enfants/:childId/assurance-dentaire' },
+              },
+              {
+                id: 'public/apply/$id/child/children/$childId/confirm-federal-provincial-territorial-benefits',
+                file: 'routes/public/apply/$id/child/children/$childId/confirm-federal-provincial-territorial-benefits.tsx',
+                paths: { en: '/:lang/apply/:id/child/children/:childId/confirm-federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/enfant/enfants/:childId/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
               },
               {
                 id: 'public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits',

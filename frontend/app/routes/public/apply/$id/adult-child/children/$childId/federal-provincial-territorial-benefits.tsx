@@ -235,12 +235,6 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               legend={t('apply-adult-child:children.dental-benefits.federal-benefits.legend', { childName })}
               options={[
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.dental-benefits.federal-benefits.option-no" />,
-                  value: HAS_FEDERAL_BENEFITS_OPTION.no,
-                  defaultChecked: hasFederalBenefitValue === false,
-                  onChange: handleOnHasFederalBenefitChanged,
-                },
-                {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.dental-benefits.federal-benefits.option-yes" />,
                   value: HAS_FEDERAL_BENEFITS_OPTION.yes,
                   defaultChecked: hasFederalBenefitValue === true,
@@ -260,6 +254,12 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                     />
                   ),
                 },
+                {
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.dental-benefits.federal-benefits.option-no" />,
+                  value: HAS_FEDERAL_BENEFITS_OPTION.no,
+                  defaultChecked: hasFederalBenefitValue === false,
+                  onChange: handleOnHasFederalBenefitChanged,
+                },
               ]}
               errorMessage={errors?.hasFederalBenefits}
               required
@@ -272,12 +272,6 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               name="hasProvincialTerritorialBenefits"
               legend={t('apply-adult-child:children.dental-benefits.provincial-territorial-benefits.legend', { childName })}
               options={[
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.dental-benefits.provincial-territorial-benefits.option-no" />,
-                  value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
-                  defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
-                  onChange: handleOnHasProvincialTerritorialBenefitChanged,
-                },
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.dental-benefits.provincial-territorial-benefits.option-yes" />,
                   value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes,
@@ -323,6 +317,12 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                     </div>
                   ),
                 },
+                {
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.dental-benefits.provincial-territorial-benefits.option-no" />,
+                  value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
+                  defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
+                  onChange: handleOnHasProvincialTerritorialBenefitChanged,
+                },
               ]}
               errorMessage={errors?.hasProvincialTerritorialBenefits}
               required
@@ -350,7 +350,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult-child/children/$childId/dental-insurance"
+                routeId="public/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

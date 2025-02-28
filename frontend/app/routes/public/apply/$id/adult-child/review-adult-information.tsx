@@ -396,7 +396,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   <>{t('apply-adult-child:review-adult-information.no')}</>
                 )}
                 <p className="mt-4">
-                  <InlineLink id="change-dental-benefits" routeId="public/apply/$id/adult-child/federal-provincial-territorial-benefits" params={params}>
+                  <InlineLink id="change-dental-benefits" routeId="public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits" params={params}>
                     {t('apply-adult-child:review-adult-information.dental-benefit-change')}
                   </InlineLink>
                 </p>

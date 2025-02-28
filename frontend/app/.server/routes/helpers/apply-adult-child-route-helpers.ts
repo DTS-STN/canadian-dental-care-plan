@@ -121,6 +121,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     applicationYear,
     communicationPreferences,
     dateOfBirth,
+    hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,
     disabilityTaxCredit,
@@ -197,8 +198,9 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/apply/$id/adult-child/dental-insurance', params));
   }
 
-  if (dentalBenefits === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult-child/federal-provincial-territorial-benefits', params));
+  //TODO: refactor to allow dentalBenefits to be undefined if hasFederalProvincialTerritorialBenefits is false
+  if (dentalBenefits === undefined || hasFederalProvincialTerritorialBenefits === undefined) {
+    throw redirect(getPathById('public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
   }
 
   const children = validateChildrenStateForReview({ childrenState: state.children, params });
@@ -211,6 +213,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     communicationPreferences,
     contactInformation,
     dateOfBirth,
+    hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,
     disabilityTaxCredit,
@@ -237,7 +240,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
     throw redirect(getPathById('public/apply/$id/adult-child/children/index', params));
   }
 
-  return children.map(({ id, dentalBenefits, dentalInsurance, information }) => {
+  return children.map(({ id, dentalBenefits, dentalInsurance, information, hasFederalProvincialTerritorialBenefits }) => {
     const childId = id;
 
     if (information === undefined) {
@@ -258,10 +261,11 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/dental-insurance', { ...params, childId }));
     }
 
-    if (dentalBenefits === undefined) {
-      throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
+    //TODO: refactor to allow dentalBenefits to be undefined if hasFederalProvincialTerritorialBenefits is false
+    if (dentalBenefits === undefined || hasFederalProvincialTerritorialBenefits === undefined) {
+      throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits', { ...params, childId }));
     }
 
-    return { ageCategory, id, dentalBenefits, dentalInsurance, information };
+    return { ageCategory, id, dentalBenefits, dentalInsurance, information, hasFederalProvincialTerritorialBenefits };
   });
 }

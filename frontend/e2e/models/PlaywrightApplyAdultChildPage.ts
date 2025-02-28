@@ -17,6 +17,7 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'apply-yourself'
       | 'children-cannot-apply-child'
       | 'children-dental-insurance'
+      | 'children-confirm-federal-provincial-territorial-benefits'
       | 'children-federal-provincial-territorial-benefits'
       | 'children-information'
       | 'children-parent-or-guardian'
@@ -29,6 +30,7 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'dental-insurance'
       | 'disability-tax-credit'
       | 'dob-eligibility'
+      | 'confirm-federal-provincial-territorial-benefits'
       | 'federal-provincial-territorial-benefits'
       | 'living-independently'
       | 'parent-or-guardian'
@@ -62,6 +64,10 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
 
       case 'children-dental-insurance':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/children\/[a-f0-9-]+\/dental-insurance/, heading: /.*: access to other dental insurance/ };
+        break;
+
+      case 'children-confirm-federal-provincial-territorial-benefits':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/children\/[a-f0-9-]+\/confirm-federal-provincial-territorial-benefits/, heading: /.*: access to other government dental benefits/ };
         break;
 
       case 'children-federal-provincial-territorial-benefits':
@@ -98,6 +104,10 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
 
       case 'disability-tax-credit':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/disability-tax-credit/, heading: 'Disability tax credit' };
+        break;
+
+      case 'confirm-federal-provincial-territorial-benefits':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/confirm-federal-provincial-territorial-benefits/, heading: 'Access to other government dental benefits' };
         break;
 
       case 'federal-provincial-territorial-benefits':
@@ -199,6 +209,11 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
   async fillDentalInsuranceForm() {
     await this.isLoaded('dental-insurance');
     await this.page.getByRole('radio', { name: 'Yes, I have access to dental insurance or coverage', exact: true }).check();
+  }
+
+  async fillConfirmOtherDentalBenefitsForm() {
+    await this.isLoaded('confirm-federal-provincial-territorial-benefits');
+    await this.page.getByRole('radio', { name: 'Yes, I have federal, provincial or territorial dental benefits', exact: true }).check();
   }
 
   async fillOtherDentalBenefitsForm() {
