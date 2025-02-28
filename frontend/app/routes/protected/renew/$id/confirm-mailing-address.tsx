@@ -355,7 +355,16 @@ export default function ProtectedRenewConfirmMailingAddress({ loaderData, params
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
               <DialogTrigger asChild>
-                <LoadingButton variant="primary" id="save-button" type="submit" name="_action" value={FORM_ACTION.submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Mailing address click">
+                <LoadingButton
+                  aria-expanded={undefined}
+                  variant="primary"
+                  id="save-button"
+                  type="submit"
+                  name="_action"
+                  value={FORM_ACTION.submit}
+                  loading={isSubmitting}
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Mailing address click"
+                >
                   {t('protected-renew:update-address.save-btn')}
                 </LoadingButton>
               </DialogTrigger>

@@ -113,10 +113,12 @@
     "select-member": {
       "heading": "Sélectionner un membre",
       "to-continue": "Vous devez sélectionner un membre pour continuer."
-    }
+    },
+    "select-member-help": "Sélectionner un membre"
   },
   "dental-insurance": {
     "title": "{{memberName}}\u00a0: accès à une assurance dentaire privée",
+    "member": "Membre",
     "legend": "Avez-vous accès à une assurance dentaire privée ou une couverture dentaire?",
     "list": {
       "employment": "dans le cadre des avantages sociaux de l'employeur d'un parent ou d'un tuteur légal, y compris les comptes de santé et de bien-être",
@@ -167,6 +169,7 @@
   },
   "demographic-survey": {
     "page-title": "Questions démographiques facultatives pour {{memberName}}",
+    "member": "Membre",
     "improve-cdcp": "La réponse à ces questions est facultative. Vos réponses aideront Santé Canada à améliorer le Régime canadien de soins dentaires et à s'assurer que nos services sont accessibles à tous.",
     "confidential": "Les renseignements recueillis ne serviront qu'à des fins statistiques et resteront confidentiels.",
     "impact-enrollment": "Le fait de répondre aux questions d'ordre démographique n'aura pas d'incidence sur votre adhésion au Régime canadien de soins dentaires.",
@@ -206,7 +209,7 @@
     },
     "error-message": {
       "marital-status-required": "Sélectionnez l'état civil",
-      "confirm-required": "La case à cocher doit être sélectionnée",
+      "confirm-required": "Le consentement de l'époux/épouse ou du conjoint de fait est requis pour procéder",
       "date-of-birth-year-required": "Entrez l'année de naissance, par exemple 1950",
       "yob-is-future": "L'année de naissance doit être dans le passé",
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
@@ -215,7 +218,7 @@
     }
   },
   "children": {
-    "child-number": "Child {{childNumber}}",
+    "child-number": "Enfant {{childNumber}}",
     "parent-or-guardian": {
       "page-title": "{{childName}}\u00a0: parent ou tuteur légal",
       "back-btn": "Retour",

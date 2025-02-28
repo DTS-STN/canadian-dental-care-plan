@@ -159,7 +159,9 @@ function CardLink({ routeId, title, previouslyReviewed, ...props }: CardLinkProp
   const { t } = useTranslation(handle.i18nNamespaces);
   return (
     <AppLink className="flex flex-row items-center gap-4 rounded-xl border border-slate-300 bg-slate-50 p-6 hover:shadow-md focus:ring-2 focus:ring-blue-600 focus:outline-none" routeId={routeId} {...props}>
-      <span className="font-lato text-2xl leading-8 font-semibold text-blue-600 underline">{title}</span>
+      <span aria-description={t('protected-renew:member-selection.select-member-help')} className="font-lato text-2xl leading-8 font-semibold text-blue-600 underline">
+        {title}
+      </span>
       {previouslyReviewed && (
         <>
           <FontAwesomeIcon fixedWidth icon={faCircleCheck} className="ml-4 size-10 self-center" style={{ color: 'green' }} />
@@ -182,10 +184,10 @@ function SelectMember() {
   }, []);
 
   return (
-    <div ref={wrapperRef} id="select-member" className="mb-4" role="region" aria-live="polite">
+    <div ref={wrapperRef} id="select-member" className="mb-4">
       <ContextualAlert type="danger">
         <h2 className="mb-2 font-bold">{t('protected-renew:member-selection.select-member.heading')}</h2>
-        <InlineLink to="#primary-applicant" className="mb-2">
+        <InlineLink role="alert" aria-live="polite" to="#primary-applicant" className="mb-2">
           {t('protected-renew:member-selection.select-member.to-continue')}
         </InlineLink>
       </ContextualAlert>

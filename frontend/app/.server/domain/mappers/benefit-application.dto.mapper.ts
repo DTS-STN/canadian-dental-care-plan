@@ -30,9 +30,9 @@ interface ToEmailAddressArgs {
 
 @injectable()
 export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDtoMapper {
-  private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>;
+  private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENABLED_FEATURES' | 'APPLICATION_YEAR_2024_ID'>;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>) {
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENABLED_FEATURES' | 'APPLICATION_YEAR_2024_ID'>) {
     this.serverConfig = serverConfig;
   }
 
@@ -102,15 +102,39 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         BenefitApplicationChannelCode: {
           ReferenceDataID: '775170001', // PP's static value for "Online"
         },
-        BenefitApplicationYear: {
-          BenefitApplicationYearIdentification: [
-            {
-              IdentificationID: applicationYearId,
-            },
-          ],
-        },
+        ...(this.applyApplicationYearEnabled()
+          ? {
+              BenefitApplicationYear: {
+                BenefitApplicationYearIdentification: [
+                  {
+                    IdentificationID:
+                      applicationYearId ??
+                      (() => {
+                        throw new Error("Expected applicationYearId to be defined when apply-application-year is enabled'");
+                      })(),
+                  },
+                ],
+              },
+            }
+          : {
+              BenefitApplicationYear: {
+                BenefitApplicationYearIdentification: [
+                  {
+                    IdentificationID: this.applicationYear2024Id(),
+                  },
+                ],
+              },
+            }),
       },
     };
+  }
+
+  private applyApplicationYearEnabled() {
+    return this.serverConfig.ENABLED_FEATURES.includes('apply-application-year');
+  }
+
+  private applicationYear2024Id() {
+    return this.serverConfig.APPLICATION_YEAR_2024_ID;
   }
 
   private toInsurancePlan(dentalBenefits: readonly string[]) {

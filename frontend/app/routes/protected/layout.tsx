@@ -6,11 +6,16 @@ import { TYPES } from '~/.server/constants';
 import { NotFoundError, ProtectedLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { useApiSession } from '~/utils/api-session-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: [...layoutI18nNamespaces],
 } as const satisfies RouteHandleData;
+
+export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
+  return [{ name: 'dcterms.accessRights', content: '1' }];
+});
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {

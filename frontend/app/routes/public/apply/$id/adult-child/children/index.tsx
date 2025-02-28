@@ -193,7 +193,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                     </ButtonLink>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button id="remove-child" disabled={isSubmitting} size="sm" variant="alternative" startIcon={faRemove}>
+                        <Button aria-expanded={undefined} id="remove-child" disabled={isSubmitting} size="sm" variant="alternative" startIcon={faRemove}>
                           {t('apply-adult-child:children.index.modal.remove-btn')}
                         </Button>
                       </DialogTrigger>

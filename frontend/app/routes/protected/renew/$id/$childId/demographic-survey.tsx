@@ -42,7 +42,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
-  return getTitleMetaTags(data.meta.title);
+  return getTitleMetaTags(data.meta.title, data.meta.dcTermsTitle);
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
@@ -58,7 +58,10 @@ export async function loader({ context: { appContainer, session }, request, para
   const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
   const memberName = state.information?.firstName ?? childNumber;
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:children.demographic-survey.page-title', { memberName }) }) };
+  const meta = {
+    title: t('gcweb:meta.title.template', { title: t('protected-renew:children.demographic-survey.page-title', { memberName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-renew:children.demographic-survey.page-title', { memberName: childNumber }) }),
+  };
 
   const demographicSurveyService = appContainer.get(TYPES.domain.services.DemographicSurveyService);
   const indigenousStatuses = demographicSurveyService.listLocalizedIndigenousStatuses(locale);

@@ -426,7 +426,11 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
 
       <Dialog>
         <DialogTrigger asChild>
-          <button className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Application successfully submitted click">
+          <button
+            aria-expanded={undefined}
+            className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Application successfully submitted click"
+          >
             {t('confirm.close-application')}
           </button>
         </DialogTrigger>
