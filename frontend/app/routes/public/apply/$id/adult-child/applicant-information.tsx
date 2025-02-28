@@ -167,6 +167,9 @@ export async function action({ context: { appContainer, session }, params, reque
   if (ageCategory === 'children') {
     return redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
   }
+  if (parsedDataResult.data.dateOfBirthYear >= 2006) {
+    return redirect(getPathById('public/apply/$id/adult-child/new-or-existing-member', params));
+  }
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
