@@ -75,7 +75,7 @@ export const pageIds = {
         livingIndependently: 'CDCP-APPL-ADCH-0022',
         childSummary: 'CDCP-APPL-ADCH-0023',
         contactApplyChild: 'CDCP-APPL-ADCH-0024',
-        newOrExistingMember: 'CDCP-APPL-AD-0025',
+        newOrExistingMember: 'CDCP-APPL-ADCH-0025',
       },
       child: {
         dateOfBirthEligibility: 'CDCP-APPL-CH-0004',
