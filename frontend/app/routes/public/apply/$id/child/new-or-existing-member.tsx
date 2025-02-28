@@ -104,7 +104,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   // TODO: should navigate to marital-status page, change the route when marital-status page is added
-  return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
+  return redirect(getPathById('public/apply/$id/child/applicant-information', params));
 }
 
 export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Route.ComponentProps) {
@@ -165,25 +165,25 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
           )}
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - New or existing member click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - New or existing member click">
                 {t('apply-child:new-or-existing-member.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - New or existing member click">
+              <ButtonLink id="back-button" routeId="public/apply/$id/child/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - New or existing member click">
                 {t('apply-child:new-or-existing-member.back-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - New or existing member click">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - New or existing member click">
                 {t('apply-child:new-or-existing-member.continue-btn')}
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/applicant-information"
+                routeId="public/apply/$id/child/applicant-information"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - New or existing member click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - New or existing member click"
               >
                 {t('apply-child:new-or-existing-member.back-btn')}
               </ButtonLink>
