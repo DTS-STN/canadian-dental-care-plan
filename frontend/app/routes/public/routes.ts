@@ -112,6 +112,11 @@ export const routes = [
             paths: { en: '/:lang/apply/:id/adult-child/living-independently', fr: '/:lang/demander/:id/adulte-enfant/vivre-maniere-independante' },
           },
           {
+            id: 'public/apply/$id/adult-child/new-or-existing-member',
+            file: 'routes/public/apply/$id/adult-child/new-or-existing-member.tsx',
+            paths: { en: '/:lang/apply/:id/adult-child/new-or-existing-member', fr: '/:lang/demander/:id/adulte-enfant/new-or-existing-member' },
+          }, // TODO: Update French route
+          {
             id: 'public/apply/$id/adult-child/contact-information',
             file: 'routes/public/apply/$id/adult-child/contact-information.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/contact-information', fr: '/:lang/demander/:id/adulte-enfant/renseignements-personnels' },
