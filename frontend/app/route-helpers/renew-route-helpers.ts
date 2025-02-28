@@ -7,14 +7,14 @@ import { removePathSegment } from '~/utils/url-utils';
 
 export function transformAdobeAnalyticsUrl(url: string | URL) {
   const urlObj = new URL(url);
-  const renewRouteRegex = /^\/(en|fr)\/(renew|renouveller)\//i;
+  const renewRouteRegex = /^\/(en|fr)\/(renew|renouveler)\//i;
   if (!renewRouteRegex.test(urlObj.pathname)) return urlObj;
   return new URL(removePathSegment(urlObj, 2));
 }
 
 export function transformAdultChildChildrenRouteAdobeAnalyticsUrl(url: string | URL) {
   const urlObj = new URL(url);
-  const adultChildRenewRouteRegex = /^\/(en|fr)\/(renew|renouveller)\/.*\/(adult-child|adulte-enfant)\/(children|enfants)\//i;
+  const adultChildRenewRouteRegex = /^\/(en|fr)\/(renew|renouveler)\/.*\/(adult-child|adulte-enfant)\/(children|enfants)\//i;
   if (!adultChildRenewRouteRegex.test(urlObj.pathname)) return urlObj;
   // remove protected renew state id
   let transformedUrl = removePathSegment(urlObj, 2);
@@ -25,7 +25,7 @@ export function transformAdultChildChildrenRouteAdobeAnalyticsUrl(url: string | 
 
 export function transformChildChildrenRouteAdobeAnalyticsUrl(url: string | URL) {
   const urlObj = new URL(url);
-  const childRenewRouteRegex = /^\/(en|fr)\/(renew|renouveller)\/.*\/(child|enfant)\/(children|enfants)\//i;
+  const childRenewRouteRegex = /^\/(en|fr)\/(renew|renouveler)\/.*\/(child|enfant)\/(children|enfants)\//i;
   if (!childRenewRouteRegex.test(urlObj.pathname)) return urlObj;
   // remove protected renew state id
   let transformedUrl = removePathSegment(urlObj, 2);
