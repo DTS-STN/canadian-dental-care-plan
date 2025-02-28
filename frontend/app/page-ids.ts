@@ -52,6 +52,7 @@ export const pageIds = {
         disabilityTaxCredit: 'CDCP-APPL-AD-0016',
         parentOrGuardian: 'CDCP-APPL-AD-0017',
         livingIndependently: 'CDCP-APPL-AD-0018',
+        newOrExistingMember: 'CDCP-APPL-AD-0019',
       },
       adultChild: {
         dateOfBirth: 'CDCP-APPL-ADCH-0004',

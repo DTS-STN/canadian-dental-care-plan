@@ -89,6 +89,10 @@ export type ApplyState = ReadonlyDeep<{
     phoneNumberAlt?: string;
     email?: string;
   };
+  newOrExistingMember?: {
+    isNewOrExistingMember: boolean;
+    clientNumber?: string;
+  };
   submissionInfo?: {
     /**
      * The confirmation code associated with the application submission.
