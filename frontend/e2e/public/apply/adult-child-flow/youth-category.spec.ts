@@ -30,9 +30,16 @@ test.describe('Youth category', () => {
   test('Should return to CDCP main page if applicant is 16 or 17, child is not under 18', async ({ page }) => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
 
-    await test.step('Should navigate to date of birth page', async () => {
+    await test.step('Should navigate to applicant information page', async () => {
       const { year, month, day } = calculateDOB(16);
-      await applyAdultChildPage.fillDateOfBirthForm({ allChildrenUnder18: 'No', day: day, month: month, year: year });
+      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year });
+      await page.getByRole('button', { name: 'Continue' }).click();
+    });
+
+    await test.step('Should navigate to living independently page', async () => {
+      await applyAdultChildPage.isLoaded('living-independently');
+
+      await page.getByRole('radio', { name: 'No' }).click();
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
@@ -51,12 +58,12 @@ test.describe('Youth category', () => {
 
     await test.step('Should navigate to date of birth page', async () => {
       const { year, month, day } = calculateDOB(15);
-      await applyAdultChildPage.fillDateOfBirthForm({ allChildrenUnder18: 'Yes', day: day, month: month, year: year });
+      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
-    await test.step('Should navigate to contact apply child page', async () => {
-      await applyAdultChildPage.isLoaded('contact-apply-child');
+    await test.step('Should navigate to Parent or guardian page', async () => {
+      await applyAdultChildPage.isLoaded('parent-or-guardian');
     });
 
     await test.step('Should return to CDCP main page', async () => {

@@ -17,7 +17,6 @@ export type ApplyState = ReadonlyDeep<{
   id: string;
   editMode: boolean;
   lastUpdatedOn: string;
-  allChildrenUnder18?: boolean;
   applicantInformation?: {
     firstName: string;
     lastName: string;

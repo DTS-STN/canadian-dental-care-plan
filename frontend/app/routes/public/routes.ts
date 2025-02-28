@@ -71,7 +71,6 @@ export const routes = [
               },
             ],
           },
-          { id: 'public/apply/$id/adult-child/date-of-birth', file: 'routes/public/apply/$id/adult-child/date-of-birth.tsx', paths: { en: '/:lang/apply/:id/adult-child/date-of-birth', fr: '/:lang/demander/:id/adulte-enfant/date-de-naissance' } },
           { id: 'public/apply/$id/adult-child/apply-children', file: 'routes/public/apply/$id/adult-child/apply-children.tsx', paths: { en: '/:lang/apply/:id/adult-child/apply-children', fr: '/:lang/demander/:id/adult-child/demande-enfant' } },
           { id: 'public/apply/$id/adult-child/confirmation', file: 'routes/public/apply/$id/adult-child/confirmation.tsx', paths: { en: '/:lang/apply/:id/adult-child/confirmation', fr: '/:lang/demander/:id/adulte-enfant/confirmation' } },
           {
@@ -136,7 +135,6 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/contact-apply-child.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/contact-apply-child', fr: '/:lang/demander/:id/adulte-enfant/contact-demande-enfant' },
           },
-          { id: 'public/apply/$id/adult-child/dob-eligibility', file: 'routes/public/apply/$id/adult-child/dob-eligibility.tsx', paths: { en: '/:lang/apply/:id/adult-child/dob-eligibility', fr: '/:lang/demander/:id/adulte-enfant/ddn-admissibilite' } },
           { id: 'public/apply/$id/adult-child/exit-application', file: 'routes/public/apply/$id/adult-child/exit-application.tsx', paths: { en: '/:lang/apply/:id/adult-child/exit-application', fr: '/:lang/demander/:id/adulte-enfant/quitter-demande' } },
           { id: 'public/apply/$id/child/children/index', file: 'routes/public/apply/$id/child/children/index.tsx', paths: { en: '/:lang/apply/:id/child/children', fr: '/:lang/demander/:id/enfant/enfants' } },
           {

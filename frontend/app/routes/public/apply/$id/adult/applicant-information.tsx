@@ -258,7 +258,6 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               required
               disableScreenReaderErrors
             />
-            {/* <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required disableScreenReaderErrors /> */}
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">

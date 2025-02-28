@@ -55,8 +55,6 @@ export const pageIds = {
         newOrExistingMember: 'CDCP-APPL-AD-0019',
       },
       adultChild: {
-        dateOfBirth: 'CDCP-APPL-ADCH-0004',
-        dateOfBirthEligibility: 'CDCP-APPL-ADCH-0005',
         applicantInformation: 'CDCP-APPL-ADCH-0006',
         partnerInformation: 'CDCP-APPL-ADCH-0007',
         contactInformation: 'CDCP-APPL-ADCH-0008',
