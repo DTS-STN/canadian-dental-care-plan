@@ -66,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.adultChild) {
-    return redirect(getPathById('public/apply/$id/adult-child/date-of-birth', params));
+    return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.child) {

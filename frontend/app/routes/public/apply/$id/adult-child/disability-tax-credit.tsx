@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'adults') {
-    return redirect(getPathById('public/apply/$id/adult-child/date-of-birth', params));
+    return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
   return { id: state.id, meta, defaultState: state.disabilityTaxCredit, editMode: state.editMode };
@@ -90,23 +90,11 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (ageCategory !== 'adults') {
-    return redirect(getPathById('public/apply/$id/adult-child/date-of-birth', params));
-  }
-
-  if (parsedDataResult.data.disabilityTaxCredit === DISABILITY_TAX_CREDIT_OPTION.no && state.allChildrenUnder18) {
-    return redirect(getPathById('public/apply/$id/adult-child/apply-children', params));
-  }
-
-  if (parsedDataResult.data.disabilityTaxCredit === DISABILITY_TAX_CREDIT_OPTION.no && !state.allChildrenUnder18) {
-    return redirect(getPathById('public/apply/$id/adult-child/dob-eligibility', params));
+    return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
   if (parsedDataResult.data.disabilityTaxCredit === DISABILITY_TAX_CREDIT_OPTION.no) {
-    return redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
-  }
-
-  if (!state.allChildrenUnder18) {
-    return redirect(getPathById('public/apply/$id/adult-child/apply-yourself', params));
+    return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params)); // TODO: This might be the wrong path, applicant-information is just a temporary redirect.
   }
 
   return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
@@ -174,7 +162,7 @@ export default function ApplyFlowDisabilityTaxCredit({ loaderData, params }: Rou
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult-child/date-of-birth"
+                routeId="public/apply/$id/adult-child/applicant-information"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

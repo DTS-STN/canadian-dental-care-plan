@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'children') {
-    return redirect(getPathById('public/apply/$id/adult-child/date-of-birth', params));
+    return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
   return { id: state.id, meta };
@@ -87,7 +87,7 @@ export default function ApplyFlowContactApplyChild({ loaderData, params }: Route
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
-          routeId="public/apply/$id/adult-child/date-of-birth"
+          routeId="public/apply/$id/adult-child/applicant-information"
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
