@@ -28,7 +28,7 @@ spec:
                 name: frontend
                 port:
                   name: http
-          - path: /.+/(protected/renew|protege/renouveller|renew|renouveller)(/.+)?
+          - path: /.+/(protected/renew|protege/renouveler|renew|renouveler)(/.+)?
             pathType: ImplementationSpecific
             backend:
               service:
