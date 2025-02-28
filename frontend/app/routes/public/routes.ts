@@ -157,6 +157,11 @@ export const routes = [
                 paths: { en: '/:lang/apply/:id/child/children/:childId/dental-insurance', fr: '/:lang/demander/:id/enfant/enfants/:childId/assurance-dentaire' },
               },
               {
+                id: 'public/apply/$id/child/children/$childId/confirm-federal-provincial-territorial-benefits',
+                file: 'routes/public/apply/$id/child/children/$childId/confirm-federal-provincial-territorial-benefits.tsx',
+                paths: { en: '/:lang/apply/:id/child/children/:childId/confirm-federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/enfant/enfants/:childId/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
+              },
+              {
                 id: 'public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits',
                 file: 'routes/public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits.tsx',
                 paths: { en: '/:lang/apply/:id/child/children/:childId/federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/enfant/enfants/:childId/prestations-dentaires-federales-provinciales-territoriales' },

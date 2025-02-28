@@ -62,6 +62,11 @@ test.describe('Children application', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
+    await test.step('Should navigate to confirm other dental benefits page', async () => {
+      await applyAdultChildPage.fillConfirmOtherDentalBenefitsForm();
+      await page.getByRole('button', { name: 'Continue' }).click();
+    });
+
     await test.step('Should navigate to other dental benefits page', async () => {
       await applyAdultChildPage.fillOtherDentalBenefitsForm();
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -136,6 +141,11 @@ test.describe('Children application', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
+    await test.step('Should navigate to confirm other dental benefits page', async () => {
+      await applyAdultChildPage.fillConfirmOtherDentalBenefitsForm();
+      await page.getByRole('button', { name: 'Continue' }).click();
+    });
+
     await test.step('Should navigate to other dental benefits page', async () => {
       await applyAdultChildPage.fillOtherDentalBenefitsForm();
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -207,6 +217,11 @@ test.describe('Children application', () => {
 
     await test.step('Should navigate to dental insurance page', async () => {
       await applyAdultChildPage.fillDentalInsuranceForm();
+      await page.getByRole('button', { name: 'Continue' }).click();
+    });
+
+    await test.step('Should navigate to confirm other dental benefits page', async () => {
+      await applyAdultChildPage.fillConfirmOtherDentalBenefitsForm();
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 

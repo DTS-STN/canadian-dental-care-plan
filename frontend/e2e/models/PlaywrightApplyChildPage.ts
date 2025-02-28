@@ -14,6 +14,7 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
       | 'confirmation'
       | 'contact-information'
       | 'children-dental-insurance'
+      | 'children-confirm-federal-provincial-territorial-benefits'
       | 'children-federal-provincial-territorial-benefits'
       | 'parent-or-guardian'
       | 'review-adult-information'
@@ -53,6 +54,10 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
 
       case 'children-dental-insurance':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/dental-insurance/, heading: /.*: access to other dental insurance/ };
+        break;
+
+      case 'children-confirm-federal-provincial-territorial-benefits':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/confirm-federal-provincial-territorial-benefits/, heading: /.*: access to other government dental benefits/ };
         break;
 
       case 'children-federal-provincial-territorial-benefits':

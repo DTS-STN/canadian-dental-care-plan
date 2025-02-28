@@ -226,6 +226,11 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
     await this.page.getByRole('radio', { name: 'Yes, I have access to dental insurance or coverage', exact: true }).check();
   }
 
+  async fillConfirmOtherDentalBenefitsForm() {
+    await this.isLoaded('confirm-federal-provincial-territorial-benefits');
+    await this.page.getByRole('radio', { name: 'Yes, I have federal, provincial or territorial dental benefits', exact: true }).check();
+  }
+
   async fillOtherDentalBenefitsForm() {
     await this.isLoaded('federal-provincial-territorial-benefits');
 

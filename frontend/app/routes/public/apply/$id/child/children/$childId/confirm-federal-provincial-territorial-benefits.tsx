@@ -9,7 +9,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirm-federal-provincial-territorial-benefits';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
+import { loadApplyChildState, loadApplySingleChildState } from '~/.server/routes/helpers/apply-child-route-helpers';
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -31,9 +31,9 @@ const FEDERAL_BENEFITS_CHANGED_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.confirmFederalProvincialTerritorialBenefits,
-  pageTitleI18nKey: 'apply-adult-child:children.confirm-dental-benefits.title',
+  pageTitleI18nKey: 'apply-child:children.confirm-dental-benefits.title',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
@@ -41,15 +41,15 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const state = loadApplyAdultSingleChildState({ params, request, session });
+  const state = loadApplySingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('apply-adult-child:children.child-number', { childNumber: state.childNumber });
+  const childNumber = t('apply-child:children.child-number', { childNumber: state.childNumber });
   const childName = state.information?.firstName ?? childNumber;
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.confirm-dental-benefits.title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.confirm-dental-benefits.title', { childName: childNumber }) }),
+    title: t('gcweb:meta.title.template', { title: t('apply-child:children.confirm-dental-benefits.title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('apply-child:children.confirm-dental-benefits.title', { childName: childNumber }) }),
   };
 
   return {
@@ -67,14 +67,14 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = loadApplyAdultSingleChildState({ params, request, session });
-  const applyState = loadApplyAdultChildState({ params, request, session });
+  const state = loadApplySingleChildState({ params, request, session });
+  const applyState = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
   const dentalBenefitsChangedSchema = z.object({
-    hasFederalProvincialTerritorialBenefits: z.boolean({ errorMap: () => ({ message: t('apply-adult-child:children.confirm-dental-benefits.error-message.federal-provincial-territorial-benefit-required') }) }),
+    hasFederalProvincialTerritorialBenefits: z.boolean({ errorMap: () => ({ message: t('apply-child:children.confirm-dental-benefits.error-message.federal-provincial-territorial-benefit-required') }) }),
   });
 
   const dentalBenefits = {
@@ -115,14 +115,14 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (dentalBenefits.hasFederalProvincialTerritorialBenefits) {
-    return redirect(getPathById('public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits', params));
+    return redirect(getPathById('public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits', params));
   }
 
   if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult-child/review-child-information', params));
+    return redirect(getPathById('public/apply/$id/child/review-child-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult-child/children/index', params));
+  return redirect(getPathById('public/apply/$id/child/children/index', params));
 }
 
 export default function ApplyAdultChildConfirmFederalProvincialTerritorialBenefits({ loaderData, params }: Route.ComponentProps) {
@@ -148,8 +148,8 @@ export default function ApplyAdultChildConfirmFederalProvincialTerritorialBenefi
         <Progress value={88} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4">{t('apply-adult-child:children.confirm-dental-benefits.access-to-dental')}</p>
-        <p className="mb-4">{t('apply-adult-child:children.confirm-dental-benefits.eligibility-criteria')}</p>
+        <p className="mb-4">{t('apply-child:children.confirm-dental-benefits.access-to-dental')}</p>
+        <p className="mb-4">{t('apply-child:children.confirm-dental-benefits.eligibility-criteria')}</p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -158,16 +158,16 @@ export default function ApplyAdultChildConfirmFederalProvincialTerritorialBenefi
             <InputRadios
               id="federal-provincial-territorial-benefits-changed"
               name="hasFederalProvincialTerritorialBenefits"
-              legend={t('apply-adult-child:children.confirm-dental-benefits.has-benefits', { childName })}
+              legend={t('apply-child:children.confirm-dental-benefits.has-benefits', { childName })}
               options={[
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.confirm-dental-benefits.option-yes" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:children.confirm-dental-benefits.option-yes" />,
                   value: FEDERAL_BENEFITS_CHANGED_OPTION.yes,
                   defaultChecked: federalProvincialTerritorialBenefitChangedValue === true,
                   onChange: handleOnFederalProvincialTerritorialBenefitChanged,
                 },
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.confirm-dental-benefits.option-no" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:children.confirm-dental-benefits.option-no" />,
                   value: FEDERAL_BENEFITS_CHANGED_OPTION.no,
                   defaultChecked: federalProvincialTerritorialBenefitChangedValue === false,
                   onChange: handleOnFederalProvincialTerritorialBenefitChanged,
@@ -179,17 +179,17 @@ export default function ApplyAdultChildConfirmFederalProvincialTerritorialBenefi
           </fieldset>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult_Child:Save - Child access to other government dental benefits click">
-                {t('apply-adult-child:children.confirm-dental-benefits.button.save-btn')}
+              <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Child:Save - Child access to other government dental benefits click">
+                {t('apply-child:children.confirm-dental-benefits.button.save-btn')}
               </Button>
               <ButtonLink
                 id="cancel-button"
-                routeId="public/apply/$id/adult-child/children/review-child-information"
+                routeId="public/apply/$id/child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult_Child:Cancel - Child access to other government dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Child:Cancel - Child access to other government dental benefits click"
               >
-                {t('apply-adult-child:children.confirm-dental-benefits.button.cancel-btn')}
+                {t('apply-child:children.confirm-dental-benefits.button.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
@@ -199,19 +199,19 @@ export default function ApplyAdultChildConfirmFederalProvincialTerritorialBenefi
                 id="continue-button"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult_Child:Continue - Child access to other government dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Child:Continue - Child access to other government dental benefits click"
               >
-                {t('apply-adult-child:children.confirm-dental-benefits.button.continue')}
+                {t('apply-child:children.confirm-dental-benefits.button.continue')}
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult-child/children/$childId/dental-insurance"
+                routeId="public/apply/$id/child/children/$childId/dental-insurance"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult_Child:Back - Child access to other government dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Child:Back - Child access to other government dental benefits click"
               >
-                {t('apply-adult-child:children.confirm-dental-benefits.button.back')}
+                {t('apply-child:children.confirm-dental-benefits.button.back')}
               </ButtonLink>
             </div>
           )}
