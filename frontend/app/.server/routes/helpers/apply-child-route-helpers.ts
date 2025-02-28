@@ -202,6 +202,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/apply/$id/child/children/$childId/dental-insurance', { ...params, childId }));
     }
 
+    //TODO: refactor to allow dentalBenefits to be undefined if hasFederalProvincialTerritorialBenefits is false
     if (dentalBenefits === undefined || hasFederalProvincialTerritorialBenefits === undefined) {
       throw redirect(getPathById('public/apply/$id/child/children/$childId/confirm-federal-provincial-territorial-benefits', { ...params, childId }));
     }
