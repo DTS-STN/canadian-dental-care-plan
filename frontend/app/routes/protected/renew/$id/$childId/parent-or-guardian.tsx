@@ -35,7 +35,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
-  return getTitleMetaTags(data.meta.title);
+  return getTitleMetaTags(data.meta.title, data.meta.dcTermsTitle);
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
@@ -49,7 +49,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
   const childName = state.information?.firstName ?? childNumber;
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:children.parent-or-guardian.page-title', { childName }) }) };
+  const meta = {
+    title: t('gcweb:meta.title.template', { title: t('protected-renew:children.parent-or-guardian.page-title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-renew:children.parent-or-guardian.page-title', { childName: childNumber }) }),
+  };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.child-parent-or-guardian', { userId: idToken.sub });

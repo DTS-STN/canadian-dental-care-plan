@@ -3,8 +3,7 @@ import { expect } from '@playwright/test';
 import { fillOutAddress } from '../utils/helpers';
 import { PlaywrightBasePage } from './PlaywrightBasePage';
 
-interface FillDateOfBirthFormArgs {
-  allChildrenUnder18: string;
+interface fillApplicantInformationFormArgs {
   day: string;
   month: string;
   year: string;
@@ -99,20 +98,12 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/confirmation/, heading: 'Application successfully submitted' };
         break;
 
-      case 'date-of-birth':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/, heading: 'Age' };
-        break;
-
       case 'dental-insurance':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/dental-insurance/, heading: 'Access to other dental insurance' };
         break;
 
       case 'disability-tax-credit':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/disability-tax-credit/, heading: 'Disability tax credit' };
-        break;
-
-      case 'dob-eligibility':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/dob-eligibility/, heading: 'Find out when you can apply' };
         break;
 
       case 'confirm-federal-provincial-territorial-benefits':
@@ -152,20 +143,14 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
   }
 
-  async fillDateOfBirthForm({ allChildrenUnder18, day, month, year }: FillDateOfBirthFormArgs) {
-    await this.isLoaded('date-of-birth');
-    await this.page.getByRole('combobox', { name: 'Month' }).selectOption(month);
-    await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
-    await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-    await this.page.getByRole('group', { name: 'Are all the children you are applying for under 18?' }).getByRole('radio', { name: allChildrenUnder18 }).check();
-  }
-
-  async fillApplicantInformationForm() {
+  async fillApplicantInformationForm({ day, month, year }: fillApplicantInformationFormArgs) {
     await this.isLoaded('applicant-information');
     await this.page.getByRole('textbox', { name: 'First name' }).fill('John');
     await this.page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
     await this.page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('900000001');
-    await this.page.getByRole('radio', { name: 'Married' }).check();
+    await this.page.getByRole('combobox', { name: 'Month' }).selectOption(month);
+    await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
+    await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
   }
 
   async fillPartnerInformationForm() {
@@ -240,6 +225,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
     await this.page.getByRole('group', { name: 'Federal benefits' }).getByRole('radio', { name: 'Correctional Service Canada Health Services' }).check();
     await this.page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('combobox', { name: 'If yes, through which province or territory?' }).selectOption('Alberta');
 
-    await this.page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Alberta Adult Health Benefits' }).check();
+    await this.page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Alberta Adult Health Benefit' }).check();
   }
 }

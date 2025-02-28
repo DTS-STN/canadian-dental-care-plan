@@ -75,20 +75,28 @@ function NavigationMenu() {
         {/* Use of a workaround (onFocusOutside={(e) => e.preventDefault()}) for the drowndownmenucontent with the resize issue raised by accessibility : https://github.com/radix-ui/primitives/issues/2754 */}
         <DropdownMenuContent onFocusOutside={(e) => e.preventDefault()} side="bottom" avoidCollisions={false} className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-dashboard.text')}</Link>
+            <Link to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:my-dashboard">
+              {t('gcweb:header.menu-dashboard.text')}
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-profile.text')}</Link>
+            <Link to={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:profile">
+              {t('gcweb:header.menu-profile.text')}
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to={t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-security-settings.text')}</Link>
+            <Link to={t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:security">
+              {t('gcweb:header.menu-security-settings.text')}
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to={t('gcweb:header.menu-contact-us.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-contact-us.text')}</Link>
+            <Link to={t('gcweb:header.menu-contact-us.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:contact">
+              {t('gcweb:header.menu-contact-us.text')}
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to="/auth/logout" className="flex items-center justify-between gap-2">
+            <Link to="/auth/logout" className="flex items-center justify-between gap-2" data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:signOut">
               {t('gcweb:header.menu-sign-out.text')} <FontAwesomeIcon icon={faArrowRightFromBracket} className="size-4 shrink-0" />
             </Link>
           </DropdownMenuItem>

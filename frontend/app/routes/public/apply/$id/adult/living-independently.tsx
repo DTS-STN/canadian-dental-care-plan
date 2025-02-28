@@ -80,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (parsedDataResult.data.livingIndependently === LIVING_INDEPENDENTLY_OPTION.yes) {
-    return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
+    return redirect(getPathById('public/apply/$id/adult/new-or-existing-member', params));
   }
 
   return redirect(getPathById('public/apply/$id/adult/parent-or-guardian', params));

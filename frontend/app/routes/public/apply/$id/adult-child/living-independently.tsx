@@ -75,7 +75,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data.livingIndependently === LIVING_INDEPENDENTLY_OPTION.yes } });
 
-  return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
+  if (parsedDataResult.data.livingIndependently === LIVING_INDEPENDENTLY_OPTION.yes) {
+    return redirect(getPathById('public/apply/$id/adult-child/new-or-existing-member', params));
+  }
+
+  return redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
 }
 
 export default function ApplyFlowLivingIndependently({ loaderData, params }: Route.ComponentProps) {
@@ -126,7 +130,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
             </LoadingButton>
             <ButtonLink
               id="back-button"
-              routeId="public/apply/$id/adult-child/date-of-birth"
+              routeId="public/apply/$id/adult-child/applicant-information"
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}

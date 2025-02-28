@@ -17,14 +17,13 @@ export type ApplyState = ReadonlyDeep<{
   id: string;
   editMode: boolean;
   lastUpdatedOn: string;
-  allChildrenUnder18?: boolean;
   applicantInformation?: {
     firstName: string;
     lastName: string;
     maritalStatus: string;
     socialInsuranceNumber: string;
   };
-  applicationYear: {
+  applicationYear?: {
     intakeYearId: string;
     taxYear: string;
   };
@@ -89,6 +88,10 @@ export type ApplyState = ReadonlyDeep<{
     phoneNumber?: string;
     phoneNumberAlt?: string;
     email?: string;
+  };
+  newOrExistingMember?: {
+    isNewOrExistingMember: boolean;
+    clientNumber?: string;
   };
   submissionInfo?: {
     /**
@@ -238,7 +241,7 @@ export function clearApplyState({ params, session }: ClearStateArgs) {
 }
 
 interface StartArgs {
-  applicationYear: ApplicationYearState;
+  applicationYear?: ApplicationYearState;
   id: string;
   session: Session;
 }

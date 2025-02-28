@@ -42,7 +42,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'children' && ageCategory !== 'youth') {
-    return redirect(getPathById('public/apply/$id/adult-child/date-of-birth', params));
+    return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
   return { id: state.id, meta, ageCategory };
@@ -66,6 +66,14 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+
+  function getBackButtonRouteId() {
+    if (ageCategory === 'youth') {
+      return 'public/apply/$id/adult-child/living-independently';
+    }
+
+    return 'public/apply/$id/adult-child/applicant-information';
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -91,7 +99,7 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
-          routeId="public/apply/$id/adult-child/date-of-birth"
+          routeId={getBackButtonRouteId()}
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}

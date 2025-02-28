@@ -189,7 +189,7 @@ export default function RenewChildIndex({ loaderData, params }: Route.ComponentP
                     </ButtonLink>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button id="remove-child" disabled={isSubmitting} size="sm" variant="alternative" startIcon={faRemove}>
+                        <Button aria-expanded={undefined} id="remove-child" disabled={isSubmitting} size="sm" variant="alternative" startIcon={faRemove}>
                           {t('renew-child:children.index.modal.remove-btn')}
                         </Button>
                       </DialogTrigger>

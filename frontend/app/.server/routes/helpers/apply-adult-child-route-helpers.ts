@@ -117,7 +117,6 @@ interface ValidateApplyAdultChildStateForReviewArgs {
 
 export function validateApplyAdultChildStateForReview({ params, state }: ValidateApplyAdultChildStateForReviewArgs) {
   const {
-    allChildrenUnder18,
     applicantInformation,
     applicationYear,
     communicationPreferences,
@@ -157,46 +156,22 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/apply/$id/file-taxes', params));
   }
 
-  if (dateOfBirth === undefined || allChildrenUnder18 === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult-child/date-of-birth', params));
+  if (dateOfBirth === undefined) {
+    throw redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
   const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
 
-  if (ageCategory === 'children' && allChildrenUnder18) {
-    throw redirect(getPathById('public/apply/$id/adult-child/contact-apply-child', params));
-  }
-
-  if (ageCategory === 'children' && !allChildrenUnder18) {
+  if (ageCategory === 'children') {
     throw redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'youth' && !allChildrenUnder18) {
+  if (ageCategory === 'youth') {
     throw redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
-  }
-
-  if (ageCategory === 'youth' && allChildrenUnder18 && livingIndependently === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult-child/living-independently', params));
   }
 
   if (ageCategory === 'adults' && disabilityTaxCredit === undefined) {
     throw redirect(getPathById('public/apply/$id/adult-child/disability-tax-credit', params));
-  }
-
-  if (ageCategory === 'adults' && disabilityTaxCredit === true && !allChildrenUnder18) {
-    throw redirect(getPathById('public/apply/$id/adult-child/apply-yourself', params));
-  }
-
-  if (ageCategory === 'adults' && disabilityTaxCredit === false && allChildrenUnder18) {
-    throw redirect(getPathById('public/apply/$id/adult-child/apply-children', params));
-  }
-
-  if (ageCategory === 'adults' && disabilityTaxCredit === false && !allChildrenUnder18) {
-    throw redirect(getPathById('public/apply/$id/adult-child/dob-eligibility', params));
-  }
-
-  if (ageCategory === 'seniors' && !allChildrenUnder18) {
-    throw redirect(getPathById('public/apply/$id/adult-child/apply-yourself', params));
   }
 
   if (applicantInformation === undefined) {
@@ -231,7 +206,6 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
 
   return {
     ageCategory,
-    allChildrenUnder18,
     applicantInformation,
     applicationYear,
     children,

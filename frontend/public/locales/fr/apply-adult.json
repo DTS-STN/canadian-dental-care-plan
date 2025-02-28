@@ -241,7 +241,7 @@
       "sin": "Entrez un NAS de 9 chiffres"
     },
     "error-message": {
-      "confirm-required": "La case à cocher doit être sélectionnée",
+      "confirm-required": "Le consentement de l'époux/épouse ou du conjoint de fait est requis pour procéder",
       "date-of-birth-day-number": "Le jour doit être un nombre",
       "date-of-birth-day-required": "La date de naissance doit inclure un jour",
       "date-of-birth-is-past": "La date de naissance doit être dans le passé",
@@ -417,5 +417,21 @@
     "back-btn": "Retour",
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
+  "new-or-existing-member": {
+    "page-title": "New or existing member",
+    "previously-enrolled": "Avez-vous déjà été inscrit au Régime canadien de soins dentaires?",
+    "client-number-label": "Entrez votre numéro de client à 11 chiffres",
+    "client-number-description": "Vous trouverez votre numéro de client dans le coin supérieur droit de la lettre de Service Canada ou sur votre carte de membre du Régime canadien de soins dentaires.",
+    "yes": "Oui",
+    "no": "Non",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "save-btn": "Enregistrer",
+    "error-message": {
+      "is-new-or-existing-member-required": "(FR) Please select whether you are new or existing member of CDCP",
+      "client-number-required": "Entrez le numéro de client de 11 chiffres",
+      "client-number-valid": "Le numéro de client doit être composé de 11 chiffres"
+    }
   }
 }

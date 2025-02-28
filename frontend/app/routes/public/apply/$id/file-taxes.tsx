@@ -27,12 +27,12 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const { id, applicationYear } = loadApplyState({ params, session });
+  const { id } = loadApplyState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:file-your-taxes.page-title') }) };
 
-  return { id, meta, taxYear: applicationYear.taxYear };
+  return { id, meta, taxYear: '2024' }; // TODO change taxYear to applicationYear.taxYear as it will always be defined when we remove apply-application-year feature flag
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

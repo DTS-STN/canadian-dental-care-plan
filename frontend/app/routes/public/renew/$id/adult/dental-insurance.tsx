@@ -111,7 +111,7 @@ export default function RenewAdultAccessToDentalInsuranceQuestion({ loaderData, 
             <li>{t('dental-insurance.detail.additional-info.eligible-list.employment-benefits')}</li>
             <li>
               {t('dental-insurance.detail.additional-info.eligible-list.organization.professional-student')}
-              <li className="list-none pl-4">{t('dental-insurance.detail.additional-info.eligible-list.organization.note')}</li>
+              <p className="pl-4">{t('dental-insurance.detail.additional-info.eligible-list.organization.note')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.not-take')}</li>
                 <li>{t('dental-insurance.detail.additional-info.eligible-list.organization.pay-premium')}</li>

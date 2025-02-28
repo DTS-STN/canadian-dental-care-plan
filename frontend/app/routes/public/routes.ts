@@ -39,6 +39,7 @@ export const routes = [
           },
           { id: 'public/apply/$id/adult/parent-or-guardian', file: 'routes/public/apply/$id/adult/parent-or-guardian.tsx', paths: { en: '/:lang/apply/:id/adult/parent-or-guardian', fr: '/:lang/demander/:id/adulte/parent-ou-tuteur' } },
           { id: 'public/apply/$id/adult/living-independently', file: 'routes/public/apply/$id/adult/living-independently.tsx', paths: { en: '/:lang/apply/:id/adult/living-independently', fr: '/:lang/demander/:id/adulte/vivre-maniere-independante' } },
+          { id: 'public/apply/$id/adult/new-or-existing-member', file: 'routes/public/apply/$id/adult/new-or-existing-member.tsx', paths: { en: '/:lang/apply/:id/adult/new-or-existing-member', fr: '/:lang/demander/:id/adulte/new-or-existing-member' } }, // TODO: Update French route
           { id: 'public/apply/$id/adult-child/children/index', file: 'routes/public/apply/$id/adult-child/children/index.tsx', paths: { en: '/:lang/apply/:id/adult-child/children', fr: '/:lang/demander/:id/adulte-enfant/enfants' } },
           {
             file: 'routes/public/apply/$id/adult-child/children/$childId/layout.tsx',
@@ -75,7 +76,6 @@ export const routes = [
               },
             ],
           },
-          { id: 'public/apply/$id/adult-child/date-of-birth', file: 'routes/public/apply/$id/adult-child/date-of-birth.tsx', paths: { en: '/:lang/apply/:id/adult-child/date-of-birth', fr: '/:lang/demander/:id/adulte-enfant/date-de-naissance' } },
           { id: 'public/apply/$id/adult-child/apply-children', file: 'routes/public/apply/$id/adult-child/apply-children.tsx', paths: { en: '/:lang/apply/:id/adult-child/apply-children', fr: '/:lang/demander/:id/adult-child/demande-enfant' } },
           { id: 'public/apply/$id/adult-child/confirmation', file: 'routes/public/apply/$id/adult-child/confirmation.tsx', paths: { en: '/:lang/apply/:id/adult-child/confirmation', fr: '/:lang/demander/:id/adulte-enfant/confirmation' } },
           {
@@ -121,6 +121,11 @@ export const routes = [
             paths: { en: '/:lang/apply/:id/adult-child/living-independently', fr: '/:lang/demander/:id/adulte-enfant/vivre-maniere-independante' },
           },
           {
+            id: 'public/apply/$id/adult-child/new-or-existing-member',
+            file: 'routes/public/apply/$id/adult-child/new-or-existing-member.tsx',
+            paths: { en: '/:lang/apply/:id/adult-child/new-or-existing-member', fr: '/:lang/demander/:id/adulte-enfant/new-or-existing-member' },
+          }, // TODO: Update French route
+          {
             id: 'public/apply/$id/adult-child/contact-information',
             file: 'routes/public/apply/$id/adult-child/contact-information.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/contact-information', fr: '/:lang/demander/:id/adulte-enfant/renseignements-personnels' },
@@ -140,7 +145,6 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/contact-apply-child.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/contact-apply-child', fr: '/:lang/demander/:id/adulte-enfant/contact-demande-enfant' },
           },
-          { id: 'public/apply/$id/adult-child/dob-eligibility', file: 'routes/public/apply/$id/adult-child/dob-eligibility.tsx', paths: { en: '/:lang/apply/:id/adult-child/dob-eligibility', fr: '/:lang/demander/:id/adulte-enfant/ddn-admissibilite' } },
           { id: 'public/apply/$id/adult-child/exit-application', file: 'routes/public/apply/$id/adult-child/exit-application.tsx', paths: { en: '/:lang/apply/:id/adult-child/exit-application', fr: '/:lang/demander/:id/adulte-enfant/quitter-demande' } },
           { id: 'public/apply/$id/child/children/index', file: 'routes/public/apply/$id/child/children/index.tsx', paths: { en: '/:lang/apply/:id/child/children', fr: '/:lang/demander/:id/enfant/enfants' } },
           {
@@ -179,6 +183,7 @@ export const routes = [
             ],
           },
           { id: 'public/apply/$id/child/applicant-information', file: 'routes/public/apply/$id/child/applicant-information.tsx', paths: { en: '/:lang/apply/:id/child/applicant-information', fr: '/:lang/demander/:id/enfant/renseignements-demandeur' } },
+          { id: 'public/apply/$id/child/new-or-existing-member', file: 'routes/public/apply/$id/child/new-or-existing-member.tsx', paths: { en: '/:lang/apply/:id/child/new-or-existing-member', fr: '/:lang/demander/:id/enfant/new-or-existing-member' } }, // TODO: Update French route
           {
             id: 'public/apply/$id/child/communication-preference',
             file: 'routes/public/apply/$id/child/communication-preference.tsx',

@@ -218,6 +218,10 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/child/contact-apply-child', params));
   }
 
+  if (parsedDobResult.data.dateOfBirthYear >= 2006) {
+    return redirect(getPathById('public/apply/$id/child/new-or-existing-member', params));
+  }
+
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
   }

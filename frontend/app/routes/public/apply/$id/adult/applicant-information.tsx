@@ -156,11 +156,15 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+
   if (ageCategory === 'youth') {
     return redirect(getPathById('public/apply/$id/adult/living-independently', params));
   }
   if (ageCategory === 'children') {
     return redirect(getPathById('public/apply/$id/adult/parent-or-guardian', params));
+  }
+  if (parsedDataResult.data.dateOfBirthYear >= 2006) {
+    return redirect(getPathById('public/apply/$id/adult/new-or-existing-member', params));
   }
 
   if (state.editMode) {
@@ -254,7 +258,6 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               required
               disableScreenReaderErrors
             />
-            {/* <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required disableScreenReaderErrors /> */}
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
