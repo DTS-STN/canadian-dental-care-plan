@@ -177,6 +177,8 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
       return 'public/apply/$id/adult-child/living-independently';
     }
 
+    // TODO: add year of birth check and redirect to New or existing page when date of birth is moved to this page
+
     return 'public/apply/$id/adult-child/date-of-birth';
   }
 

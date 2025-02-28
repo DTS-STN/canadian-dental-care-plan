@@ -29,6 +29,22 @@
       "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres"
     }
   },
+  "new-or-existing-member": {
+    "page-title": "New or existing member",
+    "previously-enrolled": "Avez-vous déjà été inscrit au Régime canadien de soins dentaires?",
+    "client-number-label": "Entrez votre numéro de client à 11 chiffres",
+    "client-number-description": "Vous trouverez votre numéro de client dans le coin supérieur droit de la lettre de Service Canada ou sur votre carte de membre du Régime canadien de soins dentaires.",
+    "yes": "Oui",
+    "no": "Non",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "save-btn": "Enregistrer",
+    "error-message": {
+      "is-new-or-existing-member-required": "(FR) Please select whether you are new or existing member of CDCP",
+      "client-number-required": "Entrez le numéro de client de 11 chiffres",
+      "client-number-valid": "Le numéro de client doit être composé de 11 chiffres"
+    }
+  },
   "children": {
     "child-number": "Enfant {{childNumber}}",
     "index": {
