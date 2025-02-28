@@ -39,9 +39,10 @@ interface AddressSuggestionDialogContentProps {
   enteredAddress: CanadianAddress;
   suggestedAddress: CanadianAddress;
   formAction: string;
+  syncAddresses?: boolean;
 }
 
-export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, formAction }: AddressSuggestionDialogContentProps) {
+export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, formAction, syncAddresses = false }: AddressSuggestionDialogContentProps) {
   const { t } = useTranslation(['common']);
   const fetcher = useEnhancedFetcher();
   const enteredAddressOptionValue = 'entered-address';
@@ -65,6 +66,9 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
     formData.set('countryId', selectedAddressSuggestion.countryId);
     formData.set('postalZipCode', selectedAddressSuggestion.postalZipCode);
     formData.set('provinceStateId', selectedAddressSuggestion.provinceStateId);
+    if (syncAddresses) {
+      formData.set('syncAddresses', 'true');
+    }
 
     await fetcher.submit(formData, { method: 'POST' });
   }
@@ -129,9 +133,10 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
 interface AddressInvalidDialogContentProps {
   invalidAddress: CanadianAddress;
   formAction: string;
+  syncAddresses?: boolean;
 }
 
-export function AddressInvalidDialogContent({ formAction, invalidAddress }: AddressInvalidDialogContentProps) {
+export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAddresses = false }: AddressInvalidDialogContentProps) {
   const { t } = useTranslation(['common']);
   const fetcher = useEnhancedFetcher();
 
@@ -150,6 +155,9 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress }: Addr
     formData.set('countryId', invalidAddress.countryId);
     formData.set('postalZipCode', invalidAddress.postalZipCode);
     formData.set('provinceStateId', invalidAddress.provinceStateId);
+    if (syncAddresses) {
+      formData.set('syncAddresses', 'true');
+    }
 
     await fetcher.submit(formData, { method: 'POST' });
   }
