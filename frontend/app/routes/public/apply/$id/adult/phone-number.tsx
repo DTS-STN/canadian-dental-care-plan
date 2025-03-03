@@ -155,7 +155,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
         ) : (
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Phone number click">
-              {t('apply-adult:new-or-existing-member.continue-btn')}
+              {t('apply-adult:phone-number.continue-btn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -165,7 +165,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
               startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click"
             >
-              {t('apply-adult:new-or-existing-member.back-btn')}
+              {t('apply-adult:phone-number.back-btn')}
             </ButtonLink>
           </div>
         )}
