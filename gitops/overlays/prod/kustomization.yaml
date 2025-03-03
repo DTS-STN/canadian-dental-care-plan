@@ -25,10 +25,10 @@ resources:
   #
   # For renewal application downtime with a 404 response, uncomment ./ingresses-renew-error-404.yaml
   #
-  # - ./ingresses.yaml
+  - ./ingresses.yaml
   # - ./ingresses-maintenance.yaml
   # - ./ingresses-apply-maintenance.yaml
-  - ./ingresses-renew-error-404.yaml
+  # - ./ingresses-renew-error-404.yaml
 patches:
   - path: ./patches/deployments-error-404.yaml
   - path: ./patches/deployments-frontend.yaml
