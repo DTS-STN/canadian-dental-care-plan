@@ -53,6 +53,26 @@
       "client-number-valid": "Le numéro de client doit être composé de 11 chiffres"
     }
   },
+  "phone-number": {
+    "page-title": "Numéro de téléphone",
+    "add-phone": "L'ajout d'un numéro de téléphone aidera le gouvernement du Canada à communiquer avec vous en cas de problème avec votre renouvellement. Sinon, nous communiquerons avec vous par la poste.",
+    "phone-number": "Numéro de téléphone (facultatif)",
+    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Sauvegarder",
+    "option-yes": "Oui",
+    "option-no": "Non",
+    "help-message": "L'ajout d'un numéro de téléphone aide le gouvernement du Canada à vous contacter en cas de problème avec votre demande. Sinon, nous vous contacterons par la poste.",
+    "error-message": {
+      "phone-number-valid": "Numéro de téléphone invalide",
+      "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-alt-valid": "Numéro de téléphone invalide",
+      "phone-number-alt-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-required": "Entrez un numéro de téléphone"
+    }
+  },
   "children": {
     "child-number": "Enfant {{childNumber}}",
     "index": {

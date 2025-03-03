@@ -76,6 +76,7 @@ export const pageIds = {
         childSummary: 'CDCP-APPL-ADCH-0023',
         contactApplyChild: 'CDCP-APPL-ADCH-0024',
         newOrExistingMember: 'CDCP-APPL-ADCH-0025',
+        phoneNumber: 'CDCP-APPL-ADCH-0026',
       },
       child: {
         dateOfBirthEligibility: 'CDCP-APPL-CH-0004',

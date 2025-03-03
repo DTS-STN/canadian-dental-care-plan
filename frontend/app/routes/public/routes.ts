@@ -126,6 +126,7 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/new-or-existing-member.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/new-or-existing-member', fr: '/:lang/demander/:id/adulte-enfant/new-or-existing-member' },
           }, // TODO: Update French route
+          { id: 'public/apply/$id/adult-child/phone-number', file: 'routes/public/apply/$id/adult-child/phone-number.tsx', paths: { en: '/:lang/apply/:id/adult-child/phone-number', fr: '/:lang/demander/:id/adulte-enfant/phone-number' } }, // TODO: Update French route
           {
             id: 'public/apply/$id/adult-child/contact-information',
             file: 'routes/public/apply/$id/adult-child/contact-information.tsx',
