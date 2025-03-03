@@ -4,6 +4,10 @@ metadata:
   name: frontend
   labels:
     app.kubernetes.io/name: frontend
+    # TODO :: GjB :: to be removed when the URLs in the application have been fixed
+    nginx.ingress.kubernetes.io/server-snippet: |
+      rewrite ^/fr/renouveler(.*)$ /fr/renouveller$1 redirect;
+      rewrite ^/fr/protege/renouveler(.*)$ /fr/protege/renouveller$1 redirect;
 spec:
   ingressClassName: nginx
   rules:
