@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/phone-number';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
+import { loadApplyAdultChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { phoneSchema } from '~/.server/validation/phone-schema';
@@ -29,9 +29,9 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adult.phoneNumber,
-  pageTitleI18nKey: 'apply-adult:phone-number.page-title',
+  i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
+  pageIdentifier: pageIds.public.apply.adultChild.phoneNumber,
+  pageTitleI18nKey: 'apply-adult-child:phone-number.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
@@ -39,10 +39,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const state = loadApplyAdultState({ params, request, session });
+  const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:phone-number.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:phone-number.page-title') }) };
 
   return {
     id: state.id,
@@ -61,17 +61,17 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = loadApplyAdultState({ params, request, session });
+  const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const phoneNumberSchema = z.object({
     phoneNumber: phoneSchema({
-      invalid_phone_canadian_error: t('apply-adult:phone-number.error-message.phone-number-valid'),
-      invalid_phone_international_error: t('apply-adult:phone-number.error-message.phone-number-valid-international'),
+      invalid_phone_canadian_error: t('apply-adult-child:phone-number.error-message.phone-number-valid'),
+      invalid_phone_international_error: t('apply-adult-child:phone-number.error-message.phone-number-valid-international'),
     }).optional(),
     phoneNumberAlt: phoneSchema({
-      invalid_phone_canadian_error: t('apply-adult:phone-number.error-message.phone-number-alt-valid'),
-      invalid_phone_international_error: t('apply-adult:phone-number.error-message.phone-number-alt-valid-international'),
+      invalid_phone_canadian_error: t('apply-adult-child:phone-number.error-message.phone-number-alt-valid'),
+      invalid_phone_international_error: t('apply-adult-child:phone-number.error-message.phone-number-alt-valid-international'),
     }).optional(),
   });
 
@@ -88,10 +88,10 @@ export async function action({ context: { appContainer, session }, params, reque
   // saveApplyState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
 
   if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
+    return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult/communication-preference', params));
+  return redirect(getPathById('public/apply/$id/adult-child/communication-preference', params));
 }
 
 export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.ComponentProps) {
@@ -113,7 +113,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
         <div className="mb-6">
-          <p className="mb-4">{t('apply-adult:phone-number.help-message')}</p>
+          <p className="mb-4">{t('apply-adult-child:phone-number.help-message')}</p>
           <div className="grid items-end gap-6">
             <InputPhoneField
               id="phone-number"
@@ -124,7 +124,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
               autoComplete="tel"
               defaultValue={defaultState.phoneNumber ?? ''}
               errorMessage={errors?.phoneNumber}
-              label={t('apply-adult:phone-number.phone-number')}
+              label={t('apply-adult-child:phone-number.phone-number')}
               maxLength={100}
               aria-describedby="adding-phone"
             />
@@ -137,7 +137,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
               autoComplete="tel"
               defaultValue={defaultState.phoneNumberAlt ?? ''}
               errorMessage={errors?.phoneNumberAlt}
-              label={t('apply-adult:phone-number.phone-number-alt')}
+              label={t('apply-adult-child:phone-number.phone-number-alt')}
               maxLength={100}
               aria-describedby="adding-phone"
             />
@@ -145,27 +145,33 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
         </div>
         {editMode ? (
           <div className="flex flex-wrap items-center gap-3">
-            <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Phone Number click">
-              {t('apply-adult:phone-number.save-btn')}
+            <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Save - Phone Number click">
+              {t('apply-adult-child:phone-number.save-btn')}
             </Button>
-            <ButtonLink id="cancel-button" routeId="public/apply/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Phone Number click">
-              {t('apply-adult:phone-number.cancel-btn')}
+            <ButtonLink
+              id="cancel-button"
+              routeId="public/apply/$id/adult-child/review-adult-information"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Cancel - Phone Number click"
+            >
+              {t('apply-adult-child:phone-number.cancel-btn')}
             </ButtonLink>
           </div>
         ) : (
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Phone number click">
-              {t('apply-adult:new-or-existing-member.continue-btn')}
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Continue - Phone number click">
+              {t('apply-adult-child:new-or-existing-member.continue-btn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
-              routeId="public/apply/$id/adult/applicant-information" //TODO: refactor route id when address routes are available
+              routeId="public/apply/$id/adult-child/applicant-information" //TODO: refactor route id when address routes are available
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Back - Phone number click"
             >
-              {t('apply-adult:new-or-existing-member.back-btn')}
+              {t('apply-adult-child:new-or-existing-member.back-btn')}
             </ButtonLink>
           </div>
         )}
