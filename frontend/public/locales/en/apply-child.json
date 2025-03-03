@@ -56,7 +56,6 @@
   },
   "phone-number": {
     "page-title": "Phone Number",
-    "add-phone": "Adding a phone number will help the Government of Canada contact you if there is an issue with your renewal. Otherwise, we'll contact you by mail.",
     "phone-number": "Phone number (optional)",
     "phone-number-alt": "Alternate phone number (optional)",
     "back-btn": "Back",
