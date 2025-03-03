@@ -51,9 +51,6 @@ const serverEnv = clientEnvSchema.extend({
   APPLICANT_CATEGORY_CODE_FAMILY: z.coerce.number().default(775170001),
   APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: z.coerce.number().default(775170002),
 
-  // application year IDs
-  APPLICATION_YEAR_2024_ID: z.string().trim().min(1).default("98f8ad43-4069-ee11-9ae7-000d3a09d1b8"),
-
   // province/territory lookup identifiers
   ALBERTA_PROVINCE_ID: z.string().trim().min(1).default("3b17d494-35b3-eb11-8236-0022486d8d5f"),
   BRITISH_COLUMBIA_PROVINCE_ID: z.string().trim().min(1).default("9c440baa-35b3-eb11-8236-0022486d8d5f"),

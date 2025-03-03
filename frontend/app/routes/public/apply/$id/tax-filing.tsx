@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:tax-filing.page-title') }) };
 
-  return { id: state.id, meta, defaultState: state.taxFiling2023, taxYear: '2024' }; // TODO change taxYear to state.applicationYear.taxYear as it will always be defined when we remove apply-application-year feature flag
+  return { id: state.id, meta, defaultState: state.taxFiling2023, taxYear: state.applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
