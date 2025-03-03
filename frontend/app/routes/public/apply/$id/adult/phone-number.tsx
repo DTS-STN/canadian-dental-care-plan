@@ -88,7 +88,7 @@ export async function action({ context: { appContainer, session }, params, reque
   // saveApplyState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
 
   if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
   return redirect(getPathById('public/apply/$id/adult/communication-preference', params));
@@ -148,7 +148,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
             <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Phone Number click">
               {t('apply-adult:phone-number.save-btn')}
             </Button>
-            <ButtonLink id="cancel-button" routeId="public/apply/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Phone Number click">
+            <ButtonLink id="cancel-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Phone Number click">
               {t('apply-adult:phone-number.cancel-btn')}
             </ButtonLink>
           </div>
