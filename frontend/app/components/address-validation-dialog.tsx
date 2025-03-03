@@ -116,12 +116,22 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
       />
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.corrected-address-close-button" disabled={fetcher.isSubmitting} variant="default" size="sm">
+          <Button id="dialog.corrected-address-close-button" disabled={fetcher.isSubmitting} variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Suggestion click">
             {t('common:dialog.address-suggestion.cancel-button')}
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={formAction} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+          <LoadingButton
+            name="_action"
+            value={formAction}
+            type="submit"
+            id="dialog.corrected-address-use-selected-address-button"
+            loading={fetcher.isSubmitting}
+            endIcon={faCheck}
+            variant="primary"
+            size="sm"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use Selected Address - Address Suggestion click"
+          >
             {t('common:dialog.address-suggestion.use-selected-address-button')}
           </LoadingButton>
         </fetcher.Form>
@@ -176,12 +186,22 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
       </div>
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.address-invalid-close-button" variant="default" size="sm">
+          <Button id="dialog.address-invalid-close-button" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Invalid click">
             {t('common:dialog.address-invalid.close-button')}
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={formAction} type="submit" id="dialog.address-invalid-use-entered-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
+          <LoadingButton
+            name="_action"
+            value={formAction}
+            type="submit"
+            id="dialog.address-invalid-use-entered-address-button"
+            loading={fetcher.isSubmitting}
+            endIcon={faCheck}
+            variant="primary"
+            size="sm"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use entered address - Address Invalid click"
+          >
             {t('common:dialog.address-invalid.use-entered-address-button')}
           </LoadingButton>
         </fetcher.Form>
