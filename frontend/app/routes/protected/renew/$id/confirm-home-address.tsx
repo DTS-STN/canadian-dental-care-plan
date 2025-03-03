@@ -1,10 +1,8 @@
-import type { SyntheticEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
 import { data, redirect } from 'react-router';
 
-import { faCheck, faChevronLeft, faChevronRight, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
@@ -15,13 +13,13 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
-import { Address } from '~/components/address';
-import { Button, ButtonLink } from '~/components/buttons';
+import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
+import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
+import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
+import { Dialog, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputOptionProps } from '~/components/input-option';
-import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
@@ -41,29 +39,6 @@ const FORM_ACTION = {
   useInvalidAddress: 'use-invalid-address',
   useSelectedAddress: 'use-selected-address',
 } as const;
-
-interface CanadianAddress {
-  address: string;
-  city: string;
-  country: string;
-  countryId: string;
-  postalZipCode: string;
-  provinceState: string;
-  provinceStateId: string;
-}
-
-interface AddressSuggestionResponse {
-  enteredAddress: CanadianAddress;
-  status: 'address-suggestion';
-  suggestedAddress: CanadianAddress;
-}
-
-interface AddressInvalidResponse {
-  invalidAddress: CanadianAddress;
-  status: 'address-invalid';
-}
-
-type AddressResponse = AddressSuggestionResponse | AddressInvalidResponse;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -123,11 +98,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const homeAddressValidator = appContainer.get(TYPES.routes.validators.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
 
   const parsedDataResult = await homeAddressValidator.validateHomeAddress({
-    address: String(formData.get('homeAddress')),
-    countryId: String(formData.get('homeCountry')),
-    provinceStateId: formData.get('homeProvince') ? String(formData.get('homeProvince')) : undefined,
-    city: String(formData.get('homeCity')),
-    postalZipCode: formData.get('homePostalCode') ? String(formData.get('homePostalCode')) : undefined,
+    address: String(formData.get('address')),
+    countryId: String(formData.get('countryId')),
+    provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
+    city: String(formData.get('city')),
+    postalZipCode: formData.get('postalZipCode') ? String(formData.get('postalZipCode')) : undefined,
   });
 
   if (!parsedDataResult.success) {
@@ -143,8 +118,8 @@ export async function action({ context: { appContainer, session }, params, reque
   };
 
   const isNotCanada = parsedDataResult.data.countryId !== CANADA_COUNTRY_ID;
-  const isUseInvalidAddressAction = formAction === 'use-invalid-address';
-  const isUseSelectedAddressAction = formAction === 'use-selected-address';
+  const isUseInvalidAddressAction = formAction === FORM_ACTION.useInvalidAddress;
+  const isUseSelectedAddressAction = formAction === FORM_ACTION.useSelectedAddress;
   const canProceedToReview = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
   if (canProceedToReview) {
     saveProtectedRenewState({ params, request, session, state: { homeAddress } });
@@ -280,7 +255,7 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
         <div className="mb-8 space-y-6">
           <InputSanitizeField
             id="home-address"
-            name="homeAddress"
+            name="address"
             className="w-full"
             label={t('protected-renew:update-address.address-field.address')}
             helpMessagePrimary={t('protected-renew:update-address.address-field.address-note')}
@@ -294,7 +269,7 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
           <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
             <InputSanitizeField
               id="home-city"
-              name="homeCity"
+              name="city"
               className="w-full"
               label={t('protected-renew:update-address.address-field.city')}
               maxLength={100}
@@ -305,7 +280,7 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
             />
             <InputSanitizeField
               id="home-postal-code"
-              name="homePostalCode"
+              name="postalZipCode"
               className="w-full"
               label={homePostalCodeRequired ? t('protected-renew:update-address.address-field.postal-code') : t('protected-renew:update-address.address-field.postal-code-optional')}
               maxLength={100}
@@ -318,7 +293,7 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
           {homeRegions.length > 0 && (
             <InputSelect
               id="home-province"
-              name="homeProvince"
+              name="provinceStateId"
               className="w-full sm:w-1/2"
               label={t('protected-renew:update-address.address-field.province')}
               defaultValue={defaultState?.province ?? ''}
@@ -329,7 +304,7 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
           )}
           <InputSelect
             id="home-country"
-            name="homeCountry"
+            name="countryId"
             className="w-full sm:w-1/2"
             label={t('protected-renew:update-address.address-field.country')}
             autoComplete="country"
@@ -360,8 +335,10 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
                 </DialogTrigger>
                 {!fetcher.isSubmitting && addressDialogContent && (
                   <>
-                    {addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
-                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+                    {addressDialogContent.status === 'address-suggestion' && (
+                      <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
+                    )}
+                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
                   </>
                 )}
               </Dialog>
@@ -390,8 +367,10 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
               </DialogTrigger>
               {!fetcher.isSubmitting && addressDialogContent && (
                 <>
-                  {addressDialogContent.status === 'address-suggestion' && <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} />}
-                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} />}
+                  {addressDialogContent.status === 'address-suggestion' && (
+                    <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
+                  )}
+                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
                 </>
               )}
             </Dialog>
@@ -409,166 +388,5 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
         )}
       </fetcher.Form>
     </div>
-  );
-}
-
-interface AddressSuggestionDialogContentProps {
-  enteredAddress: CanadianAddress;
-  suggestedAddress: CanadianAddress;
-}
-
-function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress }: AddressSuggestionDialogContentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const fetcher = useEnhancedFetcher();
-  const enteredAddressOptionValue = 'entered-address';
-  const suggestedAddressOptionValue = 'suggested-address';
-  type AddressSelectionOption = typeof enteredAddressOptionValue | typeof suggestedAddressOptionValue;
-  const [selectedAddressSuggestionOption, setSelectedAddressSuggestionOption] = useState<AddressSelectionOption>(enteredAddressOptionValue);
-
-  async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-
-    // Get the clicked button's value and append it to the FormData object
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.set(submitter.name, submitter.value);
-
-    // Append selected address suggestion to form data
-    const selectedAddressSuggestion = selectedAddressSuggestionOption === enteredAddressOptionValue ? enteredAddress : suggestedAddress;
-    formData.set('homeAddress', selectedAddressSuggestion.address);
-    formData.set('homeCity', selectedAddressSuggestion.city);
-    formData.set('homeCountry', selectedAddressSuggestion.countryId);
-    formData.set('homePostalCode', selectedAddressSuggestion.postalZipCode);
-    formData.set('homeProvince', selectedAddressSuggestion.provinceStateId);
-
-    await fetcher.submit(formData, { method: 'POST' });
-  }
-
-  return (
-    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>
-          <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 inline-block text-amber-700" />
-          {t('protected-renew:update-address.dialog.address-suggestion.header')}
-        </DialogTitle>
-        <DialogDescription>{t('protected-renew:update-address.dialog.address-suggestion.description')}</DialogDescription>
-      </DialogHeader>
-      <InputRadios
-        id="addressSelection"
-        name="addressSelection"
-        legend={t('protected-renew:update-address.dialog.address-suggestion.address-selection-legend')}
-        options={[
-          {
-            value: enteredAddressOptionValue,
-            children: (
-              <>
-                <p className="mb-2">
-                  <strong>{t('protected-renew:update-address.dialog.address-suggestion.entered-address-option')}</strong>
-                </p>
-                <Address address={enteredAddress} />
-              </>
-            ),
-          },
-          {
-            value: suggestedAddressOptionValue,
-            children: (
-              <>
-                <p className="mb-2">
-                  <strong>{t('protected-renew:update-address.dialog.address-suggestion.suggested-address-option')}</strong>
-                </p>
-                <Address address={suggestedAddress} />
-              </>
-            ),
-          },
-        ].map((option) => ({
-          ...option,
-          onChange: (e) => {
-            setSelectedAddressSuggestionOption(e.target.value as AddressSelectionOption);
-          },
-          checked: option.value === selectedAddressSuggestionOption,
-        }))}
-      />
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button id="dialog.corrected-address-close-button" startIcon={faChevronLeft} disabled={fetcher.isSubmitting} variant="alternative" size="sm">
-            {t('protected-renew:update-address.dialog.address-suggestion.cancel-button')}
-          </Button>
-        </DialogClose>
-        <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton name="_action" value={FORM_ACTION.useSelectedAddress} type="submit" id="dialog.corrected-address-use-selected-address-button" loading={fetcher.isSubmitting} endIcon={faCheck} variant="primary" size="sm">
-            {t('protected-renew:update-address.dialog.address-suggestion.use-selected-address-button')}
-          </LoadingButton>
-        </fetcher.Form>
-      </DialogFooter>
-    </DialogContent>
-  );
-}
-
-interface AddressInvalidDialogContentProps {
-  invalidAddress: CanadianAddress;
-}
-
-function AddressInvalidDialogContent({ invalidAddress }: AddressInvalidDialogContentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const fetcher = useEnhancedFetcher();
-
-  async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-
-    // Get the clicked button's value and append it to the FormData object
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.set(submitter.name, submitter.value);
-
-    // Append selected address suggestion to form data
-    formData.set('homeAddress', invalidAddress.address);
-    formData.set('homeCity', invalidAddress.city);
-    formData.set('homeCountry', invalidAddress.countryId);
-    formData.set('homePostalCode', invalidAddress.postalZipCode);
-    formData.set('homeProvince', invalidAddress.provinceStateId);
-
-    await fetcher.submit(formData, { method: 'POST' });
-  }
-
-  return (
-    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>
-          <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 inline-block text-amber-700" />
-          {t('protected-renew:update-address.dialog.address-invalid.header')}
-        </DialogTitle>
-        <DialogDescription>{t('protected-renew:update-address.dialog.address-invalid.description')}</DialogDescription>
-      </DialogHeader>
-      <div className="space-y-2">
-        <p>
-          <strong>{t('protected-renew:update-address.dialog.address-invalid.entered-address')}</strong>
-        </p>
-        <Address address={invalidAddress} />
-      </div>
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button id="dialog.address-invalid-close-button" startIcon={faChevronLeft} variant="alternative" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Dialog Close - Home address click">
-            {t('protected-renew:update-address.dialog.address-invalid.close-button')}
-          </Button>
-        </DialogClose>
-        <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton
-            name="_action"
-            value={FORM_ACTION.useInvalidAddress}
-            type="submit"
-            id="dialog.address-invalid-use-entered-address-button"
-            loading={fetcher.isSubmitting}
-            endIcon={faCheck}
-            variant="primary"
-            size="sm"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Dialog Use Selected Address - Home address click"
-          >
-            {t('protected-renew:update-address.dialog.address-invalid.use-entered-address-button')}
-          </LoadingButton>
-        </fetcher.Form>
-      </DialogFooter>
-    </DialogContent>
   );
 }

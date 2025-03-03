@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { SyntheticEvent } from 'react';
 
 import { data, redirect } from 'react-router';
 
-import { faCheck, faChevronLeft, faChevronRight, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
@@ -15,14 +13,14 @@ import { TYPES } from '~/.server/constants';
 import { loadRenewChildState } from '~/.server/routes/helpers/renew-child-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import { Address } from '~/components/address';
+import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
+import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
+import { Dialog, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import type { InputOptionProps } from '~/components/input-option';
-import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
@@ -42,29 +40,6 @@ const FORM_ACTION = {
   useInvalidAddress: 'use-invalid-address',
   useSelectedAddress: 'use-selected-address',
 } as const;
-
-interface CanadianAddress {
-  address: string;
-  city: string;
-  country: string;
-  countryId: string;
-  postalZipCode: string;
-  provinceState: string;
-  provinceStateId: string;
-}
-
-interface AddressSuggestionResponse {
-  enteredAddress: CanadianAddress;
-  status: 'address-suggestion';
-  suggestedAddress: CanadianAddress;
-}
-
-interface AddressInvalidResponse {
-  invalidAddress: CanadianAddress;
-  status: 'address-invalid';
-}
-
-type AddressResponse = AddressSuggestionResponse | AddressInvalidResponse;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
@@ -109,7 +84,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadRenewChildState({ params, request, session });
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
-  const isCopyMailingToHome = formData.get('copyMailingAddress') === 'copy';
+  const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
 
   if (formAction === FORM_ACTION.cancel) {
     saveRenewState({
@@ -125,11 +100,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
-    address: String(formData.get('mailingAddress')),
-    countryId: String(formData.get('mailingCountry')),
-    provinceStateId: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
-    city: String(formData.get('mailingCity')),
-    postalZipCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
+    address: String(formData.get('address')),
+    countryId: String(formData.get('countryId')),
+    provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
+    city: String(formData.get('city')),
+    postalZipCode: formData.get('postalZipCode') ? String(formData.get('postalZipCode')) : undefined,
   });
 
   if (!validatedResult.success) {
@@ -147,8 +122,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const homeAddress = isCopyMailingToHome ? { ...mailingAddress } : undefined;
 
   const isNotCanada = validatedResult.data.countryId !== clientConfig.CANADA_COUNTRY_ID;
-  const isUseInvalidAddressAction = formAction === 'use-invalid-address';
-  const isUseSelectedAddressAction = formAction === 'use-selected-address';
+  const isUseInvalidAddressAction = formAction === FORM_ACTION.useInvalidAddress;
+  const isUseSelectedAddressAction = formAction === FORM_ACTION.useSelectedAddress;
   const canProceedToReviewChild = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
 
   if (canProceedToReviewChild) {
@@ -254,7 +229,7 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
     postalZipCode: 'mailing-postal-code',
     provinceStateId: 'mailing-province',
     countryId: 'mailing-country',
-    copyMailingAddress: 'copy-mailing-address',
+    syncAddresses: 'sync-addresses',
   });
   const checkHandler = () => {
     setCopyAddressChecked((curState) => !curState);
@@ -301,7 +276,7 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
             <div className="space-y-6">
               <InputSanitizeField
                 id="mailing-address"
-                name="mailingAddress"
+                name="address"
                 className="w-full"
                 label={t('renew-child:update-address.address-field.address')}
                 maxLength={100}
@@ -315,7 +290,7 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
               <div className="grid items-end gap-6 md:grid-cols-2">
                 <InputSanitizeField
                   id="mailing-city"
-                  name="mailingCity"
+                  name="city"
                   className="w-full"
                   label={t('renew-child:update-address.address-field.city')}
                   maxLength={100}
@@ -326,7 +301,7 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
                 />
                 <InputSanitizeField
                   id="mailing-postal-code"
-                  name="mailingPostalCode"
+                  name="postalZipCode"
                   className="w-full"
                   label={isPostalCodeRequired ? t('renew-child:update-address.address-field.postal-code') : t('renew-child:update-address.address-field.postal-code-optional')}
                   maxLength={100}
@@ -339,7 +314,7 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
               {mailingRegions.length > 0 && (
                 <InputSelect
                   id="mailing-province"
-                  name="mailingProvince"
+                  name="provinceStateId"
                   className="w-full sm:w-1/2"
                   label={t('renew-child:update-address.address-field.province')}
                   defaultValue={defaultState.mailingAddress?.province}
@@ -350,7 +325,7 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
               )}
               <InputSelect
                 id="mailing-country"
-                name="mailingCountry"
+                name="countryId"
                 className="w-full sm:w-1/2"
                 label={t('renew-child:update-address.address-field.country')}
                 autoComplete="country"
@@ -360,7 +335,7 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
                 onChange={mailingCountryChangeHandler}
                 required
               />
-              <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
+              <InputCheckbox id="sync-addresses" name="syncAddresses" value="true" checked={copyAddressChecked} onChange={checkHandler}>
                 {t('renew-child:update-address.home-address.use-mailing-address')}
               </InputCheckbox>
             </div>
@@ -385,9 +360,9 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
                 {!fetcher.isSubmitting && addressDialogContent && (
                   <>
                     {addressDialogContent.status === 'address-suggestion' && (
-                      <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} copyAddressToHome={copyAddressChecked} />
+                      <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useSelectedAddress} />
                     )}
-                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} copyAddressToHome={copyAddressChecked} />}
+                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useInvalidAddress} />}
                   </>
                 )}
               </Dialog>
@@ -416,9 +391,9 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
                 {!fetcher.isSubmitting && addressDialogContent && (
                   <>
                     {addressDialogContent.status === 'address-suggestion' && (
-                      <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} copyAddressToHome={copyAddressChecked} />
+                      <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useSelectedAddress} />
                     )}
-                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} copyAddressToHome={copyAddressChecked} />}
+                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useInvalidAddress} />}
                   </>
                 )}
               </Dialog>
@@ -438,191 +413,5 @@ export default function RenewChildUpdateAddress({ loaderData, params }: Route.Co
         </fetcher.Form>
       </div>
     </>
-  );
-}
-
-interface AddressSuggestionDialogContentProps {
-  enteredAddress: CanadianAddress;
-  suggestedAddress: CanadianAddress;
-  copyAddressToHome: boolean;
-}
-
-function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, copyAddressToHome }: AddressSuggestionDialogContentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const fetcher = useEnhancedFetcher();
-  const enteredAddressOptionValue = 'entered-address';
-  const suggestedAddressOptionValue = 'suggested-address';
-  type AddressSelectionOption = typeof enteredAddressOptionValue | typeof suggestedAddressOptionValue;
-  const [selectedAddressSuggestionOption, setSelectedAddressSuggestionOption] = useState<AddressSelectionOption>(enteredAddressOptionValue);
-
-  async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-
-    // Get the clicked button's value and append it to the FormData object
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.set(submitter.name, submitter.value);
-
-    // Append selected address suggestion to form data
-    const selectedAddressSuggestion = selectedAddressSuggestionOption === enteredAddressOptionValue ? enteredAddress : suggestedAddress;
-    formData.set('mailingAddress', selectedAddressSuggestion.address);
-    formData.set('mailingCity', selectedAddressSuggestion.city);
-    formData.set('mailingCountry', selectedAddressSuggestion.countryId);
-    formData.set('mailingPostalCode', selectedAddressSuggestion.postalZipCode);
-    formData.set('mailingProvince', selectedAddressSuggestion.provinceStateId);
-    if (copyAddressToHome) {
-      formData.set('copyMailingAddress', 'copy');
-    }
-
-    await fetcher.submit(formData, { method: 'POST' });
-  }
-
-  return (
-    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>
-          <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 inline-block text-amber-700" />
-          {t('renew-child:update-address.dialog.address-suggestion.header')}
-        </DialogTitle>
-        <DialogDescription>{t('renew-child:update-address.dialog.address-suggestion.description')}</DialogDescription>
-      </DialogHeader>
-      <InputRadios
-        id="addressSelection"
-        name="addressSelection"
-        legend={t('renew-child:update-address.dialog.address-suggestion.address-selection-legend')}
-        options={[
-          {
-            value: enteredAddressOptionValue,
-            children: (
-              <>
-                <p className="mb-2">
-                  <strong>{t('renew-child:update-address.dialog.address-suggestion.entered-address-option')}</strong>
-                </p>
-                <Address address={enteredAddress} />
-              </>
-            ),
-          },
-          {
-            value: suggestedAddressOptionValue,
-            children: (
-              <>
-                <p className="mb-2">
-                  <strong>{t('renew-child:update-address.dialog.address-suggestion.suggested-address-option')}</strong>
-                </p>
-                <Address address={suggestedAddress} />
-              </>
-            ),
-          },
-        ].map((option) => ({
-          ...option,
-          onChange: (e) => {
-            setSelectedAddressSuggestionOption(e.target.value as AddressSelectionOption);
-          },
-          checked: option.value === selectedAddressSuggestionOption,
-        }))}
-      />
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button
-            id="dialog.corrected-address-close-button"
-            startIcon={faChevronLeft}
-            disabled={fetcher.isSubmitting}
-            variant="alternative"
-            size="sm"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Dialog Back - Mailing address click"
-          >
-            {t('renew-child:update-address.dialog.address-suggestion.cancel-button')}
-          </Button>
-        </DialogClose>
-        <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton
-            name="_action"
-            value={FORM_ACTION.useSelectedAddress}
-            type="submit"
-            id="dialog.corrected-address-use-selected-address-button"
-            loading={fetcher.isSubmitting}
-            endIcon={faCheck}
-            variant="primary"
-            size="sm"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Dialog Use Selected Address - Mailing address click"
-          >
-            {t('renew-child:update-address.dialog.address-suggestion.use-selected-address-button')}
-          </LoadingButton>
-        </fetcher.Form>
-      </DialogFooter>
-    </DialogContent>
-  );
-}
-
-interface AddressInvalidDialogContentProps {
-  invalidAddress: CanadianAddress;
-  copyAddressToHome: boolean;
-}
-
-function AddressInvalidDialogContent({ invalidAddress, copyAddressToHome }: AddressInvalidDialogContentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const fetcher = useEnhancedFetcher();
-
-  async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-
-    // Get the clicked button's value and append it to the FormData object
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.set(submitter.name, submitter.value);
-
-    // Append selected address suggestion to form data
-    formData.set('mailingAddress', invalidAddress.address);
-    formData.set('mailingCity', invalidAddress.city);
-    formData.set('mailingCountry', invalidAddress.countryId);
-    formData.set('mailingPostalCode', invalidAddress.postalZipCode);
-    formData.set('mailingProvince', invalidAddress.provinceStateId);
-    if (copyAddressToHome) {
-      formData.set('copyMailingAddress', 'copy');
-    }
-
-    await fetcher.submit(formData, { method: 'POST' });
-  }
-
-  return (
-    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>
-          <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 inline-block text-amber-700" />
-          {t('renew-child:update-address.dialog.address-invalid.header')}
-        </DialogTitle>
-        <DialogDescription>{t('renew-child:update-address.dialog.address-invalid.description')}</DialogDescription>
-      </DialogHeader>
-      <div className="space-y-2">
-        <p>
-          <strong>{t('renew-child:update-address.dialog.address-invalid.entered-address')}</strong>
-        </p>
-        <Address address={invalidAddress} />
-      </div>
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button id="dialog.address-invalid-close-button" startIcon={faChevronLeft} variant="alternative" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Dialog Back - Mailing address click">
-            {t('renew-child:update-address.dialog.address-invalid.close-button')}
-          </Button>
-        </DialogClose>
-        <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
-          <LoadingButton
-            name="_action"
-            value={FORM_ACTION.useInvalidAddress}
-            type="submit"
-            id="dialog.address-invalid-use-entered-address-button"
-            loading={fetcher.isSubmitting}
-            endIcon={faCheck}
-            variant="primary"
-            size="sm"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Dialog Use Entered Address - Mailing address click"
-          >
-            {t('renew-child:update-address.dialog.address-invalid.use-entered-address-button')}
-          </LoadingButton>
-        </fetcher.Form>
-      </DialogFooter>
-    </DialogContent>
   );
 }
