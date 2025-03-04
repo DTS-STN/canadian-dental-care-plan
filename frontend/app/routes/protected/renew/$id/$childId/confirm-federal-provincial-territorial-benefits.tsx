@@ -71,23 +71,27 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const immutableChild = renewState.clientApplication.children.find((c) => c.information.socialInsuranceNumber === state.information?.socialInsuranceNumber);
-  const clientDentalBenefits = immutableChild?.dentalBenefits.reduce((acc, id) => {
-    try {
-      appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getFederalGovernmentInsurancePlanById(id);
+  const clientDentalBenefits = immutableChild?.dentalBenefits.reduce((benefits, id) => {
+    const federalProgram = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findFederalGovernmentInsurancePlanById(id);
+    if (federalProgram) {
       return {
-        ...acc,
+        ...benefits,
         hasFederalBenefits: true,
         federalSocialProgram: id,
       };
-    } catch {
-      const provincialProgram = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getProvincialGovernmentInsurancePlanById(id);
+    }
+
+    const provincialProgram = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findProvincialGovernmentInsurancePlanById(id);
+    if (provincialProgram) {
       return {
-        ...acc,
+        ...benefits,
         hasProvincialTerritorialBenefits: true,
         provincialTerritorialSocialProgram: id,
         province: provincialProgram.provinceTerritoryStateId,
       };
     }
+
+    return benefits;
   }, {}) as ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
 
   const dentalBenefits = state.dentalBenefits ?? clientDentalBenefits;
