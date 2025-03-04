@@ -10,7 +10,7 @@ export type EmailNotificationRequestEntity = ReadonlyDeep<{
 
 export type EmailNotificationResponseEntity = ReadonlyDeep<{
   id: string;
-  reference: string;
+  reference?: string;
   content: {
     subject: string;
     body: string;
