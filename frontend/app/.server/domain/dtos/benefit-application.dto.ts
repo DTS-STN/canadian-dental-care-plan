@@ -64,7 +64,7 @@ export type ContactInformationDto = ReadonlyDeep<{
 
 export type PartnerInformationDto = ReadonlyDeep<{
   confirm: boolean;
-  dateOfBirth: string;
+  yearOfBirth: string;
   firstName: string;
   lastName: string;
   socialInsuranceNumber: string;

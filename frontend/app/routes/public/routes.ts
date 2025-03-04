@@ -122,6 +122,7 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/living-independently.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/living-independently', fr: '/:lang/demander/:id/adulte-enfant/vivre-maniere-independante' },
           },
+          { id: 'public/apply/$id/adult-child/marital-status', file: 'routes/public/apply/$id/adult-child/marital-status.tsx', paths: { en: '/:lang/apply/:id/adult-child/marital-status', fr: '/:lang/demander/:id/adulte-enfant/etat-civil' } },
           {
             id: 'public/apply/$id/adult-child/new-or-existing-member',
             file: 'routes/public/apply/$id/adult-child/new-or-existing-member.tsx',

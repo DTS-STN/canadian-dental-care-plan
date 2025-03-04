@@ -116,7 +116,7 @@ interface ValidateStateForReviewArgs {
 }
 
 export function validateApplyChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
-  const { applicantInformation, applicationYear, communicationPreferences, dateOfBirth, editMode, id, lastUpdatedOn, partnerInformation, contactInformation, submissionInfo, taxFiling2023, typeOfApplication } = state;
+  const { applicantInformation, applicationYear, communicationPreferences, dateOfBirth, maritalStatus, editMode, id, lastUpdatedOn, partnerInformation, contactInformation, submissionInfo, taxFiling2023, typeOfApplication } = state;
 
   if (typeOfApplication === undefined) {
     throw redirect(getPathById('public/apply/$id/type-application', params));
@@ -150,11 +150,15 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('public/apply/$id/child/contact-apply-child', params));
   }
 
-  if (applicantInformationStateHasPartner(applicantInformation) && !partnerInformation) {
+  if (maritalStatus === undefined) {
+    throw redirect(getPathById('public/apply/$id/child/marital-status', params));
+  }
+
+  if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('public/apply/$id/child/partner-information', params));
   }
 
-  if (!applicantInformationStateHasPartner(applicantInformation) && partnerInformation) {
+  if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
     throw redirect(getPathById('public/apply/$id/child/applicant-information', params));
   }
 
@@ -166,7 +170,7 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('public/apply/$id/child/communication-preference', params));
   }
 
-  return { ageCategory, applicantInformation, applicationYear, children, communicationPreferences, contactInformation, dateOfBirth, editMode, id, lastUpdatedOn, partnerInformation, submissionInfo, taxFiling2023, typeOfApplication };
+  return { ageCategory, applicantInformation, applicationYear, children, communicationPreferences, contactInformation, dateOfBirth, maritalStatus, editMode, id, lastUpdatedOn, partnerInformation, submissionInfo, taxFiling2023, typeOfApplication };
 }
 
 interface ValidateChildrenStateForReviewArgs {

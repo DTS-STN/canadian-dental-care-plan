@@ -59,6 +59,7 @@ export const pageIds = {
       adultChild: {
         applicantInformation: 'CDCP-APPL-ADCH-0006',
         partnerInformation: 'CDCP-APPL-ADCH-0007',
+        maritalStatus: 'CDCP-APPL-AD-0007', // TODO: Check the correct page ID.
         contactInformation: 'CDCP-APPL-ADCH-0008',
         communicationPreference: 'CDCP-APPL-ADCH-0009',
         dentalInsurance: 'CDCP-APPL-ADCH-0010',

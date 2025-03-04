@@ -153,9 +153,14 @@ export async function action({ context: { appContainer, session }, params, reque
       applicantInformation: {
         firstName: parsedDataResult.data.firstName,
         lastName: parsedDataResult.data.lastName,
+        maritalStatus: '', //TODO: To remove once the state has been reworked.
         socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
       },
       dateOfBirth: parsedDataResult.data.dateOfBirth,
+      ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
+        // Handle marital-status back button
+        newOrExistingMember: undefined,
+      }),
     },
   });
 

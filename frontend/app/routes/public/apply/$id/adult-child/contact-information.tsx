@@ -62,7 +62,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
     meta,
     defaultState: state.contactInformation,
-    maritalStatus: state.applicantInformation?.maritalStatus,
+    maritalStatus: state.maritalStatus,
     countryList,
     regionList,
     editMode: state.editMode,

@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  if (state.applicantInformation === undefined || !applicantInformationStateHasPartner(state.applicantInformation)) {
+  if (state.applicantInformation === undefined || !applicantInformationStateHasPartner(state.maritalStatus ?? '')) {
     return redirect(getPathById('public/apply/$id/child/applicant-information', params));
   }
 
@@ -134,7 +134,7 @@ export async function action({ context: { appContainer, session }, params, reque
         ...val,
         dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`,
       };
-    }) satisfies z.ZodType<PartnerInformationState>;
+    }); //satisfies z.ZodType<PartnerInformationState>; TODO: Add once the state is reworked.
 
   const parsedDataResult = partnerInformationSchema.safeParse({
     confirm: formData.get('confirm') === 'yes',
@@ -151,7 +151,19 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { partnerInformation: parsedDataResult.data } });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      partnerInformation: {
+        confirm: parsedDataResult.data.confirm,
+        yearOfBirth: parsedDataResult.data.dateOfBirth,
+        firstName: parsedDataResult.data.firstName,
+        lastName: parsedDataResult.data.lastName,
+        socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+      },
+    },
+  });
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
@@ -229,7 +241,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 month: 'dateOfBirthMonth',
                 year: 'dateOfBirthYear',
               }}
-              defaultValue={defaultState?.dateOfBirth ?? ''}
+              defaultValue={defaultState?.yearOfBirth ?? ''}
               legend={t('apply-child:partner-information.date-of-birth')}
               errorMessages={{
                 all: errors?.dateOfBirth,

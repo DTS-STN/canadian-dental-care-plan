@@ -86,6 +86,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     dentalBenefits,
     dentalInsurance,
     disabilityTaxCredit,
+    maritalStatus,
     editMode,
     id,
     lastUpdatedOn,
@@ -143,11 +144,15 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     throw redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
-  if (applicantInformationStateHasPartner(applicantInformation) && !partnerInformation) {
+  if (maritalStatus === undefined) {
+    throw redirect(getPathById('public/apply/$id/adult/marital-status', params));
+  }
+
+  if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('public/apply/$id/adult/partner-information', params));
   }
 
-  if (!applicantInformationStateHasPartner(applicantInformation) && partnerInformation) {
+  if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
     throw redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
@@ -175,6 +180,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     communicationPreferences,
     contactInformation,
     dateOfBirth,
+    maritalStatus,
     hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,

@@ -20,6 +20,7 @@ export type ApplyState = ReadonlyDeep<{
   applicantInformation?: {
     firstName: string;
     lastName: string;
+    maritalStatus: string; // TODO: To remove once all pages are done. (Do we want maritalStatus inside applicantInformation or seperate?)
     socialInsuranceNumber: string;
   };
   applicationYear: {
@@ -66,9 +67,10 @@ export type ApplyState = ReadonlyDeep<{
   partnerInformation?: {
     confirm: boolean;
     yearOfBirth: string;
+    firstName: string;
+    lastName: string;
     socialInsuranceNumber: string;
   };
-  hasMaritalStatusChanged?: boolean;
   maritalStatus?: string;
   contactInformation?: {
     copyMailingAddress: boolean;

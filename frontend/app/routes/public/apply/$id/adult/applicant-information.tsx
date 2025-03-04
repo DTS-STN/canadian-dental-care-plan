@@ -149,6 +149,7 @@ export async function action({ context: { appContainer, session }, params, reque
         firstName: parsedDataResult.data.firstName,
         lastName: parsedDataResult.data.lastName,
         socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+        maritalStatus: '', //TODO: Needs rework depending on where maritalStatus is saved in our state once its reworked.
       },
       dateOfBirth: parsedDataResult.data.dateOfBirth,
       ...(parsedDataResult.data.dateOfBirthYear < 2006 && {

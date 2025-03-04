@@ -21,8 +21,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
-import type { InputRadiosProps } from '~/components/input-radios';
-import { InputRadios } from '~/components/input-radios';
+import { InputRadios, type InputRadiosProps } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
@@ -166,7 +165,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (formAction === FORM_ACTION.cancel) {
     invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
 
-    if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
+    if (applicantInformationStateHasPartner(state.maritalStatus ?? '') && state.partnerInformation === undefined) {
       const errorMessage = t('apply-child:applicant-information.error-message.marital-status-no-partner-information');
       const flattenedErrors: z.typeToFlattenedError<z.infer<typeof applicantInformationSchema> & z.infer<typeof dateOfBirthSchema>> = { formErrors: [errorMessage], fieldErrors: { maritalStatus: [errorMessage] } };
       return { errors: transformFlattenedError(flattenedErrors) };
@@ -198,7 +197,7 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);
+  const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data.maritalStatus);
   const remove = !hasPartner ? 'partnerInformation' : undefined;
   const ageCategory = getAgeCategoryFromDateString(parsedDobResult.data.dateOfBirth);
 
