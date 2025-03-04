@@ -14,6 +14,15 @@ import type { LogFactory, Logger } from '~/.server/factories';
  */
 export interface FederalGovernmentInsurancePlanService {
   /**
+   * Finds a specific federal government insurance plan by its ID.
+   * Returns null if no matching federal government insurance plan is found.
+   *
+   * @param id - The ID of the federal government insurance plan to retrieve.
+   * @returns The FederalGovernmentInsurancePlan DTO corresponding to the specified ID or null if not found.
+   */
+  findFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanDto | null;
+
+  /**
    * Retrieves a specific federal government insurance plan by its ID.
    *
    * @param id - The ID of the federal government insurance plan to retrieve.
@@ -79,6 +88,12 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
       onCacheAdd: () => this.log.info('Creating new listFederalGovernmentInsurancePlans memo'),
     });
 
+    this.findFederalGovernmentInsurancePlanById = moize(this.findFederalGovernmentInsurancePlanById, {
+      maxAge: federalGovernmentInsurancePlanCacheTTL,
+      maxSize: Infinity,
+      onCacheAdd: () => this.log.info('Creating new findFederalGovernmentInsurancePlanById memo'),
+    });
+
     this.getFederalGovernmentInsurancePlanById = moize(this.getFederalGovernmentInsurancePlanById, {
       maxAge: federalGovernmentInsurancePlanCacheTTL,
       maxSize: Infinity,
@@ -94,6 +109,20 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
     const federalGovernmentInsurancePlanDtos = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(federalGovernmentInsurancePlanEntities);
     this.log.trace('Returning federal government insurance plans: [%j]', federalGovernmentInsurancePlanDtos);
     return federalGovernmentInsurancePlanDtos;
+  }
+
+  findFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanDto | null {
+    this.log.debug('Finding federal government insurance plan with id: [%s]', id);
+    const federalGovernmentInsurancePlanEntity = this.federalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById(id);
+
+    if (!federalGovernmentInsurancePlanEntity) {
+      this.log.trace('Federal government insurance plan with id: [%s] not found. Returning null', id);
+      return null;
+    }
+
+    const federalGovernmentInsurancePlanDto = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto(federalGovernmentInsurancePlanEntity);
+    this.log.trace('Returning federal government insurance plan: [%j]', federalGovernmentInsurancePlanDto);
+    return federalGovernmentInsurancePlanDto;
   }
 
   getFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanDto {

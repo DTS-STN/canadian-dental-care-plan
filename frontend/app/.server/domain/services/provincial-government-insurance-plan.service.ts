@@ -11,6 +11,7 @@ import type { LogFactory, Logger } from '~/.server/factories';
 
 export interface ProvincialGovernmentInsurancePlanService {
   listProvincialGovernmentInsurancePlans(): ReadonlyArray<ProvincialGovernmentInsurancePlanDto>;
+  findProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto | null;
   getProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto;
   listAndSortLocalizedProvincialGovernmentInsurancePlans(locale: AppLocale): ReadonlyArray<ProvincialGovernmentInsurancePlanLocalizedDto>;
   getLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): ProvincialGovernmentInsurancePlanLocalizedDto;
@@ -47,6 +48,12 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
       onCacheAdd: () => this.log.info('Creating new listProvincialGovernmentInsurancePlans memo'),
     });
 
+    this.findProvincialGovernmentInsurancePlanById = moize(this.findProvincialGovernmentInsurancePlanById, {
+      maxAge: provincialGovernmentInsurancePlanCacheTTL,
+      maxSize: Infinity,
+      onCacheAdd: () => this.log.info('Creating new findProvincialGovernmentInsurancePlanById memo'),
+    });
+
     this.getProvincialGovernmentInsurancePlanById = moize(this.getProvincialGovernmentInsurancePlanById, {
       maxAge: provincialGovernmentInsurancePlanCacheTTL,
       maxSize: Infinity,
@@ -62,6 +69,20 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     const provincialGovernmentInsurancePlanDtos = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities);
     this.log.trace('Returning provincial government insurance plans: [%j]', provincialGovernmentInsurancePlanDtos);
     return provincialGovernmentInsurancePlanDtos;
+  }
+
+  findProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto | null {
+    this.log.debug('Finding provincial government insurance plan with id: [%s]', id);
+    const provincialGovernmentInsurancePlanEntity = this.provincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById(id);
+
+    if (!provincialGovernmentInsurancePlanEntity) {
+      this.log.trace('Provincial government insurance plan with id: [%s] not found. Returning null', id);
+      return null;
+    }
+
+    const provincialGovernmentInsurancePlanDto = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity);
+    this.log.trace('Returning provincial government insurance plan: [%j]', provincialGovernmentInsurancePlanDto);
+    return provincialGovernmentInsurancePlanDto;
   }
 
   getProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto {
