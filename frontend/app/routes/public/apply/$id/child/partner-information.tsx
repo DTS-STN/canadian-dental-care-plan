@@ -8,7 +8,6 @@ import type { Route } from './+types/partner-information';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyChildState } from '~/.server/routes/helpers/apply-child-route-helpers';
-import type { PartnerInformationState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
