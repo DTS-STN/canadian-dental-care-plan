@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
@@ -59,5 +60,37 @@ export class DefaultNotificationRepository implements NotificationRepository {
     const emailNotificationResponseEntity: EmailNotificationResponseEntity = await response.json();
     this.log.trace('Returning verification code email response [%j]', emailNotificationResponseEntity);
     return emailNotificationResponseEntity;
+  }
+}
+
+@injectable()
+export class MockNotificationRepository implements NotificationRepository {
+  private readonly log: Logger;
+
+  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
+    this.log = logFactory.createLogger('MockNotificationRepository');
+  }
+
+  async sendVerificationCodeEmail(emailNotificationRequestEntity: EmailNotificationRequestEntity): Promise<EmailNotificationResponseEntity> {
+    this.log.trace('Sending verification code email for request: [%j]', emailNotificationRequestEntity);
+
+    const id = randomUUID();
+    const emailNotificationResponseEntity: EmailNotificationResponseEntity = {
+      id,
+      content: {
+        subject: 'Email address verification',
+        body: `Your verification code is: ${emailNotificationRequestEntity.personalisation.EmailVerificationCode}`,
+        from_email: 'test@example.com',
+      },
+      uri: `https://api.example.com/v1/notifications/${id}`,
+      template: {
+        id: emailNotificationRequestEntity.template_id,
+        version: 1,
+        uri: `https://api.example.com/v1/templates/${emailNotificationRequestEntity.template_id}`,
+      },
+    };
+
+    this.log.trace('Returning verification code email response [%j]', emailNotificationResponseEntity);
+    return await Promise.resolve(emailNotificationResponseEntity);
   }
 }
