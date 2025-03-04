@@ -103,8 +103,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  // TODO: should navigate to marital-status page, change the route when marital-status page is added
-  return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
+  return redirect(getPathById('public/apply/$id/adult/marital-status', params));
 }
 
 export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Route.ComponentProps) {
@@ -179,7 +178,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/applicant-information"
+                routeId="public/apply/$id/adult/applicant-information" // TODO: Sometimes this needs to redirect to living-independatly.tsx
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

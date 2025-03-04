@@ -20,7 +20,6 @@ export type ApplyState = ReadonlyDeep<{
   applicantInformation?: {
     firstName: string;
     lastName: string;
-    maritalStatus: string;
     socialInsuranceNumber: string;
   };
   applicationYear: {
@@ -66,11 +65,11 @@ export type ApplyState = ReadonlyDeep<{
   livingIndependently?: boolean;
   partnerInformation?: {
     confirm: boolean;
-    dateOfBirth: string;
-    firstName: string;
-    lastName: string;
+    yearOfBirth: string;
     socialInsuranceNumber: string;
   };
+  hasMaritalStatusChanged?: boolean;
+  maritalStatus?: string;
   contactInformation?: {
     copyMailingAddress: boolean;
     homeAddress?: string;
@@ -295,11 +294,7 @@ export function getChildrenState<TState extends Pick<ApplyState, 'children'>>(st
     : state.children.filter((child) => isNewChildState(child) === false);
 }
 
-interface ApplicantInformationStateHasPartnerArgs {
-  maritalStatus: string;
-}
-
-export function applicantInformationStateHasPartner({ maritalStatus }: ApplicantInformationStateHasPartnerArgs) {
+export function applicantInformationStateHasPartner(maritalStatus: string) {
   const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
   return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
 }

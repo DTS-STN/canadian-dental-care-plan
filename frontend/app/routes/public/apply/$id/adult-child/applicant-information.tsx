@@ -154,7 +154,6 @@ export async function action({ context: { appContainer, session }, params, reque
         firstName: parsedDataResult.data.firstName,
         lastName: parsedDataResult.data.lastName,
         socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
-        maritalStatus: '', // TODO: remove once the state is reworked
       },
       dateOfBirth: parsedDataResult.data.dateOfBirth,
     },
