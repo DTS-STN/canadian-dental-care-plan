@@ -51,6 +51,7 @@ export type ApplyState = ReadonlyDeep<{
     email?: string;
     preferredLanguage: string;
     preferredMethod: string;
+    preferredNotificationMethod?: string;
   };
   hasFederalProvincialTerritorialBenefits?: boolean;
   dateOfBirth?: string; // TODO: once all pages are re-worked, this can be removed. (We will use applicantInformation.dateOfBirth)
