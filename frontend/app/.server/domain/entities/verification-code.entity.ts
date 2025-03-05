@@ -1,6 +1,6 @@
 import type { ReadonlyDeep } from 'type-fest';
 
-export type EmailNotificationRequestEntity = ReadonlyDeep<{
+export type VerificationCodeEmailRequestEntity = ReadonlyDeep<{
   email_address: string;
   template_id: string;
   personalisation: {
@@ -8,7 +8,7 @@ export type EmailNotificationRequestEntity = ReadonlyDeep<{
   };
 }>;
 
-export type EmailNotificationResponseEntity = ReadonlyDeep<{
+export type VerificationCodeEmailResponseEntity = ReadonlyDeep<{
   id: string;
   reference?: string;
   content: {
