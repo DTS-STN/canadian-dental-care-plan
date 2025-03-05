@@ -97,6 +97,7 @@ describe('_public.apply.id.communication-preference', () => {
         data: {
           errors: {
             preferredMethod: 'apply-adult:communication-preference.error-message.preferred-method-required',
+            preferredNotificationMethod: 'apply-adult:communication-preference.error-message.preferred-notification-method-required',
           },
         },
         init: { status: 400 },
@@ -127,6 +128,7 @@ describe('_public.apply.id.communication-preference', () => {
           errors: {
             confirmEmail: 'apply-adult:communication-preference.error-message.confirm-email-required',
             email: 'apply-adult:communication-preference.error-message.email-required',
+            preferredNotificationMethod: 'apply-adult:communication-preference.error-message.preferred-notification-method-required',
           },
         },
         init: { status: 400 },
@@ -157,6 +159,7 @@ describe('_public.apply.id.communication-preference', () => {
         data: {
           errors: {
             confirmEmail: 'apply-adult:communication-preference.error-message.email-match',
+            preferredNotificationMethod: 'apply-adult:communication-preference.error-message.preferred-notification-method-required',
           },
         },
         init: { status: 400 },
