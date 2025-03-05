@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
 
-import type { BenefitApplicationDto } from '~/.server/domain/dtos';
+import type { ApplicantInformationDto, BenefitApplicationDto } from '~/.server/domain/dtos';
 import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 import type {
   ApplicantInformationState,
@@ -77,6 +77,11 @@ interface ToBenefitApplicationDtoArgs {
   typeOfApplication: Extract<TypeOfApplicationState, 'adult' | 'adult-child' | 'child'>;
 }
 
+interface ToApplicantInformationArgs {
+  applicantInformation: ApplicantInformationState;
+  maritalStatus?: string;
+}
+
 export interface BenefitApplicationStateMapper {
   mapApplyAdultStateToBenefitApplicationDto(applyAdultState: ApplyAdultState): BenefitApplicationDto;
 
@@ -141,7 +146,10 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     typeOfApplication,
   }: ToBenefitApplicationDtoArgs) {
     return {
-      applicantInformation,
+      applicantInformation: this.toApplicantInformation({
+        applicantInformation,
+        maritalStatus,
+      }),
       applicationYearId: applicationYear.intakeYearId,
       children: this.toChildren(children),
       communicationPreferences,
@@ -156,6 +164,11 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       typeOfApplication,
       userId: 'anonymous',
     };
+  }
+
+  private toApplicantInformation({ applicantInformation, maritalStatus }: ToApplicantInformationArgs): ApplicantInformationDto {
+    invariant(maritalStatus, 'Expected maritalStatus to be defined');
+    return { ...applicantInformation, maritalStatus };
   }
 
   private toChildren(children?: Required<ChildState>[]) {
