@@ -100,26 +100,39 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
 
   const helpMessage = (
     <div className="my-4 space-y-4">
-      <ul className="list-disc space-y-1 pl-7">
-        <li>{t('children.dental-insurance.list.employment')}</li>
-        <li>{t('children.dental-insurance.list.pension')}</li>
-        <li>{t('children.dental-insurance.list.purchased')}</li>
-        <li>{t('children.dental-insurance.list.professional')}</li>
-      </ul>
-      <Collapsible summary={t('children.dental-insurance.detail.additional-info.title')}>
+      <Collapsible summary={t('children.dental-insurance.detail.additional-info.title', { childName })}>
         <div className="space-y-4">
           <p>{t('children.dental-insurance.detail.additional-info.eligible')}</p>
           <ul className="list-disc space-y-1 pl-7">
-            <li>{t('children.dental-insurance.detail.additional-info.eligible-list.employer')}</li>
-            <li>{t('children.dental-insurance.detail.additional-info.eligible-list.pension')}</li>
-            <li>{t('children.dental-insurance.detail.additional-info.eligible-list.professional')}</li>
-          </ul>
-          <p>{t('children.dental-insurance.detail.additional-info.not-eligible')}</p>
-          <p>{t('children.dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
-          <p>{t('children.dental-insurance.detail.additional-info.excepton')}</p>
-          <ul className="list-disc space-y-1 pl-7">
-            <li>{t('children.dental-insurance.detail.additional-info.exception-list.opted-out')}</li>
-            <li>{t('children.dental-insurance.detail.additional-info.exception-list.opt-back')}</li>
+            <li>{t('children.dental-insurance.detail.additional-info.list.employer')}</li>
+            <li>
+              {t('children.dental-insurance.detail.additional-info.list.organization')}
+              <p>{t('children.dental-insurance.detail.additional-info.list.organization-note')}</p>
+              <ul className="list-disc space-y-1 pl-7">
+                <li>{t('children.dental-insurance.detail.additional-info.list.organization-list.decide')}</li>
+                <li>{t('children.dental-insurance.detail.additional-info.list.organization-list.premium')}</li>
+                <li>{t('children.dental-insurance.detail.additional-info.list.organization-list.use')}</li>
+              </ul>
+            </li>
+            <li>
+              {t('children.dental-insurance.detail.additional-info.list.pension')}
+              <ul className="list-disc space-y-1 pl-7">
+                <li>{t('children.dental-insurance.detail.additional-info.list.pension-plans')}</li>
+                <li>
+                  {t('children.dental-insurance.detail.additional-info.list.pension-exemption')}
+                  <ul className="list-disc space-y-1 pl-7">
+                    <li>{t('children.dental-insurance.detail.additional-info.list.pension-list.opt-out')}</li>
+                    <li>{t('children.dental-insurance.detail.additional-info.list.pension-list.opt-in')}</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              {t('children.dental-insurance.detail.additional-info.list.company')}
+              <ul className="list-disc space-y-1 pl-7">
+                <li>{t('children.dental-insurance.detail.additional-info.list.cannot-opt')}</li>
+              </ul>
+            </li>
           </ul>
         </div>
       </Collapsible>
