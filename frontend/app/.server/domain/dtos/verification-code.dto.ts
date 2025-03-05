@@ -1,7 +1,7 @@
 /**
- * Represents a Data Transfer Object (DTO) for an email notification request.
+ * Represents a Data Transfer Object (DTO) for a verification code email request.
  */
-export type EmailNotificationRequestDto = Readonly<{
+export type VerificationCodeEmailRequestDto = Readonly<{
   /** The recipient's email address */
   email: string;
 

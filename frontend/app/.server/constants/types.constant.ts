@@ -21,11 +21,11 @@ import type {
   LetterDtoMapper,
   LetterTypeDtoMapper,
   MaritalStatusDtoMapper,
-  NotificationDtoMapper,
   PreferredCommunicationMethodDtoMapper,
   PreferredLanguageDtoMapper,
   ProvinceTerritoryStateDtoMapper,
   ProvincialGovernmentInsurancePlanDtoMapper,
+  VerificationCodeDtoMapper,
 } from '~/.server/domain/mappers';
 import type {
   AddressValidationRepository,
@@ -42,11 +42,11 @@ import type {
   LetterRepository,
   LetterTypeRepository,
   MaritalStatusRepository,
-  NotificationRepository,
   PreferredCommunicationMethodRepository,
   PreferredLanguageRepository,
   ProvinceTerritoryStateRepository,
   ProvincialGovernmentInsurancePlanRepository,
+  VerificationCodeRepository,
 } from '~/.server/domain/repositories';
 import type {
   AddressValidationService,
@@ -64,11 +64,11 @@ import type {
   LetterService,
   LetterTypeService,
   MaritalStatusService,
-  NotificationService,
   PreferredCommunicationMethodService,
   PreferredLanguageService,
   ProvinceTerritoryStateService,
   ProvincialGovernmentInsurancePlanService,
+  VerificationCodeService,
 } from '~/.server/domain/services';
 import type { ConfigFactory, LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
@@ -161,11 +161,11 @@ export const TYPES = assignServiceIdentifiers({
       LetterDtoMapper: serviceId<LetterDtoMapper>(),
       LetterTypeDtoMapper: serviceId<LetterTypeDtoMapper>(),
       MaritalStatusDtoMapper: serviceId<MaritalStatusDtoMapper>(),
-      NotificationDtoMapper: serviceId<NotificationDtoMapper>(),
       PreferredCommunicationMethodDtoMapper: serviceId<PreferredCommunicationMethodDtoMapper>(),
       PreferredLanguageDtoMapper: serviceId<PreferredLanguageDtoMapper>(),
       ProvinceTerritoryStateDtoMapper: serviceId<ProvinceTerritoryStateDtoMapper>(),
       ProvincialGovernmentInsurancePlanDtoMapper: serviceId<ProvincialGovernmentInsurancePlanDtoMapper>(),
+      VerificationCodeDtoMapper: serviceId<VerificationCodeDtoMapper>(),
     },
     repositories: {
       AddressValidationRepository: serviceId<AddressValidationRepository>(),
@@ -182,11 +182,11 @@ export const TYPES = assignServiceIdentifiers({
       LetterRepository: serviceId<LetterRepository>(),
       LetterTypeRepository: serviceId<LetterTypeRepository>(),
       MaritalStatusRepository: serviceId<MaritalStatusRepository>(),
-      NotificationRepository: serviceId<NotificationRepository>(),
       PreferredCommunicationMethodRepository: serviceId<PreferredCommunicationMethodRepository>(),
       PreferredLanguageRepository: serviceId<PreferredLanguageRepository>(),
       ProvinceTerritoryStateRepository: serviceId<ProvinceTerritoryStateRepository>(),
       ProvincialGovernmentInsurancePlanRepository: serviceId<ProvincialGovernmentInsurancePlanRepository>(),
+      VerificationCodeRepository: serviceId<VerificationCodeRepository>(),
     },
     services: {
       AddressValidationService: serviceId<AddressValidationService>(),
@@ -205,11 +205,11 @@ export const TYPES = assignServiceIdentifiers({
       LetterService: serviceId<LetterService>(),
       LetterTypeService: serviceId<LetterTypeService>(),
       MaritalStatusService: serviceId<MaritalStatusService>(),
-      NotificationService: serviceId<NotificationService>(),
       PreferredCommunicationMethodService: serviceId<PreferredCommunicationMethodService>(),
       PreferredLanguageService: serviceId<PreferredLanguageService>(),
       ProvinceTerritoryStateService: serviceId<ProvinceTerritoryStateService>(),
       ProvincialGovernmentInsurancePlanService: serviceId<ProvincialGovernmentInsurancePlanService>(),
+      VerificationCodeService: serviceId<VerificationCodeService>(),
     },
   },
   factories: {

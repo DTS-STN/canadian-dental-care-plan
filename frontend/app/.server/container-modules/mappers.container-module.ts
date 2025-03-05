@@ -16,11 +16,11 @@ import {
   DefaultLetterDtoMapper,
   DefaultLetterTypeDtoMapper,
   DefaultMaritalStatusDtoMapper,
-  DefaultNotificationDtoMapper,
   DefaultPreferredCommunicationMethodDtoMapper,
   DefaultPreferredLanguageDtoMapper,
   DefaultProvinceTerritoryStateDtoMapper,
   DefaultProvincialGovernmentInsurancePlanDtoMapper,
+  DefaultVerificationCodeDtoMapper,
 } from '~/.server/domain/mappers';
 import { DefaultBenefitApplicationStateMapper, DefaultBenefitRenewalStateMapper } from '~/.server/routes/mappers';
 import { DefaultDynatraceDtoMapper, DefaultHCaptchaDtoMapper } from '~/.server/web/mappers';
@@ -43,11 +43,11 @@ export const mappersContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.mappers.LetterDtoMapper).to(DefaultLetterDtoMapper);
   bind(TYPES.domain.mappers.LetterTypeDtoMapper).to(DefaultLetterTypeDtoMapper);
   bind(TYPES.domain.mappers.MaritalStatusDtoMapper).to(DefaultMaritalStatusDtoMapper);
-  bind(TYPES.domain.mappers.NotificationDtoMapper).to(DefaultNotificationDtoMapper);
   bind(TYPES.domain.mappers.PreferredCommunicationMethodDtoMapper).to(DefaultPreferredCommunicationMethodDtoMapper);
   bind(TYPES.domain.mappers.PreferredLanguageDtoMapper).to(DefaultPreferredLanguageDtoMapper);
   bind(TYPES.domain.mappers.ProvinceTerritoryStateDtoMapper).to(DefaultProvinceTerritoryStateDtoMapper);
   bind(TYPES.domain.mappers.ProvincialGovernmentInsurancePlanDtoMapper).to(DefaultProvincialGovernmentInsurancePlanDtoMapper);
+  bind(TYPES.domain.mappers.VerificationCodeDtoMapper).to(DefaultVerificationCodeDtoMapper);
   bind(TYPES.routes.mappers.BenefitRenewalStateMapper).to(DefaultBenefitRenewalStateMapper);
   bind(TYPES.routes.mappers.BenefitApplicationStateMapper).to(DefaultBenefitApplicationStateMapper);
   bind(TYPES.web.mappers.DynatraceDtoMapper).to(DefaultDynatraceDtoMapper);

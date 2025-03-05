@@ -17,11 +17,11 @@ import {
   DefaultLetterRepository,
   DefaultLetterTypeRepository,
   DefaultMaritalStatusRepository,
-  DefaultNotificationRepository,
   DefaultPreferredCommunicationMethodRepository,
   DefaultPreferredLanguageRepository,
   DefaultProvinceTerritoryStateRepository,
   DefaultProvincialGovernmentInsurancePlanRepository,
+  DefaultVerificationCodeRepository,
   MockAddressValidationRepository,
   MockApplicantRepository,
   MockApplicationStatusRepository,
@@ -30,7 +30,7 @@ import {
   MockBenefitRenewalRepository,
   MockClientApplicationRepository,
   MockLetterRepository,
-  MockNotificationRepository,
+  MockVerificationCodeRepository,
 } from '~/.server/domain/repositories';
 import type { MockName } from '~/.server/utils/env.utils';
 import { DefaultDynatraceRepository, DefaultHCaptchaRepository } from '~/.server/web/repositories';
@@ -96,8 +96,8 @@ export const repositoriesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.repositories.LetterTypeRepository).to(DefaultLetterTypeRepository);
   bind(TYPES.domain.repositories.MaritalStatusRepository).to(DefaultMaritalStatusRepository);
 
-  bind(TYPES.domain.repositories.NotificationRepository).to(DefaultNotificationRepository).when(isMockEnabled('gc-notify', false));
-  bind(TYPES.domain.repositories.NotificationRepository).to(MockNotificationRepository).when(isMockEnabled('gc-notify', true));
+  bind(TYPES.domain.repositories.VerificationCodeRepository).to(DefaultVerificationCodeRepository).when(isMockEnabled('gc-notify', false));
+  bind(TYPES.domain.repositories.VerificationCodeRepository).to(MockVerificationCodeRepository).when(isMockEnabled('gc-notify', true));
 
   bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(DefaultPreferredCommunicationMethodRepository);
   bind(TYPES.domain.repositories.PreferredLanguageRepository).to(DefaultPreferredLanguageRepository);
