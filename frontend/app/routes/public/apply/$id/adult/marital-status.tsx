@@ -11,7 +11,6 @@ import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
-import type { PartnerInformationState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -69,20 +68,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
-  if (formAction === FORM_ACTION.cancel) {
-    if (state.hasMaritalStatusChanged) {
-      saveApplyState({
-        params,
-        session,
-        state: {
-          hasMaritalStatusChanged: !!state.maritalStatus,
-        },
-      });
-    }
-    return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
-  }
-
   // state validation schema
   const maritalStatusSchema = z.object({
     maritalStatus: z
@@ -105,7 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .min(1, t('apply-adult:marital-status.error-message.sin-required'))
       .refine(isValidSin, t('apply-adult:marital-status.error-message.sin-valid'))
       .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.partnerInformation?.socialInsuranceNumber, t('apply-adult:marital-status.error-message.sin-unique')),
-  }) satisfies z.ZodType<PartnerInformationState>;
+  }); //satisfies z.ZodType<PartnerInformationState>; change once state has been reworked.
 
   const maritalStatusData = {
     maritalStatus: formData.get('maritalStatus') ? String(formData.get('maritalStatus')) : undefined,
@@ -119,7 +104,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedMaritalStatus = maritalStatusSchema.safeParse(maritalStatusData);
   const parsedPartnerInformation = partnerInformationSchema.safeParse(partnerInformationData);
 
-  if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
+  if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success) || parsedPartnerInformation.data === undefined) {
     return {
       errors: {
         ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
@@ -128,7 +113,20 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  saveApplyState({ params, session, state: { maritalStatus: parsedMaritalStatus.data.maritalStatus, partnerInformation: parsedPartnerInformation.data } });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      maritalStatus: parsedMaritalStatus.data.maritalStatus,
+      partnerInformation: {
+        confirm: parsedPartnerInformation.data.confirm,
+        yearOfBirth: parsedPartnerInformation.data.yearOfBirth,
+        firstName: '', //TODO: to remove when the state is reworked.
+        lastName: '',
+        socialInsuranceNumber: parsedPartnerInformation.data.socialInsuranceNumber,
+      },
+    },
+  });
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
