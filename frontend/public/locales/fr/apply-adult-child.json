@@ -180,7 +180,7 @@
         }
       },
       "error-message": {
-        "dental-insurance-required": "Sélectionnez si vous avez une assurance dentaire"
+        "dental-insurance-required": "Sélectionnez si cet enfant a accès à une assurance dentaire"
       }
     },
     "confirm-dental-benefits": {
