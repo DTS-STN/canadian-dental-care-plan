@@ -53,7 +53,7 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
         break;
 
       case 'children-dental-insurance':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/dental-insurance/, heading: /.*: access to other dental insurance/ };
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/dental-insurance/, heading: /.*: access to private dental insurance/ };
         break;
 
       case 'children-confirm-federal-provincial-territorial-benefits':
