@@ -7,6 +7,7 @@ export type BenefitApplicationDto = ReadonlyDeep<{
   communicationPreferences: CommunicationPreferencesDto;
   contactInformation: ContactInformationDto;
   dateOfBirth: string;
+  maritalStatus?: string;
   dentalBenefits: string[];
   dentalInsurance?: boolean;
   disabilityTaxCredit?: boolean;

@@ -22,6 +22,7 @@ export interface ApplyAdultState {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   dateOfBirth: string;
+  maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   disabilityTaxCredit?: boolean;
@@ -37,6 +38,7 @@ export interface ApplyAdultChildState {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   dateOfBirth: string;
+  maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   disabilityTaxCredit?: boolean;
@@ -52,6 +54,7 @@ export interface ApplyChildState {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   dateOfBirth: string;
+  maritalStatus?: string;
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationState;
@@ -65,6 +68,7 @@ interface ToBenefitApplicationDtoArgs {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   dateOfBirth: string;
+  maritalStatus?: string;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance?: boolean;
   disabilityTaxCredit?: boolean;
@@ -127,6 +131,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     children,
     communicationPreferences,
     dateOfBirth,
+    maritalStatus,
     dentalBenefits,
     dentalInsurance,
     disabilityTaxCredit,
@@ -142,6 +147,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       communicationPreferences,
       contactInformation: this.toContactInformation(contactInformation),
       dateOfBirth,
+      maritalStatus,
       dentalBenefits: this.toDentalBenefits(dentalBenefits),
       dentalInsurance,
       disabilityTaxCredit,

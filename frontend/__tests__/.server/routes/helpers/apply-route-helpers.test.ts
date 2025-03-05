@@ -117,17 +117,17 @@ describe('apply-route-helpers', () => {
 
   describe('applicantInformationStateHasPartner', () => {
     it('should return true for marital status code "1" for MARRIED', () => {
-      const result = applicantInformationStateHasPartner({ maritalStatus: '1' });
+      const result = applicantInformationStateHasPartner('1');
       expect(result).toBe(true);
     });
 
     it('should return true for marital status code  "2" for COMMONLAW', () => {
-      const result = applicantInformationStateHasPartner({ maritalStatus: '2' });
+      const result = applicantInformationStateHasPartner('2');
       expect(result).toBe(true);
     });
 
     it('should return false for other marital status codes', () => {
-      const result = applicantInformationStateHasPartner({ maritalStatus: '99' });
+      const result = applicantInformationStateHasPartner('99');
       expect(result).toBe(false);
     });
   });
