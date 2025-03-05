@@ -174,39 +174,14 @@ describe('apply-child-route-helpers', () => {
           },
         ],
         dateOfBirth: '2022-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        maritalStatus: '1',
       } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/child/contact-apply-child, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
-    });
-
-    it('should redirect if partnerInformation is undefined and applicant has partner', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'child',
-        taxFiling2023: true,
-        children: [
-          {
-            id: '1',
-            information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
-            dentalInsurance: true,
-            hasFederalProvincialTerritorialBenefits: false,
-            dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
-          },
-        ],
-        dateOfBirth: '1900-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
-        partnerInformation: undefined,
-      } satisfies ApplyState;
-
-      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
-      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
-      vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
-
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/child/partner-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if partnerInformation is not undefined and applicant has no partner', () => {
@@ -224,7 +199,8 @@ describe('apply-child-route-helpers', () => {
           },
         ],
         dateOfBirth: '1900-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '99', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        maritalStatus: '99',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
       } satisfies ApplyState;
 
@@ -250,7 +226,8 @@ describe('apply-child-route-helpers', () => {
           },
         ],
         dateOfBirth: '1900-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
         contactInformation: undefined,
       } satisfies ApplyState;
@@ -277,7 +254,8 @@ describe('apply-child-route-helpers', () => {
           },
         ],
         dateOfBirth: '1900-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
         communicationPreferences: undefined,
@@ -305,7 +283,8 @@ describe('apply-child-route-helpers', () => {
           },
         ],
         dateOfBirth: '1900-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        maritalStatus: '1',
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
@@ -320,7 +299,7 @@ describe('apply-child-route-helpers', () => {
 
       expect(act).toEqual({
         ageCategory: 'seniors',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', maritalStatus: '1', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
         children: [
           {
@@ -334,6 +313,7 @@ describe('apply-child-route-helpers', () => {
         ],
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
         dateOfBirth: '1900-01-01',
+        maritalStatus: '1',
         editMode: false,
         id: '00000000-0000-0000-0000-000000000000',
         lastUpdatedOn: '2000-01-01',

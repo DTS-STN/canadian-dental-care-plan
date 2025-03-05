@@ -202,15 +202,21 @@ export async function action({ context: { appContainer, session }, params, reque
   const remove = !hasPartner ? 'partnerInformation' : undefined;
   const ageCategory = getAgeCategoryFromDateString(parsedDobResult.data.dateOfBirth);
 
+  const userInfo = {
+    firstName: parsedDataResult.data.firstName,
+    lastName: parsedDataResult.data.lastName,
+    socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+  };
   saveApplyState({
     params,
     remove,
     session,
     state: {
-      applicantInformation: parsedDataResult.data,
+      applicantInformation: userInfo,
       dateOfBirth: parsedDobResult.data.dateOfBirth,
       disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
       livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
+      maritalStatus: parsedDataResult.data.maritalStatus,
     },
   });
 
