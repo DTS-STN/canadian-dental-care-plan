@@ -27,10 +27,20 @@ import {
   DefaultProvinceTerritoryStateService,
   DefaultProvincialGovernmentInsurancePlanService,
   DefaultVerificationCodeService,
+  StubVerificationCodeService,
 } from '~/.server/domain/services';
 import { DefaultHttpClient } from '~/.server/http';
 import { DefaultInstrumentationService } from '~/.server/observability';
+import type { MockName } from '~/.server/utils/env.utils';
 import { DefaultDynatraceService, DefaultHCaptchaService } from '~/.server/web/services';
+
+function isMockEnabled(mockName: MockName, shouldEnable: boolean) {
+  return ({ parentContext }: interfaces.Request) => {
+    const serverConfig = parentContext.container.get(TYPES.configs.ServerConfig);
+    const isMockIncluded = serverConfig.ENABLED_MOCKS.includes(mockName);
+    return shouldEnable ? isMockIncluded : !isMockIncluded;
+  };
+}
 
 function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
   return ({ parentContext }: interfaces.Request) => {
@@ -66,7 +76,10 @@ export const servicesContainerModule = new ContainerModule((bind) => {
   bind(TYPES.domain.services.PreferredLanguageService).to(DefaultPreferredLanguageService);
   bind(TYPES.domain.services.ProvinceTerritoryStateService).to(DefaultProvinceTerritoryStateService);
   bind(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).to(DefaultProvincialGovernmentInsurancePlanService);
-  bind(TYPES.domain.services.VerificationCodeService).to(DefaultVerificationCodeService);
+
+  bind(TYPES.domain.services.VerificationCodeService).to(DefaultVerificationCodeService).when(isMockEnabled('verification-code', false));
+  bind(TYPES.domain.services.VerificationCodeService).to(StubVerificationCodeService).when(isMockEnabled('verification-code', true));
+
   bind(TYPES.http.HttpClient).to(DefaultHttpClient);
   bind(TYPES.observability.InstrumentationService).to(DefaultInstrumentationService);
   bind(TYPES.web.services.DynatraceService).to(DefaultDynatraceService);
