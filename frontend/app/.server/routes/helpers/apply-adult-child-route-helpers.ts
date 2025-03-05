@@ -121,6 +121,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     applicationYear,
     communicationPreferences,
     dateOfBirth,
+    maritalStatus,
     hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,
@@ -178,11 +179,11 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
-  if (applicantInformationStateHasPartner(applicantInformation) && !partnerInformation) {
+  if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('public/apply/$id/adult-child/partner-information', params));
   }
 
-  if (!applicantInformationStateHasPartner(applicantInformation) && partnerInformation) {
+  if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
     throw redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
@@ -213,6 +214,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     communicationPreferences,
     contactInformation,
     dateOfBirth,
+    maritalStatus,
     hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,

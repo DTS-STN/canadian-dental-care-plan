@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
 
-import type { BenefitApplicationDto } from '~/.server/domain/dtos';
+import type { ApplicantInformationDto, BenefitApplicationDto } from '~/.server/domain/dtos';
 import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 import type {
   ApplicantInformationState,
@@ -22,6 +22,7 @@ export interface ApplyAdultState {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   dateOfBirth: string;
+  maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   disabilityTaxCredit?: boolean;
@@ -37,6 +38,7 @@ export interface ApplyAdultChildState {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   dateOfBirth: string;
+  maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   disabilityTaxCredit?: boolean;
@@ -52,6 +54,7 @@ export interface ApplyChildState {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   dateOfBirth: string;
+  maritalStatus?: string;
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationState;
@@ -65,12 +68,18 @@ interface ToBenefitApplicationDtoArgs {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   dateOfBirth: string;
+  maritalStatus?: string;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance?: boolean;
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult' | 'adult-child' | 'child'>;
+}
+
+interface ToApplicantInformationArgs {
+  applicantInformation: ApplicantInformationState;
+  maritalStatus?: string;
 }
 
 export interface BenefitApplicationStateMapper {
@@ -127,6 +136,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     children,
     communicationPreferences,
     dateOfBirth,
+    maritalStatus,
     dentalBenefits,
     dentalInsurance,
     disabilityTaxCredit,
@@ -136,12 +146,16 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     typeOfApplication,
   }: ToBenefitApplicationDtoArgs) {
     return {
-      applicantInformation,
+      applicantInformation: this.toApplicantInformation({
+        applicantInformation,
+        maritalStatus,
+      }),
       applicationYearId: applicationYear.intakeYearId,
       children: this.toChildren(children),
       communicationPreferences,
       contactInformation: this.toContactInformation(contactInformation),
       dateOfBirth,
+      maritalStatus,
       dentalBenefits: this.toDentalBenefits(dentalBenefits),
       dentalInsurance,
       disabilityTaxCredit,
@@ -150,6 +164,11 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       typeOfApplication,
       userId: 'anonymous',
     };
+  }
+
+  private toApplicantInformation({ applicantInformation, maritalStatus }: ToApplicantInformationArgs): ApplicantInformationDto {
+    invariant(maritalStatus, 'Expected maritalStatus to be defined');
+    return { ...applicantInformation, maritalStatus };
   }
 
   private toChildren(children?: Required<ChildState>[]) {

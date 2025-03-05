@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  if (state.applicantInformation === undefined || !applicantInformationStateHasPartner(state.applicantInformation)) {
+  if (state.applicantInformation === undefined || !applicantInformationStateHasPartner(state.maritalStatus)) {
     return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 

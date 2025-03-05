@@ -114,7 +114,11 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/child/communication-preference', params));
   }
 
-  saveApplyState({ params, session, state: {} });
+  saveApplyState({
+    params,
+    session,
+    state: {},
+  });
   return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
 }
 

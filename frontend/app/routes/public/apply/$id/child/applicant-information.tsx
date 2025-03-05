@@ -61,7 +61,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:applicant-information.page-title') }) };
 
-  return { id: state.id, maritalStatuses, meta, defaultState: state.applicantInformation, dateOfBirth: state.dateOfBirth, editMode: state.editMode };
+  return { id: state.id, maritalStatuses, meta, defaultState: state.applicantInformation, maritalStatus: state.maritalStatus, dateOfBirth: state.dateOfBirth, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -166,7 +166,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (formAction === FORM_ACTION.cancel) {
     invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
 
-    if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
+    if (applicantInformationStateHasPartner(state.maritalStatus) && state.partnerInformation === undefined) {
       const errorMessage = t('apply-child:applicant-information.error-message.marital-status-no-partner-information');
       const flattenedErrors: z.typeToFlattenedError<z.infer<typeof applicantInformationSchema> & z.infer<typeof dateOfBirthSchema>> = { formErrors: [errorMessage], fieldErrors: { maritalStatus: [errorMessage] } };
       return { errors: transformFlattenedError(flattenedErrors) };
@@ -198,19 +198,25 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);
+  const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data.maritalStatus);
   const remove = !hasPartner ? 'partnerInformation' : undefined;
   const ageCategory = getAgeCategoryFromDateString(parsedDobResult.data.dateOfBirth);
 
+  const userInfo = {
+    firstName: parsedDataResult.data.firstName,
+    lastName: parsedDataResult.data.lastName,
+    socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+  };
   saveApplyState({
     params,
     remove,
     session,
     state: {
-      applicantInformation: parsedDataResult.data,
+      applicantInformation: userInfo,
       dateOfBirth: parsedDobResult.data.dateOfBirth,
       disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
       livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
+      maritalStatus: parsedDataResult.data.maritalStatus,
     },
   });
 
@@ -236,7 +242,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowApplicationInformation({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, dateOfBirth, maritalStatuses, editMode } = loaderData;
+  const { defaultState, dateOfBirth, maritalStatuses, maritalStatus, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -254,8 +260,8 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
   });
 
   const maritalStatusOptions = useMemo<InputRadiosProps['options']>(() => {
-    return maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.maritalStatus, children: status.name, value: status.id }));
-  }, [defaultState?.maritalStatus, maritalStatuses]);
+    return maritalStatuses.map((status) => ({ defaultChecked: status.id === maritalStatus, children: status.name, value: status.id }));
+  }, [maritalStatus, maritalStatuses]);
 
   return (
     <>
