@@ -144,16 +144,10 @@
       }
     },
     "dental-insurance": {
-      "title": "{{childName}}\u00a0: Accès à d'autres assurances dentaires",
-      "legend": "Est-ce que {{childName}} a accès à une assurance dentaire\u00a0:",
-      "list": {
-        "employment": "dans le cadre des avantages sociaux de l'employeur d'un parent ou d'un tuteur légal, y compris les comptes de santé et de bien-être",
-        "pension": "par le biais pension ou des prestations de retraite d'un parent ou d'un tuteur légal",
-        "purchased": "achetée individuellement par un parent ou un tuteur légal ou par le biais d'un plan de groupe d'une compagnie d'assurance ou de prestations",
-        "professional": "par l'intermédiaire d'une organisation professionnelle ou étudiante"
-      },
-      "option-yes": "<strong>Oui</strong>, cet enfant a accès à une assurance ou une couverture dentaire",
-      "option-no": "<strong>Non</strong>, cet enfant n'a pas accès à une assurance ou une couverture dentaire",
+      "title": "{{childName}}\u00a0: Accès à une assurance dentaire privée",
+      "legend": "Est-ce que {{childName}} a accès à une assurance dentaire privée ou une couverture dentaire?",
+      "option-yes": "<strong>Oui</strong>, l'enfant a accès à une assurance dentaire",
+      "option-no": "<strong>Non</strong>, l'enfant n'a pas accès à une assurance dentaire",
       "button": {
         "back": "Retour",
         "continue": "Continuer",
@@ -162,24 +156,31 @@
       },
       "detail": {
         "additional-info": {
-          "title": "Renseignements supplémentaires",
-          "eligible": "Un enfant est toujours considéré comme ayant accès à une assurance dentaire ou à une couverture si un parent ou un tuteur légal choisit de se retirer des prestations offertes par\u00a0:",
-          "eligible-list": {
-            "employer": "un employeur",
-            "pension": "un régime de retraite (voir exception)",
-            "professional": "une organisation professionnelle ou étudiante"
-          },
-          "not-eligible": "Par conséquent, un enfant n'est pas admissible au Régime canadien de soins dentaires.",
-          "not-eligible-purchased": "Si un parent ou un tuteur légal a acheté la police d'assurance dentaire actuelle au privé, un enfant n'est pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur.",
-          "excepton": "Exception\u00a0: Un enfant peut tout de même être admissible si un parent ou un tuteur légal a pris sa retraite et\u00a0:",
-          "exception-list": {
-            "opted-out": "a renoncé aux prestations de retraite avant le 11 décembre 2023, et",
-            "opt-back": "ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite"
+          "title": "Que signifie avoir accès à une assurance dentaire privée?",
+          "eligible": "Cela signifie que l'enfant a accès à tout type d'assurance ou de couverture dentaire\u00a0:",
+          "list": {
+            "employer": "dans le cadre des avantages sociaux d'employeur d'un parent ou d'un tuteur légal, y compris les comptes de santé et de bien-être",
+            "organization": "par une organisation professionnelle ou étudiante",
+            "organization-note": "Remarque\u00a0: Si l'enfant est admissible à la protection dentaire au moyen d'avantages sociaux d'un parent ou d'un tuteur légal ou par une organisation professionnelle ou étudiante, il n'est pas admissible au RCSD. Cela est vrai, même si\u00a0:",
+            "organization-list": {
+              "decide": "vous décidez de ne pas opter pour cette protection",
+              "premium": "vous devez verser une prime d'assurance sur cette protection",
+              "use": "vous ne l'utilisez pas"
+            },
+            "pension": "par le biais de prestations de retraite d'un parent ou d'un tuteur légal",
+            "pension-plans": "Cela comprend les régimes de retraite des gouvernements fédéral, provinciaux et territoriaux",
+            "pension-exemption": "Exception\u00a0: L'enfant peut être admissible au RCSD si un parent ou un tuteur légal est à la retraite et\u00a0:",
+            "pension-list": {
+              "opt-out": "a renoncé aux prestations de retraite avant le 11 décembre 2023",
+              "opt-in": "ne pouvez pas opter pour celles-ci de nouveau selon les règles relatives à la pension"
+            },
+            "company": "achetée individuellement par un parent ou un tuteur légal ou par le biais d'un plan de groupe d'une compagnie d'assurance ou de prestations",
+            "cannot-opt": "Si un parent ou un tuteur légal a souscrit actuellement une assurance dentaire privée (qui ne fait pas partie des types de protection indiqués ci-dessus), l'enfant n'est pas admissible au RCSD pendant la durée de cette couverture."
           }
         }
       },
       "error-message": {
-        "dental-insurance-required": "Sélectionnez si cet enfant a accès à une assurance dentaire"
+        "dental-insurance-required": "Sélectionnez si vous avez une assurance dentaire"
       }
     },
     "confirm-dental-benefits": {
@@ -469,14 +470,8 @@
     }
   },
   "dental-insurance": {
-    "title": "Accès à d'autres assurances dentaires",
-    "legend": "Avoir accès à une assurance dentaire signifie que vous avez accès à une assurance ou à une couverture dentaire\u00a0:",
-    "list": {
-      "employment": "dans le cadre des avantages sociaux de votre employeur ou de l'employeur d'un membre de votre famille, y compris les comptes de santé et de bien-être",
-      "pension": "par le biais de votre pension ou des prestations de retraite d'un membre de votre famille",
-      "purchased": "achetée individuellement par vous, par un membre de votre famille ou par le biais d'un plan de groupe d'une compagnie d'assurance ou de prestations",
-      "professional": "par l'intermédiaire d'une organisation professionnelle ou étudiante"
-    },
+    "title": "Accès à une assurance dentaire privée",
+    "legend": "Avez-vous accès à une assurance dentaire privée ou une couverture dentaire?",
     "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance dentaire",
     "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance dentaire",
     "button": {
@@ -487,19 +482,26 @@
     },
     "detail": {
       "additional-info": {
-        "title": "Renseignements supplémentaires",
-        "eligible": "Vous êtes toujours considéré comme ayant accès à l'assurance ou à la couverture dentaire si vous choisissez de ne pas bénéficier des prestations fournies par votre assurance ou celle d'un membre de votre famille\u00a0:",
-        "eligible-list": {
-          "employer": "un employeur;",
-          "pension": "un régime de retraite (voir exception);",
-          "professional": "une organisation professionnelle ou étudiante."
-        },
-        "not-eligible": "À ce titre, vous n'êtes pas admissible au Régime canadien de soins dentaires.",
-        "not-eligible-purchased": "Si vous avez souscrit votre police d'assurance dentaire actuelle de votre propre chef, vous n'êtes pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur.",
-        "excepton": "Exception\u00a0: Vous pourriez toujours être admissible si vous avez pris votre retraite et\u00a0:",
-        "exception-list": {
-          "opted-out": "vous avez renoncé aux prestations de retraite avant le 11 décembre 2023, et",
-          "opt-back": "vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite"
+        "title": "Que signifie avoir accès à une assurance dentaire privée?",
+        "eligible": "Cela signifie que vous n'avez accès à aucun type d'assurance ou de couverture dentaire\u00a0:",
+        "list": {
+          "employer": "dans le cadre des avantages sociaux de votre employeur ou de l'employeur d'un membre de votre famille, y compris les comptes de santé et de bien-être",
+          "organization": "par une organisation professionnelle ou étudiante",
+          "organization-note": "Remarque\u00a0: Si vous êtes admissible à la protection dentaire au moyen de vos avantages sociaux ou par une organisation professionnelle ou étudiante, vous n'êtes pas admissible au RCSD. Cela est vrai, même si\u00a0:",
+          "organization-list": {
+            "decide": "vous décidez de ne pas opter pour cette protection",
+            "premium": "vous devez verser une prime d'assurance sur cette protection",
+            "use": "vous ne l'utilisez pas"
+          },
+          "pension": "par le biais de votre pension ou des prestations de retraite d'un membre de votre famille",
+          "pension-plans": "Cela comprend les régimes de retraite des gouvernements fédéral, provinciaux et territoriaux",
+          "pension-exemption": "Exception\u00a0: Vous pourriez être admissible au RCSD si vous êtes à la retraite et si à la fois\u00a0:",
+          "pension-list": {
+            "opt-out": "vous avez renoncé aux prestations de retraite avant le 11 décembre 2023",
+            "opt-in": "vous ne pouvez pas opter pour celles-ci de nouveau selon les règles relatives à la pension"
+          },
+          "company": "achetée individuellement par vous, par un membre de votre famille ou par le biais d'un plan de groupe d'une compagnie d'assurance ou de prestations",
+          "cannot-opt": "Si vous souscrivez actuellement une assurance dentaire privée (qui ne fait pas partie des types de protection indiqués ci-dessus), vous n'êtes pas admissible au RCSD pendant la durée de cette couverture."
         }
       }
     },
