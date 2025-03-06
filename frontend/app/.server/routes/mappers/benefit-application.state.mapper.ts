@@ -12,6 +12,8 @@ import type {
   ContactInformationState,
   DentalFederalBenefitsState,
   DentalProvincialTerritorialBenefitsState,
+  HomeAddressState,
+  MailingAddressState,
   PartnerInformationState,
   TypeOfApplicationState,
 } from '~/.server/routes/helpers/apply-route-helpers';
@@ -27,6 +29,9 @@ export interface ApplyAdultState {
   dentalInsurance: boolean;
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
+  mailingAddress?: MailingAddressState;
+  homeAddress?: HomeAddressState;
+  isHomeAddressSameAsMailingAddress?: boolean;
   partnerInformation?: PartnerInformationState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult'>;
 }
@@ -41,6 +46,9 @@ export interface ApplyAdultChildState {
   maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
+  mailingAddress?: MailingAddressState;
+  homeAddress?: HomeAddressState;
+  isHomeAddressSameAsMailingAddress?: boolean;
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationState;
@@ -56,6 +64,9 @@ export interface ApplyChildState {
   dateOfBirth: string;
   maritalStatus?: string;
   disabilityTaxCredit?: boolean;
+  mailingAddress?: MailingAddressState;
+  homeAddress?: HomeAddressState;
+  isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationState;
   typeOfApplication: Extract<TypeOfApplicationState, 'child'>;
@@ -73,6 +84,9 @@ interface ToBenefitApplicationDtoArgs {
   dentalInsurance?: boolean;
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
+  mailingAddress?: MailingAddressState;
+  homeAddress?: HomeAddressState;
+  isHomeAddressSameAsMailingAddress?: boolean;
   partnerInformation?: PartnerInformationState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult' | 'adult-child' | 'child'>;
 }
@@ -80,6 +94,19 @@ interface ToBenefitApplicationDtoArgs {
 interface ToApplicantInformationArgs {
   applicantInformation: ApplicantInformationState;
   maritalStatus?: string;
+}
+
+interface ToHomeAddressArgs {
+  homeAddress?: HomeAddressState;
+  isHomeAddressSameAsMailingAddress?: boolean;
+  mailingAddress?: MailingAddressState;
+}
+
+interface ToContactInformationArgs {
+  contactInformation: ContactInformationState;
+  homeAddress?: HomeAddressState;
+  isHomeAddressSameAsMailingAddress?: boolean;
+  mailingAddress?: MailingAddressState;
 }
 
 export interface BenefitApplicationStateMapper {
@@ -142,6 +169,9 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     disabilityTaxCredit,
     livingIndependently,
     partnerInformation,
+    homeAddress,
+    mailingAddress,
+    isHomeAddressSameAsMailingAddress,
     contactInformation,
     typeOfApplication,
   }: ToBenefitApplicationDtoArgs) {
@@ -153,7 +183,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       applicationYearId: applicationYear.intakeYearId,
       children: this.toChildren(children),
       communicationPreferences,
-      contactInformation: this.toContactInformation(contactInformation),
+      contactInformation: this.toContactInformation({ contactInformation, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
       dateOfBirth,
       maritalStatus,
       dentalBenefits: this.toDentalBenefits(dentalBenefits),
@@ -180,10 +210,10 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     }));
   }
 
-  private toContactInformation(contactInformation: ContactInformationState) {
+  private toContactInformation({ contactInformation, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToContactInformationArgs) {
     return {
       ...contactInformation,
-      ...this.toHomeAddress(contactInformation),
+      ...this.toHomeAddress({ isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
     };
   }
 
@@ -203,29 +233,23 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     return dentalBenefits;
   }
 
-  private toHomeAddress({ copyMailingAddress, homeAddress, homeApartment, homeCity, homeCountry, homePostalCode, homeProvince, mailingAddress, mailingApartment, mailingCity, mailingCountry, mailingPostalCode, mailingProvince }: ContactInformationState) {
-    if (copyMailingAddress) {
+  private toHomeAddress({ isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToHomeAddressArgs) {
+    if (isHomeAddressSameAsMailingAddress) {
       return {
-        homeAddress: mailingAddress,
-        homeApartment: mailingApartment,
-        homeCity: mailingCity,
-        homeCountry: mailingCountry,
-        homePostalCode: mailingPostalCode,
-        homeProvince: mailingProvince,
+        homeAddress: mailingAddress?.address,
+        homeCity: mailingAddress?.city,
+        homeCountry: mailingAddress?.country,
+        homePostalCode: mailingAddress?.postalCode,
+        homeProvince: mailingAddress?.province,
       };
     }
 
-    invariant(homeAddress, 'Expected homeAddress to be defined when copyMailingAddress is false.');
-    invariant(homeCity, 'Expected homeCity to be defined when copyMailingAddress is false.');
-    invariant(homeCountry, 'Expected homeCountry to be defined when copyMailingAddress is false.');
+    invariant(homeAddress?.address, 'Expected homeAddress to be defined when isHomeAddressSameAsMailingAddress is false.');
+    invariant(homeAddress.city, 'Expected homeCity to be defined when isHomeAddressSameAsMailingAddress is false.');
+    invariant(homeAddress.country, 'Expected homeCountry to be defined when isHomeAddressSameAsMailingAddress is false.');
 
     return {
       homeAddress,
-      homeApartment,
-      homeCity,
-      homeCountry,
-      homePostalCode,
-      homeProvince,
     };
   }
 }
