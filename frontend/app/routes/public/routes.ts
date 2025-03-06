@@ -188,6 +188,7 @@ export const routes = [
           },
           { id: 'public/apply/$id/child/applicant-information', file: 'routes/public/apply/$id/child/applicant-information.tsx', paths: { en: '/:lang/apply/:id/child/applicant-information', fr: '/:lang/demander/:id/enfant/renseignements-demandeur' } },
           { id: 'public/apply/$id/child/new-or-existing-member', file: 'routes/public/apply/$id/child/new-or-existing-member.tsx', paths: { en: '/:lang/apply/:id/child/new-or-existing-member', fr: '/:lang/demander/:id/enfant/new-or-existing-member' } }, // TODO: Update French route
+          { id: 'public/apply/$id/child/marital-status', file: 'routes/public/apply/$id/child/marital-status.tsx', paths: { en: '/:lang/apply/:id/child/marital-status', fr: '/:lang/demander/:id/enfant/etat-civil' } },
           { id: 'public/apply/$id/child/phone-number', file: 'routes/public/apply/$id/child/phone-number.tsx', paths: { en: '/:lang/apply/:id/child/phone-number', fr: '/:lang/demander/:id/enfant/phone-number' } }, // TODO: Update French route
           {
             id: 'public/apply/$id/child/communication-preference',

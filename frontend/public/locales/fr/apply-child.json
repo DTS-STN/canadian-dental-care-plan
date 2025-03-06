@@ -35,6 +35,32 @@
       "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres"
     }
   },
+  "marital-status": {
+    "page-title": "État civil",
+    "marital-status": "Quel est votre état civil actuel?",
+    "spouse-or-commonlaw": "Renseignements sur l'époux/épouse ou le conjoint/la conjointe de fait",
+    "provide-sin": "Fournissez les renseignements sur votre époux/épouse ou conjoint/conjointe de fait actuel/actuelle tels qu'ils figurent sur sa carte ou sa lettre de numéro d'assurance sociale (NAS).",
+    "required-information": "Ces renseignements sont nécessaires pour calculer le revenu familial net rajusté. Votre époux/épouse ou conjoint/conjointe de fait doit présenter sa propre demande au Régime canadien de soins dentaires.",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "sin": "Numéro d'assurance sociale (NAS)",
+    "year-of-birth": "Année de naissance",
+    "confirm-checkbox": "Je confirme que mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et y a consenti.",
+    "help-message": {
+      "sin": "Entrez le NAS à 9 chiffres"
+    },
+    "error-message": {
+      "marital-status-required": "Sélectionnez l'état civil",
+      "confirm-required": "Le consentement de l'époux/épouse ou du conjoint de fait est requis pour procéder",
+      "date-of-birth-year-required": "Entrez l'année de naissance, par exemple 1950",
+      "yob-is-future": "L'année de naissance doit être dans le passé",
+      "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
+      "sin-valid": "Le NAS doit être valide",
+      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
+    }
+  },
   "new-or-existing-member": {
     "page-title": "New or existing member",
     "previously-enrolled": "Avez-vous déjà été inscrit au Régime canadien de soins dentaires?",
