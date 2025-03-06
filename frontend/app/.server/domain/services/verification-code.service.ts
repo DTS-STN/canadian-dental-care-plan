@@ -6,8 +6,17 @@ import type { VerificationCodeDtoMapper } from '~/.server/domain/mappers';
 import type { VerificationCodeRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services/audit.service';
 import type { LogFactory, Logger } from '~/.server/factories';
+import { randomString } from '~/utils/string-utils';
 
 export interface VerificationCodeService {
+  /**
+   * Generates a random 5-digit verification code for the specified user.
+   *
+   * @param userId A unique identifier of the user requesting a verification code.
+   * @returns A 5-digit verification code.
+   */
+  createVerificationCode(userId: string): string;
+
   /**
    * Sends a verification code email using the data passed in the `VerificationCodeEmailRequestDto` object
    *
@@ -19,7 +28,8 @@ export interface VerificationCodeService {
 
 @injectable()
 export class DefaultVerificationCodeService implements VerificationCodeService {
-  private readonly log: Logger;
+  protected readonly log: Logger;
+
   private readonly verificationCodeDtoMapper: VerificationCodeDtoMapper;
   private readonly verificationCodeRepository: VerificationCodeRepository;
   private readonly auditService: AuditService;
@@ -41,6 +51,16 @@ export class DefaultVerificationCodeService implements VerificationCodeService {
     this.log.debug('DefaultVerificationCodeService initiated.');
   }
 
+  createVerificationCode(userId: string): string {
+    this.log.trace('Creating verification code for userId [%s]', userId);
+    this.auditService.createAudit('verification-code.post', { userId });
+
+    const verificationCode = randomString(5, '0123456789');
+    this.log.trace('Returning verification code [%s] for userId [%s]', verificationCode, userId);
+
+    return verificationCode;
+  }
+
   async sendVerificationCodeEmail(verificationCodeEmailRequestDto: VerificationCodeEmailRequestDto): Promise<void> {
     this.log.trace('Sending verification code email for request [%j]', verificationCodeEmailRequestDto);
 
@@ -50,5 +70,26 @@ export class DefaultVerificationCodeService implements VerificationCodeService {
     await this.verificationCodeRepository.sendVerificationCodeEmail(verificationCodeEmailRequestEntity);
 
     this.log.trace('Verification code email successfully sent for request [%j]', verificationCodeEmailRequestDto);
+  }
+}
+
+@injectable()
+export class StubVerificationCodeService extends DefaultVerificationCodeService {
+  constructor(
+    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
+    @inject(TYPES.domain.mappers.VerificationCodeDtoMapper) verificationCodeDtoMapper: VerificationCodeDtoMapper,
+    @inject(TYPES.domain.repositories.VerificationCodeRepository) verificationCodeRepository: VerificationCodeRepository,
+    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
+  ) {
+    super(logFactory, verificationCodeDtoMapper, verificationCodeRepository, auditService);
+  }
+
+  createVerificationCode(userId: string): string {
+    this.log.trace('Creating verification code for userId [%s]', userId);
+
+    const verificationCode = '12345';
+    this.log.trace('Returning verification code [%s] for userId [%s]', verificationCode, userId);
+
+    return verificationCode;
   }
 }
