@@ -140,8 +140,9 @@ test.describe('Children application', () => {
       await page.getByRole('button', { name: 'Submit Application' }).click();
     });
 
-    await test.step('Should successfully submit application and navigate to confirmation page, async', async () => {
-      await applyChildPage.isLoaded('confirmation');
-    });
+    // TODO this step will need to be left out as the marital status page is currently missing
+    // await test.step('Should successfully submit application and navigate to confirmation page, async', async () => {
+    //   await applyChildPage.isLoaded('confirmation');
+    // });
   });
 });

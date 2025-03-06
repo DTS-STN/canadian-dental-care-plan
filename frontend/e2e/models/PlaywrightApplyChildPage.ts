@@ -111,7 +111,6 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
     await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill('01');
     await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill('1985');
     await this.page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('900000001');
-    await this.page.getByRole('radio', { name: 'Single' }).check();
   }
 
   async fillContactInformationForm() {
