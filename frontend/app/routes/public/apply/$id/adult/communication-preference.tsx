@@ -162,7 +162,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
   const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
     .filter((method) => method.id !== communicationMethodEmail.id)
     .map((method) => ({
-      children: <p className="font-bold">{t('apply-adult:communication-preference.by-mail')}</p>,
+      children: <span className="font-bold">{t('apply-adult:communication-preference.by-mail')}</span>,
       value: method.id,
       defaultChecked: defaultState.preferredMethod === method.id,
       onChange: handleOnPreferredMethodChecked,
@@ -170,7 +170,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <p className="font-bold">{t('apply-adult:communication-preference.by-email')}</p>,
+      children: <span className="font-bold">{t('apply-adult:communication-preference.by-email')}</span>,
       value: communicationMethodEmail.id,
       defaultChecked: defaultState.preferredMethod === communicationMethodEmail.id,
       append: preferredMethodValue === communicationMethodEmail.id && (
@@ -229,7 +229,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
                 legend={t('apply-adult:communication-preference.preferred-language')}
                 options={preferredLanguages.map((language) => ({
                   defaultChecked: defaultState.preferredLanguage === language.id,
-                  children: <p className="font-bold">{language.name}</p>,
+                  children: <span className="font-bold">{language.name}</span>,
                   value: language.id,
                 }))}
                 errorMessage={errors?.preferredLanguage}
