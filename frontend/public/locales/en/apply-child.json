@@ -35,6 +35,32 @@
       "last-name-no-digits": "Last name must contain letters only"
     }
   },
+  "marital-status": {
+    "page-title": "Marital status",
+    "marital-status": "What is your current marital status?",
+    "spouse-or-commonlaw": "Spouse or common-law partner information",
+    "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their Social Insurance Number (SIN) card or letter.",
+    "required-information": "The information is required to calculate your adjusted family net income. Your spouse or common-law partner must submit their own application for the Canadian Dental Care Plan.",
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "sin": "Social Insurance Number (SIN)",
+    "year-of-birth": "Year of birth",
+    "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.",
+    "help-message": {
+      "sin": "Enter the 9-digit SIN"
+    },
+    "error-message": {
+      "marital-status-required": "Select marital status",
+      "confirm-required": "Consent from spouse or common-law partner is required to proceed",
+      "date-of-birth-year-required": "Enter year of birth, for example 1950",
+      "yob-is-future": "Year of birth must be in the past",
+      "sin-required": "Enter 9-digit SIN, for example 123 456 789",
+      "sin-valid": "Must be a valid SIN",
+      "sin-unique": "The Social Insurance Number (SIN) must be unique"
+    }
+  },
   "new-or-existing-member": {
     "page-title": "New or existing member",
     "previously-enrolled": "Have you ever been enrolled in the Canadian Dental Care Plan?",
