@@ -20,12 +20,12 @@ export interface VerificationCodeRepository {
 @injectable()
 export class DefaultVerificationCodeRepository implements VerificationCodeRepository {
   private readonly log: Logger;
-  private readonly serverConfig: Pick<ServerConfig, 'GC_NOTIFY_API_KEY' | 'GC_NOTIFY_EMAIL_NOTIFICATIONS_URL'>;
+  private readonly serverConfig: Pick<ServerConfig, 'GC_NOTIFY_API_KEY' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
   private readonly httpClient: HttpClient;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'GC_NOTIFY_API_KEY' | 'GC_NOTIFY_EMAIL_NOTIFICATIONS_URL'>,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'GC_NOTIFY_API_KEY' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
     this.log = logFactory.createLogger('DefaultVerificationCodeRepository');
@@ -36,12 +36,14 @@ export class DefaultVerificationCodeRepository implements VerificationCodeReposi
   async sendVerificationCodeEmail(verificationCodeEmailRequestEntity: VerificationCodeEmailRequestEntity): Promise<VerificationCodeEmailResponseEntity> {
     this.log.trace('Sending verification code email for request: [%j]', verificationCodeEmailRequestEntity);
 
-    const url = this.serverConfig.GC_NOTIFY_EMAIL_NOTIFICATIONS_URL;
-    const response = await this.httpClient.instrumentedFetch('http.client.gc-notify.email-notification.posts', url, {
+    const url = `${this.serverConfig.INTEROP_API_BASE_URI}/notifications/email-txt-notifications/v1/notifications/email`;
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.email-notifications.posts', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
       headers: {
         Authorization: `ApiKey-v1 ${this.serverConfig.GC_NOTIFY_API_KEY}`,
         'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
       body: JSON.stringify(verificationCodeEmailRequestEntity),
     });
