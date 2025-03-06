@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -19,6 +19,7 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
@@ -30,6 +31,8 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -89,6 +92,7 @@ export async function action({ context: { appContainer, session }, params, reque
     .object({
       preferredLanguage: z.string().trim().min(1, t('apply-adult-child:communication-preference.error-message.preferred-language-required')),
       preferredMethod: z.string().trim().min(1, t('apply-adult-child:communication-preference.error-message.preferred-method-required')),
+      preferredNotificationMethod: z.string().trim().min(1, t('apply-adult-child:communication-preference.error-message.preferred-notification-method-required')),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
     })
@@ -117,6 +121,7 @@ export async function action({ context: { appContainer, session }, params, reque
     email: formData.get('email') ? String(formData.get('email') ?? '') : undefined,
     preferredLanguage: String(formData.get('preferredLanguage') ?? ''),
     preferredMethod: String(formData.get('preferredMethod') ?? ''),
+    preferredNotificationMethod: String(formData.get('preferredNotificationMethod') ?? ''),
   });
 
   if (!parsedDataResult.success) {
@@ -140,12 +145,15 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
   const isSubmitting = fetcher.state !== 'idle';
   const [preferredMethodValue, setPreferredMethodValue] = useState(defaultState.preferredMethod ?? '');
 
+  const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
+
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     preferredLanguage: 'input-radio-preferred-language-option-0',
     preferredMethod: 'input-radio-preferred-methods-option-0',
     email: 'email',
     confirmEmail: 'confirm-email',
+    preferredNotificationMethod: 'input-radio-preferred-notification-method-option-0',
   });
 
   const handleOnPreferredMethodChecked: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -155,7 +163,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
   const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
     .filter((method) => method.id !== communicationMethodEmail.id)
     .map((method) => ({
-      children: method.name,
+      children: <span className="font-bold">{t('apply-adult-child:communication-preference.by-mail')}</span>,
       value: method.id,
       defaultChecked: defaultState.preferredMethod === method.id,
       onChange: handleOnPreferredMethodChecked,
@@ -163,7 +171,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
 
   const options: InputRadiosProps['options'] = [
     {
-      children: communicationMethodEmail.name,
+      children: <span className="font-bold">{t('apply-adult-child:communication-preference.by-email')}</span>,
       value: communicationMethodEmail.id,
       defaultChecked: defaultState.preferredMethod === communicationMethodEmail.id,
       append: preferredMethodValue === communicationMethodEmail.id && (
@@ -210,7 +218,6 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
         <Progress value={54} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-6">{t('apply-adult-child:communication-preference.note')}</p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -223,7 +230,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
                 legend={t('apply-adult-child:communication-preference.preferred-language')}
                 options={preferredLanguages.map((language) => ({
                   defaultChecked: defaultState.preferredLanguage === language.id,
-                  children: language.name,
+                  children: <span className="font-bold">{language.name}</span>,
                   value: language.id,
                 }))}
                 errorMessage={errors?.preferredLanguage}
@@ -231,8 +238,35 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               />
             )}
             {preferredCommunicationMethods.length > 0 && (
-              <InputRadios id="preferred-methods" legend={t('apply-adult-child:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errors?.preferredMethod} required />
+              <InputRadios
+                id="preferred-methods"
+                legend={t('apply-adult-child:communication-preference.preferred-method')}
+                helpMessagePrimary={t('apply-adult-child:communication-preference.preferred-method-help-message')}
+                name="preferredMethod"
+                options={options}
+                errorMessage={errors?.preferredMethod}
+                required
+              />
             )}
+            <InputRadios
+              id="preferred-notification-method"
+              name="preferredNotificationMethod"
+              legend={t('apply-adult-child:communication-preference.preferred-notification-method')}
+              options={[
+                {
+                  value: PREFERRED_NOTIFICATION_METHOD.msca,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:communication-preference.preferred-notification-method-msca" components={{ mscaLinkAccount }} />,
+                  defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
+                },
+                {
+                  value: PREFERRED_NOTIFICATION_METHOD.mail,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:communication-preference.preferred-notification-method-mail" components={{ mscaLinkAccount }} />,
+                  defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
+                },
+              ]}
+              required
+              errorMessage={errors?.preferredNotificationMethod}
+            />
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">

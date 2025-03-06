@@ -288,7 +288,7 @@ describe('apply-child-route-helpers', () => {
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
-        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
+        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
       } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
@@ -311,7 +311,7 @@ describe('apply-child-route-helpers', () => {
             information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
           },
         ],
-        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
+        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dateOfBirth: '1900-01-01',
         maritalStatus: '1',
         editMode: false,

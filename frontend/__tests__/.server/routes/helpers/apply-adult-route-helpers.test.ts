@@ -141,7 +141,7 @@ describe('apply-adult-route-helpers', () => {
         maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
-        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
+        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dentalInsurance: undefined,
       } satisfies ApplyState;
 
@@ -162,7 +162,7 @@ describe('apply-adult-route-helpers', () => {
         maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
-        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
+        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dentalInsurance: false,
         dentalBenefits: undefined,
       } satisfies ApplyState;
@@ -183,7 +183,7 @@ describe('apply-adult-route-helpers', () => {
         maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
-        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
+        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dentalInsurance: false,
         hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
@@ -198,7 +198,7 @@ describe('apply-adult-route-helpers', () => {
         ageCategory: 'seniors',
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
-        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email' },
+        communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dateOfBirth: '1900-01-01',
         maritalStatus: '1',
         hasFederalProvincialTerritorialBenefits: false,

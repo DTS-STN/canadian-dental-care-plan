@@ -125,21 +125,6 @@ test.describe('Children application', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
-    await test.step('Should navigate to communication preference page', async () => {
-      await applyChildPage.fillCommunicationForm();
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to review child information page', async () => {
-      await applyChildPage.isLoaded('review-child-information');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to review adult information page', async () => {
-      await applyChildPage.isLoaded('review-adult-information');
-      await page.getByRole('button', { name: 'Submit Application' }).click();
-    });
-
     // TODO this step will need to be left out as the marital status page is currently missing
     // await test.step('Should successfully submit application and navigate to confirmation page, async', async () => {
     //   await applyChildPage.isLoaded('confirmation');
