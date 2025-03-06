@@ -9,7 +9,6 @@
     "first-name": "Prénom",
     "single-legal-name": "Si vous utilisez un seul nom légal",
     "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
-    "marital-status": "État civil",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
@@ -20,8 +19,6 @@
     "error-message": {
       "first-name-required": "Entrez le prénom",
       "last-name-required": "Entrez le nom de famille",
-      "marital-status-required": "Sélectionnez l'état civil",
-      "marital-status-no-partner-information": "Si vous êtes marié ou vivez en conjoint de fait, vous devez saisir leurs informations sur la page suivante. Sélectionnez votre état civil et appuyez sur «\u00a0Enregistrer\u00a0».",
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",

@@ -9,7 +9,6 @@
     "first-name": "First name",
     "single-legal-name": "If you have a single legal name",
     "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
-    "marital-status": "Marital status",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
@@ -20,8 +19,6 @@
     "error-message": {
       "first-name-required": "Enter first name",
       "last-name-required": "Enter last name",
-      "marital-status-required": "Select marital status",
-      "marital-status-no-partner-information": "If you are married or in a common-law relationship you must enter their information on the next page. Select your marital status and press 'Save'.",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "The Social Insurance Number (SIN) must be unique",
