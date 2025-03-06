@@ -50,7 +50,7 @@ export type ApplyState = ReadonlyDeep<{
     email?: string;
     preferredLanguage: string;
     preferredMethod: string;
-    preferredNotificationMethod?: string;
+    preferredNotificationMethod: string;
   };
   hasFederalProvincialTerritorialBenefits?: boolean;
   maritalStatus?: string;

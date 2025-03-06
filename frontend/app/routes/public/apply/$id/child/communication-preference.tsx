@@ -170,7 +170,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
   const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
     .filter((method) => method.id !== communicationMethodEmail.id)
     .map((method) => ({
-      children: <strong>{t('apply-child:communication-preference.by-mail')}</strong>,
+      children: <p className="font-bold">{t('apply-child:communication-preference.by-mail')}</p>,
       value: method.id,
       defaultChecked: defaultState.preferredMethod === method.id,
       onChange: handleOnPreferredMethodChecked,
@@ -178,7 +178,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <strong>{t('apply-child:communication-preference.by-email')}</strong>,
+      children: <p className="font-bold">{t('apply-child:communication-preference.by-email')}</p>,
       value: communicationMethodEmail.id,
       defaultChecked: defaultState.preferredMethod === communicationMethodEmail.id,
       append: preferredMethodValue === communicationMethodEmail.id && (
@@ -237,14 +237,24 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
                 legend={t('apply-child:communication-preference.preferred-language')}
                 options={preferredLanguages.map((language) => ({
                   defaultChecked: defaultState.preferredLanguage === language.id,
-                  children: <strong>{language.name}</strong>,
+                  children: <p className="font-bold">{language.name}</p>,
                   value: language.id,
                 }))}
                 errorMessage={errors?.preferredLanguage}
                 required
               />
             )}
-            {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('apply-child:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errors?.preferredMethod} required />}
+            {preferredCommunicationMethods.length > 0 && (
+              <InputRadios
+                id="preferred-methods"
+                legend={t('apply-child:communication-preference.preferred-method')}
+                helpMessagePrimary={t('apply-child:communication-preference.preferred-method-help-message')}
+                name="preferredMethod"
+                options={options}
+                errorMessage={errors?.preferredMethod}
+                required
+              />
+            )}
             <InputRadios
               id="preferred-notification-method"
               name="preferredNotificationMethod"
