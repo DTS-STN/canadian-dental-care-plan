@@ -32,7 +32,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
+export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -63,7 +63,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     communicationMethodEmail,
     id: state.id,
-
     meta,
     preferredCommunicationMethods,
     preferredLanguages,

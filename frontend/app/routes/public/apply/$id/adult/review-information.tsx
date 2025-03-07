@@ -11,6 +11,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-information';
+import { PREFERRED_NOTIFICATION_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultStateForReview } from '~/.server/routes/helpers/apply-adult-route-helpers';
@@ -66,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
   const countryMailing = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
   const countryHome = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.contactInformation.homeCountry, locale);
-  const communicationPreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
+  const communicationSunLifePreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
 
@@ -79,8 +80,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: maritalStatus,
     contactInformationEmail: state.contactInformation.email,
-    communicationPreferenceEmail: state.communicationPreferences.email,
-    communicationPreference: communicationPreference.name,
+    communicationSunLifePreference: communicationSunLifePreference.name,
+    communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
+    previouslyEnrolled: state.newOrExistingMember,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -255,6 +257,21 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   </InlineLink>
                 </div>
               </DescriptionListItem>
+              <DescriptionListItem term={t('apply-adult:review-information.previously-enrolled-title')}>
+                {userInfo.previouslyEnrolled?.isNewOrExistingMember ? (
+                  <>
+                    <p>{t('apply-adult:review-information.yes')}</p>
+                    <p>{userInfo.previouslyEnrolled.clientNumber}</p>
+                  </>
+                ) : (
+                  <p>{t('apply-adult:review-information.no')}</p>
+                )}
+                <div className="mt-4">
+                  <InlineLink id="change-martial-status" routeId="public/apply/$id/adult/applicant-information" params={params}>
+                    {t('apply-adult:review-information.previously-enrolled-change')}
+                  </InlineLink>
+                </div>
+              </DescriptionListItem>
             </dl>
           </section>
           {spouseInfo && (
@@ -355,15 +372,6 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
           <section className="space-y-6">
             <h2 className="font-lato text-2xl font-bold">{t('apply-adult:review-information.comm-title')}</h2>
             <dl className="divide-y border-y">
-              <DescriptionListItem term={t('apply-adult:review-information.comm-pref-title')}>
-                <p>{userInfo.communicationPreference}</p>
-                {userInfo.communicationPreferenceEmail && <p>{userInfo.communicationPreferenceEmail}</p>}
-                <p>
-                  <InlineLink id="change-communication-preference" routeId="public/apply/$id/adult/communication-preference" params={params}>
-                    {t('apply-adult:review-information.comm-pref-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
               {preferredLanguage && (
                 <DescriptionListItem term={t('apply-adult:review-information.lang-pref-title')}>
                   <p>{preferredLanguage}</p>
@@ -374,6 +382,22 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   </div>
                 </DescriptionListItem>
               )}
+              <DescriptionListItem term={t('apply-adult:review-information.sun-life-comm-pref-title')}>
+                <p>{userInfo.communicationSunLifePreference}</p>
+                <p>
+                  <InlineLink id="change-communication-preference" routeId="public/apply/$id/adult/communication-preference" params={params}>
+                    {t('apply-adult:review-information.sun-life-comm-pref-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('apply-adult:review-information.goc-comm-pref-title')}>
+                <p>{userInfo.communicationGOCPreference === PREFERRED_NOTIFICATION_METHOD.msca ? t('apply-adult:review-information.preferred-notification-method-msca') : t('apply-adult:review-information.preferred-notification-method-mail')}</p>
+                <p>
+                  <InlineLink id="change-communication-preference" routeId="public/apply/$id/adult/communication-preference" params={params}>
+                    {t('apply-adult:review-information.goc-comm-pref-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
             </dl>
           </section>
           <section className="space-y-6">
