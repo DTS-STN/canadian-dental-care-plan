@@ -58,7 +58,6 @@ export const clientEnvSchema = z.object({
   USA_COUNTRY_ID: z.string().trim().min(1).default('fcf7389e-97ae-eb11-8236-000d3af4bfc3'),
   COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('775170000'),
   COMMUNICATION_METHOD_MAIL_ID: z.string().trim().min(1).default('775170002'),
-  COMMUNICATION_METHOD_MSCA_ID: z.string().trim().min(1).default('775170003'),
   CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1).default('51af5170-614e-ee11-be6f-000d3a09d640'),
   INVALID_CLIENT_FRIENDLY_STATUS: z.string().trim().min(1).default('504fba6e-604e-ee11-be6f-000d3a09d640'),
 });

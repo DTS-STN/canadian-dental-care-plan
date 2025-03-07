@@ -400,6 +400,8 @@
     "goc-comm-pref-title": "(FR) Government of Canada communication preference",
     "sun-life-comm-pref-change": "(FR) Change Sun Life communication",
     "goc-comm-pref-change": "(FR) Change Government of Canada communication",
+    "preferred-notification-method-msca": "(FR) Digitally through My Service Canada Account (MSCA)",
+    "preferred-notification-method-mail": "(FR) By mail",
     "lang-pref-title": "Langue de préférence",
     "lang-pref-change": "Modifier la langue de préférence",
     "dental-title": "Accès à l'assurance dentaire",

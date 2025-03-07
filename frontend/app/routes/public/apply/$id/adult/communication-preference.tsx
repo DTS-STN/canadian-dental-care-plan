@@ -32,6 +32,8 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adult.communicationPreference,
@@ -43,7 +45,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const { COMMUNICATION_METHOD_EMAIL_ID, COMMUNICATION_METHOD_MAIL_ID, COMMUNICATION_METHOD_MSCA_ID } = appContainer.get(TYPES.configs.ClientConfig);
+  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -56,22 +58,10 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw data('Expected communication method email not found!', { status: 500 });
   }
 
-  const communicationMethodMail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_MAIL_ID);
-  if (!communicationMethodMail) {
-    throw data('Expected communication method mail not found!', { status: 500 });
-  }
-
-  const communicationMethodMSCA = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_MSCA_ID);
-  if (!communicationMethodMSCA) {
-    throw data('Expected communication method email not found!', { status: 500 });
-  }
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:communication-preference.page-title') }) };
 
   return {
     communicationMethodEmail,
-    communicationMethodMail,
-    communicationMethodMSCA,
     id: state.id,
     meta,
     preferredCommunicationMethods,
@@ -147,7 +137,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { communicationMethodEmail, communicationMethodMail, communicationMethodMSCA, preferredLanguages, preferredCommunicationMethods, defaultState, editMode, isReadOnlyEmail } = loaderData;
+  const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode, isReadOnlyEmail } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -167,6 +157,15 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
   const handleOnPreferredMethodChecked: ChangeEventHandler<HTMLInputElement> = (e) => {
     setPreferredMethodValue(e.target.value);
   };
+
+  const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
+    .filter((method) => method.id !== communicationMethodEmail.id)
+    .map((method) => ({
+      children: <span className="font-bold">{t('apply-adult:communication-preference.by-mail')}</span>,
+      value: method.id,
+      defaultChecked: defaultState.preferredMethod === method.id,
+      onChange: handleOnPreferredMethodChecked,
+    }));
 
   const options: InputRadiosProps['options'] = [
     {
@@ -208,12 +207,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
       ),
       onChange: handleOnPreferredMethodChecked,
     },
-    {
-      children: <span className="font-bold">{t('apply-adult:communication-preference.by-mail')}</span>,
-      value: communicationMethodMail.id,
-      defaultChecked: defaultState.preferredMethod === communicationMethodMail.id,
-      onChange: handleOnPreferredMethodChecked,
-    },
+    ...nonEmailOptions,
   ];
 
   return (
@@ -258,14 +252,14 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               legend={t('apply-adult:communication-preference.preferred-notification-method')}
               options={[
                 {
-                  value: communicationMethodMSCA.id,
+                  value: PREFERRED_NOTIFICATION_METHOD.msca,
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult:communication-preference.preferred-notification-method-msca" components={{ mscaLinkAccount }} />,
-                  defaultChecked: defaultState.preferredNotificationMethod === communicationMethodMSCA.id,
+                  defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
                 },
                 {
-                  value: communicationMethodMail.id,
+                  value: PREFERRED_NOTIFICATION_METHOD.mail,
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult:communication-preference.preferred-notification-method-mail" components={{ mscaLinkAccount }} />,
-                  defaultChecked: defaultState.preferredNotificationMethod === communicationMethodMail.id,
+                  defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail,
                 },
               ]}
               required

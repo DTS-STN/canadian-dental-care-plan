@@ -20,14 +20,14 @@
             "Label": {
               "LocalizedLabels": [
                 {
-                  "Label": "By Email",
+                  "Label": "Email",
                   "LanguageCode": 1033,
                   "IsManaged": false,
                   "MetadataId": "3ea460be-a92b-4a7d-a33a-f14142a1beba",
                   "HasChanged": null
                 },
                 {
-                  "Label": "Par Courriel",
+                  "Label": "Courriel",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "6d078da9-fb53-ee11-be6f-000d3a09d1b8",
@@ -35,7 +35,7 @@
                 }
               ],
               "UserLocalizedLabel": {
-                "Label": "By Email",
+                "Label": "Email",
                 "LanguageCode": 1033,
                 "IsManaged": false,
                 "MetadataId": "3ea460be-a92b-4a7d-a33a-f14142a1beba",
@@ -74,7 +74,7 @@
             "Label": {
               "LocalizedLabels": [
                 {
-                  "Label": "By Mail",
+                  "Label": "Mail",
                   "LanguageCode": 1033,
                   "IsManaged": false,
                   "MetadataId": "992874ad-92db-44cc-a1cd-81fd3b6b5891",
@@ -89,7 +89,7 @@
                 }
               ],
               "UserLocalizedLabel": {
-                "Label": "By Mail",
+                "Label": "Mail",
                 "LanguageCode": 1033,
                 "IsManaged": false,
                 "MetadataId": "992874ad-92db-44cc-a1cd-81fd3b6b5891",
@@ -111,60 +111,6 @@
                 "LanguageCode": 1033,
                 "IsManaged": false,
                 "MetadataId": "3ea054b2-b023-4e8d-a417-821a066ea1ee",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": 775170003,
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": "",
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Digitally through My Service Canada Account (MSCA)",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "a3fc2e73-ac03-42dc-8a37-4f3d38c0fc23",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "(FR) Digitally through My Service Canada Account (MSCA)",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "b7612b3c-f341-487c-84e3-01eba49edcde",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "Digitally through My Service Canada Account (MSCA)",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "a3fc2e73-ac03-42dc-8a37-4f3d38c0fc23",
-                "HasChanged": null
-              }
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "8503a83f-5f95-46cc-be12-deadabae78ad",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "8503a83f-5f95-46cc-be12-deadabae78ad",
                 "HasChanged": null
               }
             }

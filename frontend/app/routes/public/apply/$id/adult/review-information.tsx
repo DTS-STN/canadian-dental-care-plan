@@ -11,6 +11,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-information';
+import { PREFERRED_NOTIFICATION_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultStateForReview } from '~/.server/routes/helpers/apply-adult-route-helpers';
@@ -67,7 +68,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryMailing = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
   const countryHome = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.contactInformation.homeCountry, locale);
   const communicationSunLifePreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
-  const communicationGOCPreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredNotificationMethod, locale);
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
 
@@ -81,7 +81,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     maritalStatus: maritalStatus,
     contactInformationEmail: state.contactInformation.email,
     communicationSunLifePreference: communicationSunLifePreference.name,
-    communicationGOCPreference: communicationGOCPreference.name,
+    communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     previouslyEnrolled: false, //TODO: implement logic to determine if previous enrollment application exists for the user
     previouslyEnrolledId: '111-222-333-1234',
   };
@@ -385,7 +385,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                 </p>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.goc-comm-pref-title')}>
-                <p>{userInfo.communicationGOCPreference}</p>
+                <p>{userInfo.communicationGOCPreference === PREFERRED_NOTIFICATION_METHOD.msca ? t('apply-adult:review-information.preferred-notification-method-msca') : t('apply-adult:review-information.preferred-notification-method-mail')}</p>
                 <p>
                   <InlineLink id="change-communication-preference" routeId="public/apply/$id/adult/communication-preference" params={params}>
                     {t('apply-adult:review-information.goc-comm-pref-change')}
