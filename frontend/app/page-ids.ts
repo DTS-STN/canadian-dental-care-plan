@@ -55,6 +55,7 @@ export const pageIds = {
         livingIndependently: 'CDCP-APPL-AD-0018',
         newOrExistingMember: 'CDCP-APPL-AD-0019',
         phoneNumber: 'CDCP-APPL-AD-0020',
+        email: 'CDCP-APPL-AD-0021',
       },
       adultChild: {
         applicantInformation: 'CDCP-APPL-ADCH-0006',
