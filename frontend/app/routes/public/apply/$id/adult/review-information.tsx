@@ -82,8 +82,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     contactInformationEmail: state.contactInformation.email,
     communicationSunLifePreference: communicationSunLifePreference.name,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
-    previouslyEnrolled: false, //TODO: implement logic to determine if previous enrollment application exists for the user
-    previouslyEnrolledId: '111-222-333-1234',
+    previouslyEnrolled: state.newOrExistingMember,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -259,7 +258,14 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.previously-enrolled-title')}>
-                <p>{userInfo.previouslyEnrolled ? userInfo.previouslyEnrolledId : t('apply-adult:review-information.no')}</p>
+                {userInfo.previouslyEnrolled?.isNewOrExistingMember ? (
+                  <>
+                    <p>{t('apply-adult:review-information.yes')}</p>
+                    <p>{userInfo.previouslyEnrolled.clientNumber}</p>
+                  </>
+                ) : (
+                  <p>{t('apply-adult:review-information.no')}</p>
+                )}
                 <div className="mt-4">
                   <InlineLink id="change-martial-status" routeId="public/apply/$id/adult/applicant-information" params={params}>
                     {t('apply-adult:review-information.previously-enrolled-change')}
