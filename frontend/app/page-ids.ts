@@ -80,6 +80,7 @@ export const pageIds = {
         contactApplyChild: 'CDCP-APPL-ADCH-0024',
         newOrExistingMember: 'CDCP-APPL-ADCH-0025',
         phoneNumber: 'CDCP-APPL-ADCH-0026',
+        email: 'CDCP-APPL-ADCH-0027',
       },
       child: {
         dateOfBirthEligibility: 'CDCP-APPL-CH-0004',
