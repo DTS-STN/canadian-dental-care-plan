@@ -214,6 +214,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     return {
       ...contactInformation,
       ...this.toHomeAddress({ isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
+      ...this.toMailingAddress(mailingAddress),
     };
   }
 
@@ -250,6 +251,17 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
 
     return {
       homeAddress,
+    };
+  }
+
+  private toMailingAddress(mailingAddress: MailingAddressState) {
+    return {
+      mailingAddress: mailingAddress.address,
+      mailingApartment: undefined,
+      mailingCity: mailingAddress.city,
+      mailingCountry: mailingAddress.country,
+      mailingPostalCode: mailingAddress.postalCode,
+      mailingProvince: mailingAddress.province,
     };
   }
 }

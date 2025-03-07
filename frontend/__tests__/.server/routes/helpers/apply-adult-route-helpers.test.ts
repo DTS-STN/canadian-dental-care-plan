@@ -120,7 +120,7 @@ describe('apply-adult-route-helpers', () => {
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
-        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
+        contactInformation: { phoneNumber: '555-555-5555' },
         communicationPreferences: undefined,
       } satisfies ApplyState;
 
@@ -140,7 +140,7 @@ describe('apply-adult-route-helpers', () => {
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
-        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
+        contactInformation: { phoneNumber: '555-555-5555' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dentalInsurance: undefined,
       } satisfies ApplyState;
@@ -161,7 +161,7 @@ describe('apply-adult-route-helpers', () => {
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
-        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
+        contactInformation: { phoneNumber: '555-555-5555' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dentalInsurance: false,
         dentalBenefits: undefined,
@@ -182,7 +182,7 @@ describe('apply-adult-route-helpers', () => {
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
-        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
+        contactInformation: { phoneNumber: '555-555-5555' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dentalInsurance: false,
         hasFederalProvincialTerritorialBenefits: false,
