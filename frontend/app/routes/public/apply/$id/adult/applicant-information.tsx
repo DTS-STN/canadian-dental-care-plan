@@ -10,6 +10,7 @@ import type { Route } from './+types/applicant-information';
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
 import { getAgeCategoryFromDateString, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import type { ApplicantInformationState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -54,8 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:applicant-information.page-title') }) };
 
-  // TODO: Once the state has been reworked, we can change 'defaultState' to 'defaultState: state.applicantInformation'
-  return { defaultState: state, editMode: state.editMode, id: state.id, meta };
+  return { defaultState: state.applicantInformation, editMode: state.editMode, id: state.id, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -125,7 +125,7 @@ export async function action({ context: { appContainer, session }, params, reque
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       return { ...val, dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}` };
-    }); // satisfies z.ZodType<ApplicantInformationState>; TODO: Uncomment once the state has been reworked.
+    }) satisfies z.ZodType<ApplicantInformationState>;
 
   const parsedDataResult = applicantInformationSchema.safeParse({
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
@@ -148,9 +148,9 @@ export async function action({ context: { appContainer, session }, params, reque
       applicantInformation: {
         firstName: parsedDataResult.data.firstName,
         lastName: parsedDataResult.data.lastName,
+        dateOfBirth: parsedDataResult.data.dateOfBirth,
         socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
       },
-      dateOfBirth: parsedDataResult.data.dateOfBirth,
       ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
         // Handle marital-status back button
         newOrExistingMember: undefined,
@@ -222,7 +222,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 aria-description={t('applicant-information.name-instructions')}
                 autoComplete="given-name"
                 errorMessage={errors?.firstName}
-                defaultValue={defaultState.applicantInformation?.firstName ?? ''}
+                defaultValue={defaultState?.firstName ?? ''}
                 required
                 disableScreenReaderErrors
               />
@@ -234,7 +234,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 maxLength={100}
                 aria-description={t('applicant-information.name-instructions')}
                 autoComplete="family-name"
-                defaultValue={defaultState.applicantInformation?.lastName ?? ''}
+                defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errors?.lastName}
                 required
                 disableScreenReaderErrors
@@ -243,7 +243,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
             <DatePickerField
               id="date-of-birth"
               names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
-              defaultValue={defaultState.dateOfBirth ?? ''}
+              defaultValue={defaultState?.dateOfBirth ?? ''}
               legend={t('applicant-information.dob')}
               errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
               required
@@ -256,7 +256,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               inputMode="numeric"
               helpMessagePrimary={t('apply-adult:applicant-information.help-message.sin')}
               helpMessagePrimaryClassName="text-black"
-              defaultValue={defaultState.applicantInformation?.socialInsuranceNumber ?? ''}
+              defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
               required
               disableScreenReaderErrors

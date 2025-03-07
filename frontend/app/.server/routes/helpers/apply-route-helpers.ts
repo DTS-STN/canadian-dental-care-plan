@@ -20,6 +20,7 @@ export type ApplyState = ReadonlyDeep<{
   applicantInformation?: {
     firstName: string;
     lastName: string;
+    dateOfBirth: string;
     socialInsuranceNumber: string;
   };
   applicationYear: {
@@ -55,7 +56,6 @@ export type ApplyState = ReadonlyDeep<{
   email?: string;
   hasFederalProvincialTerritorialBenefits?: boolean;
   maritalStatus?: string;
-  dateOfBirth?: string; // TODO: once all pages are re-worked, this can be removed. (We will use applicantInformation.dateOfBirth)
   dentalBenefits?: {
     hasFederalBenefits: boolean;
     federalSocialProgram?: string;
