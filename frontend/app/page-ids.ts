@@ -42,7 +42,8 @@ export const pageIds = {
         applicantInformation: 'CDCP-APPL-AD-0006',
         partnerInformation: 'CDCP-APPL-AD-0007',
         maritalStatus: 'CDCP-APPL-AD-0007', // TODO: Check the correct page ID.
-        contactInformation: 'CDCP-APPL-AD-0008',
+        mailingAddress: 'CDCP-APPL-AD-0008', // TODO: Check the correct page ID.
+        homeAddress: 'CDCP-APPL-AD-0008', // TODO: Check the correct page ID.
         communicationPreference: 'CDCP-APPL-AD-0009',
         dentalInsurance: 'CDCP-APPL-AD-0010',
         confirmFederalProvincialTerritorialBenefits: 'CDCP-APPL-AD-0011',
@@ -60,8 +61,9 @@ export const pageIds = {
       adultChild: {
         applicantInformation: 'CDCP-APPL-ADCH-0006',
         partnerInformation: 'CDCP-APPL-ADCH-0007',
-        maritalStatus: 'CDCP-APPL-AD-0007', // TODO: Check the correct page ID.
-        contactInformation: 'CDCP-APPL-ADCH-0008',
+        maritalStatus: 'CDCP-APPL-ADCH-0007', // TODO: Check the correct page ID.
+        mailingAddress: 'CDCP-APPL-ADCH-0008', // TODO: Check the correct page ID.
+        homeAddress: 'CDCP-APPL-ADCH-0008', // TODO: Check the correct page ID.
         communicationPreference: 'CDCP-APPL-ADCH-0009',
         dentalInsurance: 'CDCP-APPL-ADCH-0010',
         confirmFederalProvincialTerritorialBenefits: 'CDCP-APPL-ADCH-0011',
@@ -85,8 +87,9 @@ export const pageIds = {
       child: {
         dateOfBirthEligibility: 'CDCP-APPL-CH-0004',
         applicantInformation: 'CDCP-APPL-CH-0005',
+        mailingAddress: 'CDCP-APPL-CH-0008', // TODO: Check the correct page ID.
+        homeAddress: 'CDCP-APPL-CH-0008', // TODO: Check the correct page ID.
         partnerInformation: 'CDCP-APPL-CH-0006',
-        contactInformation: 'CDCP-APPL-CH-0007',
         communicationPreference: 'CDCP-APPL-CH-0008',
         dentalInsurance: 'CDCP-APPL-CH-0009',
         federalProvincialTerritorialBenefits: 'CDCP-APPL-CH-0010',

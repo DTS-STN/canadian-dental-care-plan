@@ -79,6 +79,48 @@
       "client-number-valid": "Client Number must be 11 digits"
     }
   },
+  "address": {
+    "mailing-address": {
+      "page-title": "Mailing address",
+      "header": "Mailing address"
+    },
+    "home-address": {
+      "page-title": "Home address",
+      "use-mailing-address": "My mailing address is the same as my home address"
+    },
+    "address-field": {
+      "address": "Address",
+      "address-note": "Include apartment number (if applicable), street number, street name. For example: 123 Main St. Suite 4B",
+      "country": "Country",
+      "province": "Province, territory, state, or region",
+      "city": "City or town",
+      "postal-code": "Postal code or ZIP code",
+      "postal-code-optional": "Postal code or ZIP code (optional)",
+      "select-one": "Select one"
+    },
+    "dialog": {
+      "address-suggestion": {
+        "address-selection-legend": "Please select an address option below:",
+        "cancel-button": "Back",
+        "description": "There's a problem with the address you provided. Please select the address you want to use. If you live in an apartment or suite, make sure to include that information.",
+        "entered-address-option": "Entered address:",
+        "header": "Verify your address",
+        "suggested-address-option": "Suggested corrected address:",
+        "use-selected-address-button": "Use selected address"
+      },
+      "address-invalid": {
+        "close-button": "Back",
+        "description": "We could not verify your address. You can either update it or continue with the address you entered. If you live in an apartment or suite, make sure to include that information.",
+        "entered-address": "Entered address:",
+        "header": "Verify your address",
+        "use-entered-address-button": "Use entered address"
+      }
+    },
+    "back": "Back",
+    "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save"
+  },
   "phone-number": {
     "page-title": "Phone Number",
     "phone-number": "Phone number (optional)",
