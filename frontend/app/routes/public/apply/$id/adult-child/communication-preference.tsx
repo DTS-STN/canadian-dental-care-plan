@@ -134,7 +134,11 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult-child/dental-insurance', params));
+  if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === 'mail') {
+    return redirect(getPathById('public/apply/$id/adult-child/dental-insurance', params));
+  }
+
+  return redirect(getPathById('public/apply/$id/adult-child/email', params));
 }
 
 export default function ApplyFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
@@ -261,7 +265,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
                 {
                   value: PREFERRED_NOTIFICATION_METHOD.mail,
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:communication-preference.preferred-notification-method-mail" components={{ mscaLinkAccount }} />,
-                  defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
+                  defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail,
                 },
               ]}
               required
