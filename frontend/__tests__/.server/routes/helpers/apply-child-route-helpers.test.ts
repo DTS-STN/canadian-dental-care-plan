@@ -178,6 +178,25 @@ describe('apply-child-route-helpers', () => {
         ],
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '99',
+        mailingAddress: {
+          address: '123 Maple St',
+          city: 'Toronto',
+          country: 'Canada',
+          postalCode: 'M5H 2N2',
+          province: 'ON',
+        },
+        homeAddress: {
+          address: '123 Maple St',
+          city: 'Toronto',
+          country: 'Canada',
+          postalCode: 'M5H 2N2',
+          province: 'ON',
+        },
+        contactInformation: {
+          phoneNumber: '123-456-7890',
+          phoneNumberAlt: '987-654-3210',
+          email: 'test@example.com',
+        },
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
       } satisfies ApplyState;
 
@@ -232,7 +251,25 @@ describe('apply-child-route-helpers', () => {
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
-        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
+        mailingAddress: {
+          address: '123 Maple St',
+          city: 'Toronto',
+          country: 'Canada',
+          postalCode: 'M5H 2N2',
+          province: 'ON',
+        },
+        homeAddress: {
+          address: '123 Maple St',
+          city: 'Toronto',
+          country: 'Canada',
+          postalCode: 'M5H 2N2',
+          province: 'ON',
+        },
+        contactInformation: {
+          phoneNumber: '123-456-7890',
+          phoneNumberAlt: '987-654-3210',
+          email: 'test@example.com',
+        },
         communicationPreferences: undefined,
       } satisfies ApplyState;
 
@@ -261,7 +298,25 @@ describe('apply-child-route-helpers', () => {
         maritalStatus: '1',
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
-        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
+        mailingAddress: {
+          address: '123 Maple St',
+          city: 'Toronto',
+          country: 'Canada',
+          postalCode: 'M5H 2N2',
+          province: 'ON',
+        },
+        homeAddress: {
+          address: '123 Maple St',
+          city: 'Toronto',
+          country: 'Canada',
+          postalCode: 'M5H 2N2',
+          province: 'ON',
+        },
+        contactInformation: {
+          phoneNumber: '123-456-7890',
+          phoneNumberAlt: '987-654-3210',
+          email: 'test@example.com',
+        },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
       } satisfies ApplyState;
 
@@ -291,7 +346,25 @@ describe('apply-child-route-helpers', () => {
         id: '00000000-0000-0000-0000-000000000000',
         lastUpdatedOn: '2000-01-01',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
-        contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
+        mailingAddress: {
+          address: '123 Maple St',
+          city: 'Toronto',
+          country: 'Canada',
+          postalCode: 'M5H 2N2',
+          province: 'ON',
+        },
+        homeAddress: {
+          address: '123 Maple St',
+          city: 'Toronto',
+          country: 'Canada',
+          postalCode: 'M5H 2N2',
+          province: 'ON',
+        },
+        contactInformation: {
+          phoneNumber: '123-456-7890',
+          phoneNumberAlt: '987-654-3210',
+          email: 'test@example.com',
+        },
         submissionInfo: undefined,
         taxFiling2023: true,
         typeOfApplication: 'child',

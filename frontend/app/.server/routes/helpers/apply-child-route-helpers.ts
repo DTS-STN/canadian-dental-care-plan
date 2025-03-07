@@ -116,7 +116,7 @@ interface ValidateStateForReviewArgs {
 }
 
 export function validateApplyChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
-  const { applicantInformation, applicationYear, communicationPreferences, maritalStatus, editMode, id, lastUpdatedOn, partnerInformation, contactInformation, submissionInfo, taxFiling2023, typeOfApplication } = state;
+  const { applicantInformation, applicationYear, communicationPreferences, maritalStatus, editMode, id, lastUpdatedOn, partnerInformation, mailingAddress, homeAddress, contactInformation, submissionInfo, taxFiling2023, typeOfApplication } = state;
 
   if (typeOfApplication === undefined) {
     throw redirect(getPathById('public/apply/$id/type-application', params));
@@ -166,7 +166,24 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('public/apply/$id/child/communication-preference', params));
   }
 
-  return { ageCategory, applicantInformation, applicationYear, children, communicationPreferences, contactInformation, maritalStatus, editMode, id, lastUpdatedOn, partnerInformation, submissionInfo, taxFiling2023, typeOfApplication };
+  return {
+    ageCategory,
+    applicantInformation,
+    applicationYear,
+    children,
+    communicationPreferences,
+    contactInformation,
+    maritalStatus,
+    editMode,
+    id,
+    lastUpdatedOn,
+    partnerInformation,
+    mailingAddress,
+    homeAddress,
+    submissionInfo,
+    taxFiling2023,
+    typeOfApplication,
+  };
 }
 
 interface ValidateChildrenStateForReviewArgs {

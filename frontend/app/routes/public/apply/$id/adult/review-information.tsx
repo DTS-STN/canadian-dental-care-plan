@@ -54,7 +54,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadApplyAdultStateForReview({ params, request, session });
 
-  invariant(state.contactInformation.homeCountry, `Unexpected home address country: ${state.contactInformation.homeCountry}`);
+  invariant(state.mailingAddress?.country, `Unexpected mailing address country: ${state.mailingAddress?.country}`);
 
   // apply state is valid then edit mode can be set to true
   saveApplyState({ params, session, state: { editMode: true } });
@@ -63,10 +63,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
-  const countryMailing = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
-  const countryHome = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.contactInformation.homeCountry, locale);
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
+  const countryMailing = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
+  const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name : undefined;
   const communicationSunLifePreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
@@ -94,21 +94,19 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const mailingAddressInfo = {
-    address: state.contactInformation.mailingAddress,
-    city: state.contactInformation.mailingCity,
+    address: state.mailingAddress.address,
+    city: state.mailingAddress.city,
     province: mailingProvinceTerritoryStateAbbr,
-    postalCode: state.contactInformation.mailingPostalCode,
+    postalCode: state.mailingAddress.postalCode,
     country: countryMailing,
-    apartment: state.contactInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.contactInformation.homeAddress,
-    city: state.contactInformation.homeCity,
+    address: state.homeAddress?.address,
+    city: state.homeAddress?.city,
     province: homeProvinceTerritoryStateAbbr,
-    postalCode: state.contactInformation.homePostalCode,
+    postalCode: state.homeAddress?.postalCode,
     country: countryHome,
-    apartment: state.contactInformation.homeApartment,
   };
 
   const dentalInsurance = state.dentalInsurance;
@@ -341,7 +339,6 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                     provinceState: mailingAddressInfo.province,
                     postalZipCode: mailingAddressInfo.postalCode,
                     country: mailingAddressInfo.country.name,
-                    apartment: mailingAddressInfo.apartment,
                   }}
                 />
                 <div className="mt-4">
@@ -357,8 +354,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                     city: homeAddressInfo.city ?? '',
                     provinceState: homeAddressInfo.province,
                     postalZipCode: homeAddressInfo.postalCode,
-                    country: homeAddressInfo.country.name,
-                    apartment: homeAddressInfo.apartment,
+                    country: homeAddressInfo.country ?? '',
                   }}
                 />
                 <div className="mt-4">
