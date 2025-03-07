@@ -310,6 +310,20 @@
       "preferred-notification-method-required": "(FR) Select preferred notification method"
     }
   },
+  "email": {
+    "page-title": "Adresse courriel",
+    "provide-email": "Fournissez l'adresse courriel que vous souhaitez que le gouvernement du Canada ou la Sun Life utilise pour communiquer avec vous au sujet de votre adhésion au Régime canadien de soins dentaires.",
+    "verify-email": "Nous devons vérifier votre adresse courriel.",
+    "email-legend": "Adresse courriel",
+    "back": "Retour",
+    "continue": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
+    "error-message": {
+      "email-required": "Entrez l'adresse courriel",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com"
+    }
+  },
   "confirm": {
     "page-title": "Demande soumise avec succès",
     "app-code-is": "Votre code de demande est\u00a0:",
