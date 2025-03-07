@@ -133,7 +133,11 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
+  if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === 'mail') {
+    return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
+  }
+
+  return redirect(getPathById('public/apply/$id/adult/email', params));
 }
 
 export default function ApplyFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
