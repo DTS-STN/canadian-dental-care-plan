@@ -133,7 +133,6 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       communicationPreferences: parsedDataResult.data,
-      editMode: true, // last step in the flow
     },
   });
 
@@ -141,7 +140,11 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/child/review-child-information', params));
+  if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === 'mail') {
+    return redirect(getPathById('public/apply/$id/child/review-child-information', params));
+  }
+
+  return redirect(getPathById('public/apply/$id/child/email', params));
 }
 
 export default function ApplyFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {

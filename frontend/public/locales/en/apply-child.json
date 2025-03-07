@@ -310,6 +310,20 @@
       "preferred-notification-method-required": "Select preferred notification method"
     }
   },
+  "email": {
+    "page-title": "Email",
+    "provide-email": "Provide the email address you'd like the Government of Canada and/or Sun Life to use to contact you about your Canadian Dental Care Plan coverage.",
+    "verify-email": "We will need to verify your email address.",
+    "email-legend": "Email address",
+    "back": "Back",
+    "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "error-message": {
+      "email-required": "Enter email address",
+      "email-valid": "Enter an email address in the correct format, such as name@example.com"
+    }
+  },
   "confirm": {
     "page-title": "Application successfully submitted",
     "app-code-is": "Your application code is:",
