@@ -120,7 +120,6 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     applicantInformation,
     applicationYear,
     communicationPreferences,
-    dateOfBirth,
     maritalStatus,
     hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
@@ -157,11 +156,11 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/apply/$id/file-taxes', params));
   }
 
-  if (dateOfBirth === undefined) {
+  if (applicantInformation === undefined) {
     throw redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
-  const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(applicantInformation.dateOfBirth);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
@@ -173,10 +172,6 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
 
   if (ageCategory === 'adults' && disabilityTaxCredit === undefined) {
     throw redirect(getPathById('public/apply/$id/adult-child/disability-tax-credit', params));
-  }
-
-  if (applicantInformation === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
@@ -213,7 +208,6 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     children,
     communicationPreferences,
     contactInformation,
-    dateOfBirth,
     maritalStatus,
     hasFederalProvincialTerritorialBenefits,
     dentalBenefits,

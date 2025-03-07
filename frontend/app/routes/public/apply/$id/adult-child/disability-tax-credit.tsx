@@ -47,8 +47,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:disability-tax-credit.page-title') }) };
 
-  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
+  invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
   if (ageCategory !== 'adults') {
     return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
@@ -82,8 +82,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveApplyState({ params, session, state: { disabilityTaxCredit: parsedDataResult.data.disabilityTaxCredit === DISABILITY_TAX_CREDIT_OPTION.yes } });
 
-  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
+  invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));

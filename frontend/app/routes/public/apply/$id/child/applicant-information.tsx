@@ -10,6 +10,7 @@ import type { Route } from './+types/applicant-information';
 import { TYPES } from '~/.server/constants';
 import { loadApplyChildState } from '~/.server/routes/helpers/apply-child-route-helpers';
 import { getAgeCategoryFromDateString, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import type { ApplicantInformationState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -54,8 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:applicant-information.page-title') }) };
 
-  // TODO: Once the state has been reworked, we can change 'defaultState' to 'defaultState: state.applicantInformation'
-  return { id: state.id, meta, defaultState: state, editMode: state.editMode };
+  return { id: state.id, meta, defaultState: state.applicantInformation, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -125,7 +125,7 @@ export async function action({ context: { appContainer, session }, params, reque
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       return { ...val, dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}` };
-    }); // satisfies z.ZodType<ApplicantInformationState>; TODO: Uncomment once the state has been reworked.
+    }) satisfies z.ZodType<ApplicantInformationState>;
 
   const parsedDataResult = applicantInformationSchema.safeParse({
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
@@ -150,9 +150,9 @@ export async function action({ context: { appContainer, session }, params, reque
       applicantInformation: {
         firstName: parsedDataResult.data.firstName,
         lastName: parsedDataResult.data.lastName,
+        dateOfBirth: parsedDataResult.data.dateOfBirth,
         socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
       },
-      dateOfBirth: parsedDataResult.data.dateOfBirth,
       ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
         // Handle marital-status back button
         newOrExistingMember: undefined,
@@ -221,7 +221,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 aria-description={t('applicant-information.name-instructions')}
                 autoComplete="given-name"
                 errorMessage={errors?.firstName}
-                defaultValue={defaultState.applicantInformation?.firstName ?? ''}
+                defaultValue={defaultState?.firstName ?? ''}
                 required
                 disableScreenReaderErrors
               />
@@ -232,7 +232,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 className="w-full"
                 maxLength={100}
                 autoComplete="family-name"
-                defaultValue={defaultState.applicantInformation?.lastName ?? ''}
+                defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errors?.lastName}
                 aria-description={t('applicant-information.name-instructions')}
                 required
@@ -246,7 +246,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 month: 'dateOfBirthMonth',
                 year: 'dateOfBirthYear',
               }}
-              defaultValue={defaultState.dateOfBirth ?? ''}
+              defaultValue={defaultState?.dateOfBirth ?? ''}
               legend={t('apply-child:applicant-information.date-of-birth')}
               errorMessages={{
                 all: errors?.dateOfBirth,
@@ -265,7 +265,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               inputMode="numeric"
               helpMessagePrimary={t('apply-child:applicant-information.help-message.sin')}
               helpMessagePrimaryClassName="text-black"
-              defaultValue={defaultState.applicantInformation?.socialInsuranceNumber ?? ''}
+              defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
               required
               disableScreenReaderErrors

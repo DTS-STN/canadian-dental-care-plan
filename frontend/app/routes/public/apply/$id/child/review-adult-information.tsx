@@ -75,7 +75,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.contactInformation.phoneNumber,
     altPhoneNumber: state.contactInformation.phoneNumberAlt,
-    birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
+    birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: maritalStatus,
     contactInformationEmail: state.contactInformation.email,

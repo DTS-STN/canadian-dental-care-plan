@@ -116,7 +116,7 @@ interface ValidateStateForReviewArgs {
 }
 
 export function validateApplyChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
-  const { applicantInformation, applicationYear, communicationPreferences, dateOfBirth, maritalStatus, editMode, id, lastUpdatedOn, partnerInformation, contactInformation, submissionInfo, taxFiling2023, typeOfApplication } = state;
+  const { applicantInformation, applicationYear, communicationPreferences, maritalStatus, editMode, id, lastUpdatedOn, partnerInformation, contactInformation, submissionInfo, taxFiling2023, typeOfApplication } = state;
 
   if (typeOfApplication === undefined) {
     throw redirect(getPathById('public/apply/$id/type-application', params));
@@ -140,11 +140,11 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
 
   const children = validateChildrenStateForReview({ childrenState: state.children, params });
 
-  if (applicantInformation === undefined || dateOfBirth === undefined) {
+  if (applicantInformation === undefined) {
     throw redirect(getPathById('public/apply/$id/child/applicant-information', params));
   }
 
-  const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(applicantInformation.dateOfBirth);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('public/apply/$id/child/contact-apply-child', params));
@@ -166,7 +166,7 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('public/apply/$id/child/communication-preference', params));
   }
 
-  return { ageCategory, applicantInformation, applicationYear, children, communicationPreferences, contactInformation, dateOfBirth, maritalStatus, editMode, id, lastUpdatedOn, partnerInformation, submissionInfo, taxFiling2023, typeOfApplication };
+  return { ageCategory, applicantInformation, applicationYear, children, communicationPreferences, contactInformation, maritalStatus, editMode, id, lastUpdatedOn, partnerInformation, submissionInfo, taxFiling2023, typeOfApplication };
 }
 
 interface ValidateChildrenStateForReviewArgs {

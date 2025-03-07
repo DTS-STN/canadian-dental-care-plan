@@ -118,26 +118,6 @@ describe('apply-child-route-helpers', () => {
       );
     });
 
-    it('should redirect if dateOfBirth is undefined', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'child',
-        taxFiling2023: true,
-        children: [
-          {
-            id: '1',
-            information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' },
-            dentalInsurance: true,
-            hasFederalProvincialTerritorialBenefits: false,
-            dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
-          },
-        ],
-        dateOfBirth: undefined,
-      } satisfies ApplyState;
-
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/child/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
-    });
-
     it('should redirect if applicantInformation is undefined', () => {
       const mockState = {
         ...baseState,
@@ -152,7 +132,6 @@ describe('apply-child-route-helpers', () => {
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
-        dateOfBirth: '1900-01-01',
         applicantInformation: undefined,
       } satisfies ApplyState;
 
@@ -173,8 +152,7 @@ describe('apply-child-route-helpers', () => {
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
-        dateOfBirth: '2022-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '2022-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
       } satisfies ApplyState;
 
@@ -198,8 +176,7 @@ describe('apply-child-route-helpers', () => {
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
-        dateOfBirth: '1900-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '99',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
       } satisfies ApplyState;
@@ -225,8 +202,7 @@ describe('apply-child-route-helpers', () => {
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
-        dateOfBirth: '1900-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
         contactInformation: undefined,
@@ -253,8 +229,7 @@ describe('apply-child-route-helpers', () => {
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
-        dateOfBirth: '1900-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
         contactInformation: { copyMailingAddress: true, mailingAddress: '123 rue Peuplier', mailingCity: 'City', mailingCountry: 'Country' },
@@ -282,8 +257,7 @@ describe('apply-child-route-helpers', () => {
             dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
           },
         ],
-        dateOfBirth: '1900-01-01',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
         partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
@@ -299,7 +273,7 @@ describe('apply-child-route-helpers', () => {
 
       expect(act).toEqual({
         ageCategory: 'seniors',
-        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-001' },
+        applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
         children: [
           {
@@ -312,7 +286,6 @@ describe('apply-child-route-helpers', () => {
           },
         ],
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
-        dateOfBirth: '1900-01-01',
         maritalStatus: '1',
         editMode: false,
         id: '00000000-0000-0000-0000-000000000000',

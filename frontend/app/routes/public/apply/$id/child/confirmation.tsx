@@ -46,7 +46,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   // prettier-ignore
   if (state.applicantInformation === undefined ||
     state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
     state.contactInformation?.homeCountry === undefined ||
     state.submissionInfo === undefined ||
     state.taxFiling2023 === undefined ||
@@ -69,7 +68,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     phoneNumber: state.contactInformation.phoneNumber,
     altPhoneNumber: state.contactInformation.phoneNumberAlt,
     preferredLanguage: preferredLanguage.name,
-    birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
+    birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
     contactInformationEmail: state.contactInformation.email,

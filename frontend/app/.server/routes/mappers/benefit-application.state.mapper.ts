@@ -21,7 +21,6 @@ export interface ApplyAdultState {
   applicationYear: ApplicationYearState;
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
-  dateOfBirth: string;
   maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
@@ -37,7 +36,6 @@ export interface ApplyAdultChildState {
   children: Required<ChildState>[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
-  dateOfBirth: string;
   maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
@@ -53,7 +51,6 @@ export interface ApplyChildState {
   children: Required<ChildState>[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
-  dateOfBirth: string;
   maritalStatus?: string;
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
@@ -67,7 +64,6 @@ interface ToBenefitApplicationDtoArgs {
   children?: Required<ChildState>[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
-  dateOfBirth: string;
   maritalStatus?: string;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance?: boolean;
@@ -93,7 +89,7 @@ export interface BenefitApplicationStateMapper {
 @injectable()
 export class DefaultBenefitApplicationStateMapper implements BenefitApplicationStateMapper {
   mapApplyAdultStateToBenefitApplicationDto(applyAdultState: ApplyAdultState): BenefitApplicationDto {
-    const ageCategory = getAgeCategoryFromDateString(applyAdultState.dateOfBirth);
+    const ageCategory = getAgeCategoryFromDateString(applyAdultState.applicantInformation.dateOfBirth);
     if (ageCategory === 'adults' && applyAdultState.disabilityTaxCredit === undefined) {
       throw Error('Expected disabilityTaxCredit to be defined');
     }
@@ -110,7 +106,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
   }
 
   mapApplyAdultChildStateToBenefitApplicationDto(applyAdultChildState: ApplyAdultChildState): BenefitApplicationDto {
-    const ageCategory = getAgeCategoryFromDateString(applyAdultChildState.dateOfBirth);
+    const ageCategory = getAgeCategoryFromDateString(applyAdultChildState.applicantInformation.dateOfBirth);
     if (ageCategory === 'adults' && applyAdultChildState.disabilityTaxCredit === undefined) {
       throw Error('Expected disabilityTaxCredit to be defined');
     }
@@ -135,7 +131,6 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     applicationYear,
     children,
     communicationPreferences,
-    dateOfBirth,
     maritalStatus,
     dentalBenefits,
     dentalInsurance,
@@ -154,7 +149,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       children: this.toChildren(children),
       communicationPreferences,
       contactInformation: this.toContactInformation(contactInformation),
-      dateOfBirth,
+      dateOfBirth: applicantInformation.dateOfBirth,
       maritalStatus,
       dentalBenefits: this.toDentalBenefits(dentalBenefits),
       dentalInsurance,

@@ -47,7 +47,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadApplyAdultChildState({ params, request, session });
-  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
+  invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
   saveApplyState({ params, session, state: { editMode: false, typeOfApplication: 'adult' } });
 
   return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
