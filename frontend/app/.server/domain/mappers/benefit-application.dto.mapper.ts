@@ -45,7 +45,6 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     dateOfBirth,
     dentalBenefits,
     dentalInsurance,
-    disabilityTaxCredit,
     livingIndependently,
     partnerInformation,
     typeOfApplication,
@@ -55,7 +54,6 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         Applicant: {
           ApplicantDetail: {
             PrivateDentalInsuranceIndicator: dentalInsurance,
-            DisabilityTaxCreditIndicator: disabilityTaxCredit,
             LivingIndependentlyIndicator: livingIndependently,
             InsurancePlan: this.toInsurancePlan(dentalBenefits),
           },
