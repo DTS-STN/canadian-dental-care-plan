@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirm-email';
 
 import { TYPES } from '~/.server/constants';
-import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isInvitationToApplyClient, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button } from '~/components/buttons';
@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  if (!state.clientApplication.isInvitationToApplyClient && !state.editMode) {
+  if (!isInvitationToApplyClient(state.clientApplication) && !state.editMode) {
     throw new Response('Not Found', { status: 404 });
   }
 

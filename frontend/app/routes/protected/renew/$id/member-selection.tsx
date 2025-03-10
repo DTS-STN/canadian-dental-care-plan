@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/member-selection';
 
 import { TYPES } from '~/.server/constants';
-import { isChildrenStateComplete, isPrimaryApplicantStateComplete, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isChildrenStateComplete, isInvitationToApplyClient, isPrimaryApplicantStateComplete, loadProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import type { AppLinkProps } from '~/components/app-link';
@@ -62,7 +62,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       : [{ id: state.id, applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`, previouslyReviewed: state.previouslyReviewed, typeOfApplicant: 'primary' }]
   ).concat(state.children.map((child) => ({ id: child.id, applicantName: `${child.information?.firstName} ${child.information?.lastName}`, previouslyReviewed: child.previouslyReviewed, typeOfApplicant: 'child' })));
 
-  return { meta, members, isItaCandidate: state.clientApplication.isInvitationToApplyClient };
+  return { meta, members, isItaCandidate: isInvitationToApplyClient(state.clientApplication) };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

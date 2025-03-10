@@ -423,3 +423,7 @@ export function validateProtectedChildrenStateForReview(childrenState: Protected
       };
     });
 }
+
+export function isInvitationToApplyClient(clientApplication: ProtectedClientApplicationState) {
+  return clientApplication.isInvitationToApplyClient || clientApplication.applicantInformation.maritalStatus === undefined;
+}

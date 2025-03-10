@@ -12,7 +12,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirm-home-address';
 
 import { TYPES } from '~/.server/constants';
-import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isInvitationToApplyClient, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
@@ -81,7 +81,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedRenewState({ params, request, session });
 
-  if (!state.clientApplication.isInvitationToApplyClient && !state.editMode) {
+  if (!isInvitationToApplyClient(state.clientApplication) && !state.editMode) {
     throw new Response('Not Found', { status: 404 });
   }
 
@@ -148,7 +148,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const canProceedToReview = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
   if (canProceedToReview) {
     saveProtectedRenewState({ params, request, session, state: { homeAddress } });
-    if (state.editMode === false && state.clientApplication.isInvitationToApplyClient) {
+    if (state.editMode === false && isInvitationToApplyClient(state.clientApplication)) {
       return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
     }
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
@@ -210,7 +210,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-home-address', { userId: idToken.sub });
 
-  if (state.editMode === false && state.clientApplication.isInvitationToApplyClient) {
+  if (state.editMode === false && isInvitationToApplyClient(state.clientApplication)) {
     return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
   }
 
