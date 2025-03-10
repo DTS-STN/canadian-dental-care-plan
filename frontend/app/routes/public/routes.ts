@@ -31,11 +31,6 @@ export const routes = [
           },
           { id: 'public/apply/$id/adult/partner-information', file: 'routes/public/apply/$id/adult/partner-information.tsx', paths: { en: '/:lang/apply/:id/adult/partner-information', fr: '/:lang/demander/:id/adulte/renseignements-partenaire' } },
           { id: 'public/apply/$id/adult/review-information', file: 'routes/public/apply/$id/adult/review-information.tsx', paths: { en: '/:lang/apply/:id/adult/review-information', fr: '/:lang/demander/:id/adulte/revue-renseignements' } },
-          {
-            id: 'public/apply/$id/adult/disability-tax-credit',
-            file: 'routes/public/apply/$id/adult/disability-tax-credit.tsx',
-            paths: { en: '/:lang/apply/:id/adult/disability-tax-credit', fr: '/:lang/demander/:id/adulte/credit-impot-personnes-handicapees' },
-          },
           { id: 'public/apply/$id/adult/parent-or-guardian', file: 'routes/public/apply/$id/adult/parent-or-guardian.tsx', paths: { en: '/:lang/apply/:id/adult/parent-or-guardian', fr: '/:lang/demander/:id/adulte/parent-ou-tuteur' } },
           { id: 'public/apply/$id/adult/living-independently', file: 'routes/public/apply/$id/adult/living-independently.tsx', paths: { en: '/:lang/apply/:id/adult/living-independently', fr: '/:lang/demander/:id/adulte/vivre-maniere-independante' } },
           { id: 'public/apply/$id/adult/new-or-existing-member', file: 'routes/public/apply/$id/adult/new-or-existing-member.tsx', paths: { en: '/:lang/apply/:id/adult/new-or-existing-member', fr: '/:lang/demander/:id/adulte/new-or-existing-member' } }, // TODO: Update French route
@@ -109,11 +104,6 @@ export const routes = [
           },
           { id: 'public/apply/$id/adult-child/apply-yourself', file: 'routes/public/apply/$id/adult-child/apply-yourself.tsx', paths: { en: '/:lang/apply/:id/adult-child/apply-yourself', fr: '/:lang/demander/:id/adulte-enfant/postulez-vous-meme' } },
           { id: 'public/apply/$id/adult-child/dental-insurance', file: 'routes/public/apply/$id/adult-child/dental-insurance.tsx', paths: { en: '/:lang/apply/:id/adult-child/dental-insurance', fr: '/:lang/demander/:id/adulte-enfant/assurance-dentaire' } },
-          {
-            id: 'public/apply/$id/adult-child/disability-tax-credit',
-            file: 'routes/public/apply/$id/adult-child/disability-tax-credit.tsx',
-            paths: { en: '/:lang/apply/:id/adult-child/disability-tax-credit', fr: '/:lang/demander/:id/adulte-enfant/credit-impot-personnes-handicapees' },
-          },
           {
             id: 'public/apply/$id/adult-child/parent-or-guardian',
             file: 'routes/public/apply/$id/adult-child/parent-or-guardian.tsx',

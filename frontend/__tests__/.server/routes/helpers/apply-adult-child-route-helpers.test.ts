@@ -62,14 +62,6 @@ describe('apply-adult-child-route-helpers', () => {
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult-child/parent-or-guardian, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it('should redirect if age category is "adult" and disabilityTaxCredit is undefined', () => {
-      const mockState = { ...baseState, typeOfApplication: 'adult-child', taxFiling2023: true, applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1985-01-10', socialInsuranceNumber: '000-000-001' } } satisfies ApplyState;
-
-      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('adults');
-
-      expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult-child/disability-tax-credit, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
-    });
-
     it('should redirect if applicantInformation is undefined', () => {
       const mockState = { ...baseState, typeOfApplication: 'adult-child', taxFiling2023: true, applicantInformation: undefined } satisfies ApplyState;
 
@@ -342,7 +334,6 @@ describe('apply-adult-child-route-helpers', () => {
         hasFederalProvincialTerritorialBenefits: false,
         dentalBenefits: { hasFederalBenefits: false, hasProvincialTerritorialBenefits: false },
         dentalInsurance: false,
-        disabilityTaxCredit: undefined,
         editMode: false,
         id: '00000000-0000-0000-0000-000000000000',
         lastUpdatedOn: '2000-01-01',

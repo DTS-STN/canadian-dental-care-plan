@@ -64,7 +64,6 @@ export type ApplyState = ReadonlyDeep<{
     province?: string;
   };
   dentalInsurance?: boolean;
-  disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: {
     confirm: boolean;

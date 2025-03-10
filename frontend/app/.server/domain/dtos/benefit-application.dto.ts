@@ -9,7 +9,6 @@ export type BenefitApplicationDto = ReadonlyDeep<{
   dateOfBirth: string;
   dentalBenefits: string[];
   dentalInsurance?: boolean;
-  disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationDto;
   typeOfApplication: TypeOfApplicationDto;
