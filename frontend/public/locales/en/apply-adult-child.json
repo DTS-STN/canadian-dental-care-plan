@@ -579,23 +579,6 @@
       "dental-insurance-required": "Select whether you have access to dental insurance"
     }
   },
-  "disability-tax-credit": {
-    "page-title": "Disability tax credit",
-    "non-refundable": "The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",
-    "more-info": "<dtcLink>For more information on the disability tax credit (DTC)</dtcLink>",
-    "form-label": "Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for 2023?",
-    "dtc-link": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/segments/tax-credits-deductions-persons-disabilities/disability-tax-credit.html",
-    "radio-options": {
-      "yes": "Yes",
-      "no": "No"
-    },
-    "continue-btn": "Continue",
-    "back-btn": "Back",
-    "save-btn": "Save",
-    "error-message": {
-      "disability-tax-credit-required": "Select whether or not you have a valid disability tax credit"
-    }
-  },
   "eligibility": {
     "apply-children": {
       "page-title": "Apply for your child(ren)",

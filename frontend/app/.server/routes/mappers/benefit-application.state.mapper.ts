@@ -26,7 +26,6 @@ export interface ApplyAdultState {
   maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
-  disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   mailingAddress?: MailingAddressState;
   homeAddress?: HomeAddressState;
@@ -47,7 +46,6 @@ export interface ApplyAdultChildState {
   mailingAddress?: MailingAddressState;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult-child'>;
@@ -60,7 +58,6 @@ export interface ApplyChildState {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   maritalStatus?: string;
-  disabilityTaxCredit?: boolean;
   mailingAddress?: MailingAddressState;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
@@ -78,7 +75,6 @@ interface ToBenefitApplicationDtoArgs {
   maritalStatus?: string;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance?: boolean;
-  disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   mailingAddress?: MailingAddressState;
   homeAddress?: HomeAddressState;
@@ -117,34 +113,24 @@ export interface BenefitApplicationStateMapper {
 export class DefaultBenefitApplicationStateMapper implements BenefitApplicationStateMapper {
   mapApplyAdultStateToBenefitApplicationDto(applyAdultState: ApplyAdultState): BenefitApplicationDto {
     const ageCategory = getAgeCategoryFromDateString(applyAdultState.applicantInformation.dateOfBirth);
-    if (ageCategory === 'adults' && applyAdultState.disabilityTaxCredit === undefined) {
-      throw Error('Expected disabilityTaxCredit to be defined');
-    }
-
     if (ageCategory === 'youth' && applyAdultState.livingIndependently === undefined) {
       throw Error('Expected livingIndependently to be defined');
     }
 
     return this.toBenefitApplicationDto({
       ...applyAdultState,
-      disabilityTaxCredit: ageCategory === 'adults' ? applyAdultState.disabilityTaxCredit : undefined,
       livingIndependently: ageCategory === 'youth' ? applyAdultState.livingIndependently : undefined,
     });
   }
 
   mapApplyAdultChildStateToBenefitApplicationDto(applyAdultChildState: ApplyAdultChildState): BenefitApplicationDto {
     const ageCategory = getAgeCategoryFromDateString(applyAdultChildState.applicantInformation.dateOfBirth);
-    if (ageCategory === 'adults' && applyAdultChildState.disabilityTaxCredit === undefined) {
-      throw Error('Expected disabilityTaxCredit to be defined');
-    }
-
     if (ageCategory === 'youth' && applyAdultChildState.livingIndependently === undefined) {
       throw Error('Expected livingIndependently to be defined');
     }
 
     return this.toBenefitApplicationDto({
       ...applyAdultChildState,
-      disabilityTaxCredit: ageCategory === 'adults' ? applyAdultChildState.disabilityTaxCredit : undefined,
       livingIndependently: ageCategory === 'youth' ? applyAdultChildState.livingIndependently : undefined,
     });
   }
@@ -161,7 +147,6 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     maritalStatus,
     dentalBenefits,
     dentalInsurance,
-    disabilityTaxCredit,
     livingIndependently,
     partnerInformation,
     homeAddress,
@@ -183,7 +168,6 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       maritalStatus,
       dentalBenefits: this.toDentalBenefits(dentalBenefits),
       dentalInsurance,
-      disabilityTaxCredit,
       livingIndependently,
       partnerInformation,
       typeOfApplication,

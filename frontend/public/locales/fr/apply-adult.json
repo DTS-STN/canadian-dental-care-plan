@@ -390,23 +390,6 @@
     "yes": "Oui",
     "no": "Non"
   },
-  "disability-tax-credit": {
-    "page-title": "Crédit d'impôt pour personnes handicapées",
-    "non-refundable": "Le crédit d'impôt pour personnes handicapées (CIPH) est un crédit d'impôt non remboursable qui aide les personnes handicapées et les membres de leur famille à réduire l'impôt sur le revenu qu'ils pourraient avoir à payer.",
-    "more-info": "<dtcLink>Pour en savoir plus sur le crédit d'impôt pour personnes handicapées</dtcLink>",
-    "form-label": "Avez-vous un certificat valide pour le crédit d'impôt pour personnes handicapées (CIPH) auprès de l'Agence du revenu du Canada pour 2023?",
-    "dtc-link": "https://www.canada.ca/fr/agence-revenu/services/impot/particuliers/segments/deductions-credits-impot-personnes-handicapees/credit-impot-personnes-handicapees.html",
-    "radio-options": {
-      "yes": "Oui",
-      "no": "Non"
-    },
-    "continue-btn": "Continuer",
-    "back-btn": "Retour",
-    "save-btn": "Enregistrer",
-    "error-message": {
-      "disability-tax-credit-required": "Sélectionnez si vous avez un crédit d'impôt d'invalidité valide "
-    }
-  },
   "living-independently": {
     "page-title": "Vivre de manière indépendante",
     "description": "Vivre de manière indépendante signifie que vous avez 16 ou 17 ans, que vous ne recevez pas d'aide financière de vos parents et que votre résidence principale est différente de la leur.",

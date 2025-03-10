@@ -27,7 +27,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'contact-information'
       | 'date-of-birth'
       | 'dental-insurance'
-      | 'disability-tax-credit'
       | 'dob-eligibility'
       | 'confirm-federal-provincial-territorial-benefits'
       | 'federal-provincial-territorial-benefits'
@@ -99,10 +98,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
 
       case 'dental-insurance':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/dental-insurance/, heading: 'Access to other dental insurance' };
-        break;
-
-      case 'disability-tax-credit':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/disability-tax-credit/, heading: 'Disability tax credit' };
         break;
 
       case 'confirm-federal-provincial-territorial-benefits':
