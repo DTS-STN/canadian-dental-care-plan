@@ -5,13 +5,14 @@ import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
-import { applicantInformationStateHasPartner, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -25,6 +26,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
+import { extractDateParts } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -54,9 +56,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
+  invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
+  const yearOfBirth = extractDateParts(state.applicantInformation.dateOfBirth).year;
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:marital-status.page-title') }) };
-  return { defaultState: { newUser: state.newOrExistingMember?.isNewOrExistingMember, maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
+  return { defaultState: { isYouthOrNewUser: ageCategory === 'youth' || Number(yearOfBirth) >= 2006, maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -104,7 +109,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedMaritalStatus = maritalStatusSchema.safeParse(maritalStatusData);
   const parsedPartnerInformation = partnerInformationSchema.safeParse(partnerInformationData);
 
-  if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success) || parsedPartnerInformation.data === undefined) {
+  if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
     return {
       errors: {
         ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
@@ -119,20 +124,21 @@ export async function action({ context: { appContainer, session }, params, reque
     state: {
       maritalStatus: parsedMaritalStatus.data.maritalStatus,
       partnerInformation: {
-        confirm: parsedPartnerInformation.data.confirm,
-        dateOfBirth: parsedPartnerInformation.data.yearOfBirth,
-        firstName: '', //TODO: to remove when the state is reworked.
+        // TODO: partnerInformation will be reworked
+        confirm: parsedPartnerInformation.data?.confirm ?? false,
+        dateOfBirth: parsedPartnerInformation.data?.yearOfBirth ?? '2000',
+        firstName: '',
         lastName: '',
-        socialInsuranceNumber: parsedPartnerInformation.data.socialInsuranceNumber,
+        socialInsuranceNumber: parsedPartnerInformation.data?.socialInsuranceNumber ?? '',
       },
     },
   });
 
   if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult/contact-information', params)); // TODO: Needs to be changed to /update-mailing
+  return redirect(getPathById('public/apply/$id/adult/mailing-address', params));
 }
 
 export default function ApplyAdultMaritalStatus({ loaderData, params }: Route.ComponentProps) {
@@ -144,7 +150,7 @@ export default function ApplyAdultMaritalStatus({ loaderData, params }: Route.Co
   const isSubmitting = fetcher.state !== 'idle';
 
   function getBackButtonRouteId() {
-    if (defaultState.newUser) {
+    if (defaultState.isYouthOrNewUser) {
       return 'public/apply/$id/adult/new-or-existing-member';
     }
 

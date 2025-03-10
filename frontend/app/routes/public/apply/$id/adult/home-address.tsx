@@ -120,9 +120,9 @@ export async function action({ context: { appContainer, session }, params, reque
     saveApplyState({ params, session, state: { homeAddress } });
 
     if (state.editMode) {
-      return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
+      return redirect(getPathById('public/apply/$id/adult/review-information', params));
     }
-    return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
+    return redirect(getPathById('public/apply/$id/adult/phone-number', params));
   }
 
   invariant(parsedDataResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
@@ -173,7 +173,7 @@ export async function action({ context: { appContainer, session }, params, reque
   saveApplyState({ params, session, state: { homeAddress } });
 
   if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
   return redirect(getPathById('public/apply/$id/adult/phone-number', params));
 }

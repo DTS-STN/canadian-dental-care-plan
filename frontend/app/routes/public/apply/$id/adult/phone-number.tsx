@@ -8,6 +8,7 @@ import type { Route } from './+types/phone-number';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
+import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { phoneSchema } from '~/.server/validation/phone-schema';
@@ -50,6 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     defaultState: {
       phoneNumber: state.contactInformation?.phoneNumber,
       phoneNumberAlt: state.contactInformation?.phoneNumberAlt,
+      backToMailingAddress: state.isHomeAddressSameAsMailingAddress,
     },
     editMode: state.editMode,
   };
@@ -84,8 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  // TODO: Uncomment when address routes are available
-  // saveApplyState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
+  saveApplyState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
@@ -159,7 +160,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
             </LoadingButton>
             <ButtonLink
               id="back-button"
-              routeId="public/apply/$id/adult/applicant-information" //TODO: refactor route id when address routes are available
+              routeId={defaultState.backToMailingAddress ? 'public/apply/$id/adult/mailing-address' : 'public/apply/$id/adult/home-address'}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}

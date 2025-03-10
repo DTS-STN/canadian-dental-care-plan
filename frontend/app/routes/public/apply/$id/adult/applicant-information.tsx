@@ -151,10 +151,6 @@ export async function action({ context: { appContainer, session }, params, reque
         dateOfBirth: parsedDataResult.data.dateOfBirth,
         socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
       },
-      ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
-        // Handle marital-status back button
-        newOrExistingMember: undefined,
-      }),
     },
   });
 
@@ -174,7 +170,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult/contact-information', params));
+  return redirect(getPathById('public/apply/$id/adult/marital-status', params));
 }
 
 export default function ApplyFlowApplicationInformation({ loaderData, params }: Route.ComponentProps) {

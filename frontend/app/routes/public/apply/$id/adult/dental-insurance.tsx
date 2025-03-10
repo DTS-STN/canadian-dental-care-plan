@@ -2,6 +2,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/dental-insurance';
@@ -37,10 +38,13 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:dental-insurance.title') }) };
+  invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
+  const backToEmail = state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail';
 
-  return { id: state, meta, defaultState: state.dentalInsurance, editMode: state.editMode };
+  return { id: state, meta, defaultState: state.dentalInsurance, backToEmail, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -76,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function AccessToDentalInsuranceQuestion({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode } = loaderData;
+  const { defaultState, backToEmail, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -180,7 +184,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/communication-preference"
+                routeId={backToEmail ? 'public/apply/$id/adult/email' : 'public/apply/$id/adult/communication-preference'}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
