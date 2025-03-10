@@ -10,6 +10,7 @@ import type { Route } from './+types/review-adult-information';
 import { TYPES } from '~/.server/constants';
 import {
   clearProtectedRenewState,
+  isInvitationToApplyClient,
   isPrimaryApplicantStateComplete,
   loadProtectedRenewState,
   loadProtectedRenewStateForReview,
@@ -117,7 +118,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationPreference: communicationPreference.name,
     preferredLanguage: preferredLanguage,
     clientApplicationEmail: state.clientApplication.communicationPreferences.email,
-    isItaClient: state.clientApplication.isInvitationToApplyClient,
+    isItaClient: isInvitationToApplyClient(state.clientApplication),
   };
 
   const hasPartner = renewStateHasPartner(state.maritalStatus ?? state.clientApplication.applicantInformation.maritalStatus);

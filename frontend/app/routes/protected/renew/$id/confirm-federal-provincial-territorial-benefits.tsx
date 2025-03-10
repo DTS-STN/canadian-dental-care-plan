@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirm-federal-provincial-territorial-benefits';
 
 import { TYPES } from '~/.server/constants';
-import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isInvitationToApplyClient, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import type { ProtectedDentalFederalBenefitsState, ProtectedDentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
@@ -59,7 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedRenewState({ params, request, session });
 
-  if (!state.clientApplication.isInvitationToApplyClient && !state.editMode) {
+  if (!isInvitationToApplyClient(state.clientApplication) && !state.editMode) {
     throw new Response('Not Found', { status: 404 });
   }
 
@@ -92,7 +92,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     }
   }, {}) as ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
 
-  const dentalBenefits = state.clientApplication.isInvitationToApplyClient ? state.dentalBenefits : clientDentalBenefits;
+  const dentalBenefits = isInvitationToApplyClient(state.clientApplication) ? state.dentalBenefits : clientDentalBenefits;
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
