@@ -118,7 +118,6 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, { newOrExistingMember: 'input-radio-new-or-existing-member-option-0', clientNumber: 'client-number' });
   const [isNewOrExistingMember, setIsNewOrExistingMember] = useState(defaultState?.isNewOrExistingMember);
-  // const ageCategory = getAgeCategoryFromDateString(userAge);
 
   const handleNewOrExistingMemberSelection: ChangeEventHandler<HTMLInputElement> = (e) => {
     setIsNewOrExistingMember(e.target.value === NEW_OR_EXISTING_MEMBER_OPTION.yes);

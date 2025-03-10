@@ -56,12 +56,15 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
+
+  // Handle back button redirect
   invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
   const yearOfBirth = extractDateParts(state.applicantInformation.dateOfBirth).year;
+  const isYouthOrNewUser = ageCategory === 'youth' || Number(yearOfBirth) >= 2006;
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:marital-status.page-title') }) };
-  return { defaultState: { isYouthOrNewUser: ageCategory === 'youth' || Number(yearOfBirth) >= 2006, maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
+  return { isYouthOrNewUser, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -143,19 +146,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyAdultMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode, maritalStatuses } = loaderData;
+  const { isYouthOrNewUser, defaultState, editMode, maritalStatuses } = loaderData;
   const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-
-  function getBackButtonRouteId() {
-    if (defaultState.isYouthOrNewUser) {
-      return 'public/apply/$id/adult/new-or-existing-member';
-    }
-
-    return 'public/apply/$id/adult/applicant-information';
-  }
 
   const [marriedOrCommonlaw, setMarriedOrCommonlaw] = useState(defaultState.maritalStatus);
 
@@ -234,7 +229,14 @@ export default function ApplyAdultMaritalStatus({ loaderData, params }: Route.Co
               >
                 {t('apply-adult:marital-status.continue-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId={getBackButtonRouteId()} params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Back - Marital status click">
+              <ButtonLink
+                id="back-button"
+                routeId={isYouthOrNewUser ? 'public/apply/$id/adult/new-or-existing-member' : 'public/apply/$id/adult/applicant-information'}
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Back - Marital status click"
+              >
                 {t('apply-adult:marital-status.back-btn')}
               </ButtonLink>
             </div>
