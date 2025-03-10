@@ -175,7 +175,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
   }
-  return redirect(getPathById('public/apply/$id/adult/contact-information', params));
+  return redirect(getPathById('public/apply/$id/adult/phone-number', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
@@ -363,7 +363,7 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
               </Dialog>
               <ButtonLink
                 id="back-button"
-                routeId={`public/apply/$id/adult/update-mailing-address`}
+                routeId={`public/apply/$id/adult/mailing-address`}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

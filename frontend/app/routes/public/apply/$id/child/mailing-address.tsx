@@ -196,7 +196,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
   }
-  return redirect(isCopyMailingToHome ? getPathById('public/apply/$id/child/contact-information', params) : getPathById('public/apply/$id/child/home-address', params));
+  return redirect(isCopyMailingToHome ? getPathById('public/apply/$id/child/phone-number', params) : getPathById('public/apply/$id/child/home-address', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
@@ -350,7 +350,7 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
                     name="_action"
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Save - Mailing address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Child:Save - Mailing address click"
                   >
                     {t('apply-child:address.save-btn')}
                   </LoadingButton>
@@ -364,7 +364,7 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Cancel - Mailing address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Child:Cancel - Mailing address click">
                 {t('apply-child:address.cancel-btn')}
               </Button>
             </div>
@@ -381,7 +381,7 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Continue - Mailing address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Child:Continue - Mailing address click"
                   >
                     {t('apply-child:address.continue')}
                   </LoadingButton>
@@ -398,11 +398,11 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
 
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/child/confirm-address"
+                routeId="public/apply/$id/child/marital-status"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Back - Mailing address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Child:Back - Mailing address click"
               >
                 {t('apply-child:address.back')}
               </ButtonLink>

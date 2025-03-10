@@ -175,7 +175,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
   }
-  return redirect(getPathById('public/apply/$id/adult-child/contact-information', params));
+  return redirect(getPathById('public/apply/$id/adult-child/phone-number', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
@@ -316,7 +316,7 @@ export default function ApplyAdultChildHomeAddress({ loaderData, params }: Route
                     name="_action"
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Save - Home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult_Child:Save - Home address click"
                   >
                     {t('apply-adult-child:address.save-btn')}
                   </LoadingButton>
@@ -330,7 +330,7 @@ export default function ApplyAdultChildHomeAddress({ loaderData, params }: Route
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Cancel - Home address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult_Child:Cancel - Home address click">
                 {t('apply-adult-child:address.cancel-btn')}
               </Button>
             </div>
@@ -347,7 +347,7 @@ export default function ApplyAdultChildHomeAddress({ loaderData, params }: Route
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Continue - Home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult_Child:Continue - Home address click"
                   >
                     {t('apply-adult-child:address.continue')}
                   </LoadingButton>
@@ -363,11 +363,11 @@ export default function ApplyAdultChildHomeAddress({ loaderData, params }: Route
               </Dialog>
               <ButtonLink
                 id="back-button"
-                routeId={`public/apply/$id/adult-child/update-mailing-address`}
+                routeId={`public/apply/$id/adult-child/mailing-address`}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Back - Home address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult_Child:Back - Home address click"
               >
                 {t('apply-adult-child:address.back')}
               </ButtonLink>

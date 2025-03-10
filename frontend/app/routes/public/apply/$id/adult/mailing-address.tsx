@@ -86,7 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
 
   if (formAction === FORM_ACTION.cancel) {
-    return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
   const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
@@ -130,7 +130,7 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (state.editMode) {
-      return redirect(isCopyMailingToHome ? getPathById('public/apply/$id/adult/review-adult-information', params) : getPathById('public/apply/$id/adult/home-address', params));
+      return redirect(isCopyMailingToHome ? getPathById('public/apply/$id/adult/review-information', params) : getPathById('public/apply/$id/adult/home-address', params));
     }
 
     return redirect(isCopyMailingToHome ? getPathById('public/apply/$id/adult/dental-insurance', params) : getPathById('public/apply/$id/adult/home-address', params));
@@ -194,9 +194,9 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
-  return redirect(isCopyMailingToHome ? getPathById('public/apply/$id/adult/contact-information', params) : getPathById('public/apply/$id/adult/home-address', params));
+  return redirect(isCopyMailingToHome ? getPathById('public/apply/$id/adult/phone-number', params) : getPathById('public/apply/$id/adult/home-address', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
@@ -398,7 +398,7 @@ export default function ApplyAdultMailingAddress({ loaderData, params }: Route.C
 
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/confirm-address"
+                routeId="public/apply/$id/adult/marital-status"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

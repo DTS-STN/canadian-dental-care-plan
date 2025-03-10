@@ -329,24 +329,6 @@
       "postal-code-optional": "Postal code or ZIP code (optional)",
       "select-one": "Select one"
     },
-    "dialog": {
-      "address-suggestion": {
-        "address-selection-legend": "Please select an address option below:",
-        "cancel-button": "Back",
-        "description": "There's a problem with the address you provided. Please select the address you want to use. If you live in an apartment or suite, make sure to include that information.",
-        "entered-address-option": "Entered address:",
-        "header": "Verify your address",
-        "suggested-address-option": "Suggested corrected address:",
-        "use-selected-address-button": "Use selected address"
-      },
-      "address-invalid": {
-        "close-button": "Back",
-        "description": "We could not verify your address. You can either update it or continue with the address you entered. If you live in an apartment or suite, make sure to include that information.",
-        "entered-address": "Entered address:",
-        "header": "Verify your address",
-        "use-entered-address-button": "Use entered address"
-      }
-    },
     "back": "Back",
     "continue": "Continue",
     "cancel-btn": "Cancel",
