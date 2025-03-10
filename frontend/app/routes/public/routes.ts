@@ -30,7 +30,6 @@ export const routes = [
             paths: { en: '/:lang/apply/:id/adult/federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/adulte/prestations-dentaires-federales-provinciales-territoriales' },
           },
           { id: 'public/apply/$id/adult/partner-information', file: 'routes/public/apply/$id/adult/partner-information.tsx', paths: { en: '/:lang/apply/:id/adult/partner-information', fr: '/:lang/demander/:id/adulte/renseignements-partenaire' } },
-          { id: 'public/apply/$id/adult/contact-information', file: 'routes/public/apply/$id/adult/contact-information.tsx', paths: { en: '/:lang/apply/:id/adult/contact-information', fr: '/:lang/demander/:id/adulte/renseignements-personnels' } },
           { id: 'public/apply/$id/adult/review-information', file: 'routes/public/apply/$id/adult/review-information.tsx', paths: { en: '/:lang/apply/:id/adult/review-information', fr: '/:lang/demander/:id/adulte/revue-renseignements' } },
           {
             id: 'public/apply/$id/adult/disability-tax-credit',
@@ -44,6 +43,8 @@ export const routes = [
           { id: 'public/apply/$id/adult/email', file: 'routes/public/apply/$id/adult/email.tsx', paths: { en: '/:lang/apply/:id/adult/email', fr: '/:lang/demander/:id/adulte/adresse-courriel' } },
           { id: 'public/apply/$id/adult-child/children/index', file: 'routes/public/apply/$id/adult-child/children/index.tsx', paths: { en: '/:lang/apply/:id/adult-child/children', fr: '/:lang/demander/:id/adulte-enfant/enfants' } },
           { id: 'public/apply/$id/adult/marital-status', file: 'routes/public/apply/$id/adult/marital-status.tsx', paths: { en: '/:lang/apply/:id/adult/marital-status', fr: '/:lang/demander/:id/adulte/etat-civil' } },
+          { id: 'public/apply/$id/adult/mailing-address', file: 'routes/public/apply/$id/adult/mailing-address.tsx', paths: { en: '/:lang/apply/:id/adult/mailing-address', fr: '/:lang/demander/:id/adulte/adresse-postale' } },
+          { id: 'public/apply/$id/adult/home-address', file: 'routes/public/apply/$id/adult/home-address.tsx', paths: { en: '/:lang/apply/:id/adult/home-address', fr: '/:lang/demander/:id/adulte/adresse-domicile' } },
           {
             file: 'routes/public/apply/$id/adult-child/children/$childId/layout.tsx',
             children: [
@@ -118,6 +119,8 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/parent-or-guardian.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/parent-or-guardian', fr: '/:lang/demander/:id/adulte-enfant/parent-ou-tuteur' },
           },
+          { id: 'public/apply/$id/adult-child/mailing-address', file: 'routes/public/apply/$id/adult-child/mailing-address.tsx', paths: { en: '/:lang/apply/:id/adult-child/mailing-address', fr: '/:lang/demander/:id/adulte-enfant/adresse-postale' } },
+          { id: 'public/apply/$id/adult-child/home-address', file: 'routes/public/apply/$id/adult-child/home-address.tsx', paths: { en: '/:lang/apply/:id/adult-child/home-address', fr: '/:lang/demander/:id/adulte-enfant/adresse-domicile' } },
           {
             id: 'public/apply/$id/adult-child/living-independently',
             file: 'routes/public/apply/$id/adult-child/living-independently.tsx',
@@ -131,11 +134,6 @@ export const routes = [
           }, // TODO: Update French route
           { id: 'public/apply/$id/adult-child/phone-number', file: 'routes/public/apply/$id/adult-child/phone-number.tsx', paths: { en: '/:lang/apply/:id/adult-child/phone-number', fr: '/:lang/demander/:id/adulte-enfant/phone-number' } }, // TODO: Update French route
           { id: 'public/apply/$id/adult-child/email', file: 'routes/public/apply/$id/adult-child/email.tsx', paths: { en: '/:lang/apply/:id/adult-child/email', fr: '/:lang/demander/:id/adulte-enfant/adresse-courriel' } },
-          {
-            id: 'public/apply/$id/adult-child/contact-information',
-            file: 'routes/public/apply/$id/adult-child/contact-information.tsx',
-            paths: { en: '/:lang/apply/:id/adult-child/contact-information', fr: '/:lang/demander/:id/adulte-enfant/renseignements-personnels' },
-          },
           {
             id: 'public/apply/$id/adult-child/partner-information',
             file: 'routes/public/apply/$id/adult-child/partner-information.tsx',
@@ -198,11 +196,12 @@ export const routes = [
             file: 'routes/public/apply/$id/child/communication-preference.tsx',
             paths: { en: '/:lang/apply/:id/child/communication-preference', fr: '/:lang/demander/:id/child/preference-communication' },
           },
+          { id: 'public/apply/$id/child/mailing-address', file: 'routes/public/apply/$id/child/mailing-address.tsx', paths: { en: '/:lang/apply/:id/child/mailing-address', fr: '/:lang/demander/:id/enfant/adresse-postale' } },
+          { id: 'public/apply/$id/child/home-address', file: 'routes/public/apply/$id/child/home-address.tsx', paths: { en: '/:lang/apply/:id/child/home-address', fr: '/:lang/demander/:id/enfant/adresse-domicile' } },
           { id: 'public/apply/$id/child/confirmation', file: 'routes/public/apply/$id/child/confirmation.tsx', paths: { en: '/:lang/apply/:id/child/confirmation', fr: '/:lang/demander/:id/enfant/confirmation' } },
           { id: 'public/apply/$id/child/contact-apply-child', file: 'routes/public/apply/$id/child/contact-apply-child.tsx', paths: { en: '/:lang/apply/:id/child/contact-apply-child', fr: '/:lang/demander/:id/enfant/contact-demande-enfant' } },
           { id: 'public/apply/$id/child/exit-application', file: 'routes/public/apply/$id/child/exit-application.tsx', paths: { en: '/:lang/apply/:id/child/exit-application', fr: '/:lang/demander/:id/enfant/quitter-demande' } },
           { id: 'public/apply/$id/child/partner-information', file: 'routes/public/apply/$id/child/partner-information.tsx', paths: { en: '/:lang/apply/:id/child/partner-information', fr: '/:lang/demander/:id/enfant/renseignements-partenaire' } },
-          { id: 'public/apply/$id/child/contact-information', file: 'routes/public/apply/$id/child/contact-information.tsx', paths: { en: '/:lang/apply/:id/child/contact-information', fr: '/:lang/demander/:id/enfant/renseignements-personnels' } },
           {
             id: 'public/apply/$id/child/review-adult-information',
             file: 'routes/public/apply/$id/child/review-adult-information.tsx',

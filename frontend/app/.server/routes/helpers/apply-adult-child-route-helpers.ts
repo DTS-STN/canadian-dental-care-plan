@@ -130,6 +130,8 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     lastUpdatedOn,
     livingIndependently,
     partnerInformation,
+    mailingAddress,
+    homeAddress,
     contactInformation,
     submissionInfo,
     taxFiling2023,
@@ -183,7 +185,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
   }
 
   if (contactInformation === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult-child/contact-information', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/contact-information', params)); // TODO: redirect to phone-number.tsx or email.tsx
   }
 
   if (communicationPreferences === undefined) {
@@ -218,6 +220,8 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     lastUpdatedOn,
     livingIndependently,
     partnerInformation,
+    mailingAddress,
+    homeAddress,
     submissionInfo,
     taxFiling2023,
     typeOfApplication,

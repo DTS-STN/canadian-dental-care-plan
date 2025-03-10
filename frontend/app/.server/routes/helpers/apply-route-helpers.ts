@@ -73,20 +73,22 @@ export type ApplyState = ReadonlyDeep<{
     lastName: string;
     socialInsuranceNumber: string;
   };
+  isHomeAddressSameAsMailingAddress?: boolean;
+  mailingAddress?: {
+    address: string;
+    city: string;
+    country: string;
+    postalCode?: string;
+    province?: string;
+  };
+  homeAddress?: {
+    address: string;
+    city: string;
+    country: string;
+    postalCode?: string;
+    province?: string;
+  };
   contactInformation?: {
-    copyMailingAddress: boolean;
-    homeAddress?: string;
-    homeApartment?: string;
-    homeCity?: string;
-    homeCountry?: string;
-    homePostalCode?: string;
-    homeProvince?: string;
-    mailingAddress: string;
-    mailingApartment?: string;
-    mailingCity: string;
-    mailingCountry: string;
-    mailingPostalCode?: string;
-    mailingProvince?: string;
     phoneNumber?: string;
     phoneNumberAlt?: string;
     email?: string;
@@ -127,6 +129,8 @@ export type PartnerInformationState = NonNullable<ApplyState['partnerInformation
 export type ContactInformationState = NonNullable<ApplyState['contactInformation']>;
 export type SubmissionInfoState = NonNullable<ApplyState['submissionInfo']>;
 export type TypeOfApplicationState = NonNullable<ApplyState['typeOfApplication']>;
+export type HomeAddressState = NonNullable<ApplyState['homeAddress']>;
+export type MailingAddressState = NonNullable<ApplyState['mailingAddress']>;
 
 /**
  * Schema for validating UUID.

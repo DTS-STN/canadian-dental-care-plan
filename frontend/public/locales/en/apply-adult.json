@@ -310,27 +310,18 @@
       "last-name-no-digits": "Last name must contain letters only"
     }
   },
-  "contact-information": {
-    "page-title": "Contact information",
-    "phone-header": "Phone number",
-    "add-phone": "Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
-    "phone-number": "Phone number (optional)",
-    "phone-number-alt": "Alternate phone number (optional)",
-    "email-header": "Email",
-    "add-email": "Adding an email will help the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan membership.",
-    "email": "Email address (optional)",
-    "confirm-email": "Confirm email address (optional)",
+  "address": {
     "mailing-address": {
+      "page-title": "Mailing address",
       "header": "Mailing address"
     },
     "home-address": {
-      "header": "Home address",
+      "page-title": "Home address",
       "use-mailing-address": "My mailing address is the same as my home address"
     },
     "address-field": {
       "address": "Address",
-      "address-note": "Include street number and name",
-      "apartment": "Apartment, suite, etc. (optional)",
+      "address-note": "Include apartment number (if applicable), street number, street name. For example: 123 Main St. Suite 4B",
       "country": "Country",
       "province": "Province, territory, state, or region",
       "city": "City or town",
@@ -341,41 +332,7 @@
     "back": "Back",
     "continue": "Continue",
     "cancel-btn": "Cancel",
-    "save-btn": "Save",
-    "error-message": {
-      "mailing-address": {
-        "address-required": "Enter mailing address, typically number and street",
-        "city-required": "Enter a city or town for your mailing address",
-        "country-required": "Select a country for your mailing address",
-        "postal-code-required": "Enter postal code or zip code for your mailing address",
-        "postal-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
-        "province-required": "Select a province, territory, state or region for your mailing address",
-        "zip-code-valid": "Enter mailing address zip code in the correct format, such as 12345 or 12345-6789",
-        "invalid-postal-code-for-country": "A Canadian postal code in the mailing address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
-        "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
-      },
-      "home-address": {
-        "address-required": "Enter home address, typically number and street",
-        "city-required": "Enter a city or town for your home address",
-        "country-required": "Select a country for your home address",
-        "postal-code-required": "Enter postal code or zip code for your home address",
-        "postal-code-valid": "Enter home address postal code in the correct format, such as A1A 1A1",
-        "province-required": "Select a province, territory, state or region for your home address",
-        "zip-code-valid": "Enter home address zip code in the correct format, such as 12345 or 12345-6789",
-        "invalid-postal-code-for-country": "A Canadian postal code in the home address was entered but Canada was not selected as the country. Please select Canada, and the proper province, or change the postal code",
-        "invalid-postal-code-for-province": "The postal code does not match the province or territory you selected"
-      },
-      "phone-number-valid": "Invalid phone number",
-      "phone-number-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
-      "phone-number-alt-valid": "Invalid phone number",
-      "phone-number-alt-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
-      "email-match": "The email addresses entered do not match",
-      "confirm-email-required": "Confirm email address",
-      "email-required": "Enter email address",
-      "email-valid": "Enter an email address in the correct format, such as name@example.com",
-      "confirm-email-valid": "Enter confirmation of email address in the correct format, such as name@example.com",
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
-    }
+    "save-btn": "Save"
   },
   "review-information": {
     "read-carefully": "Please review this information carefully. The information provided will be used by Sun Life to create your member account.",

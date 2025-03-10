@@ -1,6 +1,5 @@
 import { expect } from '@playwright/test';
 
-import { fillOutAddress } from '../utils/helpers';
 import { PlaywrightBasePage } from './PlaywrightBasePage';
 
 interface fillApplicantInformationFormArgs {
@@ -168,35 +167,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
 
     await this.page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('800000002');
     await this.page.getByRole('checkbox', { name: 'I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.' }).check();
-  }
-
-  async fillContactInformationForm() {
-    await this.isLoaded('contact-information');
-    //invalid phone number
-    await this.page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Phone number (optional)', exact: true }).fill('111');
-    await this.page.getByRole('button', { name: 'Continue' }).click();
-    await expect(this.page.getByRole('link', { name: 'Invalid phone number' })).toBeVisible();
-
-    await this.page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Phone number (optional)', exact: true }).fill('2345678901');
-    await this.page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Alternate phone number (optional)', exact: true }).fill('2345678902');
-
-    //invalid email
-    await this.page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Email address (optional)', exact: true }).fill('123mail');
-    await this.page.getByRole('button', { name: 'Continue' }).click();
-    await expect(this.page.getByRole('link', { name: 'Enter an email address in the correct format, such as name@example.com' })).toBeVisible();
-
-    //email does not match
-    await this.page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Email address (optional)', exact: true }).fill('123@mail.com');
-    await this.page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Confirm email address (optional)', exact: true }).fill('124@mail.com');
-    await this.page.getByRole('button', { name: 'Continue' }).click();
-    await expect(this.page.getByRole('link', { name: 'The email addresses entered do not match' })).toBeVisible();
-
-    await this.page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Confirm email address (optional)', exact: true }).fill('123@mail.com');
-
-    //fillout mailing address
-    await fillOutAddress({ page: this.page, group: 'Mailing address', address: '123 street', unit: '404', country: 'Canada', province: 'Ontario', city: 'Ottawa', postalCode: 'N3B1E6' });
-    //fillout home address
-    await fillOutAddress({ page: this.page, group: 'Home address', address: '555 street', unit: '', country: 'Canada', province: 'Quebec', city: 'Montreal', postalCode: 'J3T2K3' });
   }
 
   async fillCommunicationForm() {

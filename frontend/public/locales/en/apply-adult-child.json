@@ -79,6 +79,30 @@
       "client-number-valid": "Client Number must be 11 digits"
     }
   },
+  "address": {
+    "mailing-address": {
+      "page-title": "Mailing address",
+      "header": "Mailing address"
+    },
+    "home-address": {
+      "page-title": "Home address",
+      "use-mailing-address": "My mailing address is the same as my home address"
+    },
+    "address-field": {
+      "address": "Address",
+      "address-note": "Include apartment number (if applicable), street number, street name. For example: 123 Main St. Suite 4B",
+      "country": "Country",
+      "province": "Province, territory, state, or region",
+      "city": "City or town",
+      "postal-code": "Postal code or ZIP code",
+      "postal-code-optional": "Postal code or ZIP code (optional)",
+      "select-one": "Select one"
+    },
+    "back": "Back",
+    "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save"
+  },
   "phone-number": {
     "page-title": "Phone Number",
     "phone-number": "Phone number (optional)",
