@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.communicationPreferences === undefined ||
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
-    state.contactInformation?.homeCountry === undefined ||
+    state.mailingAddress?.country === undefined ||
     state.submissionInfo === undefined ||
     state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
@@ -63,10 +63,10 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const mailingProvinceTerritoryStateAbbr = state.contactInformation.mailingProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.mailingProvince).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.contactInformation.homeProvince ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.contactInformation.homeProvince).abbr : undefined;
-  const countryMailing = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.contactInformation.mailingCountry, locale);
-  const countryHome = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.contactInformation.homeCountry, locale);
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
+  const countryMailing = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
+  const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name : undefined;
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
   const communicationPreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
@@ -74,13 +74,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
-    phoneNumber: state.contactInformation.phoneNumber,
-    altPhoneNumber: state.contactInformation.phoneNumberAlt,
+    phoneNumber: state.contactInformation?.phoneNumber,
+    altPhoneNumber: state.contactInformation?.phoneNumberAlt,
     preferredLanguage: preferredLanguage.name,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
-    contactInformationEmail: state.contactInformation.email,
+    contactInformationEmail: state.contactInformation?.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: communicationPreference.name,
   };
@@ -93,21 +93,19 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const mailingAddressInfo = {
-    address: state.contactInformation.mailingAddress,
-    city: state.contactInformation.mailingCity,
+    address: state.mailingAddress.address,
+    city: state.mailingAddress.city,
     province: mailingProvinceTerritoryStateAbbr,
-    postalCode: state.contactInformation.mailingPostalCode,
-    country: countryMailing.name,
-    apartment: state.contactInformation.mailingApartment,
+    postalCode: state.mailingAddress.postalCode,
+    country: countryMailing,
   };
 
   const homeAddressInfo = {
-    address: state.contactInformation.homeAddress,
-    city: state.contactInformation.homeCity,
+    address: state.homeAddress?.address,
+    city: state.homeAddress?.city,
     province: homeProvinceTerritoryStateAbbr,
-    postalCode: state.contactInformation.homePostalCode,
-    country: countryHome.name,
-    apartment: state.contactInformation.homeApartment,
+    postalCode: state.homeAddress?.postalCode,
+    country: countryHome,
   };
 
   const dentalInsurance = {
@@ -283,8 +281,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                   city: mailingAddressInfo.city,
                   provinceState: mailingAddressInfo.province,
                   postalZipCode: mailingAddressInfo.postalCode,
-                  country: mailingAddressInfo.country,
-                  apartment: mailingAddressInfo.apartment,
+                  country: mailingAddressInfo.country.name,
                 }}
               />
             </DescriptionListItem>
@@ -295,8 +292,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                   city: homeAddressInfo.city ?? '',
                   provinceState: homeAddressInfo.province,
                   postalZipCode: homeAddressInfo.postalCode,
-                  country: homeAddressInfo.country,
-                  apartment: homeAddressInfo.apartment,
+                  country: homeAddressInfo.country ?? '',
                 }}
               />
             </DescriptionListItem>
