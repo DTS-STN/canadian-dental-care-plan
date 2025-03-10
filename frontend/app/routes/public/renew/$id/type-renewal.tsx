@@ -2,6 +2,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/type-renewal';
@@ -83,15 +84,18 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
+  invariant(state.clientApplication, 'Expected state.clientApplication to be defined');
+  const isInvitationToApplyClient = state.clientApplication.isInvitationToApplyClient || state.clientApplication.applicantInformation.maritalStatus === undefined;
+
   if (parsedDataResult.data.typeOfRenewal === RENEWAL_TYPE.adult) {
-    if (state.clientApplication?.isInvitationToApplyClient) {
+    if (isInvitationToApplyClient) {
       return redirect(getPathById('public/renew/$id/ita/marital-status', params));
     }
     return redirect(getPathById('public/renew/$id/adult/confirm-marital-status', params));
   }
 
   if (parsedDataResult.data.typeOfRenewal === RENEWAL_TYPE.adultChild) {
-    if (state.clientApplication?.isInvitationToApplyClient) {
+    if (isInvitationToApplyClient) {
       return redirect(getPathById('public/renew/$id/ita/marital-status', params));
     }
     return redirect(getPathById('public/renew/$id/adult-child/confirm-marital-status', params));

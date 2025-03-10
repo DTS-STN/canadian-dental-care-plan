@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/dental-insurance';
 
 import { TYPES } from '~/.server/constants';
-import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isInvitationToApplyClient, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -73,7 +73,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
-    if (state.clientApplication.isInvitationToApplyClient) {
+    if (isInvitationToApplyClient(state.clientApplication)) {
       return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
     }
     return redirect(getPathById('protected/renew/$id/member-selection', params));
@@ -98,7 +98,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       dentalInsurance: parsedDataResult.data.dentalInsurance,
-      previouslyReviewed: state.editMode === false && (state.clientApplication.isInvitationToApplyClient || demographicSurveyEnabled) ? undefined : true,
+      previouslyReviewed: state.editMode === false && (isInvitationToApplyClient(state.clientApplication) || demographicSurveyEnabled) ? undefined : true,
     },
   });
 
@@ -109,7 +109,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
-  if (state.clientApplication.isInvitationToApplyClient) {
+  if (isInvitationToApplyClient(state.clientApplication)) {
     return redirect(getPathById('protected/renew/$id/confirm-federal-provincial-territorial-benefits', params));
   }
 
