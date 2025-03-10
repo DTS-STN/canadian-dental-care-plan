@@ -45,7 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
-  return { ageCategory, defaultState: state.disabilityTaxCredit, id: state.id, meta };
+  return { ageCategory, id: state.id, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

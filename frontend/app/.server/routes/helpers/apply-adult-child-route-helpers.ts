@@ -124,7 +124,6 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,
-    disabilityTaxCredit,
     editMode,
     id,
     lastUpdatedOn,
@@ -170,10 +169,6 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'adults' && disabilityTaxCredit === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult-child/disability-tax-credit', params));
-  }
-
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('public/apply/$id/adult-child/partner-information', params));
   }
@@ -212,7 +207,6 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     hasFederalProvincialTerritorialBenefits,
     dentalBenefits,
     dentalInsurance,
-    disabilityTaxCredit,
     editMode,
     id,
     lastUpdatedOn,
