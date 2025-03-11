@@ -5,6 +5,7 @@ import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/marital-status';
@@ -25,6 +26,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
+import { extractDateParts } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -55,8 +57,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
   const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
 
+  // Handle back button redirect
+  invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
+  const yearOfBirth = extractDateParts(state.applicantInformation.dateOfBirth).year;
+  const isNewUser = Number(yearOfBirth) >= 2006;
+
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:marital-status.page-title') }) };
-  return { defaultState: { newUser: state.newOrExistingMember?.isNewOrExistingMember, maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
+  return { isNewUser, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -104,7 +111,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedMaritalStatus = maritalStatusSchema.safeParse(maritalStatusData);
   const parsedPartnerInformation = partnerInformationSchema.safeParse(partnerInformationData);
 
-  if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success) || parsedPartnerInformation.data === undefined) {
+  if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
     return {
       errors: {
         ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
@@ -119,37 +126,30 @@ export async function action({ context: { appContainer, session }, params, reque
     state: {
       maritalStatus: parsedMaritalStatus.data.maritalStatus,
       partnerInformation: {
-        confirm: parsedPartnerInformation.data.confirm,
-        dateOfBirth: parsedPartnerInformation.data.yearOfBirth,
-        firstName: '', //TODO: to remove when the state is reworked.
+        // TODO: partnerInformation will be reworked
+        confirm: parsedPartnerInformation.data?.confirm ?? false,
+        dateOfBirth: parsedPartnerInformation.data?.yearOfBirth ?? '2000',
+        firstName: '',
         lastName: '',
-        socialInsuranceNumber: parsedPartnerInformation.data.socialInsuranceNumber,
+        socialInsuranceNumber: parsedPartnerInformation.data?.socialInsuranceNumber ?? '',
       },
     },
   });
 
   if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult/contact-information', params)); // TODO: Needs to be changed to /update-mailing
+  return redirect(getPathById('public/apply/$id/adult/mailing-address', params));
 }
 
 export default function ApplyAdultMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode, maritalStatuses } = loaderData;
+  const { isNewUser, defaultState, editMode, maritalStatuses } = loaderData;
   const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-
-  function getBackButtonRouteId() {
-    if (defaultState.newUser) {
-      return 'public/apply/$id/adult/new-or-existing-member';
-    }
-
-    return 'public/apply/$id/adult/applicant-information';
-  }
 
   const [marriedOrCommonlaw, setMarriedOrCommonlaw] = useState(defaultState.maritalStatus);
 
@@ -228,7 +228,14 @@ export default function ApplyAdultMaritalStatus({ loaderData, params }: Route.Co
               >
                 {t('apply-adult:marital-status.continue-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId={getBackButtonRouteId()} params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Back - Marital status click">
+              <ButtonLink
+                id="back-button"
+                routeId={isNewUser ? 'public/apply/$id/adult/new-or-existing-member' : 'public/apply/$id/adult/applicant-information'}
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Back - Marital status click"
+              >
                 {t('apply-adult:marital-status.back-btn')}
               </ButtonLink>
             </div>

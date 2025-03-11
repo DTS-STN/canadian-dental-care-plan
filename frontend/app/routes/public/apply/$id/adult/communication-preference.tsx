@@ -286,7 +286,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/contact-information"
+                routeId="public/apply/$id/adult/phone-number"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

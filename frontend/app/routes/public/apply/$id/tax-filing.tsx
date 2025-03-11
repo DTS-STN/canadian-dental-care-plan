@@ -99,7 +99,7 @@ export default function ApplyFlowTaxFiling({ loaderData, params }: Route.Compone
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Tax filing click">
               {t('apply:tax-filing.continue-btn')}
             </LoadingButton>
-            <ButtonLink id="back-button" routeId="public/apply/$id/type-application" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Tax filing click">
+            <ButtonLink id="back-button" routeId="public/apply/$id/terms-and-conditions" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Tax filing click">
               {t('apply:tax-filing.back-btn')}
             </ButtonLink>
           </div>

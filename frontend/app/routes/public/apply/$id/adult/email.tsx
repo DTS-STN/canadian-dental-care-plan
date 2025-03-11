@@ -81,7 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { email: parsedDataResult.data.email } });
+  saveApplyState({ params, session, state: { email: parsedDataResult.data.email } }); // TODO: Which state 'email' do we want to use? (There are 3 different at the time of writing this.)
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
