@@ -316,7 +316,7 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
                     name="_action"
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Save - Home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Home address click"
                   >
                     {t('apply-adult:address.save-btn')}
                   </LoadingButton>
@@ -330,7 +330,7 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Cancel - Home address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Home address click">
                 {t('apply-adult:address.cancel-btn')}
               </Button>
             </div>
@@ -347,7 +347,7 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Continue - Home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Home address click"
                   >
                     {t('apply-adult:address.continue')}
                   </LoadingButton>
@@ -367,7 +367,7 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Apply Application Form-Adult:Back - Home address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Home address click"
               >
                 {t('apply-adult:address.back')}
               </ButtonLink>
