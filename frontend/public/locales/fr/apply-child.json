@@ -433,44 +433,6 @@
     "exit-btn": "Quitter",
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
-  "partner-information": {
-    "page-title": "Renseignements sur l'époux/l'épouse ou le conjoint/la conjointe de fait",
-    "provide-sin": "Fournissez les renseignements sur votre époux/épouse ou conjoint/conjointe de fait actuel/actuelle tels qu'ils figurent sur sa carte ou sa lettre de numéro d'assurance sociale (NAS).",
-    "required-information": "Ces renseignements sont nécessaires pour calculer le revenu familial net rajusté. Votre époux/épouse ou conjoint/conjointe de fait doit présenter sa propre demande au Régime canadien de soins dentaires.",
-    "sin": "Numéro d'assurance sociale (NAS)",
-    "date-of-birth": "Date de naissance",
-    "last-name": "Nom de famille",
-    "first-name": "Prénom",
-    "single-legal-name": "Si votre époux/épouse ou conjoint/conjointe de fait a un seul nom légal",
-    "name-instructions": "Si la personne utilise un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0»",
-    "confirm-checkbox": "Je confirme que mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et qu'il/elle y consent.",
-    "back-btn": "Retour",
-    "continue-btn": "Continuer",
-    "cancel-btn": "Annuler",
-    "save-btn": "Enregistrer",
-    "help-message": {
-      "sin": "Entrez un NAS de 9 chiffres"
-    },
-    "error-message": {
-      "confirm-required": "Le consentement de l'époux/épouse ou du conjoint de fait est requis pour procéder",
-      "date-of-birth-day-number": "Le jour doit être un nombre",
-      "date-of-birth-day-required": "La date de naissance doit inclure un jour",
-      "date-of-birth-is-past": "La date de naissance doit être dans le passé",
-      "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
-      "date-of-birth-month-required": "La date de naissance doit inclure un mois",
-      "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisis",
-      "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
-      "date-of-birth-year-required": "La date de naissance doit inclure une année",
-      "first-name-required": "Entrez le prénom",
-      "last-name-required": "Entrez le nom de famille",
-      "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
-      "sin-valid": "Le NAS doit être valide",
-      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
-      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
-      "first-name-no-digits": "Le prénom doit contenir uniquement des lettres",
-      "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres"
-    }
-  },
   "contact-information": {
     "page-title": "Coordonnées du parent ou du tuteur légal",
     "phone-header": "Numéro de téléphone",

@@ -29,7 +29,6 @@ export const routes = [
             file: 'routes/public/apply/$id/adult/federal-provincial-territorial-benefits.tsx',
             paths: { en: '/:lang/apply/:id/adult/federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/adulte/prestations-dentaires-federales-provinciales-territoriales' },
           },
-          { id: 'public/apply/$id/adult/partner-information', file: 'routes/public/apply/$id/adult/partner-information.tsx', paths: { en: '/:lang/apply/:id/adult/partner-information', fr: '/:lang/demander/:id/adulte/renseignements-partenaire' } },
           { id: 'public/apply/$id/adult/review-information', file: 'routes/public/apply/$id/adult/review-information.tsx', paths: { en: '/:lang/apply/:id/adult/review-information', fr: '/:lang/demander/:id/adulte/revue-renseignements' } },
           { id: 'public/apply/$id/adult/parent-or-guardian', file: 'routes/public/apply/$id/adult/parent-or-guardian.tsx', paths: { en: '/:lang/apply/:id/adult/parent-or-guardian', fr: '/:lang/demander/:id/adulte/parent-ou-tuteur' } },
           { id: 'public/apply/$id/adult/living-independently', file: 'routes/public/apply/$id/adult/living-independently.tsx', paths: { en: '/:lang/apply/:id/adult/living-independently', fr: '/:lang/demander/:id/adulte/vivre-maniere-independante' } },
@@ -125,11 +124,6 @@ export const routes = [
           { id: 'public/apply/$id/adult-child/phone-number', file: 'routes/public/apply/$id/adult-child/phone-number.tsx', paths: { en: '/:lang/apply/:id/adult-child/phone-number', fr: '/:lang/demander/:id/adulte-enfant/phone-number' } }, // TODO: Update French route
           { id: 'public/apply/$id/adult-child/email', file: 'routes/public/apply/$id/adult-child/email.tsx', paths: { en: '/:lang/apply/:id/adult-child/email', fr: '/:lang/demander/:id/adulte-enfant/adresse-courriel' } },
           {
-            id: 'public/apply/$id/adult-child/partner-information',
-            file: 'routes/public/apply/$id/adult-child/partner-information.tsx',
-            paths: { en: '/:lang/apply/:id/adult-child/partner-information', fr: '/:lang/demander/:id/adulte-enfant/renseignements-partenaire' },
-          },
-          {
             id: 'public/apply/$id/adult-child/applicant-information',
             file: 'routes/public/apply/$id/adult-child/applicant-information.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/applicant-information', fr: '/:lang/demander/:id/adulte-enfant/renseignements-demandeur' },
@@ -191,7 +185,6 @@ export const routes = [
           { id: 'public/apply/$id/child/confirmation', file: 'routes/public/apply/$id/child/confirmation.tsx', paths: { en: '/:lang/apply/:id/child/confirmation', fr: '/:lang/demander/:id/enfant/confirmation' } },
           { id: 'public/apply/$id/child/contact-apply-child', file: 'routes/public/apply/$id/child/contact-apply-child.tsx', paths: { en: '/:lang/apply/:id/child/contact-apply-child', fr: '/:lang/demander/:id/enfant/contact-demande-enfant' } },
           { id: 'public/apply/$id/child/exit-application', file: 'routes/public/apply/$id/child/exit-application.tsx', paths: { en: '/:lang/apply/:id/child/exit-application', fr: '/:lang/demander/:id/enfant/quitter-demande' } },
-          { id: 'public/apply/$id/child/partner-information', file: 'routes/public/apply/$id/child/partner-information.tsx', paths: { en: '/:lang/apply/:id/child/partner-information', fr: '/:lang/demander/:id/enfant/renseignements-partenaire' } },
           {
             id: 'public/apply/$id/child/review-adult-information',
             file: 'routes/public/apply/$id/child/review-adult-information.tsx',

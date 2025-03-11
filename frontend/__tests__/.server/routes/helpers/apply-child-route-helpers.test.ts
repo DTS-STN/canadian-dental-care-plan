@@ -197,7 +197,7 @@ describe('apply-child-route-helpers', () => {
           phoneNumberAlt: '987-654-3210',
           email: 'test@example.com',
         },
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
       } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
@@ -223,7 +223,7 @@ describe('apply-child-route-helpers', () => {
         ],
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
         contactInformation: undefined,
       } satisfies ApplyState;
 
@@ -250,7 +250,7 @@ describe('apply-child-route-helpers', () => {
         ],
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-002' },
         mailingAddress: {
           address: '123 Maple St',
           city: 'Toronto',
@@ -297,7 +297,7 @@ describe('apply-child-route-helpers', () => {
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
         mailingAddress: {
           address: '123 Maple St',
           city: 'Toronto',
@@ -345,7 +345,7 @@ describe('apply-child-route-helpers', () => {
         editMode: false,
         id: '00000000-0000-0000-0000-000000000000',
         lastUpdatedOn: '2000-01-01',
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
         mailingAddress: {
           address: '123 Maple St',
           city: 'Toronto',

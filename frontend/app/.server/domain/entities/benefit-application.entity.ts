@@ -78,9 +78,10 @@ export type BenefitApplicationRequestEntity = ReadonlyDeep<{
           AttestParentOrGuardianIndicator?: boolean;
         };
         PersonBirthDate: {
-          date: string;
+          date?: string;
+          YearDate?: string;
         };
-        PersonName: {
+        PersonName?: {
           PersonGivenName: string[];
           PersonSurName: string;
         }[];

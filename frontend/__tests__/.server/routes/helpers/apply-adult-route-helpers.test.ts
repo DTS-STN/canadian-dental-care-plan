@@ -106,7 +106,7 @@ describe('apply-adult-route-helpers', () => {
         taxFiling2023: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '99',
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
       } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
@@ -123,7 +123,7 @@ describe('apply-adult-route-helpers', () => {
         taxFiling2023: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
         contactInformation: { phoneNumber: '555-555-5555' },
         communicationPreferences: undefined,
       } satisfies ApplyState;
@@ -142,7 +142,7 @@ describe('apply-adult-route-helpers', () => {
         taxFiling2023: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
         contactInformation: { phoneNumber: '555-555-5555' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dentalInsurance: undefined,
@@ -162,7 +162,7 @@ describe('apply-adult-route-helpers', () => {
         taxFiling2023: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
         contactInformation: { phoneNumber: '555-555-5555' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dentalInsurance: false,
@@ -182,7 +182,7 @@ describe('apply-adult-route-helpers', () => {
         taxFiling2023: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
         mailingAddress: {
           address: '123 Maple St',
           city: 'Toronto',
@@ -226,7 +226,7 @@ describe('apply-adult-route-helpers', () => {
         id: '00000000-0000-0000-0000-000000000000',
         lastUpdatedOn: '2000-01-01',
         livingIndependently: undefined,
-        partnerInformation: { confirm: true, dateOfBirth: '1900-01-01', firstName: 'First Name', lastName: 'Last Name', socialInsuranceNumber: '000-000-002' },
+        partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
         mailingAddress: {
           address: '123 Maple St',
           city: 'Toronto',

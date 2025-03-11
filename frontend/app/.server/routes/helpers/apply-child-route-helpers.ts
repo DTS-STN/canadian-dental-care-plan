@@ -151,7 +151,7 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
-    throw redirect(getPathById('public/apply/$id/child/partner-information', params));
+    throw redirect(getPathById('public/apply/$id/child/applicant-information', params));
   }
 
   if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
