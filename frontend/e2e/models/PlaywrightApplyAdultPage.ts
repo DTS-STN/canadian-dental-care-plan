@@ -12,7 +12,6 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
       | 'federal-provincial-territorial-benefits'
       | 'living-independently'
       | 'parent-or-guardian'
-      | 'partner-information'
       | 'review-information',
     heading?: string | RegExp,
   ) {
@@ -53,10 +52,6 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
 
       case 'parent-or-guardian':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/parent-or-guardian/, heading: 'Parent or guardian needs to apply' };
-        break;
-
-      case 'partner-information':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/partner-information/, heading: 'Spouse or common-law partner information' };
         break;
 
       case 'review-information':

@@ -12,6 +12,7 @@ import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
+import type { PartnerInformationState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -97,7 +98,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .min(1, t('apply-adult:marital-status.error-message.sin-required'))
       .refine(isValidSin, t('apply-adult:marital-status.error-message.sin-valid'))
       .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.partnerInformation?.socialInsuranceNumber, t('apply-adult:marital-status.error-message.sin-unique')),
-  }); //satisfies z.ZodType<PartnerInformationState>; change once state has been reworked.
+  }) satisfies z.ZodType<PartnerInformationState>;
 
   const maritalStatusData = {
     maritalStatus: formData.get('maritalStatus') ? String(formData.get('maritalStatus')) : undefined,
@@ -125,14 +126,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       maritalStatus: parsedMaritalStatus.data.maritalStatus,
-      partnerInformation: {
-        // TODO: partnerInformation will be reworked
-        confirm: parsedPartnerInformation.data?.confirm ?? false,
-        dateOfBirth: parsedPartnerInformation.data?.yearOfBirth ?? '2000',
-        firstName: '',
-        lastName: '',
-        socialInsuranceNumber: parsedPartnerInformation.data?.socialInsuranceNumber ?? '',
-      },
+      partnerInformation: parsedPartnerInformation.data,
     },
   });
 
@@ -199,7 +193,7 @@ export default function ApplyAdultMaritalStatus({ loaderData, params }: Route.Co
                   errorMessage={errors?.socialInsuranceNumber}
                   required
                 />
-                <InputPatternField id="year-of-birth" name="yearOfBirth" inputMode="numeric" format="####" defaultValue={defaultState.dateOfBirth ?? ''} label={t('apply-adult:marital-status.year-of-birth')} errorMessage={errors?.yearOfBirth} required />
+                <InputPatternField id="year-of-birth" name="yearOfBirth" inputMode="numeric" format="####" defaultValue={defaultState.yearOfBirth ?? ''} label={t('apply-adult:marital-status.year-of-birth')} errorMessage={errors?.yearOfBirth} required />
                 <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={errors?.confirm} defaultChecked={defaultState.confirm === true} required>
                   {t('apply-adult:marital-status.confirm-checkbox')}
                 </InputCheckbox>

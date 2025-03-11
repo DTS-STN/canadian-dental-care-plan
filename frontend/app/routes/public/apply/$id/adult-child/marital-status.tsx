@@ -12,6 +12,7 @@ import type { Route } from './+types/marital-status';
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
 import { applicantInformationStateHasPartner, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import type { PartnerInformationState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -95,7 +96,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .min(1, t('apply-adult-child:marital-status.error-message.sin-required'))
       .refine(isValidSin, t('apply-adult-child:marital-status.error-message.sin-valid'))
       .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.partnerInformation?.socialInsuranceNumber, t('apply-adult-child:marital-status.error-message.sin-unique')),
-  }); //satisfies z.ZodType<PartnerInformationState>; TODO: Add once the state is reworked.
+  }) satisfies z.ZodType<PartnerInformationState>;
 
   const maritalStatusData = {
     maritalStatus: formData.get('maritalStatus') ? String(formData.get('maritalStatus')) : undefined,
@@ -125,9 +126,7 @@ export async function action({ context: { appContainer, session }, params, reque
       maritalStatus: parsedMaritalStatus.data.maritalStatus,
       partnerInformation: {
         confirm: parsedPartnerInformation.data.confirm,
-        dateOfBirth: parsedPartnerInformation.data.yearOfBirth,
-        firstName: '', //TODO: to remove when the state is reworked.
-        lastName: '',
+        yearOfBirth: parsedPartnerInformation.data.yearOfBirth,
         socialInsuranceNumber: parsedPartnerInformation.data.socialInsuranceNumber,
       },
     },
@@ -209,7 +208,7 @@ export default function ApplyAdultChildMaritalStatus({ loaderData, params }: Rou
                   name="yearOfBirth"
                   inputMode="numeric"
                   format="####"
-                  defaultValue={defaultState.dateOfBirth ?? ''}
+                  defaultValue={defaultState.yearOfBirth ?? ''}
                   label={t('apply-adult-child:marital-status.year-of-birth')}
                   errorMessage={errors?.yearOfBirth}
                   required

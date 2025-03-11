@@ -272,44 +272,6 @@
     "exit-btn": "Exit",
     "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   },
-  "partner-information": {
-    "page-title": "Spouse or common-law partner information",
-    "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their Social Insurance Number (SIN) card or letter.",
-    "required-information": "The information is required to calculate the adjusted family net income. Your spouse or common-law partner must submit their own application for the Canadian Dental Care Plan.",
-    "sin": "Social Insurance Number (SIN)",
-    "date-of-birth": "Date of birth",
-    "last-name": "Last name",
-    "first-name": "First name",
-    "single-legal-name": "If your spouse or common-law partner has a single legal name",
-    "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
-    "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.",
-    "back-btn": "Back",
-    "continue-btn": "Continue",
-    "cancel-btn": "Cancel",
-    "save-btn": "Save",
-    "help-message": {
-      "sin": "Enter the 9-digit SIN"
-    },
-    "error-message": {
-      "confirm-required": "Consent from spouse or common-law partner is required to proceed",
-      "date-of-birth-day-number": "Day must be a number",
-      "date-of-birth-day-required": "Date of birth must include a day",
-      "date-of-birth-is-past": "Date of birth must be in the past",
-      "date-of-birth-is-past-valid": "Date of birth too far in the past",
-      "date-of-birth-month-required": "Date of birth must include a month",
-      "date-of-birth-valid": "Day must be valid for the given month and year",
-      "date-of-birth-year-number": "Year must be a number, for example 1950",
-      "date-of-birth-year-required": "Date of birth must include a year",
-      "first-name-required": "Enter first name",
-      "last-name-required": "Enter last name",
-      "sin-required": "Enter 9-digit SIN, for example 123 456 789",
-      "sin-valid": "Must be a valid SIN",
-      "sin-unique": "The Social Insurance Number (SIN) must be unique",
-      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
-      "first-name-no-digits": "First name must contain letters only",
-      "last-name-no-digits": "Last name must contain letters only"
-    }
-  },
   "address": {
     "mailing-address": {
       "page-title": "Mailing address",

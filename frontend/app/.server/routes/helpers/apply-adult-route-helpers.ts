@@ -138,7 +138,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
-    throw redirect(getPathById('public/apply/$id/adult/partner-information', params));
+    throw redirect(getPathById('public/apply/$id/adult/applicant-information', params));
   }
 
   if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {

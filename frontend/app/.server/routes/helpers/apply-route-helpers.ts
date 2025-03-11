@@ -67,9 +67,7 @@ export type ApplyState = ReadonlyDeep<{
   livingIndependently?: boolean;
   partnerInformation?: {
     confirm: boolean;
-    dateOfBirth: string;
-    firstName: string;
-    lastName: string;
+    yearOfBirth: string;
     socialInsuranceNumber: string;
   };
   isHomeAddressSameAsMailingAddress?: boolean;

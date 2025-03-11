@@ -1,5 +1,3 @@
-import { expect } from '@playwright/test';
-
 import { PlaywrightBasePage } from './PlaywrightBasePage';
 
 interface fillApplicantInformationFormArgs {
@@ -32,7 +30,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'federal-provincial-territorial-benefits'
       | 'living-independently'
       | 'parent-or-guardian'
-      | 'partner-information'
       | 'review-adult-information'
       | 'review-child-information',
     heading?: string | RegExp,
@@ -116,10 +113,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/parent-or-guardian/, heading: 'Parent or legal guardian needs to apply' };
         break;
 
-      case 'partner-information':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/partner-information/, heading: 'Spouse or common-law partner information' };
-        break;
-
       case 'review-adult-information':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/review-adult-information/, heading: 'Review your information' };
         break;
@@ -145,23 +138,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
     await this.page.getByRole('combobox', { name: 'Month' }).selectOption(month);
     await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
     await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-  }
-
-  async fillPartnerInformationForm() {
-    await this.isLoaded('partner-information');
-    await this.page.getByRole('textbox', { name: 'First name' }).fill('Mary');
-    await this.page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
-    await this.page.getByRole('combobox', { name: 'Month' }).selectOption('01');
-    await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill('01');
-    await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill('1960');
-
-    //check if sin is unique
-    await this.page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('900000001');
-    await this.page.getByRole('button', { name: 'Continue' }).click();
-    await expect(this.page.getByRole('link', { name: 'he Social Insurance Number (SIN) must be unique' })).toBeVisible();
-
-    await this.page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('800000002');
-    await this.page.getByRole('checkbox', { name: 'I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.' }).check();
   }
 
   async fillCommunicationForm() {

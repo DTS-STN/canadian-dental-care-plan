@@ -86,9 +86,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const spouseInfo = state.partnerInformation && {
-    firstName: state.partnerInformation.firstName,
-    lastName: state.partnerInformation.lastName,
-    birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
+    yearOfBirth: state.partnerInformation.yearOfBirth,
     sin: state.partnerInformation.socialInsuranceNumber,
     consent: state.partnerInformation.confirm,
   };
@@ -276,18 +274,10 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             <section className="space-y-6">
               <h2 className="font-lato text-2xl font-bold">{t('apply-adult:review-information.spouse-title')}</h2>
               <dl className="divide-y border-y">
-                <DescriptionListItem term={t('apply-adult:review-information.full-name-title')}>
-                  <p>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</p>
-                  <div className="mt-4">
-                    <InlineLink id="change-spouse-full-name" routeId="public/apply/$id/adult/partner-information" params={params}>
-                      {t('apply-adult:review-information.full-name-change')}
-                    </InlineLink>
-                  </div>
-                </DescriptionListItem>
                 <DescriptionListItem term={t('apply-adult:review-information.dob-title')}>
-                  <p>{spouseInfo.birthday}</p>
+                  <p>{spouseInfo.yearOfBirth}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-spouse-date-of-birth" routeId="public/apply/$id/adult/partner-information" params={params}>
+                    <InlineLink id="change-spouse-date-of-birth" routeId="public/apply/$id/adult/applicant-information" params={params}>
                       {t('apply-adult:review-information.dob-change')}
                     </InlineLink>
                   </div>
@@ -295,7 +285,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                 <DescriptionListItem term={t('apply-adult:review-information.sin-title')}>
                   <p>{formatSin(spouseInfo.sin)}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-spouse-sin" routeId="public/apply/$id/adult/partner-information" params={params}>
+                    <InlineLink id="change-spouse-sin" routeId="public/apply/$id/adult/applicant-information" params={params}>
                       {t('apply-adult:review-information.sin-change')}
                     </InlineLink>
                   </div>

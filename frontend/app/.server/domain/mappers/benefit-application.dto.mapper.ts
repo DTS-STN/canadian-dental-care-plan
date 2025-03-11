@@ -228,15 +228,11 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     return relatedPersons;
   }
 
-  private toRelatedPersonSpouse({ confirm, dateOfBirth, firstName, lastName, socialInsuranceNumber }: PartnerInformationDto) {
+  private toRelatedPersonSpouse({ confirm, socialInsuranceNumber, yearOfBirth }: PartnerInformationDto) {
     return {
-      PersonBirthDate: this.toDate(dateOfBirth),
-      PersonName: [
-        {
-          PersonGivenName: [firstName],
-          PersonSurName: lastName,
-        },
-      ],
+      PersonBirthDate: {
+        YearDate: yearOfBirth,
+      },
       PersonRelationshipCode: {
         ReferenceDataName: 'Spouse' as const,
       },
