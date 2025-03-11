@@ -1,10 +1,7 @@
-import type { interfaces } from 'inversify';
 import { Container } from 'inversify';
-import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
 
 import type { AppContainerProvider } from '~/.server/app-container.provider';
 import { DefaultAppContainerProvider } from '~/.server/app-container.provider';
-import { TYPES } from '~/.server/constants';
 import {
   authContainerModule,
   configsContainerModule,
@@ -32,7 +29,7 @@ import { getLogger } from '~/.server/utils/logging.utils';
  * application is wired together.
  */
 
-let appContainerInstance: interfaces.Container | undefined;
+let appContainerInstance: Container | undefined;
 let appContainerProviderInstance: AppContainerProvider | undefined;
 
 /**
@@ -40,8 +37,8 @@ let appContainerProviderInstance: AppContainerProvider | undefined;
  *
  * @returns the IoC app container singleton
  */
-function getAppContainer(): interfaces.Container {
-  return (appContainerInstance ??= createContainer());
+async function getAppContainer(): Promise<Container> {
+  return (appContainerInstance ??= await createContainer());
 }
 
 /**
@@ -49,8 +46,8 @@ function getAppContainer(): interfaces.Container {
  *
  * @returns The ContainerConfigProvider singleton instance.
  */
-export function getAppContainerProvider(): AppContainerProvider {
-  return (appContainerProviderInstance ??= new DefaultAppContainerProvider(getAppContainer()));
+export async function getAppContainerProvider(): Promise<AppContainerProvider> {
+  return (appContainerProviderInstance ??= new DefaultAppContainerProvider(await getAppContainer()));
 }
 
 /**
@@ -58,56 +55,16 @@ export function getAppContainerProvider(): AppContainerProvider {
  *
  * @returns the new IoC container
  */
-function createContainer(): interfaces.Container {
+async function createContainer(): Promise<Container> {
   const log = getLogger('container/createContainer');
 
   const container = new Container({ defaultScope: 'Singleton' });
-  log.info('Creating IoC container; id: [%s], options: [%j]', container.id, container.options);
+  log.info('Creating IoC container: [%j]', container);
 
   // load container modules
-  container.load(authContainerModule, configsContainerModule, factoriesContainerModule, healthContainerModule, mappersContainerModule, repositoriesContainerModule, routesContainerModule, servicesContainerModule, webContainerModule);
+  await container.load(authContainerModule, configsContainerModule, factoriesContainerModule, healthContainerModule, mappersContainerModule, repositoriesContainerModule, routesContainerModule, servicesContainerModule, webContainerModule);
 
-  // configure container logger middleware
-  const serverConfig = container.get(TYPES.configs.ServerConfig);
-
-  if (serverConfig.NODE_ENV === 'development') {
-    container.applyMiddleware(createLoggerMidddlware());
-  }
-
-  log.info('IoC container created; id: [%s]', container.id);
+  log.info('IoC container created; id: [%j]', container);
 
   return container;
-}
-
-/**
- * Create a logger middleware for the IoC container.
- *
- * @returns the logger middleware
- */
-function createLoggerMidddlware(): interfaces.Middleware {
-  const loggerMiddlewareLog = getLogger('container/LoggerMiddleware');
-  return makeLoggerMiddleware(
-    {
-      request: {
-        bindings: { activated: true, implementationType: true, scope: true, serviceIdentifier: true, type: true },
-        serviceIdentifier: true,
-        target: { metadata: true, name: true, serviceIdentifier: true },
-      },
-      time: true,
-    },
-    (out) => {
-      // NOTE: The "find" method in AppContainerProvider will return null if that error is thrown. This might be intentional.
-      if (out.exception && out.exception instanceof Error && out.exception.message.startsWith('No matching bindings found for serviceIdentifier')) {
-        loggerMiddlewareLog.warn(out.exception.message);
-        return;
-      }
-
-      if (out.exception) {
-        loggerMiddlewareLog.error(out.exception);
-        return;
-      }
-
-      loggerMiddlewareLog.trace(textSerializer(out));
-    },
-  );
 }

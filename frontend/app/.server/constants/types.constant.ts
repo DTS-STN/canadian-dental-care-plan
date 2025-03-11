@@ -1,5 +1,5 @@
 import type { HealthCheck } from '@dts-stn/health-checks';
-import type { interfaces } from 'inversify';
+import type { ServiceIdentifier as InversifyServiceIndentifier } from 'inversify';
 
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
@@ -94,7 +94,7 @@ import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } fr
  * const identifier: ServiceIdentifier<ExampleService> = serviceIdentifier('ExampleService');
  * ```
  */
-export type ServiceIdentifier<T> = Exclude<interfaces.ServiceIdentifier<T>, string | symbol>;
+export type ServiceIdentifier<T> = Exclude<InversifyServiceIndentifier<T>, string | symbol>;
 
 /**
  * Recursive type defining the structure of the service identifier registry.

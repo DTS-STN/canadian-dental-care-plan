@@ -1,4 +1,4 @@
-import type { interfaces } from 'inversify';
+import type { ContainerModuleLoadOptions, interfaces } from 'inversify';
 import { ContainerModule } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
@@ -22,11 +22,11 @@ function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
 /**
  * Container module for health components.
  */
-export const healthContainerModule = new ContainerModule((bind) => {
-  bind(TYPES.health.HealthCheck).to(AddressValidationHealthCheck);
-  bind(TYPES.health.HealthCheck).to(ApplicantHealthCheck);
-  bind(TYPES.health.HealthCheck).to(ApplicationStatusHealthCheck);
-  bind(TYPES.health.HealthCheck).to(HCaptchaHealthCheck).when(featureEnabled('hcaptcha'));
-  bind(TYPES.health.HealthCheck).to(LetterHealthCheck);
-  bind(TYPES.health.HealthCheck).to(RedisHealthCheck).when(sessionTypeIs('redis'));
+export const healthContainerModule = new ContainerModule((options: ContainerModuleLoadOptions) => {
+  options.bind(TYPES.health.HealthCheck).to(AddressValidationHealthCheck);
+  options.bind(TYPES.health.HealthCheck).to(ApplicantHealthCheck);
+  options.bind(TYPES.health.HealthCheck).to(ApplicationStatusHealthCheck);
+  options.bind(TYPES.health.HealthCheck).to(HCaptchaHealthCheck).when(featureEnabled('hcaptcha'));
+  options.bind(TYPES.health.HealthCheck).to(LetterHealthCheck);
+  options.bind(TYPES.health.HealthCheck).to(RedisHealthCheck).when(sessionTypeIs('redis'));
 });
