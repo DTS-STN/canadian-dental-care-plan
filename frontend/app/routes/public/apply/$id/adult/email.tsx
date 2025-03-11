@@ -87,7 +87,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
+  return redirect(getPathById('public/apply/$id/adult/verify-email', params));
 }
 
 export default function ApplyFlowPersonalInformation({ loaderData, params }: Route.ComponentProps) {

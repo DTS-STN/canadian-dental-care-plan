@@ -12,7 +12,7 @@ import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
-import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { applicantInformationStateHasPartner, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -59,12 +59,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   // Handle back button redirect
   invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
   const yearOfBirth = extractDateParts(state.applicantInformation.dateOfBirth).year;
-  const isYouthOrNewUser = ageCategory === 'youth' || Number(yearOfBirth) >= 2006;
+  const isNewUser = Number(yearOfBirth) >= 2006;
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:marital-status.page-title') }) };
-  return { isYouthOrNewUser, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
+  return { isNewUser, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -146,7 +145,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyAdultMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { isYouthOrNewUser, defaultState, editMode, maritalStatuses } = loaderData;
+  const { isNewUser, defaultState, editMode, maritalStatuses } = loaderData;
   const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
 
   const fetcher = useFetcher<typeof action>();
@@ -231,7 +230,7 @@ export default function ApplyAdultMaritalStatus({ loaderData, params }: Route.Co
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId={isYouthOrNewUser ? 'public/apply/$id/adult/new-or-existing-member' : 'public/apply/$id/adult/applicant-information'}
+                routeId={isNewUser ? 'public/apply/$id/adult/new-or-existing-member' : 'public/apply/$id/adult/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

@@ -151,6 +151,10 @@ export async function action({ context: { appContainer, session }, params, reque
         dateOfBirth: parsedDataResult.data.dateOfBirth,
         socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
       },
+      ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
+        // Handle marital-status back button
+        newOrExistingMember: undefined,
+      }),
     },
   });
 
