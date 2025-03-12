@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirm-marital-status';
 
 import { TYPES } from '~/.server/constants';
-import { loadProtectedRenewState, renewStateHasPartner, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isInvitationToApplyClient, loadProtectedRenewState, renewStateHasPartner, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import type { PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedRenewState({ params, request, session });
 
-  if (!state.clientApplication.isInvitationToApplyClient && !state.editMode) {
+  if (!isInvitationToApplyClient(state.clientApplication) && !state.editMode) {
     throw new Response('Not Found', { status: 404 });
   }
 
@@ -77,7 +77,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     defaultState: {
-      maritalStatus: state.maritalStatus ?? (state.clientApplication.isInvitationToApplyClient ? undefined : state.clientApplication.applicantInformation.maritalStatus),
+      maritalStatus: state.maritalStatus ?? (isInvitationToApplyClient(state.clientApplication) ? undefined : state.clientApplication.applicantInformation.maritalStatus),
       partnerInformation,
     },
     maritalStatuses,
@@ -116,8 +116,18 @@ export async function action({ context: { appContainer, session }, params, reque
       .string()
       .trim()
       .min(1, t('protected-renew:marital-status.error-message.sin-required'))
-      .refine(isValidSin, t('protected-renew:marital-status.error-message.sin-valid'))
-      .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.partnerInformation?.socialInsuranceNumber, t('protected-renew:marital-status.error-message.sin-unique')),
+      .superRefine((sin, ctx) => {
+        if (!isValidSin(sin)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:marital-status.error-message.sin-valid') });
+        } else if (
+          [state.clientApplication.applicantInformation.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
+            .filter((sin) => sin !== undefined)
+            .map((sin) => formatSin(sin))
+            .includes(formatSin(sin))
+        ) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:marital-status.error-message.sin-unique') });
+        }
+      }),
   }) satisfies z.ZodType<PartnerInformationState>;
 
   const maritalStatusData = {

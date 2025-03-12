@@ -38,7 +38,7 @@
       "yob-is-future": "Year of birth must be in the past",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
-      "sin-unique": "The Social Insurance Number (SIN) must be unique"
+      "sin-unique": "Invalid SIN. If you have confirmed that this is the correct SIN for your spouse or common-law partner and the issue continues, please call us at 1-833-537-4342."
     }
   },
   "confirm-phone": {

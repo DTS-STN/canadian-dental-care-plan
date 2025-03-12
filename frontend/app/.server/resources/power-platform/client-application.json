@@ -91,7 +91,7 @@
         }
       ],
       "PersonSINIdentification": {
-        "IdentificationID": "999999999"
+        "IdentificationID": "800000408"
       },
       "MailingSameAsHomeIndicator": true,
       "PreferredMethodCommunicationCode": {
@@ -146,7 +146,7 @@
             "ReferenceDataName": "Dependant"
           },
           "PersonSINIdentification": {
-            "IdentificationID": "100000009"
+            "IdentificationID": "800000424"
           },
           "ApplicantDetail": {
             "PrivateDentalInsuranceIndicator": false,
@@ -189,7 +189,7 @@
             "ReferenceDataName": "Dependant"
           },
           "PersonSINIdentification": {
-            "IdentificationID": "100000010"
+            "IdentificationID": "800000648"
           },
           "ApplicantDetail": {
             "PrivateDentalInsuranceIndicator": false,
@@ -220,7 +220,7 @@
             "ReferenceDataName": "Spouse"
           },
           "PersonSINIdentification": {
-            "IdentificationID": "900000001"
+            "IdentificationID": "800000655"
           },
           "ApplicantDetail": {
             "ConsentToSharePersonalInformationIndicator": true
