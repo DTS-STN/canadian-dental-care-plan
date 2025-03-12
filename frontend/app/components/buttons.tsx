@@ -24,6 +24,7 @@ const variants = {
   green: 'border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800',
   primary: 'border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800',
   red: 'border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800',
+  link: 'text-slate-700 underline hover:text-blue-700 focus:text-blue-700 border-none px-0',
 };
 
 const baseClassName = 'inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4';

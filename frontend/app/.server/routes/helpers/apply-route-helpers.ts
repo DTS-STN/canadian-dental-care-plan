@@ -54,6 +54,10 @@ export type ApplyState = ReadonlyDeep<{
     preferredNotificationMethod: string;
   };
   email?: string;
+  verifyEmail?: {
+    verificationCode: string;
+    verificationAttempts?: number;
+  };
   hasFederalProvincialTerritorialBenefits?: boolean;
   maritalStatus?: string;
   dentalBenefits?: {
