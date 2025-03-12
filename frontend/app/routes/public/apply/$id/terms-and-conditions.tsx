@@ -27,9 +27,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-enum CheckboxValue {
-  Yes = 'yes',
-}
+const CHECKBOX_VALUE = {
+  yes: 'yes',
+} as const;
 
 const FORM_ACTION = {
   continue: 'continue',
@@ -226,16 +226,16 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       </p>
       <fetcher.Form method="post" noValidate onSubmit={handleSubmit}>
         <CsrfTokenInput />
-        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgeTerms} required>
+        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeTerms} required>
           {t('apply:terms-and-conditions.checkboxes.acknowledge-terms')}
         </InputCheckbox>
-        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CheckboxValue.Yes} errorMessage={errors?.acknowledgePrivacy} required>
+        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgePrivacy} required>
           {t('apply:terms-and-conditions.checkboxes.acknowledge-privacy')}
         </InputCheckbox>
-        <InputCheckbox id="share-data" name="shareData" value={CheckboxValue.Yes} errorMessage={errors?.shareData} required>
+        <InputCheckbox id="share-data" name="shareData" value={CHECKBOX_VALUE.yes} errorMessage={errors?.shareData} required>
           {t('apply:terms-and-conditions.checkboxes.share-data')}
         </InputCheckbox>
-        <InputCheckbox id="do-not-consent" name="doNotConsent" value={CheckboxValue.Yes} className="my-8" onChange={handleChecked}>
+        <InputCheckbox id="do-not-consent" name="doNotConsent" value={CHECKBOX_VALUE.yes} className="my-8" onChange={handleChecked}>
           <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.checkboxes.do-not-consent" />
         </InputCheckbox>
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
