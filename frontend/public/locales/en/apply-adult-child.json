@@ -304,8 +304,6 @@
     "preferred-language": "What is your preferred official language of communication?",
     "by-email": "By email",
     "by-mail": "By mail",
-    "email": "Email address",
-    "confirm-email": "Confirm email address",
     "preferred-notification-method": "How would you like to receive letters or notifications from the Government of Canada about your eligibility for the Canadian Dental Care Plan?",
     "preferred-notification-method-msca": "<strong>Digitally through My Service Canada Account (MSCA)</strong><br>You <strong>will not receive</strong> your Canadian Dental Care Plan eligibility decision by mail. Visit <mscaLinkAccount>My Service Canada Account</mscaLinkAccount> to register for an account or to sign in.",
     "preferred-notification-method-mail": "<strong>By mail</strong><br>You can also view your Canadian Dental Care Plan eligibility decision in your <mscaLinkAccount>My Service Canada Account</mscaLinkAccount>.",
@@ -315,11 +313,6 @@
     "save-btn": "Save",
     "msca-link-account": "https://www.canada.ca/en/employment-social-development/services/my-account.html",
     "error-message": {
-      "email-match": "The email addresses entered do not match",
-      "confirm-email-required": "Confirm email address",
-      "email-required": "Enter email address",
-      "email-valid": "Enter an email address in the correct format, such as name@example.com",
-      "confirm-email-valid": "Enter confirmation of email address in the correct format, such as name@example.com",
       "preferred-language-required": "Select preferred language of communication",
       "preferred-method-required": "Select preferred method of communication",
       "preferred-notification-method-required": "Select preferred notification method"

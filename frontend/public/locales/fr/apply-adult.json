@@ -68,8 +68,6 @@
     "preferred-language": "Quelle langue officielle de communication préférez-vous?",
     "by-email": "Par courriel",
     "by-mail": "Par la poste",
-    "email": "Adresse courriel",
-    "confirm-email": "Confirmer l'adresse courriel",
     "preferred-notification-method": "Comment aimeriez-vous recevoir les lettres ou notifications du gouvernement du Canada au sujet de votre admissibilité au Régime canadien de soins dentaires?",
     "preferred-notification-method-msca": "<strong>Numériquement, dans Mon dossier Service Canada (MDSC)</strong><br>Vous <strong>ne recevrez pas</strong> la décision d'admissibilité au Régime canadien de soins dentaires par la poste. Allez sur le site <mscaLinkAccount>Mon dossier Service Canada</mscaLinkAccount> pour y ouvrir un compte ou pour ouvrir une session.",
     "preferred-notification-method-mail": "<strong>Par la poste</strong><br>Vous pouvez également consulter votre décision d'admissibilité au Régime canadien de soins dentaires dans <mscaLinkAccount>Mon dossier Service Canada</mscaLinkAccount>.",
@@ -79,11 +77,6 @@
     "save-btn": "Enregistrer",
     "msca-link-account": "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
     "error-message": {
-      "email-match": "Les adresses courriel entrées ne concordent pas",
-      "confirm-email-required": "Confirmez l'adresse courriel",
-      "email-required": "Entrez l'adresse courriel",
-      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
-      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
       "preferred-method-required": "Sélectionnez le moyen de communication préféré",
       "preferred-notification-method-required": "(FR) Select preferred notification method"

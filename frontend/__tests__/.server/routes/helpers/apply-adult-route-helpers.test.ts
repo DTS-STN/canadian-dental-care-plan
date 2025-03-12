@@ -200,7 +200,6 @@ describe('apply-adult-route-helpers', () => {
         contactInformation: {
           phoneNumber: '123-456-7890',
           phoneNumberAlt: '987-654-3210',
-          email: 'test@example.com',
         },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         dentalInsurance: false,
@@ -244,7 +243,6 @@ describe('apply-adult-route-helpers', () => {
         contactInformation: {
           phoneNumber: '123-456-7890',
           phoneNumberAlt: '987-654-3210',
-          email: 'test@example.com',
         },
         submissionInfo: undefined,
         taxFiling2023: true,
