@@ -1,11 +1,7 @@
-import type { ChangeEventHandler } from 'react';
-import { useState } from 'react';
-
 import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
-import validator from 'validator';
 import { z } from 'zod';
 
 import type { Route } from './+types/communication-preference';
@@ -20,7 +16,6 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
-import { InputField } from '~/components/input-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -64,16 +59,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     communicationMethodEmail,
     id: state.id,
-
     meta,
     preferredCommunicationMethods,
     preferredLanguages,
     defaultState: {
       ...(state.communicationPreferences ?? {}),
-      email: state.communicationPreferences?.email ?? state.contactInformation?.email,
     },
     editMode: state.editMode,
-    isReadOnlyEmail: !!state.contactInformation?.email,
   };
 }
 
@@ -88,37 +80,13 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formSchema = z
-    .object({
-      preferredLanguage: z.string().trim().min(1, t('apply-child:communication-preference.error-message.preferred-language-required')),
-      preferredMethod: z.string().trim().min(1, t('apply-child:communication-preference.error-message.preferred-method-required')),
-      preferredNotificationMethod: z.string().trim().min(1, t('apply-child:communication-preference.error-message.preferred-notification-method-required')),
-      email: z.string().trim().max(64).optional(),
-      confirmEmail: z.string().trim().max(64).optional(),
-    })
-    .superRefine((val, ctx) => {
-      if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
-        if (typeof val.email !== 'string' || validator.isEmpty(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:communication-preference.error-message.email-required'), path: ['email'] });
-        } else if (!validator.isEmail(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:communication-preference.error-message.email-valid'), path: ['email'] });
-        }
-
-        if (!state.contactInformation?.email) {
-          if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
-          } else if (!validator.isEmail(val.confirmEmail)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:communication-preference.error-message.confirm-email-valid'), path: ['confirmEmail'] });
-          } else if (val.email !== val.confirmEmail) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
-          }
-        }
-      }
-    }) satisfies z.ZodType<CommunicationPreferencesState>;
+  const formSchema = z.object({
+    preferredLanguage: z.string().trim().min(1, t('apply-child:communication-preference.error-message.preferred-language-required')),
+    preferredMethod: z.string().trim().min(1, t('apply-child:communication-preference.error-message.preferred-method-required')),
+    preferredNotificationMethod: z.string().trim().min(1, t('apply-child:communication-preference.error-message.preferred-notification-method-required')),
+  }) satisfies z.ZodType<CommunicationPreferencesState>;
 
   const parsedDataResult = formSchema.safeParse({
-    confirmEmail: formData.get('confirmEmail') ? String(formData.get('confirmEmail') ?? '') : undefined,
-    email: formData.get('email') ? String(formData.get('email') ?? '') : undefined,
     preferredLanguage: String(formData.get('preferredLanguage') ?? ''),
     preferredMethod: String(formData.get('preferredMethod') ?? ''),
     preferredNotificationMethod: String(formData.get('preferredNotificationMethod') ?? ''),
@@ -149,11 +117,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode, isReadOnlyEmail } = loaderData;
+  const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [preferredMethodValue, setPreferredMethodValue] = useState(defaultState.preferredMethod ?? '');
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
 
@@ -161,14 +128,8 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
   const errorSummary = useErrorSummary(errors, {
     preferredLanguage: 'input-radio-preferred-language-option-0',
     preferredMethod: 'input-radio-preferred-methods-option-0',
-    email: 'email',
-    confirmEmail: 'confirm-email',
     preferredNotificationMethod: 'input-radio-preferred-notification-method-option-0',
   });
-
-  const handleOnPreferredMethodChecked: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setPreferredMethodValue(e.target.value);
-  };
 
   const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
     .filter((method) => method.id !== communicationMethodEmail.id)
@@ -176,7 +137,6 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
       children: <span className="font-bold">{t('apply-child:communication-preference.by-mail')}</span>,
       value: method.id,
       defaultChecked: defaultState.preferredMethod === method.id,
-      onChange: handleOnPreferredMethodChecked,
     }));
 
   const options: InputRadiosProps['options'] = [
@@ -184,40 +144,6 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
       children: <span className="font-bold">{t('apply-child:communication-preference.by-email')}</span>,
       value: communicationMethodEmail.id,
       defaultChecked: defaultState.preferredMethod === communicationMethodEmail.id,
-      append: preferredMethodValue === communicationMethodEmail.id && (
-        <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
-          <InputField
-            id="email"
-            type="email"
-            inputMode="email"
-            className="w-full"
-            label={t('apply-child:communication-preference.email')}
-            maxLength={64}
-            name="email"
-            errorMessage={errors?.email}
-            autoComplete="email"
-            defaultValue={defaultState.email ?? ''}
-            required
-            readOnly={isReadOnlyEmail}
-          />
-          {!isReadOnlyEmail && (
-            <InputField
-              id="confirm-email"
-              type="email"
-              inputMode="email"
-              className="w-full"
-              label={t('apply-child:communication-preference.confirm-email')}
-              maxLength={64}
-              name="confirmEmail"
-              errorMessage={errors?.confirmEmail}
-              autoComplete="email"
-              defaultValue={defaultState.email ?? ''}
-              required
-            />
-          )}
-        </div>
-      ),
-      onChange: handleOnPreferredMethodChecked,
     },
     ...nonEmailOptions,
   ];

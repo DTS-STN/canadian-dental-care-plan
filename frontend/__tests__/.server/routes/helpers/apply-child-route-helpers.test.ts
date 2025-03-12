@@ -195,7 +195,6 @@ describe('apply-child-route-helpers', () => {
         contactInformation: {
           phoneNumber: '123-456-7890',
           phoneNumberAlt: '987-654-3210',
-          email: 'test@example.com',
         },
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
       } satisfies ApplyState;
@@ -268,7 +267,6 @@ describe('apply-child-route-helpers', () => {
         contactInformation: {
           phoneNumber: '123-456-7890',
           phoneNumberAlt: '987-654-3210',
-          email: 'test@example.com',
         },
         communicationPreferences: undefined,
       } satisfies ApplyState;
@@ -315,7 +313,6 @@ describe('apply-child-route-helpers', () => {
         contactInformation: {
           phoneNumber: '123-456-7890',
           phoneNumberAlt: '987-654-3210',
-          email: 'test@example.com',
         },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
       } satisfies ApplyState;
@@ -363,7 +360,6 @@ describe('apply-child-route-helpers', () => {
         contactInformation: {
           phoneNumber: '123-456-7890',
           phoneNumberAlt: '987-654-3210',
-          email: 'test@example.com',
         },
         submissionInfo: undefined,
         taxFiling2023: true,

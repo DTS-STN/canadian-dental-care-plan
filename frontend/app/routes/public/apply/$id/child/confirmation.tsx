@@ -71,8 +71,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
-    contactInformationEmail: state.contactInformation?.email,
-    communicationPreferenceEmail: state.communicationPreferences.email,
+    contactInformationEmail: state.email,
     communicationPreference: communicationPreference.name,
   };
 
@@ -348,7 +347,6 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('confirm.comm-pref')}>
                   <p>{userInfo.communicationPreference}</p>
-                  {userInfo.communicationPreferenceEmail && <p>{userInfo.communicationPreferenceEmail}</p>}
                 </DescriptionListItem>
                 <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage}</DescriptionListItem>
               </dl>

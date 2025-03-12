@@ -48,7 +48,6 @@ export type ApplyState = ReadonlyDeep<{
     };
   }[];
   communicationPreferences?: {
-    email?: string;
     preferredLanguage: string;
     preferredMethod: string;
     preferredNotificationMethod: string;
@@ -88,7 +87,6 @@ export type ApplyState = ReadonlyDeep<{
   contactInformation?: {
     phoneNumber?: string;
     phoneNumberAlt?: string;
-    email?: string;
   };
   newOrExistingMember?: {
     isNewOrExistingMember: boolean;

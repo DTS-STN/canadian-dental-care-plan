@@ -79,7 +79,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: maritalStatus,
-    contactInformationEmail: state.contactInformation.email,
+    contactInformationEmail: state.email,
     communicationSunLifePreference: communicationSunLifePreference.name,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     previouslyEnrolled: state.newOrExistingMember,

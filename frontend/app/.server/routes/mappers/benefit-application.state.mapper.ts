@@ -26,6 +26,7 @@ export interface ApplyAdultState {
   maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
+  email?: string;
   livingIndependently?: boolean;
   mailingAddress?: MailingAddressState;
   homeAddress?: HomeAddressState;
@@ -43,6 +44,7 @@ export interface ApplyAdultChildState {
   maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
+  email?: string;
   mailingAddress?: MailingAddressState;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
@@ -57,6 +59,7 @@ export interface ApplyChildState {
   children: Required<ChildState>[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
+  email?: string;
   maritalStatus?: string;
   mailingAddress?: MailingAddressState;
   homeAddress?: HomeAddressState;
@@ -72,6 +75,7 @@ interface ToBenefitApplicationDtoArgs {
   children?: Required<ChildState>[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
+  email?: string;
   maritalStatus?: string;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance?: boolean;
@@ -94,8 +98,14 @@ interface ToHomeAddressArgs {
   mailingAddress: MailingAddressState;
 }
 
+interface ToCommunicationPreferencesArgs {
+  communicationPreferences: CommunicationPreferencesState;
+  email?: string;
+}
+
 interface ToContactInformationArgs {
   contactInformation: ContactInformationState;
+  email?: string;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   mailingAddress?: MailingAddressState;
@@ -147,6 +157,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     maritalStatus,
     dentalBenefits,
     dentalInsurance,
+    email,
     livingIndependently,
     partnerInformation,
     homeAddress,
@@ -162,8 +173,8 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       }),
       applicationYearId: applicationYear.intakeYearId,
       children: this.toChildren(children),
-      communicationPreferences,
-      contactInformation: this.toContactInformation({ contactInformation, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
+      communicationPreferences: this.toCommunicationPreferences({ communicationPreferences, email }),
+      contactInformation: this.toContactInformation({ contactInformation, email, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
       dateOfBirth: applicantInformation.dateOfBirth,
       maritalStatus,
       dentalBenefits: this.toDentalBenefits(dentalBenefits),
@@ -189,13 +200,21 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     }));
   }
 
-  private toContactInformation({ contactInformation, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToContactInformationArgs) {
+  private toCommunicationPreferences({ communicationPreferences, email }: ToCommunicationPreferencesArgs) {
+    return {
+      ...communicationPreferences,
+      email,
+    };
+  }
+
+  private toContactInformation({ contactInformation, email, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToContactInformationArgs) {
     invariant(mailingAddress, 'Expected mailingAddress to be defined');
     return {
       ...contactInformation,
       copyMailingAddress: !!isHomeAddressSameAsMailingAddress,
       ...this.toHomeAddress({ isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
       ...this.toMailingAddress(mailingAddress),
+      email,
     };
   }
 
