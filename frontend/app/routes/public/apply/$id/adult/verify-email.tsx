@@ -11,7 +11,7 @@ import type { Route } from './+types/verify-email';
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -31,8 +31,10 @@ import { extractDigits } from '~/utils/string-utils';
 
 const FORM_ACTION = {
   request: 'request',
-  continue: 'continue',
+  submit: 'submit',
 } as const;
+
+const MAX_ATTEMPTS = 5;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -65,46 +67,64 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  // TODO: fetch gc-notify service mock
+  const locale = getLocale(request);
 
   // fetch verification code service
   const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
-  // TODO: Add logic to limit verification attempts (Max 5)
   if (formAction === FORM_ACTION.request) {
+    // Check if the maximum number of attempts has been reached
+    // TODO: Not sure what the error message is or where to display the error if max attempts reached (alert or field validation), returning status-not-found alert for now.
+    if (state.verifyEmail?.verificationAttempts && state.verifyEmail.verificationAttempts >= MAX_ATTEMPTS) {
+      return { status: 'status-not-found' } as const;
+    }
+
+    // Increment the verification attempts
+    const verificationAttempts = (state.verifyEmail?.verificationAttempts ?? 1) + 1;
+
     // create a new verification code and store the code in session
     const verificationCode = verificationCodeService.createVerificationCode('anonymous');
+    const verificationExpire = Date.now() + 5 * 60 * 1000;
+
     saveApplyState({
       params,
       session,
       state: {
         verifyEmail: {
           verificationCode,
+          verificationAttempts,
+          verificationExpire,
         },
       },
     });
+    if (state.email && state.communicationPreferences?.preferredLanguage) {
+      const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
+      await verificationCodeService.sendVerificationCodeEmail({ email: state.email, verificationCode: verificationCode, preferredLanguage: preferredLanguage, userId: 'anonymous' });
+    }
   }
 
-  const verificationCodeSchema = z.object({
-    verificationCode: z.string().trim().min(1, t('apply-adult:verify-email.error-message.verification-code-required')).transform(extractDigits),
-  });
+  if (formAction === FORM_ACTION.submit) {
+    const verificationCodeSchema = z.object({
+      verificationCode: z.string().trim().min(1, t('apply-adult:verify-email.error-message.verification-code-required')).transform(extractDigits),
+    });
 
-  const parsedDataResult = verificationCodeSchema.safeParse({
-    verificationCode: formData.get('verificationCode') ?? '',
-  });
+    const parsedDataResult = verificationCodeSchema.safeParse({
+      verificationCode: formData.get('verificationCode') ?? '',
+    });
 
-  if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    if (!parsedDataResult.success) {
+      return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    }
+
+    // If verfication code does not match input or verification code expired, display alert
+    if (parsedDataResult.data.verificationCode !== state.verifyEmail?.verificationCode || (state.verifyEmail.verificationExpire && Date.now() > state.verifyEmail.verificationExpire)) {
+      return { status: 'status-not-found' } as const;
+    }
+
+    return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
   }
-
-  if (parsedDataResult.data.verificationCode !== state.verifyEmail?.verificationCode) {
-    return { status: 'status-not-found' } as const;
-  }
-
-  return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
 }
 
 export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.ComponentProps) {
@@ -158,7 +178,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               variant="primary"
               id="continue-button"
               name="_action"
-              value={FORM_ACTION.continue}
+              value={FORM_ACTION.submit}
               loading={isSubmitting}
               endIcon={faChevronRight}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Verify email"
