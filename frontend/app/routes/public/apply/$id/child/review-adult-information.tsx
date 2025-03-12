@@ -11,6 +11,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-adult-information';
+import { PREFERRED_NOTIFICATION_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyChildStateForReview } from '~/.server/routes/helpers/apply-child-route-helpers';
@@ -66,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
   const countryMailing = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
   const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name : undefined;
-  const communicationPreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
+  const communicationSunLifePreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
 
@@ -79,8 +80,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: maritalStatus,
     contactInformationEmail: state.contactInformation.email,
-    communicationPreferenceEmail: state.communicationPreferences.email,
-    communicationPreference: communicationPreference.name,
+    communicationSunLifePreference: communicationSunLifePreference.name,
+    communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
+    previouslyEnrolled: state.newOrExistingMember,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -227,6 +229,23 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   </InlineLink>
                 </p>
               </DescriptionListItem>
+              {userInfo.previouslyEnrolled && (
+                <DescriptionListItem term={t('apply-child:review-adult-information.previously-enrolled-title')}>
+                  {userInfo.previouslyEnrolled.isNewOrExistingMember ? (
+                    <>
+                      <p>{t('apply-child:review-adult-information.yes')}</p>
+                      <p>{userInfo.previouslyEnrolled.clientNumber}</p>
+                    </>
+                  ) : (
+                    <p>{t('apply-child:review-adult-information.no')}</p>
+                  )}
+                  <div className="mt-4">
+                    <InlineLink id="change-previously-enrolled" routeId="public/apply/$id/child/new-or-existing-member" params={params}>
+                      {t('apply-child:review-adult-information.previously-enrolled-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              )}
             </dl>
           </div>
           {spouseInfo && (
@@ -261,7 +280,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
               <DescriptionListItem term={t('apply-child:review-adult-information.phone-title')}>
                 {userInfo.phoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-phone-number" routeId="public/apply/$id/child/contact-information" params={params}>
+                  <InlineLink id="change-phone-number" routeId="public/apply/$id/child/phone-number" params={params}>
                     {t('apply-child:review-adult-information.phone-change')}
                   </InlineLink>
                 </p>
@@ -269,7 +288,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
               <DescriptionListItem term={t('apply-child:review-adult-information.alt-phone-title')}>
                 {userInfo.altPhoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-alternate-phone-number" routeId="public/apply/$id/child/contact-information" params={params}>
+                  <InlineLink id="change-alternate-phone-number" routeId="public/apply/$id/child/phone-number" params={params}>
                     {t('apply-child:review-adult-information.alt-phone-change')}
                   </InlineLink>
                 </p>
@@ -277,7 +296,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
               <DescriptionListItem term={t('apply-child:review-adult-information.email')}>
                 {userInfo.contactInformationEmail}
                 <p className="mt-4">
-                  <InlineLink id="change-email" routeId="public/apply/$id/child/contact-information" params={params}>
+                  <InlineLink id="change-email" routeId="public/apply/$id/child/email" params={params}>
                     {t('apply-child:review-adult-information.email-change')}
                   </InlineLink>
                 </p>
@@ -293,7 +312,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   }}
                 />
                 <p className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="public/apply/$id/child/contact-information" params={params}>
+                  <InlineLink id="change-mailing-address" routeId="public/apply/$id/child/mailing-address" params={params}>
                     {t('apply-child:review-adult-information.mailing-change')}
                   </InlineLink>
                 </p>
@@ -309,7 +328,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   }}
                 />
                 <p className="mt-4">
-                  <InlineLink id="change-home-address" routeId="public/apply/$id/child/contact-information" params={params}>
+                  <InlineLink id="change-home-address" routeId="public/apply/$id/child/home-address" params={params}>
                     {t('apply-child:review-adult-information.home-change')}
                   </InlineLink>
                 </p>
@@ -319,20 +338,29 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
           <div>
             <h2 className="font-lato mt-8 text-2xl font-bold">{t('apply-child:review-adult-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
-              <DescriptionListItem term={t('apply-child:review-adult-information.comm-pref-title')}>
-                <p>{userInfo.communicationPreference}</p>
-                {userInfo.communicationPreferenceEmail && <p>{userInfo.communicationPreferenceEmail}</p>}
-                <p className="mt-4">
-                  <InlineLink id="change-communication-preference" routeId="public/apply/$id/child/communication-preference" params={params}>
-                    {t('apply-child:review-adult-information.comm-pref-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
               <DescriptionListItem term={t('apply-child:review-adult-information.lang-pref-title')}>
                 {preferredLanguage}
                 <p className="mt-4">
                   <InlineLink id="change-language-preference" routeId="public/apply/$id/child/communication-preference" params={params}>
                     {t('apply-child:review-adult-information.lang-pref-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('apply-child:review-adult-information.sun-life-comm-pref-title')}>
+                <p>{userInfo.communicationSunLifePreference}</p>
+                <p>
+                  <InlineLink id="change-communication-preference" routeId="public/apply/$id/child/communication-preference" params={params}>
+                    {t('apply-child:review-adult-information.sun-life-comm-pref-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('apply-child:review-adult-information.goc-comm-pref-title')}>
+                <p>
+                  {userInfo.communicationGOCPreference === PREFERRED_NOTIFICATION_METHOD.msca ? t('apply-child:review-adult-information.preferred-notification-method-msca') : t('apply-child:review-adult-information.preferred-notification-method-mail')}
+                </p>
+                <p>
+                  <InlineLink id="change-communication-preference" routeId="public/apply/$id/child/communication-preference" params={params}>
+                    {t('apply-child:review-adult-information.goc-comm-pref-change')}
                   </InlineLink>
                 </p>
               </DescriptionListItem>
