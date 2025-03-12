@@ -56,6 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     id: state.id,
     meta,
     email: state.email,
+    attempts: state.verifyEmail?.verificationAttempts,
   };
 }
 
@@ -75,15 +76,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.request) {
-    // Check if the maximum number of attempts has been reached
-    // TODO: Not sure what the error message is or where to display the error if max attempts reached (alert or field validation), returning status-not-found alert for now.
-    if (state.verifyEmail?.verificationAttempts && state.verifyEmail.verificationAttempts >= MAX_ATTEMPTS) {
-      return { status: 'status-not-found' } as const;
-    }
-
-    // Increment the verification attempts
-    const verificationAttempts = (state.verifyEmail?.verificationAttempts ?? 1) + 1;
-
     // create a new verification code and store the code in session
     const verificationCode = verificationCodeService.createVerificationCode('anonymous');
     const verificationExpire = Date.now() + 5 * 60 * 1000;
@@ -94,7 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
       state: {
         verifyEmail: {
           verificationCode,
-          verificationAttempts,
+          verificationAttempts: 0,
           verificationExpire,
         },
       },
@@ -118,10 +110,45 @@ export async function action({ context: { appContainer, session }, params, reque
       return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
     }
 
-    // If verfication code does not match input or verification code expired, display alert
-    if (parsedDataResult.data.verificationCode !== state.verifyEmail?.verificationCode || (state.verifyEmail.verificationExpire && Date.now() > state.verifyEmail.verificationExpire)) {
+    // Check if the verification code has expired
+    if (state.verifyEmail?.verificationExpire && Date.now() > state.verifyEmail.verificationExpire) {
       return { status: 'status-not-found' } as const;
     }
+
+    // Check if the verification code matches
+    if (parsedDataResult.data.verificationCode !== state.verifyEmail?.verificationCode || (state.verifyEmail.verificationExpire && Date.now() > state.verifyEmail.verificationExpire)) {
+      const verificationAttempts = (state.verifyEmail?.verificationAttempts ?? 0) + 1;
+
+      saveApplyState({
+        params,
+        session,
+        state: {
+          verifyEmail: {
+            ...state.verifyEmail,
+            verificationAttempts,
+          },
+        },
+      });
+
+      // Check if the maximum number of attempts has been reached
+      // TODO: Not sure what the error message is or where to display the error if max attempts reached (alert or field validation), returning status-not-found alert for now.
+      if (verificationAttempts >= MAX_ATTEMPTS) {
+        return { status: 'status-not-found' } as const;
+      }
+
+      return { status: 'status-not-found' } as const;
+    }
+
+    saveApplyState({
+      params,
+      session,
+      state: {
+        verifyEmail: {
+          ...state.verifyEmail,
+          verificationAttempts: 0,
+        },
+      },
+    });
 
     return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
   }
@@ -129,7 +156,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { email } = loaderData;
+  const { email, attempts } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -181,6 +208,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               value={FORM_ACTION.submit}
               loading={isSubmitting}
               endIcon={faChevronRight}
+              disabled={(attempts ?? 0) >= MAX_ATTEMPTS} // TODO: For the purpose of testing, disabled when max attempts reached. remove this when error message is available
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Verify email"
             >
               {t('apply-adult:verify-email.continue')}

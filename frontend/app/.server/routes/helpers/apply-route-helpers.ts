@@ -55,7 +55,7 @@ export type ApplyState = ReadonlyDeep<{
   };
   email?: string;
   verifyEmail?: {
-    verificationCode: string;
+    verificationCode?: string;
     verificationAttempts?: number;
     verificationExpire?: number;
   };
