@@ -56,6 +56,7 @@ export const pageIds = {
         newOrExistingMember: 'CDCP-APPL-AD-0019',
         phoneNumber: 'CDCP-APPL-AD-0020',
         email: 'CDCP-APPL-AD-0021',
+        verifyEmail: 'CDCP-APPL-AD-0022',
       },
       adultChild: {
         applicantInformation: 'CDCP-APPL-ADCH-0006',

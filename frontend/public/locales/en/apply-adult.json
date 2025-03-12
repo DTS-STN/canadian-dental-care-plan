@@ -103,6 +103,24 @@
       "email-valid": "Enter an email address in the correct format, such as name@example.com"
     }
   },
+  "verify-email": {
+    "page-title": "Verify your email address",
+    "verification-code": "An email with a verification code has been sent to {{email}}. Please enter the 5-digit verification code and select \"Continue\".",
+    "request-new": "It may take up to 60 seconds for the email to arrive. If you don't see it, check your junk or spam folder. If you still don't have the code, you can request a new one.",
+    "unable-to-verify": "If you are not able to verify your email, select “Back” to update the email address  or <communicationLink>modify your communication preference</communicationLink>.",
+    "verification-code-label": "Verification code",
+    "request-new-code": "Request new verification code",
+    "back": "Back",
+    "continue": "Continue",
+    "error-message": {
+      "verification-code-required": "Enter 5-digit verification code",
+      "verification-code-max-attempts": "You have entered an incorrect verification code more than 5 times. You must request a new code using the \"Request new verification code\" link below."
+    },
+    "verification-code-alert": {
+      "heading": "The verification code entered does not match the code that was sent to the email address provided, or the code has expired.",
+      "detail": "Please check the code and try again. If the issue continues, you can request a new code using the \"Request new verification code\" link below."
+    }
+  },
   "confirm": {
     "page-title": "Application successfully submitted",
     "app-code-is": "Your application code is:",
