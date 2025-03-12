@@ -107,7 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
 }
 
-export default function ApplyFlowPersonalInformation({ loaderData, params }: Route.ComponentProps) {
+export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { email } = loaderData;
 
