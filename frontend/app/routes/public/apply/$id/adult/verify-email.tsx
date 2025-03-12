@@ -36,6 +36,8 @@ const FORM_ACTION = {
 
 const MAX_ATTEMPTS = 5;
 
+export const PREFERRED_LANGUAGE = { en: 'English', fr: 'French' } as const;
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adult.verifyEmail,
@@ -56,7 +58,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     id: state.id,
     meta,
     email: state.email,
-    attempts: state.verifyEmail?.verificationAttempts,
   };
 }
 
@@ -78,7 +79,6 @@ export async function action({ context: { appContainer, session }, params, reque
   if (formAction === FORM_ACTION.request) {
     // create a new verification code and store the code in session
     const verificationCode = verificationCodeService.createVerificationCode('anonymous');
-    const verificationExpire = Date.now() + 5 * 60 * 1000;
 
     saveApplyState({
       params,
@@ -87,19 +87,27 @@ export async function action({ context: { appContainer, session }, params, reque
         verifyEmail: {
           verificationCode,
           verificationAttempts: 0,
-          verificationExpire,
         },
       },
     });
     if (state.email && state.communicationPreferences?.preferredLanguage) {
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
-      await verificationCodeService.sendVerificationCodeEmail({ email: state.email, verificationCode: verificationCode, preferredLanguage: preferredLanguage, userId: 'anonymous' });
+      await verificationCodeService.sendVerificationCodeEmail({ email: state.email, verificationCode: verificationCode, preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr', userId: 'anonymous' });
     }
   }
 
   if (formAction === FORM_ACTION.submit) {
     const verificationCodeSchema = z.object({
-      verificationCode: z.string().trim().min(1, t('apply-adult:verify-email.error-message.verification-code-required')).transform(extractDigits),
+      verificationCode: z
+        .string()
+        .trim()
+        .min(1, t('apply-adult:verify-email.error-message.verification-code-required'))
+        .transform(extractDigits)
+        .superRefine((val, ctx) => {
+          if (state.verifyEmail && state.verifyEmail.verificationAttempts >= MAX_ATTEMPTS) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:verify-email.error-message.verification-code-max-attempts'), path: ['verificationCode'] });
+          }
+        }),
     });
 
     const parsedDataResult = verificationCodeSchema.safeParse({
@@ -110,14 +118,9 @@ export async function action({ context: { appContainer, session }, params, reque
       return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
     }
 
-    // Check if the verification code has expired
-    if (state.verifyEmail?.verificationExpire && Date.now() > state.verifyEmail.verificationExpire) {
-      return { status: 'status-not-found' } as const;
-    }
-
     // Check if the verification code matches
-    if (parsedDataResult.data.verificationCode !== state.verifyEmail?.verificationCode || (state.verifyEmail.verificationExpire && Date.now() > state.verifyEmail.verificationExpire)) {
-      const verificationAttempts = (state.verifyEmail?.verificationAttempts ?? 0) + 1;
+    if (state.verifyEmail && state.verifyEmail.verificationCode !== parsedDataResult.data.verificationCode) {
+      const verificationAttempts = state.verifyEmail.verificationAttempts + 1;
 
       saveApplyState({
         params,
@@ -131,24 +134,26 @@ export async function action({ context: { appContainer, session }, params, reque
       });
 
       // Check if the maximum number of attempts has been reached
-      // TODO: Not sure what the error message is or where to display the error if max attempts reached (alert or field validation), returning status-not-found alert for now.
+      // TODO: Not sure what the error message is or where to display the error if max attempts reached (alert or field validation), returning verification-code-mismatch alert for now.
       if (verificationAttempts >= MAX_ATTEMPTS) {
-        return { status: 'status-not-found' } as const;
+        return { status: 'verification-code-max-attempts' } as const;
       }
 
-      return { status: 'status-not-found' } as const;
+      return { status: 'verification-code-mismatch' } as const;
     }
 
-    saveApplyState({
-      params,
-      session,
-      state: {
-        verifyEmail: {
-          ...state.verifyEmail,
-          verificationAttempts: 0,
+    if (state.verifyEmail) {
+      saveApplyState({
+        params,
+        session,
+        state: {
+          verifyEmail: {
+            ...state.verifyEmail,
+            verificationAttempts: 0,
+          },
         },
-      },
-    });
+      });
+    }
 
     return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
   }
@@ -156,7 +161,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { email, attempts } = loaderData;
+  const { email } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -172,8 +177,8 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
       <div className="my-6 sm:my-8">
         <Progress value={55} size="lg" label={t('apply:progress.label')} />
       </div>
-      {fetcherStatus === 'status-not-found' && <StatusNotFound />}
       <div className="max-w-prose">
+        {(fetcherStatus === 'verification-code-mismatch' || fetcherStatus === 'verification-code-max-attempts') && <VerificationCodeAlert />}
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -208,7 +213,6 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               value={FORM_ACTION.submit}
               loading={isSubmitting}
               endIcon={faChevronRight}
-              disabled={(attempts ?? 0) >= MAX_ATTEMPTS} // TODO: For the purpose of testing, disabled when max attempts reached. remove this when error message is available
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Verify email"
             >
               {t('apply-adult:verify-email.continue')}
@@ -223,7 +227,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
   );
 }
 
-function StatusNotFound() {
+function VerificationCodeAlert() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -236,10 +240,10 @@ function StatusNotFound() {
   };
 
   return (
-    <div ref={setWrapperRef} id="status-not-found" className="mb-4" role="region" aria-live="assertive" tabIndex={-1}>
+    <div ref={setWrapperRef} id="verification-code-alert" className="mb-4" role="region" aria-live="assertive" tabIndex={-1}>
       <ContextualAlert type="danger">
-        <h2 className="mb-2 font-bold">{t('apply-adult:verify-email.status-not-found.heading')}</h2>
-        <p className="mb-2">{t('apply-adult:verify-email.status-not-found.detail')}</p>
+        <h2 className="mb-2 font-bold">{t('apply-adult:verify-email.verification-code-alert.heading')}</h2>
+        <p className="mb-2">{t('apply-adult:verify-email.verification-code-alert.detail')}</p>
       </ContextualAlert>
     </div>
   );

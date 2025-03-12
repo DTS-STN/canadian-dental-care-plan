@@ -9,7 +9,7 @@ export type VerificationCodeEmailRequestDto = Readonly<{
   verificationCode: string;
 
   /** The recipient's preferred language for communication */
-  preferredLanguage: string;
+  preferredLanguage: 'en' | 'fr';
 
   /** A unique identifier for the applicant - used for auditing */
   userId: string;
