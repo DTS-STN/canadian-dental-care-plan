@@ -229,21 +229,23 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   </InlineLink>
                 </p>
               </DescriptionListItem>
-              <DescriptionListItem term={t('apply-child:review-adult-information.previously-enrolled-title')}>
-                {userInfo.previouslyEnrolled?.isNewOrExistingMember ? (
-                  <>
-                    <p>{t('apply-child:review-adult-information.yes')}</p>
-                    <p>{userInfo.previouslyEnrolled.clientNumber}</p>
-                  </>
-                ) : (
-                  <p>{t('apply-child:review-adult-information.no')}</p>
-                )}
-                <div className="mt-4">
-                  <InlineLink id="change-martial-status" routeId="public/apply/$id/child/applicant-information" params={params}>
-                    {t('apply-child:review-adult-information.previously-enrolled-change')}
-                  </InlineLink>
-                </div>
-              </DescriptionListItem>
+              {userInfo.previouslyEnrolled && (
+                <DescriptionListItem term={t('apply-child:review-adult-information.previously-enrolled-title')}>
+                  {userInfo.previouslyEnrolled.isNewOrExistingMember ? (
+                    <>
+                      <p>{t('apply-child:review-adult-information.yes')}</p>
+                      <p>{userInfo.previouslyEnrolled.clientNumber}</p>
+                    </>
+                  ) : (
+                    <p>{t('apply-child:review-adult-information.no')}</p>
+                  )}
+                  <div className="mt-4">
+                    <InlineLink id="change-previously-enrolled" routeId="public/apply/$id/child/new-or-existing-member" params={params}>
+                      {t('apply-child:review-adult-information.previously-enrolled-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              )}
             </dl>
           </div>
           {spouseInfo && (
@@ -278,7 +280,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
               <DescriptionListItem term={t('apply-child:review-adult-information.phone-title')}>
                 {userInfo.phoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-phone-number" routeId="public/apply/$id/child/contact-information" params={params}>
+                  <InlineLink id="change-phone-number" routeId="public/apply/$id/child/phone-number" params={params}>
                     {t('apply-child:review-adult-information.phone-change')}
                   </InlineLink>
                 </p>
@@ -286,7 +288,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
               <DescriptionListItem term={t('apply-child:review-adult-information.alt-phone-title')}>
                 {userInfo.altPhoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-alternate-phone-number" routeId="public/apply/$id/child/contact-information" params={params}>
+                  <InlineLink id="change-alternate-phone-number" routeId="public/apply/$id/child/phone-number" params={params}>
                     {t('apply-child:review-adult-information.alt-phone-change')}
                   </InlineLink>
                 </p>
@@ -294,7 +296,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
               <DescriptionListItem term={t('apply-child:review-adult-information.email')}>
                 {userInfo.contactInformationEmail}
                 <p className="mt-4">
-                  <InlineLink id="change-email" routeId="public/apply/$id/child/contact-information" params={params}>
+                  <InlineLink id="change-email" routeId="public/apply/$id/child/email" params={params}>
                     {t('apply-child:review-adult-information.email-change')}
                   </InlineLink>
                 </p>
@@ -310,7 +312,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   }}
                 />
                 <p className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="public/apply/$id/child/contact-information" params={params}>
+                  <InlineLink id="change-mailing-address" routeId="public/apply/$id/child/mailing-address" params={params}>
                     {t('apply-child:review-adult-information.mailing-change')}
                   </InlineLink>
                 </p>
@@ -326,7 +328,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   }}
                 />
                 <p className="mt-4">
-                  <InlineLink id="change-home-address" routeId="public/apply/$id/child/contact-information" params={params}>
+                  <InlineLink id="change-home-address" routeId="public/apply/$id/child/home-address" params={params}>
                     {t('apply-child:review-adult-information.home-change')}
                   </InlineLink>
                 </p>
