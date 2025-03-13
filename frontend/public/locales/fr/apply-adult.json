@@ -105,6 +105,8 @@
     "request-new-code": "Demander un nouveau code",
     "back": "Retour",
     "continue": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
     "error-message": {
       "verification-code-required": "Entrez le code de vérification de 5 chiffres",
       "verification-code-max-attempts": "Le code de vérification saisi ne correspond pas au code envoyé à l'adresse électronique fournie, ou le code a expiré. Veuillez vérifier le code et essayer de nouveau. Si le problème persiste, vous pouvez demander un nouveau code à l'aide du lien «\u00a0Demander un nouveau code de vérification\u00a0» ci-dessous."

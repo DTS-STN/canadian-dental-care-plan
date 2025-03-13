@@ -59,6 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     id: state.id,
     meta,
     email: state.email,
+    editMode: state.editMode,
   };
 }
 
@@ -72,13 +73,13 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  // fetch verification code service
+  // Fetch verification code service
   const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.request) {
-    // create a new verification code and store the code in session
+    // Create a new verification code and store the code in session
     const verificationCode = verificationCodeService.createVerificationCode('anonymous');
 
     saveApplyState({
@@ -89,11 +90,18 @@ export async function action({ context: { appContainer, session }, params, reque
           verificationCode,
           verificationAttempts: 0,
         },
+        emailVerified: false, // Reset emailVerified when requesting a new code
       },
     });
+
     if (state.email && state.communicationPreferences?.preferredLanguage) {
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
-      await verificationCodeService.sendVerificationCodeEmail({ email: state.email, verificationCode: verificationCode, preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr', userId: 'anonymous' });
+      await verificationCodeService.sendVerificationCodeEmail({
+        email: state.email,
+        verificationCode: verificationCode,
+        preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
+        userId: 'anonymous',
+      });
       return { status: 'verification-code-sent' } as const;
     }
   }
@@ -147,8 +155,13 @@ export async function action({ context: { appContainer, session }, params, reque
             ...state.verifyEmail,
             verificationAttempts: 0,
           },
+          emailVerified: true,
         },
       });
+    }
+
+    if (state.editMode) {
+      return redirect(getPathById('public/apply/$id/adult/review-information', params));
     }
 
     return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
@@ -157,7 +170,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { email } = loaderData;
+  const { email, editMode } = loaderData;
   const [showDialog, setShowDialog] = useState(false);
 
   const fetcher = useFetcher<typeof action>();
@@ -208,22 +221,33 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               {t('apply-adult:verify-email.request-new-code')}
             </LoadingButton>
           </fieldset>
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton
-              variant="primary"
-              id="continue-button"
-              name="_action"
-              value={FORM_ACTION.submit}
-              loading={isSubmitting}
-              endIcon={faChevronRight}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Verify email"
-            >
-              {t('apply-adult:verify-email.continue')}
-            </LoadingButton>
-            <ButtonLink id="back-button" routeId="public/apply/$id/adult/email" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Verify email click">
-              {t('apply-adult:verify-email.back')}
-            </ButtonLink>
-          </div>
+          {editMode ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Verify email click">
+                {t('apply-adult:verify-email.save-btn')}
+              </LoadingButton>
+              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Verify email click">
+                {t('apply-adult:verify-email.cancel-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton
+                variant="primary"
+                id="continue-button"
+                name="_action"
+                value={FORM_ACTION.submit}
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Verify email"
+              >
+                {t('apply-adult:verify-email.continue')}
+              </LoadingButton>
+              <ButtonLink id="back-button" routeId="public/apply/$id/adult/email" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Verify email click">
+                {t('apply-adult:verify-email.back')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
           <DialogContent>

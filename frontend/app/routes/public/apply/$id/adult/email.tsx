@@ -10,7 +10,7 @@ import type { Route } from './+types/email';
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -24,6 +24,8 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+export const PREFERRED_LANGUAGE = { en: 'English', fr: 'French' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -56,8 +58,10 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadApplyAdultState({ params, request, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
+
+  const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
 
   const emailSchema = z
     .object({
@@ -81,15 +85,43 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { email: parsedDataResult.data.email } }); // TODO: Which state 'email' do we want to use? (There are 3 different at the time of writing this.)
+  const verificationCode = verificationCodeService.createVerificationCode('anonymous');
+
+  const isNewEmail = state.email !== parsedDataResult.data.email;
+
+  saveApplyState({
+    params,
+    session,
+    state: {
+      email: parsedDataResult.data.email,
+      emailVerified: isNewEmail ? false : state.emailVerified,
+      verifyEmail: {
+        verificationCode,
+        verificationAttempts: 0,
+      },
+    },
+  });
+
+  if (state.email && state.communicationPreferences?.preferredLanguage) {
+    const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
+    await verificationCodeService.sendVerificationCodeEmail({
+      email: state.email,
+      verificationCode: verificationCode,
+      preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
+      userId: 'anonymous',
+    });
+  }
 
   if (state.editMode) {
+    // Redirect to /verify-email only if emailVerified is false
+    if (isNewEmail || !state.emailVerified) {
+      return redirect(getPathById('public/apply/$id/adult/verify-email', params));
+    }
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
   return redirect(getPathById('public/apply/$id/adult/verify-email', params));
 }
-
 export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode } = loaderData;

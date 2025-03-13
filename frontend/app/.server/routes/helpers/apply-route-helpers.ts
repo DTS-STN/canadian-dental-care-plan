@@ -57,6 +57,7 @@ export type ApplyState = ReadonlyDeep<{
     verificationCode: string;
     verificationAttempts: number;
   };
+  emailVerified?: boolean;
   hasFederalProvincialTerritorialBenefits?: boolean;
   maritalStatus?: string;
   dentalBenefits?: {
