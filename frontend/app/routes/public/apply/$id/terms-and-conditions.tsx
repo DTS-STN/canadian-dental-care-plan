@@ -47,10 +47,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  loadApplyState({ params, session });
+  const state = loadApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:terms-and-conditions.page-title') }) };
-  return { meta };
+  return { defaultState: state.termsAndConditions, meta };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
@@ -83,7 +83,12 @@ export async function action({ context: { appContainer, session }, request, para
       if (!val.doNotConsent && !val.shareData) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.share-data-required'), path: ['shareData'] });
       }
-    });
+    })
+    .transform((val) => ({
+      acknowledgeTerms: val.acknowledgeTerms === CHECKBOX_VALUE.yes,
+      acknowledgePrivacy: val.acknowledgePrivacy === CHECKBOX_VALUE.yes,
+      shareData: val.shareData === CHECKBOX_VALUE.yes,
+    }));
 
   const parsedDataResult = consentSchema.safeParse({
     acknowledgeTerms: formData.get('acknowledgeTerms') ?? '',
@@ -96,12 +101,19 @@ export async function action({ context: { appContainer, session }, request, para
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: {} });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      termsAndConditions: parsedDataResult.data,
+    },
+  });
   return redirect(getPathById('public/apply/$id/tax-filing', params));
 }
 
 export default function ApplyIndex({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { defaultState } = loaderData;
   const [showDialog, setShowDialog] = useState(false);
   const [doNotConsentChecked, setDoNotConsentChecked] = useState(false);
 
@@ -226,13 +238,13 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       </p>
       <fetcher.Form method="post" noValidate onSubmit={handleSubmit}>
         <CsrfTokenInput />
-        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeTerms} required>
+        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgeTerms} errorMessage={errors?.acknowledgeTerms} required>
           {t('apply:terms-and-conditions.checkboxes.acknowledge-terms')}
         </InputCheckbox>
-        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgePrivacy} required>
+        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgePrivacy} errorMessage={errors?.acknowledgePrivacy} required>
           {t('apply:terms-and-conditions.checkboxes.acknowledge-privacy')}
         </InputCheckbox>
-        <InputCheckbox id="share-data" name="shareData" value={CHECKBOX_VALUE.yes} errorMessage={errors?.shareData} required>
+        <InputCheckbox id="share-data" name="shareData" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.shareData} errorMessage={errors?.shareData} required>
           {t('apply:terms-and-conditions.checkboxes.share-data')}
         </InputCheckbox>
         <InputCheckbox id="do-not-consent" name="doNotConsent" value={CHECKBOX_VALUE.yes} className="my-8" onChange={handleChecked}>

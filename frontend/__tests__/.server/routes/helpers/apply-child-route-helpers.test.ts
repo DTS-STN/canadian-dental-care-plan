@@ -20,7 +20,14 @@ describe('apply-child-route-helpers', () => {
   describe('validateApplyChildStateForReview', () => {
     const params = { lang: 'en', id: '00000000-0000-0000-0000-000000000000' };
 
-    const baseState = { id: '00000000-0000-0000-0000-000000000000', editMode: false, lastUpdatedOn: '2000-01-01', applicationYear: { intakeYearId: '2025', taxYear: '2025' }, children: [] } satisfies ApplyState;
+    const baseState = {
+      id: '00000000-0000-0000-0000-000000000000',
+      editMode: false,
+      lastUpdatedOn: '2000-01-01',
+      applicationYear: { intakeYearId: '2025', taxYear: '2025' },
+      children: [],
+      termsAndConditions: { acknowledgePrivacy: true, acknowledgeTerms: true, shareData: true },
+    } satisfies ApplyState;
 
     it('should redirect if typeOfApplication is undefined', () => {
       const mockState = { ...baseState, typeOfApplication: undefined };
@@ -363,6 +370,7 @@ describe('apply-child-route-helpers', () => {
         },
         submissionInfo: undefined,
         taxFiling2023: true,
+        termsAndConditions: { acknowledgePrivacy: true, acknowledgeTerms: true, shareData: true },
         typeOfApplication: 'child',
       });
     });

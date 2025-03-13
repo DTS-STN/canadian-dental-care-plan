@@ -98,9 +98,9 @@
       "share-data": "I consent to the sharing of data",
       "do-not-consent": "I have <strong>not read</strong> the Terms and Conditions and Privacy Notice Statement and <strong>do not consent</strong> to the sharing of my information for the purposes of CDCP",
       "error-message": {
-        "acknowledge-terms-required": "Terms and Conditions checkbox must be selected",
-        "acknowledge-privacy-required": "Privacy Notice Statement checkbox must be selected",
-        "share-data-required": "Sharing of data checkbox must be selected"
+        "acknowledge-terms-required": "You must read the Terms and Conditions to proceed",
+        "acknowledge-privacy-required": "You must read the Privacy Notice Statement to proceed",
+        "share-data-required": "You must consent to the sharing of your data to proceed"
       }
     },
     "dialog": {

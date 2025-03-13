@@ -109,6 +109,11 @@ export type ApplyState = ReadonlyDeep<{
     submittedOn: string;
   };
   taxFiling2023?: boolean;
+  termsAndConditions?: {
+    acknowledgeTerms: boolean;
+    acknowledgePrivacy: boolean;
+    shareData: boolean;
+  };
   typeOfApplication?: 'adult' | 'adult-child' | 'child' | 'delegate';
 }>;
 
@@ -127,6 +132,7 @@ export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<ApplySta
 export type PartnerInformationState = NonNullable<ApplyState['partnerInformation']>;
 export type ContactInformationState = NonNullable<ApplyState['contactInformation']>;
 export type SubmissionInfoState = NonNullable<ApplyState['submissionInfo']>;
+export type TermsAndConditionsState = NonNullable<ApplyState['termsAndConditions']>;
 export type TypeOfApplicationState = NonNullable<ApplyState['typeOfApplication']>;
 export type HomeAddressState = NonNullable<ApplyState['homeAddress']>;
 export type MailingAddressState = NonNullable<ApplyState['mailingAddress']>;
