@@ -102,13 +102,13 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  if (isNewEmail && state.email && state.communicationPreferences?.preferredLanguage) {
+  if (isNewEmail && state.email && state.verifyEmail && state.communicationPreferences?.preferredLanguage) {
     const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
     const preferredLanguage = preferredLanguageService.getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
 
     await verificationCodeService.sendVerificationCodeEmail({
       email: state.email,
-      verificationCode: verificationCodeService.createVerificationCode('anonymous'),
+      verificationCode: state.verifyEmail.verificationCode,
       preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
       userId: 'anonymous',
     });
