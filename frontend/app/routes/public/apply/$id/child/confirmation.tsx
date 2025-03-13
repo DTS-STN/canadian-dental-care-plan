@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/confirmation';
+import { PREFERRED_NOTIFICATION_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyChildState } from '~/.server/routes/helpers/apply-child-route-helpers';
@@ -60,7 +61,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name : undefined;
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
-  const communicationPreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
+  const communicationSunLifePreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -72,7 +73,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
     contactInformationEmail: state.email,
-    communicationPreference: communicationPreference.name,
+    communicationSunLifePreference: communicationSunLifePreference.name,
+    communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
+    previouslyEnrolled: state.newOrExistingMember,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -170,7 +173,6 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const mscaLinkChecker = <InlineLink to={t('confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link" newTabIndicator target="_blank" />;
-  const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('apply-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
@@ -187,9 +189,8 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
       </ContextualAlert>
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.keep-copy')}</h2>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.print-copy-text" components={{ noPrint: <span className="print:hidden" /> }} />
-        </p>
+        <p className="mt-4">{t('confirm.print-copy-text')}</p>
+        <p className="mt-4">{t('confirm.print-copy-important')}</p>
         <Button
           variant="primary"
           size="lg"
@@ -206,11 +207,13 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
         <p className="mt-4">{t('confirm.begin-process')}</p>
+      </section>
+      <section>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.check-status')}</h2>
         <p className="mt-4">
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
         </p>
         <p className="mt-4">{t('confirm.use-code')}</p>
-        <p className="mt-4">{t('confirm.mail-letter')}</p>
       </section>
       <section>
         <h2 className="font-lato text-3xl font-bold">{viewLettersEnabled ? t('confirm.register-msca-title-featured') : t('confirm.register-msca-title')}</h2>
@@ -231,9 +234,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.how-insurance')}</h2>
         <p className="mt-4">{t('confirm.eligible-text')}</p>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-cdcp" components={{ moreInfoLink }} />
-        </p>
+        <p className="mt-4">{t('confirm.more-info-cdcp')}</p>
         <p className="mt-4">
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
         </p>
@@ -292,6 +293,17 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                   <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
                 </DescriptionListItem>
                 <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.previously-enrolled-title')}>
+                  {userInfo.previouslyEnrolled &&
+                    (userInfo.previouslyEnrolled.isNewOrExistingMember ? (
+                      <>
+                        <p>{t('confirm.yes')}</p>
+                        <p>{userInfo.previouslyEnrolled.clientNumber}</p>
+                      </>
+                    ) : (
+                      <p>{t('confirm.no')}</p>
+                    ))}
+                </DescriptionListItem>
               </dl>
             </section>
             {spouseInfo && (
@@ -345,10 +357,13 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
             <section className="space-y-6">
               <h4 className="font-lato text-xl font-bold">{t('confirm.comm-prefs')}</h4>
               <dl className="divide-y border-y">
-                <DescriptionListItem term={t('confirm.comm-pref')}>
-                  <p>{userInfo.communicationPreference}</p>
-                </DescriptionListItem>
                 <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.sun-life-comm-pref-title')}>
+                  <p>{userInfo.communicationSunLifePreference}</p>
+                </DescriptionListItem>
+                <DescriptionListItem term={t('confirm.goc-comm-pref-title')}>
+                  <p>{userInfo.communicationGOCPreference === PREFERRED_NOTIFICATION_METHOD.msca ? t('confirm.preferred-notification-method-msca') : t('confirm.preferred-notification-method-mail')}</p>
+                </DescriptionListItem>
               </dl>
             </section>
           </div>
