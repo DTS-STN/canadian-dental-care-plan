@@ -15,6 +15,21 @@ export interface VerificationCodeRepository {
    * @returns A promise resolving to an `VerificationCodeEmailResponseEntity` containing the result of the operation.
    */
   sendVerificationCodeEmail(verificationCodeEmailRequestEntity: VerificationCodeEmailRequestEntity): Promise<VerificationCodeEmailResponseEntity>;
+
+  /**
+   * Retrieves metadata associated with the verification code repository.
+   *
+   * @returns A record where the keys and values are strings representing metadata information.
+   */
+  getMetadata(): Record<string, string>;
+
+  /**
+   * Performs a health check to ensure that the verification code repository is operational.
+   *
+   * @throws An error if the health check fails or the repository is unavailable.
+   * @returns A promise that resolves when the health check completes successfully.
+   */
+  checkHealth(): Promise<void>;
 }
 
 @injectable()
@@ -22,6 +37,7 @@ export class DefaultVerificationCodeRepository implements VerificationCodeReposi
   private readonly log: Logger;
   private readonly serverConfig: Pick<ServerConfig, 'GC_NOTIFY_API_KEY' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
   private readonly httpClient: HttpClient;
+  private readonly baseUrl: string;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
@@ -31,12 +47,13 @@ export class DefaultVerificationCodeRepository implements VerificationCodeReposi
     this.log = logFactory.createLogger('DefaultVerificationCodeRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
+    this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/notifications/email-txt-notifications/v1`;
   }
 
   async sendVerificationCodeEmail(verificationCodeEmailRequestEntity: VerificationCodeEmailRequestEntity): Promise<VerificationCodeEmailResponseEntity> {
     this.log.trace('Sending verification code email for request: [%j]', verificationCodeEmailRequestEntity);
 
-    const url = `${this.serverConfig.INTEROP_API_BASE_URI}/notifications/email-txt-notifications/v1/notifications/email`;
+    const url = `${this.baseUrl}/notifications/email`;
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.email-notifications.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
@@ -62,6 +79,38 @@ export class DefaultVerificationCodeRepository implements VerificationCodeReposi
     const verificationCodeEmailResponseEntity: VerificationCodeEmailResponseEntity = await response.json();
     this.log.trace('Returning verification code email response [%j]', verificationCodeEmailResponseEntity);
     return verificationCodeEmailResponseEntity;
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      baseUrl: this.baseUrl,
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    this.log.trace('Checking health for verification code repository');
+
+    const url = `${this.baseUrl}/notifications`;
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.email-notifications.gets', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
+      method: 'GET',
+      headers: {
+        Authorization: `ApiKey-v1 ${this.serverConfig.GC_NOTIFY_API_KEY}`,
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      this.log.error('%j', {
+        message: `Failed to 'GET' email notifications`,
+        status: response.status,
+        statusText: response.statusText,
+        url,
+        responseBody: await response.text(),
+      });
+      throw new Error(`Failed to 'GET' email notifications. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
   }
 }
 
@@ -94,5 +143,15 @@ export class MockVerificationCodeRepository implements VerificationCodeRepositor
 
     this.log.trace('Returning verification code email response [%j]', verificationCodeEmailResponseEntity);
     return await Promise.resolve(verificationCodeEmailResponseEntity);
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      mockEnabled: 'true',
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    return await Promise.resolve();
   }
 }
