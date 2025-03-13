@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
@@ -13,9 +13,10 @@ import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { ButtonLink } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
@@ -93,6 +94,7 @@ export async function action({ context: { appContainer, session }, params, reque
     if (state.email && state.communicationPreferences?.preferredLanguage) {
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
       await verificationCodeService.sendVerificationCodeEmail({ email: state.email, verificationCode: verificationCode, preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr', userId: 'anonymous' });
+      return { status: 'verification-code-sent' } as const;
     }
   }
 
@@ -133,12 +135,6 @@ export async function action({ context: { appContainer, session }, params, reque
         },
       });
 
-      // Check if the maximum number of attempts has been reached
-      // TODO: Not sure what the error message is or where to display the error if max attempts reached (alert or field validation), returning verification-code-mismatch alert for now.
-      if (verificationAttempts >= MAX_ATTEMPTS) {
-        return { status: 'verification-code-max-attempts' } as const;
-      }
-
       return { status: 'verification-code-mismatch' } as const;
     }
 
@@ -162,6 +158,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { email } = loaderData;
+  const [showDialog, setShowDialog] = useState(false);
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -172,13 +169,19 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
 
   const communicationLink = <InlineLink routeId="public/apply/$id/adult/communication-preference" params={params} />;
 
+  useEffect(() => {
+    if (fetcherStatus === 'verification-code-sent') {
+      setShowDialog(true);
+    }
+  }, [fetcherStatus, fetcher.data]);
+
   return (
     <>
       <div className="my-6 sm:my-8">
         <Progress value={55} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        {(fetcherStatus === 'verification-code-mismatch' || fetcherStatus === 'verification-code-max-attempts') && <VerificationCodeAlert />}
+        {fetcherStatus === 'verification-code-mismatch' && <VerificationCodeAlert />}
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -222,6 +225,21 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
             </ButtonLink>
           </div>
         </fetcher.Form>
+        <Dialog open={showDialog} onOpenChange={setShowDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t('apply-adult:verify-email.code-sent.heading')}</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>{t('apply-adult:verify-email.code-sent.detail', { email })}</DialogDescription>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button id="modal-continue" disabled={isSubmitting} variant="primary" endIcon={faChevronRight} size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Modal Continue - Verify email click">
+                  {t('apply-adult:verify-email.continue')}
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );

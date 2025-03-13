@@ -112,6 +112,10 @@
     "verification-code-alert": {
       "heading": "Le code de vérification saisi ne correspond pas au code envoyé à l'adresse électronique fournie, ou le code a expiré.",
       "detail": "Veuillez vérifier le code et essayer de nouveau. Si le problème persiste, vous pouvez demander un nouveau code à l'aide du lien «\u00a0Demander un nouveau code de vérification\u00a0» ci-dessous."
+    },
+    "code-sent": {
+      "heading": "Nouveau code",
+      "detail": "Un nouveau code de vérification a été envoyé à {{email}}."
     }
   },
   "confirm": {
