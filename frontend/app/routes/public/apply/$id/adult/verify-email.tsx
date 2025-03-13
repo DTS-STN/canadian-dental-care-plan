@@ -173,7 +173,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
     if (fetcherStatus === 'verification-code-sent') {
       setShowDialog(true);
     }
-  }, [fetcherStatus]);
+  }, [fetcherStatus, fetcher.data]);
 
   return (
     <>
