@@ -85,8 +85,6 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  const verificationCode = verificationCodeService.createVerificationCode('anonymous');
-
   const isNewEmail = state.email !== parsedDataResult.data.email;
 
   saveApplyState({
@@ -95,18 +93,22 @@ export async function action({ context: { appContainer, session }, params, reque
     state: {
       email: parsedDataResult.data.email,
       emailVerified: isNewEmail ? false : state.emailVerified,
-      verifyEmail: {
-        verificationCode,
-        verificationAttempts: 0,
-      },
+      ...(isNewEmail && {
+        verifyEmail: {
+          verificationCode: verificationCodeService.createVerificationCode('anonymous'),
+          verificationAttempts: 0,
+        },
+      }),
     },
   });
 
-  if (state.email && state.communicationPreferences?.preferredLanguage) {
-    const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
+  if (isNewEmail && state.email && state.communicationPreferences?.preferredLanguage) {
+    const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
+    const preferredLanguage = preferredLanguageService.getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
+
     await verificationCodeService.sendVerificationCodeEmail({
       email: state.email,
-      verificationCode: verificationCode,
+      verificationCode: verificationCodeService.createVerificationCode('anonymous'),
       preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
       userId: 'anonymous',
     });
@@ -120,8 +122,13 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult/verify-email', params));
+  if (isNewEmail || !state.emailVerified) {
+    return redirect(getPathById('public/apply/$id/adult/verify-email', params));
+  }
+
+  return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
 }
+
 export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode } = loaderData;
