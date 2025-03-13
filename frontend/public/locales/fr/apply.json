@@ -98,9 +98,9 @@
       "share-data": "Je consens à l'échange des données",
       "do-not-consent": "Je <strong>ne consens pas</strong> à la divulgation de mes renseignements dans le cadre du RCSD",
       "error-message": {
-        "acknowledge-terms-required": "(FR) Terms and Conditions checkbox must be selected",
-        "acknowledge-privacy-required": "(FR) Privacy Notice Statement checkbox must be selected",
-        "share-data-required": "(FR) Sharing of data checkbox must be selected"
+        "acknowledge-terms-required": "Vous devez lire les modalités d'utilisation avant de poursuivre",
+        "acknowledge-privacy-required": "Vous devez lire l'énoncé de confidentialité avant de poursuivre",
+        "share-data-required": "Vous devez consentir à la communication de vos renseignements avant de poursuivre"
       }
     },
     "dialog": {

@@ -15,6 +15,7 @@ import type {
   HomeAddressState,
   MailingAddressState,
   PartnerInformationState,
+  TermsAndConditionsState,
   TypeOfApplicationState,
 } from '~/.server/routes/helpers/apply-route-helpers';
 
@@ -32,6 +33,7 @@ export interface ApplyAdultState {
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   partnerInformation?: PartnerInformationState;
+  termsAndConditions: TermsAndConditionsState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult'>;
 }
 
@@ -50,6 +52,7 @@ export interface ApplyAdultChildState {
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationState;
+  termsAndConditions: TermsAndConditionsState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult-child'>;
 }
 
@@ -66,6 +69,7 @@ export interface ApplyChildState {
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationState;
+  termsAndConditions: TermsAndConditionsState;
   typeOfApplication: Extract<TypeOfApplicationState, 'child'>;
 }
 
@@ -84,6 +88,7 @@ interface ToBenefitApplicationDtoArgs {
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   partnerInformation?: PartnerInformationState;
+  termsAndConditions: TermsAndConditionsState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult' | 'adult-child' | 'child'>;
 }
 
@@ -164,6 +169,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     mailingAddress,
     isHomeAddressSameAsMailingAddress,
     contactInformation,
+    termsAndConditions,
     typeOfApplication,
   }: ToBenefitApplicationDtoArgs) {
     return {
@@ -181,6 +187,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       dentalInsurance,
       livingIndependently,
       partnerInformation,
+      termsAndConditions,
       typeOfApplication,
       userId: 'anonymous',
     };

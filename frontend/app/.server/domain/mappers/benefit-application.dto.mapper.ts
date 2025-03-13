@@ -47,6 +47,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     dentalInsurance,
     livingIndependently,
     partnerInformation,
+    termsAndConditions, // TODO map terms and conditions when Interop provides field structure
     typeOfApplication,
   }: BenefitApplicationDto): BenefitApplicationRequestEntity {
     return {

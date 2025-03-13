@@ -11,6 +11,7 @@ export type BenefitApplicationDto = ReadonlyDeep<{
   dentalInsurance?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationDto;
+  termsAndConditions: TermsAndConditionsDto;
   typeOfApplication: TypeOfApplicationDto;
 
   /** A unique identifier for the user making the request - used for auditing */
@@ -59,6 +60,12 @@ export type ContactInformationDto = ReadonlyDeep<{
   phoneNumber?: string;
   phoneNumberAlt?: string;
   email?: string;
+}>;
+
+export type TermsAndConditionsDto = ReadonlyDeep<{
+  acknowledgeTerms: boolean;
+  acknowledgePrivacy: boolean;
+  shareData: boolean;
 }>;
 
 export type PartnerInformationDto = ReadonlyDeep<{

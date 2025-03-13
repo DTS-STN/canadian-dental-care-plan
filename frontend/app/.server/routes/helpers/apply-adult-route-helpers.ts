@@ -97,8 +97,13 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     contactInformation,
     submissionInfo,
     taxFiling2023,
+    termsAndConditions,
     typeOfApplication,
   } = state;
+
+  if (termsAndConditions === undefined) {
+    throw redirect(getPathById('public/apply/$id/terms-and-conditions', params));
+  }
 
   if (typeOfApplication === undefined) {
     throw redirect(getPathById('public/apply/$id/type-application', params));
@@ -184,6 +189,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     homeAddress,
     submissionInfo,
     taxFiling2023,
+    termsAndConditions,
     typeOfApplication,
   };
 }

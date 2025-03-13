@@ -269,6 +269,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedPartnerInformation: partnerInformation,
       }),
+      termsAndConditions: this.toTermsAndConditions(),
       typeOfApplication: 'adult',
       userId: 'anonymous',
     };
@@ -346,6 +347,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedPartnerInformation: partnerInformation,
       }),
+      termsAndConditions: this.toTermsAndConditions(),
       typeOfApplication: children.length === 0 ? 'adult' : 'adult-child',
       userId: 'anonymous',
     };
@@ -405,6 +407,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: true,
         renewedPartnerInformation: partnerInformation,
       }),
+      termsAndConditions: this.toTermsAndConditions(),
       typeOfApplication: 'adult',
       userId: 'anonymous',
     };
@@ -468,6 +471,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedPartnerInformation: partnerInformation,
       }),
+      termsAndConditions: this.toTermsAndConditions(),
       typeOfApplication: 'child',
       userId: 'anonymous',
     };
@@ -537,6 +541,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedPartnerInformation: partnerInformation,
       }),
       userId,
+      termsAndConditions: this.toTermsAndConditions(),
       typeOfApplication: applicantStateCompleted === false && children.length > 0 ? 'child' : children.length === 0 ? 'adult' : 'adult-child',
     };
   }
@@ -749,5 +754,13 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
   private toPartnerInformation({ existingPartnerInformation, hasMaritalStatusChanged, renewedPartnerInformation }: ToPartnerInformationArgs) {
     return hasMaritalStatusChanged ? renewedPartnerInformation : existingPartnerInformation;
+  }
+
+  private toTermsAndConditions() {
+    return {
+      acknowledgeTerms: true,
+      acknowledgePrivacy: true,
+      shareData: true,
+    };
   }
 }

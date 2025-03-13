@@ -20,6 +20,7 @@ import type {
   RenewalApplicantInformationDto,
   RenewalChildDto,
   RenewalPartnerInformationDto,
+  TermsAndConditionsDto,
   TypeOfApplicationDto,
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
@@ -47,6 +48,7 @@ interface ToBenefitRenewalRequestEntityArgs {
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: RenewalPartnerInformationDto;
+  termsAndConditions: TermsAndConditionsDto;
   typeOfApplication: TypeOfApplicationDto;
 }
 
@@ -114,6 +116,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     disabilityTaxCredit,
     livingIndependently,
     partnerInformation,
+    termsAndConditions, // TODO map terms and conditions when Interop provides field structure
     typeOfApplication,
   }: ToBenefitRenewalRequestEntityArgs): BenefitRenewalRequestEntity {
     return {
