@@ -2,6 +2,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -86,6 +87,20 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const isNewEmail = state.email !== parsedDataResult.data.email;
+  const verificationCode = isNewEmail || state.verifyEmail === undefined ? verificationCodeService.createVerificationCode('anonymous') : state.verifyEmail.verificationCode;
+
+  invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
+  if (isNewEmail) {
+    const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
+    const preferredLanguage = preferredLanguageService.getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
+
+    await verificationCodeService.sendVerificationCodeEmail({
+      email: parsedDataResult.data.email,
+      verificationCode,
+      preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
+      userId: 'anonymous',
+    });
+  }
 
   saveApplyState({
     params,
@@ -95,24 +110,12 @@ export async function action({ context: { appContainer, session }, params, reque
       emailVerified: isNewEmail ? false : state.emailVerified,
       ...(isNewEmail && {
         verifyEmail: {
-          verificationCode: verificationCodeService.createVerificationCode('anonymous'),
+          verificationCode,
           verificationAttempts: 0,
         },
       }),
     },
   });
-
-  if (isNewEmail && state.email && state.verifyEmail && state.communicationPreferences?.preferredLanguage) {
-    const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
-    const preferredLanguage = preferredLanguageService.getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
-
-    await verificationCodeService.sendVerificationCodeEmail({
-      email: state.email,
-      verificationCode: state.verifyEmail.verificationCode,
-      preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
-      userId: 'anonymous',
-    });
-  }
 
   if (state.editMode) {
     // Redirect to /verify-email only if emailVerified is false
