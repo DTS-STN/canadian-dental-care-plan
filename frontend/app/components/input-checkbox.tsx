@@ -4,7 +4,7 @@ import { InputError } from './input-error';
 
 import { cn } from '~/utils/tw-utils';
 
-const inputBaseClassName = 'h-4 w-4 rounded-sm border-gray-500 bg-gray-50 text-blue-600 focus:outline-hidden focus:ring-2 focus:ring-blue-500';
+const inputBaseClassName = 'mt-1 h-4 w-4 rounded-sm border-gray-500 bg-gray-50 text-blue-600 focus:outline-hidden focus:ring-2 focus:ring-blue-500';
 const inputDisabledClassName = 'pointer-events-none cursor-not-allowed opacity-70';
 const inputErrorClassName = 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500';
 const inputReadOnlyClassName = 'pointer-events-none cursor-not-allowed opacity-70';
@@ -32,7 +32,7 @@ export function InputCheckbox({ errorMessage, append, appendClassName, children,
           {errorMessage}
         </InputError>
       )}
-      <div className="flex items-center">
+      <div className="flex items-start">
         <input
           type="checkbox"
           id={inputCheckboxId}
