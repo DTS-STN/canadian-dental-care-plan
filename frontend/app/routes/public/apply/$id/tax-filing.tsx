@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:tax-filing.page-title') }) };
 
-  return { id: state.id, meta, defaultState: state.taxFiling2023, taxYear: state.applicationYear.taxYear };
+  return { id: state.id, meta, defaultState: state.hasFiledTaxes, taxYear: state.applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -48,17 +48,17 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const taxFilingSchema = z.object({ taxFiling2023: z.nativeEnum(TAX_FILING_OPTION, { errorMap: () => ({ message: t('apply:tax-filing.error-message.tax-filing-required') }) }) });
+  const taxFilingSchema = z.object({ hasFiledTaxes: z.nativeEnum(TAX_FILING_OPTION, { errorMap: () => ({ message: t('apply:tax-filing.error-message.tax-filing-required') }) }) });
 
-  const parsedDataResult = taxFilingSchema.safeParse({ taxFiling2023: formData.get('taxFiling2023') });
+  const parsedDataResult = taxFilingSchema.safeParse({ hasFiledTaxes: formData.get('hasFiledTaxes') });
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { taxFiling2023: parsedDataResult.data.taxFiling2023 === TAX_FILING_OPTION.yes } });
+  saveApplyState({ params, session, state: { hasFiledTaxes: parsedDataResult.data.hasFiledTaxes === TAX_FILING_OPTION.yes } });
 
-  if (parsedDataResult.data.taxFiling2023 === TAX_FILING_OPTION.no) {
+  if (parsedDataResult.data.hasFiledTaxes === TAX_FILING_OPTION.no) {
     return redirect(getPathById('public/apply/$id/file-taxes', params));
   }
 
@@ -72,7 +72,7 @@ export default function ApplyFlowTaxFiling({ loaderData, params }: Route.Compone
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { taxFiling2023: 'input-radio-tax-filing-2023-option-0' });
+  const errorSummary = useErrorSummary(errors, { hasFiledTaxes: 'input-radio-tax-filing-2023-option-0' });
 
   return (
     <>
@@ -86,13 +86,13 @@ export default function ApplyFlowTaxFiling({ loaderData, params }: Route.Compone
           <CsrfTokenInput />
           <InputRadios
             id="tax-filing-2023"
-            name="taxFiling2023"
+            name="hasFiledTaxes"
             legend={t('apply:tax-filing.form-instructions', { taxYear })}
             options={[
               { value: TAX_FILING_OPTION.yes, children: t('apply:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
               { value: TAX_FILING_OPTION.no, children: t('apply:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
             ]}
-            errorMessage={errors?.taxFiling2023}
+            errorMessage={errors?.hasFiledTaxes}
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">

@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.communicationPreferences === undefined ||
     state.mailingAddress?.country === undefined ||
     state.submissionInfo === undefined ||
-    state.taxFiling2023 === undefined ||
+    state.hasFiledTaxes === undefined ||
     state.typeOfApplication === undefined ||
     getChildrenState(state).length === 0) {
     throw new Error(`Incomplete application "${state.id}" state!`);

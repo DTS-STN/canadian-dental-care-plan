@@ -96,7 +96,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     homeAddress,
     contactInformation,
     submissionInfo,
-    taxFiling2023,
+    hasFiledTaxes,
     termsAndConditions,
     typeOfApplication,
   } = state;
@@ -117,11 +117,11 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     throw redirect(getPathById('public/apply/$id/type-application', params));
   }
 
-  if (taxFiling2023 === undefined) {
+  if (hasFiledTaxes === undefined) {
     throw redirect(getPathById('public/apply/$id/tax-filing', params));
   }
 
-  if (taxFiling2023 === false) {
+  if (hasFiledTaxes === false) {
     throw redirect(getPathById('public/apply/$id/file-taxes', params));
   }
 
@@ -188,7 +188,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     mailingAddress,
     homeAddress,
     submissionInfo,
-    taxFiling2023,
+    hasFiledTaxes,
     termsAndConditions,
     typeOfApplication,
   };

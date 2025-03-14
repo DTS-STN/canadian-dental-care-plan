@@ -47,20 +47,20 @@ describe('apply-child-route-helpers', () => {
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it('should redirect if taxFiling2023 is no', () => {
-      const mockState = { ...baseState, typeOfApplication: 'child', taxFiling2023: false } satisfies ApplyState;
+    it('should redirect if hasFiledTaxes is no', () => {
+      const mockState = { ...baseState, typeOfApplication: 'child', hasFiledTaxes: false } satisfies ApplyState;
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if children is empty', () => {
-      const mockState = { ...baseState, typeOfApplication: 'child', taxFiling2023: true, children: [] } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'child', hasFiledTaxes: true, children: [] } satisfies ApplyState;
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/child/children/index, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if a child information is undefined', () => {
-      const mockState = { ...baseState, typeOfApplication: 'child', taxFiling2023: true, children: [{ id: '1', information: undefined }] } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'child', hasFiledTaxes: true, children: [{ id: '1', information: undefined }] } satisfies ApplyState;
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/child/children/$childId/information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))');
     });
@@ -69,7 +69,7 @@ describe('apply-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: false, lastName: 'Doe' } }],
       } satisfies ApplyState;
 
@@ -83,7 +83,7 @@ describe('apply-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         children: [{ id: '1', information: { dateOfBirth: childDateOfBirth, firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' } }],
       } satisfies ApplyState;
 
@@ -97,7 +97,7 @@ describe('apply-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         children: [{ id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, hasFederalProvincialTerritorialBenefits: false, dentalInsurance: undefined }],
       } satisfies ApplyState;
 
@@ -111,7 +111,7 @@ describe('apply-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         children: [
           { id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, dentalInsurance: true, hasFederalProvincialTerritorialBenefits: false, dentalBenefits: undefined },
         ],
@@ -129,7 +129,7 @@ describe('apply-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         children: [
           {
             id: '1',
@@ -149,7 +149,7 @@ describe('apply-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         children: [
           {
             id: '1',
@@ -173,7 +173,7 @@ describe('apply-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         children: [
           {
             id: '1',
@@ -217,7 +217,7 @@ describe('apply-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         children: [
           {
             id: '1',
@@ -244,7 +244,7 @@ describe('apply-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         children: [
           {
             id: '1',
@@ -289,7 +289,7 @@ describe('apply-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         children: [
           {
             id: '1',
@@ -369,7 +369,7 @@ describe('apply-child-route-helpers', () => {
           phoneNumberAlt: '987-654-3210',
         },
         submissionInfo: undefined,
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         termsAndConditions: { acknowledgePrivacy: true, acknowledgeTerms: true, shareData: true },
         typeOfApplication: 'child',
       });
