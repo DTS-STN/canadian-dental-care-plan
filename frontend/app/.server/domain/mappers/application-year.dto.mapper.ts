@@ -12,7 +12,7 @@ export interface ApplicationYearDtoMapper {
 }
 
 interface ToRenewalApplicationYearResultDtoArgs {
-  coverageStartDate: string;
+  coverageEndDate: string;
   applicationYearResultDto: ApplicationYearResultDto;
 }
 
@@ -25,10 +25,10 @@ export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper
     };
   }
 
-  mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ coverageStartDate, applicationYearResultDto }: ToRenewalApplicationYearResultDtoArgs): RenewalApplicationYearResultDto {
+  mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ coverageEndDate, applicationYearResultDto }: ToRenewalApplicationYearResultDtoArgs): RenewalApplicationYearResultDto {
     return {
       taxYear: applicationYearResultDto.taxYear,
-      coverageStartDate,
+      coverageEndDate,
       renewalYearId: applicationYearResultDto.applicationYearId,
     };
   }

@@ -18,7 +18,7 @@ export interface RenewState {
   readonly applicationYear: {
     renewalYearId: string;
     taxYear: string;
-    coverageStartDate: string;
+    coverageEndDate: string;
   };
   readonly applicantInformation?: {
     firstName: string;

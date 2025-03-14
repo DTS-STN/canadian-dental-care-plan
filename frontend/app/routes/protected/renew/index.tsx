@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     applicationYear: {
       renewalYearId: applicationYear.renewalYearId,
       taxYear: applicationYear.taxYear,
-      coverageStartDate: applicationYear.coverageStartDate,
+      coverageEndDate: applicationYear.coverageEndDate,
     },
     clientApplication,
     id,
