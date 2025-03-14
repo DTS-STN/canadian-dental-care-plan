@@ -134,14 +134,14 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
   const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
     .filter((method) => method.id !== communicationMethodEmail.id)
     .map((method) => ({
-      children: <span className="font-bold">{t('apply-child:communication-preference.by-mail')}</span>,
+      children: t('apply-child:communication-preference.by-mail'),
       value: method.id,
       defaultChecked: defaultState.preferredMethod === method.id,
     }));
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <span className="font-bold">{t('apply-child:communication-preference.by-email')}</span>,
+      children: t('apply-child:communication-preference.by-email'),
       value: communicationMethodEmail.id,
       defaultChecked: defaultState.preferredMethod === communicationMethodEmail.id,
     },
@@ -166,7 +166,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
                 legend={t('apply-child:communication-preference.preferred-language')}
                 options={preferredLanguages.map((language) => ({
                   defaultChecked: defaultState.preferredLanguage === language.id,
-                  children: <span className="font-bold">{language.name}</span>,
+                  children: language.name,
                   value: language.id,
                 }))}
                 errorMessage={errors?.preferredLanguage}
@@ -191,12 +191,12 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               options={[
                 {
                   value: PREFERRED_NOTIFICATION_METHOD.msca,
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:communication-preference.preferred-notification-method-msca" components={{ mscaLinkAccount }} />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:communication-preference.preferred-notification-method-msca" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
                   defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
                 },
                 {
                   value: PREFERRED_NOTIFICATION_METHOD.mail,
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:communication-preference.preferred-notification-method-mail" components={{ mscaLinkAccount }} />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:communication-preference.preferred-notification-method-mail" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
                   defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail,
                 },
               ]}
