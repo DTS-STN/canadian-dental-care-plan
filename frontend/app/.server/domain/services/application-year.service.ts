@@ -1,6 +1,5 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
-import invariant from 'tiny-invariant';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -150,9 +149,12 @@ export class DefaultApplicationYearService implements ApplicationYearService {
     const intakeYear = applicationYearResultDtos.find((applicationYear) => {
       return applicationYear.nextApplicationYearId === matchingRenewalApplicationYear.applicationYearId;
     });
-    invariant(intakeYear, 'Expected intakeYear to be defined');
 
-    const renewalApplicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ coverageEndDate: intakeYear.coverageEndDate, applicationYearResultDto: matchingRenewalApplicationYear });
+    // Use the intake year's coverage end date if found;
+    // Otherwise, use the matching renewal application year's coverage end date.
+    const coverageEndDate = intakeYear ? intakeYear.coverageEndDate : matchingRenewalApplicationYear.coverageEndDate;
+
+    const renewalApplicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto({ coverageEndDate, applicationYearResultDto: matchingRenewalApplicationYear });
 
     this.log.trace('Returning renewal application year result: [%j]', renewalApplicationYearResultDto);
     return renewalApplicationYearResultDto;
