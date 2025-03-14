@@ -85,7 +85,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultState({ params, request, session });
 
   if (formAction === FORM_ACTION.cancel) {
-    return redirect(getPathById('public/apply/$id/adult/review-adult-information', params));
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
   const homeAddressValidator = appContainer.get(TYPES.routes.validators.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
