@@ -14,7 +14,7 @@ vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({
       intakeYearId: '2025',
       taxYear: '2025',
     },
-    taxFiling2023: true,
+    hasFiledTaxes: true,
   }),
   saveApplyState: vi.fn().mockReturnValue({ headers: { 'Set-Cookie': 'some-set-cookie-header' } }),
 }));
@@ -27,7 +27,7 @@ describe('_public.apply.id.tax-filing', () => {
   });
 
   describe('loader()', () => {
-    it('should load id, and taxFiling2023', async () => {
+    it('should load id, and hasFiledTaxes', async () => {
       const response = await loader({ request: new Request('http://localhost:3000/en/apply/123/tax-filing'), context: mock<AppLoadContext>(), params: { id: '123', lang: 'en' } });
 
       expect(response).toMatchObject({ id: '123', meta: {}, defaultState: true });
@@ -41,12 +41,12 @@ describe('_public.apply.id.tax-filing', () => {
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: new FormData() }), context: mockContext, params: { id: '123', lang: 'en' } });
 
-      expect(response).toEqual({ data: { errors: { taxFiling2023: 'apply:tax-filing.error-message.tax-filing-required' } }, init: { status: 400 }, type: 'DataWithResponseInit' });
+      expect(response).toEqual({ data: { errors: { hasFiledTaxes: 'apply:tax-filing.error-message.tax-filing-required' } }, init: { status: 400 }, type: 'DataWithResponseInit' });
     });
 
     it('should redirect to type-application page if tax filing is completed', async () => {
       const formData = new FormData();
-      formData.append('taxFiling2023', 'yes');
+      formData.append('hasFiledTaxes', 'yes');
 
       const mockContext = mockDeep<AppLoadContext>();
       mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
@@ -60,7 +60,7 @@ describe('_public.apply.id.tax-filing', () => {
 
     it('should redirect to error page if tax filing is incompleted', async () => {
       const formData = new FormData();
-      formData.append('taxFiling2023', 'no');
+      formData.append('hasFiledTaxes', 'no');
 
       const mockContext = mockDeep<AppLoadContext>();
       mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());

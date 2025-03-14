@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.dentalInsurance === undefined ||
     state.mailingAddress?.country === undefined ||
     state.submissionInfo === undefined ||
-    state.taxFiling2023 === undefined ||
+    state.hasFiledTaxes === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }

@@ -47,14 +47,14 @@ describe('apply-adult-child-route-helpers', () => {
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it('should redirect if taxFiling2023 is no', () => {
-      const mockState = { ...baseState, typeOfApplication: 'adult-child', taxFiling2023: false } satisfies ApplyState;
+    it('should redirect if hasFiledTaxes is no', () => {
+      const mockState = { ...baseState, typeOfApplication: 'adult-child', hasFiledTaxes: false } satisfies ApplyState;
 
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if age category is "children"', () => {
-      const mockState = { ...baseState, typeOfApplication: 'adult-child', taxFiling2023: true, applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '2022-01-01', socialInsuranceNumber: '000-000-001' } } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult-child', hasFiledTaxes: true, applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '2022-01-01', socialInsuranceNumber: '000-000-001' } } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
 
@@ -62,7 +62,7 @@ describe('apply-adult-child-route-helpers', () => {
     });
 
     it('should redirect if age category is "youth"', () => {
-      const mockState = { ...baseState, typeOfApplication: 'adult-child', taxFiling2023: true, applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '2008-01-01', socialInsuranceNumber: '000-000-001' } } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult-child', hasFiledTaxes: true, applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '2008-01-01', socialInsuranceNumber: '000-000-001' } } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('youth');
 
@@ -70,7 +70,7 @@ describe('apply-adult-child-route-helpers', () => {
     });
 
     it('should redirect if applicantInformation is undefined', () => {
-      const mockState = { ...baseState, typeOfApplication: 'adult-child', taxFiling2023: true, applicantInformation: undefined } satisfies ApplyState;
+      const mockState = { ...baseState, typeOfApplication: 'adult-child', hasFiledTaxes: true, applicantInformation: undefined } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
 
@@ -81,7 +81,7 @@ describe('apply-adult-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
@@ -97,7 +97,7 @@ describe('apply-adult-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
@@ -115,7 +115,7 @@ describe('apply-adult-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
@@ -134,7 +134,7 @@ describe('apply-adult-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
@@ -156,7 +156,7 @@ describe('apply-adult-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
@@ -178,7 +178,7 @@ describe('apply-adult-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
@@ -202,7 +202,7 @@ describe('apply-adult-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
@@ -226,7 +226,7 @@ describe('apply-adult-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
@@ -251,7 +251,7 @@ describe('apply-adult-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
@@ -276,7 +276,7 @@ describe('apply-adult-child-route-helpers', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
         applicationYear: { intakeYearId: '2025', taxYear: '2025' },
@@ -364,7 +364,7 @@ describe('apply-adult-child-route-helpers', () => {
           phoneNumberAlt: '987-654-3210',
         },
         submissionInfo: undefined,
-        taxFiling2023: true,
+        hasFiledTaxes: true,
         termsAndConditions: { acknowledgePrivacy: true, acknowledgeTerms: true, shareData: true },
         typeOfApplication: 'adult-child',
       });

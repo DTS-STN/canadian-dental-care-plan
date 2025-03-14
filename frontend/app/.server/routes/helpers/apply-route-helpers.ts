@@ -109,7 +109,7 @@ export type ApplyState = ReadonlyDeep<{
      */
     submittedOn: string;
   };
-  taxFiling2023?: boolean;
+  hasFiledTaxes?: boolean;
   termsAndConditions?: {
     acknowledgeTerms: boolean;
     acknowledgePrivacy: boolean;
