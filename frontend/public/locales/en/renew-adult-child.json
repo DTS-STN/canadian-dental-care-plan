@@ -318,7 +318,7 @@
         "date-of-birth-day-required": "Date of birth must include a day",
         "date-of-birth-is-past": "Date of birth must be in the past",
         "date-of-birth-is-past-valid": "Date of birth too far in the past",
-        "date-of-birth-ineligible": "The individual is not eligible to renew their benefits because they will be 18 as of {{coverageStartDate}}. They must submit an application as an adult to maintain their dental coverage.",
+        "date-of-birth-ineligible": "The individual is not eligible to renew their benefits because they will be 18 as of {{coverageEndDate}}. They must submit an application as an adult to maintain their dental coverage.",
         "date-of-birth-month-required": "Date of birth must include a month",
         "date-of-birth-valid": "Day must be valid for the given month and year",
         "date-of-birth-year-number": "Year must be a number, for example 1950",

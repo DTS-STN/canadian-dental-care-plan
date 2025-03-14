@@ -20,7 +20,7 @@ export type ApplicationYearResultDto = Readonly<{
 export type RenewalApplicationYearResultDto = Readonly<{
   renewalYearId?: string;
   taxYear: string;
-  coverageStartDate: string;
+  coverageEndDate: string;
 }>;
 
 /**

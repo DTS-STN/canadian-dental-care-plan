@@ -19,7 +19,7 @@ export interface ProtectedRenewState {
   readonly applicationYear: {
     renewalYearId: string;
     taxYear: string;
-    coverageStartDate: string;
+    coverageEndDate: string;
   };
   readonly clientApplication: ClientApplicationDto;
   readonly previouslyReviewed?: boolean;
@@ -266,7 +266,7 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
     communicationPreferences: clientApplication.communicationPreferences,
     children: clientApplication.children
       // filter out children who will be 18 or older at the start of the coverage period as they are ineligible for renewal
-      .filter((child) => getAgeFromDateString(child.information.dateOfBirth, applicationYear.coverageStartDate) < 18) //
+      .filter((child) => getAgeFromDateString(child.information.dateOfBirth, applicationYear.coverageEndDate) < 18) //
       .map((child) => {
         const childStateObj = {
           id: randomUUID(),

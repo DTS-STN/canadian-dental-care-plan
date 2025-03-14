@@ -112,7 +112,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         applicationYear: {
           renewalYearId: '2024',
           taxYear: '2024',
-          coverageStartDate: '2024-01-01',
+          coverageEndDate: '2024-01-01',
         },
         children: [
           {

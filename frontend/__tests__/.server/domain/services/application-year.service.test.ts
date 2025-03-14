@@ -67,7 +67,7 @@ describe('DefaultApplicationYearService', () => {
   mockApplicationYearRepository.listApplicationYears.mockResolvedValue(mockApplicationYearResultEntity);
 
   describe('findRenewalApplicationYear', () => {
-    const mockRenewalApplicationYearResultDto: RenewalApplicationYearResultDto = { taxYear: '2025', coverageStartDate: '2025-01-01' };
+    const mockRenewalApplicationYearResultDto: RenewalApplicationYearResultDto = { taxYear: '2025', coverageEndDate: '2025-01-01' };
     const mockApplicationYearDtoMapper = mock<ApplicationYearDtoMapper>();
     mockApplicationYearDtoMapper.mapApplicationYearResultEntityToApplicationYearResultDtos.mockReturnValue(mockApplicationYearResultDtos);
     mockApplicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto.mockReturnValue(mockRenewalApplicationYearResultDto);
@@ -79,7 +79,7 @@ describe('DefaultApplicationYearService', () => {
       const result = await service.findRenewalApplicationYear('2025-01-01');
 
       expect(mockApplicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto).toHaveBeenCalledWith({
-        coverageStartDate: '2024-12-31',
+        coverageEndDate: '2024-12-31',
         applicationYearResultDto: {
           applicationYear: '2025',
           applicationYearId: '2025',
@@ -103,7 +103,7 @@ describe('DefaultApplicationYearService', () => {
       const result = await service.findRenewalApplicationYear('2026-01-01');
 
       expect(mockApplicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto).toHaveBeenCalledWith({
-        coverageStartDate: '2025-12-31',
+        coverageEndDate: '2025-12-31',
         applicationYearResultDto: { applicationYear: '2026', applicationYearId: '2026', taxYear: '2026', coverageStartDate: '2026-01-01', coverageEndDate: '2026-12-31', intakeStartDate: '2026-01-01', renewalStartDate: '2026-01-01' },
       });
       expect(result).toEqual(mockRenewalApplicationYearResultDto);

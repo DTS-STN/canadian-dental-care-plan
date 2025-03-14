@@ -124,7 +124,7 @@ export async function action({ context: { appContainer, session }, params, reque
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
 
-      const coverageStartDate = renewState.applicationYear.coverageStartDate;
+      const coverageEndDate = renewState.applicationYear.coverageEndDate;
 
       if (!isValidDateString(dateOfBirth)) {
         ctx.addIssue({
@@ -144,10 +144,10 @@ export async function action({ context: { appContainer, session }, params, reque
           message: t('renew-adult-child:children.information.error-message.date-of-birth-is-past-valid'),
           path: ['dateOfBirth'],
         });
-      } else if (getAgeFromDateString(dateOfBirth, coverageStartDate) >= 18) {
+      } else if (getAgeFromDateString(dateOfBirth, coverageEndDate) >= 18) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t('renew-adult-child:children.information.error-message.date-of-birth-ineligible', { coverageStartDate: toLocaleDateString(parseDateString(coverageStartDate), locale) }),
+          message: t('renew-adult-child:children.information.error-message.date-of-birth-ineligible', { coverageEndDate: toLocaleDateString(parseDateString(coverageEndDate), locale) }),
           path: ['dateOfBirth'],
         });
       }
