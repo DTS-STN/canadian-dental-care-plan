@@ -406,7 +406,7 @@
                   "HasChanged": null
                 },
                 {
-                  "Label": "Lettre de validation - Duplicata",
+                  "Label": "Lettre de validation - Doublon",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
@@ -460,7 +460,7 @@
                   "HasChanged": null
                 },
                 {
-                  "Label": "Lettre de validation - Enfant en double",
+                  "Label": "Lettre de validation - Doublon - Enfant",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
@@ -770,6 +770,53 @@
             }
           },
           {
+            "Value": "invite-775170015",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Invitation Letter - New Adult Invitation",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre d'invitation - Invitation - Nouveaux adultes",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
             "Value": "invite-775170016",
             "Color": null,
             "IsManaged": false,
@@ -790,6 +837,194 @@
                 },
                 {
                   "Label": "Lettre d'invitation - Rappel de renouvellement pour le demandeur principal",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "notice-775170018",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Notice Letter - Benefits Expired Primary",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de préavis - Prestations expirées pour le demandeur principal",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "notice-775170019",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Notice Letter - Benefits Expired Dependant",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de préavis - Prestations expirées pour les personnes à charge",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "notice-775170020",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Notice Letter - Pre-Renewal SIR Account Revision Letter",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de révision du dossier RAS pré-renouvellement",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "invite-775170017",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Invitation Letter - Renewal Reminder Dependant",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre d'invitation - Rappel de renouvellement pour les personnes à charge",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
