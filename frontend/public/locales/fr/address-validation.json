@@ -40,7 +40,7 @@
       "province-state-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse postale",
       "zip-code-valid": "Entrez un code postal américain pour l'adresse postale dans le bon format, par exemple 12345 ou 12345-6789"
     },
-    "optional-label": "Veuillez remplir tous les champs, sauf ceux indiqués comme facultatifs.",
+    "optional-label": "Veuillez remplissez tous les champs, sauf ceux indiqués comme facultatifs.",
     "page-title": "Validation d'adresse",
     "reset-button": "Réinitialiser",
     "submit-button": "Valider l'adresse",
