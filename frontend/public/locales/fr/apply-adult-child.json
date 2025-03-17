@@ -74,7 +74,7 @@
     "continue-btn": "Continuer",
     "save-btn": "Enregistrer",
     "error-message": {
-      "is-new-or-existing-member-required": "(FR) Please select whether you are new or existing member of CDCP",
+      "is-new-or-existing-member-required": "Indiquez si vous avez déjà bénéficié d'une couverture en vertu du Régime canadien de soins dentaires.",
       "client-number-required": "Entrez le numéro de client de 11 chiffres",
       "client-number-valid": "Le numéro de client doit être composé de 11 chiffres"
     }
