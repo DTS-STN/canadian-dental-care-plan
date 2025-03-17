@@ -86,14 +86,10 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('apply-adult-child:parent-or-guardian.unable-to-apply-child')}</p>
         <p>{t('apply-adult-child:parent-or-guardian.unable-to-apply')}</p>
-        {ageCategory === 'youth' && (
-          <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="parent-or-guardian.service-canada" components={{ noWrap }} />
-          </p>
-        )}
-        <p>{t('apply-adult-child:parent-or-guardian.eligibility')}</p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="parent-or-guardian.apply-for-yourself" components={{ noWrap }} />
+        </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />

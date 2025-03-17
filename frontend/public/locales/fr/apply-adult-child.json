@@ -636,10 +636,8 @@
   },
   "parent-or-guardian": {
     "page-title": "Le parent ou le tuteur légal doit faire la demande",
-    "unable-to-apply-child": "Votre enfant n'est actuellement pas admissible au Régime canadien de soins dentaires pour le moment.",
-    "unable-to-apply": "Vous ne pouvez pas présenter une demande d'adhésion au Régime canadien de soins dentaires pour vous même. Veuillez demander à votre parent ou tuteur légal de présenter une demande en votre nom.",
-    "service-canada": "Si vous avez déjà fait une demande pour votre enfant et que vous souhaitez maintenant présenter une demande pour vous-même, vous devez parler à un représentant de Service Canada. Contactez Service Canada en appelant au <noWrap>1-833-537-4342</noWrap>.",
-    "eligibility": "Le Régime canadien de soins dentaires accepte actuellement les demandes d'adhésion des personnes âgées de 65 ans et plus, des enfants de moins de 18 ans et des adultes qui reçoivent le crédit d'impôt pour personnes handicapées valide.",
+    "unable-to-apply": "Vous avez moins de 18 ans et ne pouvez pas présenter une demande d'adhésion au Régime canadien de soins dentaires pour vous-même. Un parent ou un tuteur légal doit faire la demande en votre nom.",
+    "apply-for-yourself": "Si vous avez déjà fait une demande pour un enfant et que vous souhaitez maintenant faire une demande pour vous-même, vous devez vous adresser à un représentant de Service Canada. Vous pouvez contacter Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
     "back-btn": "Retour",
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
