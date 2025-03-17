@@ -390,9 +390,9 @@
     "save-btn": "Save"
   },
   "parent-or-guardian": {
-    "page-title": "Parent or guardian needs to apply",
-    "unable-to-apply": "You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or legal guardian apply on your behalf.",
-    "apply-for-yourself": "If you have already applied for your child and now want to apply for yourself, you must speak to a Service Canada representative. Contact Service Canada by calling  <noWrap>1-833-537-4342</noWrap>.",
+    "page-title": "Parent or legal guardian needs to apply",
+    "unable-to-apply": "You are under 18 and are not able to apply for the Canadian Dental Care Plan for yourself. A parent or legal guardian must apply on your behalf.",
+    "apply-for-yourself": "If you have previously applied for a child, and now want to apply for yourself, you must speak to a Service Canada representative. Contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
     "back-btn": "Back",
     "return-btn": "Return to main page",
     "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
