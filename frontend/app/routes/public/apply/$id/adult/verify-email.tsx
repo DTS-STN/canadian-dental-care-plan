@@ -217,7 +217,15 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
                 required
               />
             </div>
-            <LoadingButton id="request-button" name="_action" variant="link" loading={isSubmitting} value={FORM_ACTION.request} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Request new verification code - Verify email click">
+            <LoadingButton
+              id="request-button"
+              type="button"
+              name="_action"
+              variant="link"
+              loading={isSubmitting}
+              value={FORM_ACTION.request}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Request new verification code - Verify email click"
+            >
               {t('apply-adult:verify-email.request-new-code')}
             </LoadingButton>
           </fieldset>
