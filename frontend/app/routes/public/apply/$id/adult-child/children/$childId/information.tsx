@@ -26,6 +26,7 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
+import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
@@ -280,6 +281,9 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
   return (
     <>
       <AppPageTitle>{t('apply-adult-child:children.information.page-title', { childName })}</AppPageTitle>
+      <div className="my-6 sm:my-8">
+        <Progress value={84} size="lg" label={t('apply:progress.label')} />
+      </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('apply-adult-child:children.information.form-instructions-sin')}</p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>

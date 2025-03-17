@@ -129,7 +129,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={63} size="lg" label={t('apply:progress.label')} />
+        <Progress value={68} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('apply:required-label')}</p>

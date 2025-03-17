@@ -232,7 +232,7 @@ export default function ApplyAdultChildHomeAddress({ loaderData, params }: Route
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={74} size="lg" label={t('apply:progress.label')} />
+        <Progress value={48} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('apply:required-label')}</p>

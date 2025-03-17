@@ -21,6 +21,7 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
+import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -220,6 +221,9 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
 
   return (
     <>
+      <div className="my-6 sm:my-8">
+        <Progress value={84} size="lg" label={t('apply:progress.label')} />
+      </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('apply-adult-child:children.dental-benefits.access-to-dental')}</p>
         <p className="mb-4">{t('apply-adult-child:children.dental-benefits.eligibility-criteria')}</p>

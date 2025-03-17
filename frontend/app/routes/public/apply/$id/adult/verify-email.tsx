@@ -191,7 +191,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={55} size="lg" label={t('apply:progress.label')} />
+        <Progress value={76} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         {fetcherStatus === 'verification-code-mismatch' && <VerificationCodeAlert />}

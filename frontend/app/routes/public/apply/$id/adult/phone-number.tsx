@@ -17,6 +17,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPhoneField } from '~/components/input-phone-field';
 import { LoadingButton } from '~/components/loading-button';
+import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -108,69 +109,74 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
   });
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t('apply:optional-label')}</p>
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" noValidate>
-        <CsrfTokenInput />
-        <div className="mb-6">
-          <p className="mb-4">{t('apply-adult:phone-number.help-message')}</p>
-          <div className="grid items-end gap-6">
-            <InputPhoneField
-              id="phone-number"
-              name="phoneNumber"
-              type="tel"
-              inputMode="tel"
-              className="w-full"
-              autoComplete="tel"
-              defaultValue={defaultState.phoneNumber ?? ''}
-              errorMessage={errors?.phoneNumber}
-              label={t('apply-adult:phone-number.phone-number')}
-              maxLength={100}
-              aria-describedby="adding-phone"
-            />
-            <InputPhoneField
-              id="phone-number-alt"
-              name="phoneNumberAlt"
-              type="tel"
-              inputMode="tel"
-              className="w-full"
-              autoComplete="tel"
-              defaultValue={defaultState.phoneNumberAlt ?? ''}
-              errorMessage={errors?.phoneNumberAlt}
-              label={t('apply-adult:phone-number.phone-number-alt')}
-              maxLength={100}
-              aria-describedby="adding-phone"
-            />
+    <>
+      <div className="my-6 sm:my-8">
+        <Progress value={60} size="lg" label={t('apply:progress.label')} />
+      </div>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t('apply:optional-label')}</p>
+        <errorSummary.ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <div className="mb-6">
+            <p className="mb-4">{t('apply-adult:phone-number.help-message')}</p>
+            <div className="grid items-end gap-6">
+              <InputPhoneField
+                id="phone-number"
+                name="phoneNumber"
+                type="tel"
+                inputMode="tel"
+                className="w-full"
+                autoComplete="tel"
+                defaultValue={defaultState.phoneNumber ?? ''}
+                errorMessage={errors?.phoneNumber}
+                label={t('apply-adult:phone-number.phone-number')}
+                maxLength={100}
+                aria-describedby="adding-phone"
+              />
+              <InputPhoneField
+                id="phone-number-alt"
+                name="phoneNumberAlt"
+                type="tel"
+                inputMode="tel"
+                className="w-full"
+                autoComplete="tel"
+                defaultValue={defaultState.phoneNumberAlt ?? ''}
+                errorMessage={errors?.phoneNumberAlt}
+                label={t('apply-adult:phone-number.phone-number-alt')}
+                maxLength={100}
+                aria-describedby="adding-phone"
+              />
+            </div>
           </div>
-        </div>
-        {editMode ? (
-          <div className="flex flex-wrap items-center gap-3">
-            <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Phone Number click">
-              {t('apply-adult:phone-number.save-btn')}
-            </Button>
-            <ButtonLink id="cancel-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Phone Number click">
-              {t('apply-adult:phone-number.cancel-btn')}
-            </ButtonLink>
-          </div>
-        ) : (
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Phone number click">
-              {t('apply-adult:phone-number.continue-btn')}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              routeId={defaultState.backToMailingAddress ? 'public/apply/$id/adult/mailing-address' : 'public/apply/$id/adult/home-address'}
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click"
-            >
-              {t('apply-adult:phone-number.back-btn')}
-            </ButtonLink>
-          </div>
-        )}
-      </fetcher.Form>
-    </div>
+          {editMode ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Phone Number click">
+                {t('apply-adult:phone-number.save-btn')}
+              </Button>
+              <ButtonLink id="cancel-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Phone Number click">
+                {t('apply-adult:phone-number.cancel-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Phone number click">
+                {t('apply-adult:phone-number.continue-btn')}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                routeId={defaultState.backToMailingAddress ? 'public/apply/$id/adult/mailing-address' : 'public/apply/$id/adult/home-address'}
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click"
+              >
+                {t('apply-adult:phone-number.back-btn')}
+              </ButtonLink>
+            </div>
+          )}
+        </fetcher.Form>
+      </div>
+    </>
   );
 }
