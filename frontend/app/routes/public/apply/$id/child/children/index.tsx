@@ -117,7 +117,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={37} size="lg" label={t('apply:progress.label')} />
+        <Progress value={30} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p>{t('apply-child:children.index.in-this-section')}</p>

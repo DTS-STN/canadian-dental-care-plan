@@ -145,7 +145,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={55} size="lg" label={t('apply:progress.label')} />
+        <Progress value={73} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <errorSummary.ErrorSummary />

@@ -99,7 +99,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={39} size="lg" label={t('apply:progress.label')} />
+        <Progress value={33} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-6">{t('apply-adult:living-independently.description')}</p>

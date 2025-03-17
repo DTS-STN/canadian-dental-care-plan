@@ -163,7 +163,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={84} size="lg" label={t('apply:progress.label')} />
+        <Progress value={90} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="my-4 text-lg">{t('apply-child:review-child-information.read-carefully')}</p>
