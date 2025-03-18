@@ -30,9 +30,12 @@ interface ToEmailAddressArgs {
 
 @injectable()
 export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDtoMapper {
-  private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>;
+  private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'COMMUNICATION_METHOD_GC_DIGITAL_ID' | 'COMMUNICATION_METHOD_MAIL_ID'>;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>) {
+  constructor(
+    @inject(TYPES.configs.ServerConfig)
+    serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'COMMUNICATION_METHOD_GC_DIGITAL_ID' | 'COMMUNICATION_METHOD_MAIL_ID'>,
+  ) {
     this.serverConfig = serverConfig;
   }
 
@@ -47,7 +50,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     dentalInsurance,
     livingIndependently,
     partnerInformation,
-    termsAndConditions, // TODO map terms and conditions when Interop provides field structure
+    termsAndConditions,
     typeOfApplication,
   }: BenefitApplicationDto): BenefitApplicationRequestEntity {
     return {
@@ -56,8 +59,13 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           ApplicantDetail: {
             PrivateDentalInsuranceIndicator: dentalInsurance,
             LivingIndependentlyIndicator: livingIndependently,
+            PrivacyStatementIndicator: termsAndConditions.acknowledgePrivacy,
+            TermsAndConditionsIndicator: termsAndConditions.acknowledgeTerms,
+            SharingConsentIndicator: termsAndConditions.shareData,
+            ApplicantEmailVerifiedIndicator: communicationPreferences.emailVerified,
             InsurancePlan: this.toInsurancePlan(dentalBenefits),
           },
+          ClientIdentification: this.toClientIdentification(applicantInformation.clientNumber),
           PersonBirthDate: this.toDate(dateOfBirth),
           PersonContactInformation: [
             {
@@ -93,6 +101,9 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           PreferredMethodCommunicationCode: {
             ReferenceDataID: communicationPreferences.preferredMethod,
           },
+          PreferredMethodCommunicationGCCode: {
+            ReferenceDataID: this.toPreferredMethodCommunicationGCCode(communicationPreferences.preferredMethodGovernmentOfCanada),
+          },
         },
         BenefitApplicationCategoryCode: {
           ReferenceDataID: this.toBenefitApplicationCategoryCode(typeOfApplication),
@@ -110,6 +121,10 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         },
       },
     };
+  }
+
+  private toClientIdentification(clientNumber?: string) {
+    return clientNumber ? [{ IdentificationID: clientNumber, IdentificationCategoryText: 'Sun Life Client Number' }] : [];
   }
 
   private toInsurancePlan(dentalBenefits: readonly string[]) {
@@ -267,6 +282,13 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         InsurancePlan: this.toInsurancePlan(child.dentalBenefits),
       },
     }));
+  }
+
+  private toPreferredMethodCommunicationGCCode(preferredMethodGovernmentOfCanada?: string) {
+    const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_MAIL_ID } = this.serverConfig;
+    if (preferredMethodGovernmentOfCanada === 'msca') return COMMUNICATION_METHOD_GC_DIGITAL_ID;
+    if (preferredMethodGovernmentOfCanada === 'mail') return COMMUNICATION_METHOD_MAIL_ID;
+    throw new Error(`Unexpected preferredMethodGovernmentOfCanada [${preferredMethodGovernmentOfCanada}]`);
   }
 
   private toBenefitApplicationCategoryCode(typeOfApplication: TypeOfApplicationDto) {

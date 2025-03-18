@@ -7,12 +7,20 @@ export type BenefitApplicationRequestEntity = ReadonlyDeep<{
         PrivateDentalInsuranceIndicator?: boolean;
         DisabilityTaxCreditIndicator?: boolean;
         LivingIndependentlyIndicator?: boolean;
+        TermsAndConditionsIndicator: boolean;
+        PrivacyStatementIndicator: boolean;
+        SharingConsentIndicator: boolean;
+        ApplicantEmailVerifiedIndicator?: boolean;
         InsurancePlan?: {
           InsurancePlanIdentification?: {
             IdentificationID?: string;
           }[];
         }[];
       };
+      ClientIdentification: {
+        IdentificationID: string;
+        IdentificationCategoryText: string;
+      }[];
       PersonBirthDate: {
         date: string;
       };
@@ -94,6 +102,9 @@ export type BenefitApplicationRequestEntity = ReadonlyDeep<{
       }[];
       MailingSameAsHomeIndicator: boolean;
       PreferredMethodCommunicationCode: {
+        ReferenceDataID: string;
+      };
+      PreferredMethodCommunicationGCCode: {
         ReferenceDataID: string;
       };
     };

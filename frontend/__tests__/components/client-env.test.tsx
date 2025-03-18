@@ -21,6 +21,8 @@ describe('<ClientEnv>', () => {
       CLIENT_STATUS_SUCCESS_ID: 'CLIENT_STATUS_SUCCESS',
       COMMUNICATION_METHOD_EMAIL_ID: 'EMAIL',
       COMMUNICATION_METHOD_MAIL_ID: 'MAIL',
+      COMMUNICATION_METHOD_GC_DIGITAL_ID: 'DIGITAL',
+      COMMUNICATION_METHOD_GC_MAIL_ID: 'MAIL',
       ECAS_BASE_URI: 'https://srv136.services.gc.ca/ecas-seca/rascl/SCL',
       ENABLED_FEATURES: ['feature1', 'feature2'] as unknown as FeatureName[],
       HCAPTCHA_SITE_KEY: 'hcaptcha-site-key',
