@@ -105,6 +105,7 @@ export const pageIds = {
         phoneNumber: 'CDCP-APPL-CH-0020',
         maritalStatus: 'CDCP-APPL-CH-0021', // TODO: Check the correct page ID.
         email: 'CDCP-APPL-CH-0022',
+        verifyEmail: 'CDCP-APPL-CH-0023',
       },
     },
     status: { index: 'CDCP-STAT-0001', myself: 'CDCP-STAT-0002', child: 'CDCP-STAT-0003', result: 'CDCP-STAT-0004' },
