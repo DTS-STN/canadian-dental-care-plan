@@ -125,6 +125,13 @@
     "index": {
       "page-title": "Demande pour enfant(s)",
       "in-this-section": "Dans cette section, vous ajouterez votre ou vos enfants à la demande.",
+      "can-apply": "Vous pouvez faire une demande pour votre enfant si\u00a0:",
+      "parent-guardian": "Vous êtes le parent ou le tuteur légal",
+      "over-sixteen": "Vous avez plus de 16 ans",
+      "under-eighteen": "Votre enfant est âgé de moins de 18 ans",
+      "share-custody": "Si vous partagez la garde d'un enfant",
+      "one-application": "Soumettez une seule demande par enfant. Un seul parent ou tuteur légal doit présenter une demande au nom de l'enfant.",
+      "eligibility": "L'admissibilité au régime et le montant couvert dépendent du parent ou du tuteur légal qui présente la demande. L'admissibilité de l'enfant et le montant couvert peuvent changer si un autre parent ou tuteur légal présente une demande pour cet enfant.",
       "dob-title": "Date de naissance",
       "sin-title": "Numéro d'assurance sociale (NAS)",
       "edit-child": "Modifier les renseignements sur l'enfant",
