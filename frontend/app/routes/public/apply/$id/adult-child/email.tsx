@@ -102,13 +102,34 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
-  saveApplyState({ params, session, state: { email: parsedDataResult.data.email } });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      email: parsedDataResult.data.email,
+      emailVerified: isNewEmail ? false : state.emailVerified,
+      ...(isNewEmail && {
+        verifyEmail: {
+          verificationCode,
+          verificationAttempts: 0,
+        },
+      }),
+    },
+  });
 
   if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult-child/review-information', params));
+    // Redirect to /verify-email only if emailVerified is false
+    if (isNewEmail || !state.emailVerified) {
+      return redirect(getPathById('public/apply/$id/adult-child/verify-email', params));
+    }
+    return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult-child/verify-email', params));
+  if (isNewEmail || !state.emailVerified) {
+    return redirect(getPathById('public/apply/$id/adult-child/verify-email', params));
+  }
+
+  return redirect(getPathById('public/apply/$id/adult-child/dental-insurance', params));
 }
 
 export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentProps) {
@@ -153,16 +174,16 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Save - Email click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Email click">
                 {t('apply-adult-child:email.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Cancel - Email click">
+              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Email click">
                 {t('apply-adult-child:email.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Continue - Email click">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Email click">
                 {t('apply-adult-child:email.continue')}
               </LoadingButton>
               <ButtonLink
@@ -171,7 +192,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Back - Email click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Email click"
               >
                 {t('apply-adult-child:email.back')}
               </ButtonLink>

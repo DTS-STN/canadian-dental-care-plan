@@ -191,7 +191,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={76} size="lg" label={t('apply:progress.label')} />
+        <Progress value={65} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         {fetcherStatus === 'verification-code-mismatch' && <VerificationCodeAlert />}
@@ -224,14 +224,14 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               variant="link"
               loading={isSubmitting}
               value={FORM_ACTION.request}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Request new verification code - Verify email click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Request new verification code - Verify email click"
             >
               {t('apply-adult-child:verify-email.request-new-code')}
             </LoadingButton>
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Save - Verify email click">
+              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Verify email click">
                 {t('apply-adult-child:verify-email.save-btn')}
               </LoadingButton>
               <ButtonLink
@@ -239,7 +239,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
                 routeId="public/apply/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Cancel - Verify email click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Verify email click"
               >
                 {t('apply-adult-child:verify-email.cancel-btn')}
               </ButtonLink>
@@ -253,7 +253,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
                 value={FORM_ACTION.submit}
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Continue - Verify email"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Verify email"
               >
                 {t('apply-adult-child:verify-email.continue')}
               </LoadingButton>
@@ -263,7 +263,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Back - Verify email click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Verify email click"
               >
                 {t('apply-adult-child:verify-email.back')}
               </ButtonLink>
