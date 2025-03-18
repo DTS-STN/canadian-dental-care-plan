@@ -339,6 +339,30 @@
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com"
     }
   },
+  "verify-email": {
+    "page-title": "Verify your email address",
+    "verification-code": "Un courriel contenant un code de vérification a été envoyé à {{email}}, veuillez saisir le code ci-dessous et cliquer sur «\u00a0Continuer\u00a0».",
+    "request-new": "Le courriel peut prendre jusqu'à 60 secondes avant d'arriver. Si vous ne le voyez pas, vérifiez votre dossier de courrier indésirable. Si le code ne s'y trouve pas non plus, vous pouvez en demander un nouveau.",
+    "unable-to-verify": "Si vous n'êtes pas en mesure de confirmer votre courriel, cliquez sur «\u00a0Retour\u00a0» pour mettre à jour votre adresse courriel ou <communicationLink>modifier vos préférences de communication</communicationLink>.",
+    "verification-code-label": "Entrer le code à x chiffres",
+    "request-new-code": "Demander un nouveau code",
+    "back": "Retour",
+    "continue": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
+    "error-message": {
+      "verification-code-required": "Entrez le code de vérification de 5 chiffres",
+      "verification-code-max-attempts": "Le code de vérification saisi ne correspond pas au code envoyé à l'adresse électronique fournie, ou le code a expiré. Veuillez vérifier le code et essayer de nouveau. Si le problème persiste, vous pouvez demander un nouveau code à l'aide du lien «\u00a0Demander un nouveau code de vérification\u00a0» ci-dessous."
+    },
+    "verification-code-alert": {
+      "heading": "Le code de vérification saisi ne correspond pas au code envoyé à l'adresse électronique fournie, ou le code a expiré.",
+      "detail": "Veuillez vérifier le code et essayer de nouveau. Si le problème persiste, vous pouvez demander un nouveau code à l'aide du lien «\u00a0Demander un nouveau code de vérification\u00a0» ci-dessous."
+    },
+    "code-sent": {
+      "heading": "Nouveau code",
+      "detail": "Un nouveau code de vérification a été envoyé à {{email}}."
+    }
+  },
   "confirm": {
     "page-title": "Demande soumise avec succès",
     "app-code-is": "Votre code de demande est\u00a0:",

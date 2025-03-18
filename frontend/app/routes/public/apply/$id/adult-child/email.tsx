@@ -2,6 +2,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -10,7 +11,7 @@ import type { Route } from './+types/email';
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -24,6 +25,8 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+export const PREFERRED_LANGUAGE = { en: 'English', fr: 'French' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -56,8 +59,10 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadApplyAdultChildState({ params, request, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
+
+  const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
 
   const emailSchema = z
     .object({
@@ -79,6 +84,22 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+  }
+
+  const isNewEmail = state.email !== parsedDataResult.data.email;
+  const verificationCode = isNewEmail || state.verifyEmail === undefined ? verificationCodeService.createVerificationCode('anonymous') : state.verifyEmail.verificationCode;
+
+  invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
+  if (isNewEmail) {
+    const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
+    const preferredLanguage = preferredLanguageService.getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
+
+    await verificationCodeService.sendVerificationCodeEmail({
+      email: parsedDataResult.data.email,
+      verificationCode,
+      preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
+      userId: 'anonymous',
+    });
   }
 
   saveApplyState({ params, session, state: { email: parsedDataResult.data.email } });

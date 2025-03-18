@@ -123,6 +123,7 @@ export const routes = [
             paths: { en: '/:lang/apply/:id/adult-child/new-or-existing-member', fr: '/:lang/demander/:id/adulte-enfant/membre-nouveau-ou-actuel' },
           },
           { id: 'public/apply/$id/adult-child/phone-number', file: 'routes/public/apply/$id/adult-child/phone-number.tsx', paths: { en: '/:lang/apply/:id/adult-child/phone-number', fr: '/:lang/demander/:id/adulte-enfant/phone-number' } }, // TODO: Update French route
+          { id: 'public/apply/$id/adult-child/verify-email', file: 'routes/public/apply/$id/adult-child/verify-email.tsx', paths: { en: '/:lang/apply/:id/adult-child/verify-email', fr: '/:lang/demander/:id/adulte-enfant/verify-email' } }, // TODO: Update French route
           { id: 'public/apply/$id/adult-child/email', file: 'routes/public/apply/$id/adult-child/email.tsx', paths: { en: '/:lang/apply/:id/adult-child/email', fr: '/:lang/demander/:id/adulte-enfant/adresse-courriel' } },
           {
             id: 'public/apply/$id/adult-child/applicant-information',
