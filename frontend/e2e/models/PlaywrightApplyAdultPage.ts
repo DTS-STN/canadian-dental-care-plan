@@ -6,7 +6,6 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
       | 'applicant-information'
       | 'communication-preference'
       | 'confirmation'
-      | 'contact-information'
       | 'dental-insurance'
       | 'confirm-federal-provincial-territorial-benefits'
       | 'federal-provincial-territorial-benefits'
@@ -28,10 +27,6 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
 
       case 'confirmation':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/confirmation/, heading: 'Application successfully submitted' };
-        break;
-
-      case 'contact-information':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/contact-information/, heading: 'Contact information' };
         break;
 
       case 'dental-insurance':

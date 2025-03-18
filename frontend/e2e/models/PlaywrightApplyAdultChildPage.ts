@@ -20,7 +20,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'confirmation'
       | 'communication-preference'
       | 'contact-apply-child'
-      | 'contact-information'
       | 'date-of-birth'
       | 'dental-insurance'
       | 'dob-eligibility'
@@ -73,10 +72,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
 
       case 'contact-apply-child':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/contact-apply-child/, heading: 'Contact us to apply for your child' };
-        break;
-
-      case 'contact-information':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/contact-information/, heading: 'Contact information' };
         break;
 
       case 'confirmation':
