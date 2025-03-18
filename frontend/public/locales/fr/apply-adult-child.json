@@ -586,17 +586,6 @@
     }
   },
   "eligibility": {
-    "apply-children": {
-      "page-title": "Faites une demande pour votre/vos enfant(s)",
-      "not-eligible": "Vous n'êtes actuellement pas admissible au Régime canadien de soins dentaires pour le moment.",
-      "eligibility-info": "Le Régime canadien de soins dentaires accepte actuellement les demandes d'adhésion des personnes âgées de 65 ans et plus, des enfants de moins de 18 ans et des adultes qui reçoivent le crédit d'impôt pour personnes handicapées valide.",
-      "eligibility-2025": "Les adultes âgés de 18 à 64 ans qui n'ont pas de crédit d'impôt pour personnes handicapées valide pourront demander leur adhésion au Régime canadien de soins dentaires en 2025.",
-      "when-to-apply": "Découvrez quand vous pourrez faire une demande d'adhésion au Régime canadien de soins dentaires",
-      "when-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
-      "still-apply": "Cependant, vous pouvez quand même présenter une demande pour votre/vos enfant(s).",
-      "back-btn": "Retour",
-      "continue-btn": "Procéder à la demande pour votre/vos enfant(s)"
-    },
     "apply-yourself": {
       "page-title": "Faites la demande pour vous-même",
       "ineligible-to-apply": "Vos enfants ne sont actuellement pas admissibles au Régime canadien de soins dentaires pour le moment.",
