@@ -75,7 +75,6 @@ export const routes = [
               },
             ],
           },
-          { id: 'public/apply/$id/adult-child/apply-children', file: 'routes/public/apply/$id/adult-child/apply-children.tsx', paths: { en: '/:lang/apply/:id/adult-child/apply-children', fr: '/:lang/demander/:id/adult-child/demande-enfant' } },
           { id: 'public/apply/$id/adult-child/confirmation', file: 'routes/public/apply/$id/adult-child/confirmation.tsx', paths: { en: '/:lang/apply/:id/adult-child/confirmation', fr: '/:lang/demander/:id/adulte-enfant/confirmation' } },
           {
             id: 'public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits',
@@ -102,7 +101,6 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/communication-preference.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/communication-preference', fr: '/:lang/demander/:id/adulte-enfant/preference-communication' },
           },
-          { id: 'public/apply/$id/adult-child/apply-yourself', file: 'routes/public/apply/$id/adult-child/apply-yourself.tsx', paths: { en: '/:lang/apply/:id/adult-child/apply-yourself', fr: '/:lang/demander/:id/adulte-enfant/postulez-vous-meme' } },
           { id: 'public/apply/$id/adult-child/dental-insurance', file: 'routes/public/apply/$id/adult-child/dental-insurance.tsx', paths: { en: '/:lang/apply/:id/adult-child/dental-insurance', fr: '/:lang/demander/:id/adulte-enfant/assurance-dentaire' } },
           {
             id: 'public/apply/$id/adult-child/parent-or-guardian',

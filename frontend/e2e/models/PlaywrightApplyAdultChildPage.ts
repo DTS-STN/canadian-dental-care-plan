@@ -10,8 +10,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
   async isLoaded(
     applyAdultChildPage:
       | 'applicant-information'
-      | 'apply-children'
-      | 'apply-yourself'
       | 'children-cannot-apply-child'
       | 'children-dental-insurance'
       | 'children-confirm-federal-provincial-territorial-benefits'
@@ -22,7 +20,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'confirmation'
       | 'communication-preference'
       | 'contact-apply-child'
-      | 'contact-information'
       | 'date-of-birth'
       | 'dental-insurance'
       | 'dob-eligibility'
@@ -39,14 +36,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
     switch (applyAdultChildPage) {
       case 'applicant-information':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/applicant-information/, heading: 'Applicant information' };
-        break;
-
-      case 'apply-children':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/apply-children/, heading: 'Apply for your child(ren)' };
-        break;
-
-      case 'apply-yourself':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/apply-yourself/, heading: 'Apply for yourself' };
         break;
 
       case 'children':
@@ -83,10 +72,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
 
       case 'contact-apply-child':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/contact-apply-child/, heading: 'Contact us to apply for your child' };
-        break;
-
-      case 'contact-information':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/contact-information/, heading: 'Contact information' };
         break;
 
       case 'confirmation':
