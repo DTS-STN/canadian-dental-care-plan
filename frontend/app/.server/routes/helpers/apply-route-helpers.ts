@@ -127,16 +127,17 @@ export type ChildDentalInsuranceState = NonNullable<ChildState['dentalInsurance'
 export type ChildInformationState = NonNullable<ChildState['information']>;
 export type ChildSinState = Pick<NonNullable<ChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
 export type CommunicationPreferencesState = NonNullable<ApplyState['communicationPreferences']>;
+export type ContactInformationState = NonNullable<ApplyState['contactInformation']>;
 export type DentalFederalBenefitsState = Pick<NonNullable<ApplyState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalInsuranceState = NonNullable<ApplyState['dentalInsurance']>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<ApplyState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type HomeAddressState = NonNullable<ApplyState['homeAddress']>;
+export type MailingAddressState = NonNullable<ApplyState['mailingAddress']>;
+export type NewOrExistingMemberState = NonNullable<ApplyState['newOrExistingMember']>;
 export type PartnerInformationState = NonNullable<ApplyState['partnerInformation']>;
-export type ContactInformationState = NonNullable<ApplyState['contactInformation']>;
 export type SubmissionInfoState = NonNullable<ApplyState['submissionInfo']>;
 export type TermsAndConditionsState = NonNullable<ApplyState['termsAndConditions']>;
 export type TypeOfApplicationState = NonNullable<ApplyState['typeOfApplication']>;
-export type HomeAddressState = NonNullable<ApplyState['homeAddress']>;
-export type MailingAddressState = NonNullable<ApplyState['mailingAddress']>;
 
 /**
  * Schema for validating UUID.

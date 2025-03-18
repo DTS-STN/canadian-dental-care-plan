@@ -19,6 +19,7 @@ export type BenefitApplicationDto = ReadonlyDeep<{
 }>;
 
 export type ApplicantInformationDto = ReadonlyDeep<{
+  clientNumber?: string;
   firstName: string;
   lastName: string;
   maritalStatus: string;
@@ -39,8 +40,10 @@ export type ChildDto = ReadonlyDeep<{
 
 export type CommunicationPreferencesDto = ReadonlyDeep<{
   email?: string;
+  emailVerified?: boolean;
   preferredLanguage: string;
   preferredMethod: string;
+  preferredMethodGovernmentOfCanada?: string;
 }>;
 
 export type ContactInformationDto = ReadonlyDeep<{

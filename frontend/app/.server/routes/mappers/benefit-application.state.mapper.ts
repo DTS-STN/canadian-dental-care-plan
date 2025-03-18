@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
 
-import type { ApplicantInformationDto, BenefitApplicationDto } from '~/.server/domain/dtos';
+import type { ApplicantInformationDto, BenefitApplicationDto, CommunicationPreferencesDto } from '~/.server/domain/dtos';
 import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
 import type {
   ApplicantInformationState,
@@ -14,6 +14,7 @@ import type {
   DentalProvincialTerritorialBenefitsState,
   HomeAddressState,
   MailingAddressState,
+  NewOrExistingMemberState,
   PartnerInformationState,
   TermsAndConditionsState,
   TypeOfApplicationState,
@@ -24,14 +25,16 @@ export interface ApplyAdultState {
   applicationYear: ApplicationYearState;
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
-  maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   email?: string;
-  livingIndependently?: boolean;
-  mailingAddress?: MailingAddressState;
+  emailVerified?: boolean;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
+  livingIndependently?: boolean;
+  mailingAddress?: MailingAddressState;
+  maritalStatus?: string;
+  newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
   termsAndConditions: TermsAndConditionsState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult'>;
@@ -43,14 +46,16 @@ export interface ApplyAdultChildState {
   children: Required<ChildState>[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
-  maritalStatus?: string;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   email?: string;
-  mailingAddress?: MailingAddressState;
+  emailVerified?: boolean;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
+  mailingAddress?: MailingAddressState;
+  maritalStatus?: string;
+  newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
   termsAndConditions: TermsAndConditionsState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult-child'>;
@@ -63,11 +68,13 @@ export interface ApplyChildState {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   email?: string;
-  maritalStatus?: string;
-  mailingAddress?: MailingAddressState;
+  emailVerified?: boolean;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
+  mailingAddress?: MailingAddressState;
+  maritalStatus?: string;
+  newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
   termsAndConditions: TermsAndConditionsState;
   typeOfApplication: Extract<TypeOfApplicationState, 'child'>;
@@ -80,13 +87,15 @@ interface ToBenefitApplicationDtoArgs {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   email?: string;
-  maritalStatus?: string;
+  emailVerified?: boolean;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance?: boolean;
   livingIndependently?: boolean;
-  mailingAddress?: MailingAddressState;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
+  mailingAddress?: MailingAddressState;
+  maritalStatus?: string;
+  newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
   termsAndConditions: TermsAndConditionsState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult' | 'adult-child' | 'child'>;
@@ -95,6 +104,7 @@ interface ToBenefitApplicationDtoArgs {
 interface ToApplicantInformationArgs {
   applicantInformation: ApplicantInformationState;
   maritalStatus?: string;
+  newOrExistingMember?: NewOrExistingMemberState;
 }
 
 interface ToHomeAddressArgs {
@@ -106,6 +116,7 @@ interface ToHomeAddressArgs {
 interface ToCommunicationPreferencesArgs {
   communicationPreferences: CommunicationPreferencesState;
   email?: string;
+  emailVerified?: boolean;
 }
 
 interface ToContactInformationArgs {
@@ -159,16 +170,18 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     applicationYear,
     children,
     communicationPreferences,
+    contactInformation,
     maritalStatus,
     dentalBenefits,
     dentalInsurance,
     email,
-    livingIndependently,
-    partnerInformation,
+    emailVerified,
     homeAddress,
-    mailingAddress,
     isHomeAddressSameAsMailingAddress,
-    contactInformation,
+    livingIndependently,
+    mailingAddress,
+    newOrExistingMember,
+    partnerInformation,
     termsAndConditions,
     typeOfApplication,
   }: ToBenefitApplicationDtoArgs) {
@@ -176,10 +189,11 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       applicantInformation: this.toApplicantInformation({
         applicantInformation,
         maritalStatus,
+        newOrExistingMember,
       }),
       applicationYearId: applicationYear.intakeYearId,
       children: this.toChildren(children),
-      communicationPreferences: this.toCommunicationPreferences({ communicationPreferences, email }),
+      communicationPreferences: this.toCommunicationPreferences({ communicationPreferences, email, emailVerified }),
       contactInformation: this.toContactInformation({ contactInformation, email, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
       dateOfBirth: applicantInformation.dateOfBirth,
       maritalStatus,
@@ -193,9 +207,13 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     };
   }
 
-  private toApplicantInformation({ applicantInformation, maritalStatus }: ToApplicantInformationArgs): ApplicantInformationDto {
+  private toApplicantInformation({ applicantInformation, maritalStatus, newOrExistingMember }: ToApplicantInformationArgs): ApplicantInformationDto {
     invariant(maritalStatus, 'Expected maritalStatus to be defined');
-    return { ...applicantInformation, maritalStatus };
+    return {
+      ...applicantInformation,
+      maritalStatus,
+      clientNumber: newOrExistingMember?.clientNumber,
+    };
   }
 
   private toChildren(children?: Required<ChildState>[]) {
@@ -207,10 +225,13 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     }));
   }
 
-  private toCommunicationPreferences({ communicationPreferences, email }: ToCommunicationPreferencesArgs) {
+  private toCommunicationPreferences({ communicationPreferences, email, emailVerified }: ToCommunicationPreferencesArgs): CommunicationPreferencesDto {
     return {
-      ...communicationPreferences,
       email,
+      emailVerified,
+      preferredLanguage: communicationPreferences.preferredLanguage,
+      preferredMethod: communicationPreferences.preferredMethod,
+      preferredMethodGovernmentOfCanada: communicationPreferences.preferredNotificationMethod,
     };
   }
 
