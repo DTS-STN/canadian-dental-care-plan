@@ -101,7 +101,6 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/communication-preference.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/communication-preference', fr: '/:lang/demander/:id/adulte-enfant/preference-communication' },
           },
-          { id: 'public/apply/$id/adult-child/apply-yourself', file: 'routes/public/apply/$id/adult-child/apply-yourself.tsx', paths: { en: '/:lang/apply/:id/adult-child/apply-yourself', fr: '/:lang/demander/:id/adulte-enfant/postulez-vous-meme' } },
           { id: 'public/apply/$id/adult-child/dental-insurance', file: 'routes/public/apply/$id/adult-child/dental-insurance.tsx', paths: { en: '/:lang/apply/:id/adult-child/dental-insurance', fr: '/:lang/demander/:id/adulte-enfant/assurance-dentaire' } },
           {
             id: 'public/apply/$id/adult-child/parent-or-guardian',

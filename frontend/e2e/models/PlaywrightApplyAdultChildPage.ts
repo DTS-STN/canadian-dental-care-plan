@@ -10,7 +10,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
   async isLoaded(
     applyAdultChildPage:
       | 'applicant-information'
-      | 'apply-yourself'
       | 'children-cannot-apply-child'
       | 'children-dental-insurance'
       | 'children-confirm-federal-provincial-territorial-benefits'
@@ -38,10 +37,6 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
     switch (applyAdultChildPage) {
       case 'applicant-information':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/applicant-information/, heading: 'Applicant information' };
-        break;
-
-      case 'apply-yourself':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/apply-yourself/, heading: 'Apply for yourself' };
         break;
 
       case 'children':
