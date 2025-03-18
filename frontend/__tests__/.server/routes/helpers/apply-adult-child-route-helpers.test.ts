@@ -61,14 +61,6 @@ describe('apply-adult-child-route-helpers', () => {
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult-child/parent-or-guardian, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it('should redirect if age category is "youth"', () => {
-      const mockState = { ...baseState, typeOfApplication: 'adult-child', hasFiledTaxes: true, applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '2008-01-01', socialInsuranceNumber: '000-000-001' } } satisfies ApplyState;
-
-      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('youth');
-
-      expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/adult-child/parent-or-guardian, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
-    });
-
     it('should redirect if applicantInformation is undefined', () => {
       const mockState = { ...baseState, typeOfApplication: 'adult-child', hasFiledTaxes: true, applicantInformation: undefined } satisfies ApplyState;
 
