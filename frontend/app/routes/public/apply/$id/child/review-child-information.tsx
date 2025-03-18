@@ -100,6 +100,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
+  const state = loadApplyChildStateForReview({ params, request, session });
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
@@ -108,10 +109,14 @@ export async function action({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
+  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
+  invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
+  const backToEmail = (state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail') && state.communicationPreferences.preferredNotificationMethod !== 'mail';
+
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveApplyState({ params, session, state: { editMode: false } });
-    return redirect(getPathById('public/apply/$id/child/communication-preference', params));
+    return backToEmail ? redirect(getPathById('public/apply/$id/child/email', params)) : redirect(getPathById('public/apply/$id/child/communication-preference', params));
   }
 
   saveApplyState({
