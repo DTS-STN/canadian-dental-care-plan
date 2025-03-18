@@ -16,6 +16,7 @@ import { loadApplyChildState } from '~/.server/routes/helpers/apply-child-route-
 import { getChildrenState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
@@ -121,6 +122,16 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
       </div>
       <div className="max-w-prose">
         <p>{t('apply-child:children.index.in-this-section')}</p>
+        <p className="my-4">{t('apply-child:children.index.can-apply')}</p>
+        <ul className="my-4 list-disc space-y-1 pl-7">
+          <li>{t('apply-child:children.index.parent-guardian')}</li>
+          <li>{t('apply-child:children.index.over-sixteen')}</li>
+          <li>{t('apply-child:children.index.under-eighteen')}</li>
+        </ul>
+        <Collapsible className="my-4" id="name-instructions" summary={t('apply-child:children.index.share-custody')}>
+          <p>{t('apply-child:children.index.one-application')}</p>
+          <p className="my-4">{t('apply-child:children.index.eligibility')}</p>
+        </Collapsible>
         {children.length > 0 && (
           <div className="mt-6 space-y-8">
             {children.map((child) => {
