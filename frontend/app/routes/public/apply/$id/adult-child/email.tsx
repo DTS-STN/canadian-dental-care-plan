@@ -2,6 +2,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -10,7 +11,7 @@ import type { Route } from './+types/email';
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -24,6 +25,8 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+export const PREFERRED_LANGUAGE = { en: 'English', fr: 'French' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -56,8 +59,10 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadApplyAdultChildState({ params, request, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
+
+  const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
 
   const emailSchema = z
     .object({
@@ -81,13 +86,50 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { email: parsedDataResult.data.email } });
+  const isNewEmail = state.email !== parsedDataResult.data.email;
+  const verificationCode = isNewEmail || state.verifyEmail === undefined ? verificationCodeService.createVerificationCode('anonymous') : state.verifyEmail.verificationCode;
 
-  if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult-child/review-information', params));
+  invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
+  if (isNewEmail) {
+    const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
+    const preferredLanguage = preferredLanguageService.getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
+
+    await verificationCodeService.sendVerificationCodeEmail({
+      email: parsedDataResult.data.email,
+      verificationCode,
+      preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
+      userId: 'anonymous',
+    });
   }
 
-  return redirect(getPathById('public/apply/$id/adult-child/verify-email', params));
+  saveApplyState({
+    params,
+    session,
+    state: {
+      email: parsedDataResult.data.email,
+      emailVerified: isNewEmail ? false : state.emailVerified,
+      ...(isNewEmail && {
+        verifyEmail: {
+          verificationCode,
+          verificationAttempts: 0,
+        },
+      }),
+    },
+  });
+
+  if (state.editMode) {
+    // Redirect to /verify-email only if emailVerified is false
+    if (isNewEmail || !state.emailVerified) {
+      return redirect(getPathById('public/apply/$id/adult-child/verify-email', params));
+    }
+    return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
+  }
+
+  if (isNewEmail || !state.emailVerified) {
+    return redirect(getPathById('public/apply/$id/adult-child/verify-email', params));
+  }
+
+  return redirect(getPathById('public/apply/$id/adult-child/dental-insurance', params));
 }
 
 export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentProps) {
@@ -132,16 +174,16 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Save - Email click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Email click">
                 {t('apply-adult-child:email.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Cancel - Email click">
+              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Email click">
                 {t('apply-adult-child:email.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Continue - Email click">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Email click">
                 {t('apply-adult-child:email.continue')}
               </LoadingButton>
               <ButtonLink
@@ -150,7 +192,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Back - Email click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Email click"
               >
                 {t('apply-adult-child:email.back')}
               </ButtonLink>
