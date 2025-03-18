@@ -5,12 +5,13 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/new-or-existing-member';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { getAgeCategoryFromDateString, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -46,8 +47,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:new-or-existing-member.page-title') }) };
+  invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
-  return { id: state.id, meta, defaultState: state.newOrExistingMember, editMode: state.editMode };
+  return { id: state.id, meta, defaultState: state.newOrExistingMember, userAgeCategory: ageCategory, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -103,13 +106,12 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  // TODO: should navigate to marital-status page, change the route when marital-status page is added
-  return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
+  return redirect(getPathById('public/apply/$id/adult-child/marital-status', params));
 }
 
 export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode } = loaderData;
+  const { defaultState, userAgeCategory, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -179,7 +181,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult-child/applicant-information"
+                routeId={userAgeCategory === 'youth' ? 'public/apply/$id/adult-child/living-independently' : 'public/apply/$id/adult-child/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}

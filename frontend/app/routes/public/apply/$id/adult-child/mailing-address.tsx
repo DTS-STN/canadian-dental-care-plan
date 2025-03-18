@@ -133,7 +133,7 @@ export async function action({ context: { appContainer, session }, params, reque
       return redirect(isCopyMailingToHome ? getPathById('public/apply/$id/adult-child/review-adult-information', params) : getPathById('public/apply/$id/adult-child/home-address', params));
     }
 
-    return redirect(isCopyMailingToHome ? getPathById('public/apply/$id/adult-child/dental-insurance', params) : getPathById('public/apply/$id/adult-child/home-address', params));
+    return redirect(isCopyMailingToHome ? getPathById('public/apply/$id/adult-child/phone-number', params) : getPathById('public/apply/$id/adult-child/home-address', params));
   }
 
   // Validate Canadian adddress

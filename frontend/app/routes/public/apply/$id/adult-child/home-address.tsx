@@ -122,7 +122,7 @@ export async function action({ context: { appContainer, session }, params, reque
     if (state.editMode) {
       return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
     }
-    return redirect(getPathById('public/apply/$id/adult-child/dental-insurance', params));
+    return redirect(getPathById('public/apply/$id/adult-child/phone-number', params));
   }
 
   invariant(parsedDataResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');

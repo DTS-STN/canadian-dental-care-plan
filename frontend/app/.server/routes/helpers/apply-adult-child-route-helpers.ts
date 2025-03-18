@@ -176,10 +176,6 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'youth') {
-    throw redirect(getPathById('public/apply/$id/adult-child/parent-or-guardian', params));
-  }
-
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
   }

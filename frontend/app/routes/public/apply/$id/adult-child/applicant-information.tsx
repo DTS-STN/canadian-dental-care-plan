@@ -178,7 +178,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult-child/contact-information', params));
+  return redirect(getPathById('public/apply/$id/adult-child/marital-status', params));
 }
 
 export default function ApplyFlowApplicationInformation({ loaderData, params }: Route.ComponentProps) {
