@@ -82,7 +82,7 @@ export const pageIds = {
         newOrExistingMember: 'CDCP-APPL-ADCH-0025',
         phoneNumber: 'CDCP-APPL-ADCH-0026',
         email: 'CDCP-APPL-ADCH-0027',
-        verifyEmail: 'CDCP-APPL-AD-0028',
+        verifyEmail: 'CDCP-APPL-ADCH-0028',
       },
       child: {
         dateOfBirthEligibility: 'CDCP-APPL-CH-0004',

@@ -41,7 +41,7 @@ export const PREFERRED_LANGUAGE = { en: 'English', fr: 'French' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adult.verifyEmail,
+  pageIdentifier: pageIds.public.apply.adultChild.verifyEmail,
   pageTitleI18nKey: 'apply-adult-child:verify-email.page-title',
 } as const satisfies RouteHandleData;
 
