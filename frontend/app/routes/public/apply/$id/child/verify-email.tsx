@@ -164,7 +164,7 @@ export async function action({ context: { appContainer, session }, params, reque
       return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
     }
 
-    return redirect(getPathById('public/apply/$id/child/dental-insurance', params));
+    return redirect(getPathById('public/apply/$id/child/review-child-information', params));
   }
 }
 
@@ -191,7 +191,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={65} size="lg" label={t('apply:progress.label')} />
+        <Progress value={86} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         {fetcherStatus === 'verification-code-mismatch' && <VerificationCodeAlert />}
