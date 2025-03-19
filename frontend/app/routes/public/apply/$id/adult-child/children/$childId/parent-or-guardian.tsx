@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/parent-or-guardian';
 
+import { TYPES } from '~/.server/constants';
 import { loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -38,7 +39,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   return { meta };
 }
 
-export function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const formData = await request.formData();
+
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  securityHandler.validateCsrfToken({ formData, session });
+
   return redirect(getPathById('public/apply/$id/adult-child/children/index', params));
 }
 
