@@ -9,7 +9,6 @@ import type { Route } from './+types/parent-or-guardian';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
-import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -46,11 +45,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  loadApplyAdultSingleChildState({ params, request, session });
-
-  saveApplyState({ params, session, state: { typeOfApplication: 'adult' } });
-
-  return redirect(getPathById('public/apply/$id/adult/review-information', params));
+  return redirect(getPathById('public/apply/$id/adult-child/children/index', params));
 }
 
 export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
