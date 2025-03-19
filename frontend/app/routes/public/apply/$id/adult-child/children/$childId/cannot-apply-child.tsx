@@ -35,7 +35,13 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
 
-  return { meta };
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth() + 1;
+
+  const isBeforeJune = currentMonth < 6;
+
+  return { meta, currentYear, isBeforeJune };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -49,20 +55,17 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyForYourself({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { currentYear, isBeforeJune } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
   const noWrap = <span className="whitespace-nowrap" />;
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
-
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        {currentMonth < 6 ? (
+        {isBeforeJune ? (
           <>
             <p>{t('apply-adult-child:eligibility.cannot-apply-child.before-june.ineligible-to-apply', { currentYear })}</p>
             <p>
