@@ -11,17 +11,16 @@ import type {
   AdultChildChangeIndicators,
   ChildBenefitRenewalDto,
   ChildChangeIndicators,
-  CommunicationPreferencesDto,
-  ContactInformationDto,
   DemographicSurveyDto,
   ItaBenefitRenewalDto,
   ItaChangeIndicators,
   ProtectedBenefitRenewalDto,
   RenewalApplicantInformationDto,
   RenewalChildDto,
+  RenewalCommunicationPreferencesDto,
+  RenewalContactInformationDto,
   RenewalPartnerInformationDto,
-  TermsAndConditionsDto,
-  TypeOfApplicationDto,
+  RenewalTypeOfApplicationDto,
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
 import { parseDateString } from '~/utils/date-utils';
@@ -39,8 +38,8 @@ interface ToBenefitRenewalRequestEntityArgs {
   applicationYearId: string;
   changeIndicators?: AdultChangeIndicators | AdultChildChangeIndicators | ItaChangeIndicators | ChildChangeIndicators;
   children: readonly RenewalChildDto[];
-  communicationPreferences: CommunicationPreferencesDto;
-  contactInformation: ContactInformationDto;
+  communicationPreferences: RenewalCommunicationPreferencesDto;
+  contactInformation: RenewalContactInformationDto;
   dateOfBirth: string;
   demographicSurvey?: DemographicSurveyDto;
   dentalBenefits: readonly string[];
@@ -48,8 +47,7 @@ interface ToBenefitRenewalRequestEntityArgs {
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: RenewalPartnerInformationDto;
-  termsAndConditions: TermsAndConditionsDto;
-  typeOfApplication: TypeOfApplicationDto;
+  typeOfApplication: RenewalTypeOfApplicationDto;
 }
 
 interface ToAddressArgs {
@@ -116,7 +114,6 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     disabilityTaxCredit,
     livingIndependently,
     partnerInformation,
-    termsAndConditions, // TODO map terms and conditions when Interop provides field structure
     typeOfApplication,
   }: ToBenefitRenewalRequestEntityArgs): BenefitRenewalRequestEntity {
     return {
@@ -126,9 +123,9 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
             PrivateDentalInsuranceIndicator: dentalInsurance,
             DisabilityTaxCreditIndicator: disabilityTaxCredit,
             LivingIndependentlyIndicator: livingIndependently,
-            PrivacyStatementIndicator: termsAndConditions.acknowledgePrivacy,
-            TermsAndConditionsIndicator: termsAndConditions.acknowledgeTerms,
-            SharingConsentIndicator: termsAndConditions.shareData,
+            PrivacyStatementIndicator: true,
+            TermsAndConditionsIndicator: true,
+            SharingConsentIndicator: true,
             InsurancePlan: this.toInsurancePlan(dentalBenefits),
             ...this.toChangeIndicators(changeIndicators),
           },
@@ -281,7 +278,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     };
   }
 
-  private toMailingAddress({ mailingAddress, mailingApartment, mailingCity, mailingCountry, mailingPostalCode, mailingProvince }: ContactInformationDto) {
+  private toMailingAddress({ mailingAddress, mailingApartment, mailingCity, mailingCountry, mailingPostalCode, mailingProvince }: RenewalContactInformationDto) {
     return this.toAddress({
       address: mailingAddress,
       apartment: mailingApartment,
@@ -293,7 +290,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     });
   }
 
-  private toHomeAddress({ homeAddress, homeApartment, homeCity, homeCountry, homePostalCode, homeProvince }: ContactInformationDto) {
+  private toHomeAddress({ homeAddress, homeApartment, homeCity, homeCountry, homePostalCode, homeProvince }: RenewalContactInformationDto) {
     return this.toAddress({
       address: homeAddress,
       apartment: homeApartment,
@@ -345,7 +342,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     return emailAddress;
   }
 
-  private toTelephoneNumber({ phoneNumber, phoneNumberAlt }: ContactInformationDto) {
+  private toTelephoneNumber({ phoneNumber, phoneNumberAlt }: RenewalContactInformationDto) {
     const telephoneNumber = [];
 
     if (phoneNumber && !validator.isEmpty(phoneNumber)) {
@@ -433,7 +430,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     }));
   }
 
-  private toBenefitApplicationCategoryCode(typeOfApplication: TypeOfApplicationDto) {
+  private toBenefitApplicationCategoryCode(typeOfApplication: RenewalTypeOfApplicationDto) {
     const { APPLICANT_CATEGORY_CODE_INDIVIDUAL, APPLICANT_CATEGORY_CODE_FAMILY, APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY } = this.serverConfig;
     if (typeOfApplication === 'adult') return APPLICANT_CATEGORY_CODE_INDIVIDUAL.toString();
     if (typeOfApplication === 'adult-child') return APPLICANT_CATEGORY_CODE_FAMILY.toString();

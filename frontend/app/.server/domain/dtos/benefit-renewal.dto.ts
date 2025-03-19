@@ -1,11 +1,11 @@
-import type { ApplicantInformationDto, BenefitApplicationDto, ChildDto } from '~/.server/domain/dtos/benefit-application.dto';
+import type { ReadonlyDeep } from 'type-fest';
 
 export type AdultBenefitRenewalDto = BenefitRenewalDto &
-  Readonly<{
+  ReadonlyDeep<{
     changeIndicators: AdultChangeIndicators;
   }>;
 
-export type AdultChangeIndicators = Readonly<{
+export type AdultChangeIndicators = ReadonlyDeep<{
   hasAddressChanged: boolean;
   hasEmailChanged: boolean;
   hasMaritalStatusChanged: boolean;
@@ -13,11 +13,11 @@ export type AdultChangeIndicators = Readonly<{
 }>;
 
 export type AdultChildBenefitRenewalDto = BenefitRenewalDto &
-  Readonly<{
+  ReadonlyDeep<{
     changeIndicators: AdultChildChangeIndicators;
   }>;
 
-export type AdultChildChangeIndicators = Readonly<{
+export type AdultChildChangeIndicators = ReadonlyDeep<{
   hasAddressChanged: boolean;
   hasEmailChanged: boolean;
   hasMaritalStatusChanged: boolean;
@@ -25,20 +25,20 @@ export type AdultChildChangeIndicators = Readonly<{
 }>;
 
 export type ItaBenefitRenewalDto = BenefitRenewalDto &
-  Readonly<{
+  ReadonlyDeep<{
     changeIndicators: ItaChangeIndicators;
   }>;
 
-export type ItaChangeIndicators = Readonly<{
+export type ItaChangeIndicators = ReadonlyDeep<{
   hasAddressChanged: boolean;
 }>;
 
 export type ChildBenefitRenewalDto = BenefitRenewalDto &
-  Readonly<{
+  ReadonlyDeep<{
     changeIndicators: ChildChangeIndicators;
   }>;
 
-export type ChildChangeIndicators = Readonly<{
+export type ChildChangeIndicators = ReadonlyDeep<{
   hasAddressChanged: boolean;
   hasEmailChanged: boolean;
   hasMaritalStatusChanged: boolean;
@@ -47,35 +47,81 @@ export type ChildChangeIndicators = Readonly<{
 
 export type ProtectedBenefitRenewalDto = BenefitRenewalDto;
 
-export type BenefitRenewalDto = Omit<BenefitApplicationDto, 'applicantInformation' | 'children' | 'partnerInformation'> &
-  Readonly<{
-    applicantInformation: RenewalApplicantInformationDto;
-    applicationYearId: string;
-    children: RenewalChildDto[];
-    demographicSurvey?: DemographicSurveyDto;
-    partnerInformation?: RenewalPartnerInformationDto;
-  }>;
+export type BenefitRenewalDto = ReadonlyDeep<{
+  applicantInformation: RenewalApplicantInformationDto;
+  applicationYearId: string;
+  children: RenewalChildDto[];
+  communicationPreferences: RenewalCommunicationPreferencesDto;
+  contactInformation: RenewalContactInformationDto;
+  dateOfBirth: string;
+  dentalBenefits: string[];
+  dentalInsurance?: boolean;
+  demographicSurvey?: DemographicSurveyDto;
+  partnerInformation?: RenewalPartnerInformationDto;
+  typeOfApplication: RenewalTypeOfApplicationDto;
 
-export type RenewalApplicantInformationDto = ApplicantInformationDto &
-  Readonly<{
-    clientId: string;
-    clientNumber: string;
-  }>;
+  /** A unique identifier for the user making the request - used for auditing */
+  userId: string;
+}>;
 
-export type RenewalChildDto = ChildDto &
-  Readonly<{
-    clientId: string;
-    clientNumber: string;
-    demographicSurvey?: DemographicSurveyDto;
-  }>;
+export type RenewalApplicantInformationDto = ReadonlyDeep<{
+  clientId: string;
+  clientNumber: string;
+  firstName: string;
+  lastName: string;
+  maritalStatus: string;
+  socialInsuranceNumber: string;
+}>;
 
-export type RenewalPartnerInformationDto = Readonly<{
+export type RenewalChildDto = ReadonlyDeep<{
+  clientId: string;
+  clientNumber: string;
+  dentalBenefits: string[];
+  dentalInsurance: boolean;
+  demographicSurvey?: DemographicSurveyDto;
+  information: {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    isParent: boolean;
+    socialInsuranceNumber?: string;
+  };
+}>;
+
+export type RenewalCommunicationPreferencesDto = ReadonlyDeep<{
+  email?: string;
+  preferredLanguage: string;
+  preferredMethod: string;
+}>;
+
+export type RenewalContactInformationDto = ReadonlyDeep<{
+  copyMailingAddress: boolean;
+  homeAddress: string;
+  homeApartment?: string;
+  homeCity: string;
+  homeCountry: string;
+  homePostalCode?: string;
+  homeProvince?: string;
+  mailingAddress: string;
+  mailingApartment?: string;
+  mailingCity: string;
+  mailingCountry: string;
+  mailingPostalCode?: string;
+  mailingProvince?: string;
+  phoneNumber?: string;
+  phoneNumberAlt?: string;
+  email?: string;
+}>;
+
+export type RenewalPartnerInformationDto = ReadonlyDeep<{
   confirm: boolean;
   yearOfBirth: string;
   socialInsuranceNumber: string;
 }>;
 
-export type DemographicSurveyDto = Readonly<{
+export type RenewalTypeOfApplicationDto = 'adult' | 'adult-child' | 'child';
+
+export type DemographicSurveyDto = ReadonlyDeep<{
   indigenousStatus?: string;
   firstNations?: string;
   disabilityStatus?: string;
