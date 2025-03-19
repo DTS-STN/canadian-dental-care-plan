@@ -228,6 +228,10 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               onClick={async () => {
                 const formData = new FormData();
                 formData.append('_action', FORM_ACTION.request);
+
+                const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
+                formData.append('_csrf', csrfTokenInput.value);
+
                 await fetcher.submit(formData, { method: 'post' });
               }}
             >
