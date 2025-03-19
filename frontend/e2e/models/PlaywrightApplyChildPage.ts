@@ -90,7 +90,7 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
     await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
     await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
 
-    await this.page.getByRole('group', { name: 'Does this child have a Social Insurance Number (SIN)?' }).getByRole('radio', { name: 'Yes, this child has a SIN' }).check();
+    await this.page.getByRole('group', { name: 'Does this child have a Social Insurance Number (SIN)?' }).getByRole('radio', { name: "Yes, enter the child's 9-digit SIN" }).check();
     await this.page.getByRole('textbox', { name: 'Enter the 9-digit SIN' }).fill('700000003');
 
     await this.page.getByRole('group', { name: 'Are you the parent or legal guardian of this child?' }).getByRole('radio', { name: isParentOrGuardian }).check();
