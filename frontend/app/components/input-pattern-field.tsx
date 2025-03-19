@@ -20,7 +20,7 @@ export interface InputPatternFieldProps extends OmitStrict<React.ComponentProps<
   helpMessageSecondary?: React.ReactNode;
   helpMessageSecondaryClassName?: string;
   id: string;
-  label: string;
+  label?: string;
   name: string;
   disableScreenReaderErrors?: boolean;
 }
@@ -58,9 +58,11 @@ export function InputPatternField(props: InputPatternFieldProps) {
 
   return (
     <div id={inputWrapperId} data-testid={inputWrapperId}>
-      <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
-        {label}
-      </InputLabel>
+      {label ?? (
+        <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
+          {label}
+        </InputLabel>
+      )}
       {errorMessage && (
         <p className="mb-2">
           <InputError aria-hidden={disableScreenReaderErrors} id={inputErrorId}>

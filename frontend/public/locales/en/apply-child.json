@@ -166,7 +166,6 @@
       "sin-legend": "Does this child have a Social Insurance Number (SIN)?",
       "sin-yes": "<strong>Yes</strong>, enter the child's 9-digit SIN",
       "sin-no": "<strong>No</strong>, this child does not have a SIN",
-      "sin": "Enter the 9-digit SIN",
       "parent-legend": "Are you the parent or legal guardian of this child?",
       "radio-options": {
         "yes": "Yes",

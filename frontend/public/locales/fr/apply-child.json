@@ -166,7 +166,6 @@
       "sin-legend": "L'enfant a-t-il un numéro d'assurance sociale (NAS)?",
       "sin-yes": "<strong>Oui</strong>, saisissez le NAS à neuf chiffres de l'enfant",
       "sin-no": "<strong>Non</strong>, cet enfant n'a pas de NAS",
-      "sin": "Entrez un NAS de 9 chiffres",
       "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
       "radio-options": {
         "yes": "Oui",

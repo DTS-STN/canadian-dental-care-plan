@@ -259,7 +259,6 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
             id="social-insurance-number"
             name="socialInsuranceNumber"
             format={sinInputPatternFormat}
-            label={t('apply-child:children.information.sin')}
             inputMode="numeric"
             defaultValue={defaultState?.socialInsuranceNumber ?? ''}
             errorMessage={errors?.socialInsuranceNumber}
