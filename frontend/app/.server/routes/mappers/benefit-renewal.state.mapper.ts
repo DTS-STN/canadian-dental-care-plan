@@ -18,6 +18,10 @@ import type {
   ItaBenefitRenewalDto,
   ProtectedBenefitRenewalDto,
   RenewalApplicantInformationDto,
+  RenewalChildDto,
+  RenewalCommunicationPreferencesDto,
+  RenewalContactInformationDto,
+  RenewalPartnerInformationDto,
 } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
 import type {
@@ -269,7 +273,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedPartnerInformation: partnerInformation,
       }),
-      termsAndConditions: this.toTermsAndConditions(),
       typeOfApplication: 'adult',
       userId: 'anonymous',
     };
@@ -347,7 +350,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedPartnerInformation: partnerInformation,
       }),
-      termsAndConditions: this.toTermsAndConditions(),
       typeOfApplication: children.length === 0 ? 'adult' : 'adult-child',
       userId: 'anonymous',
     };
@@ -407,7 +409,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: true,
         renewedPartnerInformation: partnerInformation,
       }),
-      termsAndConditions: this.toTermsAndConditions(),
       typeOfApplication: 'adult',
       userId: 'anonymous',
     };
@@ -471,7 +472,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         renewedPartnerInformation: partnerInformation,
       }),
-      termsAndConditions: this.toTermsAndConditions(),
       typeOfApplication: 'child',
       userId: 'anonymous',
     };
@@ -541,7 +541,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedPartnerInformation: partnerInformation,
       }),
       userId,
-      termsAndConditions: this.toTermsAndConditions(),
       typeOfApplication: applicantStateCompleted === false && children.length > 0 ? 'child' : children.length === 0 ? 'adult' : 'adult-child',
     };
   }
@@ -564,7 +563,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  private toChildren({ existingChildren, renewedChildren }: ToChildrenArgs) {
+  private toChildren({ existingChildren, renewedChildren }: ToChildrenArgs): RenewalChildDto[] {
     return renewedChildren.map((renewedChild) => {
       const existingChild = existingChildren.find((existingChild) => existingChild.information.clientNumber === renewedChild.information?.clientNumber);
       invariant(existingChild, 'Expected existingChild to be defined');
@@ -599,7 +598,16 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     });
   }
 
-  private toContactInformation({ existingContactInformation, hasAddressChanged, hasEmailChanged, hasPhoneChanged, isHomeAddressSameAsMailingAddress, renewedContactInformation, renewedHomeAddress, renewedMailingAddress }: ToContactInformationArgs) {
+  private toContactInformation({
+    existingContactInformation,
+    hasAddressChanged,
+    hasEmailChanged,
+    hasPhoneChanged,
+    isHomeAddressSameAsMailingAddress,
+    renewedContactInformation,
+    renewedHomeAddress,
+    renewedMailingAddress,
+  }: ToContactInformationArgs): RenewalContactInformationDto {
     return {
       ...(hasAddressChanged
         ? {
@@ -725,7 +733,14 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         };
   }
 
-  private toCommunicationPreferences({ existingCommunicationPreferences, hasEmailChanged, renewedEmail, renewedReceiveEmailCommunication, hasPreferredLanguageChanged, renewedPreferredLanguage }: ToCommunicationPreferencesArgs) {
+  private toCommunicationPreferences({
+    existingCommunicationPreferences,
+    hasEmailChanged,
+    renewedEmail,
+    renewedReceiveEmailCommunication,
+    hasPreferredLanguageChanged,
+    renewedPreferredLanguage,
+  }: ToCommunicationPreferencesArgs): RenewalCommunicationPreferencesDto {
     if (!hasEmailChanged && !hasPreferredLanguageChanged) return existingCommunicationPreferences;
 
     return {
@@ -735,7 +750,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  private toDentalBenefits({ existingDentalBenefits, hasFederalProvincialTerritorialBenefitsChanged, renewedDentalBenefits }: ToDentalBenefitsArgs) {
+  private toDentalBenefits({ existingDentalBenefits, hasFederalProvincialTerritorialBenefitsChanged, renewedDentalBenefits }: ToDentalBenefitsArgs): readonly string[] {
     if (!hasFederalProvincialTerritorialBenefitsChanged) return existingDentalBenefits;
     if (!renewedDentalBenefits) return [];
 
@@ -752,15 +767,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     return dentalBenefits;
   }
 
-  private toPartnerInformation({ existingPartnerInformation, hasMaritalStatusChanged, renewedPartnerInformation }: ToPartnerInformationArgs) {
+  private toPartnerInformation({ existingPartnerInformation, hasMaritalStatusChanged, renewedPartnerInformation }: ToPartnerInformationArgs): RenewalPartnerInformationDto | undefined {
     return hasMaritalStatusChanged ? renewedPartnerInformation : existingPartnerInformation;
-  }
-
-  private toTermsAndConditions() {
-    return {
-      acknowledgeTerms: true,
-      acknowledgePrivacy: true,
-      shareData: true,
-    };
   }
 }

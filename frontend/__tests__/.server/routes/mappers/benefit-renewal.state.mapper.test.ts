@@ -256,11 +256,6 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         dentalInsurance: true,
         partnerInformation: undefined,
         typeOfApplication: 'adult-child',
-        termsAndConditions: {
-          acknowledgeTerms: true,
-          acknowledgePrivacy: true,
-          shareData: true,
-        },
         userId: 'anonymous',
       };
 
