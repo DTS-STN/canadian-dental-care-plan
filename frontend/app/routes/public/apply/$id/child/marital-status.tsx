@@ -94,8 +94,20 @@ export async function action({ context: { appContainer, session }, params, reque
       .string()
       .trim()
       .min(1, t('apply-child:marital-status.error-message.sin-required'))
-      .refine(isValidSin, t('apply-child:marital-status.error-message.sin-valid'))
-      .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.partnerInformation?.socialInsuranceNumber, t('apply-child:marital-status.error-message.sin-unique')),
+      .superRefine((sin, ctx) => {
+        if (!isValidSin(sin)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:marital-status.error-message.sin-valid') });
+        } else if (
+          formatSin(sin) === state.applicantInformation?.socialInsuranceNumber ||
+          state.children
+            .map((child) => child.information?.socialInsuranceNumber)
+            .filter((sin) => sin !== undefined)
+            .map((sin) => formatSin(sin))
+            .includes(formatSin(sin))
+        ) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:marital-status.error-message.sin-unique') });
+        }
+      }),
   }) satisfies z.ZodType<PartnerInformationState>;
 
   const maritalStatusData = {
