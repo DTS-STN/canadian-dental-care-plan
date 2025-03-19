@@ -103,8 +103,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  // TODO: should navigate to marital-status page, change the route when marital-status page is added
-  return redirect(getPathById('public/apply/$id/child/applicant-information', params));
+  return redirect(getPathById('public/apply/$id/child/marital-status', params));
 }
 
 export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Route.ComponentProps) {
