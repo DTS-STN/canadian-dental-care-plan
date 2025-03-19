@@ -116,8 +116,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const canProceedToDental = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
 
   if (canProceedToDental) {
-    // TODO: To check if we need this 'if' statement for the redirects.
-    saveApplyState({ params, session, state: { homeAddress } });
+    saveApplyState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
 
     if (state.editMode) {
       return redirect(getPathById('public/apply/$id/adult/review-information', params));
@@ -170,7 +169,7 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     } as const satisfies AddressSuggestionResponse;
   }
-  saveApplyState({ params, session, state: { homeAddress } });
+  saveApplyState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult/review-information', params));

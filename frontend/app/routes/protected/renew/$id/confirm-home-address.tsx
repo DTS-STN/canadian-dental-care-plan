@@ -122,7 +122,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const isUseSelectedAddressAction = formAction === FORM_ACTION.useSelectedAddress;
   const canProceedToReview = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
   if (canProceedToReview) {
-    saveProtectedRenewState({ params, request, session, state: { homeAddress } });
+    saveProtectedRenewState({ params, request, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
     if (state.editMode === false && isInvitationToApplyClient(state.clientApplication)) {
       return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
     }
@@ -179,7 +179,7 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     request,
     session,
-    state: { homeAddress },
+    state: { homeAddress, isHomeAddressSameAsMailingAddress: false },
   });
 
   const idToken: IdToken = session.get('idToken');

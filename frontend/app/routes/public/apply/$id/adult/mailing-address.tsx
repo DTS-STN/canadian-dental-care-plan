@@ -118,7 +118,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const canProceedToDental = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
 
   if (canProceedToDental) {
-    // TODO: To check if we need this 'if' statement for the redirects.
     saveApplyState({
       params,
       session,
