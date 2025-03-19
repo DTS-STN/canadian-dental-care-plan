@@ -33,7 +33,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
+import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
 const FORM_ACTION = {
   continue: 'continue',
@@ -96,8 +96,13 @@ export async function action({ context: { appContainer, session }, params, reque
       .string()
       .trim()
       .min(1, t('apply-adult:marital-status.error-message.sin-required'))
-      .refine(isValidSin, t('apply-adult:marital-status.error-message.sin-valid'))
-      .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.partnerInformation?.socialInsuranceNumber, t('apply-adult:marital-status.error-message.sin-unique')),
+      .superRefine((sin, ctx) => {
+        if (!isValidSin(sin)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:marital-status.error-message.sin-valid') });
+        } else if (sin === state.applicantInformation?.socialInsuranceNumber) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:marital-status.error-message.sin-unique') });
+        }
+      }),
   }) satisfies z.ZodType<PartnerInformationState>;
 
   const maritalStatusData = {
