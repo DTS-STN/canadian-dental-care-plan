@@ -34,7 +34,7 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
         break;
 
       case 'children-cannot-apply-child':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/cannot-apply-child/, heading: 'Find out when you can apply' };
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/cannot-apply-child/, heading: 'Your child must apply' };
         break;
 
       case 'children-information':
