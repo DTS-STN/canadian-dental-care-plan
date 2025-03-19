@@ -41,9 +41,9 @@ test.describe('Children application', () => {
       await applyChildPage.isLoaded('children-cannot-apply-child');
     });
 
-    await test.step('Should return to CDCP main page', async () => {
-      await page.getByRole('button', { name: 'Return to main page' }).click();
-      await expect(page).toHaveURL('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html');
+    await test.step('Should return to children index page', async () => {
+      await page.getByRole('button', { name: 'Continue' }).click();
+      await applyChildPage.isLoaded('children');
     });
   });
 

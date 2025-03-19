@@ -43,7 +43,7 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
         break;
 
       case 'children-cannot-apply-child':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/children\/[a-f0-9-]+\/cannot-apply-child/, heading: 'You cannot apply for your child' };
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/children\/[a-f0-9-]+\/cannot-apply-child/, heading: 'Your child must apply' };
         break;
 
       case 'children-dental-insurance':
