@@ -302,15 +302,11 @@
       "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     },
     "cannot-apply-child": {
-      "page-title": "Découvrez quand vous pouvez présenter une demande",
-      "ineligible-to-apply": "Votre enfant n'êtes pas admissibles au Régime canadien de soins dentaires pour le moment.",
-      "eligibility-info": "Le Régime canadien de soins dentaires accepte actuellement les demandes d'adhésion des personnes âgées de 65 ans et plus, des enfants de moins de 18 ans et des adultes qui reçoivent le crédit d'impôt pour personnes handicapées valide.",
-      "eligibility-2025": "Les adultes âgés de 18 à 64 ans qui n'ont pas de crédit d'impôt pour personnes handicapées valide pourront demander leur adhésion au Régime canadien de soins dentaires en 2025.",
-      "when-to-apply": "Découvrez quand vous pourrez faire une demande d'adhésion au Régime canadien de soins dentaires",
-      "when-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
+      "page-title": "Votre enfant doit présenter une demande",
+      "ineligible-to-apply": "Votre enfant a 18 ans ou plus. Votre enfant doit présenter sa propre demande au Régime canadien de soins dentaires.",
+      "eligibility-info": "Si votre enfant est un adulte à charge et que vous êtes son représentant légal ou son mandataire, vous devez vous adresser à un représentant de Service Canada pour présenter une demande en son nom. Vous pouvez contacter Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
       "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale",
-      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+      "continue-btn": "Continuer"
     }
   },
   "communication-preference": {

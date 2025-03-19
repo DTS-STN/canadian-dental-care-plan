@@ -302,15 +302,11 @@
       "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     },
     "cannot-apply-child": {
-      "page-title": "Find out when you can apply",
-      "ineligible-to-apply": "Your child is not currently eligible for the Canadian Dental Care Plan.",
-      "eligibility-info": "The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults with a valid disability tax credit.",
-      "eligibility-2025": "Adults 18 to 64 who do not have a disability tax credit will be able to apply for the Canadian Dental Care Plan in 2025.",
-      "when-to-apply": "Find out when you can apply for the Canadian Dental Care Plan",
-      "when-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
+      "page-title": "Your child must apply",
+      "ineligible-to-apply": "Your child is 18 years or older. Your child must submit their own application to the Canadian Dental Care Plan.",
+      "eligibility-info": "If your child is a dependant adult and you are their legal delegate or Power of Attorney, you must speak to a Service Canada representative to apply on their behalf. You can contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
       "back-btn": "Back",
-      "return-btn": "Return to main page",
-      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+      "continue-btn": "Continue"
     }
   },
   "communication-preference": {
