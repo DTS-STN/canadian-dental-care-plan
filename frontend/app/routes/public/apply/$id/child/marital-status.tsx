@@ -110,7 +110,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedMaritalStatus = maritalStatusSchema.safeParse(maritalStatusData);
   const parsedPartnerInformation = partnerInformationSchema.safeParse(partnerInformationData);
 
-  if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success) || parsedPartnerInformation.data === undefined) {
+  if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
     return {
       errors: {
         ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
@@ -124,11 +124,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       maritalStatus: parsedMaritalStatus.data.maritalStatus,
-      partnerInformation: {
-        confirm: parsedPartnerInformation.data.confirm,
-        yearOfBirth: parsedPartnerInformation.data.yearOfBirth,
-        socialInsuranceNumber: parsedPartnerInformation.data.socialInsuranceNumber,
-      },
+      partnerInformation: parsedPartnerInformation.data,
     },
   });
 
@@ -136,7 +132,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
   }
 
-  return redirect(getPathById('public/apply/$id/child/contact-information', params)); // TODO: Needs to be changed to /update-mailing
+  return redirect(getPathById('public/apply/$id/child/mailing-address', params));
 }
 
 export default function ApplyChildMaritalStatus({ loaderData, params }: Route.ComponentProps) {
