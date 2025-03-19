@@ -122,7 +122,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const isUseSelectedAddressAction = formAction === FORM_ACTION.useSelectedAddress;
   const canProceedToDental = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
   if (canProceedToDental) {
-    saveRenewState({ params, session, state: { homeAddress } });
+    saveRenewState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
 
     if (state.editMode) {
       return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
@@ -175,7 +175,7 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     } as const satisfies AddressSuggestionResponse;
   }
-  saveRenewState({ params, session, state: { homeAddress } });
+  saveRenewState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
