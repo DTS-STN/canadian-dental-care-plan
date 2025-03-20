@@ -225,6 +225,15 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               loading={isSubmitting}
               value={FORM_ACTION.request}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Request new verification code - Verify email click"
+              onClick={async () => {
+                const formData = new FormData();
+                formData.append('_action', FORM_ACTION.request);
+
+                const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
+                formData.append('_csrf', csrfTokenInput.value);
+
+                await fetcher.submit(formData, { method: 'post' });
+              }}
             >
               {t('apply-adult:verify-email.request-new-code')}
             </LoadingButton>
