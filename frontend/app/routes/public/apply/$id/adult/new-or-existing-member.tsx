@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { ChangeEventHandler } from 'react';
 
-import { data, redirect, useFetcher } from 'react-router';
+import { data, redirect, useFetcher, useLocation } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -122,8 +122,10 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
   const isSubmitting = fetcher.state !== 'idle';
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, { newOrExistingMember: 'input-radio-new-or-existing-member-option-0', clientNumber: 'client-number' });
+  const location = useLocation();
+  const from = location.state?.from ?? null;
   const [isNewOrExistingMember, setIsNewOrExistingMember] = useState(defaultState?.isNewOrExistingMember);
-
+  console.log(from);
   const handleNewOrExistingMemberSelection: ChangeEventHandler<HTMLInputElement> = (e) => {
     setIsNewOrExistingMember(e.target.value === NEW_OR_EXISTING_MEMBER_OPTION.yes);
   };
@@ -175,7 +177,13 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - New or existing member click">
                 {t('apply-adult:new-or-existing-member.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - New or existing member click">
+              <ButtonLink
+                id="back-button"
+                routeId={from !== null ? 'public/apply/$id/adult/review-information' : userAgeCategory === 'youth' ? 'public/apply/$id/adult/living-independently' : 'public/apply/$id/adult/applicant-information'}
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - New or existing member click"
+              >
                 {t('apply-adult:new-or-existing-member.back-btn')}
               </ButtonLink>
             </div>

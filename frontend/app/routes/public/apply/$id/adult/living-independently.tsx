@@ -53,7 +53,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
-  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
@@ -74,10 +73,6 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data.livingIndependently === LIVING_INDEPENDENTLY_OPTION.yes } });
-
-  if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult/review-information', params));
-  }
 
   if (parsedDataResult.data.livingIndependently === LIVING_INDEPENDENTLY_OPTION.yes) {
     return redirect(getPathById('public/apply/$id/adult/new-or-existing-member', params));
@@ -131,7 +126,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Living independently click">
                 {t('apply-adult:living-independently.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel -Living independently click">
+              <ButtonLink id="back-button" routeId="public/apply/$id/adult/applicant-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel -Living independently click">
                 {t('apply-adult:living-independently.back-btn')}
               </ButtonLink>
             </div>
