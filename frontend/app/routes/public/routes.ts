@@ -33,8 +33,8 @@ export const routes = [
           { id: 'public/apply/$id/adult/parent-or-guardian', file: 'routes/public/apply/$id/adult/parent-or-guardian.tsx', paths: { en: '/:lang/apply/:id/adult/parent-or-guardian', fr: '/:lang/demander/:id/adulte/parent-ou-tuteur' } },
           { id: 'public/apply/$id/adult/living-independently', file: 'routes/public/apply/$id/adult/living-independently.tsx', paths: { en: '/:lang/apply/:id/adult/living-independently', fr: '/:lang/demander/:id/adulte/vivre-maniere-independante' } },
           { id: 'public/apply/$id/adult/new-or-existing-member', file: 'routes/public/apply/$id/adult/new-or-existing-member.tsx', paths: { en: '/:lang/apply/:id/adult/new-or-existing-member', fr: '/:lang/demander/:id/adulte/membre-nouveau-ou-actuel' } },
-          { id: 'public/apply/$id/adult/phone-number', file: 'routes/public/apply/$id/adult/phone-number.tsx', paths: { en: '/:lang/apply/:id/adult/phone-number', fr: '/:lang/demander/:id/adulte/phone-number' } }, // TODO: Update French route
-          { id: 'public/apply/$id/adult/verify-email', file: 'routes/public/apply/$id/adult/verify-email.tsx', paths: { en: '/:lang/apply/:id/adult/verify-email', fr: '/:lang/demander/:id/adulte/verify-email' } }, // TODO: Update French route
+          { id: 'public/apply/$id/adult/phone-number', file: 'routes/public/apply/$id/adult/phone-number.tsx', paths: { en: '/:lang/apply/:id/adult/phone-number', fr: '/:lang/demander/:id/adulte/numero-telephone' } },
+          { id: 'public/apply/$id/adult/verify-email', file: 'routes/public/apply/$id/adult/verify-email.tsx', paths: { en: '/:lang/apply/:id/adult/verify-email', fr: '/:lang/demander/:id/adulte/verifier-courriel' } },
           { id: 'public/apply/$id/adult/email', file: 'routes/public/apply/$id/adult/email.tsx', paths: { en: '/:lang/apply/:id/adult/email', fr: '/:lang/demander/:id/adulte/adresse-courriel' } },
           { id: 'public/apply/$id/adult-child/children/index', file: 'routes/public/apply/$id/adult-child/children/index.tsx', paths: { en: '/:lang/apply/:id/adult-child/children', fr: '/:lang/demander/:id/adulte-enfant/enfants' } },
           { id: 'public/apply/$id/adult/marital-status', file: 'routes/public/apply/$id/adult/marital-status.tsx', paths: { en: '/:lang/apply/:id/adult/marital-status', fr: '/:lang/demander/:id/adulte/etat-civil' } },
@@ -120,8 +120,8 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/new-or-existing-member.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/new-or-existing-member', fr: '/:lang/demander/:id/adulte-enfant/membre-nouveau-ou-actuel' },
           },
-          { id: 'public/apply/$id/adult-child/phone-number', file: 'routes/public/apply/$id/adult-child/phone-number.tsx', paths: { en: '/:lang/apply/:id/adult-child/phone-number', fr: '/:lang/demander/:id/adulte-enfant/phone-number' } }, // TODO: Update French route
-          { id: 'public/apply/$id/adult-child/verify-email', file: 'routes/public/apply/$id/adult-child/verify-email.tsx', paths: { en: '/:lang/apply/:id/adult-child/verify-email', fr: '/:lang/demander/:id/adulte-enfant/verify-email' } }, // TODO: Update French route
+          { id: 'public/apply/$id/adult-child/phone-number', file: 'routes/public/apply/$id/adult-child/phone-number.tsx', paths: { en: '/:lang/apply/:id/adult-child/phone-number', fr: '/:lang/demander/:id/adulte-enfant/numero-telephone' } },
+          { id: 'public/apply/$id/adult-child/verify-email', file: 'routes/public/apply/$id/adult-child/verify-email.tsx', paths: { en: '/:lang/apply/:id/adult-child/verify-email', fr: '/:lang/demander/:id/adulte-enfant/verifier-courriel' } },
           { id: 'public/apply/$id/adult-child/email', file: 'routes/public/apply/$id/adult-child/email.tsx', paths: { en: '/:lang/apply/:id/adult-child/email', fr: '/:lang/demander/:id/adulte-enfant/adresse-courriel' } },
           {
             id: 'public/apply/$id/adult-child/applicant-information',
@@ -173,8 +173,8 @@ export const routes = [
           { id: 'public/apply/$id/child/applicant-information', file: 'routes/public/apply/$id/child/applicant-information.tsx', paths: { en: '/:lang/apply/:id/child/applicant-information', fr: '/:lang/demander/:id/enfant/renseignements-demandeur' } },
           { id: 'public/apply/$id/child/new-or-existing-member', file: 'routes/public/apply/$id/child/new-or-existing-member.tsx', paths: { en: '/:lang/apply/:id/child/new-or-existing-member', fr: '/:lang/demander/:id/enfant/membre-nouveau-ou-actuel' } },
           { id: 'public/apply/$id/child/marital-status', file: 'routes/public/apply/$id/child/marital-status.tsx', paths: { en: '/:lang/apply/:id/child/marital-status', fr: '/:lang/demander/:id/enfant/etat-civil' } },
-          { id: 'public/apply/$id/child/phone-number', file: 'routes/public/apply/$id/child/phone-number.tsx', paths: { en: '/:lang/apply/:id/child/phone-number', fr: '/:lang/demander/:id/enfant/phone-number' } }, // TODO: Update French route
-          { id: 'public/apply/$id/child/verify-email', file: 'routes/public/apply/$id/child/verify-email.tsx', paths: { en: '/:lang/apply/:id/child/verify-email', fr: '/:lang/demander/:id/enfant/verify-email' } }, // TODO: Update French route
+          { id: 'public/apply/$id/child/phone-number', file: 'routes/public/apply/$id/child/phone-number.tsx', paths: { en: '/:lang/apply/:id/child/phone-number', fr: '/:lang/demander/:id/enfant/numero-telephone' } },
+          { id: 'public/apply/$id/child/verify-email', file: 'routes/public/apply/$id/child/verify-email.tsx', paths: { en: '/:lang/apply/:id/child/verify-email', fr: '/:lang/demander/:id/enfant/verifier-courriel' } },
           { id: 'public/apply/$id/child/email', file: 'routes/public/apply/$id/child/email.tsx', paths: { en: '/:lang/apply/:id/child/email', fr: '/:lang/demander/:id/enfant/adresse-courriel' } },
           {
             id: 'public/apply/$id/child/communication-preference',
