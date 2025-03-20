@@ -55,6 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
+  const state = loadApplyState({ params, session });
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
@@ -105,6 +106,10 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     },
   });
+
+  if (state.editMode) {
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
+  }
 
   return redirect(getPathById('public/apply/$id/adult/marital-status', params));
 }
