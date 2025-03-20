@@ -1,11 +1,9 @@
 import type { ReadonlyDeep } from 'type-fest';
 
-import type { ChildDto, CommunicationPreferencesDto } from '~/.server/domain/dtos/benefit-application.dto';
-
 export type ClientApplicationDto = ReadonlyDeep<{
   applicantInformation: ClientApplicantInformationDto;
   children: ClientChildDto[];
-  communicationPreferences: CommunicationPreferencesDto;
+  communicationPreferences: ClientCommunicationPreferencesDto;
   contactInformation: ClientContactInformationDto;
   dateOfBirth: string;
   dentalBenefits: string[];
@@ -27,7 +25,9 @@ export type ClientApplicantInformationDto = Readonly<{
   clientNumber?: string;
 }>;
 
-export type ClientChildDto = Omit<ChildDto, 'information'> & {
+export type ClientChildDto = ReadonlyDeep<{
+  dentalBenefits: string[];
+  dentalInsurance: boolean;
   information: {
     firstName: string;
     lastName: string;
@@ -37,7 +37,13 @@ export type ClientChildDto = Omit<ChildDto, 'information'> & {
     clientNumber?: string;
     socialInsuranceNumber: string;
   };
-};
+}>;
+
+export type ClientCommunicationPreferencesDto = ReadonlyDeep<{
+  email?: string;
+  preferredLanguage: string;
+  preferredMethod: string;
+}>;
 
 export type ClientContactInformationDto = ReadonlyDeep<{
   copyMailingAddress: boolean;
