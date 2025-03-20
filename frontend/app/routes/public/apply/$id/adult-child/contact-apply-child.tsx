@@ -16,16 +16,15 @@ import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
-import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+// TODO remove this route and dependencies
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adultChild.contactApplyChild,
   pageTitleI18nKey: 'apply-adult-child:contact-apply-child.page-title',
 } as const satisfies RouteHandleData;
 

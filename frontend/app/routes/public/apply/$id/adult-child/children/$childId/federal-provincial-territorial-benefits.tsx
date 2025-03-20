@@ -40,7 +40,7 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adultChild.federalProvincialTerritorialBenefits,
+  pageIdentifier: pageIds.public.apply.adultChild.childFederalProvincialTerritorialBenefits,
   pageTitleI18nKey: 'apply-adult-child:children.dental-benefits.title',
 };
 

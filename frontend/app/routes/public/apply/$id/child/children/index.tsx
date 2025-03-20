@@ -34,7 +34,7 @@ import { formatSin } from '~/utils/sin-utils';
 
 const FORM_ACTION = { add: 'add', continue: 'continue', cancel: 'cancel', save: 'save', remove: 'remove' } as const;
 
-export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'), pageIdentifier: pageIds.public.apply.child.childInformation, pageTitleI18nKey: 'apply-child:children.index.page-title' } as const satisfies RouteHandleData;
+export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'), pageIdentifier: pageIds.public.apply.child.childSummary, pageTitleI18nKey: 'apply-child:children.index.page-title' } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);

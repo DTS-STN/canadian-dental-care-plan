@@ -32,7 +32,7 @@ const FEDERAL_BENEFITS_CHANGED_OPTION = {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adultChild.confirmFederalProvincialTerritorialBenefits,
+  pageIdentifier: pageIds.public.apply.adultChild.childConfirmFederalProvincialTerritorialBenefits,
   pageTitleI18nKey: 'apply-adult-child:children.confirm-dental-benefits.title',
 };
 

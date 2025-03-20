@@ -22,7 +22,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adultChild.parentOrGuardian,
+  pageIdentifier: pageIds.public.apply.adultChild.childParentOrGuardian,
   pageTitleI18nKey: 'apply-adult-child:children.parent-or-guardian.page-title',
 } as const satisfies RouteHandleData;
 

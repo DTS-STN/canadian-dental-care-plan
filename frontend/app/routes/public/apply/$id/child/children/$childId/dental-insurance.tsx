@@ -26,7 +26,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.child.dentalInsurance,
+  pageIdentifier: pageIds.public.apply.child.childDentalInsurance,
   pageTitleI18nKey: 'apply-child:children.dental-insurance.title',
 };
 

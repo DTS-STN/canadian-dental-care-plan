@@ -42,7 +42,7 @@ const FORM_ACTION = {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adult.homeAddress,
+  pageIdentifier: pageIds.public.apply.child.homeAddress,
   pageTitleI18nKey: 'apply-child:address.home-address.page-title',
 } as const satisfies RouteHandleData;
 
