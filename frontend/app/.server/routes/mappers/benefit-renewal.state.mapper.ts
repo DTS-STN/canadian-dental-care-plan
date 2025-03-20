@@ -12,9 +12,9 @@ import type {
   ClientApplicantInformationDto,
   ClientApplicationDto,
   ClientChildDto,
+  ClientCommunicationPreferencesDto,
   ClientContactInformationDto,
   ClientPartnerInformationDto,
-  CommunicationPreferencesDto,
   ItaBenefitRenewalDto,
   ProtectedBenefitRenewalDto,
   RenewalApplicantInformationDto,
@@ -146,7 +146,7 @@ interface ToChildrenArgs {
 }
 
 interface ToCommunicationPreferencesArgs {
-  existingCommunicationPreferences: ReadonlyObjectDeep<CommunicationPreferencesDto>;
+  existingCommunicationPreferences: ReadonlyObjectDeep<ClientCommunicationPreferencesDto>;
   hasPreferredLanguageChanged?: boolean;
   renewedPreferredLanguage?: string;
   hasEmailChanged: boolean;

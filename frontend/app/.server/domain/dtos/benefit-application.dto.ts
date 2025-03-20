@@ -43,7 +43,7 @@ export type CommunicationPreferencesDto = ReadonlyDeep<{
   emailVerified?: boolean;
   preferredLanguage: string;
   preferredMethod: string;
-  preferredMethodGovernmentOfCanada?: string;
+  preferredMethodGovernmentOfCanada: string;
 }>;
 
 export type ContactInformationDto = ReadonlyDeep<{
