@@ -123,9 +123,9 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, { newOrExistingMember: 'input-radio-new-or-existing-member-option-0', clientNumber: 'client-number' });
   const location = useLocation();
-  const from = location.state?.from ?? null;
+  const fromUrl = location.state?.from ?? null;
   const [isNewOrExistingMember, setIsNewOrExistingMember] = useState(defaultState?.isNewOrExistingMember);
-  console.log(from);
+
   const handleNewOrExistingMemberSelection: ChangeEventHandler<HTMLInputElement> = (e) => {
     setIsNewOrExistingMember(e.target.value === NEW_OR_EXISTING_MEMBER_OPTION.yes);
   };
@@ -179,7 +179,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId={from !== null ? 'public/apply/$id/adult/review-information' : userAgeCategory === 'youth' ? 'public/apply/$id/adult/living-independently' : 'public/apply/$id/adult/applicant-information'}
+                routeId={fromUrl !== null ? 'public/apply/$id/adult/review-information' : userAgeCategory === 'youth' ? 'public/apply/$id/adult/living-independently' : 'public/apply/$id/adult/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - New or existing member click"
