@@ -99,10 +99,15 @@ export async function action({ context: { appContainer, session }, params, reque
   saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
+    if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
+      saveApplyState({ params, session, state: { email: undefined } });
+      return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
+    }
+    return redirect(getPathById('public/apply/$id/adult-child/email', params));
   }
 
   if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
+    saveApplyState({ params, session, state: { email: undefined } });
     return redirect(getPathById('public/apply/$id/adult-child/dental-insurance', params));
   }
 

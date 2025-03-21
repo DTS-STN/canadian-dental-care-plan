@@ -83,6 +83,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationSunLifePreference: communicationSunLifePreference.name,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     previouslyEnrolled: state.newOrExistingMember,
+    email: state.email,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -315,14 +316,16 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                   </InlineLink>
                 </div>
               </DescriptionListItem>
-              <DescriptionListItem term={t('apply-adult:review-information.email')}>
-                <p>{userInfo.contactInformationEmail}</p>
-                <div className="mt-4">
-                  <InlineLink id="change-email" routeId="public/apply/$id/adult/email" params={params}>
-                    {t('apply-adult:review-information.email-change')}
-                  </InlineLink>
-                </div>
-              </DescriptionListItem>
+              {userInfo.email && (
+                <DescriptionListItem term={t('apply-adult:review-information.email')}>
+                  <p>{userInfo.contactInformationEmail}</p>
+                  <div className="mt-4">
+                    <InlineLink id="change-email" routeId="public/apply/$id/adult/email" params={params}>
+                      {t('apply-adult:review-information.email-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              )}
               <DescriptionListItem term={t('apply-adult:review-information.mailing-title')}>
                 <Address
                   address={{
