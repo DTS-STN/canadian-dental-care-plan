@@ -268,7 +268,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/apply/$id/adult/email"
+                routeId="public/apply/$id/adult-child/email"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
