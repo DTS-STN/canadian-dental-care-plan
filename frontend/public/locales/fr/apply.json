@@ -104,10 +104,10 @@
       }
     },
     "dialog": {
-      "title": "(FR) You must read the Terms and Conditions and Privacy Notice Statement, and consent to the sharing of your information",
-      "description": "(FR) To apply for the Canadian Dental Care Plan you must acknowledge that you have read and accept the Terms and Conditions and Privacy Notice Statement. You must also consent to the sharing of your personal information for the purposes listed.",
-      "back-btn": "(FR) Back",
-      "exit-btn": "(FR) Exit application",
+      "title": "Vous devez accepter les Conditions générales et la Déclaration de confidentialité, ainsi que consentir à la divulgation de vos renseignements personnels.",
+      "description": "Pour adhérer au Régime canadien de soins dentaires, vous devez accepter les Conditions générales et la Déclaration de confidentialité. Vous devez également consentir à la divulgation de vos renseignements personnels aux fins indiquées.",
+      "back-btn": "Retour",
+      "exit-btn": "Quitter la demande",
       "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     }
   },
