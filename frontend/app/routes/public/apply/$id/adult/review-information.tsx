@@ -1,7 +1,7 @@
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
-import { redirect, useFetcher } from 'react-router';
+import { redirect, useFetcher, useLocation } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -184,6 +184,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
+  const location = useLocation();
   const [submitAction, setSubmitAction] = useState<string>();
 
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
@@ -249,7 +250,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
               <DescriptionListItem term={t('apply-adult:review-information.marital-title')}>
                 <p>{userInfo.maritalStatus}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-martial-status" routeId="public/apply/$id/adult/applicant-information" params={params}>
+                  <InlineLink id="change-martial-status" routeId="public/apply/$id/adult/marital-status" params={params}>
                     {t('apply-adult:review-information.marital-change')}
                   </InlineLink>
                 </div>
@@ -265,7 +266,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                     <p>{t('apply-adult:review-information.no')}</p>
                   )}
                   <div className="mt-4">
-                    <InlineLink id="change-previously-enrolled" routeId="public/apply/$id/adult/new-or-existing-member" params={params}>
+                    <InlineLink id="change-previously-enrolled" routeId="public/apply/$id/adult/new-or-existing-member" state={{ from: location.pathname }} params={params}>
                       {t('apply-adult:review-information.previously-enrolled-change')}
                     </InlineLink>
                   </div>
