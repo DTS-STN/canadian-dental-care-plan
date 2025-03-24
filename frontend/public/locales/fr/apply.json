@@ -113,7 +113,7 @@
   },
   "tax-filing": {
     "page-title": "Déclaration de revenus",
-    "form-instructions": "Avez-vous, ainsi que votre époux ou conjoint de fait, le cas échéant, produit votre déclaration de revenus pour {{taxYear}} au Canada et reçu votre avis de cotisation?",
+    "form-instructions": "Est-ce que vous et votre époux/épouse ou conjoint/conjointe de fait, si vous en avez un, avez produit votre déclaration de revenus pour {{taxYear}} au Canada et reçu votre avis de cotisation?",
     "radio-options": {
       "yes": "Oui",
       "no": "Non"
@@ -127,7 +127,7 @@
   "file-your-taxes": {
     "page-title": "Produire votre déclaration de revenus",
     "ineligible-to-apply": "Vous n'êtes pas admissible au Régime canadien de soins dentaires pour le moment.",
-    "tax-not-filed": "Vous, votre époux/épouse ou conjoint/conjointe de fait n'avez pas reçu votre avis de cotisation pour {{taxYear}} auprès de l'Agence du revenu du Canada.",
+    "tax-not-filed": "Vous et votre époux/épouse ou conjoint/conjointe de fait, si vous en avez un, n'avez pas reçu votre avis de cotisation pour {{taxYear}} de l'Agence du revenu du Canada.",
     "unable-to-assess": "Nous utilisons les renseignements de votre déclaration de revenus pour nous assurer que les critères d'admissibilité relatifs au revenu et à la résidence sont remplis.",
     "tax-info": "Pour en savoir plus sur la façon de produire votre déclaration de revenus, consultez la page <taxInfo>Préparez-vous à faire vos impôts</taxInfo>.",
     "apply-after": "Vous pouvez vous inscrire au régime après que vous ou votre époux/épouse ou conjoint/conjointe de fait avez produit vos déclarations de revenus et reçu votre avis de cotisation.",
