@@ -84,8 +84,8 @@
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.7",
-    "@eslint/eslintrc": "^3.3.0",
-    "@eslint/js": "^9.22.0",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.23.0",
     "@playwright/test": "^1.51.1",
     "@react-router/dev": "^7.4.0",
     "@react-router/express": "^7.4.0",
