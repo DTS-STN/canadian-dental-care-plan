@@ -127,7 +127,7 @@
   "file-your-taxes": {
     "page-title": "File your taxes",
     "ineligible-to-apply": "You are not eligible to apply for the Canadian Dental Care Plan at this time.",
-    "tax-not-filed": "You, your spouse or common-law partner have not received your Notice of Assessment for {{taxYear}} from the Canada Revenue Agency.",
+    "tax-not-filed": "You, and if applicable your spouse or common-law partner, have not received your Notice of Assessment for {{taxYear}} from the Canada Revenue Agency.",
     "unable-to-assess": "We use the information from your tax file to verify that the income and residency eligibility requirements for the Canadian Dental Care Plan are met.",
     "tax-info": "For more information on how to file your taxes, visit <taxInfo>Get ready to do your taxes</taxInfo>.",
     "apply-after": "You can apply for the plan only after you or your spouse or common-law partner have filed your taxes and received your Notice of Assessment.",
