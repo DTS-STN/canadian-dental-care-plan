@@ -38,6 +38,7 @@ const isValidPrivateKey = (val: string) =>
 const csvToArray = (csv?: string) => csv?.split(',').map((str) => str.trim()) ?? [];
 const emptyToUndefined = (val?: string) => (val === '' ? undefined : val);
 const toBoolean = (val?: string) => val === 'true';
+const toNumber = (val?: string) => (val ? parseInt(val) : undefined);
 
 /**
  * Environment variables that will be available to server only.
@@ -131,7 +132,7 @@ const serverEnv = clientEnvSchema.extend({
   REDIS_STANDALONE_PORT: z.coerce.number().default(6379),
   REDIS_USERNAME: z.string().trim().min(1).optional(),
   REDIS_PASSWORD: z.string().trim().min(1).optional(),
-  REDIS_COMMAND_TIMEOUT_SECONDS: z.coerce.number().default(1),
+  REDIS_COMMAND_TIMEOUT_SECONDS: z.string().transform(toNumber).default('1'),
 
   // mocks settings
   ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(''),
