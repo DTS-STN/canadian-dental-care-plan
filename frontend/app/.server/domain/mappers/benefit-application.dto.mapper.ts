@@ -293,9 +293,9 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
 
   private toBenefitApplicationCategoryCode(typeOfApplication: TypeOfApplicationDto) {
     const { APPLICANT_CATEGORY_CODE_INDIVIDUAL, APPLICANT_CATEGORY_CODE_FAMILY, APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY } = this.serverConfig;
-    if (typeOfApplication === 'adult') return APPLICANT_CATEGORY_CODE_INDIVIDUAL.toString();
-    if (typeOfApplication === 'adult-child') return APPLICANT_CATEGORY_CODE_FAMILY.toString();
-    return APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY.toString();
+    if (typeOfApplication === 'adult') return APPLICANT_CATEGORY_CODE_INDIVIDUAL;
+    if (typeOfApplication === 'adult-child') return APPLICANT_CATEGORY_CODE_FAMILY;
+    return APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY;
   }
 
   mapBenefitApplicationResponseEntityToApplicationCode(benefitApplicationResponseEntity: BenefitApplicationResponseEntity): string {
