@@ -28,7 +28,8 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'living-independently'
       | 'parent-or-guardian'
       | 'review-adult-information'
-      | 'review-child-information',
+      | 'review-child-information'
+      | 'new-or-existing-member',
     heading?: string | RegExp,
   ) {
     let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
@@ -96,6 +97,10 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
 
       case 'parent-or-guardian':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/parent-or-guardian/, heading: 'Parent or legal guardian needs to apply' };
+        break;
+
+      case 'new-or-existing-member':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/new-or-existing-member/, heading: 'New or existing member' };
         break;
 
       case 'review-adult-information':

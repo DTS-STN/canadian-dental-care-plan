@@ -27,7 +27,7 @@ test.describe('Youth category', () => {
     await page.getByRole('button', { name: 'Continue' }).click();
   });
 
-  test('Should return to CDCP main page if applicant is 16 or 17, child is not under 18', async ({ page }) => {
+  test('Should navigate to New or existing member page if applicant is 16 or 17, child is not under 18', async ({ page }) => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
@@ -43,13 +43,8 @@ test.describe('Youth category', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
-    await test.step('Should navigate to Parent or guardian page', async () => {
-      await applyAdultChildPage.isLoaded('parent-or-guardian');
-    });
-
-    await test.step('Should return to CDCP main page', async () => {
-      await page.getByRole('button', { name: 'Return to main page' }).click();
-      await expect(page).toHaveURL('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html');
+    await test.step('Should navigate to New or existing member page', async () => {
+      await applyAdultChildPage.isLoaded('new-or-existing-member');
     });
   });
 
