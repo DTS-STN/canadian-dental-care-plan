@@ -386,6 +386,7 @@
       "living-independently-required": "Select whether or not you live independently from your parents"
     },
     "back-btn": "Back",
+    "cancel-btn": "Cancel",
     "continue-btn": "Continue",
     "save-btn": "Save"
   },
@@ -406,6 +407,7 @@
     "no": "No",
     "back-btn": "Back",
     "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
     "save-btn": "Save",
     "error-message": {
       "is-new-or-existing-member-required": "Select whether you have ever been enrolled in the Canadian Dental Care Plan",

@@ -141,24 +141,44 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({
-    params,
-    session,
-    state: {
-      applicantInformation: {
-        firstName: parsedDataResult.data.firstName,
-        lastName: parsedDataResult.data.lastName,
-        dateOfBirth: parsedDataResult.data.dateOfBirth,
-        socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
-      },
-      ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
-        // Handle marital-status back button
-        newOrExistingMember: undefined,
-      }),
-    },
-  });
-
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+
+  if (state.editMode && (ageCategory === 'youth' || ageCategory === 'children' || parsedDataResult.data.dateOfBirthYear >= 2006)) {
+    // Temporary state save until the user is finished with editMode workflow.
+    saveApplyState({
+      params,
+      session,
+      state: {
+        editModeApplicantInformation: {
+          firstName: parsedDataResult.data.firstName,
+          lastName: parsedDataResult.data.lastName,
+          dateOfBirth: parsedDataResult.data.dateOfBirth,
+          socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+        },
+        ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
+          // Handle marital-status back button
+          newOrExistingMember: undefined,
+        }),
+      },
+    });
+  } else {
+    saveApplyState({
+      params,
+      session,
+      state: {
+        applicantInformation: {
+          firstName: parsedDataResult.data.firstName,
+          lastName: parsedDataResult.data.lastName,
+          dateOfBirth: parsedDataResult.data.dateOfBirth,
+          socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+        },
+        ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
+          // Handle marital-status back button
+          newOrExistingMember: undefined,
+        }),
+      },
+    });
+  }
 
   if (ageCategory === 'youth') {
     return redirect(getPathById('public/apply/$id/adult/living-independently', params));
