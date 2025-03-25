@@ -255,7 +255,7 @@
         "save-btn": "Sauvegarder"
       },
       "error-message": {
-        "federal-provincial-territorial-benefit-required": "Sélectionnez si vous bénéficiez de prestations dentaires fédérales, provinciales ou territoriales"
+        "federal-provincial-territorial-benefit-required": "Sélectionnez si l'enfant bénéficie de prestations dentaires fédérales, provinciales ou territoriales"
       }
     },
     "dental-benefits": {
