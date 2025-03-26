@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -15,9 +13,9 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
-import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
+import { useErrorAlert } from '~/components/error-alert';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
@@ -231,10 +229,20 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
     clientNumber: 'client-number',
     isParent: 'input-radio-is-parent-radios-option-0',
   });
+  const { ErrorAlert } = useErrorAlert(fetcherStatus === 'child-not-found');
+
+  const noWrap = <span className="whitespace-nowrap" />;
 
   return (
     <>
-      {fetcherStatus === 'child-not-found' && <ChildNotFound />}
+      <ErrorAlert>
+        <h2 className="mb-2 font-bold">{t('renew-child:children.information.child-not-found.heading')}</h2>
+        <p className="mb-2">{t('renew-child:children.information.child-not-found.please-review')}</p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="renew-child:children.information.child-not-found.contact-service-canada" components={{ noWrap }} />
+        </p>
+      </ErrorAlert>
+
       <div className="my-6 sm:my-8">
         <Progress value={30} size="lg" label={t('renew:progress.label')} />
       </div>
@@ -348,31 +356,5 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
         </fetcher.Form>
       </div>
     </>
-  );
-}
-
-function ChildNotFound() {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const noWrap = <span className="whitespace-nowrap" />;
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const setWrapperRef = (node: HTMLDivElement | null) => {
-    if (node) {
-      node.scrollIntoView({ behavior: 'smooth' });
-      node.focus();
-    }
-    wrapperRef.current = node;
-  };
-
-  return (
-    <div ref={setWrapperRef} id="child-not-found" className="mb-4" role="region" aria-live="assertive" tabIndex={-1}>
-      <ContextualAlert type="danger">
-        <h2 className="mb-2 font-bold">{t('renew-child:children.information.child-not-found.heading')}</h2>
-        <p className="mb-2">{t('renew-child:children.information.child-not-found.please-review')}</p>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="renew-child:children.information.child-not-found.contact-service-canada" components={{ noWrap }} />
-        </p>
-      </ContextualAlert>
-    </div>
   );
 }
