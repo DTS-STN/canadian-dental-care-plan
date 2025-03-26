@@ -155,6 +155,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   const formData = await request.formData();
+  const state = loadApplyAdultStateForReview({ params, request, session });
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearApplyState({ params, session });
@@ -164,10 +165,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveApplyState({ params, session, state: { editMode: false } });
+    if (state.hasFederalProvincialTerritorialBenefits) {
+      return redirect(getPathById('public/apply/$id/adult/federal-provincial-territorial-benefits', params));
+    }
     return redirect(getPathById('public/apply/$id/adult/confirm-federal-provincial-territorial-benefits', params));
   }
 
-  const state = loadApplyAdultStateForReview({ params, request, session });
   const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyAdultStateToBenefitApplicationDto(state);
   const confirmationCode = await appContainer.get(TYPES.domain.services.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
