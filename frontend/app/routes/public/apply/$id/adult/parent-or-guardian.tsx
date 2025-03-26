@@ -39,7 +39,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:parent-or-guardian.page-title') }) };
 
   invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
+  const ageCategory = state.editModeApplicantInformation?.dateOfBirth ? getAgeCategoryFromDateString(state.editModeApplicantInformation.dateOfBirth) : getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
   if (ageCategory !== 'children' && ageCategory !== 'youth') {
     return redirect(getPathById('public/apply/$id/adult/applicant-information', params));

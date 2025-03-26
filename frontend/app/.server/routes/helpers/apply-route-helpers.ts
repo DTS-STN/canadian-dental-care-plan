@@ -17,6 +17,13 @@ export type ApplyState = ReadonlyDeep<{
   id: string;
   editMode: boolean;
   lastUpdatedOn: string;
+  editModeApplicantInformation?: {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    socialInsuranceNumber: string;
+  };
+  editModeLivingIndependently?: boolean;
   applicantInformation?: {
     firstName: string;
     lastName: string;

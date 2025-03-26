@@ -386,6 +386,7 @@
       "living-independently-required": "Sélectionnez si vous vivez de manière indépendente de vos parents"
     },
     "back-btn": "Retour",
+    "cancel-btn": "Annuler",
     "continue-btn": "Continuer",
     "save-btn": "Enregistrer"
   },
@@ -406,6 +407,7 @@
     "no": "Non",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
     "help-message": "L'ajout d'un numéro de téléphone aide le gouvernement du Canada à vous contacter en cas de problème avec votre demande. Sinon, nous vous contacterons par la poste.",
     "error-message": {
