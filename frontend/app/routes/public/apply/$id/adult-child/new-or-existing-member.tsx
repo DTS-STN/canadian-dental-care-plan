@@ -29,6 +29,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { extractDigits } from '~/utils/string-utils';
 
 const NEW_OR_EXISTING_MEMBER_OPTION = { no: 'no', yes: 'yes' } as const;
 
@@ -67,7 +68,11 @@ export async function action({ context: { appContainer, session }, params, reque
       newOrExistingMember: z.nativeEnum(NEW_OR_EXISTING_MEMBER_OPTION, {
         errorMap: () => ({ message: t('apply-adult-child:new-or-existing-member.error-message.is-new-or-existing-member-required') }),
       }),
-      clientNumber: z.string().trim().optional(),
+      clientNumber: z
+        .string()
+        .trim()
+        .optional()
+        .transform((code) => (code ? extractDigits(code) : undefined)),
     })
     .superRefine((val, ctx) => {
       if (val.newOrExistingMember === NEW_OR_EXISTING_MEMBER_OPTION.yes) {
