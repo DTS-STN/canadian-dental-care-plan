@@ -71,6 +71,7 @@
     "back-btn": "Back",
     "continue-btn": "Continue",
     "save-btn": "Save",
+    "cancel-btn": "Cancel",
     "error-message": {
       "is-new-or-existing-member-required": "Select whether you have ever been enrolled in the Canadian Dental Care Plan",
       "client-number-required": "Enter 11-digit Client Number",

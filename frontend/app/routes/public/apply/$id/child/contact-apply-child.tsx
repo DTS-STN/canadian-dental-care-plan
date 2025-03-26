@@ -40,10 +40,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:contact-apply-child.page-title') }) };
 
   invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
+  const ageCategory = state.editModeApplicantInformation?.dateOfBirth ? getAgeCategoryFromDateString(state.editModeApplicantInformation.dateOfBirth) : getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
   if (ageCategory !== 'children') {
-    return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
+    return redirect(getPathById('public/apply/$id/child/applicant-information', params));
   }
 
   return { id: state.id, meta };

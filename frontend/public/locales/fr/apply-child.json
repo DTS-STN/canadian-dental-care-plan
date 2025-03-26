@@ -71,6 +71,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "save-btn": "Enregistrer",
+    "cancel-btn": "Annuler",
     "error-message": {
       "is-new-or-existing-member-required": "Indiquez si vous avez déjà bénéficié d'une couverture en vertu du Régime canadien de soins dentaires.",
       "client-number-required": "Entrez le numéro de client de 11 chiffres",

@@ -148,23 +148,42 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
-  saveApplyState({
-    params,
-    session,
-    state: {
-      applicantInformation: {
-        firstName: parsedDataResult.data.firstName,
-        lastName: parsedDataResult.data.lastName,
-        dateOfBirth: parsedDataResult.data.dateOfBirth,
-        socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+  if (state.editMode && (ageCategory === 'youth' || ageCategory === 'children' || parsedDataResult.data.dateOfBirthYear >= 2006)) {
+    // Temporary state save until the user is finished with editMode workflow.
+    saveApplyState({
+      params,
+      session,
+      state: {
+        editModeApplicantInformation: {
+          firstName: parsedDataResult.data.firstName,
+          lastName: parsedDataResult.data.lastName,
+          dateOfBirth: parsedDataResult.data.dateOfBirth,
+          socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+        },
+        ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
+          // Handle marital-status back button
+          newOrExistingMember: undefined,
+        }),
       },
-      ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
-        // Handle marital-status back button
-        newOrExistingMember: undefined,
-      }),
-      livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
-    },
-  });
+    });
+  } else {
+    saveApplyState({
+      params,
+      session,
+      state: {
+        applicantInformation: {
+          firstName: parsedDataResult.data.firstName,
+          lastName: parsedDataResult.data.lastName,
+          dateOfBirth: parsedDataResult.data.dateOfBirth,
+          socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+        },
+        ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
+          // Handle marital-status back button
+          newOrExistingMember: undefined,
+        }),
+      },
+    });
+  }
 
   if (ageCategory === 'children') {
     return redirect(getPathById('public/apply/$id/child/contact-apply-child', params));
