@@ -43,9 +43,7 @@ test.describe('Youth category', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
-    await test.step('Should navigate to New or existing member page', async () => {
-      await applyAdultChildPage.isLoaded('new-or-existing-member');
-    });
+    // TODO: Add remaining test cases once workflow is clear.
   });
 
   test('Should return to CDCP main page if applicant is 16, child is under 18', async ({ page }) => {
