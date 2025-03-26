@@ -75,10 +75,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data.livingIndependently === LIVING_INDEPENDENTLY_OPTION.yes } });
 
-  if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult/review-information', params));
-  }
-
   if (parsedDataResult.data.livingIndependently === LIVING_INDEPENDENTLY_OPTION.yes) {
     return redirect(getPathById('public/apply/$id/adult/new-or-existing-member', params));
   }
