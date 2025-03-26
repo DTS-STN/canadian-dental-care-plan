@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-insurance.title') }) };
 
   invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
-  const backToEmail = (state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail') && state.communicationPreferences.preferredNotificationMethod !== 'mail';
+  const backToEmail = state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail';
 
   return { id: state, meta, defaultState: state.dentalInsurance, backToEmail, editMode: state.editMode };
 }

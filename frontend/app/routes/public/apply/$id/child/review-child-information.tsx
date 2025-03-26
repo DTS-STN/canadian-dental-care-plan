@@ -111,7 +111,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
   invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
-  const backToEmail = (state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail') && state.communicationPreferences.preferredNotificationMethod !== 'mail';
+  const backToEmail = state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail';
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
