@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
@@ -14,9 +14,9 @@ import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
+import { useErrorAlert } from '~/components/error-alert';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
@@ -179,6 +179,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
   const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, { verificationCode: 'verification-code' });
+  const { ErrorAlert } = useErrorAlert(fetcherStatus === 'verification-code-mismatch');
 
   const communicationLink = <InlineLink routeId="public/apply/$id/child/communication-preference" params={params} />;
 
@@ -194,7 +195,10 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
         <Progress value={86} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        {fetcherStatus === 'verification-code-mismatch' && <VerificationCodeAlert />}
+        <ErrorAlert>
+          <h2 className="mb-2 font-bold">{t('apply-child:verify-email.verification-code-alert.heading')}</h2>
+          <p className="mb-2">{t('apply-child:verify-email.verification-code-alert.detail')}</p>
+        </ErrorAlert>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -283,27 +287,5 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
         </Dialog>
       </div>
     </>
-  );
-}
-
-function VerificationCodeAlert() {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const setWrapperRef = (node: HTMLDivElement | null) => {
-    if (node) {
-      node.scrollIntoView({ behavior: 'smooth' });
-      node.focus();
-    }
-    wrapperRef.current = node;
-  };
-
-  return (
-    <div ref={setWrapperRef} id="verification-code-alert" className="mb-4" role="region" aria-live="assertive" tabIndex={-1}>
-      <ContextualAlert type="danger">
-        <h2 className="mb-2 font-bold">{t('apply-child:verify-email.verification-code-alert.heading')}</h2>
-        <p className="mb-2">{t('apply-child:verify-email.verification-code-alert.detail')}</p>
-      </ContextualAlert>
-    </div>
   );
 }

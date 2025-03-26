@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 
 import { redirect, useFetcher } from 'react-router';
@@ -16,8 +15,8 @@ import type { IdToken } from '~/.server/utils/raoidc.utils';
 import type { AppLinkProps } from '~/components/app-link';
 import { AppLink } from '~/components/app-link';
 import { ButtonLink } from '~/components/buttons';
-import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { useErrorAlert } from '~/components/error-alert';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -98,10 +97,16 @@ export default function ProtectedRenewMemberSelection({ loaderData, params }: Ro
   const isSubmitting = fetcher.state !== 'idle';
 
   const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
+  const { ErrorAlert } = useErrorAlert(fetcherStatus === 'select-member');
 
   return (
     <div className="max-w-prose">
-      {fetcherStatus === 'select-member' && <SelectMember />}
+      <ErrorAlert>
+        <h2 className="mb-2 font-bold">{t('protected-renew:member-selection.select-member.heading')}</h2>
+        <InlineLink role="alert" aria-live="polite" to="#primary-applicant" className="mb-2">
+          {t('protected-renew:member-selection.select-member.to-continue')}
+        </InlineLink>
+      </ErrorAlert>
       <p className="mb-4">{t('protected-renew:member-selection.form-instructions')}</p>
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
@@ -169,28 +174,5 @@ function CardLink({ routeId, title, previouslyReviewed, ...props }: CardLinkProp
         </>
       )}
     </AppLink>
-  );
-}
-
-function SelectMember() {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (wrapperRef.current) {
-      wrapperRef.current.scrollIntoView({ behavior: 'smooth' });
-      wrapperRef.current.focus();
-    }
-  }, []);
-
-  return (
-    <div ref={wrapperRef} id="select-member" className="mb-4">
-      <ContextualAlert type="danger">
-        <h2 className="mb-2 font-bold">{t('protected-renew:member-selection.select-member.heading')}</h2>
-        <InlineLink role="alert" aria-live="polite" to="#primary-applicant" className="mb-2">
-          {t('protected-renew:member-selection.select-member.to-continue')}
-        </InlineLink>
-      </ContextualAlert>
-    </div>
   );
 }

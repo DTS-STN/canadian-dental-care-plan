@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -15,9 +13,9 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
-import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
+import { useErrorAlert } from '~/components/error-alert';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputPatternField } from '~/components/input-pattern-field';
@@ -180,7 +178,9 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
     dateOfBirthYear: 'date-picker-date-of-birth-year',
     clientNumber: 'client-number',
   });
+  const { ErrorAlert } = useErrorAlert(fetcherStatus === 'status-not-found');
 
+  const noWrap = <span className="whitespace-nowrap" />;
   const eligibilityLink = <InlineLink to={t('renew:applicant-information.eligibility-link')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
@@ -189,7 +189,13 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
         <Progress value={7} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
-        {fetcherStatus === 'status-not-found' && <StatusNotFound />}
+        <ErrorAlert>
+          <h2 className="mb-2 font-bold">{t('renew:applicant-information.status-not-found.heading')}</h2>
+          <p className="mb-2">{t('renew:applicant-information.status-not-found.please-review')}</p>
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey="renew:applicant-information.status-not-found.contact-service-canada" components={{ noWrap }} />
+          </p>
+        </ErrorAlert>
         <p className="mb-4 italic">{t('renew:required-label')}</p>
         <p className="mb-6">{t('renew:applicant-information.required-information')}</p>
         <errorSummary.ErrorSummary />
@@ -286,31 +292,5 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
         </fetcher.Form>
       </div>
     </>
-  );
-}
-
-function StatusNotFound() {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const noWrap = <span className="whitespace-nowrap" />;
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const setWrapperRef = (node: HTMLDivElement | null) => {
-    if (node) {
-      node.scrollIntoView({ behavior: 'smooth' });
-      node.focus();
-    }
-    wrapperRef.current = node;
-  };
-
-  return (
-    <div ref={setWrapperRef} id="status-not-found" className="mb-4" role="region" aria-live="assertive" tabIndex={-1}>
-      <ContextualAlert type="danger">
-        <h2 className="mb-2 font-bold">{t('renew:applicant-information.status-not-found.heading')}</h2>
-        <p className="mb-2">{t('renew:applicant-information.status-not-found.please-review')}</p>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="renew:applicant-information.status-not-found.contact-service-canada" components={{ noWrap }} />
-        </p>
-      </ContextualAlert>
-    </div>
   );
 }
