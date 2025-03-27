@@ -305,7 +305,7 @@ export function getAgeCategoryFromAge(age: number): AgeCategory {
 }
 
 export function isNewChildState(child: ChildState) {
-  return child.dentalBenefits === undefined || child.dentalInsurance === undefined || child.information === undefined;
+  return (child.hasFederalProvincialTerritorialBenefits === true && child.dentalBenefits === undefined) || child.dentalInsurance === undefined || child.information === undefined;
 }
 
 export function getChildrenState<TState extends Pick<ApplyState, 'children'>>(state: TState, includesNewChildState: boolean = false) {
