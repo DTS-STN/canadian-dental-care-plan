@@ -66,9 +66,9 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
   const getAriaErrorMessageYear = useCallback(() => {
     const ariaDescribedby = [];
     if (errorMessages?.all) ariaDescribedby.push(inputErrorIdAll);
-    if (errorMessages?.year) ariaDescribedby.push(inputErrorIdMonth);
+    if (errorMessages?.year) ariaDescribedby.push(inputErrorIdYear);
     return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
-  }, [errorMessages?.all, errorMessages?.year, inputErrorIdAll, inputErrorIdMonth]);
+  }, [errorMessages?.all, errorMessages?.year, inputErrorIdAll, inputErrorIdYear]);
 
   const datePickerYear = useMemo(
     () => (
