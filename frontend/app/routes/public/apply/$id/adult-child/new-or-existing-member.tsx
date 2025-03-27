@@ -33,6 +33,12 @@ import { extractDigits } from '~/utils/string-utils';
 
 const NEW_OR_EXISTING_MEMBER_OPTION = { no: 'no', yes: 'yes' } as const;
 
+const FORM_ACTION = {
+  cancel: 'cancel',
+  save: 'save',
+  continue: 'continue',
+} as const;
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.newOrExistingMember,
@@ -62,6 +68,12 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+
+  if (formAction === FORM_ACTION.cancel) {
+    return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
+  }
 
   const newOrExistingMemberSchema = z
     .object({
@@ -101,19 +113,32 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({
-    params,
-    session,
-    state: {
-      newOrExistingMember: {
-        isNewOrExistingMember: parsedDataResult.data.newOrExistingMember === NEW_OR_EXISTING_MEMBER_OPTION.yes,
-        clientNumber: parsedDataResult.data.clientNumber,
-      },
-    },
-  });
-
   if (state.editMode) {
+    // Save editMode data to state.
+    saveApplyState({
+      params,
+      session,
+      state: {
+        applicantInformation: state.editModeApplicantInformation,
+        livingIndependently: state.editModeLivingIndependently,
+        newOrExistingMember: {
+          isNewOrExistingMember: parsedDataResult.data.newOrExistingMember === NEW_OR_EXISTING_MEMBER_OPTION.yes,
+          clientNumber: parsedDataResult.data.clientNumber,
+        },
+      },
+    });
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
+  } else {
+    saveApplyState({
+      params,
+      session,
+      state: {
+        newOrExistingMember: {
+          isNewOrExistingMember: parsedDataResult.data.newOrExistingMember === NEW_OR_EXISTING_MEMBER_OPTION.yes,
+          clientNumber: parsedDataResult.data.clientNumber,
+        },
+      },
+    });
   }
 
   return redirect(getPathById('public/apply/$id/adult-child/marital-status', params));
@@ -177,16 +202,24 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
           )}
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Save - New or existing member click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - New or existing member click">
                 {t('apply-adult-child:new-or-existing-member.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Cancel - New or existing member click">
-                {t('apply-adult-child:new-or-existing-member.back-btn')}
-              </ButtonLink>
+              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - New or existing member click">
+                {t('apply-adult-child:new-or-existing-member.cancel-btn')}
+              </Button>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Continue - New or existing member click">
+              <LoadingButton
+                variant="primary"
+                id="continue-button"
+                name="_action"
+                value={FORM_ACTION.continue}
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Continue - New or existing member click"
+              >
                 {t('apply-adult-child:new-or-existing-member.continue-btn')}
               </LoadingButton>
               <ButtonLink

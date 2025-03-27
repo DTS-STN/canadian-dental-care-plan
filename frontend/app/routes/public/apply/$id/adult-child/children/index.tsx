@@ -38,6 +38,7 @@ const FORM_ACTION = {
   cancel: 'cancel',
   save: 'save',
   remove: 'remove',
+  back: 'back',
 } as const;
 
 export const handle = {
@@ -99,6 +100,14 @@ export async function action({ context: { appContainer, session }, params, reque
     const children = [...getChildrenState(state)].filter((child) => child.id !== removeChildId);
     saveApplyState({ params, session, state: { children } });
     return redirect(getPathById('public/apply/$id/adult-child/children/index', params));
+  }
+
+  if (formAction === FORM_ACTION.back) {
+    saveApplyState({ params, session, state: { editMode: false } });
+    if (state.hasFederalProvincialTerritorialBenefits) {
+      return redirect(getPathById('public/apply/$id/adult-child/federal-provincial-territorial-benefits', params));
+    }
+    return redirect(getPathById('public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
   }
 
   saveApplyState({
@@ -295,16 +304,9 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
               >
                 {t('apply-adult-child:children.index.continue-btn')}
               </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child(ren) application click"
-              >
+              <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child(ren) application click">
                 {t('apply-adult-child:children.index.back-btn')}
-              </ButtonLink>
+              </Button>
             </div>
           )}
         </fetcher.Form>
