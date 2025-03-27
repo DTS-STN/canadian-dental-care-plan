@@ -15,7 +15,6 @@ import type { Route } from './+types/review-child-information';
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildStateForReview } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
 import { clearApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import type { ApplyAdultChildState } from '~/.server/routes/mappers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -67,7 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
   const benefitApplicationStateMapper = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper);
   const benefitApplicationDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitApplicationDtoMapper);
-  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyAdultChildStateToBenefitApplicationDto(state as ApplyAdultChildState));
+  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyAdultChildStateToBenefitApplicationDto(state));
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
@@ -124,7 +123,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const state = loadApplyAdultChildStateForReview({ params, request, session });
-  const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyAdultChildStateToBenefitApplicationDto(state as ApplyAdultChildState);
+  const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyAdultChildStateToBenefitApplicationDto(state);
   const confirmationCode = await appContainer.get(TYPES.domain.services.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
