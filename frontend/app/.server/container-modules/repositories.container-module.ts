@@ -37,7 +37,7 @@ import { DefaultDynatraceRepository, DefaultHCaptchaRepository } from '~/.server
 
 /**
  * Determines if a service implementation should be injected based on server configuration.
- * Used for conditional options.binding of implementations (e.g., enabling/disabling mocks).
+ * Used for conditional binding of implementations (e.g., enabling/disabling mocks).
  *
  * @param mockName - The name of the mock to check in the server configuration.
  * @param shouldEnable - If `true`, returns `true` if the mock is enabled in the configuration;
@@ -47,8 +47,8 @@ import { DefaultDynatraceRepository, DefaultHCaptchaRepository } from '~/.server
  * and the `shouldEnable` parameter.
  *
  * @example
- * // options.binds AddressValidationRepository to a mock if the mock is enabled in server config,
- * // otherwise options.binds to the actual implementation.
+ * // Binds AddressValidationRepository to a mock if the mock is enabled in server config,
+ * // otherwise binds to the actual implementation.
  * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled('wsaddress', false));
  * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled('wsaddress', true));
  */
