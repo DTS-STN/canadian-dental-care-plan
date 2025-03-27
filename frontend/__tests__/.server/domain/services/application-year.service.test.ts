@@ -120,7 +120,7 @@ describe('DefaultApplicationYearService', () => {
   });
 
   describe('getIntakeApplicationYear', () => {
-    const mockIntakeApplicationYearResultDto: IntakeApplicationYearResultDto = { intakeYearId: '2025', taxYear: '2025' };
+    const mockIntakeApplicationYearResultDto: IntakeApplicationYearResultDto = { intakeYearId: '2025', taxYear: '2025', coverageStartDate: '2025-06-01' };
     const mockApplicationYearDtoMapper = mock<ApplicationYearDtoMapper>();
     mockApplicationYearDtoMapper.mapApplicationYearResultEntityToApplicationYearResultDtos.mockReturnValue(mockApplicationYearResultDtos);
     mockApplicationYearDtoMapper.mapApplicationYearResultDtoToIntakeApplicationYearResultDto.mockReturnValue(mockIntakeApplicationYearResultDto);

@@ -22,6 +22,7 @@ export class DefaultApplicationYearDtoMapper implements ApplicationYearDtoMapper
     return {
       taxYear: applicationYearResultDto.taxYear,
       intakeYearId: applicationYearResultDto.applicationYearId,
+      coverageStartDate: applicationYearResultDto.coverageStartDate
     };
   }
 

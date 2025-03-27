@@ -190,7 +190,7 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, applyState.applicationYear.coverageStartDate);
 
   saveApplyState({
     params,

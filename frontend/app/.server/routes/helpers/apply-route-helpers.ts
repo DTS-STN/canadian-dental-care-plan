@@ -33,6 +33,7 @@ export type ApplyState = ReadonlyDeep<{
   applicationYear: {
     intakeYearId: string;
     taxYear: string;
+    coverageStartDate: string;
   };
   children: {
     id: string;
@@ -291,8 +292,8 @@ export function startApplyState({ applicationYear, id, session }: StartArgs) {
 
 export type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
 
-export function getAgeCategoryFromDateString(date: string) {
-  const age = getAgeFromDateString(date);
+export function getAgeCategoryFromDateString(date: string, coverageStartDate?: string) {
+  const age = getAgeFromDateString(date, coverageStartDate);
   return getAgeCategoryFromAge(age);
 }
 

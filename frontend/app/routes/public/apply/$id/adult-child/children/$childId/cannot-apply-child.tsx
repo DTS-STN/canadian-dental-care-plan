@@ -6,7 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/cannot-apply-child';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
+import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -30,13 +30,14 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   loadApplyAdultSingleChildState({ params, request, session });
+  const state = loadApplyAdultChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
 
   const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
+  const currentYear = state.applicationYear.coverageStartDate.split('-')[0];
   const currentMonth = currentDate.getMonth() + 1;
 
   const isBeforeJune = currentMonth < 6;
