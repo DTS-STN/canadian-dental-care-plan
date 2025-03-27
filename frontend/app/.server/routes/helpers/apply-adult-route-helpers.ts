@@ -180,23 +180,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     communicationPreferences,
     contactInformation,
     hasFederalProvincialTerritorialBenefits,
-    /*dentalBenefits: {
-      hasFederalBenefits: hasFederalProvincialTerritorialBenefits === false ? false : dentalBenefits?.hasFederalBenefits,
-      federalSocialProgram: hasFederalProvincialTerritorialBenefits === false ? undefined : dentalBenefits?.federalSocialProgram,
-      hasProvincialTerritorialBenefits: hasFederalProvincialTerritorialBenefits === false ? false : dentalBenefits?.hasProvincialTerritorialBenefits,
-      provincialTerritorialSocialProgram: hasFederalProvincialTerritorialBenefits === false ? undefined : dentalBenefits?.provincialTerritorialSocialProgram,
-      province: hasFederalProvincialTerritorialBenefits === false ? undefined : dentalBenefits?.province,
-    },*/
-    dentalBenefits:
-      hasFederalProvincialTerritorialBenefits === false
-        ? {
-            hasFederalBenefits: false,
-            federalSocialProgram: undefined,
-            hasProvincialTerritorialBenefits: false,
-            provincialTerritorialSocialProgram: undefined,
-            province: undefined,
-          }
-        : dentalBenefits,
+    dentalBenefits,
     dentalInsurance,
     editMode,
     email,

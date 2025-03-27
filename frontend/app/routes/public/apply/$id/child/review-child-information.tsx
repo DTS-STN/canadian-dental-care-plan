@@ -52,7 +52,28 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
-  saveApplyState({ params, session, state: { editMode: true } });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      editMode: true,
+      children: state.children.map((child) => {
+        return {
+          ...child,
+          dentalBenefits:
+            child.hasFederalProvincialTerritorialBenefits === false
+              ? {
+                  hasFederalBenefits: false,
+                  federalSocialProgram: undefined,
+                  hasProvincialTerritorialBenefits: false,
+                  provincialTerritorialSocialProgram: undefined,
+                  province: undefined,
+                }
+              : child.dentalBenefits,
+        };
+      }),
+    },
+  });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);

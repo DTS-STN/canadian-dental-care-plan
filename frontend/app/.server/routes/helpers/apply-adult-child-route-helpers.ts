@@ -213,16 +213,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     children,
     communicationPreferences,
     contactInformation,
-    dentalBenefits:
-      hasFederalProvincialTerritorialBenefits === false
-        ? {
-            hasFederalBenefits: false,
-            federalSocialProgram: undefined,
-            hasProvincialTerritorialBenefits: false,
-            provincialTerritorialSocialProgram: undefined,
-            province: undefined,
-          }
-        : dentalBenefits,
+    dentalBenefits,
     dentalInsurance,
     editMode,
     email,
@@ -288,16 +279,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
     return {
       ageCategory,
       id,
-      dentalBenefits:
-        hasFederalProvincialTerritorialBenefits === false
-          ? {
-              hasFederalBenefits: false,
-              federalSocialProgram: undefined,
-              hasProvincialTerritorialBenefits: false,
-              provincialTerritorialSocialProgram: undefined,
-              province: undefined,
-            }
-          : dentalBenefits,
+      dentalBenefits,
       dentalInsurance,
       information,
       hasFederalProvincialTerritorialBenefits,

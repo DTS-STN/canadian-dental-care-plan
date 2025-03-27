@@ -258,16 +258,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
 
     return {
       ageCategory,
-      dentalBenefits:
-        hasFederalProvincialTerritorialBenefits === false
-          ? {
-              hasFederalBenefits: false,
-              federalSocialProgram: undefined,
-              hasProvincialTerritorialBenefits: false,
-              provincialTerritorialSocialProgram: undefined,
-              province: undefined,
-            }
-          : dentalBenefits,
+      dentalBenefits,
       dentalInsurance,
       id,
       information,
