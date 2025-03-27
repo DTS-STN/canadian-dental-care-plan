@@ -37,11 +37,11 @@ export function globalErrorHandler(isProduction: boolean): ErrorRequestHandler {
   };
 }
 
-export function rrRequestHandler(mode: string, viteDevServer?: ViteDevServer): RequestHandler {
+export async function rrRequestHandler(mode: string, viteDevServer?: ViteDevServer): Promise<RequestHandler> {
   // dynamically declare the path to avoid static analysis errors 💩
   const remixServerBuild = './app.js';
 
-  const appContainer = getAppContainerProvider();
+  const appContainer = await getAppContainerProvider();
   const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
 
   return createRequestHandler({
@@ -49,8 +49,8 @@ export function rrRequestHandler(mode: string, viteDevServer?: ViteDevServer): R
     build: viteDevServer //
       ? async () => await viteDevServer.ssrLoadModule('virtual:react-router/server-build')
       : async () => await import(remixServerBuild),
-    getLoadContext: (request, response) => {
-      const appContainer = getAppContainerProvider();
+    getLoadContext: async (request, response) => {
+      const appContainer = await getAppContainerProvider();
       const logFactory = appContainer.get(TYPES.factories.LogFactory);
 
       // `request.session` may be undefined if session middleware is not applied,

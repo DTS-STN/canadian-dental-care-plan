@@ -67,7 +67,7 @@ if (viteDevServer) {
 }
 
 log.info('  ✓ registering react router request handler');
-app.all('*', rrRequestHandler(environment.NODE_ENV, viteDevServer));
+app.all('*', await rrRequestHandler(environment.NODE_ENV, viteDevServer));
 
 log.info('  ✓ registering global error handler');
 app.use(globalErrorHandler(isProduction));
