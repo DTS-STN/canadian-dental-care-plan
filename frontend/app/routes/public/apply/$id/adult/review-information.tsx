@@ -16,6 +16,7 @@ import { PREFERRED_NOTIFICATION_METHOD } from './communication-preference';
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultStateForReview } from '~/.server/routes/helpers/apply-adult-route-helpers';
 import { clearApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import type { ApplyAdultState } from '~/.server/routes/mappers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
@@ -53,7 +54,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadApplyAdultStateForReview({ params, request, session });
-
   invariant(state.mailingAddress?.country, `Unexpected mailing address country: ${state.mailingAddress?.country}`);
 
   // apply state is valid then edit mode can be set to true
@@ -110,22 +110,24 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram
-    ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
-    : undefined;
+  const selectedFederalGovernmentInsurancePlan =
+    state.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.federalSocialProgram
+      ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
+      : undefined;
 
-  const selectedProvincialBenefit = state.dentalBenefits.provincialTerritorialSocialProgram
-    ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
-    : undefined;
+  const selectedProvincialBenefit =
+    state.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.provincialTerritorialSocialProgram
+      ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      : undefined;
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.dentalBenefits.hasFederalBenefits,
+      access: state.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.hasFederalBenefits,
       benefit: selectedFederalGovernmentInsurancePlan?.name,
     },
     provTerrBenefit: {
-      access: state.dentalBenefits.hasProvincialTerritorialBenefits,
-      province: state.dentalBenefits.province,
+      access: state.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.hasProvincialTerritorialBenefits,
+      province: state.dentalBenefits?.province,
       benefit: selectedProvincialBenefit?.name,
     },
   };
@@ -135,7 +137,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
   const benefitApplicationDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitApplicationDtoMapper);
   const benefitApplicationStateMapper = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper);
-  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyAdultStateToBenefitApplicationDto(state));
+  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyAdultStateToBenefitApplicationDto(state as ApplyAdultState));
 
   return {
     id: state.id,
@@ -168,7 +170,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const state = loadApplyAdultStateForReview({ params, request, session });
-  const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyAdultStateToBenefitApplicationDto(state);
+  const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyAdultStateToBenefitApplicationDto(state as ApplyAdultState);
   const confirmationCode = await appContainer.get(TYPES.domain.services.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 

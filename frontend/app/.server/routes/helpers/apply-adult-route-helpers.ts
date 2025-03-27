@@ -165,9 +165,12 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     throw redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
   }
 
-  //TODO: refactor to allow dentalBenefits to be undefined if hasFederalProvincialTerritorialBenefits is false
-  if (dentalBenefits === undefined || hasFederalProvincialTerritorialBenefits === undefined) {
+  if (hasFederalProvincialTerritorialBenefits === undefined) {
     throw redirect(getPathById('public/apply/$id/adult/confirm-federal-provincial-territorial-benefits', params));
+  }
+
+  if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits === true) {
+    throw redirect(getPathById('public/apply/$id/adult/federal-provincial-territorial-benefits', params));
   }
 
   return {
@@ -177,7 +180,23 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     communicationPreferences,
     contactInformation,
     hasFederalProvincialTerritorialBenefits,
-    dentalBenefits,
+    /*dentalBenefits: {
+      hasFederalBenefits: hasFederalProvincialTerritorialBenefits === false ? false : dentalBenefits?.hasFederalBenefits,
+      federalSocialProgram: hasFederalProvincialTerritorialBenefits === false ? undefined : dentalBenefits?.federalSocialProgram,
+      hasProvincialTerritorialBenefits: hasFederalProvincialTerritorialBenefits === false ? false : dentalBenefits?.hasProvincialTerritorialBenefits,
+      provincialTerritorialSocialProgram: hasFederalProvincialTerritorialBenefits === false ? undefined : dentalBenefits?.provincialTerritorialSocialProgram,
+      province: hasFederalProvincialTerritorialBenefits === false ? undefined : dentalBenefits?.province,
+    },*/
+    dentalBenefits:
+      hasFederalProvincialTerritorialBenefits === false
+        ? {
+            hasFederalBenefits: false,
+            federalSocialProgram: undefined,
+            hasProvincialTerritorialBenefits: false,
+            provincialTerritorialSocialProgram: undefined,
+            province: undefined,
+          }
+        : dentalBenefits,
     dentalInsurance,
     editMode,
     email,

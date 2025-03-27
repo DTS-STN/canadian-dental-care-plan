@@ -87,15 +87,6 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasFederalProvincialTerritorialBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
-      dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits
-        ? state.dentalBenefits
-        : {
-            hasFederalBenefits: false,
-            federalSocialProgram: undefined,
-            hasProvincialTerritorialBenefits: false,
-            provincialTerritorialSocialProgram: undefined,
-            province: undefined,
-          },
     },
   });
 

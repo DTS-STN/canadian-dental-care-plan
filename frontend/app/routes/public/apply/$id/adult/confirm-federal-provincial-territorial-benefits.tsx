@@ -58,7 +58,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
-  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
@@ -87,15 +86,6 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasFederalProvincialTerritorialBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
-      dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits
-        ? state.dentalBenefits
-        : {
-            hasFederalBenefits: false,
-            federalSocialProgram: undefined,
-            hasProvincialTerritorialBenefits: false,
-            provincialTerritorialSocialProgram: undefined,
-            province: undefined,
-          },
     },
   });
 

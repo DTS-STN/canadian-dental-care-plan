@@ -16,6 +16,7 @@ import { PREFERRED_NOTIFICATION_METHOD } from './communication-preference';
 import { TYPES } from '~/.server/constants';
 import { loadApplyChildStateForReview } from '~/.server/routes/helpers/apply-child-route-helpers';
 import { clearApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import type { ApplyChildState } from '~/.server/routes/mappers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
@@ -113,7 +114,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
   const benefitApplicationDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitApplicationDtoMapper);
   const benefitApplicationStateMapper = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper);
-  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyChildStateToBenefitApplicationDto(state));
+  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyChildStateToBenefitApplicationDto(state as ApplyChildState));
 
   return {
     id: state.id,
@@ -142,7 +143,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const state = loadApplyChildStateForReview({ params, request, session });
-  const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyChildStateToBenefitApplicationDto(state);
+  const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyChildStateToBenefitApplicationDto(state as ApplyChildState);
   const confirmationCode = await appContainer.get(TYPES.domain.services.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
