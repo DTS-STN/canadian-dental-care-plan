@@ -38,7 +38,7 @@ export function useErrorAlert(showErrorAlert: boolean, errorAlertId: string = 'e
   const alertRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (alertRef.current) {
+    if (alertRef.current && showErrorAlert) {
       alertRef.current.scrollIntoView({ behavior: 'smooth' });
       alertRef.current.focus();
       if (adobeAnalytics.isConfigured()) {
@@ -46,7 +46,7 @@ export function useErrorAlert(showErrorAlert: boolean, errorAlertId: string = 'e
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [alertRef.current, errorAlertId]);
+  }, [alertRef.current, errorAlertId, showErrorAlert]);
 
   const errorAlertComponent = useCallback(
     ({ children }: PropsWithChildren) => {
