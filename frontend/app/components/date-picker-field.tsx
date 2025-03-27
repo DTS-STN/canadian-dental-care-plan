@@ -39,23 +39,9 @@ export interface DatePickerFieldProps {
     year: string;
   };
   required?: boolean;
-  disableScreenReaderErrors?: boolean;
 }
 
-export const DatePickerField = ({
-  defaultValue,
-  disabled,
-  errorMessages,
-  helpMessagePrimary,
-  helpMessagePrimaryClassName,
-  helpMessageSecondary,
-  helpMessageSecondaryClassName,
-  id,
-  legend,
-  names,
-  required,
-  disableScreenReaderErrors,
-}: DatePickerFieldProps) => {
+export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, names, required }: DatePickerFieldProps) => {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(['gcweb']);
   const [value] = useState(extractDateParts(defaultValue));
@@ -154,30 +140,30 @@ export const DatePickerField = ({
     return {
       all:
         typeof errorMessages?.all === 'string' ? (
-          <InputError aria-hidden={disableScreenReaderErrors} id={inputErrorIdAll} data-testid="date-picker-error-all">
+          <InputError id={inputErrorIdAll} data-testid="date-picker-error-all">
             {errorMessages.all}
           </InputError>
         ) : undefined,
       month:
         typeof errorMessages?.month === 'string' ? (
-          <InputError aria-hidden={disableScreenReaderErrors} id={inputErrorIdMonth} data-testid="date-picker-error-month">
+          <InputError id={inputErrorIdMonth} data-testid="date-picker-error-month">
             {errorMessages.month}
           </InputError>
         ) : undefined,
       day:
         typeof errorMessages?.day === 'string' ? (
-          <InputError aria-hidden={disableScreenReaderErrors} id={inputErrorIdDay} data-testid="date-picker-error-day">
+          <InputError id={inputErrorIdDay} data-testid="date-picker-error-day">
             {errorMessages.day}
           </InputError>
         ) : undefined,
       year:
         typeof errorMessages?.year === 'string' ? (
-          <InputError aria-hidden={disableScreenReaderErrors} id={inputErrorIdYear} data-testid="date-picker-error-year">
+          <InputError id={inputErrorIdYear} data-testid="date-picker-error-year">
             {errorMessages.year}
           </InputError>
         ) : undefined,
     };
-  }, [errorMessages?.all, errorMessages?.day, errorMessages?.month, errorMessages?.year, inputErrorIdAll, inputErrorIdDay, inputErrorIdMonth, inputErrorIdYear, disableScreenReaderErrors]);
+  }, [errorMessages?.all, errorMessages?.day, errorMessages?.month, errorMessages?.year, inputErrorIdAll, inputErrorIdDay, inputErrorIdMonth, inputErrorIdYear]);
 
   return (
     <div id={inputWrapperId} data-testid="date-picker-field">

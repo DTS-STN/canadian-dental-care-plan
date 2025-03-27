@@ -249,7 +249,6 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
-                disableScreenReaderErrors
               />
               <InputSanitizeField
                 id="last-name"
@@ -262,7 +261,6 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 errorMessage={errors?.lastName}
                 aria-description={t('applicant-information.name-instructions')}
                 required
-                disableScreenReaderErrors
               />
             </div>
             <DatePickerField
@@ -284,7 +282,6 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
               required
-              disableScreenReaderErrors
             />
           </div>
           {editMode ? (

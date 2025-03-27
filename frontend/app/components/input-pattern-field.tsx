@@ -22,25 +22,10 @@ export interface InputPatternFieldProps extends OmitStrict<React.ComponentProps<
   id: string;
   label: string;
   name: string;
-  disableScreenReaderErrors?: boolean;
 }
 
 export function InputPatternField(props: InputPatternFieldProps) {
-  const {
-    'aria-describedby': ariaDescribedby,
-    className,
-    defaultValue,
-    errorMessage,
-    helpMessagePrimary,
-    helpMessagePrimaryClassName,
-    helpMessageSecondary,
-    helpMessageSecondaryClassName,
-    id,
-    label,
-    required,
-    disableScreenReaderErrors,
-    ...restProps
-  } = props;
+  const { 'aria-describedby': ariaDescribedby, className, defaultValue, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, ...restProps } = props;
 
   const inputWrapperId = `input-pattern-field-${id}`;
   const inputErrorId = `${inputWrapperId}-error`;
@@ -63,9 +48,7 @@ export function InputPatternField(props: InputPatternFieldProps) {
       </InputLabel>
       {errorMessage && (
         <p className="mb-2">
-          <InputError aria-hidden={disableScreenReaderErrors} id={inputErrorId}>
-            {errorMessage}
-          </InputError>
+          <InputError id={inputErrorId}>{errorMessage}</InputError>
         </p>
       )}
       {helpMessagePrimary && (
