@@ -106,17 +106,18 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (state.editMode) {
     if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === 'mail') {
-      saveApplyState({ params, session, state: { email: undefined } });
+      saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined } });
       return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
     }
+    saveApplyState({ params, session, state: { editModeCommunicationPreferences: parsedDataResult.data } });
     return redirect(getPathById('public/apply/$id/child/email', params));
   }
 
   if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === 'mail') {
-    saveApplyState({ params, session, state: { email: undefined } });
+    saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined } });
     return redirect(getPathById('public/apply/$id/child/review-child-information', params));
   }
-
+  saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
   return redirect(getPathById('public/apply/$id/child/email', params));
 }
 
