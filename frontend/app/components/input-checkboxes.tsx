@@ -37,16 +37,16 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
     <fieldset id={inputWrapperId} data-testid={inputWrapperId}>
       <InputLegend id={inputLegendId} className="mb-2" aria-describedby={getAriaDescribedby()}>
         {legend}
+        {helpMessagePrimary && (
+          <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-field-help-primary">
+            {helpMessagePrimary}
+          </InputHelp>
+        )}
       </InputLegend>
       {errorMessage && (
         <p className="mb-2">
           <InputError id={inputErrorId}>{errorMessage}</InputError>
         </p>
-      )}
-      {helpMessagePrimary && (
-        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-field-help-primary">
-          {helpMessagePrimary}
-        </InputHelp>
       )}
       <ul className="space-y-2">
         {options.map((optionProps, index) => {
