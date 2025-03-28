@@ -96,7 +96,6 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (state.editMode) {
-      console.log(' line 99');
       invariant(state.editModeEmail, 'Expected editModeEmail to be defined');
       invariant(state.editModeCommunicationPreferences, 'Expected editModeCommunicationPreferences to be defined');
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.editModeCommunicationPreferences.preferredLanguage, locale).name;
@@ -108,7 +107,6 @@ export async function action({ context: { appContainer, session }, params, reque
       });
       return { status: 'verification-code-sent' } as const;
     } else if (state.email && state.communicationPreferences?.preferredLanguage) {
-      console.log(' line 111');
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
       await verificationCodeService.sendVerificationCodeEmail({
         email: state.email,
@@ -121,7 +119,6 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (formAction === FORM_ACTION.submit) {
-    console.log('Submit @@@@@@@@@@@@@@@@@@@@2');
     const verificationCodeSchema = z.object({
       verificationCode: z
         .string()
@@ -146,7 +143,6 @@ export async function action({ context: { appContainer, session }, params, reque
     // Check if the verification code matches
     if (state.verifyEmail && state.verifyEmail.verificationCode !== parsedDataResult.data.verificationCode) {
       const verificationAttempts = state.verifyEmail.verificationAttempts + 1;
-      console.log(' line 148 -- mismatch');
       saveApplyState({
         params,
         session,
@@ -160,11 +156,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
       return { status: 'verification-code-mismatch' } as const;
     }
-    console.log(state.verifyEmail);
     if (state.verifyEmail) {
-      console.log(' line 164');
       if (state.editMode) {
-        console.log(' line 166');
         saveApplyState({
           params,
           session,

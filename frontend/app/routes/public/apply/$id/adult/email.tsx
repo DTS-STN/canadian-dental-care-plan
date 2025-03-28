@@ -102,40 +102,6 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
-  // if (state.editMode) {
-  //   // Save editMode data to state.
-  //   saveApplyState({
-  //     params,
-  //     session,
-  //     state: {
-  //       communicationPreferences: state.editModeCommunicationPreferences,
-  //       email: parsedDataResult.data.email,
-  //       emailVerified: isNewEmail ? false : state.emailVerified,
-  //       ...(isNewEmail && {
-  //         verifyEmail: {
-  //           verificationCode,
-  //           verificationAttempts: 0,
-  //         },
-  //       }),
-  //     },
-  //   });
-  // } else {
-  //   saveApplyState({
-  //     params,
-  //     session,
-  //     state: {
-  //       email: parsedDataResult.data.email,
-  //       emailVerified: isNewEmail ? false : state.emailVerified,
-  //       ...(isNewEmail && {
-  //         verifyEmail: {
-  //           verificationCode,
-  //           verificationAttempts: 0,
-  //         },
-  //       }),
-  //     },
-  //   });
-  // }
-
   if (state.editMode) {
     // Redirect to /verify-email only if emailVerified is false
     if (isNewEmail || !state.emailVerified) {
@@ -162,7 +128,7 @@ export async function action({ context: { appContainer, session }, params, reque
       state: {
         communicationPreferences: state.editModeCommunicationPreferences,
         email: parsedDataResult.data.email,
-        emailVerified: true, // I can remove this ?
+        emailVerified: state.emailVerified,
         verifyEmail: {
           verificationCode,
           verificationAttempts: 0,
