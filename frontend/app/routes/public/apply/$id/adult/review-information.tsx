@@ -53,11 +53,16 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadApplyAdultStateForReview({ params, request, session });
-
   invariant(state.mailingAddress?.country, `Unexpected mailing address country: ${state.mailingAddress?.country}`);
 
-  // apply state is valid then edit mode can be set to true
-  saveApplyState({ params, session, state: { editMode: true } });
+  // apply state is valid then edit mode can be set to true, also handle fpt benefits
+  saveApplyState({
+    params,
+    session,
+    state: {
+      editMode: true,
+    },
+  });
 
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -110,22 +115,22 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
     ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
     : undefined;
 
-  const selectedProvincialBenefit = state.dentalBenefits.provincialTerritorialSocialProgram
+  const selectedProvincialBenefit = state.dentalBenefits?.provincialTerritorialSocialProgram
     ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.dentalBenefits.hasFederalBenefits,
+      access: state.dentalBenefits?.hasFederalBenefits,
       benefit: selectedFederalGovernmentInsurancePlan?.name,
     },
     provTerrBenefit: {
-      access: state.dentalBenefits.hasProvincialTerritorialBenefits,
-      province: state.dentalBenefits.province,
+      access: state.dentalBenefits?.hasProvincialTerritorialBenefits,
+      province: state.dentalBenefits?.province,
       benefit: selectedProvincialBenefit?.name,
     },
   };

@@ -58,8 +58,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
-  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const state = loadApplyAdultState({ params, request, session });
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -81,21 +82,12 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  //TODO: set dentalBenefits state at review instead of using default values here
   saveApplyState({
     params,
     session,
     state: {
       hasFederalProvincialTerritorialBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
-      dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits
-        ? state.dentalBenefits
-        : {
-            hasFederalBenefits: false,
-            federalSocialProgram: undefined,
-            hasProvincialTerritorialBenefits: false,
-            provincialTerritorialSocialProgram: undefined,
-            province: undefined,
-          },
+      dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits ? state.dentalBenefits : undefined,
     },
   });
 

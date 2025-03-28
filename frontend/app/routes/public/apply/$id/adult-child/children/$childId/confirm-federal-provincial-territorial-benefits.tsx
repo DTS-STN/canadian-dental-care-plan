@@ -91,7 +91,6 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  //TODO: set dentalBenefits state at review instead of using default values here
   saveApplyState({
     params,
     session,
@@ -101,15 +100,7 @@ export async function action({ context: { appContainer, session }, params, reque
         return {
           ...child,
           hasFederalProvincialTerritorialBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
-          dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits
-            ? state.dentalBenefits
-            : {
-                hasFederalBenefits: false,
-                federalSocialProgram: undefined,
-                hasProvincialTerritorialBenefits: false,
-                provincialTerritorialSocialProgram: undefined,
-                province: undefined,
-              },
+          dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits ? child.dentalBenefits : undefined,
         };
       }),
     },
@@ -185,7 +176,7 @@ export default function ApplyAdultChildConfirmFederalProvincialTerritorialBenefi
               </Button>
               <ButtonLink
                 id="cancel-button"
-                routeId="public/apply/$id/adult-child/children/review-child-information"
+                routeId="public/apply/$id/adult-child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Child access to other government dental benefits click"

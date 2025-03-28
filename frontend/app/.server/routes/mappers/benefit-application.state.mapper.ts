@@ -25,7 +25,7 @@ export interface ApplyAdultState {
   applicationYear: ApplicationYearState;
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
-  dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   email?: string;
   emailVerified?: boolean;
@@ -43,10 +43,10 @@ export interface ApplyAdultState {
 export interface ApplyAdultChildState {
   applicantInformation: ApplicantInformationState;
   applicationYear: ApplicationYearState;
-  children: Required<ChildState>[];
+  children: ChildState[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
-  dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   email?: string;
   emailVerified?: boolean;
@@ -64,7 +64,7 @@ export interface ApplyAdultChildState {
 export interface ApplyChildState {
   applicantInformation: ApplicantInformationState;
   applicationYear: ApplicationYearState;
-  children: Required<ChildState>[];
+  children: ChildState[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   email?: string;
@@ -83,7 +83,7 @@ export interface ApplyChildState {
 interface ToBenefitApplicationDtoArgs {
   applicantInformation: ApplicantInformationState;
   applicationYear: ApplicationYearState;
-  children?: Required<ChildState>[];
+  children?: ChildState[];
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   email?: string;
@@ -216,13 +216,29 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     };
   }
 
-  private toChildren(children?: Required<ChildState>[]) {
+  private toChildren(children?: ChildState[]) {
     if (!children) return [];
 
-    return children.map((child) => ({
-      ...child,
-      dentalBenefits: this.toDentalBenefits(child.dentalBenefits),
-    }));
+    return children.map((child) => {
+      invariant(child.information, 'Expected child.information to be defined');
+
+      if (child.dentalInsurance === undefined) {
+        throw new Error('Expected child.dentalInsurance to be defined');
+      }
+
+      return {
+        ...child,
+        dentalInsurance: child.dentalInsurance,
+        dentalBenefits: this.toDentalBenefits(child.dentalBenefits),
+        information: {
+          firstName: child.information.firstName,
+          lastName: child.information.lastName,
+          dateOfBirth: child.information.dateOfBirth,
+          isParent: child.information.isParent,
+          socialInsuranceNumber: child.information.socialInsuranceNumber,
+        },
+      };
+    });
   }
 
   private toCommunicationPreferences({ communicationPreferences, email, emailVerified }: ToCommunicationPreferencesArgs): CommunicationPreferencesDto {

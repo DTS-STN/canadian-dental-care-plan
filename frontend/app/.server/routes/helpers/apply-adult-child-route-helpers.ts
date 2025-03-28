@@ -196,9 +196,12 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('public/apply/$id/adult-child/dental-insurance', params));
   }
 
-  //TODO: refactor to allow dentalBenefits to be undefined if hasFederalProvincialTerritorialBenefits is false
-  if (dentalBenefits === undefined || hasFederalProvincialTerritorialBenefits === undefined) {
+  if (hasFederalProvincialTerritorialBenefits === undefined) {
     throw redirect(getPathById('public/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits', params));
+  }
+
+  if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits === true) {
+    throw redirect(getPathById('public/apply/$id/adult-child/federal-provincial-territorial-benefits', params));
   }
 
   const children = validateChildrenStateForReview({ childrenState: state.children, params });
@@ -265,11 +268,21 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/dental-insurance', { ...params, childId }));
     }
 
-    //TODO: refactor to allow dentalBenefits to be undefined if hasFederalProvincialTerritorialBenefits is false
-    if (dentalBenefits === undefined || hasFederalProvincialTerritorialBenefits === undefined) {
+    if (hasFederalProvincialTerritorialBenefits === undefined) {
       throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits', { ...params, childId }));
     }
 
-    return { ageCategory, id, dentalBenefits, dentalInsurance, information, hasFederalProvincialTerritorialBenefits };
+    if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits === true) {
+      throw redirect(getPathById('public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
+    }
+
+    return {
+      ageCategory,
+      id,
+      dentalBenefits,
+      dentalInsurance,
+      information,
+      hasFederalProvincialTerritorialBenefits,
+    };
   });
 }

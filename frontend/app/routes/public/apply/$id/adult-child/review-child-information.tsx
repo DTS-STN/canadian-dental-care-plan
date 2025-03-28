@@ -54,7 +54,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
-  saveApplyState({ params, session, state: { editMode: true } });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      editMode: true,
+    },
+  });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -73,12 +79,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = state.children.map((child) => {
     // prettier-ignore
-    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram
+    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
       ? federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
     // prettier-ignore
-    const selectedProvincialBenefit = child.dentalBenefits.provincialTerritorialSocialProgram
+    const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
       ? provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
@@ -92,12 +98,12 @@ export async function loader({ context: { appContainer, session }, params, reque
       dentalInsurance: {
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
-          access: child.dentalBenefits.hasFederalBenefits,
+          access: child.dentalBenefits?.hasFederalBenefits,
           benefit: selectedFederalGovernmentInsurancePlan?.name,
         },
         provTerrBenefit: {
-          access: child.dentalBenefits.hasProvincialTerritorialBenefits,
-          province: child.dentalBenefits.province,
+          access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
+          province: child.dentalBenefits?.province,
           benefit: selectedProvincialBenefit?.name,
         },
       },
@@ -241,7 +247,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                         <>{t('apply-adult-child:review-child-information.no')}</>
                       )}
                       <p className="mt-4">
-                        <InlineLink id="change-dental-benefits" routeId="public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits" params={childParams}>
+                        <InlineLink id="change-dental-benefits" routeId="public/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits" params={childParams}>
                           {t('apply-adult-child:review-child-information.dental-benefit-change')}
                         </InlineLink>
                       </p>

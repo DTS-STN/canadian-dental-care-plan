@@ -81,21 +81,12 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  //TODO: set dentalBenefits state at review instead of using default values here
   saveApplyState({
     params,
     session,
     state: {
       hasFederalProvincialTerritorialBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
-      dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits
-        ? state.dentalBenefits
-        : {
-            hasFederalBenefits: false,
-            federalSocialProgram: undefined,
-            hasProvincialTerritorialBenefits: false,
-            provincialTerritorialSocialProgram: undefined,
-            province: undefined,
-          },
+      dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits ? state.dentalBenefits : undefined,
     },
   });
 

@@ -107,13 +107,13 @@ describe('apply-child-route-helpers', () => {
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath(public/apply/$id/child/children/$childId/dental-insurance, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))');
     });
 
-    it('should redirect if a child dentalBenefits is undefined', () => {
+    it('should redirect if a child dentalBenefits is undefined and hasFederalProvincialTerritorialBenefits is true', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
         hasFiledTaxes: true,
         children: [
-          { id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, dentalInsurance: true, hasFederalProvincialTerritorialBenefits: false, dentalBenefits: undefined },
+          { id: '1', information: { dateOfBirth: '2012-02-23', firstName: 'John', hasSocialInsuranceNumber: false, isParent: true, lastName: 'Doe' }, dentalInsurance: true, hasFederalProvincialTerritorialBenefits: true, dentalBenefits: undefined },
         ],
       } satisfies ApplyState;
 
