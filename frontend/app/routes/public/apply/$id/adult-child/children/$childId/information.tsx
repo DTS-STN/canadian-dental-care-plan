@@ -13,6 +13,7 @@ import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getAgeCategoryFromDateString, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -76,6 +77,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultSingleChildState({ params, request, session });
   const applyState = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const { APPLICATION_YEAR_REQUEST_DATE } = getEnv();
 
   // Form action Continue & Save
   // state validation schema
@@ -190,7 +193,10 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, applyState.applicationYear.coverageStartDate);
+  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? new Date(APPLICATION_YEAR_REQUEST_DATE) : new Date();
+  const coverageStartDate = new Date(applyState.applicationYear.coverageStartDate);
+
+  const ageCategory = currentDate < coverageStartDate ? getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, applyState.applicationYear.coverageStartDate) : getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
   saveApplyState({
     params,

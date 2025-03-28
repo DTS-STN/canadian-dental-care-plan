@@ -7,7 +7,8 @@ import type { Route } from './+types/cannot-apply-child';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getEnv } from '~/.server/utils/env.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -31,18 +32,20 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   loadApplyAdultSingleChildState({ params, request, session });
   const state = loadApplyAdultChildState({ params, request, session });
+  const { APPLICATION_YEAR_REQUEST_DATE } = getEnv();
+  const locale = getLocale(request);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
 
-  const currentDate = new Date();
-  const currentYear = state.applicationYear.coverageStartDate.split('-')[0];
-  const currentMonth = currentDate.getMonth() + 1;
+  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? new Date(APPLICATION_YEAR_REQUEST_DATE) : new Date();
+  const coverageStartDate = new Date(state.applicationYear.coverageStartDate);
+  const formattedDate = coverageStartDate.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric' });
 
-  const isBeforeJune = currentMonth < 6;
+  const isBeforeCoverageStartDate = currentDate < coverageStartDate;
 
-  return { meta, currentYear, isBeforeJune };
+  return { meta, isBeforeCoverageStartDate, currentYear: formattedDate };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -56,7 +59,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyForYourself({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { currentYear, isBeforeJune } = loaderData;
+  const { currentYear, isBeforeCoverageStartDate } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -66,7 +69,7 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        {isBeforeJune ? (
+        {isBeforeCoverageStartDate ? (
           <>
             <p>{t('apply-adult-child:eligibility.cannot-apply-child.before-june.ineligible-to-apply', { currentYear })}</p>
             <p>
