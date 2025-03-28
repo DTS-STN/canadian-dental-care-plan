@@ -31,7 +31,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
+import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -194,8 +194,8 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? new UTCDate(APPLICATION_YEAR_REQUEST_DATE) : new UTCDate();
-  const coverageStartDate = new UTCDate(applyState.applicationYear.coverageStartDate);
+  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? parseDateString(APPLICATION_YEAR_REQUEST_DATE) : new UTCDate();
+  const coverageStartDate = parseDateString(applyState.applicationYear.coverageStartDate);
 
   const ageCategory = currentDate < coverageStartDate ? getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, applyState.applicationYear.coverageStartDate) : getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 

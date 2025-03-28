@@ -550,7 +550,7 @@
         "eligibility-info": "If your child is a dependant adult and you are their legal delegate or Power of Attorney, you must speak to a Service Canada representative to apply on their behalf. You can contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>."
       },
       "before-june": {
-        "ineligible-to-apply": "Your child will be 18 years old before {{currentYear}}. They must submit their own application as an adult to the Canadian Dental Care Plan. They must be 18 years to apply.",
+        "ineligible-to-apply": "Your child will be 18 years old before {{coverageStartDate}}. They must submit their own application as an adult to the Canadian Dental Care Plan. They must be 18 years to apply.",
         "eligibility-info": "If your child is a dependant adult and you are their legal delegate or Power of Attorney, you must speak to a Service Canada representative to apply on their behalf. You can contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>."
       },
       "back-btn": "Back",

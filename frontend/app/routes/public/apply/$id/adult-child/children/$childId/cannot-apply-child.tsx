@@ -14,6 +14,7 @@ import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
+import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -39,13 +40,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
-  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? new Date(APPLICATION_YEAR_REQUEST_DATE) : new Date();
-  const coverageStartDate = new UTCDate(state.applicationYear.coverageStartDate);
-  const formattedDate = coverageStartDate.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric' });
+  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? parseDateString(APPLICATION_YEAR_REQUEST_DATE) : new UTCDate();
+  const coverageStartDate = parseDateString(state.applicationYear.coverageStartDate);
+  const formattedDate = toLocaleDateString(coverageStartDate, locale);
 
   const isBeforeCoverageStartDate = currentDate < coverageStartDate;
 
-  return { meta, isBeforeCoverageStartDate, currentYear: formattedDate };
+  return { meta, isBeforeCoverageStartDate, coverageStartDate: formattedDate };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -59,7 +60,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyForYourself({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { currentYear, isBeforeCoverageStartDate } = loaderData;
+  const { coverageStartDate, isBeforeCoverageStartDate } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -71,7 +72,7 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
       <div className="mb-6 space-y-4">
         {isBeforeCoverageStartDate ? (
           <>
-            <p>{t('apply-adult-child:eligibility.cannot-apply-child.before-june.ineligible-to-apply', { currentYear })}</p>
+            <p>{t('apply-adult-child:eligibility.cannot-apply-child.before-june.ineligible-to-apply', { coverageStartDate })}</p>
             <p>
               <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.cannot-apply-child.before-june.eligibility-info" components={{ noWrap }} />
             </p>

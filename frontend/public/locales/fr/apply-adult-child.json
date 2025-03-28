@@ -550,7 +550,7 @@
         "eligibility-info": "Si votre enfant est un adulte à charge et que vous êtes son représentant légal ou son mandataire, vous devez vous adresser à un représentant de Service Canada pour présenter une demande en son nom. Vous pouvez contacter Service Canada en composant le <noWrap>1-833-537-4342</noWrap>."
       },
       "before-june": {
-        "ineligible-to-apply": "Votre enfant aura 18 ans avant le {{currentYear}}. Il doit soumettre sa propre demande en tant qu'adulte au Plan de soins dentaires canadien. Il doit avoir 18 ans pour postuler.",
+        "ineligible-to-apply": "Votre enfant aura 18 ans avant le {{coverageStartDate}}. Il doit soumettre sa propre demande en tant qu'adulte au Plan de soins dentaires canadien. Il doit avoir 18 ans pour postuler.",
         "eligibility-info": "Si votre enfant est un adulte à charge et que vous êtes son représentant légal ou son mandataire, vous devez vous adresser à un représentant de Service Canada pour présenter une demande en son nom. Vous pouvez contacter Service Canada en composant le <noWrap>1-833-537-4342</noWrap>."
       },
       "back-btn": "Retour",
