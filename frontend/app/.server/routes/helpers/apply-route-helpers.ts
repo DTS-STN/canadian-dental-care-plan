@@ -59,6 +59,12 @@ export type ApplyState = ReadonlyDeep<{
     preferredMethod: string;
     preferredNotificationMethod: string;
   };
+  editModeCommunicationPreferences?: {
+    preferredLanguage: string;
+    preferredMethod: string;
+    preferredNotificationMethod: string;
+  };
+  editModeEmail?: string;
   email?: string;
   verifyEmail?: {
     verificationCode: string;

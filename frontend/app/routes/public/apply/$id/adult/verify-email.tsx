@@ -4,6 +4,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/verify-email';
@@ -94,7 +95,18 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     });
 
-    if (state.email && state.communicationPreferences?.preferredLanguage) {
+    if (state.editMode) {
+      invariant(state.editModeEmail, 'Expected editModeEmail to be defined');
+      invariant(state.editModeCommunicationPreferences, 'Expected editModeCommunicationPreferences to be defined');
+      const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.editModeCommunicationPreferences.preferredLanguage, locale).name;
+      await verificationCodeService.sendVerificationCodeEmail({
+        email: state.editModeEmail,
+        verificationCode: verificationCode,
+        preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
+        userId: 'anonymous',
+      });
+      return { status: 'verification-code-sent' } as const;
+    } else if (state.email && state.communicationPreferences?.preferredLanguage) {
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
       await verificationCodeService.sendVerificationCodeEmail({
         email: state.email,
@@ -131,7 +143,6 @@ export async function action({ context: { appContainer, session }, params, reque
     // Check if the verification code matches
     if (state.verifyEmail && state.verifyEmail.verificationCode !== parsedDataResult.data.verificationCode) {
       const verificationAttempts = state.verifyEmail.verificationAttempts + 1;
-
       saveApplyState({
         params,
         session,
@@ -145,8 +156,23 @@ export async function action({ context: { appContainer, session }, params, reque
 
       return { status: 'verification-code-mismatch' } as const;
     }
-
     if (state.verifyEmail) {
+      if (state.editMode) {
+        saveApplyState({
+          params,
+          session,
+          state: {
+            communicationPreferences: state.editModeCommunicationPreferences,
+            email: state.editModeEmail,
+            verifyEmail: {
+              ...state.verifyEmail,
+              verificationAttempts: 0,
+            },
+            emailVerified: true,
+          },
+        });
+        return redirect(getPathById('public/apply/$id/adult/review-information', params));
+      }
       saveApplyState({
         params,
         session,
@@ -158,10 +184,6 @@ export async function action({ context: { appContainer, session }, params, reque
           emailVerified: true,
         },
       });
-    }
-
-    if (state.editMode) {
-      return redirect(getPathById('public/apply/$id/adult/review-information', params));
     }
 
     return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));

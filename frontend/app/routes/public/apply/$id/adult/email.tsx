@@ -102,6 +102,41 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
+  if (state.editMode) {
+    // Redirect to /verify-email only if emailVerified is false
+    if (isNewEmail || !state.emailVerified) {
+      saveApplyState({
+        params,
+        session,
+        state: {
+          editModeEmail: parsedDataResult.data.email,
+          emailVerified: isNewEmail ? false : state.emailVerified,
+          ...(isNewEmail && {
+            verifyEmail: {
+              verificationCode,
+              verificationAttempts: 0,
+            },
+          }),
+        },
+      });
+      return redirect(getPathById('public/apply/$id/adult/verify-email', params));
+    }
+    // Save editMode data to state.
+    saveApplyState({
+      params,
+      session,
+      state: {
+        communicationPreferences: state.editModeCommunicationPreferences,
+        email: parsedDataResult.data.email,
+        emailVerified: state.emailVerified,
+        verifyEmail: {
+          verificationCode,
+          verificationAttempts: 0,
+        },
+      },
+    });
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
+  }
   saveApplyState({
     params,
     session,
@@ -116,15 +151,6 @@ export async function action({ context: { appContainer, session }, params, reque
       }),
     },
   });
-
-  if (state.editMode) {
-    // Redirect to /verify-email only if emailVerified is false
-    if (isNewEmail || !state.emailVerified) {
-      return redirect(getPathById('public/apply/$id/adult/verify-email', params));
-    }
-    return redirect(getPathById('public/apply/$id/adult/review-information', params));
-  }
-
   if (isNewEmail || !state.emailVerified) {
     return redirect(getPathById('public/apply/$id/adult/verify-email', params));
   }
