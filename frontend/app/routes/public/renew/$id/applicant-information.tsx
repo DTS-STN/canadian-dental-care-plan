@@ -217,7 +217,6 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
                 errorMessage={errors?.firstName}
                 aria-description={t('renew:applicant-information.name-instructions')}
                 required
-                disableScreenReaderErrors
               />
               <InputSanitizeField
                 id="last-name"
@@ -230,7 +229,6 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
                 errorMessage={errors?.lastName}
                 aria-description={t('renew:applicant-information.name-instructions')}
                 required
-                disableScreenReaderErrors
               />
             </div>
             <DatePickerField
@@ -249,7 +247,6 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
                 day: errors?.dateOfBirthDay,
               }}
               required
-              disableScreenReaderErrors
             />
             <InputPatternField
               id="client-number"
@@ -262,7 +259,6 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
               defaultValue={defaultState?.clientNumber ?? ''}
               errorMessage={errors?.clientNumber}
               required
-              disableScreenReaderErrors
             />
             <Collapsible id="no-client-number" summary={t('renew:applicant-information.no-client-number')}>
               <div className="space-y-2">

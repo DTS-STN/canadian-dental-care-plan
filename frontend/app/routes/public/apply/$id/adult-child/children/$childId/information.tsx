@@ -268,7 +268,6 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
             defaultValue={defaultState?.socialInsuranceNumber ?? ''}
             errorMessage={errors?.socialInsuranceNumber}
             required
-            disableScreenReaderErrors
           />
         </div>
       ),
@@ -310,7 +309,6 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
-                disableScreenReaderErrors
               />
               <InputSanitizeField
                 id="last-name"
@@ -323,7 +321,6 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 errorMessage={errors?.lastName}
                 aria-description={t('apply-adult-child:children.information.name-instructions')}
                 required
-                disableScreenReaderErrors
               />
             </div>
             <DatePickerField
@@ -342,18 +339,9 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 day: errors?.dateOfBirthDay,
               }}
               required
-              disableScreenReaderErrors
             />
 
-            <InputRadios
-              id="has-social-insurance-number"
-              legend={t('apply-adult-child:children.information.sin-legend')}
-              name="hasSocialInsuranceNumber"
-              options={options}
-              errorMessage={errors?.hasSocialInsuranceNumber}
-              required
-              disableScreenReaderErrors
-            />
+            <InputRadios id="has-social-insurance-number" legend={t('apply-adult-child:children.information.sin-legend')} name="hasSocialInsuranceNumber" options={options} errorMessage={errors?.hasSocialInsuranceNumber} required />
 
             <InputRadios
               id="is-parent-radios"
@@ -364,7 +352,6 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 { value: YES_NO_OPTION.no, children: t('apply-adult-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
               ]}
               errorMessage={errors?.isParent}
-              disableScreenReaderErrors
             />
           </div>
           {editMode ? (

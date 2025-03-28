@@ -22,11 +22,10 @@ export interface InputSanitizeFieldProps
   id: string;
   label: string;
   name: string;
-  disableScreenReaderErrors?: boolean;
 }
 
 export function InputSanitizeField(props: InputSanitizeFieldProps) {
-  const { 'aria-describedby': ariaDescribedby, className, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, disableScreenReaderErrors, ...restProps } = props;
+  const { 'aria-describedby': ariaDescribedby, className, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, ...restProps } = props;
 
   const inputWrapperId = `input-sanitize-field-${id}`;
   const inputErrorId = `${inputWrapperId}-error`;
@@ -49,9 +48,7 @@ export function InputSanitizeField(props: InputSanitizeFieldProps) {
       </InputLabel>
       {errorMessage && (
         <p className="mb-2">
-          <InputError aria-hidden={disableScreenReaderErrors} id={inputErrorId}>
-            {errorMessage}
-          </InputError>
+          <InputError id={inputErrorId}>{errorMessage}</InputError>
         </p>
       )}
       {helpMessagePrimary && (

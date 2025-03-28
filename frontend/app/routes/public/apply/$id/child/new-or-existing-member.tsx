@@ -192,7 +192,6 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
                 defaultValue={defaultState?.clientNumber ?? ''}
                 errorMessage={errors?.clientNumber}
                 helpMessagePrimary={t('apply-child:new-or-existing-member.client-number-description')}
-                disableScreenReaderErrors
                 required={isNewOrExistingMember}
               />
             </div>
