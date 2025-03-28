@@ -1,5 +1,6 @@
 import { redirect, useFetcher } from 'react-router';
 
+import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -38,9 +39,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
-
   const currentDate = APPLICATION_YEAR_REQUEST_DATE ? new Date(APPLICATION_YEAR_REQUEST_DATE) : new Date();
-  const coverageStartDate = new Date(state.applicationYear.coverageStartDate);
+  const coverageStartDate = new UTCDate(state.applicationYear.coverageStartDate);
   const formattedDate = coverageStartDate.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric' });
 
   const isBeforeCoverageStartDate = currentDate < coverageStartDate;

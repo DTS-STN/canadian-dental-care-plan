@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { redirect, useFetcher } from 'react-router';
 
+import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -193,8 +194,8 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? new Date(APPLICATION_YEAR_REQUEST_DATE) : new Date();
-  const coverageStartDate = new Date(applyState.applicationYear.coverageStartDate);
+  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? new UTCDate(APPLICATION_YEAR_REQUEST_DATE) : new UTCDate();
+  const coverageStartDate = new UTCDate(applyState.applicationYear.coverageStartDate);
 
   const ageCategory = currentDate < coverageStartDate ? getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, applyState.applicationYear.coverageStartDate) : getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
@@ -205,9 +206,6 @@ export async function action({ context: { appContainer, session }, params, reque
       children: applyState.children.map((child) => {
         if (child.id !== state.id) return child;
         const information = { ...parsedDataResult.data, ...parsedSinDataResult.data };
-        if (ageCategory !== 'youth' && ageCategory !== 'children') {
-          information['dateOfBirth'] = child.information?.dateOfBirth ?? '';
-        }
         return { ...child, information };
       }),
     },
