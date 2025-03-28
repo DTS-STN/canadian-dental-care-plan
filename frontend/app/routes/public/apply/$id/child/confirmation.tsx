@@ -101,17 +101,17 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = getChildrenState(state).map((child) => {
     // prettier-ignore
-    if (child.dentalBenefits === undefined ||
+    if (child.hasFederalProvincialTerritorialBenefits === undefined ||
       child.dentalInsurance === undefined ||
       child.information === undefined) {
       throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
     }
 
-    const federalGovernmentInsurancePlan = child.dentalBenefits.federalSocialProgram
+    const federalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
       ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
-    const provincialGovernmentInsurancePlan = child.dentalBenefits.provincialTerritorialSocialProgram
+    const provincialGovernmentInsurancePlan = child.dentalBenefits?.provincialTerritorialSocialProgram
       ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
@@ -125,12 +125,9 @@ export async function loader({ context: { appContainer, session }, params, reque
       dentalInsurance: {
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
-          access: child.dentalBenefits.hasFederalBenefits,
           benefit: federalGovernmentInsurancePlan?.name,
         },
         provTerrBenefit: {
-          access: child.dentalBenefits.hasProvincialTerritorialBenefits,
-          province: child.dentalBenefits.province,
           benefit: provincialGovernmentInsurancePlan?.name,
         },
       },

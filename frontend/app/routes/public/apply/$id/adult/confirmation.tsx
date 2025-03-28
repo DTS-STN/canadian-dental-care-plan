@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   // prettier-ignore
   if (state.applicantInformation === undefined ||
     state.communicationPreferences === undefined ||
-    state.dentalBenefits === undefined ||
+    state.hasFederalProvincialTerritorialBenefits === undefined ||
     state.dentalInsurance === undefined ||
     state.mailingAddress?.country === undefined ||
     state.submissionInfo === undefined ||
@@ -56,11 +56,11 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.federalSocialProgram
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
     ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
     : undefined;
 
-  const selectedProvincialBenefits = state.dentalBenefits.provincialTerritorialSocialProgram
+  const selectedProvincialBenefits = state.dentalBenefits?.provincialTerritorialSocialProgram
     ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
@@ -120,7 +120,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     dentalInsurance,
     homeAddressInfo,
     mailingAddressInfo,
-
     meta,
     spouseInfo,
     submissionInfo: state.submissionInfo,
