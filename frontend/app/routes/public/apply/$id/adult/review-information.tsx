@@ -61,16 +61,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     session,
     state: {
       editMode: true,
-      dentalBenefits:
-        state.hasFederalProvincialTerritorialBenefits === false
-          ? {
-              hasFederalBenefits: false,
-              federalSocialProgram: undefined,
-              hasProvincialTerritorialBenefits: false,
-              provincialTerritorialSocialProgram: undefined,
-              province: undefined,
-            }
-          : state.dentalBenefits,
     },
   });
 
@@ -125,23 +115,21 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalGovernmentInsurancePlan =
-    state.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.federalSocialProgram
-      ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
-      : undefined;
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
+    ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
+    : undefined;
 
-  const selectedProvincialBenefit =
-    state.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.provincialTerritorialSocialProgram
-      ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
-      : undefined;
+  const selectedProvincialBenefit = state.dentalBenefits?.provincialTerritorialSocialProgram
+    ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    : undefined;
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.hasFederalBenefits,
+      access: state.dentalBenefits?.hasFederalBenefits,
       benefit: selectedFederalGovernmentInsurancePlan?.name,
     },
     provTerrBenefit: {
-      access: state.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.hasProvincialTerritorialBenefits,
+      access: state.dentalBenefits?.hasProvincialTerritorialBenefits,
       province: state.dentalBenefits?.province,
       benefit: selectedProvincialBenefit?.name,
     },

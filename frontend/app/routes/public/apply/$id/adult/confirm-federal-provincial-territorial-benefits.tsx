@@ -60,6 +60,8 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const state = loadApplyAdultState({ params, request, session });
+
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
   const dentalBenefitsChangedSchema = z.object({
@@ -85,6 +87,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       hasFederalProvincialTerritorialBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
+      dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits ? state.dentalBenefits : undefined,
     },
   });
 

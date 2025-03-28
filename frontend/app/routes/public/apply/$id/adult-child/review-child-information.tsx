@@ -59,31 +59,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     session,
     state: {
       editMode: true,
-      dentalBenefits:
-        state.hasFederalProvincialTerritorialBenefits === false
-          ? {
-              hasFederalBenefits: false,
-              federalSocialProgram: undefined,
-              hasProvincialTerritorialBenefits: false,
-              provincialTerritorialSocialProgram: undefined,
-              province: undefined,
-            }
-          : state.dentalBenefits,
-      children: state.children.map((child) => {
-        return {
-          ...child,
-          dentalBenefits:
-            child.hasFederalProvincialTerritorialBenefits === false
-              ? {
-                  hasFederalBenefits: false,
-                  federalSocialProgram: undefined,
-                  hasProvincialTerritorialBenefits: false,
-                  provincialTerritorialSocialProgram: undefined,
-                  province: undefined,
-                }
-              : child.dentalBenefits,
-        };
-      }),
     },
   });
 
@@ -104,12 +79,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = state.children.map((child) => {
     // prettier-ignore
-    const selectedFederalGovernmentInsurancePlan = child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.federalSocialProgram
+    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
       ? federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
     // prettier-ignore
-    const selectedProvincialBenefit = child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.provincialTerritorialSocialProgram
+    const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
       ? provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
@@ -123,11 +98,11 @@ export async function loader({ context: { appContainer, session }, params, reque
       dentalInsurance: {
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
-          access: child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.hasFederalBenefits,
+          access: child.dentalBenefits?.hasFederalBenefits,
           benefit: selectedFederalGovernmentInsurancePlan?.name,
         },
         provTerrBenefit: {
-          access: child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.hasProvincialTerritorialBenefits,
+          access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
           province: child.dentalBenefits?.province,
           benefit: selectedProvincialBenefit?.name,
         },
