@@ -96,21 +96,20 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
-
   if (state.editMode) {
-    if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
-      saveApplyState({ params, session, state: { email: undefined } });
+    if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === 'mail') {
+      saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined } });
       return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
     }
+    saveApplyState({ params, session, state: { editModeCommunicationPreferences: parsedDataResult.data } });
     return redirect(getPathById('public/apply/$id/adult-child/email', params));
   }
 
-  if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
-    saveApplyState({ params, session, state: { email: undefined } });
+  if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === 'mail') {
+    saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined } });
     return redirect(getPathById('public/apply/$id/adult-child/dental-insurance', params));
   }
-
+  saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
   return redirect(getPathById('public/apply/$id/adult-child/email', params));
 }
 

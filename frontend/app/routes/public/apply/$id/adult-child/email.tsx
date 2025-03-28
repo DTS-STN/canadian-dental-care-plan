@@ -102,6 +102,41 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
+  if (state.editMode) {
+    // Redirect to /verify-email only if emailVerified is false
+    if (isNewEmail || !state.emailVerified) {
+      saveApplyState({
+        params,
+        session,
+        state: {
+          editModeEmail: parsedDataResult.data.email,
+          emailVerified: isNewEmail ? false : state.emailVerified,
+          ...(isNewEmail && {
+            verifyEmail: {
+              verificationCode,
+              verificationAttempts: 0,
+            },
+          }),
+        },
+      });
+      return redirect(getPathById('public/apply/$id/adult-child/verify-email', params));
+    }
+    // Save editMode data to state.
+    saveApplyState({
+      params,
+      session,
+      state: {
+        communicationPreferences: state.editModeCommunicationPreferences,
+        email: parsedDataResult.data.email,
+        emailVerified: state.emailVerified,
+        verifyEmail: {
+          verificationCode,
+          verificationAttempts: 0,
+        },
+      },
+    });
+    return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
+  }
   saveApplyState({
     params,
     session,
@@ -116,14 +151,6 @@ export async function action({ context: { appContainer, session }, params, reque
       }),
     },
   });
-
-  if (state.editMode) {
-    // Redirect to /verify-email only if emailVerified is false
-    if (isNewEmail || !state.emailVerified) {
-      return redirect(getPathById('public/apply/$id/adult-child/verify-email', params));
-    }
-    return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
-  }
 
   if (isNewEmail || !state.emailVerified) {
     return redirect(getPathById('public/apply/$id/adult-child/verify-email', params));
@@ -177,7 +204,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Email click">
                 {t('apply-adult-child:email.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Email click">
+              <ButtonLink id="back-button" routeId="public/apply/$id/adult-child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Email click">
                 {t('apply-adult-child:email.cancel-btn')}
               </ButtonLink>
             </div>
