@@ -35,7 +35,7 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
 
   return (
     <fieldset id={inputWrapperId} data-testid={inputWrapperId}>
-      <InputLegend id={inputLegendId} className="mb-2">
+      <InputLegend id={inputLegendId} className="mb-2" aria-describedby={getAriaDescribedby()}>
         {legend}
       </InputLegend>
       {errorMessage && (
@@ -53,17 +53,7 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
           const inputCheckboxId = `${id}-option-${index}`;
           return (
             <li key={inputCheckboxId}>
-              <InputCheckbox
-                aria-describedby={getAriaDescribedby()}
-                aria-errormessage={errorMessage && inputErrorId}
-                aria-invalid={!!errorMessage}
-                aria-required={required}
-                hasError={!!errorMessage}
-                id={inputCheckboxId}
-                name={name}
-                required={required}
-                {...optionProps}
-              />
+              <InputCheckbox aria-errormessage={errorMessage && inputErrorId} aria-invalid={!!errorMessage} aria-required={required} hasError={!!errorMessage} id={inputCheckboxId} name={name} required={required} {...optionProps} />
             </li>
           );
         })}
