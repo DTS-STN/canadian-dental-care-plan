@@ -1,17 +1,20 @@
 import { redirect, useFetcher } from 'react-router';
 
+import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/cannot-apply-child';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
+import { getEnv } from '~/.server/utils/env.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
+import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -30,18 +33,20 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   loadApplyAdultSingleChildState({ params, request, session });
+  const state = loadApplyAdultChildState({ params, request, session });
+  const { APPLICATION_YEAR_REQUEST_DATE } = getEnv();
+  const locale = getLocale(request);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
+  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? parseDateString(APPLICATION_YEAR_REQUEST_DATE) : new UTCDate();
+  const coverageStartDate = parseDateString(state.applicationYear.coverageStartDate);
+  const formattedDate = toLocaleDateString(coverageStartDate, locale);
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
+  const isBeforeCoverageStartDate = currentDate < coverageStartDate;
 
-  const isBeforeJune = currentMonth < 6;
-
-  return { meta, currentYear, isBeforeJune };
+  return { meta, isBeforeCoverageStartDate, coverageStartDate: formattedDate };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -55,7 +60,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyForYourself({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { currentYear, isBeforeJune } = loaderData;
+  const { coverageStartDate, isBeforeCoverageStartDate } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -65,9 +70,9 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        {isBeforeJune ? (
+        {isBeforeCoverageStartDate ? (
           <>
-            <p>{t('apply-adult-child:eligibility.cannot-apply-child.before-june.ineligible-to-apply', { currentYear })}</p>
+            <p>{t('apply-adult-child:eligibility.cannot-apply-child.before-june.ineligible-to-apply', { coverageStartDate })}</p>
             <p>
               <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.cannot-apply-child.before-june.eligibility-info" components={{ noWrap }} />
             </p>

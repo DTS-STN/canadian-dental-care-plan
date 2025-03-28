@@ -29,4 +29,5 @@ export type RenewalApplicationYearResultDto = Readonly<{
 export type IntakeApplicationYearResultDto = Readonly<{
   intakeYearId: string;
   taxYear: string;
+  coverageStartDate: string;
 }>;

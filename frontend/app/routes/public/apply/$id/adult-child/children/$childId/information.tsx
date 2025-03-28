@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { redirect, useFetcher } from 'react-router';
 
+import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -13,6 +14,7 @@ import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getAgeCategoryFromDateString, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -29,7 +31,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
+import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -76,6 +78,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultSingleChildState({ params, request, session });
   const applyState = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const { APPLICATION_YEAR_REQUEST_DATE } = getEnv();
 
   // Form action Continue & Save
   // state validation schema
@@ -190,7 +194,10 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? parseDateString(APPLICATION_YEAR_REQUEST_DATE) : new UTCDate();
+  const coverageStartDate = parseDateString(applyState.applicationYear.coverageStartDate);
+
+  const ageCategory = currentDate < coverageStartDate ? getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, applyState.applicationYear.coverageStartDate) : getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
   saveApplyState({
     params,
@@ -199,9 +206,6 @@ export async function action({ context: { appContainer, session }, params, reque
       children: applyState.children.map((child) => {
         if (child.id !== state.id) return child;
         const information = { ...parsedDataResult.data, ...parsedSinDataResult.data };
-        if (ageCategory !== 'youth' && ageCategory !== 'children') {
-          information['dateOfBirth'] = child.information?.dateOfBirth ?? '';
-        }
         return { ...child, information };
       }),
     },
