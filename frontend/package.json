@@ -63,8 +63,8 @@
     "moderndash": "^4.0.0",
     "moize": "^6.1.6",
     "morgan": "^1.10.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-i18next": "^15.4.1",
     "react-idle-timer": "^5.7.2",
     "react-number-format": "^5.4.3",
@@ -79,7 +79,7 @@
     "validator": "^13.15.0",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
-    "winston-error-format": "^3.0.1",
+    "winston-error-format": "^3.0.2",
     "zod": "^3.24.2"
   },
   "devDependencies": {
