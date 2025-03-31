@@ -157,6 +157,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
               <LoadingButton
                 variant="primary"
                 id="continue-button"
+                name="_action"
                 value={FORM_ACTION.continue}
                 loading={isSubmitting}
                 endIcon={faChevronRight}
