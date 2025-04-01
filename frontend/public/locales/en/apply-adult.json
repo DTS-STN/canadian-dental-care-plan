@@ -9,10 +9,15 @@
     "dob": "Date of birth",
     "single-legal-name": "If you have one legal name",
     "name-instructions": "If using one legal name, please enter that name in BOTH the first name and last name fields.",
+    "dtc-question": "Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for {{taxYear}}?",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
     "save-btn": "Save",
+    "radio-options": {
+      "no": "No",
+      "yes": "yes"
+    },
     "help-message": {
       "sin": "Enter the 9-digit SIN"
     },
@@ -32,7 +37,8 @@
       "date-of-birth-month-required": "Date of birth must include a month",
       "date-of-birth-valid": "Day must be valid for the given month and year",
       "date-of-birth-year-number": "Year must be a number, for example 1950",
-      "date-of-birth-year-required": "Date of birth must include a year"
+      "date-of-birth-year-required": "Date of birth must include a year",
+      "dtc-required": "Select whether or not you have a valid Disability Tax Credit certificate"
     }
   },
   "marital-status": {

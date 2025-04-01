@@ -9,10 +9,15 @@
     "dob": "Date de naissance",
     "single-legal-name": "Si vous utilisez un seul nom légal",
     "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
+    "dtc-question": "Avez-vous un certificat valide pour le crédit d'impôt pour personnes handicapées (CIPH) auprès de l'Agence du revenu du Canada pour {{taxYear}}?",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
+    "radio-options": {
+      "no": "Non",
+      "yes": "Oui"
+    },
     "help-message": {
       "sin": "Entrez un NAS de 9 chiffres"
     },
@@ -32,7 +37,8 @@
       "date-of-birth-month-required": "La date de naissance doit inclure un mois",
       "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisis",
       "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
-      "date-of-birth-year-required": "La date de naissance doit inclure une année"
+      "date-of-birth-year-required": "La date de naissance doit inclure une année",
+      "dtc-required": "(FR) Select whether or not you have a valid Disability Tax Credit certificate"
     }
   },
   "marital-status": {

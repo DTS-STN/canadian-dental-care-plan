@@ -19,6 +19,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
+import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
@@ -39,6 +40,11 @@ const FORM_ACTION = {
   save: 'save',
 } as const;
 
+const DTC_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adult.applicantInformation,
@@ -55,7 +61,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:applicant-information.page-title') }) };
 
-  return { defaultState: state.applicantInformation, editMode: state.editMode, id: state.id, meta };
+  return { defaultState: state.applicantInformation, taxYear: state.applicationYear.taxYear, editMode: state.editMode, id: state.id, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -107,6 +113,9 @@ export async function action({ context: { appContainer, session }, params, reque
       dateOfBirthMonth: z.number({ required_error: t('applicant-information.error-message.date-of-birth-month-required') }),
       dateOfBirthDay: z.number({ required_error: t('applicant-information.error-message.date-of-birth-day-required'), invalid_type_error: t('applicant-information.error-message.date-of-birth-day-number') }),
       dateOfBirth: z.string(),
+      disabilityTaxCredit: z.nativeEnum(DTC_OPTION, {
+        errorMap: () => ({ message: t('applicant-information.error-message.dtc-required') }),
+      }),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
@@ -135,6 +144,7 @@ export async function action({ context: { appContainer, session }, params, reque
     dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
     dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
     dateOfBirth: '',
+    disabilityTaxCredit: String(formData.get('dtc') ?? ''),
   });
 
   if (!parsedDataResult.success) {
@@ -142,6 +152,10 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+
+  // TODO: conditionally check dtc eligibility depending on an env variable.
+  // check the yes or no to DTC
+  // Check here for the age eligibility from date-utils.ts
 
   if (state.editMode && (ageCategory === 'youth' || ageCategory === 'children' || parsedDataResult.data.dateOfBirthYear >= 2006)) {
     // Temporary state save until the user is finished with editMode workflow.
@@ -154,6 +168,7 @@ export async function action({ context: { appContainer, session }, params, reque
           lastName: parsedDataResult.data.lastName,
           dateOfBirth: parsedDataResult.data.dateOfBirth,
           socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+          disabilityTaxCredit: parsedDataResult.data.disabilityTaxCredit,
         },
         ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
           // Handle marital-status back button
@@ -171,6 +186,7 @@ export async function action({ context: { appContainer, session }, params, reque
           lastName: parsedDataResult.data.lastName,
           dateOfBirth: parsedDataResult.data.dateOfBirth,
           socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+          disabilityTaxCredit: parsedDataResult.data.disabilityTaxCredit,
         },
         ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
           // Handle marital-status back button
@@ -200,7 +216,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowApplicationInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { currentLanguage } = useCurrentLanguage();
-  const { defaultState, editMode } = loaderData;
+  const { defaultState, taxYear, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -214,6 +230,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
       : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
     dateOfBirthYear: 'date-picker-date-of-birth-year',
     socialInsuranceNumber: 'social-insurance-number',
+    disabilityTaxCredit: 'input-radio-disability-tax-credit-option-0',
   });
 
   return (
@@ -277,6 +294,26 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
               required
+            />
+            {/* TODO: conditionally show the following InputRadios depending on an env variable. */}
+            <InputRadios
+              id="dtc"
+              name="dtc"
+              legend={t('apply-adult:applicant-information.dtc-question', { taxYear })}
+              options={[
+                {
+                  value: DTC_OPTION.yes,
+                  children: t('apply-adult:applicant-information.radio-options.yes'),
+                  defaultChecked: defaultState?.disabilityTaxCredit === DTC_OPTION.yes,
+                },
+                {
+                  value: DTC_OPTION.no,
+                  children: t('apply-adult:applicant-information.radio-options.no'),
+                  defaultChecked: defaultState?.disabilityTaxCredit === DTC_OPTION.no,
+                },
+              ]}
+              required
+              errorMessage={errors?.disabilityTaxCredit}
             />
           </div>
           {editMode ? (
