@@ -82,7 +82,7 @@
       "application-consent": "By continuing with this application you agree that you have read and accept the above terms and conditions and privacy notice statement. In addition, you also consent to the sharing of your personal information for the purposes listed above.",
       "back-button": "Back",
       "link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
-      "start-button": "Agree and continue"
+      "continue-button": "Continue"
     },
     "links": {
       "canada-ca-terms-and-conditions": "https://www.canada.ca/en/transparency/terms.html",
