@@ -82,7 +82,7 @@
       "application-consent": "En poursuivant cette demande, vous reconnaissez avoir lu et accepté les modalités et l'énoncé de confidentialité ci-dessus. De plus, vous consentez à ce que vos renseignements personnels soient communiqués aux fins susmentionnées.",
       "back-button": "Retour",
       "link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
-      "start-button": "Accepter et poursuivre"
+      "continue-button": "Continuer"
     },
     "links": {
       "canada-ca-terms-and-conditions": "https://www.canada.ca/fr/transparence/avis.html",

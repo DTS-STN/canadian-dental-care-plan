@@ -14,7 +14,7 @@ test.describe('Youth category', () => {
     await page.getByRole('checkbox', { name: 'I have read the Terms and Conditions' }).check();
     await page.getByRole('checkbox', { name: 'I have read the Privacy Notice Statement' }).check();
     await page.getByRole('checkbox', { name: 'I consent to the sharing of data' }).check();
-    await page.getByRole('button', { name: 'Agree and continue' }).click();
+    await page.getByRole('button', { name: 'Continue' }).click();
 
     await applyPage.isLoaded('tax-filing');
     await page.getByRole('radio', { name: 'Yes', exact: true }).check();

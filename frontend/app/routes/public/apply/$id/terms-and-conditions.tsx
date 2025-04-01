@@ -259,9 +259,9 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             value={FORM_ACTION.continue}
             loading={isSubmitting}
             endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Agree and Continue - Terms and Conditions click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Terms and Conditions click"
           >
-            {t('apply:terms-and-conditions.apply.start-button')}
+            {t('apply:terms-and-conditions.apply.continue-button')}
           </LoadingButton>
           <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click">
             {t('apply:terms-and-conditions.apply.back-button')}
