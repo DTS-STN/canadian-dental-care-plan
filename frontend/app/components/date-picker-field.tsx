@@ -72,7 +72,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
 
   const datePickerYear = useMemo(
     () => <DatePickerYear id={id} defaultValue={value.year ?? ''} name={names.year} label={t('gcweb:date-picker.year.label')} className="w-full sm:w-32" ariaErrorMessage={getAriaErrorMessageYear()} required={required} disabled={disabled} />,
-    [disabled, getAriaDescribedBy, getAriaErrorMessageYear, id, names.year, required, t, value.year],
+    [disabled, getAriaErrorMessageYear, id, names.year, required, t, value.year],
   );
 
   const getAriaErrorMessageMonth = useCallback(() => {
@@ -96,7 +96,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
         disabled={disabled}
       />
     ),
-    [disabled, getAriaDescribedBy, getAriaErrorMessageMonth, id, names.month, required, t, value.month],
+    [disabled, getAriaErrorMessageMonth, id, names.month, required, t, value.month],
   );
 
   const getAriaErrorMessageDay = useCallback(() => {
@@ -108,7 +108,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
 
   const datePickerDay = useMemo(
     () => <DatePickerDay id={id} defaultValue={value.day ?? ''} name={names.day} label={t('gcweb:date-picker.day.label')} className="w-full sm:w-20" ariaErrorMessage={getAriaErrorMessageDay()} required={required} disabled={disabled} />,
-    [disabled, getAriaDescribedBy, getAriaErrorMessageDay, id, names.day, required, t, value.day],
+    [disabled, getAriaErrorMessageDay, id, names.day, required, t, value.day],
   );
 
   const datePickerErrorMessages = useMemo(() => {
