@@ -93,7 +93,11 @@ export async function action({ context: { appContainer, session }, params, reque
     saveApplyState({ params, session, state: { livingIndependently: isLivingindependently } });
   }
 
-  return redirect(getPathById('public/apply/$id/adult/new-or-existing-member', params));
+  if (isLivingindependently) {
+    return redirect(getPathById('public/apply/$id/adult/new-or-existing-member', params));
+  }
+
+  return redirect(getPathById('public/apply/$id/adult/parent-or-guardian', params));
 }
 
 export default function ApplyFlowLivingIndependently({ loaderData, params }: Route.ComponentProps) {
