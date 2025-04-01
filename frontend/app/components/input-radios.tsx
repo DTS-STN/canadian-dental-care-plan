@@ -36,8 +36,8 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
   }
 
   return (
-    <fieldset id={inputWrapperId} data-testid={inputWrapperId}>
-      <InputLegend id={inputLegendId} className={cn('mb-2', legendClassName)}>
+    <fieldset id={inputWrapperId} data-testid={inputWrapperId} aria-labelledby={`${inputLegendId} ${inputHelpMessagePrimaryId}`} aria-required={required}>
+      <InputLegend id={inputLegendId} className={cn('mb-2', legendClassName)} aria-describedby={getAriaDescribedby()}>
         {legend}
       </InputLegend>
       {errorMessage && (
@@ -55,17 +55,7 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
           const inputRadioId = `${id}-option-${index}`;
           return (
             <li key={inputRadioId}>
-              <InputRadio
-                aria-describedby={getAriaDescribedby()}
-                aria-errormessage={errorMessage && inputErrorId}
-                aria-invalid={!!errorMessage}
-                aria-required={required}
-                hasError={!!errorMessage}
-                id={inputRadioId}
-                name={name}
-                required={required}
-                {...optionProps}
-              />
+              <InputRadio aria-errormessage={errorMessage && inputErrorId} aria-invalid={!!errorMessage} hasError={!!errorMessage} id={inputRadioId} name={name} {...optionProps} />
             </li>
           );
         })}

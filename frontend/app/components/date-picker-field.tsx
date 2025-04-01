@@ -71,19 +71,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
   }, [errorMessages?.all, errorMessages?.year, inputErrorIdAll, inputErrorIdYear]);
 
   const datePickerYear = useMemo(
-    () => (
-      <DatePickerYear
-        id={id}
-        defaultValue={value.year ?? ''}
-        name={names.year}
-        label={t('gcweb:date-picker.year.label')}
-        className="w-full sm:w-32"
-        ariaDescribedBy={getAriaDescribedBy()}
-        ariaErrorMessage={getAriaErrorMessageYear()}
-        required={required}
-        disabled={disabled}
-      />
-    ),
+    () => <DatePickerYear id={id} defaultValue={value.year ?? ''} name={names.year} label={t('gcweb:date-picker.year.label')} className="w-full sm:w-32" ariaErrorMessage={getAriaErrorMessageYear()} required={required} disabled={disabled} />,
     [disabled, getAriaDescribedBy, getAriaErrorMessageYear, id, names.year, required, t, value.year],
   );
 
@@ -103,7 +91,6 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
         label={t('gcweb:date-picker.month.label')}
         placeholder={t('gcweb:date-picker.month.placeholder')}
         className="w-full sm:w-auto"
-        ariaDescribedBy={getAriaDescribedBy()}
         ariaErrorMessage={getAriaErrorMessageMonth()}
         required={required}
         disabled={disabled}
@@ -120,19 +107,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
   }, [errorMessages?.all, errorMessages?.day, inputErrorIdAll, inputErrorIdDay]);
 
   const datePickerDay = useMemo(
-    () => (
-      <DatePickerDay
-        id={id}
-        defaultValue={value.day ?? ''}
-        name={names.day}
-        label={t('gcweb:date-picker.day.label')}
-        className="w-full sm:w-20"
-        ariaDescribedBy={getAriaDescribedBy()}
-        ariaErrorMessage={getAriaErrorMessageDay()}
-        required={required}
-        disabled={disabled}
-      />
-    ),
+    () => <DatePickerDay id={id} defaultValue={value.day ?? ''} name={names.day} label={t('gcweb:date-picker.day.label')} className="w-full sm:w-20" ariaErrorMessage={getAriaErrorMessageDay()} required={required} disabled={disabled} />,
     [disabled, getAriaDescribedBy, getAriaErrorMessageDay, id, names.day, required, t, value.day],
   );
 
@@ -166,9 +141,9 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
   }, [errorMessages?.all, errorMessages?.day, errorMessages?.month, errorMessages?.year, inputErrorIdAll, inputErrorIdDay, inputErrorIdMonth, inputErrorIdYear]);
 
   return (
-    <div id={inputWrapperId} data-testid="date-picker-field">
+    <div id={inputWrapperId} data-testid="date-picker-field" aria-labelledby={`${inputLegendId} ${inputHelpMessagePrimaryId}`}>
       <fieldset>
-        <InputLegend id={inputLegendId} className="mb-2">
+        <InputLegend id={inputLegendId} className="mb-2" aria-describedby={getAriaDescribedBy()}>
           {legend}
         </InputLegend>
         {(datePickerErrorMessages.all !== undefined || datePickerErrorMessages.year !== undefined || datePickerErrorMessages.month !== undefined || datePickerErrorMessages.day !== undefined) && (
@@ -220,7 +195,6 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
 };
 
 interface DatePickerMonthProps {
-  ariaDescribedBy: string;
   ariaErrorMessage?: string;
   className?: string;
   defaultValue: string;
@@ -232,7 +206,7 @@ interface DatePickerMonthProps {
   required?: boolean;
 }
 
-function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, placeholder, required }: DatePickerMonthProps) {
+function DatePickerMonth({ ariaErrorMessage, className, defaultValue, disabled, id, label, name, placeholder, required }: DatePickerMonthProps) {
   const { currentLanguage } = useCurrentLanguage();
   const months = useMonths(currentLanguage);
 
@@ -247,7 +221,6 @@ function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, default
         {label}
       </InputLabel>
       <select
-        aria-describedby={ariaDescribedBy}
         aria-errormessage={ariaErrorMessage}
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
@@ -276,7 +249,6 @@ function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, default
 }
 
 interface DatePickerYearProps {
-  ariaDescribedBy: string;
   ariaErrorMessage?: string;
   className?: string;
   defaultValue: string;
@@ -287,7 +259,7 @@ interface DatePickerYearProps {
   required?: boolean;
 }
 
-function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, required }: DatePickerYearProps) {
+function DatePickerYear({ ariaErrorMessage, className, defaultValue, disabled, id, label, name, required }: DatePickerYearProps) {
   const inputId = `date-picker-${id}-year`;
   const wrapperId = `date-picker-${id}-year-wrapper`;
   const inputLabelId = `date-picker-${id}-year-label`;
@@ -298,7 +270,6 @@ function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultV
         {label}
       </InputLabel>
       <input
-        aria-describedby={ariaDescribedBy}
         aria-errormessage={ariaErrorMessage}
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
@@ -320,7 +291,6 @@ function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultV
 }
 
 interface DatePickerDayProps {
-  ariaDescribedBy: string;
   ariaErrorMessage?: string;
   className?: string;
   defaultValue: string;
@@ -331,7 +301,7 @@ interface DatePickerDayProps {
   required?: boolean;
 }
 
-function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, required }: DatePickerDayProps) {
+function DatePickerDay({ ariaErrorMessage, className, defaultValue, disabled, id, label, name, required }: DatePickerDayProps) {
   const inputId = `date-picker-${id}-day`;
   const wrapperId = `date-picker-${id}-day-wrapper`;
   const inputLabelId = `date-picker-${id}-day-label`;
@@ -342,7 +312,6 @@ function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultVa
         {label}
       </InputLabel>
       <input
-        aria-describedby={ariaDescribedBy}
         aria-errormessage={ariaErrorMessage}
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
