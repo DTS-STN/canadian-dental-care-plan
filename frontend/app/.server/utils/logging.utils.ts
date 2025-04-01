@@ -96,15 +96,21 @@ export const getLogger = (category: string): Logger => {
       }),
     ),
     transports: [consoleTransport],
-  });
+  }) as Logger;
 
   //
   // Audit logs are persisted to disk to ensure that we
   // can retain a history record of important system events
   //
   if (env.auditLogEnabled) {
+    // each time a new logger is created, an `error`, `drain`, `close`, and `finish` event listener is added to `dailyRotateFileTransport`
+    // this will eventually lead to a "MaxListenersExceededWarning: Possible EventEmitter memory leak detected" wearning being emitted by nodejs
+    // to fix this, whenever a new logger is added, increase the maxListeners by 4
+    dailyRotateFileTransport.setMaxListeners(dailyRotateFileTransport.getMaxListeners() + 4);
+    logger.trace('dailyRotateFileTransport.maxListeners increased to %s', dailyRotateFileTransport.getMaxListeners());
+
     logger.add(dailyRotateFileTransport);
   }
 
-  return logger as Logger;
+  return logger;
 };
