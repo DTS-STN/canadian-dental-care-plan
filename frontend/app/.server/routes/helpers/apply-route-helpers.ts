@@ -22,7 +22,7 @@ export type ApplyState = ReadonlyDeep<{
     lastName: string;
     dateOfBirth: string;
     socialInsuranceNumber: string;
-    disabilityTaxCredit: string;
+    disabilityTaxCredit?: string;
   };
   editModeLivingIndependently?: boolean;
   applicantInformation?: {
@@ -30,7 +30,7 @@ export type ApplyState = ReadonlyDeep<{
     lastName: string;
     dateOfBirth: string;
     socialInsuranceNumber: string;
-    disabilityTaxCredit: string;
+    disabilityTaxCredit?: string;
   };
   applicationYear: {
     intakeYearId: string;
