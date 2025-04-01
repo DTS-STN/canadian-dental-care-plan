@@ -96,7 +96,7 @@
       "acknowledge-terms": "I have read the Terms and Conditions",
       "acknowledge-privacy": "I have read the Privacy Notice Statement",
       "share-data": "I consent to the sharing of data",
-      "do-not-consent": "I have <strong>not read</strong> the Terms and Conditions and Privacy Notice Statement and <strong>do not consent</strong> to the sharing of my information for the purposes of CDCP",
+      "do-not-consent": "I <strong>do not agree</strong> to the Terms and Conditions and Privacy Notice Statement and <strong>do not consent</strong> to the sharing of my information for the purposes listed above.",
       "error-message": {
         "acknowledge-terms-required": "You must read the Terms and Conditions to proceed",
         "acknowledge-privacy-required": "You must read the Privacy Notice Statement to proceed",
