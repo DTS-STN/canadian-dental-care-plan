@@ -190,7 +190,7 @@ export default function RenewAdultChildChildrenDentalInsurance({ loaderData, par
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Child access to private dental insurance click">
+              <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Child access to private dental insurance click">
                 {t('children.dental-insurance.button.continue')}
               </LoadingButton>
               <ButtonLink

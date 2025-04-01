@@ -218,6 +218,7 @@ export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion(
         ) : (
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton
+              id="continue-button"
               name="_action"
               value={FORM_ACTION.continue}
               variant="primary"
