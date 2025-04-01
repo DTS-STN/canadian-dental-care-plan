@@ -141,15 +141,10 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
   }, [errorMessages?.all, errorMessages?.day, errorMessages?.month, errorMessages?.year, inputErrorIdAll, inputErrorIdDay, inputErrorIdMonth, inputErrorIdYear]);
 
   return (
-    <div id={inputWrapperId} data-testid="date-picker-field">
+    <div id={inputWrapperId} data-testid="date-picker-field" aria-labelledby={`${inputLegendId} ${inputHelpMessagePrimaryId}`}>
       <fieldset>
         <InputLegend id={inputLegendId} className="mb-2" aria-describedby={getAriaDescribedBy()}>
           {legend}
-          {helpMessagePrimary && (
-            <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="date-picker-help-primary">
-              {helpMessagePrimary}
-            </InputHelp>
-          )}
         </InputLegend>
         {(datePickerErrorMessages.all !== undefined || datePickerErrorMessages.year !== undefined || datePickerErrorMessages.month !== undefined || datePickerErrorMessages.day !== undefined) && (
           <div className="mb-2 space-y-2">
@@ -168,6 +163,11 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
               </>
             )}
           </div>
+        )}
+        {helpMessagePrimary && (
+          <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="date-picker-help-primary">
+            {helpMessagePrimary}
+          </InputHelp>
         )}
         <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
           {currentLanguage === 'fr' ? (

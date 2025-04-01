@@ -36,26 +36,26 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
   }
 
   return (
-    <fieldset id={inputWrapperId} data-testid={inputWrapperId}>
+    <fieldset id={inputWrapperId} data-testid={inputWrapperId} aria-labelledby={`${inputLegendId} ${inputHelpMessagePrimaryId}`} aria-required={required}>
       <InputLegend id={inputLegendId} className={cn('mb-2', legendClassName)} aria-describedby={getAriaDescribedby()}>
         {legend}
-        {helpMessagePrimary && (
-          <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-field-help-primary">
-            {helpMessagePrimary}
-          </InputHelp>
-        )}
       </InputLegend>
       {errorMessage && (
         <p className="mb-2">
           <InputError id={inputErrorId}>{errorMessage}</InputError>
         </p>
       )}
+      {helpMessagePrimary && (
+        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-field-help-primary">
+          {helpMessagePrimary}
+        </InputHelp>
+      )}
       <ul className="space-y-2">
         {options.map((optionProps, index) => {
           const inputRadioId = `${id}-option-${index}`;
           return (
             <li key={inputRadioId}>
-              <InputRadio aria-errormessage={errorMessage && inputErrorId} aria-invalid={!!errorMessage} aria-required={required} hasError={!!errorMessage} id={inputRadioId} name={name} required={required} {...optionProps} />
+              <InputRadio aria-errormessage={errorMessage && inputErrorId} aria-invalid={!!errorMessage} hasError={!!errorMessage} id={inputRadioId} name={name} {...optionProps} />
             </li>
           );
         })}
