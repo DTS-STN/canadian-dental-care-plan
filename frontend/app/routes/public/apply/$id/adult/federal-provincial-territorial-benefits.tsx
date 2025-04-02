@@ -28,6 +28,12 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+} as const;
+
 const HAS_FEDERAL_BENEFITS_OPTION = {
   no: 'no',
   yes: 'yes',
@@ -79,6 +85,21 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const state = loadApplyAdultState({ params, request, session });
+
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  if (formAction === FORM_ACTION.cancel) {
+    if (state.hasFederalProvincialTerritorialBenefits) {
+      saveApplyState({
+        params,
+        session,
+        state: {
+          hasFederalProvincialTerritorialBenefits: !!state.dentalBenefits,
+        },
+      });
+    }
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
+  }
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -317,22 +338,24 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
           </fieldset>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Access to other dental benefits click">
+              <Button variant="primary" id="save-button" name="_action" value={FORM_ACTION.save} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Access to other dental benefits click">
                 {t('apply-adult:dental-benefits.button.save-btn')}
               </Button>
-              <ButtonLink
-                id="back-button"
-                routeId="public/apply/$id/adult/review-information"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Access to other dental benefits click"
-              >
+              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Access to other dental benefits click">
                 {t('apply-adult:dental-benefits.button.cancel-btn')}
-              </ButtonLink>
+              </Button>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Access to other dental benefits click">
+              <LoadingButton
+                variant="primary"
+                id="continue-button"
+                name="_action"
+                value={FORM_ACTION.continue}
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Access to other dental benefits click"
+              >
                 {t('apply-adult:dental-benefits.button.continue')}
               </LoadingButton>
               <ButtonLink
