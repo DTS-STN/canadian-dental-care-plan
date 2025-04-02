@@ -3,6 +3,7 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { BenefitApplicationRequestEntity, BenefitApplicationResponseEntity } from '~/.server/domain/entities';
+import { TooManyRequestsException } from '~/.server/domain/exceptions';
 import type { LogFactory, Logger } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
 
@@ -55,6 +56,12 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
         url: url,
         responseBody: await response.text(),
       });
+
+      if (response.status === 429) {
+        // TODO ::: GjB ::: this throw is to facilitate queueing the failed requests in a cache for later processing; it can (should?) be removed if the caching is ever removed
+        throw new TooManyRequestsException(`Failed to 'POST' for benefit application. Status: ${response.status}, Status Text: ${response.statusText}`);
+      }
+
       throw new Error(`Failed to 'POST' for benefit application. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
