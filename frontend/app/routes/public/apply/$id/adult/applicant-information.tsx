@@ -25,6 +25,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import { useFeature } from '~/root';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -217,6 +218,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
   const { t } = useTranslation(handle.i18nNamespaces);
   const { currentLanguage } = useCurrentLanguage();
   const { defaultState, taxYear, editMode } = loaderData;
+  const applyEligibilityEnabled = useFeature('apply-eligibility');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -295,26 +297,27 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               errorMessage={errors?.socialInsuranceNumber}
               required
             />
-            {/* TODO: conditionally show the following InputRadios depending on an env variable. */}
-            <InputRadios
-              id="dtc"
-              name="dtc"
-              legend={t('apply-adult:applicant-information.dtc-question', { taxYear })}
-              options={[
-                {
-                  value: DTC_OPTION.yes,
-                  children: t('apply-adult:applicant-information.radio-options.yes'),
-                  defaultChecked: defaultState?.disabilityTaxCredit === DTC_OPTION.yes,
-                },
-                {
-                  value: DTC_OPTION.no,
-                  children: t('apply-adult:applicant-information.radio-options.no'),
-                  defaultChecked: defaultState?.disabilityTaxCredit === DTC_OPTION.no,
-                },
-              ]}
-              required
-              errorMessage={errors?.disabilityTaxCredit}
-            />
+            {applyEligibilityEnabled ?? (
+              <InputRadios
+                id="dtc"
+                name="dtc"
+                legend={t('apply-adult:applicant-information.dtc-question', { taxYear })}
+                options={[
+                  {
+                    value: DTC_OPTION.yes,
+                    children: t('apply-adult:applicant-information.radio-options.yes'),
+                    defaultChecked: defaultState?.disabilityTaxCredit === DTC_OPTION.yes,
+                  },
+                  {
+                    value: DTC_OPTION.no,
+                    children: t('apply-adult:applicant-information.radio-options.no'),
+                    defaultChecked: defaultState?.disabilityTaxCredit === DTC_OPTION.no,
+                  },
+                ]}
+                required
+                errorMessage={errors?.disabilityTaxCredit}
+              />
+            )}
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">

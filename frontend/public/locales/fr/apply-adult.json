@@ -38,7 +38,7 @@
       "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisis",
       "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
       "date-of-birth-year-required": "La date de naissance doit inclure une année",
-      "dtc-required": "(FR) Select whether or not you have a valid Disability Tax Credit certificate"
+      "dtc-required": "Sélectionnez si vous avez un crédit d'impôt d'invalidité valide"
     }
   },
   "marital-status": {
