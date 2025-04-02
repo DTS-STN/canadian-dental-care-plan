@@ -14,7 +14,7 @@
       "description": "Nous n'avons pas pu vérifier votre adresse. Vous pouvez soit la mettre à jour, soit continuer avec l'adresse que vous avez saisie. Si vous vivez dans un appartement ou une chambre, n'oubliez pas d'indiquer cette information.",
       "entered-address": "Adresse saisie\u00a0:",
       "header": "Adresse invalide",
-      "use-entered-address-button": "Utiliser l'adresse saisie"
+      "use-entered-address-button": "Utiliser adresse saisie"
     }
   },
   "error-message": {
