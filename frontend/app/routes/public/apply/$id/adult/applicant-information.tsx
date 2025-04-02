@@ -114,9 +114,11 @@ export async function action({ context: { appContainer, session }, params, reque
       dateOfBirthMonth: z.number({ required_error: t('applicant-information.error-message.date-of-birth-month-required') }),
       dateOfBirthDay: z.number({ required_error: t('applicant-information.error-message.date-of-birth-day-required'), invalid_type_error: t('applicant-information.error-message.date-of-birth-day-number') }),
       dateOfBirth: z.string(),
-      disabilityTaxCredit: z.nativeEnum(DTC_OPTION, {
-        errorMap: () => ({ message: t('applicant-information.error-message.dtc-required') }),
-      }),
+      disabilityTaxCredit: z
+        .nativeEnum(DTC_OPTION, {
+          errorMap: () => ({ message: t('applicant-information.error-message.dtc-required') }),
+        })
+        .optional(),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
