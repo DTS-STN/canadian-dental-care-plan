@@ -21,17 +21,21 @@ spec:
             - name: squid
               containerPort: 3128
           livenessProbe:
-            tcpSocket:
-              port: squid
+            exec:
+              command: [/usr/sbin/squid, -k, parse]
+            initialDelaySeconds: 5
+            periodSeconds: 5
           readinessProbe:
-            tcpSocket:
-              port: squid
+            exec:
+              command: [/usr/sbin/squid, -k, parse]
+            initialDelaySeconds: 5
+            periodSeconds: 5
           resources:
             requests:
-              cpu: 250m
-              memory: 64Mi
+              cpu: 100m
+              memory: 16Mi
             limits:
-              cpu: 500m
-              memory: 128Mi
+              cpu: 200m
+              memory: 32Mi
           securityContext:
             allowPrivilegeEscalation: false
