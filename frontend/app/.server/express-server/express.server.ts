@@ -67,7 +67,11 @@ if (viteDevServer) {
 }
 
 log.info('  ✓ registering react router request handler');
-app.all('*', rrRequestHandler(environment.NODE_ENV, viteDevServer));
+// In Express v5, the path route matching syntax has changed.
+// The wildcard "*" must now have a name, similar to parameters ":".
+// Use "/*splat" instead of "/*" to match the updated behavior.
+// Reference: https://expressjs.com/en/guide/migrating-5.html#path-syntax
+app.all('*splat', rrRequestHandler(environment.NODE_ENV, viteDevServer));
 
 log.info('  ✓ registering global error handler');
 app.use(globalErrorHandler(isProduction));
