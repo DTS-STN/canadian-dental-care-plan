@@ -297,7 +297,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               errorMessage={errors?.socialInsuranceNumber}
               required
             />
-            {applyEligibilityEnabled ?? (
+            {applyEligibilityEnabled && (
               <InputRadios
                 id="dtc"
                 name="dtc"
