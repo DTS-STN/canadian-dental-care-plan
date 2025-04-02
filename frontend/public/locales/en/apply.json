@@ -48,6 +48,7 @@
       "personal-information": {
         "heading": "Personal Information",
         "service-canada-application-administration": "The personal information collected in this application is required for the purposes of applying for the Canada Dental Care Plan (CDCP). Service Canada, which is part of Employment and Social Development Canada (ESDC), administers applications for the CDCP on behalf of Health Canada. Service Canada will collect the personal information you include in your CDCP application to register and enroll you into the Plan.",
+        "policy-analysis": "ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC, Health Canada and Statistics Canada. These uses or activities will not result in any administrative decisions made about you.",
         "collection-use": "The collection, use, and disclosure of your personal information is authorized by, among other laws, the <cite>Department of Health Act</cite>, the <cite>Dental Care Measures Act</cite>, the <cite>Department of Employment and Social Development Act</cite>, and is protected by the provisions of the <cite>Privacy Act</cite>.",
         "microsoft-policy": "ESDC carries out this application process using services from a third-party provider, Microsoft Corporation, which may be subject to foreign laws. For more information, see <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles</microsoftDataPrivacyPolicy>."
       },
