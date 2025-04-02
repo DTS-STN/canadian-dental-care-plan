@@ -288,7 +288,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                 <DescriptionListItem term={t('apply-adult:review-information.dob-title')}>
                   <p>{spouseInfo.yearOfBirth}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-spouse-date-of-birth" routeId="public/apply/$id/adult/applicant-information" params={params}>
+                    <InlineLink id="change-spouse-date-of-birth" routeId="public/apply/$id/adult/marital-status" params={params}>
                       {t('apply-adult:review-information.dob-change')}
                     </InlineLink>
                   </div>
@@ -296,7 +296,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                 <DescriptionListItem term={t('apply-adult:review-information.sin-title')}>
                   <p>{formatSin(spouseInfo.sin)}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-spouse-sin" routeId="public/apply/$id/adult/applicant-information" params={params}>
+                    <InlineLink id="change-spouse-sin" routeId="public/apply/$id/adult/marital-status" params={params}>
                       {t('apply-adult:review-information.sin-change')}
                     </InlineLink>
                   </div>
