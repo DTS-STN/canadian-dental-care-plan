@@ -1,5 +1,5 @@
-import Redis from 'ioredis';
 import type { RedisOptions } from 'ioredis';
+import Redis from 'ioredis';
 
 import type { ServerConfig } from '~/.server/configs';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -72,6 +72,7 @@ function getRedisConfig(serverConfig: ServerConfig): RedisOptions {
         username: REDIS_USERNAME,
         password: REDIS_PASSWORD,
         commandTimeout: REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
+        enableAutoPipelining: true,
         retryStrategy,
       };
     }
@@ -85,6 +86,7 @@ function getRedisConfig(serverConfig: ServerConfig): RedisOptions {
         username: REDIS_USERNAME,
         password: REDIS_PASSWORD,
         commandTimeout: REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
+        enableAutoPipelining: true,
         retryStrategy,
       };
     }
