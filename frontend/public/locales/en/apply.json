@@ -79,8 +79,8 @@
       }
     },
     "apply": {
-      "application-participation": "Participation in the Canadian Dental Care Plan is voluntary. However, if you do not provide your personal information in your application, you cannot be considered for the Canadian Dental Care Plan.",
-      "application-consent": "By continuing with this application you agree that you have read and accept the above terms and conditions and privacy notice statement. In addition, you also consent to the sharing of your personal information for the purposes listed above.",
+      "application-participation": "Participation in the CDCP is voluntary. However, if you do not provide your personal information in your application, you cannot be considered for the CDCP.",
+      "application-consent": "By continuing with this application, you agree that you have read and accept the above terms and conditions and privacy notice statement. You also consent to the sharing of your personal information for the purposes listed above.",
       "back-button": "Back",
       "link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
       "continue-button": "Continue"
