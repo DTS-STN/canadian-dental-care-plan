@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { SyntheticEvent } from 'react';
 
-import { faCheck, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
@@ -193,7 +193,7 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
       </div>
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.address-invalid-close-button" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Invalid click">
+          <Button id="dialog.address-invalid-close-button" variant="default" size="sm" startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Invalid click">
             {t('common:dialog.address-invalid.close-button')}
           </Button>
         </DialogClose>
@@ -204,7 +204,7 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
             type="submit"
             id="dialog.address-invalid-use-entered-address-button"
             loading={fetcher.isSubmitting}
-            endIcon={faCheck}
+            endIcon={faChevronRight}
             variant="primary"
             size="sm"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use entered address - Address Invalid click"
