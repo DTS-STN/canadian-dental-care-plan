@@ -190,6 +190,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             <section className="space-y-4">
               <h2 className="font-lato text-lg font-bold"> {t('apply:terms-and-conditions.privacy-notice-statement.personal-information.heading')}</h2>
               <p>{t('apply:terms-and-conditions.privacy-notice-statement.personal-information.service-canada-application-administration')}</p>
+              <p>{t('apply:terms-and-conditions.privacy-notice-statement.personal-information.policy-analysis')}</p>
               <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.personal-information.collection-use" components={{ cite }} />
               </p>
