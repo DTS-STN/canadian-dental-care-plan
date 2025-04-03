@@ -4,12 +4,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { ErrorSummary, createErrorSummaryItem, createErrorSummaryItems, hasErrors, useErrorSummary } from '~/components/error-summary';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-}));
-
 vi.mock('~/utils/link-utils', () => ({
   scrollAndFocusFromAnchorLink: vi.fn(),
 }));

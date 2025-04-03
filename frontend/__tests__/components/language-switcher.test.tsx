@@ -7,12 +7,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { getAltLanguage } from '~/utils/locale-utils';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: vi.fn().mockReturnValue({
-    i18n: { changeLanguage: vi.fn() },
-  }),
-}));
-
 vi.mock('react-router', async (actual) => {
   // XXX :: GjB :: using actual <Link> component and useHref hook because I'm too lazy to mock it 🤷
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports

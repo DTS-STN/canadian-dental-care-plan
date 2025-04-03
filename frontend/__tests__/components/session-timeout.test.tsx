@@ -11,7 +11,6 @@ import type { SessionTimeoutProps } from '~/components/session-timeout';
 import SessionTimeout from '~/components/session-timeout';
 
 vi.mock('react-idle-timer');
-vi.mock('react-i18next');
 
 describe('SessionTimeout', () => {
   const mockActivate = vi.fn();

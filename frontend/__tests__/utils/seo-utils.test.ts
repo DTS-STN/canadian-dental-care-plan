@@ -11,7 +11,6 @@ import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCan
  */
 
 vi.mock('react-router');
-vi.mock('react-i18next');
 vi.mock('~/utils/env-utils');
 vi.mock('~/utils/route-utils');
 

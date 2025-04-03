@@ -3,6 +3,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT, getLocale, getLocaleFromParams, initI18n } from '~/.server/utils/locale.utils';
 
+// locale.utils uses the actual implementation of react-i18next's functions
+// rather than the mocked version to ensure real behavior is tested.
+vi.unmock('react-i18next');
+
 vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(),
 }));
