@@ -1,113 +1,83 @@
-import type { interfaces } from 'inversify';
 import { Container } from 'inversify';
-import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middleware';
+
+import { TYPES } from './constants';
 
 import type { AppContainerProvider } from '~/.server/app-container.provider';
 import { DefaultAppContainerProvider } from '~/.server/app-container.provider';
-import { TYPES } from '~/.server/constants';
 import {
-  authContainerModule,
-  configsContainerModule,
-  factoriesContainerModule,
-  healthContainerModule,
-  mappersContainerModule,
-  repositoriesContainerModule,
-  routesContainerModule,
-  servicesContainerModule,
-  webContainerModule,
+  createAuthContainerModule,
+  createConfigsContainerModule,
+  createFactoriesContainerModule,
+  createHealthContainerModule,
+  createMappersContainerModule,
+  createRepositoriesContainerModule,
+  createRoutesContainerModule,
+  createServicesContainerModule,
+  createWebContainerModule,
 } from '~/.server/container-modules';
 import { getLogger } from '~/.server/utils/logging.utils';
 
 /**
  * This module bootstraps the application by creating an Inversion of Control (IoC) container.
- * It uses InversifyJS as the IoC container and initializes it with various modules that
- * provide bindings for different components of the application.
+ * It uses InversifyJS to initialize and manage dependency injection across various modules.
  *
- * The container is a singleton, meaning only one instance of it is created and shared
- * throughout the application. This ensures that all parts of the application have access
- * to the same instances of dependencies.
+ * The container is a singleton, ensuring that all parts of the application share
+ * the same instances of dependencies.
  *
- * The container is also configured with a logger middleware that logs information about
- * dependency resolution. This can be useful for debugging and understanding how the
- * application is wired together.
+ * A logger middleware is included to provide visibility into dependency resolution,
+ * which can be useful for debugging.
  */
 
-let appContainerInstance: interfaces.Container | undefined;
+let appContainerInstance: Container | undefined;
 let appContainerProviderInstance: AppContainerProvider | undefined;
 
 /**
- * Return the IoC app container singleton.
- *
- * @returns the IoC app container singleton
+ * Returns the IoC app container singleton.
  */
-function getAppContainer(): interfaces.Container {
+function getAppContainer() {
   return (appContainerInstance ??= createContainer());
 }
 
 /**
- * Returns the ContainerConfigProvider singleton instance.
- *
- * @returns The ContainerConfigProvider singleton instance.
+ * Returns the AppContainerProvider singleton instance.
  */
-export function getAppContainerProvider(): AppContainerProvider {
+export function getAppContainerProvider() {
   return (appContainerProviderInstance ??= new DefaultAppContainerProvider(getAppContainer()));
 }
 
 /**
- * Create a new IoC container.
+ * Creates and configures a new IoC container instance.
  *
- * @returns the new IoC container
+ * This function initializes the container by loading the necessary modules
+ * in the correct order to ensure dependencies are properly injected.
  */
-function createContainer(): interfaces.Container {
+function createContainer() {
   const log = getLogger('container/createContainer');
 
   const container = new Container({ defaultScope: 'Singleton' });
-  log.info('Creating IoC container; id: [%s], options: [%j]', container.id, container.options);
+  log.info('Creating IoC container');
 
-  // load container modules
-  container.load(authContainerModule, configsContainerModule, factoriesContainerModule, healthContainerModule, mappersContainerModule, repositoriesContainerModule, routesContainerModule, servicesContainerModule, webContainerModule);
+  // Load configurations first to ensure `ServerConfig` is available
+  // for conditional service bindings in other modules.
+  container.loadSync(
+    createConfigsContainerModule(), //
+    createFactoriesContainerModule(),
+  );
 
-  // configure container logger middleware
   const serverConfig = container.get(TYPES.configs.ServerConfig);
 
-  if (serverConfig.NODE_ENV === 'development') {
-    container.applyMiddleware(createLoggerMidddlware());
-  }
+  // Load other container modules
+  container.loadSync(
+    createAuthContainerModule(),
+    createHealthContainerModule(serverConfig),
+    createMappersContainerModule(),
+    createRepositoriesContainerModule(serverConfig),
+    createRoutesContainerModule(),
+    createServicesContainerModule(serverConfig),
+    createWebContainerModule(),
+  );
 
-  log.info('IoC container created; id: [%s]', container.id);
+  log.info('IoC container created successfully');
 
   return container;
-}
-
-/**
- * Create a logger middleware for the IoC container.
- *
- * @returns the logger middleware
- */
-function createLoggerMidddlware(): interfaces.Middleware {
-  const loggerMiddlewareLog = getLogger('container/LoggerMiddleware');
-  return makeLoggerMiddleware(
-    {
-      request: {
-        bindings: { activated: true, implementationType: true, scope: true, serviceIdentifier: true, type: true },
-        serviceIdentifier: true,
-        target: { metadata: true, name: true, serviceIdentifier: true },
-      },
-      time: true,
-    },
-    (out) => {
-      // NOTE: The "find" method in AppContainerProvider will return null if that error is thrown. This might be intentional.
-      if (out.exception && out.exception instanceof Error && out.exception.message.startsWith('No matching bindings found for serviceIdentifier')) {
-        loggerMiddlewareLog.warn(out.exception.message);
-        return;
-      }
-
-      if (out.exception) {
-        loggerMiddlewareLog.error(out.exception);
-        return;
-      }
-
-      loggerMiddlewareLog.trace(textSerializer(out));
-    },
-  );
 }

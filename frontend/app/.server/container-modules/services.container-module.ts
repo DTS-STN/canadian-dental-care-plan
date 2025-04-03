@@ -1,5 +1,5 @@
-import type { interfaces } from 'inversify';
 import { ContainerModule } from 'inversify';
+import type { BindingConstraints } from 'inversify';
 
 import { DefaultRaoidcService } from '~/.server/auth/raoidc.service';
 import type { ServerConfig } from '~/.server/configs';
@@ -34,54 +34,55 @@ import { DefaultInstrumentationService } from '~/.server/observability';
 import type { MockName } from '~/.server/utils/env.utils';
 import { DefaultDynatraceService, DefaultHCaptchaService } from '~/.server/web/services';
 
-function isMockEnabled(mockName: MockName, shouldEnable: boolean) {
-  return ({ parentContext }: interfaces.Request) => {
-    const serverConfig = parentContext.container.get(TYPES.configs.ServerConfig);
+function isMockEnabled(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS'>, mockName: MockName, shouldEnable: boolean) {
+  return (metadata: BindingConstraints) => {
     const isMockIncluded = serverConfig.ENABLED_MOCKS.includes(mockName);
     return shouldEnable ? isMockIncluded : !isMockIncluded;
   };
 }
 
-function sessionTypeIs(sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
-  return ({ parentContext }: interfaces.Request) => {
-    const serverConfig = parentContext.container.get(TYPES.configs.ServerConfig);
+function sessionTypeIs(serverConfig: Pick<ServerConfig, 'SESSION_STORAGE_TYPE'>, sessionType: ServerConfig['SESSION_STORAGE_TYPE']) {
+  return (metadata: BindingConstraints) => {
     return serverConfig.SESSION_STORAGE_TYPE === sessionType;
   };
 }
 
 /**
- * Container module for services.
+ * Defines the container module for service bindings.
  */
-export const servicesContainerModule = new ContainerModule((bind) => {
-  bind(TYPES.auth.RaoidcService).to(DefaultRaoidcService);
-  bind(TYPES.core.BuildInfoService).to(DefaultBuildInfoService);
-  // RedisService bindings depend on the SESSION_STORAGE_TYPE configuration string
-  bind(TYPES.data.services.RedisService).to(DefaultRedisService).when(sessionTypeIs('redis'));
-  bind(TYPES.domain.services.AddressValidationService).to(DefaultAddressValidationService);
-  bind(TYPES.domain.services.ApplicantService).to(DefaultApplicantService);
-  bind(TYPES.domain.services.ApplicationStatusService).to(DefaultApplicationStatusService);
-  bind(TYPES.domain.services.ApplicationYearService).to(DefaultApplicationYearService);
-  bind(TYPES.domain.services.AuditService).to(DefaultAuditService);
-  bind(TYPES.domain.services.BenefitApplicationService).to(DefaultBenefitApplicationService);
-  bind(TYPES.domain.services.BenefitRenewalService).to(DefaultBenefitRenewalService);
-  bind(TYPES.domain.services.ClientApplicationService).to(DefaultClientApplicationService);
-  bind(TYPES.domain.services.ClientFriendlyStatusService).to(DefaultClientFriendlyStatusService);
-  bind(TYPES.domain.services.CountryService).to(DefaultCountryService);
-  bind(TYPES.domain.services.DemographicSurveyService).to(DefaultDemographicSurveyServiceService);
-  bind(TYPES.domain.services.FederalGovernmentInsurancePlanService).to(DefaultFederalGovernmentInsurancePlanService);
-  bind(TYPES.domain.services.LetterService).to(DefaultLetterService);
-  bind(TYPES.domain.services.LetterTypeService).to(DefaultLetterTypeService);
-  bind(TYPES.domain.services.MaritalStatusService).to(DefaultMaritalStatusService);
-  bind(TYPES.domain.services.PreferredCommunicationMethodService).to(DefaultPreferredCommunicationMethodService);
-  bind(TYPES.domain.services.PreferredLanguageService).to(DefaultPreferredLanguageService);
-  bind(TYPES.domain.services.ProvinceTerritoryStateService).to(DefaultProvinceTerritoryStateService);
-  bind(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).to(DefaultProvincialGovernmentInsurancePlanService);
+export function createServicesContainerModule(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS' | 'SESSION_STORAGE_TYPE'>): ContainerModule {
+  // prettier-ignore
+  return new ContainerModule((options) => {
+    options.bind(TYPES.auth.RaoidcService).to(DefaultRaoidcService);
+    options.bind(TYPES.core.BuildInfoService).to(DefaultBuildInfoService);
+    // RedisService bindings depend on the SESSION_STORAGE_TYPE configuration string
+    options.bind(TYPES.data.services.RedisService).to(DefaultRedisService).when(sessionTypeIs(serverConfig, 'redis'));
+    options.bind(TYPES.domain.services.AddressValidationService).to(DefaultAddressValidationService);
+    options.bind(TYPES.domain.services.ApplicantService).to(DefaultApplicantService);
+    options.bind(TYPES.domain.services.ApplicationStatusService).to(DefaultApplicationStatusService);
+    options.bind(TYPES.domain.services.ApplicationYearService).to(DefaultApplicationYearService);
+    options.bind(TYPES.domain.services.AuditService).to(DefaultAuditService);
+    options.bind(TYPES.domain.services.BenefitApplicationService).to(DefaultBenefitApplicationService);
+    options.bind(TYPES.domain.services.BenefitRenewalService).to(DefaultBenefitRenewalService);
+    options.bind(TYPES.domain.services.ClientApplicationService).to(DefaultClientApplicationService);
+    options.bind(TYPES.domain.services.ClientFriendlyStatusService).to(DefaultClientFriendlyStatusService);
+    options.bind(TYPES.domain.services.CountryService).to(DefaultCountryService);
+    options.bind(TYPES.domain.services.DemographicSurveyService).to(DefaultDemographicSurveyServiceService);
+    options.bind(TYPES.domain.services.FederalGovernmentInsurancePlanService).to(DefaultFederalGovernmentInsurancePlanService);
+    options.bind(TYPES.domain.services.LetterService).to(DefaultLetterService);
+    options.bind(TYPES.domain.services.LetterTypeService).to(DefaultLetterTypeService);
+    options.bind(TYPES.domain.services.MaritalStatusService).to(DefaultMaritalStatusService);
+    options.bind(TYPES.domain.services.PreferredCommunicationMethodService).to(DefaultPreferredCommunicationMethodService);
+    options.bind(TYPES.domain.services.PreferredLanguageService).to(DefaultPreferredLanguageService);
+    options.bind(TYPES.domain.services.ProvinceTerritoryStateService).to(DefaultProvinceTerritoryStateService);
+    options.bind(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).to(DefaultProvincialGovernmentInsurancePlanService);
 
-  bind(TYPES.domain.services.VerificationCodeService).to(DefaultVerificationCodeService).when(isMockEnabled('verification-code', false));
-  bind(TYPES.domain.services.VerificationCodeService).to(StubVerificationCodeService).when(isMockEnabled('verification-code', true));
+    options.bind(TYPES.domain.services.VerificationCodeService).to(DefaultVerificationCodeService).when(isMockEnabled(serverConfig, 'verification-code', false));
+    options.bind(TYPES.domain.services.VerificationCodeService).to(StubVerificationCodeService).when(isMockEnabled(serverConfig, 'verification-code', true));
 
-  bind(TYPES.http.HttpClient).to(DefaultHttpClient);
-  bind(TYPES.observability.InstrumentationService).to(DefaultInstrumentationService);
-  bind(TYPES.web.services.DynatraceService).to(DefaultDynatraceService);
-  bind(TYPES.web.services.HCaptchaService).to(DefaultHCaptchaService);
-});
+    options.bind(TYPES.http.HttpClient).to(DefaultHttpClient);
+    options.bind(TYPES.observability.InstrumentationService).to(DefaultInstrumentationService);
+    options.bind(TYPES.web.services.DynatraceService).to(DefaultDynatraceService);
+    options.bind(TYPES.web.services.HCaptchaService).to(DefaultHCaptchaService);
+  });
+}

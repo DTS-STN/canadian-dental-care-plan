@@ -1,4 +1,4 @@
-import type { interfaces } from 'inversify';
+import type { Container } from 'inversify';
 
 import type { ServiceIdentifier } from '~/.server/constants';
 import { TYPES } from '~/.server/constants';
@@ -38,10 +38,10 @@ export interface AppContainerProvider {
 }
 
 export class DefaultAppContainerProvider implements AppContainerProvider {
-  private readonly container: interfaces.Container;
+  private readonly container: Container;
   private readonly log: Logger;
 
-  constructor(container: interfaces.Container) {
+  constructor(container: Container) {
     this.container = container;
     const logFactory = container.get(TYPES.factories.LogFactory);
     this.log = logFactory.createLogger('DefaultAppContainerProvider');
@@ -49,12 +49,12 @@ export class DefaultAppContainerProvider implements AppContainerProvider {
 
   find<T>(serviceIdentifier: ServiceIdentifier<T>): T | undefined {
     this.log.trace('Finding service for service identifier: %s', serviceIdentifier);
-    return this.container.tryGet(serviceIdentifier);
+    return this.container.get(serviceIdentifier, { optional: true });
   }
 
   findAll<T>(serviceIdentifier: ServiceIdentifier<T>): T[] {
     this.log.trace('Finding service for service identifier: %s', serviceIdentifier);
-    return this.container.tryGetAll(serviceIdentifier, { enforceBindingConstraints: true });
+    return this.container.getAll(serviceIdentifier, { optional: true });
   }
 
   get<T>(serviceIdentifier: ServiceIdentifier<T>): T {
@@ -64,6 +64,6 @@ export class DefaultAppContainerProvider implements AppContainerProvider {
 
   getAll<T>(serviceIdentifier: ServiceIdentifier<T>): T[] {
     this.log.trace('Getting all services for service identifier: %s', serviceIdentifier);
-    return this.container.getAll(serviceIdentifier, { enforceBindingConstraints: true });
+    return this.container.getAll(serviceIdentifier);
   }
 }

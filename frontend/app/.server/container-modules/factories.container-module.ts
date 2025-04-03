@@ -7,12 +7,14 @@ import { DefaultHomeAddressValidatorFactory } from '~/.server/routes/validators/
 import { DefaultMailingAddressValidatorFactory } from '~/.server/routes/validators/mailing-address.validator.factory';
 
 /**
- * Container module for factories.
+ * Defines the container module for factory bindings.
  */
-export const factoriesContainerModule = new ContainerModule((bind) => {
-  bind(TYPES.domain.services.ConfigFactory).to(DefaultConfigFactory);
-  bind(TYPES.factories.LogFactory).to(DefaultLogFactory);
-  bind(TYPES.routes.validators.AddressValidatorFactory).to(DefaultAddressValidatorFactory);
-  bind(TYPES.routes.validators.MailingAddressValidatorFactory).to(DefaultMailingAddressValidatorFactory);
-  bind(TYPES.routes.validators.HomeAddressValidatorFactory).to(DefaultHomeAddressValidatorFactory);
-});
+export function createFactoriesContainerModule(): ContainerModule {
+  return new ContainerModule((options) => {
+    options.bind(TYPES.domain.services.ConfigFactory).to(DefaultConfigFactory);
+    options.bind(TYPES.factories.LogFactory).to(DefaultLogFactory);
+    options.bind(TYPES.routes.validators.AddressValidatorFactory).to(DefaultAddressValidatorFactory);
+    options.bind(TYPES.routes.validators.MailingAddressValidatorFactory).to(DefaultMailingAddressValidatorFactory);
+    options.bind(TYPES.routes.validators.HomeAddressValidatorFactory).to(DefaultHomeAddressValidatorFactory);
+  });
+}
