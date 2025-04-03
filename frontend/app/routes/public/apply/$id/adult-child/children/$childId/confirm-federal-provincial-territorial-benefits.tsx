@@ -100,13 +100,13 @@ export async function action({ context: { appContainer, session }, params, reque
         return {
           ...child,
           hasFederalProvincialTerritorialBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
-          dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits ? child.dentalBenefits : undefined,
+          dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits ? state.dentalBenefits : undefined,
         };
       }),
     },
   });
 
-  if (dentalBenefits.hasFederalProvincialTerritorialBenefits) {
+  if (dentalBenefits.hasFederalProvincialTerritorialBenefits === true) {
     return redirect(getPathById('public/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits', params));
   }
 

@@ -46,6 +46,7 @@ describe('apply-route-helpers', () => {
   describe('isNewChildState', () => {
     const childWithAllProps = {
       id: '00000000-0000-0000-0000-000000000000',
+      hasFederalProvincialTerritorialBenefits: true,
       dentalBenefits: {
         hasFederalBenefits: false,
         hasProvincialTerritorialBenefits: false,
@@ -60,8 +61,8 @@ describe('apply-route-helpers', () => {
       },
     } as const satisfies ChildState;
 
-    it('should return true if dentalBenefits is undefined and hasFederalProvincialTerritorialBenefits is true', () => {
-      expect(isNewChildState({ ...childWithAllProps, dentalBenefits: undefined, hasFederalProvincialTerritorialBenefits: true })).toBe(true);
+    it('should return true if dentalBenefits is undefined and hasFederalProvincialTerritorialBenefits is undefined', () => {
+      expect(isNewChildState({ ...childWithAllProps, dentalBenefits: undefined, hasFederalProvincialTerritorialBenefits: undefined })).toBe(true);
     });
 
     it('should return true if dentalInsurance is undefined', () => {
@@ -80,7 +81,11 @@ describe('apply-route-helpers', () => {
   describe('getChildrenState', () => {
     const childWithAllProps = {
       id: '00000000-0000-0000-0000-000000000000',
-      dentalBenefits: undefined,
+      hasFederalProvincialTerritorialBenefits: true,
+      dentalBenefits: {
+        hasFederalBenefits: false,
+        hasProvincialTerritorialBenefits: false,
+      },
       dentalInsurance: false,
       information: {
         dateOfBirth: '2012-02-23',
@@ -94,7 +99,7 @@ describe('apply-route-helpers', () => {
     const childWithMissingDentalBenefits = {
       ...childWithAllProps,
       dentalBenefits: undefined,
-      hasFederalProvincialTerritorialBenefits: true,
+      hasFederalProvincialTerritorialBenefits: undefined,
     } as const satisfies ChildState;
 
     it('should return all children when includesNewChildState is true', () => {
