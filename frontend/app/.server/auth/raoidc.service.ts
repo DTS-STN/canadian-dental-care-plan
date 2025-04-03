@@ -4,8 +4,9 @@ import { subtle } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
 import type { FetchFn, HttpClient } from '~/.server/http';
+import type { Logger } from '~/.server/logging';
 import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
 import type { ClientMetadata, IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import * as raoidcUtils from '~/.server/utils/raoidc.utils';

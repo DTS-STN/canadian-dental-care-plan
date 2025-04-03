@@ -2,7 +2,8 @@ import type { Request } from 'express';
 import assert from 'node:assert';
 import validator from 'validator';
 
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 type RequestSession = Request['session'];
 

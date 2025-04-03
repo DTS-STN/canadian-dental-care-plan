@@ -7,7 +7,8 @@ import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { ClientApplicationRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
 import { DefaultClientApplicationService } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 describe('DefaultClientApplicationService', () => {
   const mockLogFactory = mock<LogFactory>();

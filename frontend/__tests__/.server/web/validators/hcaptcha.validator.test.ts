@@ -2,7 +2,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { mock, mockReset } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import type { HCaptchaService } from '~/.server/web/services';
 import { DefaultHCaptchaValidator } from '~/.server/web/validators';
 

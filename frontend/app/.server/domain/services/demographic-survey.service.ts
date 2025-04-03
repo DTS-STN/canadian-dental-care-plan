@@ -20,7 +20,8 @@ import type {
 import { DisabilityStatusNotFoundException, EthnicGroupNotFoundException, FirstNationsNotFoundException, GenderStatusNotFoundException, IndigenousStatusNotFoundException, LocationBornStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { DemographicSurveyDtoMapper } from '~/.server/domain/mappers';
 import type { DemographicSurveyRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 /**
  * Service interface for managing demographic survey data.

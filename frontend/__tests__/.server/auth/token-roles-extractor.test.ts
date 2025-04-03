@@ -4,7 +4,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import { DefaultTokenRolesExtractor } from '~/.server/auth/token-roles-extractor';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 vi.mock('jose', () => ({
   createRemoteJWKSet: vi.fn(),

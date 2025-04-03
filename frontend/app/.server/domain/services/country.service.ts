@@ -7,7 +7,8 @@ import type { CountryDto, CountryLocalizedDto } from '~/.server/domain/dtos';
 import { CountryNotFoundException } from '~/.server/domain/exceptions';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import { moveToTop } from '~/.server/utils/collection.utils';
 
 /**

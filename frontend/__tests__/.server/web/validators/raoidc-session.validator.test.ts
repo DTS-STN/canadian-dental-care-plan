@@ -2,8 +2,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
 
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import type { Logger } from '~/.server/logging';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { validateSession } from '~/.server/utils/raoidc.utils';
 import type { Session } from '~/.server/web/session';

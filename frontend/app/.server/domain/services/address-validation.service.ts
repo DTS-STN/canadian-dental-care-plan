@@ -5,7 +5,8 @@ import type { AddressCorrectionRequestDto, AddressCorrectionResultDto } from '~/
 import type { AddressValidationDtoMapper } from '~/.server/domain/mappers';
 import type { AddressValidationRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services/audit.service';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 export interface AddressValidationService {
   /**

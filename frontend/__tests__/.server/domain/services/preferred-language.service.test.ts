@@ -8,7 +8,8 @@ import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories';
 import type { PreferredLanguageServiceImpl_ServerConfig } from '~/.server/domain/services';
 import { DefaultPreferredLanguageService } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 vi.mock('moize');
 

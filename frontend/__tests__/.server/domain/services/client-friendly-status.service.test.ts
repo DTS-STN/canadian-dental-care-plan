@@ -8,7 +8,8 @@ import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories';
 import type { ClientFriendlyStatusServiceImpl_ServerConfig } from '~/.server/domain/services';
 import { DefaultClientFriendlyStatusService } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 vi.mock('moize');
 

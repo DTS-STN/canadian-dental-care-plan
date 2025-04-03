@@ -3,7 +3,8 @@ import moize from 'moize';
 import { existsSync, readFileSync } from 'node:fs';
 
 import { TYPES } from '~/.server/constants';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 export interface BuildInfo {
   buildDate: string;

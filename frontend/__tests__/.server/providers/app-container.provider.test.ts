@@ -5,7 +5,8 @@ import { mock } from 'vitest-mock-extended';
 import { DefaultAppContainerProvider } from '~/.server/app-container.provider';
 import type { ServiceIdentifier } from '~/.server/constants';
 import { TYPES } from '~/.server/constants';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 describe('DefaultAppContainerProvider', () => {
   let container: Container;

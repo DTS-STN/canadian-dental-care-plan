@@ -7,7 +7,8 @@ import type { ProvincialGovernmentInsurancePlanDto, ProvincialGovernmentInsuranc
 import { ProvincialGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions';
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 export interface ProvincialGovernmentInsurancePlanService {
   listProvincialGovernmentInsurancePlans(): ReadonlyArray<ProvincialGovernmentInsurancePlanDto>;

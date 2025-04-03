@@ -4,8 +4,9 @@ import { mock } from 'vitest-mock-extended';
 import type { ServerConfig } from '~/.server/configs';
 import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
 import { DefaultApplicationYearRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import type { Logger } from '~/.server/logging';
 
 describe('DefaultApplicationYearRepository', () => {
   afterEach(() => {

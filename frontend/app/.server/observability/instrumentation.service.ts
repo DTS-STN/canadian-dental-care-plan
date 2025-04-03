@@ -14,7 +14,8 @@ import invariant from 'tiny-invariant';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { BuildInfo, BuildInfoService } from '~/.server/core';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 export interface InstrumentationService {
   /**

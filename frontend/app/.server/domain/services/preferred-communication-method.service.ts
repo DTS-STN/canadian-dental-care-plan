@@ -7,7 +7,8 @@ import type { PreferredCommunicationMethodDto, PreferredCommunicationMethodLocal
 import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 export interface PreferredCommunicationMethodService {
   getLocalizedPreferredCommunicationMethodById(id: string, locale: AppLocale): PreferredCommunicationMethodLocalizedDto;

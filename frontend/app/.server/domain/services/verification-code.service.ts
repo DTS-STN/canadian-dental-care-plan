@@ -5,7 +5,8 @@ import type { VerificationCodeEmailRequestDto } from '~/.server/domain/dtos';
 import type { VerificationCodeDtoMapper } from '~/.server/domain/mappers';
 import type { VerificationCodeRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services/audit.service';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import { randomString } from '~/utils/string-utils';
 
 export interface VerificationCodeService {

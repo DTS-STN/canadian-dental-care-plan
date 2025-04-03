@@ -6,7 +6,8 @@ import type { LetterDto, LettersRequestDto, PdfRequestDto } from '~/.server/doma
 import type { LetterDtoMapper } from '~/.server/domain/mappers';
 import type { LetterRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 export interface LetterService {
   /**
