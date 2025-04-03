@@ -363,7 +363,7 @@ async function createClientAssertion(issuer: string, client: ClientMetadata) {
 async function decryptJwe(jwe: string, privateKey: CryptoKey) {
   const { kty, ...restOfJwk } = await subtle.exportKey('jwk', privateKey);
   invariant(kty, 'Expected JWK to have a key type');
-  const key = await importJWK({ ...restOfJwk, kty }, 'RSA-OAEP');
+  const key = await importJWK({ ...restOfJwk, kty }, 'RSA-OAEP-256');
   const decryptResult = await compactDecrypt(jwe, key, { keyManagementAlgorithms: ['RSA-OAEP-256'] });
   return decryptResult.plaintext.toString();
 }
@@ -487,12 +487,12 @@ function validateServerMetadata(serverMetadata: ServerMetadata) {
 /**
  * Verify a JWT by checking it against a collection of JWKs.
  */
-async function verifyJwt<Payload = JWTPayload>(jwt: string, jwks: JWKSet, alg = 'RSA-OAEP') {
+async function verifyJwt<Payload = JWTPayload>(jwt: string, jwks: JWKSet) {
   const log = getLogger('raoidc-utils.server/verifyJwt');
   for (const key of jwks.keys) {
     const { kty, ...restOfKey } = key;
     invariant(kty, 'Expected JWK to have a key type');
-    const keyLike = await importJWK({ ...restOfKey, kty }, alg);
+    const keyLike = await importJWK({ ...restOfKey, kty }, 'RSA-OAEP-256');
 
     try {
       return await jwtVerify<Payload>(jwt, keyLike);
