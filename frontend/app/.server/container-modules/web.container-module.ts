@@ -4,10 +4,12 @@ import { TYPES } from '~/.server/constants';
 import { DefaultCsrfTokenValidator, DefaultHCaptchaValidator, DefaultRaoidcSessionValidator } from '~/.server/web/validators';
 
 /**
- * Container module for web.
+ * Defines the container module for web bindings.
  */
-export const webContainerModule = new ContainerModule((bind) => {
-  bind(TYPES.web.validators.CsrfTokenValidator).to(DefaultCsrfTokenValidator);
-  bind(TYPES.web.validators.HCaptchaValidator).to(DefaultHCaptchaValidator);
-  bind(TYPES.web.validators.RaoidcSessionValidator).to(DefaultRaoidcSessionValidator);
-});
+export function createWebContainerModule(): ContainerModule {
+  return new ContainerModule((options) => {
+    options.bind(TYPES.web.validators.CsrfTokenValidator).to(DefaultCsrfTokenValidator);
+    options.bind(TYPES.web.validators.HCaptchaValidator).to(DefaultHCaptchaValidator);
+    options.bind(TYPES.web.validators.RaoidcSessionValidator).to(DefaultRaoidcSessionValidator);
+  });
+}

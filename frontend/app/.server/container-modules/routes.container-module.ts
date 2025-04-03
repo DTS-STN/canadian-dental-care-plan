@@ -4,8 +4,10 @@ import { TYPES } from '~/.server/constants';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
 
 /**
- * Container module for routes.
+ * Defines the container module for route bindings.
  */
-export const routesContainerModule = new ContainerModule((bind) => {
-  bind(TYPES.routes.security.SecurityHandler).to(DefaultSecurityHandler);
-});
+export function createRoutesContainerModule(): ContainerModule {
+  return new ContainerModule((options) => {
+    options.bind(TYPES.routes.security.SecurityHandler).to(DefaultSecurityHandler);
+  });
+}

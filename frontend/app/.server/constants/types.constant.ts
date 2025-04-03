@@ -1,5 +1,5 @@
 import type { HealthCheck } from '@dts-stn/health-checks';
-import type { interfaces } from 'inversify';
+import type { Newable } from 'inversify';
 
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
@@ -86,7 +86,7 @@ import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } fr
 /**
  * Represents a service identifier for dependency injection purposes.
  * The identifier restricts the use of `string` and `symbol` types, allowing only specific types
- * from `interfaces.ServiceIdentifier` to be used for registering and resolving dependencies.
+ * from `ServiceIdentifier` to be used for registering and resolving dependencies.
  *
  * @template T - The type associated with the service identifier.
  * @example
@@ -94,7 +94,7 @@ import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } fr
  * const identifier: ServiceIdentifier<ExampleService> = serviceIdentifier('ExampleService');
  * ```
  */
-export type ServiceIdentifier<T> = Exclude<interfaces.ServiceIdentifier<T>, string | symbol>;
+export type ServiceIdentifier<TInstance = unknown> = Newable<TInstance>;
 
 /**
  * Recursive type defining the structure of the service identifier registry.

@@ -1,4 +1,3 @@
-import type { interfaces } from 'inversify';
 import { Container } from 'inversify';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { mock } from 'vitest-mock-extended';
@@ -9,7 +8,7 @@ import { TYPES } from '~/.server/constants';
 import type { LogFactory, Logger } from '~/.server/factories';
 
 describe('DefaultAppContainerProvider', () => {
-  let container: interfaces.Container;
+  let container: Container;
   let appContainerProvider: DefaultAppContainerProvider;
   const mockLogger = mock<Logger>();
   const mockLogFactory = mock<LogFactory>();
@@ -93,8 +92,9 @@ describe('DefaultAppContainerProvider', () => {
       expect(mockLogger.trace).toHaveBeenCalledWith('Getting all services for service identifier: %s', mockServiceIdentifier);
     });
 
-    it('should throw an error if no instances are found', () => {
-      expect(() => appContainerProvider.getAll(mockServiceIdentifier)).toThrowError();
+    it('should return empty array when no instances are found', () => {
+      const result = appContainerProvider.getAll(mockServiceIdentifier);
+      expect(result).toHaveLength(0);
       expect(mockLogger.trace).toHaveBeenCalledWith('Getting all services for service identifier: %s', mockServiceIdentifier);
     });
   });

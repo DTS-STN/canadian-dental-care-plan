@@ -4,13 +4,15 @@ import { DefaultBearerTokenResolver, DefaultTokenRolesExtractor } from '~/.serve
 import { TYPES } from '~/.server/constants';
 
 /**
- * Container module for auth components.
+ * Defines the container module for authentication bindings.
  */
-export const authContainerModule = new ContainerModule((bind) => {
-  bind(TYPES.auth.BearerTokenResolver).to(DefaultBearerTokenResolver);
-  bind(TYPES.auth.HealthTokenRolesExtractor).toDynamicValue((context) => {
-    const logFactory = context.container.get(TYPES.factories.LogFactory);
-    const { HEALTH_AUTH_TOKEN_AUDIENCE, HEALTH_AUTH_TOKEN_ISSUER, HEALTH_AUTH_JWKS_URI } = context.container.get(TYPES.configs.ServerConfig);
-    return new DefaultTokenRolesExtractor(logFactory, HEALTH_AUTH_TOKEN_AUDIENCE, HEALTH_AUTH_TOKEN_ISSUER, HEALTH_AUTH_JWKS_URI);
+export function createAuthContainerModule(): ContainerModule {
+  return new ContainerModule((options) => {
+    options.bind(TYPES.auth.BearerTokenResolver).to(DefaultBearerTokenResolver);
+    options.bind(TYPES.auth.HealthTokenRolesExtractor).toDynamicValue((context) => {
+      const logFactory = context.get(TYPES.factories.LogFactory);
+      const { HEALTH_AUTH_TOKEN_AUDIENCE, HEALTH_AUTH_TOKEN_ISSUER, HEALTH_AUTH_JWKS_URI } = context.get(TYPES.configs.ServerConfig);
+      return new DefaultTokenRolesExtractor(logFactory, HEALTH_AUTH_TOKEN_AUDIENCE, HEALTH_AUTH_TOKEN_ISSUER, HEALTH_AUTH_JWKS_URI);
+    });
   });
-});
+}
