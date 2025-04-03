@@ -2,8 +2,8 @@ import type { RedisOptions } from 'ioredis';
 import Redis from 'ioredis';
 
 import type { ServerConfig } from '~/.server/configs';
+import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 
 /**
  * A holder for our singleton redis client instance.
@@ -22,7 +22,7 @@ export function getRedisClient() {
  * Creates a new Redis client and sets up logging for connection and error events.
  */
 function createRedisClient(): Redis {
-  const log = getLogger('session.server/createRedisClient');
+  const log = createLogger('session.server/createRedisClient');
   log.info('Creating new redis client');
 
   const serverConfig = getEnv();
@@ -42,7 +42,7 @@ function createRedisClient(): Redis {
  * Constructs the configuration object for the Redis client based on the server environment.
  */
 function getRedisConfig(serverConfig: ServerConfig): RedisOptions {
-  const log = getLogger('session.server/getRedisConfig');
+  const log = createLogger('session.server/getRedisConfig');
   const {
     REDIS_COMMAND_TIMEOUT_SECONDS, //
     REDIS_SENTINEL_HOST,

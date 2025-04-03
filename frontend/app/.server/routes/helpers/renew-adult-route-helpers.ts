@@ -1,8 +1,8 @@
 import { redirect } from 'react-router';
 
+import { createLogger } from '~/.server/logging';
 import type { RenewState, RenewStateParams } from '~/.server/routes//helpers/renew-route-helpers';
 import { loadRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
@@ -19,7 +19,7 @@ interface LoadRenewAdultStateArgs {
  * @returns The loaded Adult state.
  */
 export function loadRenewAdultState({ params, request, session }: LoadRenewAdultStateArgs) {
-  const log = getLogger('renew-adult-route-helpers.server/loadRenewAdultState');
+  const log = createLogger('renew-adult-route-helpers.server/loadRenewAdultState');
   const { pathname } = new URL(request.url);
   const renewState = loadRenewState({ params, session });
 

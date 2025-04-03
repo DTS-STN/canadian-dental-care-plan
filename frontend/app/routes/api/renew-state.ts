@@ -6,9 +6,9 @@ import { z } from 'zod';
 import type { Route } from './+types/renew-state';
 
 import { TYPES } from '~/.server/constants';
+import { createLogger } from '~/.server/logging';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import type { RenewStateParams } from '~/.server/routes/helpers/renew-route-helpers';
-import { getLogger } from '~/.server/utils/logging.utils';
 
 const API_RENEW_STATE_ACTIONS = ['extend'] as const;
 export type ApiRenewStateAction = (typeof API_RENEW_STATE_ACTIONS)[number];
@@ -17,7 +17,7 @@ export async function action({ context: { appContainer, session }, request }: Ro
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
-  const log = getLogger('routes/api/renew-state');
+  const log = createLogger('routes/api/renew-state');
   const sessionId = session.id;
   log.debug("Action with with user's renew state; sessionId: [%s]", sessionId);
 

@@ -5,8 +5,8 @@ import { createInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 import { i18nResources } from '~/.server/i18n.resources';
+import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { APP_LOCALES } from '~/utils/locale-utils';
 
 /**
@@ -30,7 +30,7 @@ export async function getFixedT<N extends Namespace>(localeOrRequest: AppLocale 
  * @returns The detected locale, either `'en'` or `'fr'`. Defaults to `'en'` if no valid locale is found.
  */
 export function getLocale(request: Request): AppLocale {
-  const log = getLogger('locale-utils.server/getLocale');
+  const log = createLogger('locale-utils.server/getLocale');
   const { pathname } = new URL(request.url);
 
   if (pathname.startsWith('/en')) {
@@ -58,7 +58,7 @@ export function getLocale(request: Request): AppLocale {
  * @returns The detected locale, either `'en'` or `'fr'`. Defaults to `'en'` if no valid locale is found.
  */
 export function getLocaleFromParams(params: Params): AppLocale {
-  const log = getLogger('locale-utils.server/getLocaleFromParams');
+  const log = createLogger('locale-utils.server/getLocaleFromParams');
   const lang = params.lang;
 
   if (lang === 'en') {
@@ -80,7 +80,7 @@ export function getLocaleFromParams(params: Params): AppLocale {
  * @see https://www.i18next.com/overview/api#createinstance
  */
 export async function initI18n<N extends Namespace>(locale: string | undefined, namespaces: N) {
-  const log = getLogger('locale-utils.server/initI18n');
+  const log = createLogger('locale-utils.server/initI18n');
   const { I18NEXT_DEBUG } = getEnv();
   const i18n = createInstance();
 

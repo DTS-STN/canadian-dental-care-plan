@@ -7,11 +7,11 @@ import type { ViteDevServer } from 'vite';
 
 import { getAppContainerProvider } from '~/.server/app.container';
 import { TYPES } from '~/.server/constants';
-import { getLogger } from '~/.server/utils/logging.utils';
+import { createLogger } from '~/.server/logging';
 import { ExpressSession, NoopSession } from '~/.server/web/session';
 import { randomString } from '~/utils/string-utils';
 
-const log = getLogger('request-handlers.server.ts');
+const log = createLogger('request-handlers.server.ts');
 
 export function globalErrorHandler(isProduction: boolean): ErrorRequestHandler {
   return (error, request, response, next) => {

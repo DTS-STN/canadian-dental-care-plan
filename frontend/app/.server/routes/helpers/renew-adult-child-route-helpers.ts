@@ -2,9 +2,9 @@ import { redirect } from 'react-router';
 
 import { z } from 'zod';
 
+import { createLogger } from '~/.server/logging';
 import { getChildrenState, isNewChildState, loadRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import type { ChildState, RenewState, RenewStateParams } from '~/.server/routes/helpers/renew-route-helpers';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
@@ -21,7 +21,7 @@ interface LoadRenewAdultChildStateArgs {
  * @returns The loaded AdultChild state.
  */
 export function loadRenewAdultChildState({ params, request, session }: LoadRenewAdultChildStateArgs) {
-  const log = getLogger('renew-adult-child-route-helpers.server/loadRenewAdultChildState');
+  const log = createLogger('renew-adult-child-route-helpers.server/loadRenewAdultChildState');
   const { pathname } = new URL(request.url);
   const renewState = loadRenewState({ params, session });
 
@@ -60,7 +60,7 @@ interface LoadRenewAdultSingleChildStateArgs {
  * @returns The loaded child state.
  */
 export function loadRenewAdultSingleChildState({ params, request, session }: LoadRenewAdultSingleChildStateArgs) {
-  const log = getLogger('renew-adult-child-route-helpers.server/loadRenewAdultSingleChildState');
+  const log = createLogger('renew-adult-child-route-helpers.server/loadRenewAdultSingleChildState');
   const applyState = loadRenewAdultChildState({ params, request, session });
 
   const parsedChildId = z.string().uuid().safeParse(params.childId);

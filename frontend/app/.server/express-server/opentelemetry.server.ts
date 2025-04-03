@@ -12,9 +12,9 @@ import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-base';
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic-conventions';
 import { ATTR_DEPLOYMENT_ENVIRONMENT_NAME } from '@opentelemetry/semantic-conventions/incubating';
 
-import { getLogger } from '~/.server/utils/logging.utils';
+import { createLogger } from '~/.server/logging';
 
-const log = getLogger('opentelemetry');
+const log = createLogger('opentelemetry');
 
 /**
  * Gets the environment variable value, falling back to a default value if the environment variable is not set or is empty.

@@ -5,9 +5,9 @@ import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
+import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { getCdcpWebsiteRenewUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 
@@ -161,7 +161,7 @@ interface LoadStateArgs {
  * @returns The loaded state.
  */
 export function loadRenewState({ params, session }: LoadStateArgs) {
-  const log = getLogger('renew-route-helpers.server/loadRenewState');
+  const log = createLogger('renew-route-helpers.server/loadRenewState');
   const locale = getLocaleFromParams(params);
   const cdcpWebsiteRenewUrl = getCdcpWebsiteRenewUrl(locale);
 
@@ -208,7 +208,7 @@ interface SaveStateArgs {
  * @returns The new renew state.
  */
 export function saveRenewState({ params, session, state }: SaveStateArgs) {
-  const log = getLogger('renew-route-helpers.server/saveRenewState');
+  const log = createLogger('renew-route-helpers.server/saveRenewState');
   const currentState = loadRenewState({ params, session });
 
   const newState = {
@@ -233,7 +233,7 @@ interface ClearStateArgs {
  * @param args - The arguments.
  */
 export function clearRenewState({ params, session }: ClearStateArgs) {
-  const log = getLogger('renew-route-helpers.server/clearRenewState');
+  const log = createLogger('renew-route-helpers.server/clearRenewState');
   const state = loadRenewState({ params, session });
   const sessionName = getSessionName(state.id);
   session.unset(sessionName);
@@ -252,7 +252,7 @@ interface StartArgs {
  * @returns The initial Renew state.
  */
 export function startRenewState({ applicationYear, id, session }: StartArgs) {
-  const log = getLogger('renew-route-helpers.server/startRenewState');
+  const log = createLogger('renew-route-helpers.server/startRenewState');
   const parsedId = idSchema.parse(id);
 
   const initialState: RenewState = {

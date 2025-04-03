@@ -4,7 +4,7 @@ import { setInterval } from 'node:timers';
 
 import type { ServerConfig } from '~/.server/configs';
 import { getRedisClient } from '~/.server/data/redis.client';
-import { getLogger } from '~/.server/utils/logging.utils';
+import { createLogger } from '~/.server/logging';
 
 /**
  * Creates a memory store for Express sessions.
@@ -12,7 +12,7 @@ import { getLogger } from '~/.server/utils/logging.utils';
  * up an automated task to purge expired sessions every 60 seconds.
  */
 export function createMemoryStore(): MemoryStore {
-  const log = getLogger('session.server/createMemoryStore');
+  const log = createLogger('session.server/createMemoryStore');
   log.info('      initializing new memory session store');
   const memoryStore = new MemoryStore();
 
@@ -28,7 +28,7 @@ export function createMemoryStore(): MemoryStore {
  * Redis client and session configuration from the provided server environment.
  */
 export function createRedisStore(serverConfig: Pick<ServerConfig, 'SESSION_EXPIRES_SECONDS' | 'SESSION_KEY_PREFIX'>): RedisStore {
-  const log = getLogger('session.server/createRedisStore');
+  const log = createLogger('session.server/createRedisStore');
   log.info('      initializing new Redis session store');
   return new RedisStore({
     client: getRedisClient(),
@@ -45,7 +45,7 @@ export function createRedisStore(serverConfig: Pick<ServerConfig, 'SESSION_EXPIR
  * checking their expiration times, and removes any sessions that have expired.
  */
 function purgeExpiredSessions(memoryStore: MemoryStore): void {
-  const log = getLogger('session.server/purgeExpiredSessions');
+  const log = createLogger('session.server/purgeExpiredSessions');
   log.trace('Purging expired sessions');
 
   const isPast = (date: Date): boolean => date.getTime() < Date.now();

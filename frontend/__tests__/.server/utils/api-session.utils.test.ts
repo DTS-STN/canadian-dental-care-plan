@@ -10,8 +10,8 @@ vi.mock('~/.server/utils/url.utils', () => ({
   getCdcpWebsiteUrl: vi.fn(),
 }));
 
-vi.mock('~/.server/utils/logging.utils', () => ({
-  getLogger: vi.fn().mockReturnValue({
+vi.mock('~/.server/logging', () => ({
+  createLogger: vi.fn().mockReturnValue({
     debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),

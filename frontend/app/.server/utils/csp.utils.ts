@@ -1,5 +1,5 @@
+import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 
 export const adobeAnalyticsCSP = {
   connectSrc: 'https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://*.omtrdc.net',
@@ -20,7 +20,7 @@ export const hcaptchaCSP = {
  * @see https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html
  */
 export function generateContentSecurityPolicy(nonce: string) {
-  const log = getLogger('csp-utils.server/generateContentSecurityPolicy');
+  const log = createLogger('csp-utils.server/generateContentSecurityPolicy');
   const { NODE_ENV } = getEnv();
   const isDevelopment = NODE_ENV === 'development';
 

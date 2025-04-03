@@ -6,9 +6,9 @@ import { z } from 'zod';
 import type { Route } from './+types/apply-state';
 
 import { TYPES } from '~/.server/constants';
+import { createLogger } from '~/.server/logging';
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import type { ApplyStateParams } from '~/.server/routes/helpers/apply-route-helpers';
-import { getLogger } from '~/.server/utils/logging.utils';
 
 const API_APPLY_STATE_ACTIONS = ['extend'] as const;
 export type ApiApplyStateAction = (typeof API_APPLY_STATE_ACTIONS)[number];
@@ -17,7 +17,7 @@ export async function action({ context: { appContainer, session }, request }: Ro
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
-  const log = getLogger('routes/api/apply-state');
+  const log = createLogger('routes/api/apply-state');
   const sessionId = session.id;
   log.debug("Action with with user's apply state; sessionId: [%s]", sessionId);
 

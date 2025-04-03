@@ -8,8 +8,8 @@ import { z } from 'zod';
 import type { Route } from './+types/session';
 
 import { TYPES } from '~/.server/constants';
+import { createLogger } from '~/.server/logging';
 import { getApiSessionRedirectToUrl } from '~/.server/utils/api-session.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { APP_LOCALES } from '~/utils/locale-utils';
 
 const API_SESSION_ACTIONS = ['end', 'extend'] as const;
@@ -22,7 +22,7 @@ export async function action({ context: { appContainer, session }, request }: Ro
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
-  const log = getLogger('routes/api/session');
+  const log = createLogger('routes/api/session');
   const sessionId = session.id;
   log.debug("Action with user's server-side session; sessionId: [%s]", sessionId);
 

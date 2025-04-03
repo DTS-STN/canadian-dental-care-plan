@@ -7,8 +7,8 @@ vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(),
 }));
 
-vi.mock('~/.server/utils/logging.utils', () => ({
-  getLogger: () => ({
+vi.mock('~/.server/logging', () => ({
+  createLogger: () => ({
     trace: vi.fn(),
   }),
 }));

@@ -1,8 +1,8 @@
 import { redirect } from 'react-router';
 
+import { createLogger } from '~/.server/logging';
 import type { ApplyState, ApplyStateParams } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
@@ -19,7 +19,7 @@ interface LoadApplyAdultStateArgs {
  * @returns The loaded adult state.
  */
 export function loadApplyAdultState({ params, request, session }: LoadApplyAdultStateArgs) {
-  const log = getLogger('apply-adult-route-helpers.server/loadApplyAdultState');
+  const log = createLogger('apply-adult-route-helpers.server/loadApplyAdultState');
   const { pathname } = new URL(request.url);
   const applyState = loadApplyState({ params, session });
 

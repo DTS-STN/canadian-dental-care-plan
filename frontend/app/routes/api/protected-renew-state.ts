@@ -6,9 +6,9 @@ import { z } from 'zod';
 import type { Route } from './+types/protected-renew-state';
 
 import { TYPES } from '~/.server/constants';
+import { createLogger } from '~/.server/logging';
 import { saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import type { ProtectedRenewStateParams } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import { getLogger } from '~/.server/utils/logging.utils';
 
 const API_PROTECTED_RENEW_STATE_ACTIONS = ['extend'] as const;
 export type ApiProtectedRenewStateAction = (typeof API_PROTECTED_RENEW_STATE_ACTIONS)[number];
@@ -17,7 +17,7 @@ export async function action({ context: { appContainer, session }, request }: Ro
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
-  const log = getLogger('routes/api/protected-renew-state');
+  const log = createLogger('routes/api/protected-renew-state');
   const sessionId = session.id;
   log.debug("Action with with user's protected renew state; sessionId: [%s]", sessionId);
 

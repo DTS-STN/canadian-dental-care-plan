@@ -4,9 +4,9 @@ import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
+import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
@@ -158,7 +158,7 @@ interface LoadStateArgs {
  * @returns The loaded state.
  */
 export function loadProtectedRenewState({ params, request, session }: LoadStateArgs) {
-  const log = getLogger('protected-renew-route-helpers.server/loadProtectedRenewState');
+  const log = createLogger('protected-renew-route-helpers.server/loadProtectedRenewState');
   const locale = getLocaleFromParams(params);
   const { pathname } = new URL(request.url);
   const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
@@ -204,7 +204,7 @@ interface SaveStateArgs {
  * @returns The new protected renew state.
  */
 export function saveProtectedRenewState({ params, request, session, state }: SaveStateArgs) {
-  const log = getLogger('protected-renew-route-helpers.server/saveProtectedRenewState');
+  const log = createLogger('protected-renew-route-helpers.server/saveProtectedRenewState');
   const currentState = loadProtectedRenewState({ params, request, session });
 
   const newState = {
@@ -229,7 +229,7 @@ interface ClearStateArgs {
  * @param args - The arguments.
  */
 export function clearProtectedRenewState({ params, request, session }: ClearStateArgs) {
-  const log = getLogger('protected-renew-route-helpers.server/clearProtectedRenewState');
+  const log = createLogger('protected-renew-route-helpers.server/clearProtectedRenewState');
   const state = loadProtectedRenewState({ params, request, session });
   const sessionName = getSessionName(state.id);
   session.unset(sessionName);
@@ -249,7 +249,7 @@ interface StartArgs {
  * @returns The initial protected renew state.
  */
 export function startProtectedRenewState({ applicationYear, clientApplication, id, session }: StartArgs) {
-  const log = getLogger('protected-renew-route-helpers.server/startProtectedRenewState');
+  const log = createLogger('protected-renew-route-helpers.server/startProtectedRenewState');
   const parsedId = idSchema.parse(id);
   const sessionName = getSessionName(parsedId);
 
@@ -310,7 +310,7 @@ interface LoadProtectedRenewSingleChildStateArgs {
  * @returns The loaded child state.
  */
 export function loadProtectedRenewSingleChildState({ params, request, session }: LoadProtectedRenewSingleChildStateArgs) {
-  const log = getLogger('protected-renew-route-helpers.server/loadProtectedRenewSingleChildState');
+  const log = createLogger('protected-renew-route-helpers.server/loadProtectedRenewSingleChildState');
   const protectedRenewState = loadProtectedRenewState({ params, request, session });
 
   const parsedChildId = z.string().uuid().safeParse(params.childId);

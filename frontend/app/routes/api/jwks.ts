@@ -4,8 +4,8 @@ import type { Route } from './+types/jwks';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
+import { createLogger } from '~/.server/logging';
 import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 
 /**
  * JsonWebKey with an additional `kid` (key id) property.
@@ -19,7 +19,7 @@ interface JWK extends JsonWebKey {
  * keys have been configured, this function returns an empty array.
  */
 async function getJwks(serverConfig: Pick<ServerConfig, 'AUTH_JWT_PUBLIC_KEY'>) {
-  const log = getLogger('[.]well-known.jwks[.]json');
+  const log = createLogger('[.]well-known.jwks[.]json');
   const { AUTH_JWT_PUBLIC_KEY } = serverConfig;
 
   if (!AUTH_JWT_PUBLIC_KEY) {
