@@ -177,15 +177,15 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
-    throw redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/marital-status', params));
   }
 
   if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
-    throw redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
+    throw redirect(getPathById('public/apply/$id/adult-child/marital-status', params));
   }
 
   if (contactInformation === undefined) {
-    throw redirect(getPathById('public/apply/$id/adult-child/contact-information', params)); // TODO: redirect to phone-number.tsx or email.tsx
+    throw redirect(getPathById('public/apply/$id/adult-child/phone-number', params));
   }
 
   if (communicationPreferences === undefined) {

@@ -175,15 +175,15 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
-    throw redirect(getPathById('public/apply/$id/child/applicant-information', params));
+    throw redirect(getPathById('public/apply/$id/child/marital-status', params));
   }
 
   if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
-    throw redirect(getPathById('public/apply/$id/child/applicant-information', params));
+    throw redirect(getPathById('public/apply/$id/child/marital-status', params));
   }
 
   if (contactInformation === undefined) {
-    throw redirect(getPathById('public/apply/$id/child/contact-information', params));
+    throw redirect(getPathById('public/apply/$id/child/phone-number', params));
   }
 
   if (communicationPreferences === undefined) {
