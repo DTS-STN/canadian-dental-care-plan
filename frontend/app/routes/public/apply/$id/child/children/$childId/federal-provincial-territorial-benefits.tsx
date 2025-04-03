@@ -28,6 +28,12 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+const FORM_ACTION = {
+  continue: 'continue',
+  cancel: 'cancel',
+  save: 'save',
+} as const;
+
 const HAS_FEDERAL_BENEFITS_OPTION = {
   no: 'no',
   yes: 'yes',
@@ -89,6 +95,26 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplySingleChildState({ params, request, session });
   const applyState = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  if (formAction === FORM_ACTION.cancel) {
+    if (state.hasFederalProvincialTerritorialBenefits) {
+      saveApplyState({
+        params,
+        session,
+        state: {
+          children: applyState.children.map((child) => {
+            if (child.id !== state.id) return child;
+            return {
+              ...child,
+              hasFederalProvincialTerritorialBenefits: !!state.dentalBenefits,
+            };
+          }),
+        },
+      });
+    }
+    return redirect(getPathById('public/apply/$id/child/review-child-information', params));
+  }
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -336,24 +362,33 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
           </fieldset>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Child access to other federal, provincial or territorial dental benefits click">
+              <Button
+                variant="primary"
+                id="save-button"
+                name="_action"
+                value={FORM_ACTION.save}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Child access to other federal, provincial or territorial dental benefits click"
+              >
                 {t('apply-child:children.dental-benefits.button.save-btn')}
               </Button>
-              <ButtonLink
-                id="back-button"
-                routeId="public/apply/$id/child/review-child-information"
-                params={params}
+              <LoadingButton
+                id="cancel-button"
+                name="_action"
+                value={FORM_ACTION.cancel}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Child access to other federal, provincial or territorial dental benefits click"
               >
                 {t('apply-child:children.dental-benefits.button.cancel-btn')}
-              </ButtonLink>
+              </LoadingButton>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <LoadingButton
                 variant="primary"
                 id="continue-button"
+                name="_action"
+                value={FORM_ACTION.continue}
                 loading={isSubmitting}
                 endIcon={faChevronRight}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child access to other federal, provincial or territorial dental benefits click"
