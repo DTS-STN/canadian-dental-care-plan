@@ -38,7 +38,12 @@
       "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisis",
       "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
       "date-of-birth-year-required": "La date de naissance doit inclure une année",
-      "dtc-required": "Sélectionnez si vous avez un crédit d'impôt d'invalidité valide"
+      "dtc-required": "Sélectionnez si vous avez un crédit d'impôt d'invalidité valide",
+      "alert": {
+        "heading": "Vous ne pouvez pas souscrire pour le moment",
+        "detail": "Compte tenu de votre date de naissance, vous ne pouvez pas souscrire au Régime canadien de soins dentaires pour le moment.",
+        "applyDate": "Vous pouvez souscrire à partir du {{startDate}}."
+      }
     }
   },
   "marital-status": {

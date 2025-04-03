@@ -328,3 +328,36 @@ export function applicantInformationStateHasPartner(maritalStatus?: string) {
   const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
   return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
 }
+
+type EligibilityRule = {
+  minAge: number;
+  maxAge: number;
+  startDate: string;
+};
+
+type EligibilityResult = {
+  eligible: boolean;
+  startDate?: string;
+};
+
+function getEligibilityRules(): EligibilityRule[] {
+  const { APPLY_ELIGIBILITY_RULES } = getEnv();
+  return JSON.parse(APPLY_ELIGIBILITY_RULES);
+}
+
+export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
+  const { CURRENT_DATE } = getEnv();
+
+  const today = CURRENT_DATE ? new Date(CURRENT_DATE) : new Date();
+  const age = getAgeFromDateString(dateOfBirth);
+
+  for (const { minAge, maxAge, startDate } of getEligibilityRules()) {
+    if (age >= minAge && age <= maxAge) {
+      const ruleStartDate = startDate.toLowerCase() === 'now' ? today : new Date(startDate);
+      return today < ruleStartDate ? { eligible: false, startDate } : { eligible: true };
+    }
+  }
+
+  // No eligibility group found.
+  return { eligible: false };
+}
