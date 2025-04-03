@@ -3,7 +3,7 @@
  */
 import { UTCDate } from '@date-fns/utc';
 import type { JWTPayload, JWTVerifyResult } from 'jose';
-import { SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
+import { SignJWT, compactDecrypt, decodeProtectedHeader, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
 import invariant from 'tiny-invariant';
 
@@ -363,9 +363,11 @@ async function createClientAssertion(issuer: string, client: ClientMetadata) {
 async function decryptJwe(jwe: string, privateKey: CryptoKey) {
   const { kty, ...restOfJwk } = await subtle.exportKey('jwk', privateKey);
   invariant(kty, 'Expected JWK to have a key type');
+
   const key = await importJWK({ ...restOfJwk, kty }, 'RSA-OAEP-256');
-  const decryptResult = await compactDecrypt(jwe, key, { keyManagementAlgorithms: ['RSA-OAEP-256'] });
-  return decryptResult.plaintext.toString();
+  const decryptResult = await compactDecrypt(jwe, key);
+
+  return Buffer.from(decryptResult.plaintext).toString();
 }
 
 /**
@@ -489,13 +491,18 @@ function validateServerMetadata(serverMetadata: ServerMetadata) {
  */
 async function verifyJwt<Payload = JWTPayload>(jwt: string, jwks: JWKSet) {
   const log = getLogger('raoidc-utils.server/verifyJwt');
-  for (const key of jwks.keys) {
-    const { kty, ...restOfKey } = key;
+
+  // normally the crypto algorithm is declared in the jwk, however RAOIDC's
+  // nonprod jwk does not declare an algorithm, so we will use the one declared in the jwt header
+  const jwtHeader = decodeProtectedHeader(jwt);
+
+  for (const jwk of jwks.keys) {
+    const { kty, ...restOfKey } = jwk;
     invariant(kty, 'Expected JWK to have a key type');
-    const keyLike = await importJWK({ ...restOfKey, kty }, 'RSA-OAEP-256');
 
     try {
-      return await jwtVerify<Payload>(jwt, keyLike);
+      const key = await importJWK({ ...restOfKey, kty }, jwtHeader.alg);
+      return await jwtVerify<Payload>(jwt, key);
     } catch {
       // not the right JWK; skip to the next one
     }
