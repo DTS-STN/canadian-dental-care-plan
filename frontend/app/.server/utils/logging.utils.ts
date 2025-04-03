@@ -75,6 +75,11 @@ export const getLogger = (category: string): Logger => {
     return winston.loggers.get(category) as Logger;
   }
 
+  // each time a new logger is created, an `error`, `drain`, `close`, `finish`, and 'unpipe` event listener is added to `consoleTransport`
+  // this will eventually lead to a "MaxListenersExceededWarning: Possible EventEmitter memory leak detected" wearning being emitted by nodejs
+  // to fix this, whenever a new logger is added, increase the maxListeners by 5
+  consoleTransport.setMaxListeners(consoleTransport.getMaxListeners() + 5);
+
   const logger = winston.loggers.add(category, {
     level: env.logLevel,
     levels: logLevels,
@@ -97,6 +102,8 @@ export const getLogger = (category: string): Logger => {
     ),
     transports: [consoleTransport],
   }) as Logger;
+
+  logger.trace('consoleTransport.maxListeners increased to %s', consoleTransport.getMaxListeners());
 
   //
   // Audit logs are persisted to disk to ensure that we
