@@ -128,11 +128,6 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/applicant-information.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/applicant-information', fr: '/:lang/demander/:id/adulte-enfant/renseignements-demandeur' },
           },
-          {
-            id: 'public/apply/$id/adult-child/contact-apply-child',
-            file: 'routes/public/apply/$id/adult-child/contact-apply-child.tsx',
-            paths: { en: '/:lang/apply/:id/adult-child/contact-apply-child', fr: '/:lang/demander/:id/adulte-enfant/contact-demande-enfant' },
-          },
           { id: 'public/apply/$id/adult-child/exit-application', file: 'routes/public/apply/$id/adult-child/exit-application.tsx', paths: { en: '/:lang/apply/:id/adult-child/exit-application', fr: '/:lang/demander/:id/adulte-enfant/quitter-demande' } },
           { id: 'public/apply/$id/child/children/index', file: 'routes/public/apply/$id/child/children/index.tsx', paths: { en: '/:lang/apply/:id/child/children', fr: '/:lang/demander/:id/enfant/enfants' } },
           {
