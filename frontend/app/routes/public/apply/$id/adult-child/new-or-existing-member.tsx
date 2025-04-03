@@ -217,7 +217,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
                 value={FORM_ACTION.continue}
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Continue - New or existing member click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - New or existing member click"
               >
                 {t('apply-adult-child:new-or-existing-member.continue-btn')}
               </LoadingButton>
@@ -227,7 +227,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Back - New or existing member click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - New or existing member click"
               >
                 {t('apply-adult-child:new-or-existing-member.back-btn')}
               </ButtonLink>
