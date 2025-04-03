@@ -437,15 +437,6 @@
       "close-btn": "Fermer la demande"
     }
   },
-  "contact-apply-child": {
-    "page-title": "Communiquez avec nous pour faire une demande pour votre enfant",
-    "contact-service-canada": "Vous devez parler à un représentant de Service Canada si vous avez moins de 16 ans et présentez une demande pour votre enfant. Veuillez communiquer avec Service Canada au <noWrap>1-833-537-4342</noWrap> ou vous rendre dans un <serviceCanadaOfficeLink>bureau de Service Canada</serviceCanadaOfficeLink>.",
-    "service-canada-office-link": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=fra",
-    "parent-guardian": "Un parent ou tuteur légal doit faire une demande pour vous inscrire au Régime canadien de soins dentaire.",
-    "back-btn": "Retour",
-    "return-btn": "Revenir à la page principale",
-    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
-  },
   "confirm-dental-benefits": {
     "title": "Accès à d'autres prestations dentaires gouvernementales",
     "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
