@@ -4,12 +4,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { InputLabel } from '~/components/input-label';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-}));
-
 describe('InputLabel', () => {
   afterEach(() => {
     vi.clearAllMocks();

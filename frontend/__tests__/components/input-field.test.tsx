@@ -4,12 +4,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { InputField } from '~/components/input-field';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-}));
-
 describe('InputField', () => {
   afterEach(() => {
     vi.clearAllMocks();

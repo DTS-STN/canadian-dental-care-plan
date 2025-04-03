@@ -6,12 +6,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: vi.fn().mockReturnValue({
-    t: (key: string) => key,
-  }),
-}));
-
 describe('ClientFriendlyStatusMarkdown Component', () => {
   afterEach(() => {
     vi.clearAllMocks();

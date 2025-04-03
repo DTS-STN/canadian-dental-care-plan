@@ -6,15 +6,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { PageHeaderBrand } from '~/components/page-header-brand';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    i18n: {
-      getFixedT: (lang: string) => (key: string) => key,
-    },
-  }),
-}));
-
 vi.mock('~/components/language-switcher', () => ({
   LanguageSwitcher: vi.fn().mockImplementation(({ children }) => <div>{children}</div>),
 }));

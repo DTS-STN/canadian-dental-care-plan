@@ -4,12 +4,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { InputTextarea } from '~/components/input-textarea';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-}));
-
 describe('InputTextarea', () => {
   afterEach(() => {
     vi.clearAllMocks();

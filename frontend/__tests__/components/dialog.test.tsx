@@ -1,14 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-}));
 
 describe('Dialog', () => {
   it('renders Dialog component', () => {
@@ -63,6 +57,7 @@ describe('Dialog', () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Dialog Title</DialogTitle>
+            <DialogDescription>Dialog Description</DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>,
