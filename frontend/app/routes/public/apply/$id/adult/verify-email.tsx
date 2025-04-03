@@ -59,7 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     id: state.id,
     meta,
-    email: state.email,
+    email: state.editModeEmail ?? state.email,
     editMode: state.editMode,
   };
 }
@@ -162,7 +162,7 @@ export async function action({ context: { appContainer, session }, params, reque
           params,
           session,
           state: {
-            communicationPreferences: state.editModeCommunicationPreferences,
+            communicationPreferences: state.editModeCommunicationPreferences ?? state.communicationPreferences,
             email: state.editModeEmail,
             verifyEmail: {
               ...state.verifyEmail,
