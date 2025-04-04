@@ -48,7 +48,7 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
   const enteredAddressOptionValue = 'entered-address';
   const suggestedAddressOptionValue = 'suggested-address';
   type AddressSelectionOption = typeof enteredAddressOptionValue | typeof suggestedAddressOptionValue;
-  const [selectedAddressSuggestionOption, setSelectedAddressSuggestionOption] = useState<AddressSelectionOption>(enteredAddressOptionValue);
+  const [selectedAddressSuggestionOption, setSelectedAddressSuggestionOption] = useState<AddressSelectionOption>(suggestedAddressOptionValue);
 
   async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
