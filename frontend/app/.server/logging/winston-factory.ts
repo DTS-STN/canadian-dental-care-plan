@@ -1,105 +1,83 @@
-import { isEmpty, omit } from 'moderndash';
-import os from 'node:os';
-import util from 'node:util';
-import { LEVEL, MESSAGE, SPLAT } from 'triple-beam';
+import path from 'node:path';
 import type * as w from 'winston';
-import winston, { format, transports } from 'winston';
+import winston, { format } from 'winston';
 import 'winston-daily-rotate-file';
 import { fullFormat } from 'winston-error-format';
 
 import type { LogLevel } from '~/.server/logging/log-levels';
 import type { LoggingConfig } from '~/.server/logging/logging-config';
+import { createConsoleTransport, createDailyRotateFileTransport } from '~/.server/logging/winston-transport-factory';
+
+export type LevelsConfig = {
+  levels: Record<LogLevel, number>;
+  colors: Record<LogLevel, string>;
+};
+
+const levelsConfig = {
+  levels: {
+    audit: 0, // Highest priority - for security and compliance events
+    error: 1, // Application errors requiring immediate attention
+    warn: 2, // Warning conditions
+    info: 3, // Informational messages highlighting application progress
+    debug: 4, // Detailed debug information
+    trace: 5, // Fine-grained debug information
+  },
+  colors: {
+    audit: 'magenta',
+    error: 'red',
+    warn: 'yellow',
+    info: 'green',
+    debug: 'blue',
+    trace: 'dim',
+  },
+} as const satisfies LevelsConfig;
+
+winston.addColors(levelsConfig.colors);
 
 /**
  * Creates a configured Winston logger instance based on the provided environment settings.
  *
  * @param config - The logging environment configuration containing settings like log level
- *              and audit log parameters.
+ *                and audit log parameters.
  * @returns A configured Winston logger instance.
  */
 export function createWinstonInstance(config: LoggingConfig): w.Logger {
-  // Define log levels with corresponding priorities (lower number = higher priority)
-  const levels = {
-    audit: 0,
-    error: 1,
-    warn: 2,
-    info: 3,
-    debug: 4,
-    trace: 5,
-  } as const satisfies Record<LogLevel, number>;
-
-  // Configure console transport with exception handling
-  const consoleTransport = new transports.Console({
-    handleExceptions: true, // Log uncaught exceptions
-    handleRejections: true, // Log unhandled promise rejections
-  });
+  // Validate that LOG_LEVEL is valid before creating the logger
+  if (!levelsConfig.levels[config.LOG_LEVEL]) {
+    throw new Error(`Invalid LOG_LEVEL: ${config.LOG_LEVEL}`);
+  }
 
   // Create and configure the main logger instance
   const winstonInstance = winston.createLogger({
     level: config.LOG_LEVEL,
-    levels,
+    levels: levelsConfig.levels,
     format: format.combine(
       format.timestamp(),
       format.splat(), // Enables string interpolation with %s, %d, etc.
       fullFormat(), // Enhanced error formatting from winston-error-format
-      format.printf((info) => consoleLogFormat(info)),
     ),
-    transports: [consoleTransport],
+    transports: [createConsoleTransport(levelsConfig)],
   });
 
-  // Add DailyRotateFile transport for audit logs if enabled in environment config
-  if (config.AUDIT_LOG_ENABLED) {
-    const dailyRotateFileTransport = new transports.DailyRotateFile({
-      level: 'audit',
-      dirname: config.AUDIT_LOG_DIRNAME,
-      filename: config.AUDIT_LOG_FILENAME,
-      format: format.printf((info) => `${info.message}`),
-      extension: `_${os.hostname()}.log`,
-      utc: true,
-    });
+  // Configure audit logging if enabled
+  configureAuditLogging(winstonInstance, config);
 
-    winstonInstance.add(dailyRotateFileTransport);
-    winstonInstance.info(`Audit logging enabled. Writing logs to ${dailyRotateFileTransport.dirname}/${dailyRotateFileTransport.filename}`);
-  }
-
-  winstonInstance.info(`Logger initialized with level "${winstonInstance.level}"`);
+  winstonInstance.info('Logger initialized with level "%s"', winstonInstance.level);
   return winstonInstance;
 }
 
 /**
- * Formats a log label string to a fixed length.
- * If the label is longer than the specified size, it's truncated and prefixed with an ellipsis.
+ * Configures and adds audit logging if enabled in the configuration.
  *
- * @param label - The label string to format
- * @param size - The desired fixed width for the label
- * @returns The formatted label string with consistent width
+ * @param logger - The Winston logger instance
+ * @param config - The logging configuration
  */
-function formatLabel(label: string, size: number): string {
-  const str = label.padStart(size);
-  return str.length <= size ? str : `…${str.slice(-size + 1)}`;
-}
+function configureAuditLogging(logger: w.Logger, config: LoggingConfig): void {
+  if (config.AUDIT_LOG_ENABLED) {
+    const dailyRotateFileTransport = createDailyRotateFileTransport(config);
+    logger.add(dailyRotateFileTransport);
 
-/**
- * Custom Winston log formatter for console output.
- * Creates a readable, aligned format with timestamp, level, category, message,
- * and any additional metadata.
- *
- * Format: "[timestamp] [LEVEL] --- [category]: message --- {metadata}"
- *
- * @param info - The log information object provided by Winston
- * @returns The formatted log string
- */
-function consoleLogFormat(info: w.Logform.TransformableInfo): string {
-  const { label, level, message, timestamp, ...rest } = info;
-
-  // Format the core log message with fixed-width fields for alignment
-  let formattedInfo = `${timestamp} ${level.toUpperCase().padStart(7)} --- [${formatLabel(`${label ?? 'winston-factory'}`, 25)}]: ${message}`;
-
-  // Append metadata if present, excluding Winston's internal properties
-  if (!isEmpty(rest)) {
-    const stripped = omit(rest, [LEVEL, MESSAGE, SPLAT]);
-    formattedInfo += ` --- ${util.inspect(stripped, false, null, true)}`;
+    const logPath = path.join(dailyRotateFileTransport.dirname || '.', dailyRotateFileTransport.filename);
+    logger.info(`Audit logging enabled. Writing logs to ${logPath}`);
   }
-
-  return formattedInfo;
 }

@@ -22,7 +22,9 @@ export type LoggingConfig = {
 
 /**
  * Default configuration values used when specific settings are not provided.
- * LOG_LEVEL defaults based on the environment - 'info' in production, 'debug' otherwise.
+ * LOG_LEVEL defaults based on the environment:
+ * - 'info' in production
+ * - 'debug' in other environments (e.g., development)
  */
 export const defaultsConfig = {
   LOG_LEVEL: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
@@ -33,19 +35,19 @@ export const defaultsConfig = {
 
 /**
  * Zod schema for validating and parsing logging-related environment variables.
- * For each config property:
- *  - Validates the input against constraints
- *  - Transforms string inputs to appropriate types when needed
+ * This schema:
+ *  - Validates the input against predefined constraints
+ *  - Transforms string inputs to appropriate types
  *  - Falls back to default values when validation fails
  */
-const loggingEnvSchema = z.object({
+const loggingConfigSchema = z.object({
   LOG_LEVEL: z
-    .enum(logLevels) //
+    .enum(logLevels) // Ensures the log level is one of the predefined levels
     .catch(defaultsConfig.LOG_LEVEL),
 
   AUDIT_LOG_ENABLED: z
-    .string() //
-    .transform((val) => val.toLowerCase() === 'true')
+    .string() // Validates AUDIT_LOG_ENABLED as a string
+    .transform((val) => val.toLowerCase() === 'true') // Converts to boolean
     .catch(defaultsConfig.AUDIT_LOG_ENABLED),
 
   AUDIT_LOG_DIRNAME: z
@@ -63,7 +65,6 @@ const loggingEnvSchema = z.object({
 
 /**
  * Retrieves and validates logging configuration from environment variables.
- *
  * This function parses environment variables according to the defined schema,
  * applies validation rules, and returns a fully validated configuration object.
  * If environment variables are missing or invalid, it falls back to default values.
@@ -71,5 +72,5 @@ const loggingEnvSchema = z.object({
  * @returns The validated logging configuration.
  */
 export function getLoggingConfig(): LoggingConfig {
-  return loggingEnvSchema.parse(process.env);
+  return loggingConfigSchema.parse(process.env);
 }

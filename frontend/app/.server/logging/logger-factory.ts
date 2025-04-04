@@ -1,41 +1,22 @@
-import type * as w from 'winston';
-
-import { createWinstonInstance } from './winston-factory';
+import invariant from 'tiny-invariant';
 
 import type { Logger } from '~/.server/logging/logger';
-import { getLoggingConfig } from '~/.server/logging/logging-config';
-import { WinstonLogger } from '~/.server/logging/winston-logger';
+import { DefaultLogger } from '~/.server/logging/logger-default';
+import { getWinstonLoggerSingleton } from '~/.server/logging/winston-logger-singleton';
 
 /**
- * Singleton Winston instance used across the application.
- * Lazily initialized on first access via getWinstonInstance().
- */
-let singletonWinstonInstance: w.Logger | undefined = undefined;
-
-/**
- * Creates and/or retrieves the singleton Winston logger instance.
- * This function initializes the logger on its first call based on environment settings.
- * Subsequent calls return the existing instance.
+ * Creates a logger instance for the specified label. The label identifies the context
+ * of the logging (e.g., which service or module the logs are coming from). This function
+ * ensures that the label is non-empty and valid before returning a logger instance.
  *
- * @returns The configured Winston logger instance.
- */
-function getWinstonInstance(): w.Logger {
-  if (!singletonWinstonInstance) {
-    const config = getLoggingConfig();
-    singletonWinstonInstance = createWinstonInstance(config);
-  }
-  return singletonWinstonInstance;
-}
-
-/**
- * Creates a logger instance for the specified category.
+ * The logger returned by this function will prefix logs with the provided label and
+ * can be used for structured logging in the context of services like 'Database', 'AuthService', etc.
  *
- * Each call returns a new wrapper instance (`WinstonLogger`) configured with the
- * provided category. These wrappers delegate logging calls to the shared,
- * underlying Winston logger instance.
+ * The logger instance will be configured using a default Winston Logger instance obtained from
+ * `getWinstonInstance()`. The logger will use this Winston Logger instance to log messages
+ * with the provided context (label).
  *
  * @example
- * ```typescript
  * // In database service
  * const logger = createLogger('Database');
  * logger.info('Connection established');
@@ -43,17 +24,18 @@ function getWinstonInstance(): w.Logger {
  * // In auth service
  * const logger = createLogger('AuthService');
  * logger.error('Authentication failed', { userId: '123', reason: 'invalid_token' });
- * ```
  *
- * @param category - A string identifying the logging context (e.g., 'Database', 'AuthService').
- *                   This category will be included in the log metadata.
- * @returns A logger instance configured for the specified category.
- * @throws {Error} If category is empty or not provided.
+ * @param label - A string identifying the logging context (e.g., 'Database', 'AuthService').
+ *                The label is used to contextualize logs and should not be empty or whitespace-only.
+ *
+ * @throws {Error} If the label is empty, invalid, or only whitespace.
+ *
+ * @returns A logger instance (configured with the given label) for use in logging.
  */
-export function createLogger(category: string): Logger {
-  if (!category || category.trim() === '') {
-    throw new Error('Logger category must be provided');
-  }
+export function createLogger(label: string): Logger {
+  // Ensure the label is a valid non-empty string
+  invariant(typeof label === 'string' && label.trim().length > 0, 'Logger label must be a non-empty string and cannot be just whitespace.');
 
-  return new WinstonLogger(getWinstonInstance(), category);
+  // Return the logger instance configured with the label using the default Winston Logger instance
+  return new DefaultLogger(getWinstonLoggerSingleton(), label);
 }
