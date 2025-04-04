@@ -39,6 +39,16 @@ export interface FederalGovernmentInsurancePlanService {
   listFederalGovernmentInsurancePlans(): ReadonlyArray<FederalGovernmentInsurancePlanDto>;
 
   /**
+   * Finds a specific federal government insurance plan by its ID in the specified locale.
+   * Returns null if no matching federal government insurance plan is found for the specified locale.
+   *
+   * @param id - The ID of the federal government insurance plan to retrieve.
+   * @param locale - The desired locale (e.g., 'en' or 'fr').
+   * @returns The FederalGovernmentInsurancePlan DTO corresponding to the specified ID and locale or null if not found.
+   */
+  findLocalizedFederalGovernmentInsurancePlanById(id: string, locale: AppLocale): FederalGovernmentInsurancePlanLocalizedDto | null;
+
+  /**
    * Retrieves a specific federal government insurance plan by its ID in the specified locale.
    *
    * @param id - The ID of the federal government insurance plan to retrieve.
@@ -146,6 +156,21 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
     const sortedFederalGovernmentInsurancePlanLocalizedDtos = this.sortFederalGovernmentInsurancePlanLocalizedDtos(federalGovernmentInsurancePlanLocalizedDtos, locale);
     this.log.trace('Returning localized and sorted federal government insurance plans: [%j]', sortedFederalGovernmentInsurancePlanLocalizedDtos);
     return sortedFederalGovernmentInsurancePlanLocalizedDtos;
+  }
+
+  findLocalizedFederalGovernmentInsurancePlanById(id: string, locale: AppLocale): FederalGovernmentInsurancePlanLocalizedDto | null {
+    this.log.debug('Finding federal government insurance plan with id [%s] and locale [%s]', id, locale);
+    const federalGovernmentInsurancePlanDto = this.findFederalGovernmentInsurancePlanById(id);
+
+    if (!federalGovernmentInsurancePlanDto) {
+      this.log.trace('Federal government insurance plan with id [%s] not found. Returning null', id);
+      return null;
+    }
+
+    const federalGovernmentInsurancePlanLocalizedDto = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto(federalGovernmentInsurancePlanDto, locale);
+
+    this.log.trace('Returning federal government insurance plan: [%j]', federalGovernmentInsurancePlanLocalizedDto);
+    return federalGovernmentInsurancePlanLocalizedDto;
   }
 
   getLocalizedFederalGovernmentInsurancePlanById(id: string, locale: AppLocale): FederalGovernmentInsurancePlanLocalizedDto {

@@ -48,7 +48,7 @@ export class DefaultProvincialGovernmentInsurancePlanRepository implements Provi
     const provincialGovernmentInsurancePlanEntity = provincialGovernmentInsurancePlanEntities.find(({ esdc_governmentinsuranceplanid }) => esdc_governmentinsuranceplanid === id);
 
     if (!provincialGovernmentInsurancePlanEntity) {
-      this.log.warn('Provincial government insurance plan not found; id: [%s]', id);
+      this.log.info('Provincial government insurance plan not found; id: [%s]', id);
       return null;
     }
 

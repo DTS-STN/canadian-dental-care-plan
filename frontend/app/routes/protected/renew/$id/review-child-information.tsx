@@ -76,14 +76,14 @@ export async function loader({ context: { appContainer, session }, params, reque
       ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
-    const clientDentalBenefits = immutableChild?.dentalBenefits.map((id) => {
-      try {
-        const federalBenefit = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(id, locale);
-        return federalBenefit.name;
-      } catch {
-        const provincialBenefit = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(id, locale);
-        return provincialBenefit.name;
-      }
+    const clientDentalBenefits = immutableChild?.dentalBenefits.flatMap((id) => {
+      const federalProgram = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findLocalizedFederalGovernmentInsurancePlanById(id, locale);
+      if (federalProgram) return [federalProgram.name];
+
+      const provincialProgram = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
+      if (provincialProgram) return [provincialProgram.name];
+
+      return [];
     });
 
     const dentalBenefits = child.dentalBenefits

@@ -204,6 +204,59 @@ describe('DefaultFederalGovernmentInsurancePlanService', () => {
     });
   });
 
+  describe('findLocalizedFederalGovernmentInsurancePlanById', () => {
+    it('fetches federal government insurance plan by id and locale', () => {
+      const id = '1';
+      const mockFederalGovernmentInsurancePlanRepository = mock<FederalGovernmentInsurancePlanRepository>();
+      mockFederalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById.mockReturnValueOnce({
+        esdc_governmentinsuranceplanid: '1',
+        esdc_nameenglish: 'First Insurance Plan',
+        esdc_namefrench: "Premier plan d'assurance",
+      });
+
+      const mockDto: FederalGovernmentInsurancePlanDto = {
+        id: '1',
+        nameEn: 'First Insurance Plan',
+        nameFr: "Premier plan d'assurance",
+      };
+
+      const mockLocalizedDto: FederalGovernmentInsurancePlanLocalizedDto = {
+        id: '1',
+        name: 'First Insurance Plan',
+      };
+
+      const mockFederalGovernmentInsurancePlanDtoMapper = mock<FederalGovernmentInsurancePlanDtoMapper>();
+      mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
+      mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
+
+      const service = new DefaultFederalGovernmentInsurancePlanService(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
+
+      const dto = service.findLocalizedFederalGovernmentInsurancePlanById(id, 'en');
+
+      expect(dto).toEqual(mockLocalizedDto);
+      expect(mockFederalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById).toHaveBeenCalledOnce();
+      expect(mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto).toHaveBeenCalledOnce();
+      expect(mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto).toHaveBeenCalledOnce();
+    });
+
+    it('fetches federal government insurance plan by id and locale and returns null if not found', () => {
+      const id = '1033';
+      const mockFederalGovernmentInsurancePlanRepository = mock<FederalGovernmentInsurancePlanRepository>();
+      mockFederalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById.mockReturnValueOnce(null);
+
+      const mockFederalGovernmentInsurancePlanDtoMapper = mock<FederalGovernmentInsurancePlanDtoMapper>();
+
+      const service = new DefaultFederalGovernmentInsurancePlanService(mockLogFactory, mockFederalGovernmentInsurancePlanDtoMapper, mockFederalGovernmentInsurancePlanRepository, mockServerConfig);
+
+      const dto = service.findLocalizedFederalGovernmentInsurancePlanById(id, 'en');
+
+      expect(dto).toBeNull();
+      expect(mockFederalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById).toHaveBeenCalledOnce();
+      expect(mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto).not.toHaveBeenCalled();
+      expect(mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto).not.toHaveBeenCalled();
+    });
+  });
+
   describe('getLocalizedFederalGovernmentInsurancePlanById', () => {
     it('fetches localized federal government insurance plan by id', () => {
       const id = '1';
