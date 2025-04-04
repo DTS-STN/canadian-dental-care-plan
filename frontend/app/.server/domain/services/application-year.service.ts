@@ -42,13 +42,13 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   private readonly log: Logger;
   private readonly applicationYearDtoMapper: ApplicationYearDtoMapper;
   private readonly applicationYearRepository: ApplicationYearRepository;
-  private readonly serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE' | 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>;
+  private readonly serverConfig: Pick<ServerConfig, 'APPLICATION_CURRENT_DATE' | 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.ApplicationYearDtoMapper) applicationYearDtoMapper: ApplicationYearDtoMapper,
     @inject(TYPES.domain.repositories.ApplicationYearRepository) applicationYearRepository: ApplicationYearRepository,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICATION_YEAR_REQUEST_DATE' | 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICATION_CURRENT_DATE' | 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('DefaultApplicationYearService');
     this.applicationYearDtoMapper = applicationYearDtoMapper;
@@ -90,7 +90,7 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   async getIntakeApplicationYear(date: string): Promise<IntakeApplicationYearResultDto> {
     this.log.trace('Finding intake application year results with date: [%s]', date);
 
-    const applicationYearRequestDate = this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? date;
+    const applicationYearRequestDate = this.serverConfig.APPLICATION_CURRENT_DATE ?? date;
     this.log.debug('Using application year request date [%s]', applicationYearRequestDate);
 
     const applicationYearResultDtos = await this.listApplicationYears(date);
@@ -121,7 +121,7 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   async findRenewalApplicationYear(date: string): Promise<RenewalApplicationYearResultDto | null> {
     this.log.trace('Finding renewal application year results with date: [%s]', date);
 
-    const applicationYearRequestDate = this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? date;
+    const applicationYearRequestDate = this.serverConfig.APPLICATION_CURRENT_DATE ?? date;
     this.log.debug('Using application year request date [%s]', applicationYearRequestDate);
 
     const applicationYearResultDtos = await this.listApplicationYears(date);
@@ -163,7 +163,7 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   async listApplicationYears(date: string): Promise<ReadonlyArray<ApplicationYearResultDto>> {
     this.log.trace('Getting possible application years results with date: [%j]', date);
 
-    const applicationYearRequestDate = this.serverConfig.APPLICATION_YEAR_REQUEST_DATE ?? date;
+    const applicationYearRequestDate = this.serverConfig.APPLICATION_CURRENT_DATE ?? date;
     const applicationYearResultEntity = await this.applicationYearRepository.listApplicationYears(applicationYearRequestDate);
     const applicationYearResultDto = this.applicationYearDtoMapper.mapApplicationYearResultEntityToApplicationYearResultDtos(applicationYearResultEntity);
 

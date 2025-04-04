@@ -34,13 +34,13 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   loadApplyAdultSingleChildState({ params, request, session });
   const state = loadApplyAdultChildState({ params, request, session });
-  const { APPLICATION_YEAR_REQUEST_DATE } = getEnv();
+  const { APPLICATION_CURRENT_DATE } = getEnv();
   const locale = getLocale(request);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
-  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? parseDateString(APPLICATION_YEAR_REQUEST_DATE) : new UTCDate();
+  const currentDate = APPLICATION_CURRENT_DATE ? parseDateString(APPLICATION_CURRENT_DATE) : new UTCDate();
   const coverageStartDate = parseDateString(state.applicationYear.coverageStartDate);
   const formattedDate = toLocaleDateString(coverageStartDate, locale);
 

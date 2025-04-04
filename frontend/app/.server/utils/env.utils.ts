@@ -85,7 +85,7 @@ const serverEnv = clientEnvSchema.extend({
   INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY: z.string().trim().transform(emptyToUndefined).optional(),
 
   // simulation/testing date settings
-  APPLICATION_YEAR_REQUEST_DATE: z.string().optional(),
+  APPLICATION_CURRENT_DATE: z.string().optional(),
 
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
@@ -204,6 +204,7 @@ const serverEnv = clientEnvSchema.extend({
   HEALTH_AUTH_TOKEN_AUDIENCE: z.string().default('00000000-0000-0000-0000-000000000000'), // intentional default to enforce an audience check when verifying JWTs
   HEALTH_AUTH_TOKEN_ISSUER: z.string().default('https://auth.example.com/'), // intentional default to enforce an issuer check when verifying JWTs
   HEALTH_PLACEHOLDER_REQUEST_VALUE: z.string().default('CDCP_HEALTH_CHECK'),
+  APPLY_ELIGIBILITY_RULES: z.string().default('[{"minAge":55,"maxAge":64,"startDate":"2025-05-01"},{"minAge":18,"maxAge":34,"startDate":"2025-05-15"},{"minAge":35,"maxAge":54,"startDate":"2025-05-29"}]')
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
