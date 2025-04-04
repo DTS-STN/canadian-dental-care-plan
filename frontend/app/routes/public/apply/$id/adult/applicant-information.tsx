@@ -11,7 +11,7 @@ import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
 import { getAgeCategoryFromDateString, getEligibilityByAge, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import type { ApplicantInformationState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -27,7 +27,7 @@ import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useFeature } from '~/root';
-import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
+import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -68,6 +68,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
+  const locale = getLocale(request);
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
@@ -170,11 +171,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
   // Seniors and DTC certificate owners do no need to be eligibility checked.
-  if (ageCategory !== 'seniors' && parsedDataResult.data.disabilityTaxCredit !== DTC_OPTION.yes && applyEligibilityEnabled) {
+  if (ageCategory === 'adults' && parsedDataResult.data.disabilityTaxCredit !== DTC_OPTION.yes && applyEligibilityEnabled) {
     const eligibilityResult = getEligibilityByAge(parsedDataResult.data.dateOfBirth);
 
     if (!eligibilityResult.eligible) {
-      return { status: 'not-eligible', startDate: eligibilityResult.startDate } as const;
+      return { status: 'not-eligible', startDate: toLocaleDateString(parseDateString(eligibilityResult.startDate ?? ''), locale) } as const;
     }
   }
 

@@ -346,15 +346,14 @@ function getEligibilityRules(): EligibilityRule[] {
 }
 
 export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
-  const { CURRENT_DATE } = getEnv();
+  const { APPLICATION_CURRENT_DATE } = getEnv();
 
-  const today = CURRENT_DATE ? new Date(CURRENT_DATE) : new Date();
-  const age = getAgeFromDateString(dateOfBirth);
+  const today = APPLICATION_CURRENT_DATE ? new Date(APPLICATION_CURRENT_DATE) : new Date();
+  const age = getAgeFromDateString(dateOfBirth, APPLICATION_CURRENT_DATE);
 
   for (const { minAge, maxAge, startDate } of getEligibilityRules()) {
     if (age >= minAge && age <= maxAge) {
-      const ruleStartDate = startDate.toLowerCase() === 'now' ? today : new Date(startDate);
-      return today < ruleStartDate ? { eligible: false, startDate } : { eligible: true };
+      return today < new Date(startDate) ? { eligible: false, startDate } : { eligible: true };
     }
   }
 

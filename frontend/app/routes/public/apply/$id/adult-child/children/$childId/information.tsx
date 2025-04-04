@@ -79,7 +79,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const applyState = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const { APPLICATION_YEAR_REQUEST_DATE } = getEnv();
+  const { APPLICATION_CURRENT_DATE } = getEnv();
 
   // Form action Continue & Save
   // state validation schema
@@ -194,7 +194,7 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  const currentDate = APPLICATION_YEAR_REQUEST_DATE ? parseDateString(APPLICATION_YEAR_REQUEST_DATE) : new UTCDate();
+  const currentDate = APPLICATION_CURRENT_DATE ? parseDateString(APPLICATION_CURRENT_DATE) : new UTCDate();
   const coverageStartDate = parseDateString(applyState.applicationYear.coverageStartDate);
 
   const ageCategory = currentDate < coverageStartDate ? getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, applyState.applicationYear.coverageStartDate) : getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);

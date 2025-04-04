@@ -73,7 +73,7 @@ describe('DefaultApplicationYearService', () => {
     mockApplicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto.mockReturnValue(mockRenewalApplicationYearResultDto);
 
     it('should return the correct renewal application year if given date is within a renewal period', async () => {
-      const mockServerConfig = { APPLICATION_YEAR_REQUEST_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
+      const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
       const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
       const result = await service.findRenewalApplicationYear('2025-01-01');
@@ -97,7 +97,7 @@ describe('DefaultApplicationYearService', () => {
     });
 
     it('should return the correct renewal application year when the given date is on or after the renewal start date and no renewal end date is provided', async () => {
-      const mockServerConfig = { APPLICATION_YEAR_REQUEST_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
+      const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
       const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
       const result = await service.findRenewalApplicationYear('2026-01-01');
@@ -110,7 +110,7 @@ describe('DefaultApplicationYearService', () => {
     });
 
     it('should return null if given date is not within any renewal period', async () => {
-      const mockServerConfig = { APPLICATION_YEAR_REQUEST_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
+      const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
       const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
 
@@ -126,7 +126,7 @@ describe('DefaultApplicationYearService', () => {
     mockApplicationYearDtoMapper.mapApplicationYearResultDtoToIntakeApplicationYearResultDto.mockReturnValue(mockIntakeApplicationYearResultDto);
 
     it('should return the correct intake application year if given date is within an intake period', async () => {
-      const mockServerConfig = { APPLICATION_YEAR_REQUEST_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
+      const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
       const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
       const result = await service.getIntakeApplicationYear('2025-01-01');
@@ -147,7 +147,7 @@ describe('DefaultApplicationYearService', () => {
     });
 
     it('should return the correct intake application year when the given date is on or after the intake start date and no intake end date is provided', async () => {
-      const mockServerConfig = { APPLICATION_YEAR_REQUEST_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
+      const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
       const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
       const result = await service.getIntakeApplicationYear('2026-01-01');
@@ -165,7 +165,7 @@ describe('DefaultApplicationYearService', () => {
     });
 
     it('should throw if given date is not within any intake period', async () => {
-      const mockServerConfig = { APPLICATION_YEAR_REQUEST_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
+      const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
       const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
 
