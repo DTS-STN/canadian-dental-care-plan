@@ -20,13 +20,6 @@ spec:
           ports:
             - name: fluentd
               containerPort: 24224
-          resources:
-            requests:
-              cpu: 10m
-              memory: 128Mi
-            limits:
-              cpu: 15m
-              memory: 256Mi
           volumeMounts:
             - name: audit-logs
               mountPath: /logs
