@@ -132,7 +132,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "detail": {
       "additional-info": {
@@ -184,7 +184,7 @@
     "gender-help-message": "Le genre renvoie au genre actuel d'une personne, qui peut être différent du sexe attribué à la naissance et de celui qui est indiqué sur les documents juridiques.",
     "continue-btn": "Continuer",
     "back-btn": "Retour",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "cancel-btn": "Annuler",
     "error-message": {
       "first-nations-required": "Cochez tout ce qui s'applique",
@@ -199,7 +199,7 @@
     "required-information": "Votre époux/épouse ou conjoint/conjointe de fait doit présenter sa propre demande initiale ou demande de renouvellement au Régime canadien de soins dentaires.",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "cancel-btn": "Annuler",
     "sin": "Numéro d'assurance sociale (NAS)",
     "year-of-birth": "Année de naissance",
@@ -248,7 +248,7 @@
         "back": "Retour",
         "continue": "Continuer",
         "cancel-btn": "Annuler",
-        "save-btn": "Sauvegarder"
+        "save-btn": "Enregistrer"
       },
       "detail": {
         "additional-info": {
@@ -311,7 +311,7 @@
         "back": "Retour",
         "continue": "Continuer",
         "cancel-btn": "Annuler",
-        "save-btn": "Sauvegarder"
+        "save-btn": "Enregistrer"
       },
       "error-message": {
         "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel l'enfant est couvert",
@@ -337,7 +337,7 @@
       "gender-help-message": "Le genre renvoie au genre actuel d'une personne, qui peut être différent du sexe attribué à la naissance et de celui qui est indiqué sur les documents juridiques.",
       "continue-btn": "Continuer",
       "back-btn": "Retour",
-      "save-btn": "Sauvegarder",
+      "save-btn": "Enregistrer",
       "cancel-btn": "Annuler",
       "error-message": {
         "first-nations-required": "Cochez tout ce qui s'applique",
@@ -350,7 +350,7 @@
     "phone-number": "Numéro de téléphone (facultatif)",
     "phone-number-alt": "Autre numéro de téléphone (facultatif)",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "error-message": {
       "phone-number-valid": "Numéro de téléphone invalide",
       "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
@@ -369,7 +369,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "option-yes": "Oui",
     "option-no": "Non",
     "error-message": {
@@ -424,7 +424,7 @@
     "back": "Retour",
     "continue": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder"
+    "save-btn": "Enregistrer"
   },
   "communication-preference": {
     "page-title": "Communication",
@@ -472,7 +472,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
@@ -601,6 +601,6 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder"
+    "save-btn": "Enregistrer"
   }
 }

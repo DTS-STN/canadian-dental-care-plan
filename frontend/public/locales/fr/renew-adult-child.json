@@ -6,7 +6,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "radio-options": {
       "yes": "Oui",
       "no": "Non"
@@ -52,7 +52,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "option-yes": "Oui",
     "option-no": "Non",
     "error-message": {
@@ -79,7 +79,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "option-yes": "Oui",
     "option-no": "Non",
     "error-message": {
@@ -150,7 +150,7 @@
     "back": "Retour",
     "continue": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder"
+    "save-btn": "Enregistrer"
   },
   "confirm-dental-benefits": {
     "title": "Accès à d'autres prestations dentaires gouvernementales",
@@ -164,7 +164,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "error-message": {
       "federal-provincial-territorial-benefit-required": "Sélectionnez si vous bénéficiez de prestations dentaires fédérales, provinciales ou territoriales"
@@ -198,7 +198,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
@@ -223,7 +223,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "detail": {
       "additional-info": {
@@ -274,7 +274,7 @@
       "back-btn": "Retour",
       "continue-btn": "Poursuivre la demande",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder",
+      "save-btn": "Enregistrer",
       "dental-insurance-title": "Accès à une assurance ou une couverture dentaire privée",
       "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
       "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
@@ -355,7 +355,7 @@
         "back": "Retour",
         "continue": "Continuer",
         "cancel-btn": "Annuler",
-        "save-btn": "Sauvegarder"
+        "save-btn": "Enregistrer"
       },
       "detail": {
         "additional-info": {
@@ -402,7 +402,7 @@
         "back": "Retour",
         "continue": "Continuer",
         "cancel-btn": "Annuler",
-        "save-btn": "Sauvegarder"
+        "save-btn": "Enregistrer"
       },
       "error-message": {
         "federal-provincial-territorial-benefit-required": "Sélectionnez si l'enfant bénéficie de prestations dentaires fédérales, provinciales ou territoriales"
@@ -436,7 +436,7 @@
         "back": "Retour",
         "continue": "Continuer",
         "cancel-btn": "Annuler",
-        "save-btn": "Sauvegarder"
+        "save-btn": "Enregistrer"
       },
       "error-message": {
         "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel l'enfant est couvert",
@@ -462,7 +462,7 @@
       "gender-help-message": "Le genre renvoie au genre actuel d'une personne, qui peut être différent du sexe attribué à la naissance et de celui qui est indiqué sur les documents juridiques.",
       "continue-btn": "Continuer",
       "back-btn": "Retour",
-      "save-btn": "Sauvegarder",
+      "save-btn": "Enregistrer",
       "cancel-btn": "Annuler",
       "error-message": {
         "first-nations-required": "Cochez tout ce qui s'applique",
@@ -631,7 +631,7 @@
     "gender-help-message": "Le genre renvoie au genre actuel d'une personne, qui peut être différent du sexe attribué à la naissance et de celui qui est indiqué sur les documents juridiques.",
     "continue-btn": "Continuer",
     "back-btn": "Retour",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "cancel-btn": "Annuler",
     "error-message": {
       "first-nations-required": "Cochez tout ce qui s'applique",
