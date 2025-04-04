@@ -258,8 +258,8 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
       ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
       : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
     dateOfBirthYear: 'date-picker-date-of-birth-year',
+    disabilityTaxCredit: 'input-radio-dtc-option-0',
     socialInsuranceNumber: 'social-insurance-number',
-    disabilityTaxCredit: 'input-radio-disability-tax-credit-option-0',
   });
 
   return (
