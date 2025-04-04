@@ -357,6 +357,6 @@ export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
     }
   }
 
-  // No eligibility group found.
-  return { eligible: false };
+  // No eligibility group found; Young and seniors are outisde the eligibility range validation.
+  return { eligible: true };
 }
