@@ -213,7 +213,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "error-message": {
       "federal-provincial-territorial-benefit-required": "Sélectionnez si vous bénéficiez de prestations dentaires fédérales, provinciales ou territoriales"
@@ -327,7 +327,7 @@
     "back": "Retour",
     "continue": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder"
+    "save-btn": "Enregistrer"
   },
   "review-information": {
     "read-carefully": "Veuillez examiner attentivement les renseignements suivants. Les renseignements fournis seront utilisés par la Sun Life pour créer votre compte de membre et figureront sur votre carte de membre.",
@@ -434,7 +434,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "option-yes": "Oui",
     "option-no": "Non",
     "help-message": "L'ajout d'un numéro de téléphone aide le gouvernement du Canada à vous contacter en cas de problème avec votre demande. Sinon, nous vous contacterons par la poste.",

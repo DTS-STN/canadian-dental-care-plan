@@ -8,7 +8,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "sin": "Numéro d'assurance sociale (NAS)",
     "year-of-birth": "Année de naissance",
     "confirm-checkbox": "Je confirme que mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et y a consenti.",
@@ -33,7 +33,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "option-yes": "Oui",
     "option-no": "Non",
     "error-message": {
@@ -56,7 +56,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "option-yes": "Oui",
     "option-no": "Non",
     "error-message": {
@@ -84,7 +84,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder"
+    "save-btn": "Enregistrer"
   },
   "update-address": {
     "mailing-address": {
@@ -126,7 +126,7 @@
     "back": "Retour",
     "continue": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder"
+    "save-btn": "Enregistrer"
   },
   "dental-benefits": {
     "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
@@ -156,7 +156,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
@@ -181,7 +181,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "detail": {
       "additional-info": {
@@ -344,7 +344,7 @@
     "gender-help-message": "Le genre renvoie au genre actuel d'une personne, qui peut être différent du sexe attribué à la naissance et de celui qui est indiqué sur les documents juridiques.",
     "continue-btn": "Continuer",
     "back-btn": "Retour",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "cancel-btn": "Annuler",
     "error-message": {
       "first-nations-required": "Cochez tout ce qui s'applique",

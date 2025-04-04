@@ -102,7 +102,7 @@
     "back": "Retour",
     "continue": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder"
+    "save-btn": "Enregistrer"
   },
   "phone-number": {
     "page-title": "Numéro de téléphone",
@@ -111,7 +111,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "option-yes": "Oui",
     "option-no": "Non",
     "help-message": "L'ajout d'un numéro de téléphone aide le gouvernement du Canada à vous contacter en cas de problème avec votre demande. Sinon, nous vous contacterons par la poste.",
@@ -253,7 +253,7 @@
         "back": "Retour",
         "continue": "Continuer",
         "cancel-btn": "Annuler",
-        "save-btn": "Sauvegarder"
+        "save-btn": "Enregistrer"
       },
       "error-message": {
         "federal-provincial-territorial-benefit-required": "Sélectionnez si l'enfant bénéficie de prestations dentaires fédérales, provinciales ou territoriales"
@@ -449,7 +449,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "error-message": {
       "federal-provincial-territorial-benefit-required": "Sélectionnez si vous bénéficiez de prestations dentaires fédérales, provinciales ou territoriales"
@@ -569,7 +569,7 @@
     },
     "back-btn": "Retour",
     "continue-btn": "Continuer",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "cancel-btn": "Annuler"
   },
   "parent-or-guardian": {

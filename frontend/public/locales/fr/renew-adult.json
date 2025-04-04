@@ -6,7 +6,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "radio-options": {
       "yes": "Oui",
       "no": "Non"
@@ -52,7 +52,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "option-yes": "Oui",
     "option-no": "Non",
     "error-message": {
@@ -78,7 +78,7 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "option-yes": "Oui",
     "option-no": "Non",
     "error-message": {
@@ -148,7 +148,7 @@
     "back": "Retour",
     "continue": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Sauvegarder"
+    "save-btn": "Enregistrer"
   },
   "dental-insurance": {
     "title": "Accès à une assurance dentaire privée",
@@ -165,7 +165,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "detail": {
       "additional-info": {
@@ -212,7 +212,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "error-message": {
       "federal-provincial-territorial-benefit-required": "Sélectionnez si vous bénéficiez de prestations dentaires fédérales, provinciales ou territoriales"
@@ -246,7 +246,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Sauvegarder"
+      "save-btn": "Enregistrer"
     },
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
@@ -272,7 +272,7 @@
     "gender-help-message": "Le genre renvoie au genre actuel d'une personne, qui peut être différent du sexe attribué à la naissance et de celui qui est indiqué sur les documents juridiques.",
     "continue-btn": "Continuer",
     "back-btn": "Retour",
-    "save-btn": "Sauvegarder",
+    "save-btn": "Enregistrer",
     "cancel-btn": "Annuler",
     "error-message": {
       "first-nations-required": "Cochez tout ce qui s'applique",
