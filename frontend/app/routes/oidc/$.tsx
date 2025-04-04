@@ -9,8 +9,8 @@ import type { Route } from './+types/$';
 import { TYPES } from '~/.server/constants';
 import { generateCryptoKey } from '~/.server/utils/crypto.utils';
 import type { MockName } from '~/.server/utils/env.utils';
+import type { ServerMetadata, TokenEndpointResponse, UserinfoResponse } from '~/.server/utils/raoidc.utils';
 import { generateRandomString } from '~/.server/utils/raoidc.utils';
-import type { JWKSet, ServerMetadata, TokenEndpointResponse, UserinfoResponse } from '~/.server/utils/raoidc.utils';
 
 export async function loader({ context, params, request }: Route.LoaderArgs) {
   validateRaoidcMockEnabled({ context });
@@ -115,16 +115,9 @@ async function handleJwksRequest({ context, params, request }: Route.LoaderArgs)
   const serverVerificationKey = await generateCryptoKey(AUTH_JWT_PUBLIC_KEY, 'verify');
   const publicJwk = await subtle.exportKey('jwk', serverVerificationKey);
 
-  const jwks: JWKSet = {
-    keys: [
-      {
-        kid: 'RAOIDC_Client_Dev', // matches RAOIDC's nonprod key id
-        ...publicJwk,
-      },
-    ],
-  } as JWKSet;
-
-  return Response.json(jwks);
+  return Response.json({
+    keys: [{ kid: '00000000-0000-0000-0000-000000000000', ...publicJwk }],
+  });
 }
 
 //
@@ -233,7 +226,7 @@ async function generateAccessToken(serverPublicKey: string, serverPrivateKey: st
 
   // prettier-ignore
   const accessToken = await new SignJWT(accessTokenPayload)
-    .setProtectedHeader({ alg: 'PS256' })
+    .setProtectedHeader({ alg: 'PS256', kid: '00000000-0000-0000-0000-000000000000' })
     .sign(await generateCryptoKey(serverPrivateKey, 'sign'));
 
   // prettier-ignore
@@ -256,7 +249,7 @@ async function generateIdToken(clientPublicKey: string, serverPrivateKey: string
 
   // prettier-ignore
   const idToken = await new SignJWT(idTokenPayload)
-    .setProtectedHeader({ alg: 'PS256' })
+    .setProtectedHeader({ alg: 'PS256', kid: '00000000-0000-0000-0000-000000000000' })
     .sign(await generateCryptoKey(serverPrivateKey, 'sign'));
 
   // prettier-ignore
@@ -282,7 +275,7 @@ async function generateUserInfoToken(clientPublicKey: string, serverPrivateKey: 
 
   // prettier-ignore
   const userinfoToken = await new SignJWT(userinfoTokenPayload)
-    .setProtectedHeader({ alg: 'PS256' })
+    .setProtectedHeader({ alg: 'PS256', kid: '00000000-0000-0000-0000-000000000000' })
     .sign(await generateCryptoKey(serverPrivateKey, 'sign'));
 
   // prettier-ignore

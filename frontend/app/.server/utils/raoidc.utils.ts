@@ -2,7 +2,7 @@
  * Utility functions to help with RAOIDC requests.
  */
 import { UTCDate } from '@date-fns/utc';
-import type { JWTPayload, JWTVerifyResult } from 'jose';
+import type { JWK, JWTPayload, JWTVerifyResult } from 'jose';
 import { SignJWT, compactDecrypt, decodeProtectedHeader, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
 import invariant from 'tiny-invariant';
@@ -136,7 +136,7 @@ export interface ServerMetadata extends Record<string, unknown> {
  * Returned from the auth server's JWKS endpoint.
  */
 export interface JWKSet {
-  keys: Array<JsonWebKey & Record<string, unknown>>;
+  keys: Array<JWK & Record<string, unknown>>;
 }
 
 /**
@@ -492,22 +492,14 @@ function validateServerMetadata(serverMetadata: ServerMetadata) {
 async function verifyJwt<Payload = JWTPayload>(jwt: string, jwks: JWKSet) {
   const log = getLogger('raoidc-utils.server/verifyJwt');
 
-  // normally the crypto algorithm is declared in the jwk, however RAOIDC's
-  // nonprod jwk does not declare an algorithm, so we will use the one declared in the jwt header
-  const jwtHeader = decodeProtectedHeader(jwt);
+  const { alg, kid } = decodeProtectedHeader(jwt);
+  const key = jwks.keys.find((jwk) => jwk.kid === kid);
 
-  for (const jwk of jwks.keys) {
-    const { kty, ...restOfKey } = jwk;
-    invariant(kty, 'Expected JWK to have a key type');
-
-    try {
-      const key = await importJWK({ ...restOfKey, kty }, jwtHeader.alg);
-      return await jwtVerify<Payload>(jwt, key);
-    } catch {
-      // not the right JWK; skip to the next one
-    }
+  if (!key) {
+    log.error('JWT verification failure; no matching JWK with kid=%s could be found', kid);
+    throw new Error('No matching JWK was found to verify JWT');
   }
 
-  log.warn('JWT verification failure; no matching JWK could be found');
-  throw new Error('No matching JWK was found to verify JWT');
+  const jwk = await importJWK(key, alg);
+  return await jwtVerify<Payload>(jwt, jwk);
 }
