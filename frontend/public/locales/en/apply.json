@@ -101,15 +101,9 @@
       "error-message": {
         "acknowledge-terms-required": "You must read the Terms and Conditions to proceed",
         "acknowledge-privacy-required": "You must read the Privacy Notice Statement to proceed",
-        "share-data-required": "You must consent to the sharing of your data to proceed"
+        "share-data-required": "You must consent to the sharing of your data to proceed",
+        "consent-required": "You must agree to the Terms and Conditions and Privacy Notice Statement, and consent to the sharing of your information. To apply for the Canadian Dental Care Plan, you must agree to the Terms and Conditions and Privacy Notice Statement. You must also consent to the sharing of your personal information for the purposes listed."
       }
-    },
-    "dialog": {
-      "title": "You must read the Terms and Conditions and Privacy Notice Statement, and consent to the sharing of your information",
-      "description": "To apply for the Canadian Dental Care Plan you must acknowledge that you have read and accept the Terms and Conditions and Privacy Notice Statement. You must also consent to the sharing of your personal information for the purposes listed.",
-      "back-btn": "Back",
-      "exit-btn": "Exit application",
-      "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     }
   },
   "tax-filing": {

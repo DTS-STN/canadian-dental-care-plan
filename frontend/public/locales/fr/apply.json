@@ -101,15 +101,9 @@
       "error-message": {
         "acknowledge-terms-required": "Vous devez lire les modalités d'utilisation avant de poursuivre",
         "acknowledge-privacy-required": "Vous devez lire l'énoncé de confidentialité avant de poursuivre",
-        "share-data-required": "Vous devez consentir à la communication de vos renseignements avant de poursuivre"
+        "share-data-required": "Vous devez consentir à la communication de vos renseignements avant de poursuivre",
+        "consent-required": "Vous devez accepter les Conditions générales et la Déclaration de confidentialité, ainsi que consentir à la divulgation de vos renseignements personnels. Pour adhérer au Régime canadien de soins dentaires, vous devez accepter les Conditions générales et la Déclaration de confidentialité. Vous devez également consentir à la divulgation de vos renseignements personnels aux fins indiquées."
       }
-    },
-    "dialog": {
-      "title": "Vous devez accepter les Conditions générales et la Déclaration de confidentialité, ainsi que consentir à la divulgation de vos renseignements personnels.",
-      "description": "Pour adhérer au Régime canadien de soins dentaires, vous devez accepter les Conditions générales et la Déclaration de confidentialité. Vous devez également consentir à la divulgation de vos renseignements personnels aux fins indiquées.",
-      "back-btn": "Retour",
-      "exit-btn": "Quitter la demande",
-      "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     }
   },
   "tax-filing": {
