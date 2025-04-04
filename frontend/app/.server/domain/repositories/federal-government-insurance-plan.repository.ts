@@ -48,7 +48,7 @@ export class DefaultFederalGovernmentInsurancePlanRepository implements FederalG
     const federalGovernmentInsurancePlanEntity = federalGovernmentInsurancePlanEntities.find(({ esdc_governmentinsuranceplanid }) => esdc_governmentinsuranceplanid === id);
 
     if (!federalGovernmentInsurancePlanEntity) {
-      this.log.warn('Federal government insurance plan not found; id: [%s]', id);
+      this.log.info('Federal government insurance plan not found; id: [%s]', id);
       return null;
     }
 

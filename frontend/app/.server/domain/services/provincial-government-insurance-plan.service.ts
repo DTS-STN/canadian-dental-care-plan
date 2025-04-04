@@ -14,6 +14,7 @@ export interface ProvincialGovernmentInsurancePlanService {
   findProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto | null;
   getProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto;
   listAndSortLocalizedProvincialGovernmentInsurancePlans(locale: AppLocale): ReadonlyArray<ProvincialGovernmentInsurancePlanLocalizedDto>;
+  findLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): ProvincialGovernmentInsurancePlanLocalizedDto | null;
   getLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): ProvincialGovernmentInsurancePlanLocalizedDto;
 }
 
@@ -103,6 +104,20 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     const sortedProvincialGovernmentInsurancePlanLocalizedDtos = this.sortLocalizedProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanLocalizedDtos, locale);
     this.log.trace('Returning localized and sorted provincial government insurance plans: [%j]', sortedProvincialGovernmentInsurancePlanLocalizedDtos);
     return sortedProvincialGovernmentInsurancePlanLocalizedDtos;
+  }
+
+  findLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): ProvincialGovernmentInsurancePlanLocalizedDto | null {
+    this.log.debug('Finding provincial government insurance plan with id [%s] and locale [%s]', id, locale);
+    const provincialGovernmentInsurancePlanDto = this.findProvincialGovernmentInsurancePlanById(id);
+
+    if (!provincialGovernmentInsurancePlanDto) {
+      this.log.trace('Provincial government insurance plan with id: [%s] not found. Returning null', id);
+      return null;
+    }
+
+    const provincialGovernmentInsurancePlanLocalizedDto = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto(provincialGovernmentInsurancePlanDto, locale);
+    this.log.trace('Returning provincial government insurance plan: [%j]', provincialGovernmentInsurancePlanDto);
+    return provincialGovernmentInsurancePlanLocalizedDto;
   }
 
   getLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): ProvincialGovernmentInsurancePlanLocalizedDto {
