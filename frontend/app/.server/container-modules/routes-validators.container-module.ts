@@ -6,9 +6,9 @@ import { DefaultHomeAddressValidatorFactory } from '~/.server/routes/validators/
 import { DefaultMailingAddressValidatorFactory } from '~/.server/routes/validators/mailing-address.validator.factory';
 
 /**
- * Defines the container module for factory bindings.
+ * Defines the container module for routes validator bindings.
  */
-export function createFactoriesContainerModule(): ContainerModule {
+export function createRoutesValidatorsContainerModule(): ContainerModule {
   return new ContainerModule((options) => {
     options.bind(TYPES.routes.validators.AddressValidatorFactory).to(DefaultAddressValidatorFactory);
     options.bind(TYPES.routes.validators.MailingAddressValidatorFactory).to(DefaultMailingAddressValidatorFactory);
