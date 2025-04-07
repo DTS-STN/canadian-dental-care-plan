@@ -7,7 +7,8 @@ import { ApplicationYearNotFoundException } from '~/.server/domain/exceptions/ap
 import type { ApplicationYearDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicationYearRepository } from '~/.server/domain/repositories';
 import { DefaultApplicationYearService } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 describe('DefaultApplicationYearService', () => {
   const mockLogFactory = mock<LogFactory>();

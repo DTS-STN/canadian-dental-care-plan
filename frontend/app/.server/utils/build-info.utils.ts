@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 
-import { getLogger } from '~/.server/utils/logging.utils';
+import { createLogger } from '~/.server/logging';
 
 export interface BuildInfo {
   buildDate: string;
@@ -14,7 +14,7 @@ export interface BuildInfo {
  * contains information about the build, such as the version number and the build date.
  */
 export function readBuildInfo(filename: string) {
-  const logger = getLogger('build-info.server/readBuildInfo');
+  const logger = createLogger('build-info.server/readBuildInfo');
   const fileExists = fs.existsSync(filename);
 
   if (!fileExists) {

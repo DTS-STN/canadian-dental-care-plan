@@ -7,7 +7,8 @@ import type { ApplicationYearResultDto, IntakeApplicationYearResultDto, RenewalA
 import { ApplicationYearNotFoundException } from '~/.server/domain/exceptions/application-year-not-found.exception';
 import type { ApplicationYearDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicationYearRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 export interface ApplicationYearService {
   /**

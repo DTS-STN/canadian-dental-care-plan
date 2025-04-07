@@ -7,7 +7,8 @@ import type { PreferredLanguageDto, PreferredLanguageLocalizedDto } from '~/.ser
 import { PreferredLanguageNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import { moveToTop } from '~/.server/utils/collection.utils';
 
 /**

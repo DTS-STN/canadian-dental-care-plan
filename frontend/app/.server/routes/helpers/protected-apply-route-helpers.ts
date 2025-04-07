@@ -6,8 +6,8 @@ import { omit } from 'moderndash';
 import type { ReadonlyDeep } from 'type-fest';
 import { z } from 'zod';
 
+import { createLogger } from '~/.server/logging';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 
@@ -62,7 +62,7 @@ interface LoadStateArgs {
  * @returns The loaded state.
  */
 export function loadProtectedApplyState({ params, session }: LoadStateArgs) {
-  const log = getLogger('apply-route-helpers.server/loadProtectedApplyState');
+  const log = createLogger('apply-route-helpers.server/loadProtectedApplyState');
   const locale = getLocaleFromParams(params);
   const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
 
@@ -102,7 +102,7 @@ export function loadProtectedApplyState({ params, session }: LoadStateArgs) {
  * @returns The initial protected apply state.
  */
 export function startProtectedApplyState({ applicationYear, id, session }: StartArgs) {
-  const log = getLogger('protected-apply-route-helpers.server/startProtectedApplyState');
+  const log = createLogger('protected-apply-route-helpers.server/startProtectedApplyState');
   const parsedId = idSchema.parse(id);
   const sessionName = getSessionName(parsedId);
 
@@ -132,7 +132,7 @@ interface SaveStateArgs {
  * @returns The new protected apply state.
  */
 export function saveProtectedApplyState({ params, session, state, remove = undefined }: SaveStateArgs) {
-  const log = getLogger('protected-apply-route-helpers.server/saveProtectedApplyState');
+  const log = createLogger('protected-apply-route-helpers.server/saveProtectedApplyState');
   const currentState = loadProtectedApplyState({ params, session });
 
   let newState = {

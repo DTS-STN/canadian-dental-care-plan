@@ -6,9 +6,9 @@ import { omit } from 'moderndash';
 import type { ReadonlyDeep } from 'type-fest';
 import { z } from 'zod';
 
+import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 import { getAgeFromDateString } from '~/utils/date-utils';
@@ -185,7 +185,7 @@ interface LoadStateArgs {
  * @returns The loaded state.
  */
 export function loadApplyState({ params, session }: LoadStateArgs) {
-  const log = getLogger('apply-route-helpers.server/loadApplyState');
+  const log = createLogger('apply-route-helpers.server/loadApplyState');
   const locale = getLocaleFromParams(params);
   const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
 
@@ -232,7 +232,7 @@ interface SaveStateArgs {
  * @returns The new apply state.
  */
 export function saveApplyState({ params, session, state, remove = undefined }: SaveStateArgs) {
-  const log = getLogger('apply-route-helpers.server/saveApplyState');
+  const log = createLogger('apply-route-helpers.server/saveApplyState');
   const currentState = loadApplyState({ params, session });
 
   let newState = {
@@ -261,7 +261,7 @@ interface ClearStateArgs {
  * @param args - The arguments.
  */
 export function clearApplyState({ params, session }: ClearStateArgs) {
-  const log = getLogger('apply-route-helpers.server/clearApplyState');
+  const log = createLogger('apply-route-helpers.server/clearApplyState');
   const { id } = loadApplyState({ params, session });
 
   const sessionName = getSessionName(id);
@@ -281,7 +281,7 @@ interface StartArgs {
  * @returns The initial apply state.
  */
 export function startApplyState({ applicationYear, id, session }: StartArgs) {
-  const log = getLogger('apply-route-helpers.server/startApplyState');
+  const log = createLogger('apply-route-helpers.server/startApplyState');
   const parsedId = idSchema.parse(id);
 
   const initialState: ApplyState = {

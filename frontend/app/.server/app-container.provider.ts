@@ -2,7 +2,8 @@ import type { Container } from 'inversify';
 
 import type { ServiceIdentifier } from '~/.server/constants';
 import { TYPES } from '~/.server/constants';
-import type { Logger } from '~/.server/factories';
+import type {} from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 /**
  * AppContainerProvider interface provides methods for accessing services within an Inversify IoC container.

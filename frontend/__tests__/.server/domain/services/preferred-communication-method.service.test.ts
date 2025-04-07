@@ -8,7 +8,8 @@ import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
 import { DefaultPreferredCommunicationMethodService } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 vi.mock('moize');
 

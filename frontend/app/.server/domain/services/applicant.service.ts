@@ -5,7 +5,8 @@ import type { ApplicantRequestDto } from '~/.server/domain/dtos';
 import type { ApplicantDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicantRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 /**
  * A service that provides access to applicant data.

@@ -6,9 +6,9 @@ import { z } from 'zod';
 import type { Route } from './+types/protected-apply-state';
 
 import { TYPES } from '~/.server/constants';
+import { createLogger } from '~/.server/logging';
 import { saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import type { ProtectedApplyStateParams } from '~/.server/routes/helpers/protected-apply-route-helpers';
-import { getLogger } from '~/.server/utils/logging.utils';
 
 const API_PROTECTED_APPLY_STATE_ACTIONS = ['extend'] as const;
 export type ApiProtectedApplyStateAction = (typeof API_PROTECTED_APPLY_STATE_ACTIONS)[number];
@@ -17,7 +17,7 @@ export async function action({ context: { appContainer, session }, request }: Ro
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
-  const log = getLogger('routes/api/protected-apply-state');
+  const log = createLogger('routes/api/protected-apply-state');
   const sessionId = session.id;
   log.debug("Action with with user's protected apply state; sessionId: [%s]", sessionId);
 

@@ -3,15 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { adobeAnalyticsCSP, generateContentSecurityPolicy, hcaptchaCSP } from '~/.server/utils/csp.utils';
 import { getEnv } from '~/.server/utils/env.utils';
 
-vi.mock('~/.server/utils/env.utils', () => ({
-  getEnv: vi.fn(),
-}));
-
-vi.mock('~/.server/utils/logging.utils', () => ({
-  getLogger: () => ({
-    trace: vi.fn(),
-  }),
-}));
+vi.mock('~/.server/utils/env.utils');
 
 describe('csp.utils', () => {
   afterEach(() => {

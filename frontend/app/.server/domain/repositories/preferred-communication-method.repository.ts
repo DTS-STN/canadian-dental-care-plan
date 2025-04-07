@@ -2,7 +2,8 @@ import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import type { PreferredCommunicationMethodEntity } from '~/.server/domain/entities';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import preferredCommunicationMethodJsonDataSource from '~/.server/resources/power-platform/preferred-communication-method.json';
 
 export interface PreferredCommunicationMethodRepository {

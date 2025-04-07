@@ -7,7 +7,8 @@ import type { ClientFriendlyStatusDto, ClientFriendlyStatusLocalizedDto } from '
 import { ClientFriendlyStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 /**
  * Service interface for managing client friendly status data.

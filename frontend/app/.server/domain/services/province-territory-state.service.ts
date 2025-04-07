@@ -7,7 +7,8 @@ import type { ProvinceTerritoryStateDto, ProvinceTerritoryStateLocalizedDto } fr
 import { ProvinceTerritoryStateNotFoundException } from '~/.server/domain/exceptions';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 /**
  * Service interface for managing province territory state data.

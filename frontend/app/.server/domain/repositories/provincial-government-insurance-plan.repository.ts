@@ -2,7 +2,8 @@ import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import type { ProvincialGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import provincialGovernmentInsurancePlanJsonDataSource from '~/.server/resources/power-platform/provincial-government-insurance-plan.json';
 
 export interface ProvincialGovernmentInsurancePlanRepository {

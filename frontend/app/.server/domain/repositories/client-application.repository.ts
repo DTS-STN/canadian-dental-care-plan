@@ -3,8 +3,9 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import type { Logger } from '~/.server/logging';
 import clientApplicationItaJsonDataSource from '~/.server/resources/power-platform/client-application-ita.json';
 import clientApplicationJsonDataSource from '~/.server/resources/power-platform/client-application.json';
 

@@ -5,7 +5,8 @@ import type { BenefitApplicationDto } from '~/.server/domain/dtos';
 import type { BenefitApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitApplicationRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 export interface BenefitApplicationService {
   /**

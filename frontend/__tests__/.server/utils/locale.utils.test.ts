@@ -11,12 +11,6 @@ vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(),
 }));
 
-vi.mock('~/.server/utils/logging.utils', () => ({
-  getLogger: () => ({
-    debug: vi.fn(),
-  }),
-}));
-
 describe('locale.utils', () => {
   afterEach(() => {
     vi.clearAllMocks();

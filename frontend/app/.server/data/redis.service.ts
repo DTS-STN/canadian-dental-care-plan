@@ -1,11 +1,11 @@
 import { inject, injectable } from 'inversify';
 import Redis from 'ioredis';
 import type { RedisOptions } from 'ioredis';
-import type { Logger } from 'winston';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 /**
  * The RedisService is a service module for interacting with a Redis server. It

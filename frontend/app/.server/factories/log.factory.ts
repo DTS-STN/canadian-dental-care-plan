@@ -1,16 +1,15 @@
 import { injectable } from 'inversify';
 
-import { getLogger } from '~/.server/utils/logging.utils';
-
-export type Logger = ReturnType<typeof getLogger>;
+import { createLogger } from '~/.server/logging';
+import type { Logger } from '~/.server/logging';
 
 export interface LogFactory {
-  createLogger(category: string): Logger;
+  createLogger(label: string): Logger;
 }
 
 @injectable()
 export class DefaultLogFactory implements LogFactory {
-  createLogger(category: string) {
-    return getLogger(category);
+  createLogger(label: string) {
+    return createLogger(label);
   }
 }

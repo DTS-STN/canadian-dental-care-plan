@@ -1,4 +1,4 @@
-import { getLogger } from '~/.server/utils/logging.utils';
+import { createLogger } from '~/.server/logging';
 import { getCdcpWebsiteApplyUrl, getCdcpWebsiteRenewUrl, getCdcpWebsiteStatusUrl, getCdcpWebsiteUrl } from '~/.server/utils/url.utils';
 import type { ApiSessionRedirectTo } from '~/routes/api/session';
 
@@ -16,7 +16,7 @@ import type { ApiSessionRedirectTo } from '~/routes/api/session';
  * ```
  */
 export function getApiSessionRedirectToUrl(redirectTo: ApiSessionRedirectTo, locale: AppLocale): string {
-  const log = getLogger('api-session-utils.server/getApiSessionRedirectToUrl');
+  const log = createLogger('api-session-utils.server/getApiSessionRedirectToUrl');
   switch (redirectTo) {
     case 'cdcp-website': {
       return getCdcpWebsiteUrl(locale);

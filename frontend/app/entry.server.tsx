@@ -10,9 +10,9 @@ import { PassThrough } from 'node:stream';
 import { I18nextProvider } from 'react-i18next';
 
 import { TYPES } from '~/.server/constants';
+import { createLogger } from '~/.server/logging';
 import { generateContentSecurityPolicy } from '~/.server/utils/csp.utils';
 import { getLocale, initI18n } from '~/.server/utils/locale.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { NonceProvider } from '~/components/nonce-context';
 import { getNamespaces } from '~/utils/locale-utils';
 import { randomHexString } from '~/utils/string-utils';
@@ -30,7 +30,7 @@ import { randomHexString } from '~/utils/string-utils';
  */
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function handleDataRequest(response: Response, { context: { appContainer }, request }: LoaderFunctionArgs | ActionFunctionArgs) {
-  const log = getLogger('entry.server/handleDataRequest');
+  const log = createLogger('entry.server/handleDataRequest');
   log.debug('Touching session to extend its lifetime');
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
   instrumentationService.createCounter('http.server.requests').add(1);
@@ -46,7 +46,7 @@ export async function handleDataRequest(response: Response, { context: { appCont
 export function handleError(error: unknown, { context: { appContainer }, request }: LoaderFunctionArgs | ActionFunctionArgs) {
   // note that you generally want to avoid logging when the request was aborted, since remix's
   // cancellation and race-condition handling can cause a lot of requests to be aborted
-  const log = getLogger('entry.server/handleError');
+  const log = createLogger('entry.server/handleError');
   if (!request.signal.aborted) {
     if (error instanceof Error) {
       log.error(error);
@@ -60,7 +60,7 @@ export function handleError(error: unknown, { context: { appContainer }, request
 }
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, routerContext: EntryContext, { appContainer }: AppLoadContext) {
-  const log = getLogger('entry.server/handleRequest');
+  const log = createLogger('entry.server/handleRequest');
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);

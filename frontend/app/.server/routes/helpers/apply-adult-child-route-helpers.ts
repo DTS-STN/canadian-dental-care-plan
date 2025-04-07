@@ -2,9 +2,9 @@ import { redirect } from 'react-router';
 
 import { z } from 'zod';
 
+import { createLogger } from '~/.server/logging';
 import type { ApplyState, ApplyStateParams, ChildrenState } from '~/.server/routes/helpers/apply-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getLogger } from '~/.server/utils/logging.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
@@ -21,7 +21,7 @@ interface LoadApplyAdultChildStateArgs {
  * @returns The loaded adult child(ren) state.
  */
 export function loadApplyAdultChildState({ params, request, session }: LoadApplyAdultChildStateArgs) {
-  const log = getLogger('apply-adult-child-route-helpers.server/loadApplyAdultChildState');
+  const log = createLogger('apply-adult-child-route-helpers.server/loadApplyAdultChildState');
   const { pathname } = new URL(request.url);
   const applyState = loadApplyState({ params, session });
 
@@ -60,7 +60,7 @@ interface LoadApplyAdultSingleChildStateArgs {
  * @returns The loaded child state.
  */
 export function loadApplyAdultSingleChildState({ params, request, session }: LoadApplyAdultSingleChildStateArgs) {
-  const log = getLogger('apply-adult-child-route-helpers.server/loadApplyAdultSingleChildState');
+  const log = createLogger('apply-adult-child-route-helpers.server/loadApplyAdultSingleChildState');
   const applyState = loadApplyAdultChildState({ params, request, session });
 
   const parsedChildId = z.string().uuid().safeParse(params.childId);

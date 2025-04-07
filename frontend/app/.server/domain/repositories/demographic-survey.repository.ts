@@ -2,7 +2,8 @@ import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import type { DisabilityStatusEntity, EthnicGroupEntity, FirstNationsEntity, GenderStatusEntity, IndigenousStatusEntity, LocationBornStatusEntity } from '~/.server/domain/entities';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import EthnicGroupJsonDataSource from '~/.server/resources/power-platform/demographic-survey/ethnic-groups.json';
 import FirstNationsJsonDataSource from '~/.server/resources/power-platform/demographic-survey/first-nations.json';
 import DisabilityStatusJsonDataSource from '~/.server/resources/power-platform/demographic-survey/has-disability.json';

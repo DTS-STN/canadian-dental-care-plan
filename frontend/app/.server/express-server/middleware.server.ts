@@ -6,7 +6,7 @@ import { randomUUID } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
 import { createMemoryStore, createRedisStore } from '~/.server/express-server/session.server';
-import { getLogger } from '~/.server/utils/logging.utils';
+import { createLogger } from '~/.server/logging';
 
 /**
  * Checks if a given path should be ignored based on a list of ignore patterns.
@@ -21,7 +21,7 @@ function shouldIgnore(ignorePatterns: string[], path: string): boolean {
 
 // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
 export function securityHeaders(): RequestHandler {
-  const log = getLogger('express.server/securityHeadersRequestHandler');
+  const log = createLogger('express.server/securityHeadersRequestHandler');
   const ignorePatterns: string[] = [];
 
   // prettier-ignore
@@ -58,7 +58,7 @@ export function securityHeaders(): RequestHandler {
 }
 
 export function logging(isProduction: boolean): RequestHandler {
-  const log = getLogger('express.server/loggingRequestHandler');
+  const log = createLogger('express.server/loggingRequestHandler');
   const ignorePatterns: string[] = ['/api/readyz'];
 
   const logFormat = isProduction ? 'tiny' : 'dev';
@@ -77,7 +77,7 @@ export function logging(isProduction: boolean): RequestHandler {
  * Configures session middleware, optionally skipping it for bots and specific paths.
  */
 export function session(isProduction: boolean, serverConfig: ServerConfig): RequestHandler {
-  const log = getLogger('express.server/sessionRequestHandler');
+  const log = createLogger('express.server/sessionRequestHandler');
 
   const ignorePatterns = ['/api/buildinfo', '/api/health', '/api/readyz', '/.well-known/jwks.json'];
 
