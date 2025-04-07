@@ -11,7 +11,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-information';
-import { PREFERRED_NOTIFICATION_METHOD } from './communication-preference';
+import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultStateForReview } from '~/.server/routes/helpers/apply-adult-route-helpers';
@@ -74,7 +74,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
   const countryMailing = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
   const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name : undefined;
-  const communicationSunLifePreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
 
@@ -87,7 +86,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: maritalStatus,
     contactInformationEmail: state.email,
-    communicationSunLifePreference: communicationSunLifePreference.name,
+    communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     previouslyEnrolled: state.newOrExistingMember,
     email: state.email,
@@ -392,7 +391,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                 </DescriptionListItem>
               )}
               <DescriptionListItem term={t('apply-adult:review-information.sun-life-comm-pref-title')}>
-                <p>{userInfo.communicationSunLifePreference}</p>
+                <p>{userInfo.communicationSunLifePreference === PREFERRED_SUN_LIFE_METHOD.email ? t('apply-adult:review-information.preferred-notification-method-email') : t('apply-adult:review-information.preferred-notification-method-mail')}</p>
                 <p>
                   <InlineLink id="change-communication-preference" routeId="public/apply/$id/adult/communication-preference" params={params}>
                     {t('apply-adult:review-information.sun-life-comm-pref-change')}

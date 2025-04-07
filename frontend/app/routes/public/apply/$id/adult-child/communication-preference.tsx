@@ -27,6 +27,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+export const PREFERRED_SUN_LIFE_METHOD = { email: '775170000', mail: '775170002' } as const;
 export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
 
 export const handle = {
