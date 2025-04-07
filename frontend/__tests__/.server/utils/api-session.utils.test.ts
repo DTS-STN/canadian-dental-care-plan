@@ -10,14 +10,6 @@ vi.mock('~/.server/utils/url.utils', () => ({
   getCdcpWebsiteUrl: vi.fn(),
 }));
 
-vi.mock('~/.server/utils/logging.utils', () => ({
-  getLogger: vi.fn().mockReturnValue({
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-  }),
-}));
-
 describe('getApiSessionRedirectToUrl', () => {
   const locale: AppLocale = 'en';
 

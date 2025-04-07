@@ -15,7 +15,7 @@ import {
   createServicesContainerModule,
   createWebContainerModule,
 } from '~/.server/container-modules';
-import { getLogger } from '~/.server/utils/logging.utils';
+import { createLogger } from '~/.server/logging';
 
 /**
  * This module bootstraps the application by creating an Inversion of Control (IoC) container.
@@ -52,7 +52,7 @@ export function getAppContainerProvider() {
  * in the correct order to ensure dependencies are properly injected.
  */
 function createContainer() {
-  const log = getLogger('container/createContainer');
+  const log = createLogger('container/createContainer');
 
   const container = new Container({ defaultScope: 'Singleton' });
   log.info('Creating IoC container');

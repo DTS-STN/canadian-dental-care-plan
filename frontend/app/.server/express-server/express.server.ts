@@ -5,11 +5,11 @@ import sourceMapSupport from 'source-map-support';
 import { logging, securityHeaders, session } from '~/.server/express-server/middleware.server';
 import { globalErrorHandler, rrRequestHandler } from '~/.server/express-server/request-handlers.server';
 import { createViteDevServer } from '~/.server/express-server/vite.server';
+import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
-import { getLogger } from '~/.server/utils/logging.utils';
 
 console.log('Starting Canadian Dental Care Plan server...');
-const log = getLogger('express.server');
+const log = createLogger('express.server');
 
 log.info('Validating runtime environment...');
 const environment = getEnv();

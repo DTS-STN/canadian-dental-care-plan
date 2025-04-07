@@ -7,7 +7,7 @@ import { fetchServerMetadata, generateAuthorizationRequest, generateCallbackUri,
 const server = setupServer();
 
 vi.mock('~/utils/logging.server', () => ({
-  getLogger: () => ({
+  createLogger: () => ({
     debug: vi.fn(),
     info: vi.fn(),
     trace: vi.fn(),

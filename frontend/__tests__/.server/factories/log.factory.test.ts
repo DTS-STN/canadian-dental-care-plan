@@ -10,7 +10,7 @@ describe('DefaultLogFactory', () => {
     const logFactory = new DefaultLogFactory();
     const logger = logFactory.createLogger('test-category');
 
-    // Assuming getLogger returns a non-null value
+    // Assuming createLogger returns a non-null value
     expect(logger).not.toBeNull();
     expect(createLogger).toHaveBeenCalledWith('test-category');
   });
