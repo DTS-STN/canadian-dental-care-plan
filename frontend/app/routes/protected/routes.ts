@@ -30,6 +30,21 @@ export const routes = [
         paths: { en: '/:lang/protected/stub-login', fr: '/:lang/protege/stub-login' },
       },
       {
+        file: 'routes/protected/apply/layout.tsx',
+        children: [
+          {
+            id: 'protected/apply/index',
+            file: 'routes/protected/apply/index.tsx',
+            paths: { en: '/:lang/protected/apply', fr: '/:lang/protege/demander' },
+          },
+          {
+            id: 'protected/apply/$id/terms-and-conditions',
+            file: 'routes/protected/apply/$id/terms-and-conditions.tsx',
+            paths: { en: '/:lang/protected/apply/:id/terms-and-conditions', fr: '/:lang/protege/demander/:id/conditions-utilisation' },
+          },
+        ],
+      },
+      {
         file: 'routes/protected/renew/layout.tsx',
         children: [
           {

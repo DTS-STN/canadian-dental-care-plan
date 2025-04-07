@@ -3,6 +3,9 @@ export const pageIds = {
     letters: {
       index: 'CDCP-PROT-0015',
     },
+    apply: {
+      index: 'CDCP-PROT-APPL-0001',
+    },
     renew: {
       index: 'CDCP-PROT-RENW-0001',
       termsAndConditions: 'CDCP-PROT-RENW-0002',
