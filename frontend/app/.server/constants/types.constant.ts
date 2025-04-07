@@ -1,8 +1,6 @@
 import type { HealthCheck } from '@dts-stn/health-checks';
 import type { Newable } from 'inversify';
 
-import type { ConfigFactory } from '../configs/config.factory';
-
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
@@ -136,7 +134,6 @@ export const TYPES = assignServiceIdentifiers({
   },
   configs: {
     ClientConfig: serviceId<ClientConfig>(),
-    ConfigFactory: serviceId<ConfigFactory>(),
     ServerConfig: serviceId<ServerConfig>(),
   },
   core: {

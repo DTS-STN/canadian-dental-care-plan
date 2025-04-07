@@ -7,11 +7,11 @@ import { DefaultAppContainerProvider } from '~/.server/app-container.provider';
 import {
   createAuthContainerModule,
   createConfigsContainerModule,
-  createFactoriesContainerModule,
   createHealthContainerModule,
   createMappersContainerModule,
   createRepositoriesContainerModule,
   createRoutesContainerModule,
+  createRoutesValidatorsContainerModule,
   createServicesContainerModule,
   createWebContainerModule,
 } from '~/.server/container-modules';
@@ -59,11 +59,7 @@ function createContainer() {
 
   // Load configurations first to ensure `ServerConfig` is available
   // for conditional service bindings in other modules.
-  container.loadSync(
-    createConfigsContainerModule(), //
-    createFactoriesContainerModule(),
-  );
-
+  container.loadSync(createConfigsContainerModule());
   const serverConfig = container.get(TYPES.configs.ServerConfig);
 
   // Load other container modules
@@ -73,6 +69,7 @@ function createContainer() {
     createMappersContainerModule(),
     createRepositoriesContainerModule(serverConfig),
     createRoutesContainerModule(),
+    createRoutesValidatorsContainerModule(),
     createServicesContainerModule(serverConfig),
     createWebContainerModule(),
   );
