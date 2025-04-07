@@ -2,8 +2,11 @@ import { DiagLogLevel } from '@opentelemetry/api';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
+import { singleton } from './instance-registry';
+
 import { generateCryptoKey } from '~/.server/utils/crypto.utils';
 import { clientEnvSchema } from '~/utils/env-utils';
+import type { ClientEnv } from '~/utils/env-utils';
 
 // none, error, warn, info, debug, verbose, all
 const otelLogLevels = Object.keys(DiagLogLevel).map((key) => key.toLowerCase());
@@ -209,24 +212,48 @@ const serverEnv = clientEnvSchema.extend({
 
 export type ServerEnv = z.infer<typeof serverEnv>;
 
-export function getEnv() {
-  const result = serverEnv.safeParse(process.env);
+/**
+ * Retrieves and validates the server-side environment variables.
+ *
+ * Uses the `serverEnv` schema to validate `process.env` and caches the result
+ * using a singleton pattern to avoid re-validation on subsequent calls.
+ *
+ * @returns The validated server environment configuration.
+ * @throws {Error} If the environment variables do not match the schema.
+ */
+export function getEnv(): ServerEnv {
+  return singleton('serverEnv', () => {
+    const processed = preprocess(process.env);
+    const result = serverEnv.safeParse(processed);
 
-  if (!result.success) {
-    throw new Error(`Invalid application configuration: ${result.error}`);
-  }
+    if (!result.success) {
+      throw new Error(`Invalid application configuration: ${result.error}`);
+    }
 
-  return result.data;
+    return result.data;
+  });
 }
 
-export function getClientEnv() {
-  const result = clientEnvSchema.safeParse(process.env);
+/**
+ * Retrieves and validates the client-side environment variables.
+ *
+ * Uses the `clientEnvSchema` to validate `process.env` and caches the result
+ * using a singleton pattern to avoid re-validation on subsequent calls.
+ *
+ * @returns The validated client environment configuration.
+ * @throws {Error} If the environment variables do not match the schema.
+ */
+export function getClientEnv(): ClientEnv {
+  return singleton('clientEnv', () => {
+    const processed = preprocess(process.env);
+    const result = clientEnvSchema.safeParse(processed);
 
-  if (!result.success) {
-    throw new Error(`Invalid application configuration: ${result.error}`);
-  }
+    if (!result.success) {
+      throw new Error(`Invalid application configuration: ${result.error}`);
+    }
 
-  return result.data;
+    return result.data;
+  });
 }
 
 /**
@@ -235,4 +262,21 @@ export function getClientEnv() {
 export function mockEnabled(mock: MockName) {
   const { ENABLED_MOCKS } = getEnv();
   return ENABLED_MOCKS.includes(mock);
+}
+
+/**
+ * Preprocesses validation input.
+ *
+ * This function takes a record and returns a new record with empty string
+ * values replaced with undefined. This is useful for handling optional
+ * environment variables that may not be set.
+ *
+ * @param data - The record to be preprocessed.
+ * @returns A new record with empty string values replaced with undefined.
+ */
+export function preprocess<K extends string | number | symbol, T>(data: Record<K, T>): Record<K, T | undefined> {
+  const processedEntries = Object.entries(data) //
+    .map(([key, val]) => [key, val === '' ? undefined : val]);
+
+  return Object.fromEntries(processedEntries);
 }
