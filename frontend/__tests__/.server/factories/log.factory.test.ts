@@ -1,9 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { DefaultLogFactory } from '~/.server/factories';
 import { createLogger } from '~/.server/logging';
-
-vi.mock('~/.server/logging');
 
 describe('DefaultLogFactory', () => {
   it('should create a logger instance', () => {

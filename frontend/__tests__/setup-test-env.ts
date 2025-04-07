@@ -13,6 +13,7 @@ import { afterEach, beforeEach, vi } from 'vitest';
 
 beforeEach(() => {
   vi.mock('react-i18next');
+  vi.mock('~/.server/logging');
 });
 
 afterEach(() => {
