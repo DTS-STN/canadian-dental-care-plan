@@ -1,8 +1,7 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
-import { TYPES } from '~/.server/constants';
 import type { PreferredLanguageEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import preferredLanguageJsonDataSource from '~/.server/resources/power-platform/preferred-language.json';
 
@@ -25,8 +24,8 @@ export interface PreferredLanguageRepository {
 export class DefaultPreferredLanguageRepository implements PreferredLanguageRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultPreferredLanguageRepository');
+  constructor() {
+    this.log = createLogger('DefaultPreferredLanguageRepository');
   }
 
   listAllPreferredLanguages(): PreferredLanguageEntity[] {

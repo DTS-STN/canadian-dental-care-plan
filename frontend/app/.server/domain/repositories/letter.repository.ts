@@ -3,8 +3,8 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LetterEntity, PdfEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import getPdfByLetterIdJson from '~/.server/resources/cct/get-pdf-by-letter-id.json';
 
@@ -55,12 +55,11 @@ export class DefaultLetterRepository implements LetterRepository {
   private readonly baseUrl: string;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_BASE_URI' | 'INTEROP_CCT_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_COMMUNITY'>,
     @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger('DefaultLetterRepository');
+    this.log = createLogger('DefaultLetterRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
     this.baseUrl = `${this.serverConfig.INTEROP_CCT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1`;
@@ -145,8 +144,8 @@ export class DefaultLetterRepository implements LetterRepository {
 export class MockLetterRepository implements LetterRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('MockLetterRepository');
+  constructor() {
+    this.log = createLogger('MockLetterRepository');
   }
 
   async findLettersByClientId(clientId: string): Promise<ReadonlyArray<LetterEntity>> {

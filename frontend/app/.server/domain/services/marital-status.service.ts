@@ -7,7 +7,7 @@ import type { MaritalStatusDto, MaritalStatusLocalizedDto } from '~/.server/doma
 import { MaritalStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
 import type { MaritalStatusRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -66,12 +66,11 @@ export class DefaultMaritalStatusService implements MaritalStatusService {
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.MaritalStatusDtoMapper) maritalStatusDtoMapper: MaritalStatusDtoMapper,
     @inject(TYPES.domain.repositories.MaritalStatusRepository) maritalStatusRepository: MaritalStatusRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultMaritalStatusService');
+    this.log = createLogger('DefaultMaritalStatusService');
     this.maritalStatusDtoMapper = maritalStatusDtoMapper;
     this.maritalStatusRepository = maritalStatusRepository;
     this.serverConfig = serverConfig;

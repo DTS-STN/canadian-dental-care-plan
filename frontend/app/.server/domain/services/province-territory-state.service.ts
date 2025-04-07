@@ -7,7 +7,7 @@ import type { ProvinceTerritoryStateDto, ProvinceTerritoryStateLocalizedDto } fr
 import { ProvinceTerritoryStateNotFoundException } from '~/.server/domain/exceptions';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -85,12 +85,11 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.ProvinceTerritoryStateDtoMapper) provinceTerritoryStateDtoMapper: ProvinceTerritoryStateDtoMapper,
     @inject(TYPES.domain.repositories.ProvinceTerritoryStateRepository) provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultProvinceTerritoryStateService');
+    this.log = createLogger('DefaultProvinceTerritoryStateService');
     this.provinceTerritoryStateDtoMapper = provinceTerritoryStateDtoMapper;
     this.provinceTerritoryStateRepository = provinceTerritoryStateRepository;
     this.serverConfig = serverConfig;

@@ -3,8 +3,8 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { BenefitApplicationRequestEntity, BenefitApplicationResponseEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface BenefitApplicationRepository {
@@ -24,12 +24,11 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
   private readonly httpClient: HttpClient;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_BENEFIT_APPLICATION_API_BASE_URI' | 'INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger('DefaultBenefitApplicationRepository');
+    this.log = createLogger('DefaultBenefitApplicationRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
   }
@@ -69,8 +68,8 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
 export class MockBenefitApplicationRepository implements BenefitApplicationRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('MockBenefitApplicationRepository');
+  constructor() {
+    this.log = createLogger('MockBenefitApplicationRepository');
   }
 
   async createBenefitApplication(benefitApplicationRequestEntity: BenefitApplicationRequestEntity): Promise<BenefitApplicationResponseEntity> {

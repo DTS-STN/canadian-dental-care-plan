@@ -20,7 +20,7 @@ import type {
 import { DisabilityStatusNotFoundException, EthnicGroupNotFoundException, FirstNationsNotFoundException, GenderStatusNotFoundException, IndigenousStatusNotFoundException, LocationBornStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { DemographicSurveyDtoMapper } from '~/.server/domain/mappers';
 import type { DemographicSurveyRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -249,12 +249,11 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.DemographicSurveyDtoMapper) DemographicSurveyDtoMapper: DemographicSurveyDtoMapper,
     @inject(TYPES.domain.repositories.DemographicSurveyRepository) DemographicSurveyRepository: DemographicSurveyRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultDemographicSurveyServiceService');
+    this.log = createLogger('DefaultDemographicSurveyServiceService');
     this.DemographicSurveyDtoMapper = DemographicSurveyDtoMapper;
     this.DemographicSurveyRepository = DemographicSurveyRepository;
     this.serverConfig = serverConfig;

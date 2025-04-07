@@ -5,7 +5,7 @@ import type { AddressCorrectionRequestDto, AddressCorrectionResultDto } from '~/
 import type { AddressValidationDtoMapper } from '~/.server/domain/mappers';
 import type { AddressValidationRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services/audit.service';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface AddressValidationService {
@@ -26,12 +26,11 @@ export class DefaultAddressValidationService implements AddressValidationService
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.AddressValidationDtoMapper) addressValidationDtoMapper: AddressValidationDtoMapper,
     @inject(TYPES.domain.repositories.AddressValidationRepository) addressValidationRepository: AddressValidationRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('DefaultAddressValidationService');
+    this.log = createLogger('DefaultAddressValidationService');
     this.addressValidationDtoMapper = addressValidationDtoMapper;
     this.addressValidationRepository = addressValidationRepository;
     this.auditService = auditService;

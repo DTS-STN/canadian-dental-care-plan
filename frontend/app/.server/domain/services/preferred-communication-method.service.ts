@@ -7,7 +7,7 @@ import type { PreferredCommunicationMethodDto, PreferredCommunicationMethodLocal
 import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface PreferredCommunicationMethodService {
@@ -25,12 +25,11 @@ export class DefaultPreferredCommunicationMethodService implements PreferredComm
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.PreferredCommunicationMethodDtoMapper) preferredCommunicationMethodDtoMapper: PreferredCommunicationMethodDtoMapper,
     @inject(TYPES.domain.repositories.PreferredCommunicationMethodRepository) preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultPreferredCommunicationMethodService');
+    this.log = createLogger('DefaultPreferredCommunicationMethodService');
     this.preferredCommunicationMethodDtoMapper = preferredCommunicationMethodDtoMapper;
     this.preferredCommunicationMethodRepository = preferredCommunicationMethodRepository;
     this.serverConfig = serverConfig;

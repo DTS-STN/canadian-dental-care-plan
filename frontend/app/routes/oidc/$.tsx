@@ -7,6 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/$';
 
 import { TYPES } from '~/.server/constants';
+import { createLogger } from '~/.server/logging';
 import { generateCryptoKey } from '~/.server/utils/crypto.utils';
 import type { MockName } from '~/.server/utils/env.utils';
 import type { ServerMetadata, TokenEndpointResponse, UserinfoResponse } from '~/.server/utils/raoidc.utils';
@@ -15,7 +16,7 @@ import { generateRandomString } from '~/.server/utils/raoidc.utils';
 export async function loader({ context, params, request }: Route.LoaderArgs) {
   validateRaoidcMockEnabled({ context });
 
-  const log = context.appContainer.get(TYPES.factories.LogFactory).createLogger('oidc.$/loader');
+  const log = createLogger('oidc.$/loader');
   const { '*': slug } = params;
 
   switch (slug) {
@@ -52,7 +53,7 @@ export async function action({ context, params, request }: Route.ActionArgs) {
   const securityHandler = context.appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
-  const log = context.appContainer.get(TYPES.factories.LogFactory).createLogger('oidc.$/action');
+  const log = createLogger('oidc.$/action');
   const { '*': slug } = params;
 
   switch (slug) {
@@ -72,7 +73,7 @@ function validateRaoidcMockEnabled({ context }: Pick<Route.LoaderArgs, 'context'
   const mockName = 'raoidc' satisfies MockName;
 
   if (!ENABLED_MOCKS.includes(mockName)) {
-    const log = context.appContainer.get(TYPES.factories.LogFactory).createLogger('routes/oidc/validateRaoidcMockEnabled');
+    const log = createLogger('routes/oidc/validateRaoidcMockEnabled');
     log.warn('Mock [%s] is not enabled; returning 404 response', mockName);
     throw Response.json(null, { status: 404 });
   }
@@ -169,7 +170,7 @@ function handleValidateSessionRequest({ context, params, request }: Route.Loader
  * @see https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint
  */
 function handleMockAuthorizeRequest({ context: { appContainer }, request }: Route.LoaderArgs) {
-  const log = appContainer.get(TYPES.factories.LogFactory).createLogger('oidc.$/handleMockAuthorizeRequest');
+  const log = createLogger('oidc.$/handleMockAuthorizeRequest');
   log.debug('Handling (mock) RAOIDC authorize request');
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
   instrumentationService.createCounter('auth.authorize.requests').add(1);

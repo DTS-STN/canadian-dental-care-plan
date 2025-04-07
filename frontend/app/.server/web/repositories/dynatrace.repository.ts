@@ -2,8 +2,8 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { expandTemplate } from '~/utils/string-utils';
 
@@ -22,12 +22,8 @@ export class DefaultDynatraceRepository implements DynatraceRepository {
   private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'DYNATRACE_API_RUM_SCRIPT_TOKEN' | 'DYNATRACE_API_RUM_SCRIPT_URI'>;
   private readonly httpClient: HttpClient;
 
-  constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'DYNATRACE_API_RUM_SCRIPT_TOKEN' | 'DYNATRACE_API_RUM_SCRIPT_URI'>,
-    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
-  ) {
-    this.log = logFactory.createLogger('DefaultDynatraceRepository');
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'DYNATRACE_API_RUM_SCRIPT_TOKEN' | 'DYNATRACE_API_RUM_SCRIPT_URI'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+    this.log = createLogger('DefaultDynatraceRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
   }

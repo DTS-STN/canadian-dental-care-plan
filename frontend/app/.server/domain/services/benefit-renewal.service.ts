@@ -5,7 +5,7 @@ import type { AdultBenefitRenewalDto, AdultChildBenefitRenewalDto, ChildBenefitR
 import type { BenefitRenewalDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitRenewalRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface BenefitRenewalService {
@@ -53,12 +53,11 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.BenefitRenewalDtoMapper) benefitRenewalDtoMapper: BenefitRenewalDtoMapper,
     @inject(TYPES.domain.repositories.BenefitRenewalRepository) benefitRenewalRepository: BenefitRenewalRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('DefaultBenefitRenewalService');
+    this.log = createLogger('DefaultBenefitRenewalService');
     this.benefitRenewalDtoMapper = benefitRenewalDtoMapper;
     this.benefitRenewalRepository = benefitRenewalRepository;
     this.auditService = auditService;

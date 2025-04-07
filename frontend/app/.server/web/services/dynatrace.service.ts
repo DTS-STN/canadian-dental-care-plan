@@ -4,7 +4,7 @@ import moize from 'moize';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import type { DynatraceRumScriptDto } from '~/.server/web/dtos';
 import type { DynatraceDtoMapper } from '~/.server/web/mappers';
@@ -29,13 +29,12 @@ export class DefaultDynatraceService implements DynatraceService {
   private readonly serverConfig: Pick<ServerConfig, 'DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.web.mappers.DynatraceDtoMapper) dynatraceDtoMapper: DynatraceDtoMapper,
     @inject(TYPES.web.repositories.DynatraceRepository) dynatraceRepository: DynatraceRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultDynatraceService');
+    this.log = createLogger('DefaultDynatraceService');
     this.dynatraceDtoMapper = dynatraceDtoMapper;
     this.dynatraceRepository = dynatraceRepository;
     this.auditService = auditService;

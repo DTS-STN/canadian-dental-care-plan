@@ -1,8 +1,7 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
-import { TYPES } from '~/.server/constants';
 import type { ProvinceTerritoryStateEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import provinceTerritoryStateJsonDataSource from '~/.server/resources/power-platform/province-territory-state.json';
 
@@ -32,8 +31,8 @@ export interface ProvinceTerritoryStateRepository {
 export class DefaultProvinceTerritoryStateRepository implements ProvinceTerritoryStateRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultProvinceTerritoryStateRepository');
+  constructor() {
+    this.log = createLogger('DefaultProvinceTerritoryStateRepository');
   }
 
   listAllProvinceTerritoryStates(): ProvinceTerritoryStateEntity[] {

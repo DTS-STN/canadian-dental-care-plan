@@ -2,13 +2,12 @@ import { Outlet, data, isRouteErrorResponse, useParams, useRouteError } from 're
 
 import type { Route } from './+types/layout';
 
-import { TYPES } from '~/.server/constants';
+import { createLogger } from '~/.server/logging';
 import { BilingualNotFoundError, NotFoundError, ServerError } from '~/components/layouts/public-layout';
 import { isAppLocale } from '~/utils/locale-utils';
 
 export function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const logFactory = appContainer.get(TYPES.factories.LogFactory);
-  const log = logFactory.createLogger('public/layout/loader');
+  const log = createLogger('public/layout/loader');
 
   if (!isAppLocale(params.lang)) {
     log.warn('Invalid lang requested [%s]; responding with 404', params.lang);

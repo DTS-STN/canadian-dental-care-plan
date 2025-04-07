@@ -5,7 +5,7 @@ import type { ApplicationStatusBasicInfoRequestDto, ApplicationStatusSinRequestD
 import type { ApplicationStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicationStatusRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -37,12 +37,11 @@ export class DefaultApplicationStatusService implements ApplicationStatusService
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.ApplicationStatusDtoMapper) applicationStatusDtoMapper: ApplicationStatusDtoMapper,
     @inject(TYPES.domain.repositories.ApplicationStatusRepository) applicationStatusRepository: ApplicationStatusRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('DefaultApplicationStatusService');
+    this.log = createLogger('DefaultApplicationStatusService');
     this.applicationStatusDtoMapper = applicationStatusDtoMapper;
     this.applicationStatusRepository = applicationStatusRepository;
     this.auditService = auditService;

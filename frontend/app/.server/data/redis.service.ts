@@ -4,7 +4,7 @@ import type { RedisOptions } from 'ioredis';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -37,8 +37,8 @@ export class DefaultRedisService implements RedisService {
   private readonly log: Logger;
   private readonly redisClient: Redis;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig) {
-    this.log = logFactory.createLogger('DefaultRedisService');
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig) {
+    this.log = createLogger('DefaultRedisService');
     this.redisClient = new Redis(this.getRedisConfig(serverConfig));
 
     const redisUrl = serverConfig.REDIS_SENTINEL_NAME //

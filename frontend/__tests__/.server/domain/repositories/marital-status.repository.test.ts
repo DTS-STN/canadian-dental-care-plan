@@ -1,9 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
 
 import { DefaultMaritalStatusRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -57,10 +54,7 @@ describe('DefaultMaritalStatusRepository', () => {
   });
 
   it('should get all marital statuses', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultMaritalStatusRepository(mockLogFactory);
+    const repository = new DefaultMaritalStatusRepository();
 
     const maritalStatuses = repository.listAllMaritalStatuses();
 
@@ -101,10 +95,7 @@ describe('DefaultMaritalStatusRepository', () => {
   it('should handle empty marital statuses data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultMaritalStatusRepository(mockLogFactory);
+    const repository = new DefaultMaritalStatusRepository();
 
     const maritalStatuses = repository.listAllMaritalStatuses();
 
@@ -112,10 +103,7 @@ describe('DefaultMaritalStatusRepository', () => {
   });
 
   it('should get a marital status by id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultMaritalStatusRepository(mockLogFactory);
+    const repository = new DefaultMaritalStatusRepository();
 
     const maritalStatus = repository.findMaritalStatusById('1');
 
@@ -137,10 +125,7 @@ describe('DefaultMaritalStatusRepository', () => {
   });
 
   it('should return null for non-existent marital status id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultMaritalStatusRepository(mockLogFactory);
+    const repository = new DefaultMaritalStatusRepository();
 
     const maritalStatus = repository.findMaritalStatusById('non-existent-id');
 

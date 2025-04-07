@@ -5,7 +5,7 @@ import type { ApplicantRequestDto } from '~/.server/domain/dtos';
 import type { ApplicantDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicantRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -29,12 +29,11 @@ export class DefaultApplicantService implements ApplicantService {
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.ApplicantDtoMapper) applicantDtoMapper: ApplicantDtoMapper,
     @inject(TYPES.domain.repositories.ApplicantRepository) applicantRepository: ApplicantRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('DefaultApplicantService');
+    this.log = createLogger('DefaultApplicantService');
     this.applicantDtoMapper = applicantDtoMapper;
     this.applicantRepository = applicantRepository;
     this.auditService = auditService;

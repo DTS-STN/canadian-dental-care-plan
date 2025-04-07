@@ -7,7 +7,7 @@ import type { ClientFriendlyStatusDto, ClientFriendlyStatusLocalizedDto } from '
 import { ClientFriendlyStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers';
 import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -59,12 +59,11 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
    * @param serverConfig - The server configuration containing necessary constants and cache TTL values.
    */
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.ClientFriendlyStatusDtoMapper) clientFriendlyStatusDtoMapper: ClientFriendlyStatusDtoMapper,
     @inject(TYPES.domain.repositories.ClientFriendlyStatusRepository) clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
   ) {
-    this.log = logFactory.createLogger('DefaultClientFriendlyStatusService');
+    this.log = createLogger('DefaultClientFriendlyStatusService');
     this.clientFriendlyStatusDtoMapper = clientFriendlyStatusDtoMapper;
     this.clientFriendlyStatusRepository = clientFriendlyStatusRepository;
     this.serverConfig = serverConfig;

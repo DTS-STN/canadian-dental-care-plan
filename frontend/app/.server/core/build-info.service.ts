@@ -1,9 +1,8 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import moize from 'moize';
 import { existsSync, readFileSync } from 'node:fs';
 
-import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface BuildInfo {
@@ -27,8 +26,8 @@ export class DefaultBuildInfoService implements BuildInfoService {
     buildVersion: '0.0.0',
   };
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultBuildInfoService');
+  constructor() {
+    this.log = createLogger('DefaultBuildInfoService');
     this.init();
   }
 

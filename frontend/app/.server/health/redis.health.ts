@@ -5,7 +5,7 @@ import moize from 'moize';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { RedisService } from '~/.server/data';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 @injectable()
@@ -17,12 +17,11 @@ export class RedisHealthCheck implements HealthCheck {
   readonly metadata?: Record<string, string>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL' | 'REDIS_USERNAME' | 'REDIS_STANDALONE_HOST' | 'REDIS_STANDALONE_PORT' | 'REDIS_SENTINEL_NAME' | 'REDIS_SENTINEL_HOST' | 'REDIS_SENTINEL_PORT' | 'REDIS_COMMAND_TIMEOUT_SECONDS'>,
     @inject(TYPES.data.services.RedisService) redisService: RedisService,
   ) {
-    this.log = logFactory.createLogger('RedisHealthCheck');
+    this.log = createLogger('RedisHealthCheck');
     this.serverConfig = serverConfig;
     this.redisService = redisService;
     this.name = 'redis';

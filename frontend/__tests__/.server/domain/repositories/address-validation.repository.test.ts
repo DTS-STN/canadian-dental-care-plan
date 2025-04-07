@@ -4,9 +4,7 @@ import { mock } from 'vitest-mock-extended';
 import type { ServerConfig } from '~/.server/configs';
 import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
 import { DefaultAddressValidationRepository, MockAddressValidationRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
-import type { Logger } from '~/.server/logging';
 
 describe('DefaultAddressValidationRepository', () => {
   afterEach(() => {
@@ -28,40 +26,32 @@ describe('DefaultAddressValidationRepository', () => {
         },
       };
 
-      const mockLogFactory = mock<LogFactory>();
-      mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
       const mockServerConfig = mock<ServerConfig>();
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
       const mockHttpClient = mock<HttpClient>();
       mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(mockResponseData));
 
-      const repository = new DefaultAddressValidationRepository(mockLogFactory, mockServerConfig, mockHttpClient);
+      const repository = new DefaultAddressValidationRepository(mockServerConfig, mockHttpClient);
 
       const result = await repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' });
       expect(result).toEqual(mockResponseData);
     });
 
     it('should throw an error when fetch response is not ok', async () => {
-      const mockLogFactory = mock<LogFactory>();
-      mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
       const mockServerConfig = mock<ServerConfig>();
       mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
 
       const mockHttpClient = mock<HttpClient>();
       mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(null, { status: 500 }));
 
-      const repository = new DefaultAddressValidationRepository(mockLogFactory, mockServerConfig, mockHttpClient);
+      const repository = new DefaultAddressValidationRepository(mockServerConfig, mockHttpClient);
       await expect(async () => await repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' })).rejects.toThrowError();
     });
   });
 });
 
 describe('MockAddressValidationRepository', () => {
-  const mockLogFactory = mock<LogFactory>({ createLogger: () => mock<Logger>() });
-
   it('should return a mocked address correction result', async () => {
     const addressCorrectionRequest: AddressCorrectionRequestEntity = {
       address: '111 Wellington Street',
@@ -70,7 +60,7 @@ describe('MockAddressValidationRepository', () => {
       provinceCode: 'ON',
     };
 
-    const repository = new MockAddressValidationRepository(mockLogFactory);
+    const repository = new MockAddressValidationRepository();
     const result = await repository.getAddressCorrectionResult(addressCorrectionRequest);
 
     expect(result).toEqual({

@@ -1,9 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
 
 import { DefaultPreferredLanguageRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -45,10 +42,7 @@ describe('DefaultPreferredLanguageRepository', () => {
   });
 
   it('should get all preferred languages', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultPreferredLanguageRepository(mockLogFactory);
+    const repository = new DefaultPreferredLanguageRepository();
 
     const preferredLanguages = repository.listAllPreferredLanguages();
 
@@ -79,10 +73,7 @@ describe('DefaultPreferredLanguageRepository', () => {
       value: [],
     });
 
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultPreferredLanguageRepository(mockLogFactory);
+    const repository = new DefaultPreferredLanguageRepository();
 
     const preferredLanguages = repository.listAllPreferredLanguages();
 
@@ -90,10 +81,7 @@ describe('DefaultPreferredLanguageRepository', () => {
   });
 
   it('should get a preferred language by id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultPreferredLanguageRepository(mockLogFactory);
+    const repository = new DefaultPreferredLanguageRepository();
 
     const preferredLanguage = repository.findPreferredLanguageById('1033');
 
@@ -115,10 +103,7 @@ describe('DefaultPreferredLanguageRepository', () => {
   });
 
   it('should return null for non-existent preferred language id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultPreferredLanguageRepository(mockLogFactory);
+    const repository = new DefaultPreferredLanguageRepository();
 
     const preferredLanguage = repository.findPreferredLanguageById('non-existent-id');
 

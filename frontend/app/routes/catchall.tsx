@@ -2,7 +2,7 @@ import { data } from 'react-router';
 
 import type { Route } from './+types/catchall';
 
-import { TYPES } from '~/.server/constants';
+import { createLogger } from '~/.server/logging';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { BilingualNotFoundError, NotFoundError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import { pageIds } from '~/page-ids';
@@ -21,8 +21,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const logFactory = appContainer.get(TYPES.factories.LogFactory);
-  const log = logFactory.createLogger('catchall/action');
+  const log = createLogger('catchall/action');
 
   if (!isAppLocale(params.lang)) {
     log.warn('Invalid lang requested [%s]; responding with 404', params.lang);

@@ -7,7 +7,7 @@ import type { PreferredLanguageDto, PreferredLanguageLocalizedDto } from '~/.ser
 import { PreferredLanguageNotFoundException } from '~/.server/domain/exceptions';
 import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { moveToTop } from '~/.server/utils/collection.utils';
 
@@ -44,12 +44,11 @@ export class DefaultPreferredLanguageService implements PreferredLanguageService
   private readonly serverConfig: PreferredLanguageServiceImpl_ServerConfig;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.PreferredLanguageDtoMapper) preferredLanguageDtoMapper: PreferredLanguageDtoMapper,
     @inject(TYPES.domain.repositories.PreferredLanguageRepository) preferredLanguageRepository: PreferredLanguageRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: PreferredLanguageServiceImpl_ServerConfig,
   ) {
-    this.log = logFactory.createLogger('DefaultPreferredLanguageService');
+    this.log = createLogger('DefaultPreferredLanguageService');
     this.preferredLanguageDtoMapper = preferredLanguageDtoMapper;
     this.preferredLanguageRepository = preferredLanguageRepository;
     this.serverConfig = serverConfig;

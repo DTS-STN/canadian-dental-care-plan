@@ -4,8 +4,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import { DefaultTokenRolesExtractor } from '~/.server/auth/token-roles-extractor';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 vi.mock('jose', () => ({
   createRemoteJWKSet: vi.fn(),
@@ -14,10 +12,8 @@ vi.mock('jose', () => ({
 }));
 
 describe('DefaultTokenRolesExtractor', () => {
-  const mockLogFactory = mock<LogFactory>({ createLogger: () => mock<Logger>() });
-
   describe('decodeJwt', () => {
-    const tokenRolesExtractor = new DefaultTokenRolesExtractor(mockLogFactory, 'audience', 'issuer');
+    const tokenRolesExtractor = new DefaultTokenRolesExtractor('audience', 'issuer');
 
     it('should return an empty array if the token does not contain roles', () => {
       vi.mocked(decodeJwt).mockReturnValue({});
@@ -33,7 +29,7 @@ describe('DefaultTokenRolesExtractor', () => {
   });
 
   describe('decodeAndVerifyJwt', () => {
-    const tokenRolesExtractor = new DefaultTokenRolesExtractor(mockLogFactory, 'audience', 'issuer');
+    const tokenRolesExtractor = new DefaultTokenRolesExtractor('audience', 'issuer');
 
     it('should return an empty array if the token does not contain roles', async () => {
       vi.mocked(jwtVerify).mockResolvedValue(
@@ -61,7 +57,7 @@ describe('DefaultTokenRolesExtractor', () => {
   });
 
   describe('extract', () => {
-    const tokenRolesExtractor = new DefaultTokenRolesExtractor(mockLogFactory, 'audience', 'issuer');
+    const tokenRolesExtractor = new DefaultTokenRolesExtractor('audience', 'issuer');
 
     it('should return an empty array if the token is undefined', async () => {
       expect(await tokenRolesExtractor.extract(undefined)).toEqual([]);

@@ -1,8 +1,7 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
-import { TYPES } from '~/.server/constants';
 import type { LetterTypeEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import letterTypeJsonDataSource from '~/.server/resources/power-platform/letter-type.json';
 
@@ -25,8 +24,8 @@ export interface LetterTypeRepository {
 export class DefaultLetterTypeRepository implements LetterTypeRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultLetterTypeRepository');
+  constructor() {
+    this.log = createLogger('DefaultLetterTypeRepository');
   }
 
   listAllLetterTypes(): ReadonlyArray<LetterTypeEntity> {

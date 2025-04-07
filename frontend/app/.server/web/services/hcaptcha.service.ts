@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import type { HCaptchaVerifyRequestDto, HCaptchaVerifyResponseDto } from '~/.server/web/dtos';
 import type { HCaptchaDtoMapper } from '~/.server/web/mappers';
@@ -26,12 +26,11 @@ export class DefaultHCaptchaService implements HCaptchaService {
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.web.mappers.HCaptchaDtoMapper) hCaptchaDtoMapper: HCaptchaDtoMapper,
     @inject(TYPES.web.repositories.HCaptchaRepository) hCaptchaRepository: HCaptchaRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('DefaultHCaptchaService');
+    this.log = createLogger('DefaultHCaptchaService');
     this.hCaptchaDtoMapper = hCaptchaDtoMapper;
     this.hCaptchaRepository = hCaptchaRepository;
     this.auditService = auditService;

@@ -4,7 +4,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import type { Session } from '~/.server/web/session';
@@ -125,13 +125,12 @@ export class DefaultSecurityHandler implements SecurityHandler {
   private readonly raoidcSessionValidator: RaoidcSessionValidator;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
     @inject(TYPES.web.validators.CsrfTokenValidator) csrfTokenValidator: CsrfTokenValidator,
     @inject(TYPES.web.validators.HCaptchaValidator) hCaptchaValidator: HCaptchaValidator,
     @inject(TYPES.web.validators.RaoidcSessionValidator) raoidcSessionValidator: RaoidcSessionValidator,
   ) {
-    this.log = logFactory.createLogger('DefaultSecurityHandler');
+    this.log = createLogger('DefaultSecurityHandler');
     this.serverConfig = serverConfig;
     this.csrfTokenValidator = csrfTokenValidator;
     this.hCaptchaValidator = hCaptchaValidator;

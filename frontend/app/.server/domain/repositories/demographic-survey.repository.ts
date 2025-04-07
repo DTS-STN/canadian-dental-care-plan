@@ -1,8 +1,7 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
-import { TYPES } from '~/.server/constants';
 import type { DisabilityStatusEntity, EthnicGroupEntity, FirstNationsEntity, GenderStatusEntity, IndigenousStatusEntity, LocationBornStatusEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import EthnicGroupJsonDataSource from '~/.server/resources/power-platform/demographic-survey/ethnic-groups.json';
 import FirstNationsJsonDataSource from '~/.server/resources/power-platform/demographic-survey/first-nations.json';
@@ -95,8 +94,8 @@ export interface DemographicSurveyRepository {
 export class DefaultDemographicSurveyRepository implements DemographicSurveyRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultDemographicSurveyRepository');
+  constructor() {
+    this.log = createLogger('DefaultDemographicSurveyRepository');
   }
 
   listAllIndigenousStatuses(): IndigenousStatusEntity[] {

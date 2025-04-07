@@ -5,7 +5,7 @@ import moize from 'moize';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 @injectable()
@@ -17,12 +17,11 @@ export class ApplicantHealthCheck implements HealthCheck {
   readonly metadata?: Record<string, string>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>,
     @inject(TYPES.domain.repositories.ApplicantRepository) applicantRepository: ApplicantRepository,
   ) {
-    this.log = logFactory.createLogger('ApplicantHealthCheck');
+    this.log = createLogger('ApplicantHealthCheck');
     this.serverConfig = serverConfig;
     this.applicantRepository = applicantRepository;
     this.name = 'applicant';

@@ -5,7 +5,7 @@ import type { VerificationCodeEmailRequestDto } from '~/.server/domain/dtos';
 import type { VerificationCodeDtoMapper } from '~/.server/domain/mappers';
 import type { VerificationCodeRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services/audit.service';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { randomString } from '~/utils/string-utils';
 
@@ -36,12 +36,11 @@ export class DefaultVerificationCodeService implements VerificationCodeService {
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.VerificationCodeDtoMapper) verificationCodeDtoMapper: VerificationCodeDtoMapper,
     @inject(TYPES.domain.repositories.VerificationCodeRepository) verificationCodeRepository: VerificationCodeRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('DefaultVerificationCodeService');
+    this.log = createLogger('DefaultVerificationCodeService');
     this.verificationCodeDtoMapper = verificationCodeDtoMapper;
     this.verificationCodeRepository = verificationCodeRepository;
     this.auditService = auditService;
@@ -77,12 +76,11 @@ export class DefaultVerificationCodeService implements VerificationCodeService {
 @injectable()
 export class StubVerificationCodeService extends DefaultVerificationCodeService {
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.VerificationCodeDtoMapper) verificationCodeDtoMapper: VerificationCodeDtoMapper,
     @inject(TYPES.domain.repositories.VerificationCodeRepository) verificationCodeRepository: VerificationCodeRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
-    super(logFactory, verificationCodeDtoMapper, verificationCodeRepository, auditService);
+    super(verificationCodeDtoMapper, verificationCodeRepository, auditService);
   }
 
   createVerificationCode(userId: string): string {

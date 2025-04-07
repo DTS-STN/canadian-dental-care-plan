@@ -7,7 +7,7 @@ import type { ApplicationYearResultDto, IntakeApplicationYearResultDto, RenewalA
 import { ApplicationYearNotFoundException } from '~/.server/domain/exceptions/application-year-not-found.exception';
 import type { ApplicationYearDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicationYearRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface ApplicationYearService {
@@ -46,12 +46,11 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   private readonly serverConfig: Pick<ServerConfig, 'APPLICATION_CURRENT_DATE' | 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.ApplicationYearDtoMapper) applicationYearDtoMapper: ApplicationYearDtoMapper,
     @inject(TYPES.domain.repositories.ApplicationYearRepository) applicationYearRepository: ApplicationYearRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICATION_CURRENT_DATE' | 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultApplicationYearService');
+    this.log = createLogger('DefaultApplicationYearService');
     this.applicationYearDtoMapper = applicationYearDtoMapper;
     this.applicationYearRepository = applicationYearRepository;
     this.serverConfig = serverConfig;

@@ -4,8 +4,6 @@ import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
 import { DefaultRedisService } from '~/.server/data';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 vi.mock('ioredis', () => {
   return {
@@ -24,12 +22,9 @@ describe('DefaultRedisService', () => {
     vi.clearAllMocks();
   });
 
-  const mockLockFactory = mock<LogFactory>({ createLogger: () => mock<Logger>() });
-
   describe('constructor', () => {
     it('should create a standalone client when not using a sentinel', () => {
       new DefaultRedisService(
-        mockLockFactory,
         mock<ServerConfig>({
           REDIS_SENTINEL_NAME: undefined,
           REDIS_STANDALONE_HOST: 'example.com',
@@ -52,7 +47,6 @@ describe('DefaultRedisService', () => {
 
     it('should create a sentinel client when using a sentinel', () => {
       new DefaultRedisService(
-        mockLockFactory,
         mock<ServerConfig>({
           REDIS_SENTINEL_NAME: 'sentinel',
           REDIS_SENTINEL_HOST: 'example.com',
@@ -76,7 +70,7 @@ describe('DefaultRedisService', () => {
 
   describe('get<T>', () => {
     it('should return correct parsed value', async () => {
-      const redisService = new DefaultRedisService(mockLockFactory, mock<ServerConfig>());
+      const redisService = new DefaultRedisService(mock<ServerConfig>());
       const mockRedisClient = new Redis();
 
       vi.mocked(mockRedisClient.get).mockResolvedValue(JSON.stringify({ name: 'John Doe' }));
@@ -84,7 +78,7 @@ describe('DefaultRedisService', () => {
     });
 
     it('should null if no value found', async () => {
-      const redisService = new DefaultRedisService(mockLockFactory, mock<ServerConfig>());
+      const redisService = new DefaultRedisService(mock<ServerConfig>());
       const mockRedisClient = new Redis();
 
       vi.mocked(mockRedisClient.get).mockResolvedValue(null);
@@ -94,7 +88,7 @@ describe('DefaultRedisService', () => {
 
   describe('set', () => {
     it('should call redisClient.set() with stringified value', async () => {
-      const redisService = new DefaultRedisService(mockLockFactory, mock<ServerConfig>());
+      const redisService = new DefaultRedisService(mock<ServerConfig>());
       const mockRedisClient = new Redis();
 
       await redisService.set('key', { name: 'John Doe' }, 600);
@@ -104,7 +98,7 @@ describe('DefaultRedisService', () => {
 
   describe('del', () => {
     it('should call redisClient.del()', async () => {
-      const redisService = new DefaultRedisService(mockLockFactory, mock<ServerConfig>());
+      const redisService = new DefaultRedisService(mock<ServerConfig>());
       const mockRedisClient = new Redis();
 
       await redisService.del('key');

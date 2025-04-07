@@ -4,8 +4,8 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface AddressValidationRepository {
@@ -40,12 +40,8 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
-  constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
-    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
-  ) {
-    this.log = logFactory.createLogger('DefaultAddressValidationRepository');
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+    this.log = createLogger('DefaultAddressValidationRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
     this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/address/validation/v1`;
@@ -103,8 +99,8 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
 export class MockAddressValidationRepository implements AddressValidationRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('MockAddressValidationRepository');
+  constructor() {
+    this.log = createLogger('MockAddressValidationRepository');
   }
 
   async getAddressCorrectionResult(addressCorrectionRequestEntity: AddressCorrectionRequestEntity): Promise<AddressCorrectionResultEntity> {

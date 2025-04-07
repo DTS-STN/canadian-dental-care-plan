@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
 import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import type { AddressValidatorFactory } from '~/.server/routes/validators/';
 import { DefaultHomeAddressValidator } from '~/.server/routes/validators/home-address.validator';
@@ -25,8 +25,8 @@ export class DefaultHomeAddressValidatorFactory implements HomeAddressValidatorF
   private readonly log: Logger;
   private readonly addressValidatorFactory: AddressValidatorFactory;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.routes.validators.AddressValidatorFactory) addressValidatorFactory: AddressValidatorFactory) {
-    this.log = logFactory.createLogger('DefaultHomeAddressValidatorFactory');
+  constructor(@inject(TYPES.routes.validators.AddressValidatorFactory) addressValidatorFactory: AddressValidatorFactory) {
+    this.log = createLogger('DefaultHomeAddressValidatorFactory');
     this.addressValidatorFactory = addressValidatorFactory;
     this.init();
   }

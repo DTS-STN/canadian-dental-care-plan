@@ -5,7 +5,7 @@ import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, Client
 import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { ClientApplicationRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -37,12 +37,11 @@ export class DefaultClientApplicationService implements ClientApplicationService
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.ClientApplicationDtoMapper) clientApplicationDtoMapper: ClientApplicationDtoMapper,
     @inject(TYPES.domain.repositories.ClientApplicationRepository) clientApplicationRepository: ClientApplicationRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('DefaultClientApplicationService');
+    this.log = createLogger('DefaultClientApplicationService');
     this.clientApplicationDtoMapper = clientApplicationDtoMapper;
     this.clientApplicationRepository = clientApplicationRepository;
     this.auditService = auditService;

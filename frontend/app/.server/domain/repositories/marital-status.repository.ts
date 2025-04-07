@@ -1,8 +1,7 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
-import { TYPES } from '~/.server/constants';
 import type { MaritalStatusEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import maritalStatusJsonDataSource from '~/.server/resources/power-platform/marital-status.json';
 
@@ -25,8 +24,8 @@ export interface MaritalStatusRepository {
 export class DefaultMaritalStatusRepository implements MaritalStatusRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultMaritalStatusRepository');
+  constructor() {
+    this.log = createLogger('DefaultMaritalStatusRepository');
   }
 
   listAllMaritalStatuses(): MaritalStatusEntity[] {

@@ -7,7 +7,7 @@ import type { CountryDto, CountryLocalizedDto } from '~/.server/domain/dtos';
 import { CountryNotFoundException } from '~/.server/domain/exceptions';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { moveToTop } from '~/.server/utils/collection.utils';
 
@@ -76,12 +76,11 @@ export class DefaultCountryService implements CountryService {
    * @param serverConfig - The server configuration containing necessary constants and cache TTL values.
    */
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.CountryDtoMapper) countryDtoMapper: CountryDtoMapper,
     @inject(TYPES.domain.repositories.CountryRepository) countryRepository: CountryRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: CountryServiceImpl_ServiceConfig,
   ) {
-    this.log = logFactory.createLogger('DefaultCountryService');
+    this.log = createLogger('DefaultCountryService');
     this.countryDtoMapper = countryDtoMapper;
     this.countryRepository = countryRepository;
     this.serverConfig = serverConfig;

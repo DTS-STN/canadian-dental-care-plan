@@ -8,9 +8,7 @@ import { mock } from 'vitest-mock-extended';
 import { DefaultRaoidcService } from '~/.server/auth/raoidc.service';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ServerConfig } from '~/.server/configs';
-import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
-import type { Logger } from '~/.server/logging';
 import { generateCryptoKey, generateJwkId } from '~/.server/utils/crypto.utils';
 import type { IdToken, JWKSet, ServerMetadata, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/.server/utils/raoidc.utils';
@@ -42,22 +40,17 @@ describe('DefaultRaoidcService', () => {
     HTTP_PROXY_URL: 'https://example.com/proxy',
   };
 
-  let mockLogFactory: MockProxy<LogFactory>;
-  let mockLogger: MockProxy<Logger>;
   let mockHttpClient: MockProxy<HttpClient>;
   let service: RaoidcService;
 
   beforeEach(() => {
-    mockLogger = mock<Logger>();
-    mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mockLogger);
     mockHttpClient = mock<HttpClient>();
-
-    service = new DefaultRaoidcService(mockLogFactory, mockServerConfig, mockHttpClient);
+    service = new DefaultRaoidcService(mockServerConfig, mockHttpClient);
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('constructor', () => {
@@ -66,7 +59,7 @@ describe('DefaultRaoidcService', () => {
         public readonly fetchServerMetadataTest = this.fetchServerMetadata;
       }
 
-      const serviceTest = new DefaultRaoidcServiceTest(mockLogFactory, mockServerConfig, mockHttpClient);
+      const serviceTest = new DefaultRaoidcServiceTest(mockServerConfig, mockHttpClient);
 
       // Act and Assert
       expect((serviceTest.fetchServerMetadataTest as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds

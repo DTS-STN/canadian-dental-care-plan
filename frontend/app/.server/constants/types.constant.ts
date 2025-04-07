@@ -70,7 +70,7 @@ import type {
   ProvincialGovernmentInsurancePlanService,
   VerificationCodeService,
 } from '~/.server/domain/services';
-import type { ConfigFactory, LogFactory } from '~/.server/factories';
+import type { ConfigFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
 import type { InstrumentationService } from '~/.server/observability';
 import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
@@ -211,9 +211,6 @@ export const TYPES = assignServiceIdentifiers({
       ProvincialGovernmentInsurancePlanService: serviceId<ProvincialGovernmentInsurancePlanService>(),
       VerificationCodeService: serviceId<VerificationCodeService>(),
     },
-  },
-  factories: {
-    LogFactory: serviceId<LogFactory>(),
   },
   health: {
     HealthCheck: serviceId<HealthCheck>(),

@@ -1,9 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
 
 import { DefaultCountryRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -33,10 +30,7 @@ describe('DefaultCountryRepository', () => {
   });
 
   it('should get all countries', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultCountryRepository(mockLogFactory);
+    const repository = new DefaultCountryRepository();
 
     const countries = repository.listAllCountries();
 
@@ -59,10 +53,7 @@ describe('DefaultCountryRepository', () => {
   it('should handle empty countries data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultCountryRepository(mockLogFactory);
+    const repository = new DefaultCountryRepository();
 
     const countries = repository.listAllCountries();
 
@@ -70,10 +61,7 @@ describe('DefaultCountryRepository', () => {
   });
 
   it('should get a country by id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultCountryRepository(mockLogFactory);
+    const repository = new DefaultCountryRepository();
 
     const country = repository.findCountryById('1');
 
@@ -86,10 +74,7 @@ describe('DefaultCountryRepository', () => {
   });
 
   it('should return null for non-existent country id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultCountryRepository(mockLogFactory);
+    const repository = new DefaultCountryRepository();
 
     const country = repository.findCountryById('non-existent-id');
 
