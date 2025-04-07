@@ -148,6 +148,10 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
               value: 'protected/letters/index',
             },
             {
+              children: 'Apply',
+              value: 'protected/apply/index',
+            },
+            {
               children: 'Renew my coverage',
               value: 'protected/renew/index',
             },

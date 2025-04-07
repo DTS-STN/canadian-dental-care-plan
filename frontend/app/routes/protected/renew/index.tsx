@@ -42,7 +42,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
   const applicationYear = await applicationYearService.findRenewalApplicationYear(currentDate);
-  invariant(applicationYear?.renewalYearId, 'Expected applicationYear.renewalYearId to be defined'); // TODO this should redirect to the protected apply flow when introduced
+  if (!applicationYear?.renewalYearId) {
+    throw redirect(getPathById('protected/apply/index', params));
+  }
 
   const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
   const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.renewalYearId, userId: userInfoToken.sub });
