@@ -2,7 +2,8 @@ import { inject, injectable } from 'inversify';
 import moize from 'moize';
 
 import { TYPES } from '~/.server/constants';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import type { AddressValidatorFactory } from '~/.server/routes/validators/';
 import { DefaultMailingAddressValidator } from '~/.server/routes/validators/mailing-address.validator';
 import type { MailingAddressValidator } from '~/.server/routes/validators/mailing-address.validator';

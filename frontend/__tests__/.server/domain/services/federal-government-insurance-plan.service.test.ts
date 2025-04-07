@@ -8,7 +8,8 @@ import { FederalGovernmentInsurancePlanNotFoundException } from '~/.server/domai
 import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { DefaultFederalGovernmentInsurancePlanService } from '~/.server/domain/services';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 vi.mock('moize');
 

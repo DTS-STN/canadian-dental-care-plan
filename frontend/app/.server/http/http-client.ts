@@ -2,7 +2,8 @@ import { inject } from 'inversify';
 import { ProxyAgent } from 'undici';
 
 import { TYPES } from '~/.server/constants';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import type { InstrumentationService } from '~/.server/observability';
 import { getEnv } from '~/.server/utils/env.utils';
 

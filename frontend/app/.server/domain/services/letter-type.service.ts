@@ -7,7 +7,8 @@ import type { LetterTypeDto, LetterTypeLocalizedDto } from '~/.server/domain/dto
 import { LetterTypeNotFoundException } from '~/.server/domain/exceptions';
 import type { LetterTypeDtoMapper } from '~/.server/domain/mappers';
 import type { LetterTypeRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 /**
  * Service interface for managing letter type data.

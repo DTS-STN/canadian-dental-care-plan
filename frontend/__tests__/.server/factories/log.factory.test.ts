@@ -1,11 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { DefaultLogFactory } from '~/.server/factories';
-import { getLogger } from '~/.server/utils/logging.utils';
+import { createLogger } from '~/.server/logging';
 
-vi.mock('~/.server/utils/logging.utils', () => ({
-  getLogger: vi.fn(),
-}));
+vi.mock('~/.server/logging');
 
 describe('DefaultLogFactory', () => {
   it('should create a logger instance', () => {
@@ -14,6 +12,6 @@ describe('DefaultLogFactory', () => {
 
     // Assuming getLogger returns a non-null value
     expect(logger).not.toBeNull();
-    expect(getLogger).toHaveBeenCalledWith('test-category');
+    expect(createLogger).toHaveBeenCalledWith('test-category');
   });
 });

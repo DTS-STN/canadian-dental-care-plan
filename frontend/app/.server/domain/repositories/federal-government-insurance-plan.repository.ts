@@ -2,7 +2,8 @@ import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import type { FederalGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import federalGovernmentInsurancePlanJsonDataSource from '~/.server/resources/power-platform/federal-government-insurance-plan.json';
 
 export interface FederalGovernmentInsurancePlanRepository {

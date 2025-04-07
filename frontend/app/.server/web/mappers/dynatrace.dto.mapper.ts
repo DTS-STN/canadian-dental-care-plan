@@ -3,7 +3,8 @@ import { inject, injectable } from 'inversify';
 import { z } from 'zod';
 
 import { TYPES } from '~/.server/constants';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import type { DynatraceRumScriptDto } from '~/.server/web/dtos';
 
 export interface DynatraceDtoMapper {

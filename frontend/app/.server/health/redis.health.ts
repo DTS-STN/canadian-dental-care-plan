@@ -5,7 +5,8 @@ import moize from 'moize';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { RedisService } from '~/.server/data';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 @injectable()
 export class RedisHealthCheck implements HealthCheck {

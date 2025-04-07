@@ -2,7 +2,8 @@ import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
 import type { ProvinceTerritoryStateEntity } from '~/.server/domain/entities';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 import provinceTerritoryStateJsonDataSource from '~/.server/resources/power-platform/province-territory-state.json';
 
 export interface ProvinceTerritoryStateRepository {

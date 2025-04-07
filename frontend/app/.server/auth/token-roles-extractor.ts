@@ -2,7 +2,8 @@ import { inject, injectable } from 'inversify';
 import { createRemoteJWKSet, decodeJwt, jwtVerify } from 'jose';
 
 import { TYPES } from '~/.server/constants';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 export interface TokenRolesExtractor {
   extract(jwt?: string): Promise<string[]>;

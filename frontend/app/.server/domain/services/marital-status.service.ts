@@ -7,7 +7,8 @@ import type { MaritalStatusDto, MaritalStatusLocalizedDto } from '~/.server/doma
 import { MaritalStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
 import type { MaritalStatusRepository } from '~/.server/domain/repositories';
-import type { LogFactory, Logger } from '~/.server/factories';
+import type { LogFactory } from '~/.server/factories';
+import type { Logger } from '~/.server/logging';
 
 /**
  * Service interface for managing marital status data.
