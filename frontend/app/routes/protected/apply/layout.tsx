@@ -8,8 +8,7 @@ import { TYPES } from '~/.server/constants';
 import { getLocale } from '~/.server/utils/locale.utils';
 import { i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
-//TODO replace with correct import once file is created
-import { transformAdobeAnalyticsUrl } from '~/route-helpers/protected-renew-route-helpers';
+import { transformAdobeAnalyticsUrl } from '~/route-helpers/protected-apply-route-helpers';
 import { useApiProtectedApplyState } from '~/utils/api-protected-apply-state.utils';
 import { useApiSession } from '~/utils/api-session-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
