@@ -1,7 +1,6 @@
 import type { Container } from 'inversify';
 
 import type { ServiceIdentifier } from '~/.server/constants';
-import type {} from '~/.server/factories';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 

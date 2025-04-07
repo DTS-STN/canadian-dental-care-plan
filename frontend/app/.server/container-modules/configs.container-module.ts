@@ -8,10 +8,10 @@ import { TYPES } from '~/.server/constants';
 export function createConfigsContainerModule(): ContainerModule {
   return new ContainerModule((options) => {
     options.bind(TYPES.configs.ClientConfig).toDynamicValue((context) => {
-      return context.get(TYPES.domain.services.ConfigFactory).createClientConfig();
+      return context.get(TYPES.configs.ConfigFactory).createClientConfig();
     });
     options.bind(TYPES.configs.ServerConfig).toDynamicValue((context) => {
-      return context.get(TYPES.domain.services.ConfigFactory).createServerConfig();
+      return context.get(TYPES.configs.ConfigFactory).createServerConfig();
     });
   });
 }

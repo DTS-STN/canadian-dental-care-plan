@@ -1,6 +1,8 @@
 import type { HealthCheck } from '@dts-stn/health-checks';
 import type { Newable } from 'inversify';
 
+import type { ConfigFactory } from '../configs/config.factory';
+
 import type { BearerTokenResolver, TokenRolesExtractor } from '~/.server/auth';
 import type { RaoidcService } from '~/.server/auth/raoidc.service';
 import type { ClientConfig, ServerConfig } from '~/.server/configs';
@@ -70,7 +72,6 @@ import type {
   ProvincialGovernmentInsurancePlanService,
   VerificationCodeService,
 } from '~/.server/domain/services';
-import type { ConfigFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
 import type { InstrumentationService } from '~/.server/observability';
 import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
@@ -135,6 +136,7 @@ export const TYPES = assignServiceIdentifiers({
   },
   configs: {
     ClientConfig: serviceId<ClientConfig>(),
+    ConfigFactory: serviceId<ConfigFactory>(),
     ServerConfig: serviceId<ServerConfig>(),
   },
   core: {
@@ -198,7 +200,6 @@ export const TYPES = assignServiceIdentifiers({
       BenefitRenewalService: serviceId<BenefitRenewalService>(),
       ClientApplicationService: serviceId<ClientApplicationService>(),
       ClientFriendlyStatusService: serviceId<ClientFriendlyStatusService>(),
-      ConfigFactory: serviceId<ConfigFactory>(),
       CountryService: serviceId<CountryService>(),
       DemographicSurveyService: serviceId<DemographicSurveyService>(),
       FederalGovernmentInsurancePlanService: serviceId<FederalGovernmentInsurancePlanService>(),
