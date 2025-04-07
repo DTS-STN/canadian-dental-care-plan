@@ -2,6 +2,7 @@ import type { RouteModules } from 'react-router';
 
 import type { i18nResources } from '~/.server/i18n.resources';
 import type { ClientEnv } from '~/.server/utils/env.utils';
+import type { InstanceName } from '~/.server/utils/instance-registry';
 import type { APP_LOCALES } from '~/utils/locale-utils';
 
 /* eslint-disable no-var */
@@ -15,6 +16,11 @@ declare global {
    * scope, but doesn't declare them anywhere.
    */
   var __reactRouterRouteModules: RouteModules;
+
+  /**
+   * A holder for any application-scoped singletons.
+   */
+  var __instanceRegistry: Map<InstanceName, unknown>;
 
   /**
    * A union type representing the possible values for the application locale.
