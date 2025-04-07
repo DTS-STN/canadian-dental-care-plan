@@ -8,8 +8,6 @@ import { ProvincialGovernmentInsurancePlanNotFoundException } from '~/.server/do
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { DefaultProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 vi.mock('moize');
 
@@ -19,15 +17,12 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
     LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: 5,
   };
 
-  const mockLogFactory = mock<LogFactory>();
-  mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
   describe('constructor', () => {
     it('sets the correct maxAge for moize options', () => {
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
       const mockProvincialGovernmentInsurancePlanRepository = mock<ProvincialGovernmentInsurancePlanRepository>();
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
 
       expect((service.listProvincialGovernmentInsurancePlans as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
       expect((service.getProvincialGovernmentInsurancePlanById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
@@ -70,7 +65,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos.mockReturnValueOnce(mockDtos);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dtos = service.listProvincialGovernmentInsurancePlans();
 
@@ -101,7 +96,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.getProvincialGovernmentInsurancePlanById(id);
 
@@ -117,7 +112,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
       expect(() => service.getProvincialGovernmentInsurancePlanById(id)).toThrow(ProvincialGovernmentInsurancePlanNotFoundException);
       expect(mockProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
@@ -146,7 +141,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.findProvincialGovernmentInsurancePlanById(id);
 
@@ -162,7 +157,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.findProvincialGovernmentInsurancePlanById(id);
 
@@ -204,7 +199,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos.mockReturnValueOnce(mockDtos);
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtosToProvincialGovernmentInsurancePlanLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dtos = service.listAndSortLocalizedProvincialGovernmentInsurancePlans('en');
 
@@ -243,7 +238,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.findLocalizedProvincialGovernmentInsurancePlanById(id, 'en');
 
@@ -260,7 +255,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.findLocalizedProvincialGovernmentInsurancePlanById(id, 'en');
 
@@ -289,7 +284,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dtos = service.getLocalizedProvincialGovernmentInsurancePlanById('1', 'en');
 
@@ -305,7 +300,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockLogFactory, mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig);
 
       expect(() => service.getLocalizedProvincialGovernmentInsurancePlanById('1', 'en')).toThrow(ProvincialGovernmentInsurancePlanNotFoundException);
       expect(mockProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();

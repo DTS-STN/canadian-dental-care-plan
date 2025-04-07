@@ -4,8 +4,8 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { VerificationCodeEmailRequestEntity, VerificationCodeEmailResponseEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface VerificationCodeRepository {
@@ -40,12 +40,8 @@ export class DefaultVerificationCodeRepository implements VerificationCodeReposi
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
-  constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'GC_NOTIFY_API_KEY' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
-    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
-  ) {
-    this.log = logFactory.createLogger('DefaultVerificationCodeRepository');
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'GC_NOTIFY_API_KEY' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+    this.log = createLogger('DefaultVerificationCodeRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
     this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/notifications/email-txt-notifications/v1`;
@@ -119,8 +115,8 @@ export class DefaultVerificationCodeRepository implements VerificationCodeReposi
 export class MockVerificationCodeRepository implements VerificationCodeRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('MockVerificationCodeRepository');
+  constructor() {
+    this.log = createLogger('MockVerificationCodeRepository');
   }
 
   async sendVerificationCodeEmail(verificationCodeEmailRequestEntity: VerificationCodeEmailRequestEntity): Promise<VerificationCodeEmailResponseEntity> {

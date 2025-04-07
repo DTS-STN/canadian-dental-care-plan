@@ -51,12 +51,11 @@ export function rrRequestHandler(mode: string, viteDevServer?: ViteDevServer): R
       : async () => await import(remixServerBuild),
     getLoadContext: (request, response) => {
       const appContainer = getAppContainerProvider();
-      const logFactory = appContainer.get(TYPES.factories.LogFactory);
 
       // `request.session` may be undefined if session middleware is not applied,
       // so a fallback `NoopSession` is used in that case.
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      const session = request.session ? new ExpressSession(logFactory, request.session) : new NoopSession();
+      const session = request.session ? new ExpressSession(request.session) : new NoopSession();
 
       if (session instanceof ExpressSession) {
         // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.

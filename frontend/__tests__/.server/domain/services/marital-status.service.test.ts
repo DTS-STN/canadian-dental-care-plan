@@ -8,8 +8,6 @@ import { MaritalStatusNotFoundException } from '~/.server/domain/exceptions';
 import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers';
 import type { MaritalStatusRepository } from '~/.server/domain/repositories';
 import { DefaultMaritalStatusService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 vi.mock('moize');
 
@@ -19,15 +17,12 @@ describe('DefaultMaritalStatusService', () => {
     LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS: 5,
   };
 
-  const mockLogFactory = mock<LogFactory>();
-  mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
   describe('constructor', () => {
     it('sets the correct maxAge for moize options', () => {
       const mockMaritalStatusDtoMapper = mock<MaritalStatusDtoMapper>();
       const mockMaritalStatusRepository = mock<MaritalStatusRepository>();
 
-      const service = new DefaultMaritalStatusService(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
+      const service = new DefaultMaritalStatusService(mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       // Act and Assert
       expect((service.listMaritalStatuses as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
@@ -67,7 +62,7 @@ describe('DefaultMaritalStatusService', () => {
       const mockMaritalStatusDtoMapper = mock<MaritalStatusDtoMapper>();
       mockMaritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos.mockReturnValueOnce(mockDtos);
 
-      const service = new DefaultMaritalStatusService(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
+      const service = new DefaultMaritalStatusService(mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       const dtos = service.listMaritalStatuses();
 
@@ -96,7 +91,7 @@ describe('DefaultMaritalStatusService', () => {
       const mockMaritalStatusDtoMapper = mock<MaritalStatusDtoMapper>();
       mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto.mockReturnValueOnce(mockDto);
 
-      const service = new DefaultMaritalStatusService(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
+      const service = new DefaultMaritalStatusService(mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       const dto = service.getMaritalStatusById(id);
 
@@ -112,7 +107,7 @@ describe('DefaultMaritalStatusService', () => {
 
       const mockMaritalStatusDtoMapper = mock<MaritalStatusDtoMapper>();
 
-      const service = new DefaultMaritalStatusService(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
+      const service = new DefaultMaritalStatusService(mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       expect(() => service.getMaritalStatusById(id)).toThrow(MaritalStatusNotFoundException);
       expect(mockMaritalStatusRepository.findMaritalStatusById).toHaveBeenCalledOnce();
@@ -158,7 +153,7 @@ describe('DefaultMaritalStatusService', () => {
       mockMaritalStatusDtoMapper.mapMaritalStatusEntitiesToMaritalStatusDtos.mockReturnValueOnce(mockDtos);
       mockMaritalStatusDtoMapper.mapMaritalStatusDtosToMaritalStatusLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
 
-      const service = new DefaultMaritalStatusService(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
+      const service = new DefaultMaritalStatusService(mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       const dtos = service.listLocalizedMaritalStatuses('en');
 
@@ -191,7 +186,7 @@ describe('DefaultMaritalStatusService', () => {
       mockMaritalStatusDtoMapper.mapMaritalStatusEntityToMaritalStatusDto.mockReturnValueOnce(mockDto);
       mockMaritalStatusDtoMapper.mapMaritalStatusDtoToMaritalStatusLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
 
-      const service = new DefaultMaritalStatusService(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
+      const service = new DefaultMaritalStatusService(mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       const dto = service.getLocalizedMaritalStatusById(id, 'en');
 
@@ -208,7 +203,7 @@ describe('DefaultMaritalStatusService', () => {
 
       const mockMaritalStatusDtoMapper = mock<MaritalStatusDtoMapper>();
 
-      const service = new DefaultMaritalStatusService(mockLogFactory, mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
+      const service = new DefaultMaritalStatusService(mockMaritalStatusDtoMapper, mockMaritalStatusRepository, mockServerConfig);
 
       expect(() => service.getLocalizedMaritalStatusById(id, 'en')).toThrow(MaritalStatusNotFoundException);
       expect(mockMaritalStatusRepository.findMaritalStatusById).toHaveBeenCalledOnce();

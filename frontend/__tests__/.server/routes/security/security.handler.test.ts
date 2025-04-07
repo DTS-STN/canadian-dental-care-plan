@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
 
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
 import type { ValidateRequestMethodParams } from '~/.server/routes/security';
@@ -14,7 +14,6 @@ import type { FeatureName } from '~/utils/env-utils';
 vi.mock('~/.server/utils/ip-address.utils');
 
 describe('DefaultSecurityHandler', () => {
-  let mockLogFactory: MockProxy<LogFactory>;
   let mockLogger: MockProxy<Logger>;
   let mockCsrfTokenValidator: MockProxy<CsrfTokenValidator>;
   let mockHCaptchaValidator: MockProxy<HCaptchaValidator>;
@@ -23,16 +22,14 @@ describe('DefaultSecurityHandler', () => {
 
   beforeEach(() => {
     // Mocking the dependencies
-    mockLogFactory = mock<LogFactory>();
     mockLogger = mock<Logger>();
-    mockLogFactory.createLogger.mockReturnValue(mockLogger);
+    vi.mocked(createLogger).mockReturnValue(mockLogger);
     mockCsrfTokenValidator = mock<CsrfTokenValidator>();
     mockHCaptchaValidator = mock<HCaptchaValidator>();
     mockRaoidcSessionValidator = mock<RaoidcSessionValidator>();
 
     // Creating an instance of DefaultSecurityHandler with the mocked dependencies
     securityHandler = new DefaultSecurityHandler(
-      mockLogFactory,
       { ENABLED_FEATURES: ['hcaptcha'] }, // Mocked server config
       mockCsrfTokenValidator,
       mockHCaptchaValidator,
@@ -122,7 +119,6 @@ describe('DefaultSecurityHandler', () => {
       const feature: FeatureName = 'status';
 
       const securityHandler = new DefaultSecurityHandler(
-        mockLogFactory,
         { ENABLED_FEATURES: ['hcaptcha'] }, // Mocked server config
         mockCsrfTokenValidator,
         mockHCaptchaValidator,
@@ -142,7 +138,6 @@ describe('DefaultSecurityHandler', () => {
       const feature: FeatureName = 'hcaptcha';
 
       const securityHandler = new DefaultSecurityHandler(
-        mockLogFactory,
         { ENABLED_FEATURES: ['hcaptcha'] }, // Mocked server config
         mockCsrfTokenValidator,
         mockHCaptchaValidator,
@@ -180,7 +175,6 @@ describe('DefaultSecurityHandler', () => {
     it('should skip hCaptcha validation if the feature is disabled', async () => {
       // Mocking the server config to disable hCaptcha
       securityHandler = new DefaultSecurityHandler(
-        mockLogFactory,
         { ENABLED_FEATURES: [] }, // hCaptcha feature is not enabled
         mockCsrfTokenValidator,
         mockHCaptchaValidator,

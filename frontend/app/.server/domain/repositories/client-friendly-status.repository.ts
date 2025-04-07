@@ -1,8 +1,7 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
-import { TYPES } from '~/.server/constants';
 import type { ClientFriendlyStatusEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import clientFriendlyStatusJsonDataSource from '~/.server/resources/power-platform/client-friendly-status.json';
 
@@ -25,8 +24,8 @@ export interface ClientFriendlyStatusRepository {
 export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStatusRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultClientFriendlyStatusRepository');
+  constructor() {
+    this.log = createLogger('DefaultClientFriendlyStatusRepository');
   }
 
   listAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[] {

@@ -4,7 +4,7 @@ import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import type { HCaptchaRepository } from '~/.server/web/repositories';
 
@@ -17,12 +17,11 @@ export class HCaptchaHealthCheck implements HealthCheck {
   readonly metadata?: Record<string, string>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>,
     @inject(TYPES.web.repositories.HCaptchaRepository) hCaptchaRepository: HCaptchaRepository,
   ) {
-    this.log = logFactory.createLogger('HCaptchaHealthCheck');
+    this.log = createLogger('HCaptchaHealthCheck');
     this.serverConfig = serverConfig;
     this.hCaptchaRepository = hCaptchaRepository;
     this.name = 'hCaptcha';

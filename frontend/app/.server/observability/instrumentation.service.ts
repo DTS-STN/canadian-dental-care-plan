@@ -14,7 +14,7 @@ import invariant from 'tiny-invariant';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { BuildInfo, BuildInfoService } from '~/.server/core';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface InstrumentationService {
@@ -60,8 +60,8 @@ export class DefaultInstrumentationService implements InstrumentationService {
   private readonly serverConfig: DefaultInstrumentationServiceServerConfig;
   private readonly buildInfo: BuildInfo;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.configs.ServerConfig) serverConfig: DefaultInstrumentationServiceServerConfig, @inject(TYPES.core.BuildInfoService) buildInfoService: BuildInfoService) {
-    this.log = logFactory.createLogger('DefaultInstrumentationService');
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultInstrumentationServiceServerConfig, @inject(TYPES.core.BuildInfoService) buildInfoService: BuildInfoService) {
+    this.log = createLogger('DefaultInstrumentationService');
     this.serverConfig = serverConfig;
     this.buildInfo = buildInfoService.getBuildInfo();
   }

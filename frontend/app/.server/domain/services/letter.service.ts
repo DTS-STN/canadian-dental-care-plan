@@ -6,7 +6,7 @@ import type { LetterDto, LettersRequestDto, PdfRequestDto } from '~/.server/doma
 import type { LetterDtoMapper } from '~/.server/domain/mappers';
 import type { LetterRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface LetterService {
@@ -34,13 +34,8 @@ export class DefaultLetterService implements LetterService {
   private readonly letterRepository: LetterRepository;
   private readonly auditService: AuditService;
 
-  constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.domain.mappers.LetterDtoMapper) letterDtoMapper: LetterDtoMapper,
-    @inject(TYPES.domain.repositories.LetterRepository) letterRepository: LetterRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
-  ) {
-    this.log = logFactory.createLogger('DefaultLetterService');
+  constructor(@inject(TYPES.domain.mappers.LetterDtoMapper) letterDtoMapper: LetterDtoMapper, @inject(TYPES.domain.repositories.LetterRepository) letterRepository: LetterRepository, @inject(TYPES.domain.services.AuditService) auditService: AuditService) {
+    this.log = createLogger('DefaultLetterService');
     this.letterDtoMapper = letterDtoMapper;
     this.letterRepository = letterRepository;
     this.auditService = auditService;

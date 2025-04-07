@@ -3,8 +3,8 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface ApplicationYearRepository {
@@ -23,12 +23,8 @@ export class DefaultApplicationYearRepository implements ApplicationYearReposito
   private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
   private readonly httpClient: HttpClient;
 
-  constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>,
-    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
-  ) {
-    this.log = logFactory.createLogger('DefaultApplicationYearRepository');
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+    this.log = createLogger('DefaultApplicationYearRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
   }
@@ -71,8 +67,8 @@ export class DefaultApplicationYearRepository implements ApplicationYearReposito
 export class MockApplicationYearRepository implements ApplicationYearRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('MockApplicationYearRepository');
+  constructor() {
+    this.log = createLogger('MockApplicationYearRepository');
   }
 
   async listApplicationYears(date: string): Promise<ApplicationYearResultEntity> {

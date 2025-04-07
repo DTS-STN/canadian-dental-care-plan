@@ -7,7 +7,7 @@ import type { ProvincialGovernmentInsurancePlanDto, ProvincialGovernmentInsuranc
 import { ProvincialGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions';
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface ProvincialGovernmentInsurancePlanService {
@@ -27,12 +27,11 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.ProvincialGovernmentInsurancePlanDtoMapper) provincialGovernmentInsurancePlanDtoMapper: ProvincialGovernmentInsurancePlanDtoMapper,
     @inject(TYPES.domain.repositories.ProvincialGovernmentInsurancePlanRepository) provincialGovernmentInsurancePlanRepository: ProvincialGovernmentInsurancePlanRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultProvincialGovernmentInsurancePlanService');
+    this.log = createLogger('DefaultProvincialGovernmentInsurancePlanService');
     this.provincialGovernmentInsurancePlanDtoMapper = provincialGovernmentInsurancePlanDtoMapper;
     this.provincialGovernmentInsurancePlanRepository = provincialGovernmentInsurancePlanRepository;
     this.serverConfig = serverConfig;

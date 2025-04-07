@@ -1,7 +1,6 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
-import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -34,8 +33,8 @@ export interface CsrfTokenValidator {
 export class DefaultCsrfTokenValidator implements CsrfTokenValidator {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultCsrfTokenValidator');
+  constructor() {
+    this.log = createLogger('DefaultCsrfTokenValidator');
   }
 
   validateCsrfToken({ requestToken, sessionToken }: ValidateCsrfTokenParams): ValidateCsrfTokenResult {

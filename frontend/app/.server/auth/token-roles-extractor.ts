@@ -1,8 +1,7 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { createRemoteJWKSet, decodeJwt, jwtVerify } from 'jose';
 
-import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface TokenRolesExtractor {
@@ -16,8 +15,8 @@ export class DefaultTokenRolesExtractor implements TokenRolesExtractor {
   private readonly issuer: string;
   private readonly jwksUrl?: string;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, audience: string, issuer: string, jwksUrl?: string) {
-    this.log = logFactory.createLogger('DefaultTokenRolesExtractor');
+  constructor(audience: string, issuer: string, jwksUrl?: string) {
+    this.log = createLogger('DefaultTokenRolesExtractor');
     this.audience = audience;
     this.issuer = issuer;
     this.jwksUrl = jwksUrl;

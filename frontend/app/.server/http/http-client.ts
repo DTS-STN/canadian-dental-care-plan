@@ -2,7 +2,7 @@ import { inject } from 'inversify';
 import { ProxyAgent } from 'undici';
 
 import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import type { InstrumentationService } from '~/.server/observability';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -63,8 +63,8 @@ export class DefaultHttpClient implements HttpClient {
   private readonly log: Logger;
   private readonly instrumentationService: InstrumentationService;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.observability.InstrumentationService) instrumentationService: InstrumentationService) {
-    this.log = logFactory.createLogger('DefaultHttpClient');
+  constructor(@inject(TYPES.observability.InstrumentationService) instrumentationService: InstrumentationService) {
+    this.log = createLogger('DefaultHttpClient');
     this.instrumentationService = instrumentationService;
   }
 

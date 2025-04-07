@@ -1,9 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
 
 import { DefaultFederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -31,10 +28,7 @@ describe('DefaultFederalGovernmentInsurancePlanRepository', () => {
   });
 
   it('should get all federal government insurance plans', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultFederalGovernmentInsurancePlanRepository(mockLogFactory);
+    const repository = new DefaultFederalGovernmentInsurancePlanRepository();
 
     const federalGovernmentInsurancePlans = repository.listAllFederalGovernmentInsurancePlans();
 
@@ -55,10 +49,7 @@ describe('DefaultFederalGovernmentInsurancePlanRepository', () => {
   it('should handle empty federal government insurance plans data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultFederalGovernmentInsurancePlanRepository(mockLogFactory);
+    const repository = new DefaultFederalGovernmentInsurancePlanRepository();
 
     const federalGovernmentInsurancePlans = repository.listAllFederalGovernmentInsurancePlans();
 
@@ -66,10 +57,7 @@ describe('DefaultFederalGovernmentInsurancePlanRepository', () => {
   });
 
   it('should get a federal government insurance plan by id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultFederalGovernmentInsurancePlanRepository(mockLogFactory);
+    const repository = new DefaultFederalGovernmentInsurancePlanRepository();
 
     const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('1');
 
@@ -81,10 +69,7 @@ describe('DefaultFederalGovernmentInsurancePlanRepository', () => {
   });
 
   it('should return null for non-existent federal government insurance plan id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultFederalGovernmentInsurancePlanRepository(mockLogFactory);
+    const repository = new DefaultFederalGovernmentInsurancePlanRepository();
 
     const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('non-existent-id');
 

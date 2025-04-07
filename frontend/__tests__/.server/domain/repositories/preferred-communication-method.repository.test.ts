@@ -1,9 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
 
 import { DefaultPreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -57,10 +54,7 @@ describe('DefaultPreferredCommunicationMethodRepository', () => {
   });
 
   it('should get all preferred communication methods', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultPreferredCommunicationMethodRepository(mockLogFactory);
+    const repository = new DefaultPreferredCommunicationMethodRepository();
 
     const preferredCommunicationMethods = repository.listAllPreferredCommunicationMethods();
 
@@ -101,10 +95,7 @@ describe('DefaultPreferredCommunicationMethodRepository', () => {
   it('should handle empty preferred communication methods data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultPreferredCommunicationMethodRepository(mockLogFactory);
+    const repository = new DefaultPreferredCommunicationMethodRepository();
 
     const preferredCommunicationMethods = repository.listAllPreferredCommunicationMethods();
 
@@ -112,10 +103,7 @@ describe('DefaultPreferredCommunicationMethodRepository', () => {
   });
 
   it('should get a preferred communication method by id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultPreferredCommunicationMethodRepository(mockLogFactory);
+    const repository = new DefaultPreferredCommunicationMethodRepository();
 
     const preferredCommunicationMethod = repository.findPreferredCommunicationMethodById('1');
 
@@ -137,10 +125,7 @@ describe('DefaultPreferredCommunicationMethodRepository', () => {
   });
 
   it('should return null for non-existent preferred communication method id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultPreferredCommunicationMethodRepository(mockLogFactory);
+    const repository = new DefaultPreferredCommunicationMethodRepository();
 
     const preferredCommunicationMethod = repository.findPreferredCommunicationMethodById('non-existent-id');
 

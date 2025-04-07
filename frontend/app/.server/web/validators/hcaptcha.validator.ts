@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import type { HCaptchaVerifyRequestDto } from '~/.server/web/dtos';
 import type { HCaptchaService } from '~/.server/web/services';
@@ -51,8 +51,8 @@ export class DefaultHCaptchaValidator implements HCaptchaValidator {
   private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_MAX_SCORE'>;
   private readonly hCaptchaService: HCaptchaService;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory, @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HCAPTCHA_MAX_SCORE'>, @inject(TYPES.web.services.HCaptchaService) hCaptchaService: HCaptchaService) {
-    this.log = logFactory.createLogger('DefaultHCaptchaValidator');
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HCAPTCHA_MAX_SCORE'>, @inject(TYPES.web.services.HCaptchaService) hCaptchaService: HCaptchaService) {
+    this.log = createLogger('DefaultHCaptchaValidator');
     this.serverConfig = serverConfig;
     this.hCaptchaService = hCaptchaService;
   }

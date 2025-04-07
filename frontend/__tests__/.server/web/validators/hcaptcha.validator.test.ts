@@ -1,28 +1,26 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockReset } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import type { HCaptchaService } from '~/.server/web/services';
 import { DefaultHCaptchaValidator } from '~/.server/web/validators';
 
 const mockLogger = mock<Logger>();
-const mockLogFactory = mock<LogFactory>();
+
 const mockServerConfig = mock<Pick<ServerConfig, 'HCAPTCHA_MAX_SCORE'>>();
 const mockHCaptchaService = mock<HCaptchaService>();
 
 describe('DefaultHCaptchaValidator', () => {
-  const logFactory = mockLogFactory;
-  logFactory.createLogger.mockReturnValue(mockLogger);
+  vi.mocked(createLogger).mockReturnValue(mockLogger);
   const serverConfig = mockServerConfig;
   const hCaptchaService = mockHCaptchaService;
 
-  const validator = new DefaultHCaptchaValidator(logFactory, serverConfig, hCaptchaService);
+  const validator = new DefaultHCaptchaValidator(serverConfig, hCaptchaService);
 
   beforeEach(() => {
     mockReset(mockLogger);
-    mockReset(mockLogFactory);
     mockReset(mockServerConfig);
     mockReset(mockHCaptchaService);
   });

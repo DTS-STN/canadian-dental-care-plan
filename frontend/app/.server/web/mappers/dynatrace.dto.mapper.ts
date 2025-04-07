@@ -1,9 +1,8 @@
 import { XMLParser } from 'fast-xml-parser';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { z } from 'zod';
 
-import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import type { DynatraceRumScriptDto } from '~/.server/web/dtos';
 
@@ -21,8 +20,8 @@ export interface DynatraceDtoMapper {
 export class DefaultDynatraceDtoMapper implements DynatraceDtoMapper {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultDynatraceDtoMapper');
+  constructor() {
+    this.log = createLogger('DefaultDynatraceDtoMapper');
   }
 
   mapDynatraceRumScriptToDynatraceRumScriptDto(dynatraceRumScript: string): DynatraceRumScriptDto | null {

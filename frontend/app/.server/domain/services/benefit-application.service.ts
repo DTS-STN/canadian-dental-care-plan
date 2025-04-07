@@ -5,7 +5,7 @@ import type { BenefitApplicationDto } from '~/.server/domain/dtos';
 import type { BenefitApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitApplicationRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface BenefitApplicationService {
@@ -26,12 +26,11 @@ export class DefaultBenefitApplicationService implements BenefitApplicationServi
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.BenefitApplicationDtoMapper) benefitApplicationDtoMapper: BenefitApplicationDtoMapper,
     @inject(TYPES.domain.repositories.BenefitApplicationRepository) benefitApplicationRepository: BenefitApplicationRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
   ) {
-    this.log = logFactory.createLogger('DefaultBenefitApplicationService');
+    this.log = createLogger('DefaultBenefitApplicationService');
     this.benefitApplicationDtoMapper = benefitApplicationDtoMapper;
     this.benefitApplicationRepository = benefitApplicationRepository;
     this.auditService = auditService;

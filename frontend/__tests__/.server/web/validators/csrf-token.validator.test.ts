@@ -1,22 +1,21 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
 
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { DefaultCsrfTokenValidator } from '~/.server/web/validators';
 
 describe('DefaultCsrfTokenValidator', () => {
   let logMock: MockProxy<Logger>;
-  let logFactoryMock: MockProxy<LogFactory>;
   let csrfTokenValidator: DefaultCsrfTokenValidator;
 
   beforeEach(() => {
     logMock = mock<Logger>();
-    logFactoryMock = mock<LogFactory>();
-    logFactoryMock.createLogger.mockReturnValue(logMock);
 
-    csrfTokenValidator = new DefaultCsrfTokenValidator(logFactoryMock);
+    vi.mocked(createLogger).mockReturnValue(logMock);
+
+    csrfTokenValidator = new DefaultCsrfTokenValidator();
   });
 
   it('should return { isValid: true } when tokens match', () => {

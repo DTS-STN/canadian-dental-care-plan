@@ -7,13 +7,8 @@ import { ApplicationYearNotFoundException } from '~/.server/domain/exceptions/ap
 import type { ApplicationYearDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicationYearRepository } from '~/.server/domain/repositories';
 import { DefaultApplicationYearService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 describe('DefaultApplicationYearService', () => {
-  const mockLogFactory = mock<LogFactory>();
-  mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
   const mockApplicationYearResultDtos: ApplicationYearResultDto[] = [
     {
       // renewal start and end dates not set
@@ -76,7 +71,7 @@ describe('DefaultApplicationYearService', () => {
     it('should return the correct renewal application year if given date is within a renewal period', async () => {
       const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
+      const service = new DefaultApplicationYearService(mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
       const result = await service.findRenewalApplicationYear('2025-01-01');
 
       expect(mockApplicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto).toHaveBeenCalledWith({
@@ -100,7 +95,7 @@ describe('DefaultApplicationYearService', () => {
     it('should return the correct renewal application year when the given date is on or after the renewal start date and no renewal end date is provided', async () => {
       const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
+      const service = new DefaultApplicationYearService(mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
       const result = await service.findRenewalApplicationYear('2026-01-01');
 
       expect(mockApplicationYearDtoMapper.mapApplicationYearResultDtoToRenewalApplicationYearResultDto).toHaveBeenCalledWith({
@@ -113,7 +108,7 @@ describe('DefaultApplicationYearService', () => {
     it('should return null if given date is not within any renewal period', async () => {
       const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
+      const service = new DefaultApplicationYearService(mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
 
       const result = await service.findRenewalApplicationYear('2024-01-01');
       expect(result).toEqual(null);
@@ -129,7 +124,7 @@ describe('DefaultApplicationYearService', () => {
     it('should return the correct intake application year if given date is within an intake period', async () => {
       const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
+      const service = new DefaultApplicationYearService(mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
       const result = await service.getIntakeApplicationYear('2025-01-01');
 
       expect(mockApplicationYearDtoMapper.mapApplicationYearResultDtoToIntakeApplicationYearResultDto).toHaveBeenCalledWith({
@@ -150,7 +145,7 @@ describe('DefaultApplicationYearService', () => {
     it('should return the correct intake application year when the given date is on or after the intake start date and no intake end date is provided', async () => {
       const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
+      const service = new DefaultApplicationYearService(mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
       const result = await service.getIntakeApplicationYear('2026-01-01');
 
       expect(mockApplicationYearDtoMapper.mapApplicationYearResultDtoToIntakeApplicationYearResultDto).toHaveBeenCalledWith({
@@ -168,7 +163,7 @@ describe('DefaultApplicationYearService', () => {
     it('should throw if given date is not within any intake period', async () => {
       const mockServerConfig = { APPLICATION_CURRENT_DATE: undefined, LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: 10 };
 
-      const service = new DefaultApplicationYearService(mockLogFactory, mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
+      const service = new DefaultApplicationYearService(mockApplicationYearDtoMapper, mockApplicationYearRepository, mockServerConfig);
 
       await expect(async () => await service.getIntakeApplicationYear('2023-01-01')).rejects.toThrow(ApplicationYearNotFoundException);
     });

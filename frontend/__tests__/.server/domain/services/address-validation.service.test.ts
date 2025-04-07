@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { AddressCorrectionRequestDto, AddressCorrectionResultDto } from '~/.server/domain/dtos';
@@ -7,15 +7,12 @@ import type { AddressValidationDtoMapper } from '~/.server/domain/mappers';
 import type { AddressValidationRepository } from '~/.server/domain/repositories';
 import { DefaultAddressValidationService } from '~/.server/domain/services';
 import type { AuditService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 describe('DefaultAddressValidationService', () => {
   describe('getAddressCorrectionResult', () => {
     it('should return address correction result DTO', async () => {
-      const mockLogFactory = mock<LogFactory>();
-      mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
       const mockAddressCorrectionResultDto: AddressCorrectionResultDto = {
         status: 'corrected',
         address: '123 Fake St',
@@ -43,7 +40,7 @@ describe('DefaultAddressValidationService', () => {
 
       const mockAuditService = mock<AuditService>();
 
-      const service = new DefaultAddressValidationService(mockLogFactory, mockAddressValidationDtoMapper, mockAddressValidationRepository, mockAuditService);
+      const service = new DefaultAddressValidationService(mockAddressValidationDtoMapper, mockAddressValidationRepository, mockAuditService);
       const mockAddressCorrectionRequestDto: AddressCorrectionRequestDto = {
         address: '123 Fake Street',
         city: 'North Pole',
@@ -57,9 +54,8 @@ describe('DefaultAddressValidationService', () => {
     });
 
     it('should handle errors and return service unavailable status', async () => {
-      const mockLogFactory = mock<LogFactory>();
       const mockLogger = mock<Logger>();
-      mockLogFactory.createLogger.mockReturnValue(mockLogger);
+      vi.mocked(createLogger).mockReturnValue(mockLogger);
 
       const mockAddressCorrectionResultDto: AddressCorrectionResultDto = {
         status: 'service-unavailable', // Expecting service unavailable status
@@ -77,7 +73,7 @@ describe('DefaultAddressValidationService', () => {
 
       const mockAuditService = mock<AuditService>();
 
-      const service = new DefaultAddressValidationService(mockLogFactory, mockAddressValidationDtoMapper, mockAddressValidationRepository, mockAuditService);
+      const service = new DefaultAddressValidationService(mockAddressValidationDtoMapper, mockAddressValidationRepository, mockAuditService);
 
       const mockAddressCorrectionRequestDto: AddressCorrectionRequestDto = {
         address: '123 Fake Street',

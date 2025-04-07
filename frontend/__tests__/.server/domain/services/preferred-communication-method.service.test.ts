@@ -8,8 +8,6 @@ import { PreferredCommunicationMethodNotFoundException } from '~/.server/domain/
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
 import { DefaultPreferredCommunicationMethodService } from '~/.server/domain/services';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 vi.mock('moize');
 
@@ -19,15 +17,12 @@ describe('DefaultPreferredCommunicationMethodService', () => {
     LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS: 5,
   };
 
-  const mockLogFactory = mock<LogFactory>();
-  mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
   describe('constructor', () => {
     it('sets the correct maxAge for moize options', () => {
       const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
 
-      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig); // Act and Assert
+      const service = new DefaultPreferredCommunicationMethodService(mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig); // Act and Assert
 
       expect((service.listPreferredCommunicationMethods as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
       expect((service.getPreferredCommunicationMethodById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
@@ -66,7 +61,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
       const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos.mockReturnValueOnce(mockDtos);
 
-      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+      const service = new DefaultPreferredCommunicationMethodService(mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       const dtos = service.listPreferredCommunicationMethods();
 
@@ -95,7 +90,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
       const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto.mockReturnValueOnce(mockDto);
 
-      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+      const service = new DefaultPreferredCommunicationMethodService(mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       const dto = service.getPreferredCommunicationMethodById(id);
 
@@ -111,7 +106,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
 
       const mockPreferredCommunicationMethodDtoMapper = mock<PreferredCommunicationMethodDtoMapper>();
 
-      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+      const service = new DefaultPreferredCommunicationMethodService(mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       expect(() => service.getPreferredCommunicationMethodById(id)).toThrow(PreferredCommunicationMethodNotFoundException);
       expect(mockPreferredCommunicationMethodRepository.findPreferredCommunicationMethodById).toHaveBeenCalledOnce();
@@ -158,7 +153,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntitiesToPreferredCommunicationMethodDtos.mockReturnValueOnce(mockDtos);
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtosToPreferredCommunicationMethodLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
 
-      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+      const service = new DefaultPreferredCommunicationMethodService(mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       const dtos = service.listAndSortLocalizedPreferredCommunicationMethods(locale);
 
@@ -191,7 +186,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto.mockReturnValueOnce(mockDto);
       mockPreferredCommunicationMethodDtoMapper.mapPreferredCommunicationMethodDtoToPreferredCommunicationMethodLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
 
-      const service = new DefaultPreferredCommunicationMethodService(mockLogFactory, mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
+      const service = new DefaultPreferredCommunicationMethodService(mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig);
 
       const dto = service.getLocalizedPreferredCommunicationMethodById(id, locale);
 

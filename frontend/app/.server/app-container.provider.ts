@@ -1,8 +1,8 @@
 import type { Container } from 'inversify';
 
 import type { ServiceIdentifier } from '~/.server/constants';
-import { TYPES } from '~/.server/constants';
 import type {} from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -44,8 +44,7 @@ export class DefaultAppContainerProvider implements AppContainerProvider {
 
   constructor(container: Container) {
     this.container = container;
-    const logFactory = container.get(TYPES.factories.LogFactory);
-    this.log = logFactory.createLogger('DefaultAppContainerProvider');
+    this.log = createLogger('DefaultAppContainerProvider');
   }
 
   find<T>(serviceIdentifier: ServiceIdentifier<T>): T | undefined {

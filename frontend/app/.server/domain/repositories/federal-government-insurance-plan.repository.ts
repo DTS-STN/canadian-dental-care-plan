@@ -1,8 +1,7 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
-import { TYPES } from '~/.server/constants';
 import type { FederalGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import federalGovernmentInsurancePlanJsonDataSource from '~/.server/resources/power-platform/federal-government-insurance-plan.json';
 
@@ -25,8 +24,8 @@ export interface FederalGovernmentInsurancePlanRepository {
 export class DefaultFederalGovernmentInsurancePlanRepository implements FederalGovernmentInsurancePlanRepository {
   private readonly log: Logger;
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('DefaultFederalGovernmentInsurancePlanRepository');
+  constructor() {
+    this.log = createLogger('DefaultFederalGovernmentInsurancePlanRepository');
   }
 
   listAllFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanEntity[] {

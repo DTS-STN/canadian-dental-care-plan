@@ -2,7 +2,7 @@ import type { Request } from 'express';
 import assert from 'node:assert';
 import validator from 'validator';
 
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 type RequestSession = Request['session'];
@@ -88,17 +88,15 @@ export interface Session {
  * Wrapper around the Express session object. Provides a type-safe and convenient API for session management.
  */
 export class ExpressSession implements Session {
-  readonly logFactory: LogFactory;
   private readonly session: RequestSession;
   static readonly SESSION_RESERVED_KEYS = ['id', 'cookie', 'regenerate', 'destroy', 'reload', 'resetMaxAge', 'save', 'touch'] as const;
 
   private readonly log: Logger;
 
-  constructor(logFactory: LogFactory, session: RequestSession) {
-    this.logFactory = logFactory;
+  constructor(session: RequestSession) {
     this.session = session;
     assert(session, 'Session object is undefined. Ensure session middleware is properly configured.');
-    this.log = logFactory.createLogger('~/.server/web/Session');
+    this.log = createLogger('~/.server/web/Session');
     this.log.trace('Session initialized with ID: %s', this.id);
   }
 

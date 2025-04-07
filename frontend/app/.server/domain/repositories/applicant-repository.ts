@@ -3,8 +3,8 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantRequestEntity, ApplicantResponseEntity } from '~/.server/domain/entities';
-import type { LogFactory } from '~/.server/factories';
 import type { HttpClient } from '~/.server/http';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -43,12 +43,11 @@ export class DefaultApplicantRepository implements ApplicantRepository {
   private readonly baseUrl: string;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.configs.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_APPLICANT_API_BASE_URI' | 'INTEROP_APPLICANT_API_SUBSCRIPTION_KEY'>,
     @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
-    this.log = logFactory.createLogger('DefaultApplicantRepository');
+    this.log = createLogger('DefaultApplicantRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
     this.baseUrl = `${this.serverConfig.INTEROP_APPLICANT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1`;
@@ -175,8 +174,8 @@ export class MockApplicantRepository implements ApplicantRepository {
     },
   ];
 
-  constructor(@inject(TYPES.factories.LogFactory) logFactory: LogFactory) {
-    this.log = logFactory.createLogger('MockApplicantRepository');
+  constructor() {
+    this.log = createLogger('MockApplicantRepository');
   }
 
   async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null> {

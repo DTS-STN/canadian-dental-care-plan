@@ -1,29 +1,28 @@
 import { Container } from 'inversify';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
+import type { MockProxy } from 'vitest-mock-extended';
 
 import { DefaultAppContainerProvider } from '~/.server/app-container.provider';
 import type { ServiceIdentifier } from '~/.server/constants';
-import { TYPES } from '~/.server/constants';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 describe('DefaultAppContainerProvider', () => {
   let container: Container;
   let appContainerProvider: DefaultAppContainerProvider;
-  const mockLogger = mock<Logger>();
-  const mockLogFactory = mock<LogFactory>();
+
+  let mockLogger: MockProxy<Logger>;
 
   type MockService = { name: string };
   const mockService: MockService = { name: 'MockService' };
   const mockServiceIdentifier = Symbol.for('MockService') as unknown as ServiceIdentifier<MockService>;
 
   beforeEach(() => {
-    container = new Container();
-    mockLogger.trace.mockClear();
-    mockLogFactory.createLogger.mockReturnValue(mockLogger);
+    mockLogger = mock<Logger>();
+    vi.mocked(createLogger).mockReturnValueOnce(mockLogger);
 
-    container.bind(TYPES.factories.LogFactory).toConstantValue(mockLogFactory);
+    container = new Container();
     appContainerProvider = new DefaultAppContainerProvider(container);
   });
 

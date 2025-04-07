@@ -7,7 +7,7 @@ import type { LetterTypeDto, LetterTypeLocalizedDto } from '~/.server/domain/dto
 import { LetterTypeNotFoundException } from '~/.server/domain/exceptions';
 import type { LetterTypeDtoMapper } from '~/.server/domain/mappers';
 import type { LetterTypeRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
+import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 /**
@@ -57,12 +57,11 @@ export class DefaultLetterTypeService implements LetterTypeService {
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.factories.LogFactory) logFactory: LogFactory,
     @inject(TYPES.domain.mappers.LetterTypeDtoMapper) letterTypeDtoMapper: LetterTypeDtoMapper,
     @inject(TYPES.domain.repositories.LetterTypeRepository) letterTypeRepository: LetterTypeRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('DefaultLetterTypeService');
+    this.log = createLogger('DefaultLetterTypeService');
     this.letterTypeDtoMapper = letterTypeDtoMapper;
     this.letterTypeRepository = letterTypeRepository;
     this.serverConfig = serverConfig;

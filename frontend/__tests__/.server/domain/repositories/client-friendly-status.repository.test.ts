@@ -1,9 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
 
 import { DefaultClientFriendlyStatusRepository } from '~/.server/domain/repositories';
-import type { LogFactory } from '~/.server/factories';
-import type { Logger } from '~/.server/logging';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -31,10 +28,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
   });
 
   it('should get all client friendly statuses', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultClientFriendlyStatusRepository(mockLogFactory);
+    const repository = new DefaultClientFriendlyStatusRepository();
 
     const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
 
@@ -55,10 +49,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
   it('should handle empty client friendly statuses data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultClientFriendlyStatusRepository(mockLogFactory);
+    const repository = new DefaultClientFriendlyStatusRepository();
 
     const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
 
@@ -66,10 +57,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
   });
 
   it('should get a client friendly status by id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultClientFriendlyStatusRepository(mockLogFactory);
+    const repository = new DefaultClientFriendlyStatusRepository();
 
     const clientFriendlyStatus = repository.findClientFriendlyStatusById('1');
 
@@ -81,10 +69,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
   });
 
   it('should return null for non-existent client friendly status id', () => {
-    const mockLogFactory = mock<LogFactory>();
-    mockLogFactory.createLogger.mockReturnValue(mock<Logger>());
-
-    const repository = new DefaultClientFriendlyStatusRepository(mockLogFactory);
+    const repository = new DefaultClientFriendlyStatusRepository();
 
     const clientFriendlyStatus = repository.findClientFriendlyStatusById('non-existent-id');
 
