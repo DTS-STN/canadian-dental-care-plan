@@ -6,6 +6,7 @@ import { mock, mockDeep } from 'vitest-mock-extended';
 import type { ClientConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { PreferredCommunicationMethodService, PreferredLanguageService } from '~/.server/domain/services';
+import type { InstrumentationService } from '~/.server/observability';
 import type { SecurityHandler } from '~/.server/routes/security';
 import { action, loader } from '~/routes/public/apply/$id/adult/communication-preference';
 
@@ -30,6 +31,7 @@ describe('_public.apply.id.communication-preference', () => {
   describe('loader()', () => {
     it('should id, state, country list and region list', async () => {
       const mockAppLoadContext = mockDeep<AppLoadContext>();
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',
       } satisfies Partial<ClientConfig>);
@@ -82,6 +84,7 @@ describe('_public.apply.id.communication-preference', () => {
       formData.append('preferredLanguage', 'fr');
 
       const mockAppLoadContext = mockDeep<AppLoadContext>();
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         COMMUNICATION_METHOD_EMAIL_ID: 'email',

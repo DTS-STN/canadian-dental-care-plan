@@ -52,6 +52,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadApplyAdultStateForReview({ params, request, session });
   invariant(state.mailingAddress?.country, `Unexpected mailing address country: ${state.mailingAddress?.country}`);
 
@@ -142,6 +144,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const benefitApplicationStateMapper = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper);
   const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyAdultStateToBenefitApplicationDto(state));
 
+  instrumentationService.countHttpStatus('public.apply.adult.review-information', 200);
+
   return {
     id: state.id,
     userInfo,
@@ -158,18 +162,23 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+
   const formData = await request.formData();
   const state = loadApplyAdultStateForReview({ params, request, session });
+
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearApplyState({ params, session });
+    instrumentationService.countHttpStatus('public.apply.adult.review-information', 302);
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveApplyState({ params, session, state: { editMode: false } });
+    instrumentationService.countHttpStatus('public.apply.adult.review-information', 302);
     if (state.hasFederalProvincialTerritorialBenefits) {
       return redirect(getPathById('public/apply/$id/adult/federal-provincial-territorial-benefits', params));
     }
@@ -182,6 +191,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveApplyState({ params, session, state: { submissionInfo } });
 
+  instrumentationService.countHttpStatus('public.apply.adult.review-information', 302);
   return redirect(getPathById('public/apply/$id/adult/confirmation', params));
 }
 
