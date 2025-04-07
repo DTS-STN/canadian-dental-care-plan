@@ -280,17 +280,18 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
               <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus}</DescriptionListItem>
-            <DescriptionListItem term={t('confirm.previously-enrolled-title')}>
-              {userInfo.previouslyEnrolled &&
-                (userInfo.previouslyEnrolled.isNewOrExistingMember ? (
+            {userInfo.previouslyEnrolled && (
+              <DescriptionListItem term={t('confirm.previously-enrolled-title')}>
+                {userInfo.previouslyEnrolled.isNewOrExistingMember ? (
                   <>
                     <p>{t('confirm.yes')}</p>
                     <p>{userInfo.previouslyEnrolled.clientNumber}</p>
                   </>
                 ) : (
                   <p>{t('confirm.no')}</p>
-                ))}
-            </DescriptionListItem>
+                )}
+              </DescriptionListItem>
+            )}
           </dl>
         </section>
 
@@ -316,9 +317,11 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
             <DescriptionListItem term={t('confirm.alt-phone-number')}>
               <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
             </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.email')}>
-              <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
-            </DescriptionListItem>
+            {userInfo.contactInformationEmail && (
+              <DescriptionListItem term={t('confirm.email')}>
+                <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
+              </DescriptionListItem>
+            )}
             <DescriptionListItem term={t('confirm.mailing')}>
               <Address
                 address={{
