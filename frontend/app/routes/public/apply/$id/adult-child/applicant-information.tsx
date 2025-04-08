@@ -58,15 +58,20 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:applicant-information.page-title') }) };
 
+  instrumentationService.countHttpStatus('public.apply.adult-child.applicant-information', 200);
   return { defaultState: state.applicantInformation, taxYear: state.applicationYear.taxYear, editMode: state.editMode, id: state.id, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -82,6 +87,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (formAction === FORM_ACTION.cancel) {
     invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
+    instrumentationService.countHttpStatus('public.apply.adult-child.applicant-information', 302);
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
   }
 
@@ -171,6 +177,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('public.apply.adult-child.applicant-information', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -226,6 +233,8 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
+  instrumentationService.countHttpStatus('public.apply.adult-child.applicant-information', 302);
+
   if (ageCategory === 'youth') {
     return redirect(getPathById('public/apply/$id/adult-child/living-independently', params));
   }
@@ -259,7 +268,6 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
 
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'not-eligible');
 
-  // const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     firstName: 'first-name',
     lastName: 'last-name',
