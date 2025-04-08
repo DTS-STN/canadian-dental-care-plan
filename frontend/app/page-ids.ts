@@ -5,6 +5,11 @@ export const pageIds = {
     },
     apply: {
       index: 'CDCP-PROT-APPL-0001',
+      termsAndConditions: 'CDCP-PROT-APPL-0002',
+      taxFiling: 'CDCP-PROT-APPL-0003',
+      fileYourTaxes: 'CDCP-PROT-APPL-0004',
+      typeOfApplication: 'CDCP-PROT-APPL-0005',
+      applicationDelegate: 'CDCP-PROT-APPL-0006',
     },
     renew: {
       index: 'CDCP-PROT-RENW-0001',

@@ -1,8 +1,159 @@
 {
-  "index": {
-    "page-title": "Présenter une demande du Régime canadien de soins dentaires"
+  "application-delegate": {
+    "page-title": "Présenter une demande au nom d'une autre personne à titre de délégué ou de mandataire",
+    "contact-representative": "Vous devez parler à un représentant de Service Canada si vous présentez une demande au nom d'une autre personne à titre de délégué ou de mandataire. Veuillez communiquer avec Service Canada au <noWrap>1-833-537-4342</noWrap> ou vous rendre dans un <contactServiceCanada>bureau de Service Canada</contactServiceCanada> près de chez vous.",
+    "prepare-to-apply": "<preparingToApply>Se préparer à présenter une demande au nom de quelqu'un</preparingToApply>",
+    "contact-service-canada-href": "https://bureaux.service.canada.ca/fr",
+    "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#aide",
+    "back-btn": "Retour",
+    "return-btn": "Revenir à la page principale",
+    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
+  "index": {
+    "page-title": "Présenter une demande"
+  },
+  "progress": {
+    "label": "Progression de la demande"
+  },
+  "required-label": "Remplissez tous les champs.",
+  "optional-label": "Remplissez tous les champs sauf s'ils sont indiqués facultatifs.",
   "terms-and-conditions": {
-    "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires"
+    "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires",
+    "page-heading": "Conditions générales d'utilisation et énoncé de confidentialité",
+    "intro-text": "Merci d'utiliser la demande en ligne du Régime canadien de soins dentaires (RCSD) («\u00a0la demande en ligne\u00a0»). Nous avons établi conditions d'utilisation de ce service («\u00a0conditions d'utilisation\u00a0»). Veuillez les lire attentivement.",
+    "terms-and-conditions-of-use": {
+      "summary": "Conditions générales d'utilisation",
+      "online-application-legal-terms": "<strong>VEUILLEZ LIRE ATTENTIVEMENT.</strong> Les présentes conditions d'utilisation de la demande en ligne du Régime canadien de soins dentaires (RCSD) contiennent des renseignements sur vos droits et obligations juridiques et régissent votre utilisation de la demande en ligne. Les présentes conditions d'utilisation doivent être lues en parallèle avec celles du site Web Canada.ca. En cas de divergence, les présentes conditions d'utilisation ont préséance sur celles du site Web <canadaTermsConditions>Canada.ca</canadaTermsConditions>. En cas de divergence, les présentes conditions générales d'utilisation ont préséance sur celles du site Web Canada.ca.",
+      "online-application-access-terms": "Votre accès à la demande en ligne et votre utilisation de celle-ci, y compris tout le contenu, sont assujettis à (1) votre acceptation des présentes conditions d'utilisation et (2) votre respect de celles-ci.",
+      "online-application-usage-terms": "Chaque fois que vous utilisez la demande en ligne, ces conditions continuent de s'appliquer. En utilisant la demande en ligne, vous acceptez de respecter les conditions suivantes. Il vous incombe de comprendre et de conserver ces conditions.",
+      "online-application-outage": "Il peut arriver que le système soit interrompu pour des raisons de maintenance.",
+      "online-application-timeout": "Si vous êtes inactif pendant 15 minutes dans la demande en ligne, votre séance prendra fin et vous perdrez tous les renseignements que vous avez entrés.",
+      "terms-rejection-policy": "Vous pouvez en tout temps décider de ne pas accepter les conditions, auquel cas vous ne serez pas autorisé à accéder à la demande en ligne et à l'utiliser.",
+      "esdc-definition-clarification": "Aux fins des présentes conditions d'utilisation, «\u00a0EDSC\u00a0» désigne Sa Majesté le Roi du chef du Canada représenté par le ministre de l'Emploi et du Développement social du Canada.",
+      "online-application": {
+        "heading": "Conditions générales d'utilisation de la demande en ligne",
+        "self-agreement": "Votre utilisation de la demande en ligne signifie que vous avez lu et accepté les présentes conditions d'utilisation et l'énoncé de confidentialité. Si, à tout moment, vous cessez d'accepter l'une ou l'autre des conditions d'utilisation, vous devez renoncer à utiliser la demande en ligne.",
+        "on-behalf-of-someone-else": "Si vous utilisez la demande en ligne au nom d'un enfant, vous certifiez en l'utilisant que vous disposez de toute l'autorité nécessaire pour accepter les conditions d'utilisation au nom de cette personne, et que vous acceptez les conditions d'utilisation au nom de la personne que vous représentez.",
+        "at-your-own-risk": "Si vous utilisez un ordinateur partagé ou une connexion Internet partagée, vous utilisez ce service à vos propres risques et vous devrez protéger toutes vos informations personnelles. Si vous utilisez un ordinateur public, assurez-vous de fermer le navigateur ou de vous déconnecter lorsque vous avez terminé.",
+        "msdc": "EDSC utilise les services de Microsoft Corporation pour exécuter la demande en ligne. Les centres de données Microsoft utilisés par EDSC sont au Canada conformément à l'entente sur <microsoftDataPrivacyPolicy>les conditions de service de Microsoft Corporation</microsoftDataPrivacyPolicy>.",
+        "antibot": "EDSC utilise les services de protection contre les robots hCaptcha pour nos outils en ligne conformément aux <hcaptchaTermsOfService>conditions de service</hcaptchaTermsOfService> de hCaptcha."
+      },
+      "changes-to-these-terms-of-use": {
+        "heading": "Changements apportés aux présentes conditions d'utilisation",
+        "esdc-terms-amendment-policy": "EDSC peut modifier les présentes conditions à tout moment et sans préavis. Ces changements prennent effet immédiatement à la date de leur publication. En utilisant la demande en ligne, vous acceptez de respecter les conditions modifiées. Vous devez vous assurer de comprendre et de conserver les conditions modifiées."
+      }
+    },
+    "privacy-notice-statement": {
+      "summary": "Énoncé de confidentialité",
+      "personal-information": {
+        "heading": "Renseignements personnels",
+        "service-canada-application-administration": "Les renseignements personnels recueillis dans la présente demande sont nécessaires aux fins de l'inscription au Régime canadien de soins dentaires (RCSD). Service Canada, qui fait partie d'Emploi et Développement social Canada (EDSC), administre les demandes au titre du RCSD au nom de Santé Canada. Service Canada recueillera les renseignements personnels que vous avez inclus dans votre demande de participation au RCSD afin de vous inscrire au régime.",
+        "policy-analysis": "EDSC peut utiliser ou communiquer les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC, de SC et de Statistique Canada. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet.",
+        "collection-use": "La collecte, l'utilisation et la divulgation de vos renseignements personnels sont autorisées par la <cite>Loi sur le ministère de la Santé</cite>, la <cite>Loi sur les mesures de soins dentaires</cite> et la <cite>Loi sur le ministère de l'Emploi et du Développement social</cite>, entre autres, et sont protégées par les dispositions de la Loi sur la protection des renseignements personnels.",
+        "microsoft-policy": "EDSC exécute ce processus de demande en utilisant les services du fournisseur tiers Microsoft Corporation, qui peut être soumis à des lois étrangères. Vous trouverez de plus amples renseignements en consultant cette page Web <microsoftDataPrivacyPolicy>Politique de protection des données et principes de confidentialité de Microsoft</microsoftDataPrivacyPolicy>."
+      },
+      "how-we-protect-your-privacy": {
+        "heading": "Comment protégeons-nous vos renseignements personnels?",
+        "personal-information-rights-and-access": "Vous avez droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, le cas échéant, à leur correction. Ils sont conservés dans les fichiers de renseignements personnels suivants (FRPs)\u00a0:",
+        "personal-information-banks": {
+          "esdc-ppu-712": "Régime canadien de soins dentaires (ESDC PPU 712)",
+          "hc-ppu-440": "Régime canadien de soins dentaires (SC PPU 440)"
+        },
+        "info-source-access": "Vous pouvez apprendre comment accéder à cette information dans la publication du gouvernement intitulée <infosource>Info Source</infosource>. Vous pouvez également accéder à Info Source en ligne dans n'importe quel Centre Service Canada.",
+        "personal-information-handling-complaint-process": "Si vous n'êtes pas satisfait de la façon dont vos renseignements personnels ont été traités par EDSC, vous pouvez communiquer avec le Commissariat à la protection de la vie privée du Canada pour <fileacomplaint>déposer une plainte</fileacomplaint>."
+      }
+    },
+    "sharing-your-information": {
+      "summary": "Communication de vos renseignements",
+      "government-of-canada-and-sun-life": {
+        "heading": "Gouvernement du canada et Sun Life",
+        "share-info": "Emploi et Développement social Canada (EDSC) peut communiquer vos renseignements personnels à Santé Canada (SC), à l'Agence du revenu du Canada et à la Sun Life pour administrer le régime, valider votre admissibilité et vous inscrire au Régime canadien de soins dentaires (RCSD).",
+        "disclose-info": "Vos renseignements peuvent également être divulguées à l'administrateur des prestations du RCSD (la Sun Life) et aux agents et fournisseurs de services de l'administrateur des prestations aux fins de souscription, de vérification, d'administration, de décision et d'enquête concernant les prestations versées au titre du RCSD.",
+        "sun-life-authorization": "La Sun Life est autorisée à recueillir, à utiliser et à divulguer des renseignements à votre sujet à toute personne ou organisation, y compris les fournisseurs de soins de santé buccodentaire, les établissements, les services d'enquête et le RCSD, aux fins de l'administration du programme, de la vérification, des demandes de règlement et de la sécurité des patients/clients."
+      },
+      "sharing-of-information-and-oral-health-providers": {
+        "heading": "Partage d'informations et prestataires de santé bucco-dentaire",
+        "enrol-consent": "En vous inscrivant au RCSD, vous consentez également à ce que vos fournisseurs de soins de santé buccodentaire divulguent tous les renseignements personnels, tel qu'autorisé par la <cite>Loi sur le ministère de la Santé</cite> et la <cite>Loi sur les mesures de soins dentaires</cite>, qui peuvent être jugés utiles par la Sun Life dans le contexte de l'administration du programme, de la vérification et de la gestion des demandes de règlement, et de la sécurité des patients/clients. Ces renseignements peuvent comprendre, sans s'y limiter, des détails sur les services fournis, des données cliniques sur le patient, des paiements et des radiographies.",
+        "considered-minor": "Si vous êtes considéré comme mineur dans votre province ou territoire, vos renseignements peuvent également être communiqués à vos parents ou tuteurs légaux.",
+        "analysis": "EDSC peut utiliser ou communiquer les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC, de SC et de Statistique Canada. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet."
+      }
+    },
+    "apply": {
+      "application-participation": "La participation au RCSD est volontaire. Toutefois, si vous ne fournissez pas vos renseignements personnels dans votre demande, votre admissibilité au RCSD ne pourra pas être validée.",
+      "application-consent": "En poursuivant cette demande, vous reconnaissez avoir lu et accepté les modalités et l'énoncé de confidentialité ci-dessus. De plus, vous consentez à ce que vos renseignements personnels soient communiqués aux fins susmentionnées.",
+      "back-button": "Retour",
+      "link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
+      "continue-button": "Continuer"
+    },
+    "links": {
+      "canada-ca-terms-and-conditions": "https://www.canada.ca/fr/transparence/avis.html",
+      "file-complaint": "https://www.priv.gc.ca/fr/signaler-un-probleme/",
+      "hcaptcha": "https://www.hcaptcha.com/terms",
+      "info-source": "https://www.canada.ca/fr/emploi-developpement-social/ministere/transparence/aai/rapports/infosource.html",
+      "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy",
+      "sun-life": "https://www.sunlife.ca/fr/"
+    },
+    "checkboxes": {
+      "acknowledge-terms": "Je reconnais avoir lu et compris les conditions générales d'utilisation",
+      "acknowledge-privacy": "Je reconnais avoir lu et compris l'énoncé de confidentialité",
+      "share-data": "Je consens à l'échange des données",
+      "do-not-consent": "Je <strong>n'accepte pas</strong> les termes et conditions et la déclaration de confidentialité et je <strong>ne consens pas</strong> à la divulgation de mes renseignements personnels aux fins énumérées.",
+      "error-message": {
+        "acknowledge-terms-required": "Vous devez lire les modalités d'utilisation avant de poursuivre",
+        "acknowledge-privacy-required": "Vous devez lire l'énoncé de confidentialité avant de poursuivre",
+        "share-data-required": "Vous devez consentir à la communication de vos renseignements avant de poursuivre",
+        "consent-required": "Vous devez accepter les Conditions générales et la Déclaration de confidentialité, ainsi que consentir à la divulgation de vos renseignements personnels. Pour adhérer au Régime canadien de soins dentaires, vous devez accepter les Conditions générales et la Déclaration de confidentialité. Vous devez également consentir à la divulgation de vos renseignements personnels aux fins indiquées."
+      }
+    }
+  },
+  "tax-filing": {
+    "page-title": "Déclaration de revenus",
+    "form-instructions": "Est-ce que vous et votre époux/épouse ou conjoint/conjointe de fait, si vous en avez un, avez produit votre déclaration de revenus pour {{taxYear}} au Canada et reçu votre avis de cotisation?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "error-message": {
+      "tax-filing-required": "Sélectionnez si vous avez fait votre déclaration de revenus ou non"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
+  },
+  "file-your-taxes": {
+    "page-title": "Produire votre déclaration de revenus",
+    "ineligible-to-apply": "Vous n'êtes pas admissible au Régime canadien de soins dentaires pour le moment.",
+    "tax-not-filed": "Vous et votre époux/épouse ou conjoint/conjointe de fait, si vous en avez un, n'avez pas reçu votre avis de cotisation pour {{taxYear}} de l'Agence du revenu du Canada.",
+    "unable-to-assess": "Nous utilisons les renseignements de votre déclaration de revenus pour nous assurer que les critères d'admissibilité relatifs au revenu et à la résidence sont remplis.",
+    "tax-info": "Pour en savoir plus sur la façon de produire votre déclaration de revenus, consultez la page <taxInfo>Préparez-vous à faire vos impôts</taxInfo>.",
+    "apply-after": "Vous pouvez vous inscrire au régime après que vous ou votre époux/épouse ou conjoint/conjointe de fait avez produit vos déclarations de revenus et reçu votre avis de cotisation.",
+    "tax-info-href": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
+    "back-btn": "Retour",
+    "return-btn": "Revenir à la page principale",
+    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
+
+  "type-of-application": {
+    "page-title": "Type de demande",
+    "info-alert": {
+      "heading": "Les demandes sont ouvertes progressivement",
+      "eligibility-requirements": "Le Régime canadien de soins dentaires (RCSD) sera offert progressivement. Veuillez vérifier que vous répondez aux quatre <eligibilityRequirements>critères d'admissibilité</eligibilityRequirements> avant de soumettre votre demande.",
+      "schedule-when": "Consultez le calendrier ci-dessous pour savoir <whenApply>quand vous pouvez faire une demande.</whenApply>",
+      "links": {
+        "apply-qualify": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/admissibilite.html",
+        "apply-when": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand"
+      }
+    },
+    "form-instructions": "Pour qui présentez-vous la demande?",
+    "radio-options": {
+      "personal": "Je présente une demande pour <strong>moi-même</strong>",
+      "child": "Je présente une demande pour <strong>mon (mes) enfant(s)</strong>",
+      "personal-and-child": "Je présente une demande pour <strong>moi-même et mon (mes) enfant(s)</strong>",
+      "delegate": "Je présente une demande <strong>au nom d'une autre personne à titre de représentant légal ou mandataire</strong>"
+    },
+    "error-message": {
+      "type-of-application-required": "Sélectionnez à qui s'adresse cette demande"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
   }
 }
