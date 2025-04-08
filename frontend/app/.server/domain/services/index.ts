@@ -18,3 +18,5 @@ export * from './preferred-language.service';
 export * from './province-territory-state.service';
 export * from './provincial-government-insurance-plan.service';
 export * from './verification-code.service';
+
+export const KILLSWITCH_KEY = 'APPLICATION_KILLSWITCH_ENGAGED';
