@@ -1,12 +1,17 @@
 import { inject, injectable } from 'inversify';
 
+import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
+import type { RedisService } from '~/.server/data';
 import type { BenefitApplicationDto } from '~/.server/domain/dtos';
 import type { BenefitApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitApplicationRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
-import { createLogger } from '~/.server/logging';
+import { KILLSWITCH_KEY } from '~/.server/domain/services';
 import type { Logger } from '~/.server/logging';
+import { createLogger } from '~/.server/logging';
+import { AppError, isAppError } from '~/errors/app-error';
+import { ErrorCodes } from '~/errors/error-codes';
 
 export interface BenefitApplicationService {
   /**
@@ -32,16 +37,25 @@ export class DefaultBenefitApplicationService implements BenefitApplicationServi
   private readonly benefitApplicationDtoMapper: BenefitApplicationDtoMapper;
   private readonly benefitApplicationRepository: BenefitApplicationRepository;
   private readonly auditService: AuditService;
+  // TODO :: GjB :: the redis service is temporary.. it should be removed when HTTP429 mitigation is removed
+  private readonly redisService: RedisService;
+  private readonly serverConfig: ServerConfig;
 
   constructor(
     @inject(TYPES.domain.mappers.BenefitApplicationDtoMapper) benefitApplicationDtoMapper: BenefitApplicationDtoMapper,
     @inject(TYPES.domain.repositories.BenefitApplicationRepository) benefitApplicationRepository: BenefitApplicationRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
+    @inject(TYPES.data.services.RedisService) redisService: RedisService,
+    @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig,
   ) {
     this.log = createLogger('DefaultBenefitApplicationService');
     this.benefitApplicationDtoMapper = benefitApplicationDtoMapper;
     this.benefitApplicationRepository = benefitApplicationRepository;
     this.auditService = auditService;
+    // TODO :: GjB :: the redis service is temporary.. it should be removed when HTTP429 mitigation is removed
+    this.redisService = redisService;
+    this.serverConfig = serverConfig;
+
     this.init();
   }
 
@@ -52,14 +66,30 @@ export class DefaultBenefitApplicationService implements BenefitApplicationServi
   async createBenefitApplication(benefitApplicationRequestDto: BenefitApplicationDto): Promise<string> {
     this.log.trace('Creating benefit application for request [%j]', benefitApplicationRequestDto);
 
+    const killswitchEngaged = await this.redisService.get(KILLSWITCH_KEY);
+
+    if (killswitchEngaged) {
+      this.log.info('Request to create benefit application is unavailable due to killswitch engagement.');
+      new AppError('Request to create benefit application is unavailable due to killswitch engagement.', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
+    }
+
     this.auditService.createAudit('application-submit.post', { userId: benefitApplicationRequestDto.userId });
 
-    const benefitApplicationRequestEntity = this.benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationRequestDto);
-    const benefitApplicationResponseEntity = await this.benefitApplicationRepository.createBenefitApplication(benefitApplicationRequestEntity);
-    const applicationCode = this.benefitApplicationDtoMapper.mapBenefitApplicationResponseEntityToApplicationCode(benefitApplicationResponseEntity);
+    try {
+      const benefitApplicationRequestEntity = this.benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationRequestDto);
+      const benefitApplicationResponseEntity = await this.benefitApplicationRepository.createBenefitApplication(benefitApplicationRequestEntity);
+      const applicationCode = this.benefitApplicationDtoMapper.mapBenefitApplicationResponseEntityToApplicationCode(benefitApplicationResponseEntity);
 
-    this.log.trace('Returning application code: [%s]', applicationCode);
-    return applicationCode;
+      this.log.trace('Returning application code: [%s]', applicationCode);
+      return applicationCode;
+    } catch (error) {
+      if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
+        this.log.warn('Received XAPI_TOO_MANY_REQUESTS... killswitch engage!');
+        await this.redisService.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
+      }
+
+      throw error;
+    }
   }
 
   async createProtectedBenefitApplication(protectedBenefitApplicationRequestDto: BenefitApplicationDto): Promise<string> {
