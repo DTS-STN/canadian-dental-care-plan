@@ -84,7 +84,8 @@
   },
   "applicant-information": {
     "page-title": "Renseignements personnels",
-    "required-information": "Nous utiliserons les renseignements que vous fournirez ci-dessous pour confirmer votre identité.",
+    "required-information": "Veuillez fournir vos informations ci-dessous. Nous les utiliserons pour vérifier votre identité.",
+    "if-child-renew": "Si vous renouvelez pour un enfant, vous devez être le parent ou le tuteur légal ayant initialement effectué la demande. Votre numéro de client se trouve en haut à droite de la lettre de renouvellement de votre enfant.",
     "client-number": "Numéro de client",
     "date-of-birth": "Date de naissance",
     "last-name": "Nom de famille",
@@ -92,10 +93,7 @@
     "single-legal-name": "Si vous avez un seul nom légal",
     "name-instructions": "Si vous utilisez un seul nom légal, indiquez-le dans les champs «\u00a0prénom\u00a0» et «\u00a0nom de famille\u00a0».",
     "no-client-number": "Je n'ai pas de numéro de client",
-    "renew-client-number": "Pour renouveler votre adhésion, vous devez avoir un numéro de client.",
-    "apply-to-cdcp": "Si vous n'en avez pas, vous devrez présenter une demande au Régime canadien de soins dentaires.",
-    "check-eligibility": "<eligibilityLink>Vérifiez si vous pouvez présenter une demande au Régime canadien de soins dentaires.</eligibilityLink>",
-    "eligibility-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/admissibilite.html",
+    "renew-client-number": "Pour renouveler votre couverture, vous devez être inscrit au Régime canadien de soins dentaires. Vous aurez besoin du numéro de client que vous avez reçu après votre demande.",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
@@ -121,9 +119,9 @@
       "client-number-valid": "Le numéro de client doit être composé de 11 chiffres"
     },
     "status-not-found": {
-      "heading": "Nous n'avons pas pu trouver votre demande avec les informations que vous nous avez fournies",
-      "please-review": "Assurez-vous que les informations que vous avez saisies sont correctes.",
-      "contact-service-canada": "Si vous devez modifier votre nom ou si ce problème persiste, contactez Service Canada en composant le <noWrap>1-833-537-4342</noWrap>."
+      "heading": "Nous n'avons pas pu retrouver votre dossier avec les informations que vous nous avez fournies.",
+      "please-review": "Veuillez-vous assurer que les informations que vous avez saisies sont correctes. Si vous êtes un parent ou un tuteur légal qui renouvelle pour votre enfant, vous devez saisir vos informations ci-dessous.",
+      "contact-service-canada": "Si vous devez mettre à jour vos informations d'identité ou si ce problème persiste, contactez Service Canada en appelant le <noWrap>1-833-537-4342</noWrap>."
     }
   },
   "type-of-renewal": {

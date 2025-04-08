@@ -19,7 +19,6 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
-import { InlineLink } from '~/components/inline-link';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
@@ -181,8 +180,6 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
     clientNumber: 'client-number',
   });
 
-  const eligibilityLink = <InlineLink to={t('renew:applicant-information.eligibility-link')} className="external-link" newTabIndicator target="_blank" />;
-
   return (
     <>
       <div className="my-6 sm:my-8">
@@ -192,6 +189,7 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
         {fetcherStatus === 'status-not-found' && <StatusNotFound />}
         <p className="mb-4 italic">{t('renew:required-label')}</p>
         <p className="mb-6">{t('renew:applicant-information.required-information')}</p>
+        <p className="mb-6">{t('renew:applicant-information.if-child-renew')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -261,10 +259,6 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
             <Collapsible id="no-client-number" summary={t('renew:applicant-information.no-client-number')}>
               <div className="space-y-2">
                 <p>{t('renew:applicant-information.renew-client-number')}</p>
-                <p>{t('renew:applicant-information.apply-to-cdcp')}</p>
-                <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="renew:applicant-information.check-eligibility" components={{ eligibilityLink }} />
-                </p>
               </div>
             </Collapsible>
           </div>
