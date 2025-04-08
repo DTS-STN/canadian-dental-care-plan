@@ -1,8 +1,159 @@
 {
-  "index": {
-    "page-title": "Canadian Dental Care Plan Apply"
+  "application-delegate": {
+    "page-title": "Applying on behalf of someone as a legal delegate or Power of Attorney",
+    "contact-representative": "You must speak to a Service Canada representative if you are applying on behalf of someone as their legal delegate or Power of Attorney. You can contact Service Canada by calling 1-833-537-4342 or by visiting a <contactServiceCanada>Service Canada Centre</contactServiceCanada> near you.",
+    "prepare-to-apply": "<preparingToApply>Preparing to apply on behalf of someone</preparingToApply>",
+    "contact-service-canada-href": "https://bureaux.service.canada.ca/en",
+    "preparing-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#helping",
+    "back-btn": "Back",
+    "return-btn": "Return to main page",
+    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   },
+  "index": {
+    "page-title": "Apply"
+  },
+  "progress": {
+    "label": "Application progress"
+  },
+  "required-label": "Complete all fields.",
+  "optional-label": "Complete all fields unless marked as optional.",
   "terms-and-conditions": {
-    "page-title": "Terms and conditions"
+    "page-title": "Terms and conditions",
+    "page-heading": "Terms and conditions of use and privacy notice statement",
+    "intro-text": "Thank you for using the Canadian Dental Care Plan (CDCP) Online Application (\"the Online Application\"). We have developed important terms and conditions for using this service (\"Terms\"). Please read them carefully.",
+    "terms-and-conditions-of-use": {
+      "summary": "Terms and Conditions of Use",
+      "online-application-legal-terms": "<strong>PLEASE READ CAREFULLY.</strong> These Terms for the Canadian Dental Care Plan (CDCP) Online Application contain information about your legal rights and obligations and regulate your use of the Online Application. These Terms should be read in conjunction with the <canadaTermsConditions>Canada.ca website Terms and Conditions</canadaTermsConditions>. In case they are differing, the present Terms take precedence over Canada.ca Terms and Conditions.",
+      "online-application-access-terms": "Your access to and use of the Online Application including any and all content is subject to (1) your acceptance of and (2) your compliance with these Terms.",
+      "online-application-usage-terms": "Every time you use the Online Application, these Terms will apply. By using the Online Application, you agree to abide by the following Terms. It is your responsibility to understand and retain these Terms.",
+      "online-application-outage": "There will be times when the system might be down for maintenance.",
+      "online-application-timeout": "If you are inactive for 15 minutes on the Online Application, your session will end and you will lose any information you entered.",
+      "terms-rejection-policy": "At any time you may decide not to accept the Terms, in which case you will not be permitted to access and use the Online Application.",
+      "esdc-definition-clarification": "In these Terms, \"ESDC\" refers to the Minister of Employment and Social Development, representing His Majesty the King in Right of Canada.",
+      "online-application": {
+        "heading": "Terms of Use for the Online Application:",
+        "self-agreement": "Using the Online Application means that you have read and agree to these Terms and the Privacy Notice Statement. If, at any time, you withdraw your agreement to any of the Terms you must stop use of the Online Application.",
+        "on-behalf-of-someone-else": "If you are using the Application on behalf of a child, by using the Online Application, you certify that you have all the necessary authority to agree to the Terms on behalf of that individual, and that you agree to the Terms on behalf of the individual you are representing.",
+        "at-your-own-risk": "If you are using a shared computer or shared internet connection, you are using this service at your own risk, and you will need to keep any personal information safe. If you are using a public computer make sure to close the browser or log out when you are done.",
+        "msdc": "ESDC uses services from Microsoft Corporation to run the Online Application. The Microsoft data centres used by ESDC are in Canada in accordance with <microsoftDataPrivacyPolicy>Microsoft Corporation's Terms of Service Agreement</microsoftDataPrivacyPolicy>.",
+        "antibot": "ESDC uses hCaptcha anti-bot services for our online tools in accordance with hCaptcha's <hcaptchaTermsOfService>Terms of Service</hcaptchaTermsOfService>."
+      },
+      "changes-to-these-terms-of-use": {
+        "heading": "Changes to these Terms of Use",
+        "esdc-terms-amendment-policy": "ESDC may amend these Terms at any time and without notice. Such changes shall be effective immediately on the date they are published. By using the Online Application, you agree to abide by the amended Terms. You are responsible to ensure you understand and retain the amended Terms."
+      }
+    },
+    "privacy-notice-statement": {
+      "summary": "Privacy Notice Statement",
+      "personal-information": {
+        "heading": "Personal Information",
+        "service-canada-application-administration": "The personal information collected in this application is required for the purposes of applying for the Canada Dental Care Plan (CDCP). Service Canada, which is part of Employment and Social Development Canada (ESDC), administers applications for the CDCP on behalf of Health Canada. Service Canada will collect the personal information you include in your CDCP application to register and enroll you into the Plan.",
+        "policy-analysis": "ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC, Health Canada and Statistics Canada. These uses or activities will not result in any administrative decisions made about you.",
+        "collection-use": "The collection, use, and disclosure of your personal information is authorized by, among other laws, the <cite>Department of Health Act</cite>, the <cite>Dental Care Measures Act</cite>, the <cite>Department of Employment and Social Development Act</cite>, and is protected by the provisions of the <cite>Privacy Act</cite>.",
+        "microsoft-policy": "ESDC carries out this application process using services from a third-party provider, Microsoft Corporation, which may be subject to foreign laws. For more information, see <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles</microsoftDataPrivacyPolicy>."
+      },
+      "how-we-protect-your-privacy": {
+        "heading": "How we protect your privacy",
+        "personal-information-rights-and-access": "You have the right to the protection of, access to, and where applicable, the correction of your personal information. It is kept in the following personal information banks (PIBS):",
+        "personal-information-banks": {
+          "esdc-ppu-712": "Canadian Dental Care Plan (ESDC PPU 712)",
+          "hc-ppu-440": "Canadian Dental Care Plan (HC PPU 440)"
+        },
+        "info-source-access": "You can learn how to access this information in the government publication called <infosource>Info Source</infosource>. You can also access Info Source online at any Service Canada Centre.",
+        "personal-information-handling-complaint-process": "If you do not agree with the way your personal information was handled by ESDC, you can contact the Office of the Privacy Commissioner of Canada (OPC) to <fileacomplaint>file a complaint</fileacomplaint>."
+      }
+    },
+    "sharing-your-information": {
+      "summary": "Sharing your information",
+      "government-of-canada-and-sun-life": {
+        "heading": "Government of Canada and Sun Life",
+        "share-info": "Employment and Social Development Canada (ESDC) may share your personal information with Health Canada (HC), the Canada Revenue Agency (CRA), and Sun Life to administer the plan, validate your eligibility, and register you for the Canadian Dental Care Plan (CDCP).",
+        "disclose-info": "Your information may also be disclosed to the CDCP benefits administrator (Sun Life), the benefits administrator's agents, and service providers for the purpose of underwriting, verification, administration, adjudication and investigation of claims under the CDCP.",
+        "sun-life-authorization": "Sun Life is authorized to collect, use, and disclose information about you to any person or organization, including oral health providers, institutions, investigative services, and the CDCP, for the purposes of program administration, audit, claims and patient/client safety."
+      },
+      "sharing-of-information-and-oral-health-providers": {
+        "heading": "Sharing of information and Oral Health Providers",
+        "enrol-consent": "By enrolling in the CDCP, you are also providing consent to your oral health providers to disclose all personal information, as authorized by the <cite>Department of Health Act</cite> and the <cite>Dental Care Measures Act</cite>, that may be considered useful by Sun Life in the context of program administration, conducting claims verifications, managing claims, and patient/client safety. This information may include, but is not limited to, details on the services provided, patient clinical data, payments, and X-rays.",
+        "considered-minor": "If you are considered a minor in your province or territory, your information can also be shared with your parents or legal guardians.",
+        "analysis": "ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC, Health Canada and Statistics Canada. These uses or activities will not result in any administrative decisions made about you."
+      }
+    },
+    "apply": {
+      "application-participation": "Participation in the CDCP is voluntary. However, if you do not provide your personal information in your application, you cannot be considered for the CDCP.",
+      "application-consent": "By continuing with this application, you agree that you have read and accept the above terms and conditions and privacy notice statement. You also consent to the sharing of your personal information for the purposes listed above.",
+      "back-button": "Back",
+      "link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
+      "continue-button": "Continue"
+    },
+    "links": {
+      "canada-ca-terms-and-conditions": "https://www.canada.ca/en/transparency/terms.html",
+      "file-complaint": "https://www.priv.gc.ca/en/report-a-concern/",
+      "hcaptcha": "https://www.hcaptcha.com/terms",
+      "info-source": "https://www.canada.ca/en/employment-social-development/corporate/transparency/access-information/reports/infosource.html",
+      "microsoft-data-privacy-policy": "https://www.microsoft.com/en-ca/trust-center/privacy",
+      "sun-life": "https://www.sunlife.ca/en/"
+    },
+    "checkboxes": {
+      "acknowledge-terms": "I have read the Terms and Conditions",
+      "acknowledge-privacy": "I have read the Privacy Notice Statement",
+      "share-data": "I consent to the sharing of data",
+      "do-not-consent": "I <strong>do not agree</strong> to the Terms and Conditions and Privacy Notice Statement and <strong>do not consent</strong> to the sharing of my information for the purposes listed above.",
+      "error-message": {
+        "acknowledge-terms-required": "You must read the Terms and Conditions to proceed",
+        "acknowledge-privacy-required": "You must read the Privacy Notice Statement to proceed",
+        "share-data-required": "You must consent to the sharing of your data to proceed",
+        "consent-required": "You must agree to the Terms and Conditions and Privacy Notice Statement, and consent to the sharing of your information. To apply for the Canadian Dental Care Plan, you must agree to the Terms and Conditions and Privacy Notice Statement. You must also consent to the sharing of your personal information for the purposes listed."
+      }
+    }
+  },
+  "tax-filing": {
+    "page-title": "Tax filing",
+    "form-instructions": "Have you, and if applicable, your spouse or common-law partner, filed your tax return for {{taxYear}} in Canada and received your Notice of Assessment?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "error-message": {
+      "tax-filing-required": "Select whether or not you have filed your taxes"
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
+  },
+  "file-your-taxes": {
+    "page-title": "File your taxes",
+    "ineligible-to-apply": "You are not eligible to apply for the Canadian Dental Care Plan at this time.",
+    "tax-not-filed": "You, and if applicable your spouse or common-law partner, have not received your Notice of Assessment for {{taxYear}} from the Canada Revenue Agency.",
+    "unable-to-assess": "We use the information from your tax file to verify that the income and residency eligibility requirements for the Canadian Dental Care Plan are met.",
+    "tax-info": "For more information on how to file your taxes, visit <taxInfo>Get ready to do your taxes</taxInfo>.",
+    "apply-after": "You can apply for the plan only after you or your spouse or common-law partner have filed your taxes and received your Notice of Assessment.",
+
+    "tax-info-href": "https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax/get-ready-taxes.html",
+    "back-btn": "Back",
+    "return-btn": "Return to main page",
+    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
+  "type-of-application": {
+    "page-title": "Type of application",
+    "info-alert": {
+      "heading": "Applications are opening in phases",
+      "eligibility-requirements": "The Canadian Dental Care Plan (CDCP) is opening in phases. Make sure you meet all four of the <eligibilityRequirements>eligibility requirements</eligibilityRequirements> before applying.",
+      "schedule-when": "Check the schedule to find out <whenApply>when you can apply.</whenApply>",
+      "links": {
+        "apply-qualify": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
+        "apply-when": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when"
+      }
+    },
+    "form-instructions": "Who are you applying for?",
+    "radio-options": {
+      "personal": "I am applying for <strong>myself</strong>",
+      "delegate": "I am applying on behalf of someone else as a <strong>legal delegate or Power of Attorney</strong>",
+      "child": "I am applying for <strong>my child(ren)</strong>",
+      "personal-and-child": "I am applying for <strong>myself and my child(ren)</strong>"
+    },
+    "error-message": {
+      "type-of-application-required": "Select who this application is for"
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
   }
 }

@@ -15,13 +15,19 @@ export type ProtectedApplyState = ReadonlyDeep<{
   id: string;
   editMode: boolean;
   lastUpdatedOn: string;
+  typeOfApplication?: 'adult' | 'adult-child' | 'child' | 'delegate';
   applicationYear: {
     intakeYearId: string;
     taxYear: string;
     coverageStartDate: string;
   };
+  hasFiledTaxes?: boolean;
+  termsAndConditions?: {
+    acknowledgeTerms: boolean;
+    acknowledgePrivacy: boolean;
+    shareData: boolean;
+  };
   children: object;
-  typeOfApplication?: 'adult' | 'adult-child' | 'child' | 'delegate';
 }>;
 
 export type ProtectedApplicationYearState = NonNullable<ProtectedApplyState['applicationYear']>;
@@ -149,4 +155,22 @@ export function saveProtectedApplyState({ params, session, state, remove = undef
   session.set(sessionName, newState);
   log.info('Protected apply session state saved; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
   return newState;
+}
+
+interface ClearStateArgs {
+  params: ProtectedApplyStateParams;
+  session: Session;
+}
+
+/**
+ * Clears protected apply state.
+ * @param args - The arguments.
+ */
+export function clearProtectedApplyState({ params, session }: ClearStateArgs) {
+  const log = createLogger('protected-apply-route-helpers.server/clearProtectedApplyState');
+  const { id } = loadProtectedApplyState({ params, session });
+
+  const sessionName = getSessionName(id);
+  session.unset(sessionName);
+  log.info('Protected apply session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
 }
