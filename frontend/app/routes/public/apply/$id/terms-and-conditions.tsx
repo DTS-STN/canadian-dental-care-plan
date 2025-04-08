@@ -39,13 +39,19 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:terms-and-conditions.page-title') }) };
+
+  instrumentationService.countHttpStatus('public.apply.terms-and-conditions', 200);
   return { defaultState: state.termsAndConditions, meta };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -87,6 +93,7 @@ export async function action({ context: { appContainer, session }, request, para
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('public.apply.terms-and-conditions', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -97,6 +104,8 @@ export async function action({ context: { appContainer, session }, request, para
       termsAndConditions: parsedDataResult.data,
     },
   });
+
+  instrumentationService.countHttpStatus('public.apply.terms-and-conditions', 302);
   return redirect(getPathById('public/apply/$id/tax-filing', params));
 }
 

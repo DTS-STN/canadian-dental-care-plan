@@ -36,6 +36,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
@@ -45,10 +47,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
   const backToEmail = state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail';
 
+  instrumentationService.countHttpStatus('public.apply.adult-child.dental-insurance', 200);
   return { id: state, meta, defaultState: state.dentalInsurance, backToEmail, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -66,10 +71,13 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDataResult = dentalInsuranceSchema.safeParse(dentalInsurance);
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('public.apply.adult-child.dental-insurance', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   saveApplyState({ params, session, state: { dentalInsurance: parsedDataResult.data.dentalInsurance } });
+
+  instrumentationService.countHttpStatus('public.apply.adult-child.dental-insurance', 302);
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));

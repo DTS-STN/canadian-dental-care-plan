@@ -9,11 +9,16 @@
     "dob": "Date of birth",
     "single-legal-name": "If you have one legal name",
     "name-instructions": "If using one legal name, please enter that name in BOTH the first name and last name fields.",
+    "dtc-question": "Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for {{taxYear}}?",
     "marital-status": "Marital status",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
     "save-btn": "Save",
+    "radio-options": {
+      "no": "No",
+      "yes": "Yes"
+    },
     "help-message": {
       "sin": "Enter the 9-digit SIN"
     },
@@ -34,7 +39,13 @@
       "date-of-birth-valid": "Day must be valid for the given month and year",
       "date-of-birth-year-number": "Year must be a number, for example 1950",
       "date-of-birth-year-required": "Date of birth must include a year",
-      "child-age-required": "Select whether or not all the children are under 18"
+      "child-age-required": "Select whether or not all the children are under 18",
+      "dtc-required": "Select whether or not you have a valid disability tax credit",
+      "alert": {
+        "heading": "You cannot apply at this time.",
+        "detail": "Based on the date of birth provided, you are not able to apply for the Canadian Dental Care Plan at this time.",
+        "applyDate": "You can apply starting {{startDate}}."
+      }
     }
   },
   "marital-status": {

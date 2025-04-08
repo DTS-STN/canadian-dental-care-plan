@@ -9,7 +9,7 @@
 import { AppError } from '~/errors/app-error';
 import { ErrorCodes } from '~/errors/error-codes';
 
-export const instanceNames = ['loggingConfig', 'winstonLogger'] as const;
+export const instanceNames = ['clientEnv', 'loggingConfig', 'serverEnv', 'winstonLogger'] as const;
 export type InstanceName = (typeof instanceNames)[number];
 
 /**

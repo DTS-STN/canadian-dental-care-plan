@@ -7,6 +7,7 @@ import commonEn from '~/../public/locales/en/common.json';
 import dataUnavailableEn from '~/../public/locales/en/data-unavailable.json';
 import gcwebEn from '~/../public/locales/en/gcweb.json';
 import lettersEn from '~/../public/locales/en/letters.json';
+import protectedApplyAdultEn from '~/../public/locales/en/protected-apply-adult.json';
 import protectedApplyEn from '~/../public/locales/en/protected-apply.json';
 import protectedRenewEn from '~/../public/locales/en/protected-renew.json';
 import renewAdultChildEn from '~/../public/locales/en/renew-adult-child.json';
@@ -26,6 +27,7 @@ import commonFr from '~/../public/locales/fr/common.json';
 import dataUnavailableFr from '~/../public/locales/fr/data-unavailable.json';
 import gcwebFr from '~/../public/locales/fr/gcweb.json';
 import lettersFr from '~/../public/locales/fr/letters.json';
+import protectedApplyAdultFr from '~/../public/locales/fr/protected-apply-adult.json';
 import protectedApplyFr from '~/../public/locales/fr/protected-apply.json';
 import protectedRenewFr from '~/../public/locales/fr/protected-renew.json';
 import renewAdultChildFr from '~/../public/locales/fr/renew-adult-child.json';
@@ -43,6 +45,7 @@ const i18nResourcesEn = {
   'address-validation': addressValidationEn,
   'apply-adult-child': applyAdultChildEn,
   'apply-adult': applyAdultEn,
+  'protected-apply-adult': protectedApplyAdultEn,
   'apply-child': applyChildEn,
   apply: applyEn,
   common: commonEn,
@@ -65,6 +68,7 @@ const i18nResourcesFr = {
   'address-validation': addressValidationFr,
   'apply-adult-child': applyAdultChildFr,
   'apply-adult': applyAdultFr,
+  'protected-apply-adult': protectedApplyAdultFr,
   'apply-child': applyChildFr,
   apply: applyFr,
   common: commonFr,

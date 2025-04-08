@@ -34,6 +34,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -43,13 +45,17 @@ export async function loader({ context: { appContainer, session }, params, reque
   const ageCategory = state.editModeApplicantInformation?.dateOfBirth ? getAgeCategoryFromDateString(state.editModeApplicantInformation.dateOfBirth) : getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
   if (ageCategory !== 'children') {
+    instrumentationService.countHttpStatus('public.apply.child.contact-apply-child', 302);
     return redirect(getPathById('public/apply/$id/child/applicant-information', params));
   }
 
+  instrumentationService.countHttpStatus('public.apply.child.contact-apply-child', 200);
   return { id: state.id, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -57,6 +63,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  instrumentationService.countHttpStatus('public.apply.child.contact-apply-child', 302);
   return redirect(t('apply-child:contact-apply-child.return-btn-link'));
 }
 

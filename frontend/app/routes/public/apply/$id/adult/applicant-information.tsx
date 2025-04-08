@@ -65,7 +65,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:applicant-information.page-title') }) };
 
-  instrumentationService.countHttpStatus('public.apply.adult.applicant-information.', 200);
+  instrumentationService.countHttpStatus('public.apply.adult.applicant-information', 200);
 
   return { defaultState: state.applicantInformation, taxYear: state.applicationYear.taxYear, editMode: state.editMode, id: state.id, meta };
 }
@@ -88,7 +88,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (formAction === FORM_ACTION.cancel) {
     invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
-    instrumentationService.countHttpStatus('public.apply.adult.applicant-information.', 302);
+    instrumentationService.countHttpStatus('public.apply.adult.applicant-information', 302);
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
@@ -172,7 +172,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('public.apply.adult.applicant-information.', 400);
+    instrumentationService.countHttpStatus('public.apply.adult.applicant-information', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -226,7 +226,7 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
-  instrumentationService.countHttpStatus('public.apply.adult.applicant-information.', 302);
+  instrumentationService.countHttpStatus('public.apply.adult.applicant-information', 302);
 
   if (ageCategory === 'youth') {
     return redirect(getPathById('public/apply/$id/adult/living-independently', params));

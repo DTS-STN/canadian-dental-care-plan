@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { redirect, useFetcher } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -41,10 +41,14 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:confirm-dental-benefits.title') }) };
+
+  instrumentationService.countHttpStatus('public.apply.adult-child.confirm-federal-provincial-territorial-benefits', 200);
 
   return {
     defaultState: state.hasFederalProvincialTerritorialBenefits,
@@ -54,6 +58,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -74,11 +80,15 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDentalBenefitsResult = dentalBenefitsChangedSchema.safeParse(dentalBenefits);
 
   if (!parsedDentalBenefitsResult.success) {
-    return {
-      errors: {
-        ...transformFlattenedError(parsedDentalBenefitsResult.error.flatten()),
+    instrumentationService.countHttpStatus('public.apply.adult-child.confirm-federal-provincial-territorial-benefits', 400);
+    return data(
+      {
+        errors: {
+          ...transformFlattenedError(parsedDentalBenefitsResult.error.flatten()),
+        },
       },
-    };
+      { status: 400 },
+    );
   }
 
   saveApplyState({
@@ -89,6 +99,8 @@ export async function action({ context: { appContainer, session }, params, reque
       dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits ? state.dentalBenefits : undefined,
     },
   });
+
+  instrumentationService.countHttpStatus('public.apply.adult-child.confirm-federal-provincial-territorial-benefits', 302);
 
   if (dentalBenefits.hasFederalProvincialTerritorialBenefits) {
     return redirect(getPathById('public/apply/$id/adult-child/federal-provincial-territorial-benefits', params));

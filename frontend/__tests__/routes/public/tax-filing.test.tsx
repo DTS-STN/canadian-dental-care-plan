@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
 
 import { TYPES } from '~/.server/constants';
+import type { InstrumentationService } from '~/.server/observability';
 import type { SecurityHandler } from '~/.server/routes/security';
 import { action, loader } from '~/routes/public/apply/$id/tax-filing';
 
@@ -28,7 +29,10 @@ describe('_public.apply.id.tax-filing', () => {
 
   describe('loader()', () => {
     it('should load id, and hasFiledTaxes', async () => {
-      const response = await loader({ request: new Request('http://localhost:3000/en/apply/123/tax-filing'), context: mock<AppLoadContext>(), params: { id: '123', lang: 'en' } });
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
+
+      const response = await loader({ request: new Request('http://localhost:3000/en/apply/123/tax-filing'), context: mockContext, params: { id: '123', lang: 'en' } });
 
       expect(response).toMatchObject({ id: '123', meta: {}, defaultState: true });
     });
@@ -37,6 +41,7 @@ describe('_public.apply.id.tax-filing', () => {
   describe('action()', () => {
     it('should validate missing tax filing selection', async () => {
       const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: new FormData() }), context: mockContext, params: { id: '123', lang: 'en' } });
@@ -49,6 +54,7 @@ describe('_public.apply.id.tax-filing', () => {
       formData.append('hasFiledTaxes', 'yes');
 
       const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }), context: mockContext, params: { lang: 'en', id: '123' } });
@@ -63,6 +69,7 @@ describe('_public.apply.id.tax-filing', () => {
       formData.append('hasFiledTaxes', 'no');
 
       const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }), context: mockContext, params: { lang: 'en', id: '123' } });
