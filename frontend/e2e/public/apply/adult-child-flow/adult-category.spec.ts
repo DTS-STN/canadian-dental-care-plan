@@ -32,7 +32,7 @@ test.describe('Adult category', () => {
 
     await test.step('Should navigate to applicant information page', async () => {
       const { year, month, day } = calculateDOB(35);
-      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year });
+      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
@@ -44,7 +44,7 @@ test.describe('Adult category', () => {
 
     await test.step('Should navigate to applicant information page', async () => {
       const { year, month, day } = calculateDOB(35);
-      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year });
+      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
@@ -56,7 +56,7 @@ test.describe('Adult category', () => {
 
     await test.step('Should navigate to applicant information page', async () => {
       const { year, month, day } = calculateDOB(35);
-      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year });
+      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
