@@ -49,6 +49,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadApplyChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
@@ -79,6 +81,8 @@ export async function loader({ context: { appContainer, session }, params, reque
       ? provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
+    instrumentationService.countHttpStatus('public.apply.child.review-child-information', 200);
+
     return {
       id: child.id,
       firstName: child.information.firstName,
@@ -105,6 +109,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
   const state = loadApplyChildStateForReview({ params, request, session });
 
@@ -112,6 +118,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearApplyState({ params, session });
+    instrumentationService.countHttpStatus('public.apply.child.review-child-information', 302);
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
@@ -122,6 +129,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveApplyState({ params, session, state: { editMode: false } });
+    instrumentationService.countHttpStatus('public.apply.child.review-child-information', 302);
     return backToEmail ? redirect(getPathById('public/apply/$id/child/email', params)) : redirect(getPathById('public/apply/$id/child/communication-preference', params));
   }
 
@@ -130,6 +138,8 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {},
   });
+
+  instrumentationService.countHttpStatus('public.apply.child.review-child-information', 302);
   return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
 }
 

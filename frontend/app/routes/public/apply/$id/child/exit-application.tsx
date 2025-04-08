@@ -29,15 +29,20 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const { id } = loadApplyChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:exit-application.page-title') }) };
 
+  instrumentationService.countHttpStatus('public.apply.child.exit-application', 200);
   return { id, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -46,6 +51,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearApplyState({ params, session });
+
+  instrumentationService.countHttpStatus('public.apply.child.exit-application', 302);
   return redirect(t('exit-application.exit-link'));
 }
 

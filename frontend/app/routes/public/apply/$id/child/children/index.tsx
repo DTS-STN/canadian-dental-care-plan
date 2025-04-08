@@ -41,6 +41,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -58,6 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
         ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
         : undefined;
 
+    instrumentationService.countHttpStatus('public.apply.child.children', 200);
     return { ...child, dentalBenefits: { ...child.dentalBenefits, federalSocialProgram: federalGovernmentInsurancePlanService?.name, provincialTerritorialSocialProgram: provincialTerritorialSocialProgram?.name } };
   });
 
@@ -65,6 +68,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -72,6 +77,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplyChildState({ params, request, session });
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+
+  instrumentationService.countHttpStatus('public.apply.child.children', 302);
 
   if (formAction === FORM_ACTION.add) {
     const childId = randomUUID();
