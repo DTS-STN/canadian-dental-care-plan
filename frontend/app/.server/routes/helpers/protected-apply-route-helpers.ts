@@ -7,19 +7,123 @@ import type { ReadonlyDeep } from 'type-fest';
 import { z } from 'zod';
 
 import { createLogger } from '~/.server/logging';
+import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
+import { getAgeFromDateString } from '~/utils/date-utils';
 
 export type ProtectedApplyState = ReadonlyDeep<{
   id: string;
   editMode: boolean;
   lastUpdatedOn: string;
-  typeOfApplication?: 'adult' | 'adult-child' | 'child' | 'delegate';
+  editModeApplicantInformation?: {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    socialInsuranceNumber: string;
+    disabilityTaxCredit?: string;
+  };
+  editModeLivingIndependently?: boolean;
+  applicantInformation?: {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    socialInsuranceNumber: string;
+    disabilityTaxCredit?: string;
+  };
   applicationYear: {
     intakeYearId: string;
     taxYear: string;
     coverageStartDate: string;
+  };
+  children: {
+    id: string;
+    hasFederalProvincialTerritorialBenefits?: boolean;
+    dentalBenefits?: {
+      hasFederalBenefits: boolean;
+      federalSocialProgram?: string;
+      hasProvincialTerritorialBenefits: boolean;
+      provincialTerritorialSocialProgram?: string;
+      province?: string;
+    };
+    dentalInsurance?: boolean;
+    information?: {
+      firstName: string;
+      lastName: string;
+      dateOfBirth: string;
+      isParent: boolean;
+      hasSocialInsuranceNumber: boolean;
+      socialInsuranceNumber?: string;
+    };
+  }[];
+  communicationPreferences?: {
+    preferredLanguage: string;
+    preferredMethod: string;
+    preferredNotificationMethod: string;
+  };
+  editModeCommunicationPreferences?: {
+    preferredLanguage: string;
+    preferredMethod: string;
+    preferredNotificationMethod: string;
+  };
+  editModeEmail?: string;
+  email?: string;
+  verifyEmail?: {
+    verificationCode: string;
+    verificationAttempts: number;
+  };
+  emailVerified?: boolean;
+  hasFederalProvincialTerritorialBenefits?: boolean;
+  maritalStatus?: string;
+  dentalBenefits?: {
+    hasFederalBenefits: boolean;
+    federalSocialProgram?: string;
+    hasProvincialTerritorialBenefits: boolean;
+    provincialTerritorialSocialProgram?: string;
+    province?: string;
+  };
+  dentalInsurance?: boolean;
+  livingIndependently?: boolean;
+  partnerInformation?: {
+    confirm: boolean;
+    yearOfBirth: string;
+    socialInsuranceNumber: string;
+  };
+  isHomeAddressSameAsMailingAddress?: boolean;
+  mailingAddress?: {
+    address: string;
+    city: string;
+    country: string;
+    postalCode?: string;
+    province?: string;
+  };
+  homeAddress?: {
+    address: string;
+    city: string;
+    country: string;
+    postalCode?: string;
+    province?: string;
+  };
+  contactInformation?: {
+    phoneNumber?: string;
+    phoneNumberAlt?: string;
+  };
+  newOrExistingMember?: {
+    isNewOrExistingMember: boolean;
+    clientNumber?: string;
+  };
+  submissionInfo?: {
+    /**
+     * The confirmation code associated with the application submission.
+     */
+    confirmationCode: string;
+
+    /**
+     * The UTC date and time when the application was submitted.
+     * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
+     */
+    submittedOn: string;
   };
   hasFiledTaxes?: boolean;
   termsAndConditions?: {
@@ -27,10 +131,29 @@ export type ProtectedApplyState = ReadonlyDeep<{
     acknowledgePrivacy: boolean;
     shareData: boolean;
   };
-  children: object;
+  typeOfApplication?: 'adult' | 'adult-child' | 'child' | 'delegate';
 }>;
 
-export type ProtectedApplicationYearState = NonNullable<ProtectedApplyState['applicationYear']>;
+export type ApplicantInformationState = NonNullable<ProtectedApplyState['applicantInformation']>;
+export type ApplicationYearState = ProtectedApplyState['applicationYear'];
+export type ChildrenState = ProtectedApplyState['children'];
+export type ChildState = ChildrenState[number];
+export type ChildDentalBenefitsState = NonNullable<ChildState['dentalBenefits']>;
+export type ChildDentalInsuranceState = NonNullable<ChildState['dentalInsurance']>;
+export type ChildInformationState = NonNullable<ChildState['information']>;
+export type ChildSinState = Pick<NonNullable<ChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
+export type CommunicationPreferencesState = NonNullable<ProtectedApplyState['communicationPreferences']>;
+export type ContactInformationState = NonNullable<ProtectedApplyState['contactInformation']>;
+export type DentalFederalBenefitsState = Pick<NonNullable<ProtectedApplyState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
+export type DentalInsuranceState = NonNullable<ProtectedApplyState['dentalInsurance']>;
+export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<ProtectedApplyState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type HomeAddressState = NonNullable<ProtectedApplyState['homeAddress']>;
+export type MailingAddressState = NonNullable<ProtectedApplyState['mailingAddress']>;
+export type NewOrExistingMemberState = NonNullable<ProtectedApplyState['newOrExistingMember']>;
+export type PartnerInformationState = NonNullable<ProtectedApplyState['partnerInformation']>;
+export type SubmissionInfoState = NonNullable<ProtectedApplyState['submissionInfo']>;
+export type TermsAndConditionsState = NonNullable<ProtectedApplyState['termsAndConditions']>;
+export type TypeOfApplicationState = NonNullable<ProtectedApplyState['typeOfApplication']>;
 
 /**
  * Schema for validating UUID.
@@ -52,7 +175,7 @@ export type ProtectedApplyStateParams = {
 };
 
 interface StartArgs {
-  applicationYear: ProtectedApplicationYearState;
+  applicationYear: ApplicationYearState;
   id: string;
   session: Session;
 }
@@ -173,4 +296,56 @@ export function clearProtectedApplyState({ params, session }: ClearStateArgs) {
   const sessionName = getSessionName(id);
   session.unset(sessionName);
   log.info('Protected apply session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+}
+
+export function applicantInformationStateHasPartner(maritalStatus?: string) {
+  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
+  return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
+}
+
+export type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
+
+export function getAgeCategoryFromDateString(date: string, coverageStartDate?: string) {
+  const age = getAgeFromDateString(date, coverageStartDate);
+  return getAgeCategoryFromAge(age);
+}
+
+export function getAgeCategoryFromAge(age: number): AgeCategory {
+  if (age >= 65) return 'seniors';
+  if (age >= 18 && age < 65) return 'adults';
+  if (age >= 16 && age < 18) return 'youth';
+  if (age >= 0 && age < 16) return 'children';
+  throw new Error(`Invalid age [${age}]`);
+}
+
+type EligibilityRule = {
+  minAge: number;
+  maxAge: number;
+  startDate: string;
+};
+
+type EligibilityResult = {
+  eligible: boolean;
+  startDate?: string;
+};
+
+function getEligibilityRules(): EligibilityRule[] {
+  const { APPLY_ELIGIBILITY_RULES } = getEnv();
+  return JSON.parse(APPLY_ELIGIBILITY_RULES);
+}
+
+export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
+  const { APPLICATION_CURRENT_DATE } = getEnv();
+
+  const today = APPLICATION_CURRENT_DATE ? new Date(APPLICATION_CURRENT_DATE) : new Date();
+  const age = getAgeFromDateString(dateOfBirth, APPLICATION_CURRENT_DATE);
+
+  for (const { minAge, maxAge, startDate } of getEligibilityRules()) {
+    if (age >= minAge && age <= maxAge) {
+      return today < new Date(startDate) ? { eligible: false, startDate } : { eligible: true };
+    }
+  }
+
+  // No eligibility group found; Young and seniors are outisde the eligibility range validation.
+  return { eligible: true };
 }
