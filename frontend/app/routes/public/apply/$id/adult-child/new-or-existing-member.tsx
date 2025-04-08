@@ -50,6 +50,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -57,10 +59,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
+  instrumentationService.countHttpStatus('public.apply.adult-child.new-or-existing-member', 200);
   return { id: state.id, meta, defaultState: state.newOrExistingMember, userAgeCategory: ageCategory, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
   const state = loadApplyState({ params, session });
 
@@ -72,6 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.cancel) {
+    instrumentationService.countHttpStatus('public.apply.adult-child.new-or-existing-member', 302);
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
   }
 
@@ -110,8 +116,11 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('public.apply.adult-child.new-or-existing-member', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
+
+  instrumentationService.countHttpStatus('public.apply.adult-child.new-or-existing-member', 302);
 
   if (state.editMode) {
     // Save editMode data to state.

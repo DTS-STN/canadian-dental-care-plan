@@ -1,7 +1,7 @@
 import type { ChangeEventHandler } from 'react';
 import { useMemo, useState } from 'react';
 
-import { redirect, useFetcher } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -52,6 +52,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadApplyAdultChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -64,10 +66,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   const isNewUser = Number(yearOfBirth) >= 2006;
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:marital-status.page-title') }) };
+
+  instrumentationService.countHttpStatus('public.apply.adult-child.marital-status', 200);
   return { isNewUser, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -78,6 +84,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.cancel) {
+    instrumentationService.countHttpStatus('public.apply.adult-child.marital-status', 302);
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
   }
 
@@ -130,12 +137,16 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedPartnerInformation = partnerInformationSchema.safeParse(partnerInformationData);
 
   if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
-    return {
-      errors: {
-        ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
-        ...(parsedMaritalStatus.success && applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(parsedPartnerInformation.error.flatten()) : {}),
+    instrumentationService.countHttpStatus('public.apply.adult-child.marital-status', 400);
+    return data(
+      {
+        errors: {
+          ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
+          ...(parsedMaritalStatus.success && applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(parsedPartnerInformation.error.flatten()) : {}),
+        },
       },
-    };
+      { status: 400 },
+    );
   }
 
   saveApplyState({
@@ -146,6 +157,8 @@ export async function action({ context: { appContainer, session }, params, reque
       partnerInformation: parsedPartnerInformation.data,
     },
   });
+
+  instrumentationService.countHttpStatus('public.apply.adult-child.marital-status', 302);
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
