@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
 
 import { TYPES } from '~/.server/constants';
+import type { InstrumentationService } from '~/.server/observability';
 import type { SecurityHandler } from '~/.server/routes/security';
 import { action, loader } from '~/routes/public/apply/$id/type-application';
 
@@ -18,16 +19,20 @@ describe('_public.apply.id.type-of-application', () => {
   });
 
   describe('loader()', () => {
-    it('should load id, and typeOfApplication', async () => {
-      const response = await loader({ request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application'), context: mock<AppLoadContext>(), params: { id: '123', lang: 'en' } });
+    it('should load id and typeOfApplication', async () => {
+      const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
+
+      const response = await loader({ request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application'), context: mockContext, params: { id: '123', lang: 'en' } });
 
       expect(response).toMatchObject({ id: '123', meta: { title: 'gcweb:meta.title.template' }, defaultState: 'delegate' });
     });
   });
 
   describe('action()', () => {
-    it('should validate missing applcation type selection', async () => {
+    it('should validate missing application type selection', async () => {
       const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: new FormData() }), context: mockContext, params: { id: '123', lang: 'en' } });
@@ -40,6 +45,7 @@ describe('_public.apply.id.type-of-application', () => {
       formData.append('typeOfApplication', 'delegate');
 
       const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }), context: mockContext, params: { lang: 'en', id: '123' } });
@@ -54,6 +60,7 @@ describe('_public.apply.id.type-of-application', () => {
       formData.append('typeOfApplication', 'adult');
 
       const mockContext = mockDeep<AppLoadContext>();
+      mockContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }), context: mockContext, params: { lang: 'en', id: '123' } });

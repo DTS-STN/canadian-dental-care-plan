@@ -39,16 +39,22 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply:terms-and-conditions.page-title') }) };
+
+  instrumentationService.countHttpStatus('protected.apply.terms-and-conditions', 200);
   return { defaultState: state.termsAndConditions, meta };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -92,6 +98,7 @@ export async function action({ context: { appContainer, session }, request, para
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('protected.apply.terms-and-conditions', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -102,6 +109,8 @@ export async function action({ context: { appContainer, session }, request, para
       termsAndConditions: parsedDataResult.data,
     },
   });
+
+  instrumentationService.countHttpStatus('protected.apply.terms-and-conditions', 302);
   return redirect(getPathById('protected/apply/$id/tax-filing', params));
 }
 
