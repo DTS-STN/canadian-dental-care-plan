@@ -157,14 +157,14 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               helpMessagePrimary={t('apply-adult:communication-preference.preferred-method-help-message')}
               options={[
                 {
-                  value: PREFERRED_SUN_LIFE_METHOD.mail,
-                  children: t('apply-adult:communication-preference.by-mail'),
-                  defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.mail,
-                },
-                {
                   value: PREFERRED_SUN_LIFE_METHOD.email,
                   children: t('apply-adult:communication-preference.by-email'),
                   defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email,
+                },
+                {
+                  value: PREFERRED_SUN_LIFE_METHOD.mail,
+                  children: t('apply-adult:communication-preference.by-mail'),
+                  defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.mail,
                 },
               ]}
               errorMessage={errors?.preferredMethod}
