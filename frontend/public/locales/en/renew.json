@@ -84,7 +84,8 @@
   },
   "applicant-information": {
     "page-title": "Personal information",
-    "required-information": "We will use the information you provide below to verify your identity.",
+    "required-information": "Please provide your information below. We will use the details you provide to verify your identity.",
+    "if-child-renew": "If you are renewing for a child, you must be the parent or legal guardian who first applied for the child. Your Client Number can be found in the upper right corner of your child's renewal letter.",
     "client-number": "Client number",
     "date-of-birth": "Date of birth",
     "last-name": "Last name",
@@ -92,10 +93,7 @@
     "single-legal-name": "If you have one legal name",
     "name-instructions": "If you have only one legal name, enter it in both the first and last name fields.",
     "no-client-number": "I don't have a client number",
-    "renew-client-number": "To renew your coverage, you must have a client number.",
-    "apply-to-cdcp": "If you don't have one, you will need to apply for the Canadian Dental Care Plan.",
-    "check-eligibility": "<eligibilityLink>Check if you are eligible to apply for the CDCP.</eligibilityLink>",
-    "eligibility-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
+    "renew-client-number": "To renew your coverage, you must be currently enrolled in the Canadian Dental Care Plan. You will need your client number you received after you applied.",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
@@ -121,9 +119,9 @@
       "client-number-valid": "Client Number must be 11 digits"
     },
     "status-not-found": {
-      "heading": "We could not find your application with the information you gave us.",
-      "please-review": "Please make sure the information you entered is correct.",
-      "contact-service-canada": "If you need to update your name or if this issue continues, contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>."
+      "heading": "We could not find your file with the information you gave us.",
+      "please-review": "Please make sure the information you entered is correct. If you are a parent or legal guardian renewing for your child, you must enter your information below.",
+      "contact-service-canada": "If you need to update your identity information, or if this issue continues contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>."
     }
   },
   "type-of-renewal": {
