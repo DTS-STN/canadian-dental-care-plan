@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/confirmation';
-import { PREFERRED_NOTIFICATION_METHOD } from './communication-preference';
+import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyChildState } from '~/.server/routes/helpers/apply-child-route-helpers';
@@ -63,7 +63,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name : undefined;
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
-  const communicationSunLifePreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -75,7 +74,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
     contactInformationEmail: state.email,
-    communicationSunLifePreference: communicationSunLifePreference.name,
+    communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     previouslyEnrolled: state.newOrExistingMember,
   };
@@ -364,7 +363,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage}</DescriptionListItem>
                 <DescriptionListItem term={t('confirm.sun-life-comm-pref-title')}>
-                  <p>{userInfo.communicationSunLifePreference}</p>
+                  <p>{userInfo.communicationSunLifePreference === PREFERRED_SUN_LIFE_METHOD.email ? t('confirm.preferred-notification-method-email') : t('confirm.preferred-notification-method-mail')}</p>
                 </DescriptionListItem>
                 <DescriptionListItem term={t('confirm.goc-comm-pref-title')}>
                   <p>{userInfo.communicationGOCPreference === PREFERRED_NOTIFICATION_METHOD.msca ? t('confirm.preferred-notification-method-msca') : t('confirm.preferred-notification-method-mail')}</p>

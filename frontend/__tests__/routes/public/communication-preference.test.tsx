@@ -59,13 +59,8 @@ describe('_public.apply.id.communication-preference', () => {
       });
 
       expect(response).toMatchObject({
-        communicationMethodEmail: { id: 'email', name: 'Email' },
         id: '123',
         meta: {},
-        preferredCommunicationMethods: [
-          { id: 'email', name: 'Email' },
-          { id: 'mail', name: 'Mail' },
-        ],
         preferredLanguages: [
           { id: 'en', name: 'English' },
           { id: 'fr', name: 'French' },
