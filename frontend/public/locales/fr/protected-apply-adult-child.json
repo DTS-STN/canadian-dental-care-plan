@@ -507,8 +507,8 @@
   "dental-insurance": {
     "title": "Accès à une assurance dentaire privée",
     "legend": "Avez-vous accès à une assurance dentaire privée ou une couverture dentaire?",
-    "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance dentaire",
-    "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance dentaire",
+    "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance ou une couverture dentaire",
+    "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance ou une couverture dentaire",
     "button": {
       "back": "Retour",
       "continue": "Continuer",
