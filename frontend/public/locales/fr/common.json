@@ -42,5 +42,11 @@
       "province-state-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse du domicile",
       "zip-code-valid": "Entrez un code postal américain pour l'adresse du domicile dans le bon format, par exemple 12345 ou 12345-6789"
     }
+  },
+  "killswitch": {
+    "title": "Veuillez patienter",
+    "overloaded": "Nous recevons beaucoup de visiteurs en ce moment, ce qui ralentit le processus. Vous pourrez continuer lorsque le minuteur atteindra zéro.",
+    "dont-worry-be-happy": "Ne vous inquiétez pas\u2014vos renseignements sont enregistrés. Ne fermez pas votre navigateur, sinon vous devrez recommencer l'application.",
+    "remaining-time": "Accéder à l'application dans\u00a0: {{mins}} min {{secs}} sec"
   }
 }
