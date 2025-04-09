@@ -16,7 +16,6 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
-import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
@@ -27,6 +26,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as const;
 export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
 
 export const handle = {
@@ -40,33 +40,23 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
-  await securityHandler.validateAuthSession({ request, session });
-
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
-  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const preferredLanguages = appContainer.get(TYPES.domain.services.PreferredLanguageService).listAndSortLocalizedPreferredLanguages(locale);
-  const preferredCommunicationMethods = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).listAndSortLocalizedPreferredCommunicationMethods(locale);
-
-  const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
-  if (!communicationMethodEmail) {
-    throw data('Expected communication method email not found!', { status: 500 });
-  }
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult:communication-preference.page-title') }) };
 
   instrumentationService.countHttpStatus('protected.apply.adult.communication-preference', 200);
 
   return {
-    communicationMethodEmail,
     id: state.id,
     meta,
-    preferredCommunicationMethods,
     preferredLanguages,
     defaultState: {
       ...(state.communicationPreferences ?? {}),
@@ -83,8 +73,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
-
-  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   const state = loadProtectedApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -109,7 +97,7 @@ export async function action({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('protected.apply.adult.communication-preference', 302);
 
   if (state.editMode) {
-    if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === 'mail') {
+    if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
       saveProtectedApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined } });
       return redirect(getPathById('protected/apply/$id/adult/review-information', params));
     }
@@ -117,7 +105,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/apply/$id/adult/email', params));
   }
 
-  if (parsedDataResult.data.preferredMethod !== COMMUNICATION_METHOD_EMAIL_ID && parsedDataResult.data.preferredNotificationMethod === 'mail') {
+  if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
     saveProtectedApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined } });
     return redirect(getPathById('protected/apply/$id/adult/dental-insurance', params));
   }
@@ -127,7 +115,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedApplyFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode } = loaderData;
+  const { preferredLanguages, defaultState, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -140,23 +128,6 @@ export default function ProtectedApplyFlowCommunicationPreferencePage({ loaderDa
     preferredMethod: 'input-radio-preferred-methods-option-0',
     preferredNotificationMethod: 'input-radio-preferred-notification-method-option-0',
   });
-
-  const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
-    .filter((method) => method.id !== communicationMethodEmail.id)
-    .map((method) => ({
-      children: t('protected-apply-adult:communication-preference.by-mail'),
-      value: method.id,
-      defaultChecked: defaultState.preferredMethod === method.id,
-    }));
-
-  const options: InputRadiosProps['options'] = [
-    {
-      children: t('protected-apply-adult:communication-preference.by-email'),
-      value: communicationMethodEmail.id,
-      defaultChecked: defaultState.preferredMethod === communicationMethodEmail.id,
-    },
-    ...nonEmailOptions,
-  ];
 
   return (
     <>
@@ -183,17 +154,27 @@ export default function ProtectedApplyFlowCommunicationPreferencePage({ loaderDa
                 required
               />
             )}
-            {preferredCommunicationMethods.length > 0 && (
-              <InputRadios
-                id="preferred-methods"
-                legend={t('protected-apply-adult:communication-preference.preferred-method')}
-                name="preferredMethod"
-                helpMessagePrimary={t('protected-apply-adult:communication-preference.preferred-method-help-message')}
-                options={options}
-                errorMessage={errors?.preferredMethod}
-                required
-              />
-            )}
+            <InputRadios
+              id="preferred-methods"
+              legend={t('protected-apply-adult:communication-preference.preferred-method')}
+              name="preferredMethod"
+              helpMessagePrimary={t('protected-apply-adult:communication-preference.preferred-method-help-message')}
+              options={[
+                {
+                  value: PREFERRED_SUN_LIFE_METHOD.email,
+                  children: t('protected-apply-adult:communication-preference.by-email'),
+                  defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email,
+                },
+                {
+                  value: PREFERRED_SUN_LIFE_METHOD.mail,
+                  children: t('protected-apply-adult:communication-preference.by-mail'),
+                  defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.mail,
+                },
+              ]}
+              errorMessage={errors?.preferredMethod}
+              required
+            />
+
             <InputRadios
               id="preferred-notification-method"
               name="preferredNotificationMethod"

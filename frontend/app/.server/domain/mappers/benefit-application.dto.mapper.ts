@@ -11,6 +11,7 @@ import { parseDateString } from '~/utils/date-utils';
 export interface BenefitApplicationDtoMapper {
   mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationDto: BenefitApplicationDto): BenefitApplicationRequestEntity;
   mapBenefitApplicationResponseEntityToApplicationCode(benefitApplicationResponseEntity: BenefitApplicationResponseEntity): string;
+  mapBenefitApplicationDtoToProtectedBenefitApplicationRequestEntity(protectedBenefitApplicationRequestDto: BenefitApplicationDto): BenefitApplicationRequestEntity;
 }
 
 interface ToAddressArgs {
@@ -45,20 +46,17 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     this.serverConfig = serverConfig;
   }
 
-  mapBenefitApplicationDtoToBenefitApplicationRequestEntity({
-    applicantInformation,
-    applicationYearId,
-    children,
-    communicationPreferences,
-    contactInformation,
-    dateOfBirth,
-    dentalBenefits,
-    dentalInsurance,
-    livingIndependently,
-    partnerInformation,
-    termsAndConditions,
-    typeOfApplication,
-  }: BenefitApplicationDto): BenefitApplicationRequestEntity {
+  mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationDto: BenefitApplicationDto): BenefitApplicationRequestEntity {
+    return this.toBenefitApplicationRequestEntity(benefitApplicationDto, false);
+  }
+
+  mapBenefitApplicationDtoToProtectedBenefitApplicationRequestEntity(protectedBenefitApplicationDto: BenefitApplicationDto): BenefitApplicationRequestEntity {
+    return this.toBenefitApplicationRequestEntity(protectedBenefitApplicationDto, true);
+  }
+
+  private toBenefitApplicationRequestEntity(benefitApplication: BenefitApplicationDto, isProtectedRoute: boolean): BenefitApplicationRequestEntity {
+    const { applicantInformation, applicationYearId, children, communicationPreferences, contactInformation, dateOfBirth, dentalBenefits, dentalInsurance, livingIndependently, partnerInformation, termsAndConditions, typeOfApplication } =
+      benefitApplication;
     return {
       BenefitApplication: {
         Applicant: {
@@ -116,7 +114,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           ReferenceDataName: 'New',
         },
         BenefitApplicationChannelCode: {
-          ReferenceDataID: '775170001', // PP's static value for "Online"
+          ReferenceDataID: isProtectedRoute ? '775170004' : '775170001', // PP's static values for "MSCA" and "Online"
         },
         BenefitApplicationYear: {
           BenefitApplicationYearIdentification: [

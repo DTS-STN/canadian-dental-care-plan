@@ -16,6 +16,14 @@ export interface BenefitApplicationService {
    * @returns A Promise that resolves to the benefit application code
    */
   createBenefitApplication(benefitApplicationRequestDto: BenefitApplicationDto): Promise<string>;
+
+  /**
+   * Submits benefit application request for the protected route.
+   *
+   * @param protectedBenefitApplicationRequestDto The protected route benefit application request dto
+   * @returns A Promise that resolves to the benefit application code
+   */
+  createProtectedBenefitApplication(protectedBenefitApplicationRequestDto: BenefitApplicationDto): Promise<string>;
 }
 
 @injectable()
@@ -48,6 +56,19 @@ export class DefaultBenefitApplicationService implements BenefitApplicationServi
 
     const benefitApplicationRequestEntity = this.benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationRequestDto);
     const benefitApplicationResponseEntity = await this.benefitApplicationRepository.createBenefitApplication(benefitApplicationRequestEntity);
+    const applicationCode = this.benefitApplicationDtoMapper.mapBenefitApplicationResponseEntityToApplicationCode(benefitApplicationResponseEntity);
+
+    this.log.trace('Returning application code: [%s]', applicationCode);
+    return applicationCode;
+  }
+
+  async createProtectedBenefitApplication(protectedBenefitApplicationRequestDto: BenefitApplicationDto): Promise<string> {
+    this.log.trace('Creating protected benefit application for request [%j]', protectedBenefitApplicationRequestDto);
+
+    this.auditService.createAudit('protected-application-submit.post', { userId: protectedBenefitApplicationRequestDto.userId });
+
+    const protectedBenefitApplicationRequestEntity = this.benefitApplicationDtoMapper.mapBenefitApplicationDtoToProtectedBenefitApplicationRequestEntity(protectedBenefitApplicationRequestDto);
+    const benefitApplicationResponseEntity = await this.benefitApplicationRepository.createBenefitApplication(protectedBenefitApplicationRequestEntity);
     const applicationCode = this.benefitApplicationDtoMapper.mapBenefitApplicationResponseEntityToApplicationCode(benefitApplicationResponseEntity);
 
     this.log.trace('Returning application code: [%s]', applicationCode);
