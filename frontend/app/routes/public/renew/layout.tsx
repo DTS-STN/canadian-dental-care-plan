@@ -5,7 +5,9 @@ import { Outlet, useNavigate } from 'react-router';
 import type { Route } from './+types/layout';
 
 import { TYPES } from '~/.server/constants';
+import { KILLSWITCH_KEY } from '~/.server/domain/services';
 import { getLocale } from '~/.server/utils/locale.utils';
+import { Killswitch } from '~/components/killswitch';
 import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/renew-route-helpers';
@@ -20,15 +22,18 @@ export const handle = {
   transformAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
 
-// eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const locale = getLocale(request);
+
+  const redisService = appContainer.get(TYPES.data.services.RedisService);
+  const killswitchTimeout = await redisService.ttl(KILLSWITCH_KEY);
+
   const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.configs.ClientConfig);
-  return { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
+  return { killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 
 export default function Route({ loaderData, params }: Route.ComponentProps) {
-  const { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
+  const { killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
 
   const navigate = useNavigate();
 
@@ -64,6 +69,7 @@ export default function Route({ loaderData, params }: Route.ComponentProps) {
 
   return (
     <PublicLayout>
+      <Killswitch timeout={killswitchTimeout} />
       <SessionTimeout promptBeforeIdle={SESSION_TIMEOUT_PROMPT_SECONDS * 1000} timeout={SESSION_TIMEOUT_SECONDS * 1000} onSessionEnd={handleOnSessionEnd} onSessionExtend={handleOnSessionExtend} />
       <Outlet />
     </PublicLayout>
