@@ -127,12 +127,12 @@ export default function ProtectedApplyFlowPhoneNumber({ loaderData, params }: Ro
         <Progress value={60} size="lg" label={t('protected-apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('protected-apply:optional-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
             <p className="mb-4">{t('protected-apply-adult:phone-number.help-message')}</p>
+            <p className="mb-4 italic">{t('protected-apply:optional-label')}</p>
             <div className="grid items-end gap-6">
               <InputPhoneField
                 id="phone-number"
