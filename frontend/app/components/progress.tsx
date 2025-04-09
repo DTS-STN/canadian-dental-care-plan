@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 import * as ProgressPrimitive from '@radix-ui/react-progress';
 
@@ -32,17 +32,14 @@ export interface ProgressProps extends React.ComponentPropsWithoutRef<typeof Pro
   value: number;
 }
 
-const Progress = React.forwardRef<React.ComponentRef<typeof ProgressPrimitive.Root>, ProgressProps>(({ className, size = 'base', variant = 'default', value, label, ...props }, ref) => {
+export function Progress({ className, size = 'base', variant = 'default', value, label, ...props }: ProgressProps) {
   const { currentLanguage } = useCurrentLanguage();
   return (
     <>
       {label && <p id="progress-label" className="mb-2">{`${label} ${formatPercent(value, currentLanguage)}`}</p>}
-      <ProgressPrimitive.Root ref={ref} className={cn(rootBaseClassName, sizes[size], className)} data-testid="progress-root" value={value} {...props} aria-labelledby={label && 'progress-label'}>
+      <ProgressPrimitive.Root className={cn(rootBaseClassName, sizes[size], className)} data-testid="progress-root" value={value} {...props} aria-labelledby={label && 'progress-label'}>
         <ProgressPrimitive.Indicator className={cn(indicatorBaseClassName, variants[variant])} style={{ transform: `translateX(-${100 - value}%)` }} data-testid="progress-indicator" />
       </ProgressPrimitive.Root>
     </>
   );
-});
-Progress.displayName = ProgressPrimitive.Root.displayName;
-
-export { Progress };
+}
