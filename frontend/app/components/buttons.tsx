@@ -1,5 +1,4 @@
 import type { ComponentProps } from 'react';
-import { forwardRef } from 'react';
 
 import { ButtonEndIcon, ButtonStartIcon } from './button-icons';
 
@@ -43,19 +42,25 @@ export interface ButtonProps extends ComponentProps<'button'> {
  * Tailwind CSS Buttons from Flowbite
  * @see https://flowbite.com/docs/components/buttons/
  */
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ children, className, endIcon, endIconProps, pill, size = 'base', startIcon, startIconProps, variant = 'default', ...props }, ref) => {
-  const disabledClassName = 'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
-  const buttonClassName = cn(baseClassName, sizes[size], variants[variant], disabledClassName, pill && 'rounded-full', className);
+export function Button({ children, className, endIcon, endIconProps, pill, size = 'base', startIcon, startIconProps, variant = 'default', ...props }: ButtonProps) {
   return (
-    <button className={buttonClassName} {...props} ref={ref}>
+    <button
+      className={cn(
+        baseClassName, //
+        sizes[size],
+        variants[variant],
+        'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70',
+        pill && 'rounded-full',
+        className,
+      )}
+      {...props}
+    >
       {startIcon && <ButtonStartIcon {...(startIconProps ?? {})} icon={startIcon} />}
       {children}
       {endIcon && <ButtonEndIcon {...(endIconProps ?? {})} icon={endIcon} />}
     </button>
   );
-});
-
-Button.displayName = 'Button';
+}
 
 export interface ButtonLinkProps extends ComponentProps<typeof AppLink> {
   disabled?: boolean;
@@ -75,8 +80,7 @@ export interface ButtonLinkProps extends ComponentProps<typeof AppLink> {
  * Disabling a link
  * @see https://www.scottohara.me/blog/2021/05/28/disabled-links.html
  */
-const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(({ children, className, disabled, endIcon, endIconProps, pill, size = 'base', routeId, startIcon, startIconProps, to, variant = 'default', ...props }, ref) => {
-  const disabledClassName = 'pointer-events-none cursor-not-allowed opacity-70';
+export function ButtonLink({ children, className, disabled, endIcon, endIconProps, pill, size = 'base', routeId, startIcon, startIconProps, to, variant = 'default', ...props }: ButtonLinkProps) {
   const buttonLinkClassName = cn(baseClassName, sizes[size], variants[variant], pill && 'rounded-full', className);
 
   const actualChildren = (
@@ -89,19 +93,15 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(({ children, c
 
   if (disabled) {
     return (
-      <a className={cn(buttonLinkClassName, disabledClassName)} role="link" aria-disabled="true" {...props} ref={ref}>
+      <a className={cn(buttonLinkClassName, 'pointer-events-none cursor-not-allowed opacity-70')} role="link" aria-disabled="true" {...props}>
         {actualChildren}
       </a>
     );
   }
 
   return (
-    <AppLink className={buttonLinkClassName} routeId={routeId} to={to} {...props} ref={ref}>
+    <AppLink className={buttonLinkClassName} routeId={routeId} to={to} {...props}>
       {actualChildren}
     </AppLink>
   );
-});
-
-ButtonLink.displayName = 'ButtonLink';
-
-export { Button, ButtonLink };
+}
