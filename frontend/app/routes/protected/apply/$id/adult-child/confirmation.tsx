@@ -40,6 +40,9 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplyAdultChildState({ params, request, session });
@@ -166,11 +169,13 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
