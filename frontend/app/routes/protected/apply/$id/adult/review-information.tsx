@@ -11,7 +11,7 @@ import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-information';
-import { PREFERRED_NOTIFICATION_METHOD } from './communication-preference';
+import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultStateForReview } from '~/.server/routes/helpers/protected-apply-adult-route-helpers';
@@ -52,10 +52,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplyAdultStateForReview({ params, request, session });
   invariant(state.mailingAddress?.country, `Unexpected mailing address country: ${state.mailingAddress?.country}`);
@@ -77,7 +77,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
   const countryMailing = appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
   const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name : undefined;
-  const communicationSunLifePreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
 
@@ -90,7 +89,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: maritalStatus,
     contactInformationEmail: state.email,
-    communicationSunLifePreference: communicationSunLifePreference.name,
+    communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     previouslyEnrolled: state.newOrExistingMember,
     email: state.email,
@@ -145,7 +144,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
   const benefitApplicationDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitApplicationDtoMapper);
   const benefitApplicationStateMapper = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper);
-  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyAdultStateToBenefitApplicationDto(state));
+  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToProtectedBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyAdultStateToBenefitApplicationDto(state));
 
   instrumentationService.countHttpStatus('protected.apply.adult.review-information', 200);
 
@@ -166,6 +165,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -176,14 +176,14 @@ export async function action({ context: { appContainer, session }, params, reque
 
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearProtectedApplyState({ params, session });
-    instrumentationService.countHttpStatus('protected.apply.adult.review-information', 302);
+    instrumentationService.countHttpStatus('protected-.apply.adult.review-information', 302);
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveProtectedApplyState({ params, session, state: { editMode: false } });
-    instrumentationService.countHttpStatus('protected.apply.adult.review-information', 302);
+    instrumentationService.countHttpStatus('protected-.apply.adult.review-information', 302);
     if (state.hasFederalProvincialTerritorialBenefits) {
       return redirect(getPathById('protected/apply/$id/adult/federal-provincial-territorial-benefits', params));
     }
@@ -196,7 +196,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveProtectedApplyState({ params, session, state: { submissionInfo } });
 
-  instrumentationService.countHttpStatus('protected.apply.adult.review-information', 302);
+  instrumentationService.countHttpStatus('protected-.apply.adult.review-information', 302);
   return redirect(getPathById('protected/apply/$id/adult/confirmation', params));
 }
 
@@ -399,7 +399,11 @@ export default function ProtectedReviewInformation({ loaderData, params }: Route
                 </DescriptionListItem>
               )}
               <DescriptionListItem term={t('protected-apply-adult:review-information.sun-life-comm-pref-title')}>
-                <p>{userInfo.communicationSunLifePreference}</p>
+                <p>
+                  {userInfo.communicationSunLifePreference === PREFERRED_SUN_LIFE_METHOD.email
+                    ? t('protected-apply-adult:review-information.preferred-notification-method-email')
+                    : t('protected-apply-adult:review-information.preferred-notification-method-mail')}
+                </p>
                 <p>
                   <InlineLink id="change-communication-preference" routeId="protected/apply/$id/adult/communication-preference" params={params}>
                     {t('protected-apply-adult:review-information.sun-life-comm-pref-change')}
