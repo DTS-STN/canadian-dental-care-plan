@@ -13,6 +13,7 @@ vi.mock('ioredis', () => {
       get: vi.fn(),
       set: vi.fn(),
       del: vi.fn(),
+      ttl: vi.fn(),
     }),
   };
 });
@@ -103,6 +104,16 @@ describe('DefaultRedisService', () => {
 
       await redisService.del('key');
       expect(mockRedisClient.del).toHaveBeenCalledWith('key');
+    });
+  });
+
+  describe('ttl', () => {
+    it('should call redisClient.ttl()', async () => {
+      const redisService = new DefaultRedisService(mock<ServerConfig>());
+      const mockRedisClient = new Redis();
+
+      await redisService.ttl('key');
+      expect(mockRedisClient.ttl).toHaveBeenCalledWith('key');
     });
   });
 });

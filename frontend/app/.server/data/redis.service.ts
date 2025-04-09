@@ -1,11 +1,11 @@
 import { inject, injectable } from 'inversify';
-import Redis from 'ioredis';
 import type { RedisOptions } from 'ioredis';
+import Redis from 'ioredis';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
+import { createLogger } from '~/.server/logging';
 
 /**
  * The RedisService is a service module for interacting with a Redis server. It
@@ -30,6 +30,10 @@ export interface RedisService {
    * @see https://redis.io/commands/ping/
    */
   ping: () => Promise<'PONG'>;
+  /**
+   * @see https://redis.io/commands/ttl/
+   */
+  ttl: (key: string) => Promise<number>;
 }
 
 @injectable()
@@ -67,6 +71,10 @@ export class DefaultRedisService implements RedisService {
 
   async ping(): Promise<'PONG'> {
     return await this.redisClient.ping();
+  }
+
+  async ttl(key: string): Promise<number> {
+    return await this.redisClient.ttl(key);
   }
 
   private getRedisConfig(serverConfig: ServerConfig): RedisOptions {
