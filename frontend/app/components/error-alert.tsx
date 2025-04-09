@@ -1,32 +1,23 @@
-import type { PropsWithChildren, ReactNode } from 'react';
-import { forwardRef, useCallback, useEffect, useRef } from 'react';
+import type { ComponentProps, PropsWithChildren } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import type { AlertType } from '~/components/contextual-alert';
 import { ContextualAlert } from '~/components/contextual-alert';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
+import { cn } from '~/utils/tw-utils';
 
-export interface ErrorAlertProps {
-  /* Content to be displayed inside the alert */
-  children: ReactNode;
-
-  /* ID for the alert (defaults to 'error-alert') */
-  id: string;
-
+export interface ErrorAlertProps extends ComponentProps<'section'> {
   /* Type of alert (eg. 'info', 'warning'; defaults to 'danger') */
   type?: AlertType;
 }
 
-/**
- * ForwardRef component to display the ErrorAlert with ContextualAlert
- */
-export const ErrorAlert = forwardRef<HTMLDivElement, ErrorAlertProps>(({ children, id, type = 'danger' }, ref) => {
+export function ErrorAlert({ className, children, type = 'danger', tabIndex = -1, ...props }: ErrorAlertProps) {
   return (
-    <section ref={ref} id={id} className="mb-4" tabIndex={-1}>
+    <section className={cn('mb-4', className)} {...props}>
       <ContextualAlert type={type}>{children}</ContextualAlert>
     </section>
   );
-});
-ErrorAlert.displayName = 'ErrorAlert';
+}
 
 /**
  * Custom hook for managing the error alert and its focus/scroll behavior
