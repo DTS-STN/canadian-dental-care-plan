@@ -17,8 +17,10 @@ export function Killswitch({ timeout }: KillswitchProps) {
   const [remainingTime, setRemainingTime] = useState(timeout);
   const { t } = useTranslation(['common']);
 
+  const hasTimeRemaining = remainingTime > 0;
+
   useEffect(() => {
-    if (remainingTime > 0) {
+    if (hasTimeRemaining) {
       const timerId = globalThis.setInterval(() => {
         setRemainingTime((prevTime) => prevTime - 1);
       }, 1000);
@@ -26,11 +28,9 @@ export function Killswitch({ timeout }: KillswitchProps) {
       // clear the timer when the component unmounts (or when the timeout changes)
       return () => globalThis.clearInterval(timerId);
     }
+  }, [hasTimeRemaining, timeout]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeout]);
-
-  if (remainingTime > 0) {
+  if (hasTimeRemaining) {
     const { mins, secs } = formatTime(remainingTime);
 
     return (
