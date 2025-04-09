@@ -1,5 +1,3 @@
-import { forwardRef } from 'react';
-
 import { InputError } from './input-error';
 import { InputHelp } from './input-help';
 
@@ -19,7 +17,7 @@ export interface InputTextareaProps extends OmitStrict<React.ComponentProps<'tex
   name: string;
 }
 
-const InputTextarea = forwardRef<HTMLTextAreaElement, InputTextareaProps>((props, ref) => {
+export function InputTextarea(props: InputTextareaProps) {
   const { errorMessage, className, helpMessage, id, label, required, rows, ...restInputProps } = props;
 
   const inputErrorId = `input-${id}-error`;
@@ -44,7 +42,6 @@ const InputTextarea = forwardRef<HTMLTextAreaElement, InputTextareaProps>((props
         </div>
       )}
       <textarea
-        ref={ref}
         aria-describedby={getAriaDescribedby()}
         aria-errormessage={errorMessage && inputErrorId}
         aria-invalid={!!errorMessage}
@@ -64,8 +61,4 @@ const InputTextarea = forwardRef<HTMLTextAreaElement, InputTextareaProps>((props
       )}
     </div>
   );
-});
-
-InputTextarea.displayName = 'InputTextarea';
-
-export { InputTextarea };
+}

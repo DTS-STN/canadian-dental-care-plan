@@ -1,5 +1,3 @@
-import { forwardRef } from 'react';
-
 import { InputError } from './input-error';
 import { InputHelp } from './input-help';
 
@@ -23,7 +21,7 @@ export interface InputFieldProps extends OmitStrict<React.ComponentProps<'input'
   type?: 'email' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'url';
 }
 
-const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) => {
+export function InputField(props: InputFieldProps) {
   const { 'aria-describedby': ariaDescribedby, errorMessage, className, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, type = 'text', ...restInputProps } = props;
 
   const inputErrorId = `input-${id}-error`;
@@ -56,7 +54,6 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
         </InputHelp>
       )}
       <input
-        ref={ref}
         aria-describedby={getAriaDescribedby()}
         aria-errormessage={errorMessage ? inputErrorId : undefined}
         aria-invalid={!!errorMessage}
@@ -76,8 +73,4 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
       )}
     </div>
   );
-});
-
-InputField.displayName = 'InputField';
-
-export { InputField };
+}
