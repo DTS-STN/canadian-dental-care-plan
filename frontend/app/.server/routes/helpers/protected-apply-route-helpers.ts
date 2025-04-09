@@ -349,3 +349,14 @@ export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
   // No eligibility group found; Young and seniors are outisde the eligibility range validation.
   return { eligible: true };
 }
+
+export function isNewChildState(child: ChildState) {
+  return child.dentalInsurance === undefined || child.information === undefined || child.hasFederalProvincialTerritorialBenefits === undefined;
+}
+
+export function getChildrenState<TState extends Pick<ProtectedApplyState, 'children'>>(state: TState, includesNewChildState: boolean = false) {
+  // prettier-ignore
+  return includesNewChildState
+    ? state.children
+    : state.children.filter((child) => isNewChildState(child) === false);
+}

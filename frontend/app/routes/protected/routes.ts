@@ -88,6 +88,77 @@ export const routes = [
           { id: 'protected/apply/$id/adult/marital-status', file: 'routes/protected/apply/$id/adult/marital-status.tsx', paths: { en: '/:lang/protected/apply/:id/adult/marital-status', fr: '/:lang/protege/demander/:id/adulte/etat-civil' } },
           { id: 'protected/apply/$id/adult/mailing-address', file: 'routes/protected/apply/$id/adult/mailing-address.tsx', paths: { en: '/:lang/protected/apply/:id/adult/mailing-address', fr: '/:lang/protege/demander/:id/adulte/adresse-postale' } },
           { id: 'protected/apply/$id/adult/home-address', file: 'routes/protected/apply/$id/adult/home-address.tsx', paths: { en: '/:lang/protected/apply/:id/adult/home-address', fr: '/:lang/protege/demander/:id/adulte/adresse-domicile' } },
+          {
+            id: 'protected/apply/$id/adult-child/applicant-information',
+            file: 'routes/protected/apply/$id/adult-child/applicant-information.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/applicant-information', fr: '/:lang/protege/demander/:id/adulte-enfant/renseignements-demandeur' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/communication-preference',
+            file: 'routes/protected/apply/$id/adult-child/communication-preference.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/communication-preference', fr: '/:lang/protege/demander/:id/adulte-enfant/preference-communication' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/dental-insurance',
+            file: 'routes/protected/apply/$id/adult-child/dental-insurance.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/dental-insurance', fr: '/:lang/protege/demander/:id/adulte-enfant/assurance-dentaire' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits',
+            file: 'routes/protected/apply/$id/adult-child/confirm-federal-provincial-territorial-benefits.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/confirm-federal-provincial-territorial-benefits', fr: '/:lang/protege/demander/:id/adulte-enfant/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/federal-provincial-territorial-benefits',
+            file: 'routes/protected/apply/$id/adult-child/federal-provincial-territorial-benefits.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/federal-provincial-territorial-benefits', fr: '/:lang/protege/demander/:id/adulte-enfant/prestations-dentaires-federales-provinciales-territoriales' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/parent-or-guardian',
+            file: 'routes/protected/apply/$id/adult-child/parent-or-guardian.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/parent-or-guardian', fr: '/:lang/protege/demander/:id/adulte-enfant/parent-ou-tuteur' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/living-independently',
+            file: 'routes/protected/apply/$id/adult-child/living-independently.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/living-independently', fr: '/:lang/protege/demander/:id/adulte-enfant/vivre-maniere-independante' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/new-or-existing-member',
+            file: 'routes/protected/apply/$id/adult-child/new-or-existing-member.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/new-or-existing-member', fr: '/:lang/protege/demander/:id/adulte-enfant/membre-nouveau-ou-actuel' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/phone-number',
+            file: 'routes/protected/apply/$id/adult-child/phone-number.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/phone-number', fr: '/:lang/protege/demander/:id/adulte-enfant/numero-telephone' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/verify-email',
+            file: 'routes/protected/apply/$id/adult-child/verify-email.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/verify-email', fr: '/:lang/protege/demander/:id/adulte-enfant/verifier-courriel' },
+          },
+          { id: 'protected/apply/$id/adult-child/email', file: 'routes/protected/apply/$id/adult-child/email.tsx', paths: { en: '/:lang/protected/apply/:id/adult-child/email', fr: '/:lang/protege/demander/:id/adulte-enfant/adresse-courriel' } },
+          {
+            id: 'protected/apply/$id/adult-child/marital-status',
+            file: 'routes/protected/apply/$id/adult-child/marital-status.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/marital-status', fr: '/:lang/protege/demander/:id/adulte-enfant/etat-civil' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/mailing-address',
+            file: 'routes/protected/apply/$id/adult-child/mailing-address.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/mailing-address', fr: '/:lang/protege/demander/:id/adulte-enfant/adresse-postale' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/home-address',
+            file: 'routes/protected/apply/$id/adult-child/home-address.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/home-address', fr: '/:lang/protege/demander/:id/adulte-enfant/adresse-domicile' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/confirmation',
+            file: 'routes/protected/apply/$id/adult-child/confirmation.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/confirmation', fr: '/:lang/protege/demander/:id/adulte-enfant/confirmation' },
+          },
         ],
       },
       {
