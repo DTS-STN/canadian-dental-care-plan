@@ -1,0 +1,1576 @@
+openapi: 3.0.2
+info:
+    title: CDCP PP-to-DTS Get Personal Information Canonical Model
+    version: 1.0.14
+    description: |-
+        Support the following APIs:
+        - Retrieve Applicant Personal Information from PowerPlatform
+        - Submit Application to PowerPlatform
+        - Retrieve Application from PowerPlatform
+        - Retrieve Application Configuration Dates from PowerPlatform
+paths:
+    /applicant:
+        summary: Retrieve personal applicant information from Power Platform
+        description: Personal applicant information APIs
+        post:
+            requestBody:
+                description: Applicant identifier
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/applicantRequest'
+                        examples:
+                            applicant-identifier:
+                                value:
+                                    Applicant:
+                                        PersonSINIdentification:
+                                            IdentificationID: '987654321'
+                required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/applicantResponse'
+                            examples:
+                                ApplicantInformation:
+                                    value:
+                                        BenefitApplication:
+                                            Applicant:
+                                                ApplicantCategoryCode:
+                                                    ReferenceDataID: '775170000'
+                                                ClientIdentification:
+                                                    -
+                                                        IdentificationID: 4f35f70b-2f83-ee11-8179-000d3a09d000
+                                                        IdentificationCategoryText: Applicant ID
+                                                    -
+                                                        IdentificationID: 1e97fe42-0263-ee11-8df0-000d3a09df08
+                                                        IdentificationCategoryText: Client ID
+                                                    -
+                                                        IdentificationID: '11375350677'
+                                                        IdentificationCategoryText: Client Number
+                                                PersonBirthDate:
+                                                    date: '1983-07-17'
+                                                PersonContactInformation:
+                                                    -
+                                                        Address:
+                                                            -
+                                                                AddressCategoryCode:
+                                                                    ReferenceDataName: Mailing
+                                                                AddressCityName: Hamilton
+                                                                AddressCountry:
+                                                                    CountryCode:
+                                                                        ReferenceDataID: 0cf5389e-97ae-eb11-8236-000d3af4bfc3
+                                                                AddressPostalCode: L9B 1A2
+                                                                AddressProvince:
+                                                                    ProvinceCode:
+                                                                        ReferenceDataID: 6d861c55-36b3-eb11-8236-0022486d8d5f
+                                                                AddressSecondaryUnitText: Apt. No. 50
+                                                                AddressStreet:
+                                                                    StreetName: 50 My Street
+                                                            -
+                                                                AddressCategoryCode:
+                                                                    ReferenceDataName: Home
+                                                                AddressCityName: Hamilton
+                                                                AddressCountry:
+                                                                    CountryCode:
+                                                                        ReferenceDataID: 0cf5389e-97ae-eb11-8236-000d3af4bfc3
+                                                                AddressPostalCode: L9B 1A2
+                                                                AddressProvince:
+                                                                    ProvinceCode:
+                                                                        ReferenceDataID: 6d861c55-36b3-eb11-8236-0022486d8d5f
+                                                                AddressSecondaryUnitText: Apt. No. 50
+                                                                AddressStreet:
+                                                                    StreetName: 50 My Street
+                                                        EmailAddress:
+                                                            -
+                                                                EmailAddressID: myEmail50@domain.ca
+                                                        TelephoneNumber:
+                                                            -
+                                                                FullTelephoneNumber:
+                                                                    TelephoneNumberFullID: 555-555-5555
+                                                                TelephoneNumberCategoryCode:
+                                                                    ReferenceDataName: Primary
+                                                            -
+                                                                FullTelephoneNumber:
+                                                                    TelephoneNumberFullID: 555-555-5555
+                                                                TelephoneNumberCategoryCode:
+                                                                    ReferenceDataName: Alternate
+                                                PersonMaritalStatus:
+                                                    StatusCode:
+                                                        ReferenceDataID: '775170001'
+                                                PersonName:
+                                                    -
+                                                        PersonGivenName:
+                                                            - MyFirstName50
+                                                        PersonSurName: MyLastName50
+                                                PersonSINIdentification:
+                                                    IdentificationID: '999999999'
+                                                MailingSameAsHomeIndicator: true
+                                                PreferredMethodCommunicationCode:
+                                                    ReferenceDataID: '775170002'
+                                            BenefitApplicationIdentification:
+                                                -
+                                                    IdentificationID: 41d42b4e-0263-ee11-8df0-000d3a09dca9
+                                                    IdentificationCategoryText: Dental Application ID
+                    description: Successful query
+                '204':
+                    description: Applicant not found
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OperationOutcome'
+                    description: Bad request failure
+                '500':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OperationOutcome'
+                    description: Internal server error
+            operationId: GetApplicantInformation
+            summary: Personal Information
+            description: Get Applicant information from PowerPlatform
+    /benefit-application:
+        summary: Application submission to Power Platform
+        description: Submit Application APIs
+        post:
+            requestBody:
+                description: Applicant application information
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/benefitApplicationRequest'
+                        examples:
+                            Submit-Application-Sample:
+                                value:
+                                    BenefitApplication:
+                                        Applicant:
+                                            ApplicantDetail:
+                                                PrivateDentalInsuranceIndicator: true
+                                                DisabilityTaxCreditIndicator: true
+                                                LivingIndependentlyIndicator: true
+                                                MaritalStatusChangedIndicator: true
+                                                AddressChangedIndicator: true
+                                                PhoneChangedIndicator: true
+                                                EmailChangedIndicator: true
+                                                PublicInsuranceChangedIndicator: true
+                                                InsurancePlan:
+                                                    -
+                                                        InsurancePlanIdentification:
+                                                            -
+                                                                IdentificationID: b5f25fea-a7a9-ee11-a569-000d3af4f898
+                                                            -
+                                                                IdentificationID: 7f10dff7-25c5-ee11-9079-000d3a09d640
+                                            ClientIdentification:
+                                                -
+                                                    IdentificationID: 37e5aa05-813c-ef11-a317-000d3af4f3ef
+                                                    IdentificationCategoryText: Client ID
+                                            PersonBirthDate:
+                                                date: '2018-02-20'
+                                            PersonContactInformation:
+                                                -
+                                                    Address:
+                                                        -
+                                                            AddressCategoryCode:
+                                                                ReferenceDataName: Mailing
+                                                            AddressCityName: Testsville
+                                                            AddressCountry:
+                                                                CountryCode:
+                                                                    ReferenceDataID: 0cf5389e-97ae-eb11-8236-000d3af4bfc3
+                                                            AddressPostalCode: L9B 1A2
+                                                            AddressProvince:
+                                                                ProvinceCode:
+                                                                    ReferenceDataID: daf4d05b-37b3-eb11-8236-0022486d8d5f
+                                                            AddressSecondaryUnitText: Apt. No. 50
+                                                            AddressStreet:
+                                                                StreetName: 123 Tester Lane
+                                                        -
+                                                            AddressCategoryCode:
+                                                                ReferenceDataName: Home
+                                                            AddressCityName: Testsville
+                                                            AddressCountry:
+                                                                CountryCode:
+                                                                    ReferenceDataID: 0cf5389e-97ae-eb11-8236-000d3af4bfc3
+                                                            AddressPostalCode: L9B 1A2
+                                                            AddressProvince:
+                                                                ProvinceCode:
+                                                                    ReferenceDataID: daf4d05b-37b3-eb11-8236-0022486d8d5f
+                                                            AddressSecondaryUnitText: Apt. No. 50
+                                                            AddressStreet:
+                                                                StreetName: 123 Tester Lane
+                                                    EmailAddress:
+                                                        -
+                                                            EmailAddressID: myemail@domain.com
+                                                    TelephoneNumber:
+                                                        -
+                                                            TelephoneNumberCategoryCode:
+                                                                ReferenceDataID: 555-555-5555
+                                                                ReferenceDataName: Primary
+                                                        -
+                                                            TelephoneNumberCategoryCode:
+                                                                ReferenceDataID: 555-555-5556
+                                                                ReferenceDataName: Alternate
+                                            PersonLanguage:
+                                                -
+                                                    CommunicationCategoryCode:
+                                                        ReferenceDataID: '1036'
+                                                    PreferredIndicator: true
+                                            PersonMaritalStatus:
+                                                StatusCode:
+                                                    ReferenceDataID: '775170000'
+                                            PersonName:
+                                                -
+                                                    PersonGivenName:
+                                                        - MyFirstname
+                                                    PersonSurName: MyLastname
+                                            PersonSINIdentification:
+                                                IdentificationID: '500000000'
+                                            BenefitApplicationDetail:
+                                                -
+                                                    BenefitApplicationDetailID: WhereWereYouBorn
+                                                    BenefitApplicationDetailValue: '775170000'
+                                                -
+                                                    BenefitApplicationDetailID: AreYouFirstNations
+                                                    BenefitApplicationDetailValue: '775170000'
+                                                -
+                                                    BenefitApplicationDetailID: Ethnicity
+                                                    BenefitApplicationDetailValues:
+                                                        - '775170000'
+                                                        - '775170001'
+                                                -
+                                                    BenefitApplicationDetailID: OtherEthnicity
+                                                    BenefitApplicationDetailValue: '?'
+                                                -
+                                                    BenefitApplicationDetailID: IdentifiesAsPersonWithDisability
+                                                    BenefitApplicationDetailIndicator: false
+                                                -
+                                                    BenefitApplicationDetailID: Gender
+                                                    BenefitApplicationDetailValue: '775170000'
+                                                -
+                                                    BenefitApplicationDetailID: SexAtBirth
+                                                    BenefitApplicationDetailValue: '775170000'
+                                                -
+                                                    BenefitApplicationDetailID: MouthPainOccurancePast12Months
+                                                    BenefitApplicationDetailValue: '775170002'
+                                                -
+                                                    BenefitApplicationDetailID: LastTimeVisitedDentist
+                                                    BenefitApplicationDetailValue: '775170000'
+                                                -
+                                                    BenefitApplicationDetailID: AvoidedVisitingDentistLast12Months
+                                                    BenefitApplicationDetailIndicator: false
+                                            RelatedPerson:
+                                                -
+                                                    PersonRelationshipCode:
+                                                        ReferenceDataName: Spouse
+                                                    PersonSINIdentification:
+                                                        IdentificationID: '500000001'
+                                                    ClientIdentification:
+                                                        -
+                                                            IdentificationID: aaab2d02-e08f-ef11-8a6a-000d3af44283
+                                                            IdentificationCategoryText: Client ID
+                                                    PersonBirthDate:
+                                                        YearDate: '2018'
+                                                    PersonName:
+                                                        -
+                                                            PersonGivenName:
+                                                                - Myfirstname2
+                                                            PersonSurName: Mylastname2
+                                                    ApplicantDetail:
+                                                        ConsentToSharePersonalInformationIndicator: false
+                                                -
+                                                    PersonRelationshipCode:
+                                                        ReferenceDataName: Dependant
+                                                    PersonSINIdentification:
+                                                        IdentificationID: '500000002'
+                                                    ClientIdentification:
+                                                        -
+                                                            IdentificationID: aaab2d02-e08f-ef11-8a6a-000d3af44283
+                                                            IdentificationCategoryText: Client ID
+                                                    PersonBirthDate:
+                                                        date: '2023-06-22'
+                                                    PersonName:
+                                                        -
+                                                            PersonGivenName:
+                                                                - Myfirstname3
+                                                            PersonSurName: Mylastname3
+                                                    ApplicantDetail:
+                                                        AttestParentOrGuardianIndicator: true
+                                                        PrivateDentalInsuranceIndicator: true
+                                                        InsurancePlan:
+                                                            -
+                                                                InsurancePlanIdentification:
+                                                                    -
+                                                                        IdentificationID: b5f25fea-a7a9-ee11-a569-000d3af4f898
+                                                                    -
+                                                                        IdentificationID: 7f10dff7-25c5-ee11-9079-000d3a09d640
+                                                    BenefitApplicationDetail:
+                                                        -
+                                                            BenefitApplicationDetailID: WhereWereYouBorn
+                                                            BenefitApplicationDetailValue: '775170000'
+                                                        -
+                                                            BenefitApplicationDetailID: AreYouFirstNations
+                                                            BenefitApplicationDetailValue: '775170000'
+                                                        -
+                                                            BenefitApplicationDetailID: Ethnicity
+                                                            BenefitApplicationDetailValues:
+                                                                - '775170000'
+                                                                - '775170001'
+                                                        -
+                                                            BenefitApplicationDetailID: OtherEthnicity
+                                                            BenefitApplicationDetailValue: '?'
+                                                        -
+                                                            BenefitApplicationDetailID: IdentifiesAsPersonWithDisability
+                                                            BenefitApplicationDetailIndicator: false
+                                                        -
+                                                            BenefitApplicationDetailID: Gender
+                                                            BenefitApplicationDetailValue: '775170000'
+                                                        -
+                                                            BenefitApplicationDetailID: SexAtBirth
+                                                            BenefitApplicationDetailValue: '775170000'
+                                                        -
+                                                            BenefitApplicationDetailID: MouthPainOccurancePast12Months
+                                                            BenefitApplicationDetailValue: '775170002'
+                                                        -
+                                                            BenefitApplicationDetailID: LastTimeVisitedDentist
+                                                            BenefitApplicationDetailValue: '775170000'
+                                                        -
+                                                            BenefitApplicationDetailID: AvoidedVisitingDentistLast12Months
+                                                            BenefitApplicationDetailIndicator: false
+                                            MailingSameAsHomeIndicator: true
+                                            PreferredMethodCommunicationCode:
+                                                ReferenceDataID: '775170000'
+                                        BenefitApplicationCategoryCode:
+                                            ReferenceDataID: '775170000'
+                                            ReferenceDataName: New OR Renewal
+                                        BenefitApplicationChannelCode:
+                                            ReferenceDataID: '775170001'
+                                        BenefitApplicationYear:
+                                            BenefitApplicationYearIdentification:
+                                                -
+                                                    IdentificationID: 98f8ad43-4069-ee11-9ae7-000d3a09d1b8
+                required: true
+            responses:
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/benefitApplicationResponse'
+                            examples:
+                                response:
+                                    value:
+                                        BenefitApplication:
+                                            BenefitApplicationIdentification:
+                                                -
+                                                    IdentificationID: xxxx
+                                                    IdentificationCategoryText: Confirmation Number
+                    description: Successful application confirmation number
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OperationOutcome'
+                    description: Bad request failure
+                '500':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OperationOutcome'
+                    description: Internal server error
+            operationId: SubmitApplication
+            summary: Submit Application
+            description: Submit a benefit application to PowerPlatform
+    /retrieve-benefit-application:
+        summary: Application retrieval from Power Platform
+        description: Retrieve Application APIs
+        post:
+            requestBody:
+                description: Application identifier
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/retrieveApplicationRequest'
+                        examples:
+                            ApplicationRequest:
+                                value:
+                                    Applicant:
+                                        PersonSINIdentification:
+                                            IdentificationID: '500000000'
+                                        PersonName:
+                                            PersonGivenName:
+                                                - MyFirstname
+                                            PersonSurName: MyLastname
+                                        PersonBirthDate:
+                                            date: '2018-02-20'
+                                        ClientIdentification:
+                                            -
+                                                IdentificationID: '19347889'
+                                                IdentificationCategoryText: Client Number
+                                            -
+                                                IdentificationID: 98f8ad43-4069-ee11-9ae7-000000000000
+                                                IdentificationCategoryText: Guid Primary Key
+                                    BenefitApplicationYear:
+                                        IdentificationID: 98f8ad43-4069-ee11-9ae7-000d3a09d1b8
+                required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/retrieveApplicationResponse'
+                            examples:
+                                BenefitApplicationResponse:
+                                    value:
+                                        BenefitApplication:
+                                            BenefitApplicationCategoryCode:
+                                                ReferenceDataID: '775170000'
+                                            BenefitApplicationYear:
+                                                BenefitApplicationYearIdentification:
+                                                    -
+                                                        IdentificationID: 98f8ad43-4069-ee11-9ae7-000d3a09d1b8
+                                            Applicant:
+                                                ApplicantDetail:
+                                                    PreviousApplicationIndicator: false
+                                                    PreviousTaxesFiledIndicator: true
+                                                    PrivateDentalInsuranceIndicator: true
+                                                    DisabilityTaxCreditIndicator: true
+                                                    LivingIndependentlyIndicator: false
+                                                    InvitationToApplyIndicator: false
+                                                    RequiresMaritalInformationIndicator: false
+                                                    InsurancePlan:
+                                                        -
+                                                            InsurancePlanIdentification:
+                                                                -
+                                                                    IdentificationID: b5f25fea-a7a9-ee11-a569-000d3af4f898
+                                                                -
+                                                                    IdentificationID: 7f10dff7-25c5-ee11-9079-000d3a09d640
+                                                ClientIdentification:
+                                                    -
+                                                        IdentificationID: 37e5aa05-813c-ef11-a317-000d3af4f3ef
+                                                        IdentificationCategoryText: Client ID
+                                                    -
+                                                        IdentificationID: '48806682560'
+                                                        IdentificationCategoryText: Client Number
+                                                PersonBirthDate:
+                                                    date: '2018-01-17'
+                                                PersonContactInformation:
+                                                    -
+                                                        Address:
+                                                            -
+                                                                AddressCategoryCode:
+                                                                    ReferenceDataName: Mailing
+                                                                AddressCityName: Testsville
+                                                                AddressCountry:
+                                                                    CountryCode:
+                                                                        ReferenceDataID: 0cf5389e-97ae-eb11-8236-000d3af4bfc3
+                                                                AddressPostalCode: L9B 1A2
+                                                                AddressProvince:
+                                                                    ProvinceCode:
+                                                                        ReferenceDataID: daf4d05b-37b3-eb11-8236-0022486d8d5f
+                                                                AddressSecondaryUnitText: Apt. No. 50
+                                                                AddressStreet:
+                                                                    StreetName: 123 Tester Lane
+                                                            -
+                                                                AddressCategoryCode:
+                                                                    ReferenceDataName: Home
+                                                                AddressCityName: Testsville
+                                                                AddressCountry:
+                                                                    CountryCode:
+                                                                        ReferenceDataID: 0cf5389e-97ae-eb11-8236-000d3af4bfc3
+                                                                AddressPostalCode: L9B 1A2
+                                                                AddressProvince:
+                                                                    ProvinceCode:
+                                                                        ReferenceDataID: daf4d05b-37b3-eb11-8236-0022486d8d5f
+                                                                AddressSecondaryUnitText: Apt. No. 50
+                                                                AddressStreet:
+                                                                    StreetName: 123 Tester Lane
+                                                        EmailAddress:
+                                                            -
+                                                                EmailAddressID: myemail@domain.com
+                                                        TelephoneNumber:
+                                                            -
+                                                                TelephoneNumberCategoryCode:
+                                                                    ReferenceDataID: 555-555-5555
+                                                                    ReferenceDataName: Primary
+                                                            -
+                                                                TelephoneNumberCategoryCode:
+                                                                    ReferenceDataID: 555-555-5556
+                                                                    ReferenceDataName: Alternate
+                                                PersonLanguage:
+                                                    -
+                                                        CommunicationCategoryCode:
+                                                            ReferenceDataID: '1033'
+                                                        PreferredIndicator: true
+                                                PersonMaritalStatus:
+                                                    StatusCode:
+                                                        ReferenceDataID: '775170000'
+                                                PersonName:
+                                                    -
+                                                        PersonGivenName:
+                                                            - MyFirstname
+                                                        PersonSurName: MyLastname
+                                                PersonSINIdentification:
+                                                    IdentificationID: '900000000'
+                                                MailingSameAsHomeIndicator: true
+                                                PreferredMethodCommunicationCode:
+                                                    ReferenceDataID: '775170000'
+                                                RelatedPerson:
+                                                    -
+                                                        PersonRelationshipCode:
+                                                            ReferenceDataName: Spouse
+                                                        PersonBirthDate:
+                                                            YearDate: '2018'
+                                                        PersonName:
+                                                            -
+                                                                PersonGivenName:
+                                                                    - Myfirstname2
+                                                                PersonSurName: Mylastname2
+                                                        PersonSINIdentification:
+                                                            IdentificationID: '900000001'
+                                                        ClientIdentification:
+                                                            -
+                                                                IdentificationID: 9b278833-8e55-ef11-bfe3-000d3af47f3e
+                                                                IdentificationCategoryText: Client ID
+                                                            -
+                                                                IdentificationID: '31923313697'
+                                                                IdentificationCategoryText: Client Number
+                                                        ApplicantDetail:
+                                                            ConsentToSharePersonalInformationIndicator: true
+                                                    -
+                                                        PersonRelationshipCode:
+                                                            ReferenceDataName: Dependant
+                                                        PersonBirthDate:
+                                                            date: '2018-01-17'
+                                                        PersonName:
+                                                            -
+                                                                PersonGivenName:
+                                                                    - Myfirstname3
+                                                                PersonSurName: Mylastname3
+                                                        PersonSINIdentification:
+                                                            IdentificationID: '900000002'
+                                                        ClientIdentification:
+                                                            -
+                                                                IdentificationID: effded25-02d1-ee11-904d-000d3a09d132
+                                                                IdentificationCategoryText: Client ID
+                                                            -
+                                                                IdentificationID: '56743424551'
+                                                                IdentificationCategoryText: Client Number
+                                                        ApplicantDetail:
+                                                            AttestParentOrGuardianIndicator: true
+                                                            PrivateDentalInsuranceIndicator: false
+                                                            InsurancePlan:
+                                                                -
+                                                                    InsurancePlanIdentification:
+                                                                        -
+                                                                            IdentificationID: b5f25fea-a7a9-ee11-a569-000d3af4f898
+                                                                        -
+                                                                            IdentificationID: b5f25fea-a7a9-ee11-a569-000d3af4f898
+                    description: Successful query
+                '204':
+                    description: Application not found
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OperationOutcome'
+                    description: Bad request failure
+                '500':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OperationOutcome'
+                    description: Internal server error
+            operationId: RetrieveApplication
+            summary: Retrieve Application
+            description: Retrieve a benefit application from PowerPlatform
+    /retrieve-benefit-application-config-dates:
+        get:
+            parameters:
+                -
+                    examples:
+                        GetApplicationDateInformationSample:
+                            value: '"2025-03-15"'
+                    name: date
+                    description: The date to use to request application date configuration information
+                    schema:
+                        format: date
+                        type: string
+                    in: query
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/retrieveBenefitApplicationConfigDatesResponse'
+                            examples:
+                                RetrieveApplicationConfigDatesSample:
+                                    value:
+                                        BenefitApplicationYear:
+                                            -
+                                                BenefitApplicationYearIdentification:
+                                                    -
+                                                        IdentificationID: 37e5aa05-813c-ef11-a317-000d3af4f3ef
+                                                BenefitApplicationYearEffectivePeriod:
+                                                    StartDate:
+                                                        YearDate: '2024'
+                                                BenefitApplicationYearTaxYear:
+                                                    YearDate: '2023'
+                                                BenefitApplicationYearIntakePeriod:
+                                                    StartDate:
+                                                        date: '2024-05-01'
+                                                    EndDate:
+                                                        date: '2025-03-31'
+                                                BenefitApplicationYearRenewalPeriod:
+                                                    StartDate: {}
+                                                    EndDate: {}
+                                                BenefitApplicationYearNext:
+                                                    BenefitApplicationYearIdentification:
+                                                        IdentificationID: 9bb21bc9-028c-ef11-8a69-000d3a0a1a29
+                                                BenefitApplicationYearCoveragePeriod:
+                                                    StartDate:
+                                                        date: '2024-05-01'
+                                                    EndDate:
+                                                        date: '2025-06-30'
+                                            -
+                                                BenefitApplicationYearIdentification:
+                                                    -
+                                                        IdentificationID: 9bb21bc9-028c-ef11-8a69-000d3a0a1a29
+                                                BenefitApplicationYearEffectivePeriod:
+                                                    StartDate:
+                                                        YearDate: '2025'
+                                                BenefitApplicationYearTaxYear:
+                                                    YearDate: '2024'
+                                                BenefitApplicationYearIntakePeriod:
+                                                    StartDate:
+                                                        date: '2025-02-14'
+                                                    EndDate:
+                                                        date: '2026-06-30'
+                                                BenefitApplicationYearRenewalPeriod:
+                                                    StartDate:
+                                                        date: '2024-12-01'
+                                                    EndDate:
+                                                        date: '2025-06-30'
+                                                BenefitApplicationYearNext:
+                                                    BenefitApplicationYearIdentification: {}
+                                                BenefitApplicationYearCoveragePeriod:
+                                                    StartDate:
+                                                        date: '2025-04-01'
+                                                    EndDate:
+                                                        date: '2026-06-30'
+                    description: Successful query
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OperationOutcome'
+                    description: Bad request failure
+                '500':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OperationOutcome'
+                    description: Internal server error
+            operationId: GetApplicationConfigDates
+components:
+    schemas:
+        BenefitApplication:
+            $ref: '#/components/schemas/BenefitApplicationType'
+            description: An application for a program benefit.
+        BenefitApplicationYear:
+            $ref: '#/components/schemas/BenefitApplicationYearType'
+            description: >-
+                A benefit application year contains detail about a business year like period application,
+                taxation year, coverage period.
+        InsurancePlan:
+            $ref: '#/components/schemas/InsurancePlanType'
+            description: >-
+                InsurancePlan describes an insurance offering comprised of a list of covered benefits, costs
+                associated with those benefits (i.e. the plan), and additional information about the offering,
+                such as who it is owned and administered by, a coverage area, contact information, etc.
+        BenefitApplicationYearType:
+            description: A data type for a benefit application year
+            type: object
+            properties:
+                BenefitApplicationYearIdentification:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/BenefitApplicationYearIdentification'
+                BenefitApplicationYearEffectivePeriod:
+                    $ref: '#/components/schemas/DatePeriodType'
+                BenefitApplicationYearTaxYear:
+                    $ref: '#/components/schemas/DateType'
+                BenefitApplicationYearIntakePeriod:
+                    $ref: '#/components/schemas/DatePeriodType'
+                BenefitApplicationYearRenewalPeriod:
+                    $ref: '#/components/schemas/DatePeriodType'
+                BenefitApplicationYearNext:
+                    $ref: '#/components/schemas/BenefitApplicationYearNextType'
+                BenefitApplicationYearCoveragePeriod:
+                    $ref: '#/components/schemas/DatePeriodType'
+        DatePeriodType:
+            type: object
+            properties:
+                StartDate:
+                    $ref: '#/components/schemas/DateType'
+                EndDate:
+                    $ref: '#/components/schemas/DateType'
+        BenefitApplicationYearNextType:
+            description: ''
+            type: object
+            properties:
+                BenefitApplicationYearIdentification:
+                    $ref: '#/components/schemas/BenefitApplicationYearIdentification'
+        InsurancePlanType:
+            description: A data type for insurance plan
+            type: object
+            properties:
+                InsurancePlanIdentification:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/InsurancePlanIdentification'
+        Applicant:
+            $ref: '#/components/schemas/ClientType'
+            description: The applicant for the benefit.
+        ApplicantDetail:
+            $ref: '#/components/schemas/ApplicantDetailType'
+            description: The detail of the applicant.
+        AttestParentOrGuardianIndicator:
+            description: >-
+                An identifier to attest that the primary applicant is the parent or legal guardian of the
+                dependent.
+            type: boolean
+        DisabilityTaxCreditIndicator:
+            description: An identifier that the applicant does have the Disability Tax Credit.
+            type: boolean
+        LivingIndependentlyIndicator:
+            description: >-
+                An identifier that the applicant is 16 or 17 and lives independently from his parents or legal
+                guardian.
+            type: boolean
+        ApplicantCategoryCode:
+            $ref: '#/components/schemas/ReferenceDataCodeType'
+            description: 'A type of applicant. IE : Primary, Spouse, Dependant'
+        MailingSameAsHomeIndicator:
+            description: Indicates that mailing address is the same as home address
+            type: boolean
+        PreferredMethodCommunicationCode:
+            $ref: '#/components/schemas/ReferenceDataCodeMandatoryIDType'
+            description: A code for the preferred method of communication
+        PrivateDentalInsuranceIndicator:
+            description: Indicates that the application has a private dental insurance plan
+            type: boolean
+        FederalDentalCoverageIndicator:
+            description: Indicates that the application has federal dental coverage
+            type: boolean
+        BenefitApplicationCategoryCode:
+            $ref: '#/components/schemas/ReferenceDataCodeType'
+            description: A type of the benefit application.
+        BenefitApplicationChannelCode:
+            $ref: '#/components/schemas/ReferenceDataCodeMandatoryIDType'
+            description: 'A code of the channel (online, paper) for the benefit application.'
+        BenefitApplicationIdentification:
+            $ref: '#/components/schemas/IdentificationType'
+            description: An identification for the benefit application.
+        BenefitApplicationYearIdentification:
+            $ref: '#/components/schemas/IdentificationType'
+            description: An identification for an application year
+        InsurancePlanIdentification:
+            $ref: '#/components/schemas/IdentificationType'
+            description: An identification for an insurance plan
+        ReferenceDataCodeType:
+            description: >-
+                Represents a codeable concept used by a property of a resource. It defines the value, name and
+                origin for this code.
+            type: object
+            properties:
+                ReferenceDataID:
+                    $ref: '#/components/schemas/ReferenceDataID'
+                ReferenceDataName:
+                    $ref: '#/components/schemas/ReferenceDataName'
+        ReferenceDataCodeMandatoryIDAndNameType:
+            description: Copied from ReferenceDataCodeType
+            required:
+                - ReferenceDataID
+                - ReferenceDataName
+            type: object
+            properties:
+                ReferenceDataID:
+                    $ref: '#/components/schemas/ReferenceDataID'
+                ReferenceDataName:
+                    $ref: '#/components/schemas/ReferenceDataName'
+        ReferenceDataCodeMandatoryIDType:
+            description: Copied from ReferenceDataCodeType
+            required:
+                - ReferenceDataID
+            type: object
+            properties:
+                ReferenceDataID:
+                    $ref: '#/components/schemas/ReferenceDataID'
+        ReferenceDataCodeMandatoryNameType:
+            description: Copied from ReferenceDataCodeType
+            required:
+                - ReferenceDataName
+            type: object
+            properties:
+                ReferenceDataName:
+                    $ref: '#/components/schemas/ReferenceDataName'
+        CountryType:
+            description: >-
+                A data type for a country, territory, dependency, or other such geopolitical subdivision of a
+                location.
+            required:
+                - CountryCode
+            type: object
+            properties:
+                CountryCode:
+                    $ref: '#/components/schemas/CountryCode'
+        DateType:
+            type: object
+            properties:
+                date:
+                    format: date
+                    type: string
+                dateTime:
+                    format: date-time
+                    type: string
+                DayDate:
+                    type: string
+                MonthDate:
+                    type: string
+                YearDate:
+                    type: string
+                    pattern: "^\\d{4}$"
+            additionalProperties: false
+        IdentificationType:
+            description: A data type for a representation of an identity.
+            required:
+                - IdentificationID
+            type: object
+            properties:
+                IdentificationID:
+                    $ref: '#/components/schemas/IdentificationID'
+                IdentificationCategoryText:
+                    $ref: '#/components/schemas/IdentificationCategoryText'
+        ProvinceType:
+            description: A data type for a province of a country.
+            type: object
+            properties:
+                ProvinceCode:
+                    $ref: '#/components/schemas/ProvinceCode'
+                ProvinceName:
+                    $ref: '#/components/schemas/ProvinceName'
+        PersonStatusType:
+            description: A data type for a state of something or someone.
+            required:
+                - StatusCode
+            type: object
+            properties:
+                StatusCode:
+                    $ref: '#/components/schemas/PersonStatusCode'
+        PersonStatusCode:
+            $ref: '#/components/schemas/ReferenceDataCodeMandatoryIDType'
+            description: A code for a status or condition of something or someone.
+        ClientIdentification:
+            $ref: '#/components/schemas/IdentificationType'
+            description: An identification for a client.
+        PersonBirthDate:
+            $ref: '#/components/schemas/DateType'
+            description: A date a person was born.
+        PersonContactInformation:
+            $ref: '#/components/schemas/ContactInformationType'
+            description: A means of contacting a person.
+        PersonLanguage:
+            $ref: '#/components/schemas/PersonLanguageType'
+            description: A language capability of a person.
+        PersonMaritalStatus:
+            $ref: '#/components/schemas/PersonStatusType'
+            description: The current legal marital status for the client.
+        PersonName:
+            $ref: '#/components/schemas/PersonNameType'
+            description: A combination of names and/or titles by which a person is known.
+        PersonSINIdentification:
+            $ref: '#/components/schemas/IdentificationType'
+            description: A Social Insurance Number assigned by the Government of Canada.
+        PersonLanguageType:
+            description: A data type for a person language.
+            required:
+                - CommunicationCategoryCode
+                - PreferredIndicator
+            type: object
+            properties:
+                CommunicationCategoryCode:
+                    $ref: '#/components/schemas/PersonCommunicationCategoryCode'
+                PreferredIndicator:
+                    $ref: '#/components/schemas/PreferredIndicator'
+        PersonCommunicationCategoryCode:
+            $ref: '#/components/schemas/ReferenceDataCodeMandatoryIDType'
+            description: 'A code of human communication, ie: spoken, written.'
+        RelatedPerson:
+            $ref: '#/components/schemas/RelatedPersonType'
+            description: Information about a person related to a client.
+        ReferenceDataID:
+            description: A code or identifier defined for a reference data set.
+            type: string
+        ReferenceDataName:
+            description: A name or description of a code or identifier.
+            minLength: 1
+            pattern: ^(Mailing|Home|Spouse|Dependant|Primary|Alternate|New|Renewal)$
+            type: string
+        CountryCode:
+            $ref: '#/components/schemas/ReferenceDataCodeMandatoryIDType'
+            description: 'A country, territory, dependency, or other such geopolitical subdivision of a location.'
+        IdentificationID:
+            description: An identifier.
+            type: string
+        IdentificationCategoryText:
+            description: A kind of identification.
+            type: string
+        ProvinceCode:
+            $ref: '#/components/schemas/ReferenceDataCodeType'
+            description: A code for a province of a country.
+        ProvinceName:
+            description: A name of a province of a country.
+            type: string
+        LanguageCode:
+            $ref: '#/components/schemas/ReferenceDataCodeType'
+            description: A code of the language.
+        PreferredIndicator:
+            description: An indicator marking this class as preferred.
+            type: boolean
+        PersonNameType:
+            description: A data type for a combination of names and/or titles by which a person is known.
+            type: object
+            properties:
+                PersonGivenName:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PersonGivenName'
+                PersonSurName:
+                    $ref: '#/components/schemas/PersonSurName'
+        ReferenceDataType:
+            description: A reference data represents a value (code) defined for a reference data set (code list).
+            type: object
+            properties:
+                ReferenceDataID:
+                    $ref: '#/components/schemas/ReferenceDataID'
+                ReferenceDataName:
+                    $ref: '#/components/schemas/ReferenceDataName'
+        Address:
+            $ref: '#/components/schemas/AddressType'
+            description: 'A set of location information, often described by postal information.'
+        ContactInformationCategoryCode:
+            $ref: '#/components/schemas/ReferenceDataCodeType'
+            description: 'A type of the contact information. IE: Mailing, Home.'
+        EmailAddress:
+            $ref: '#/components/schemas/EmailAddressType'
+            description: An email address identifies an email box to which messages are delivered.
+        TelephoneNumber:
+            $ref: '#/components/schemas/TelephoneNumberType'
+            description: >-
+                A telephone number for a telecommunication device by which a person or organization may be
+                contacted.
+        PersonGivenName:
+            description: A first name of a person.
+            type: string
+        PersonSurName:
+            description: A last name or family name of a person.
+            type: string
+        PersonRelationshipCode:
+            description: A code for the relationship between two persons.
+            required:
+                - ReferenceDataName
+            type: object
+            properties:
+                ReferenceDataName:
+                    $ref: '#/components/schemas/ReferenceDataName'
+        AddressType:
+            description: A data type for a geophysical location described by postal information.
+            required:
+                - AddressCategoryCode
+                - AddressCityName
+                - AddressCountry
+                - AddressStreet
+            type: object
+            properties:
+                AddressCategoryCode:
+                    $ref: '#/components/schemas/AddressCategoryCode'
+                AddressCityName:
+                    $ref: '#/components/schemas/AddressCityName'
+                AddressCountry:
+                    $ref: '#/components/schemas/AddressCountry'
+                AddressPostalCode:
+                    $ref: '#/components/schemas/AddressPostalCode'
+                AddressProvince:
+                    $ref: '#/components/schemas/AddressProvince'
+                AddressSecondaryUnitText:
+                    $ref: '#/components/schemas/AddressSecondaryUnitText'
+                AddressStreet:
+                    $ref: '#/components/schemas/AddressStreet'
+        TelephoneNumberType:
+            description: A data type for a telephone number for a telecommunication device.
+            required:
+                - TelephoneNumberCategoryCode
+            type: object
+            properties:
+                FullTelephoneNumber:
+                    $ref: '#/components/schemas/FullTelephoneNumber'
+                TelephoneNumberCategoryCode:
+                    $ref: '#/components/schemas/TelephoneNumberCategoryCode'
+        EmailAddressType:
+            description: A data type for an email address identifies an email box to which messages are delivered.
+            type: object
+            properties:
+                EmailAddressID:
+                    $ref: '#/components/schemas/EmailAddressID'
+        AddressCategoryCode:
+            $ref: '#/components/schemas/ReferenceDataCodeMandatoryNameType'
+            description: A kind of address.
+        AddressCityName:
+            description: A name of a city or town.
+            minLength: 1
+            pattern: ^(?!\s*$).+
+            type: string
+        AddressCountry:
+            $ref: '#/components/schemas/CountryType'
+            description: 'A country, territory, dependency, or other such geopolitical subdivision of a location.'
+        AddressPostalCode:
+            description: An identifier of a post office-assigned zone for an address.
+            type: string
+        AddressProvince:
+            $ref: '#/components/schemas/ProvinceType'
+            description: A province of a country.
+        AddressSecondaryUnitText:
+            description: A particular unit within a larger unit or grouping at a location.
+            type: string
+        AddressStreet:
+            $ref: '#/components/schemas/StreetType'
+            description: 'A road, thoroughfare or highway.'
+        FullTelephoneNumber:
+            $ref: '#/components/schemas/FullTelephoneNumberType'
+            description: A full telephone number.
+        TelephoneNumberCategoryCode:
+            $ref: '#/components/schemas/ReferenceDataCodeMandatoryIDAndNameType'
+            description: A kind of telephone number.
+        EmailAddressID:
+            description: An unique identifier for an email box.
+            type: string
+            x-comment: Extension
+        StreetType:
+            description: 'A data type for a road, thoroughfare, or highway.'
+            required:
+                - StreetName
+            type: object
+            properties:
+                StreetName:
+                    $ref: '#/components/schemas/StreetName'
+        FullTelephoneNumberType:
+            description: A data type for a full telephone number.
+            type: object
+            properties:
+                TelephoneNumberFullID:
+                    $ref: '#/components/schemas/TelephoneNumberFullID'
+        StreetName:
+            description: A name of a street.
+            minLength: 1
+            pattern: ^(?!\s*$).+
+            type: string
+        TelephoneNumberFullID:
+            description: A complete telephone number.
+            type: string
+        ContactInformationType:
+            description: A data type for how to contact a person or an organization.
+            type: object
+            properties:
+                Address:
+                    minItems: 2
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Address'
+                ContactInformationCategoryCode:
+                    $ref: '#/components/schemas/ContactInformationCategoryCode'
+                EmailAddress:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/EmailAddress'
+                TelephoneNumber:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TelephoneNumber'
+        ApplicantWithSinOnly:
+            description: Applicant with SIN Only
+            required:
+                - PersonSINIdentification
+            type: object
+            properties:
+                PersonSINIdentification:
+                    $ref: '#/components/schemas/PersonSINIdentification'
+        OperationOutcome:
+            $ref: '#/components/schemas/OperationOutcomeType'
+            description: A resource for information about the success/failure of a restful operation.
+        OperationOutcomeType:
+            description: A data type for information about the success/failure of a restful operation
+            type: object
+            allOf:
+                -
+                    $ref: '#/components/schemas/ResourceType'
+                -
+                    properties:
+                        Issue:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/Issue'
+                        OperationOutcomeDate:
+                            $ref: '#/components/schemas/OperationOutcomeDate'
+                        OperationOutcomeStatus:
+                            $ref: '#/components/schemas/OperationOutcomeStatus'
+        ResourceType:
+            description: A data type for a resource.
+            type: object
+            properties:
+                ResourceID:
+                    $ref: '#/components/schemas/ResourceID'
+                ResourceLanguage:
+                    $ref: '#/components/schemas/ResourceLanguage'
+                ResourceMeta:
+                    $ref: '#/components/schemas/ResourceMeta'
+                ResourceReference:
+                    $ref: '#/components/schemas/ResourceReference'
+        Issue:
+            $ref: '#/components/schemas/IssueType'
+            description: A single issue associated with the operation.
+        ResourceID:
+            description: An identifier for the resource.
+            type: string
+        ResourceLanguage:
+            $ref: '#/components/schemas/LanguageType'
+            description: Language of the resource content.
+        ResourceMeta:
+            $ref: '#/components/schemas/ResourceMetaType'
+            description: >-
+                A set of metadata that provides technical and workflow context to the resource. The metadata
+                items are all optional, though some or all of them may be required in particular
+                implementations or contexts of use.
+        ResourceReference:
+            description: 'Literal reference, Relative, internal or absolute URL.'
+            type: string
+        IssueType:
+            description: A data type for an issue associated with the operation.
+            type: object
+            properties:
+                IssueAdditionalInformation:
+                    $ref: '#/components/schemas/IssueAdditionalInformation'
+                IssueCode:
+                    $ref: '#/components/schemas/IssueCode'
+                IssueDate:
+                    $ref: '#/components/schemas/IssueDate'
+                IssueDetails:
+                    $ref: '#/components/schemas/IssueDetails'
+                IssueReferenceExpression:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IssueReferenceExpression'
+                IssueSeverityCode:
+                    $ref: '#/components/schemas/IssueSeverityCode'
+        ResourceMetaType:
+            description: >-
+                A data type for a set of metadata that provides technical and workflow context to the
+                resource. The metadata items are all optional, though some or all of them may be required in
+                particular implementations or contexts of use.
+            type: object
+            properties:
+                LastUpdatedDate:
+                    $ref: '#/components/schemas/LastUpdatedDate'
+                SecurityAttribute:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/SecurityAttribute'
+                SourceCode:
+                    $ref: '#/components/schemas/SourceCode'
+                VersionID:
+                    $ref: '#/components/schemas/VersionID'
+        IssueAdditionalInformation:
+            description: Additional Information for the issue.
+            type: string
+        IssueDetails:
+            description: The details about the issue.
+            type: string
+        IssueReferenceExpression:
+            description: 'A reference to the properties related to the issue. IE : jsonpath, xpath,regex.'
+            type: string
+        SecurityAttribute:
+            $ref: '#/components/schemas/SecurityAttributeType'
+            description: >-
+                An abstraction representing the basic properties or characteristics of an entity with respect
+                to safeguarding information.
+            x-comment: Extension
+        VersionID:
+            description: >-
+                The version of the resource content. Can be used to ensure that updates are based on the
+                latest version of the resource.
+            type: string
+            x-comment: Extension
+        SecurityAttributeType:
+            description: >-
+                An abstraction representing the basic properties or characteristics of an entity with respect
+                to safeguarding information.
+            type: object
+            properties:
+                DataElementReference:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DataElementReference'
+                    x-comment: Extension
+                SecurityCode:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/SecurityCode'
+                    x-comment: Extension
+                SecurityLabel:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/SecurityLabel'
+                    x-comment: Extension
+            x-comment: Extension
+        DataElementReference:
+            description: 'A reference to a data element within the resource. IE: xpath, jsonpath.'
+            type: string
+            x-comment: Extension
+        SecurityLabel:
+            description: A security label applicable to this security attribute.
+            type: string
+            x-comment: Extension
+        IssueDate:
+            $ref: '#/components/schemas/DateType'
+            description: The date the issue occurred.
+        LastUpdatedDate:
+            $ref: '#/components/schemas/DateType'
+            description: The date the resource content was last updated.
+            x-comment: Extension
+        OperationOutcomeDate:
+            $ref: '#/components/schemas/DateType'
+            description: The date of the operation outcome.
+        LanguageType:
+            description: A data type for a language.
+            type: object
+            properties:
+                CommunicationCategoryCode:
+                    $ref: '#/components/schemas/CommunicationCategoryCode'
+                    x-comment: Extension
+                LanguageCode:
+                    $ref: '#/components/schemas/LanguageCode'
+                    x-comment: Extension
+                PreferredIndicator:
+                    $ref: '#/components/schemas/PreferredIndicator'
+                    x-comment: Extension
+            x-comment: Extension
+        SourceCode:
+            $ref: '#/components/schemas/ReferenceDataType'
+            description: 'A code for name, identifier, or reference of a resource from which the information was taken.'
+            x-comment: Extension
+        SecurityCode:
+            $ref: '#/components/schemas/ReferenceDataCodeType'
+            description: A security code applicable to this security attribute.
+            x-comment: Extension
+        CommunicationCategoryCode:
+            $ref: '#/components/schemas/ReferenceDataCodeType'
+            description: 'A code of human communication, ie: spoken, written.'
+            x-comment: Extension
+        IssueCode:
+            $ref: '#/components/schemas/ReferenceDataCodeType'
+            description: An error or warning code of the issue.
+        IssueSeverityCode:
+            $ref: '#/components/schemas/ReferenceDataCodeType'
+            description: 'A code for the severity of the issue : fatal | error | warning | information.'
+        OperationOutcomeStatus:
+            $ref: '#/components/schemas/StatusType'
+            description: A status for the operation outcome.
+        StatusType:
+            description: A data type for a state of something or someone.
+            type: object
+            properties:
+                StatusCode:
+                    $ref: '#/components/schemas/StatusCode'
+        StatusCode:
+            $ref: '#/components/schemas/ReferenceDataCodeType'
+            description: A code for a status or condition of something or someone.
+        applicantRequest:
+            description: Personal information request
+            required:
+                - Applicant
+            type: object
+            properties:
+                Applicant:
+                    $ref: '#/components/schemas/ApplicantWithSinOnly'
+                    description: ''
+                    example: ''
+        applicantResponse:
+            description: Personal information response
+            required:
+                - BenefitApplication
+            type: object
+            properties:
+                BenefitApplication:
+                    $ref: '#/components/schemas/BenefitApplication'
+                    example: ''
+        benefitApplicationRequest:
+            description: Benefit application request
+            required:
+                - BenefitApplication
+            type: object
+            properties:
+                BenefitApplication:
+                    $ref: '#/components/schemas/BenefitApplication'
+                    description: ''
+        benefitApplicationResponse:
+            description: Benefit application response
+            required:
+                - BenefitApplication
+            type: object
+            properties:
+                BenefitApplication:
+                    $ref: '#/components/schemas/BenefitApplication'
+                    description: ''
+                    example: ''
+            example:
+                BenefitApplication:
+                    BenefitApplicationIdentification:
+                        -
+                            IdentificationID: xxxx
+                            IdentificationCategoryText: Confirmation Number
+        retrieveBenefitApplicationConfigDatesResponse:
+            description: Retrieve benefit application config dates response
+            type: object
+            properties:
+                BenefitApplicationYear:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/BenefitApplicationYearType'
+        ClientType:
+            description: A data type for the client resource.
+            required:
+                - PersonBirthDate
+                - PersonContactInformation
+                - PersonLanguage
+                - PersonMaritalStatus
+                - PersonSINIdentification
+                - MailingSameAsHomeIndicator
+                - PreferredMethodCommunicationCode
+                - ApplicantDetail
+            type: object
+            properties:
+                ApplicantCategoryCode:
+                    $ref: '#/components/schemas/ApplicantCategoryCode'
+                ApplicantDetail:
+                    $ref: '#/components/schemas/ApplicantDetail'
+                ClientIdentification:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ClientIdentification'
+                PersonBirthDate:
+                    $ref: '#/components/schemas/PersonBirthDate'
+                PersonContactInformation:
+                    minItems: 1
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PersonContactInformation'
+                PersonLanguage:
+                    minItems: 1
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PersonLanguage'
+                PersonMaritalStatus:
+                    $ref: '#/components/schemas/PersonMaritalStatus'
+                PersonName:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PersonName'
+                PersonSINIdentification:
+                    $ref: '#/components/schemas/PersonSINIdentification'
+                RelatedPerson:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RelatedPerson'
+                MailingSameAsHomeIndicator:
+                    $ref: '#/components/schemas/MailingSameAsHomeIndicator'
+                PreferredMethodCommunicationCode:
+                    $ref: '#/components/schemas/PreferredMethodCommunicationCode'
+                BenefitApplicationDetail:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/BenefitApplicationDetailIdentification'
+        RelatedPersonType:
+            description: A data type for information about a person related to a client.
+            required:
+                - PersonBirthDate
+                - PersonRelationshipCode
+                - ApplicantDetail
+            type: object
+            properties:
+                ApplicantDetail:
+                    $ref: '#/components/schemas/ApplicantDetail'
+                PersonBirthDate:
+                    $ref: '#/components/schemas/PersonBirthDate'
+                PersonName:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PersonName'
+                PersonRelationshipCode:
+                    $ref: '#/components/schemas/PersonRelationshipCode'
+                PersonSINIdentification:
+                    $ref: '#/components/schemas/PersonSINIdentification'
+                ClientIdentification:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ClientIdentification'
+                BenefitApplicationDetail:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/BenefitApplicationDetailIdentification'
+        BenefitApplicationType:
+            description: A data type for an application for a program benefit.
+            required:
+                - Applicant
+                - BenefitApplicationChannelCode
+                - BenefitApplicationCategoryCode
+            type: object
+            properties:
+                Applicant:
+                    $ref: '#/components/schemas/Applicant'
+                BenefitApplicationCategoryCode:
+                    $ref: '#/components/schemas/BenefitApplicationCategoryCode'
+                BenefitApplicationChannelCode:
+                    $ref: '#/components/schemas/BenefitApplicationChannelCode'
+                BenefitApplicationIdentification:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/BenefitApplicationIdentification'
+                BenefitApplicationYear:
+                    $ref: '#/components/schemas/BenefitApplicationYear'
+        ApplicantDetailType:
+            description: A data type for the detail of the applicant.
+            type: object
+            properties:
+                AttestParentOrGuardianIndicator:
+                    $ref: '#/components/schemas/AttestParentOrGuardianIndicator'
+                ConsentToSharePersonalInformationIndicator:
+                    $ref: '#/components/schemas/ConsentToSharePersonalInformationIndicator'
+                DisabilityTaxCreditIndicator:
+                    $ref: '#/components/schemas/DisabilityTaxCreditIndicator'
+                FederalDentalCoverageIndicator:
+                    $ref: '#/components/schemas/FederalDentalCoverageIndicator'
+                LivingIndependentlyIndicator:
+                    $ref: '#/components/schemas/LivingIndependentlyIndicator'
+                PrivateDentalInsuranceIndicator:
+                    $ref: '#/components/schemas/PrivateDentalInsuranceIndicator'
+                ProvincialDentalCoverageIndicator:
+                    $ref: '#/components/schemas/ProvincialDentalCoverageIndicator'
+                PreviousTaxesFiledIndicator:
+                    $ref: '#/components/schemas/PreviousTaxesFiledIndicator'
+                PreviousApplicationIndicator:
+                    $ref: '#/components/schemas/PreviousApplicationIndicator'
+                InvitationToApplyIndicator:
+                    $ref: '#/components/schemas/InvitationToApplyIndicator'
+                RequiresMaritalInformationIndicator:
+                    $ref: '#/components/schemas/RequiresMaritalInformationIndicator'
+                MaritalStatusChangedIndicator:
+                    $ref: '#/components/schemas/MaritalStatusChangedIndicator'
+                AddressChangedIndicator:
+                    $ref: '#/components/schemas/AddressChangedIndicator'
+                PhoneChangedIndicator:
+                    $ref: '#/components/schemas/PhoneChangedIndicator'
+                EmailChangedIndicator:
+                    $ref: '#/components/schemas/EmailChangedIndicator'
+                PublicInsuranceChangedIndicator:
+                    $ref: '#/components/schemas/PublicInsuranceChangedIndicator'
+                InsurancePlan:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/InsurancePlan'
+        ConsentToSharePersonalInformationIndicator:
+            description: >-
+                An identifier that the primary applicant attests that their spouse has consented to share
+                their information.
+            type: boolean
+        ProvincialDentalCoverageIndicator:
+            description: Indicates that the application has provincial dental coverage
+            type: boolean
+        retrieveApplicationRequest:
+            description: Retrieve client application request
+            required:
+                - Applicant
+            type: object
+            properties:
+                Applicant:
+                    $ref: '#/components/schemas/ApplicantByMultipleChoice'
+                    description: ''
+                    example: ''
+                BenefitApplicationYear:
+                    $ref: '#/components/schemas/BenefitApplicationYearIdentification'
+                    description: ''
+        retrieveApplicationResponse:
+            description: Retrieve client application request
+            type: object
+            properties:
+                BenefitApplication:
+                    $ref: '#/components/schemas/BenefitApplication'
+                    description: Benefit application
+        ApplicantByMultipleChoice:
+            description: Applicant specified by multiple choices
+            type: object
+            properties:
+                PersonSINIdentification:
+                    $ref: '#/components/schemas/PersonSINIdentification'
+                PersonName:
+                    $ref: '#/components/schemas/PersonNameType'
+                PersonBirthDate:
+                    $ref: '#/components/schemas/PersonBirthDate'
+                ClientIdentification:
+                    maxItems: 2
+                    minItems: 0
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ClientIdentification'
+        PreviousApplicationIndicator:
+            description: An indicator that the applicant has previously applied for this benefit.
+            type: boolean
+        PreviousTaxesFiledIndicator:
+            description: An indicator that the applicant and partner have previously filed their taxes.
+            type: boolean
+        InvitationToApplyIndicator:
+            description: An indicator that the applicant received an invitation to apply for benefits.
+            type: boolean
+        RequiresMaritalInformationIndicator:
+            description: An indicator that the applicant requires marital information.
+            type: boolean
+        MaritalStatusChangedIndicator:
+            description: An indicator that the applicant's marital status has changed.
+            type: boolean
+        AddressChangedIndicator:
+            description: An indicator that the applicant's home and mailing address has changed.
+            type: boolean
+        PhoneChangedIndicator:
+            description: An indicator that the applicant's phone number has changed.
+            type: boolean
+        EmailChangedIndicator:
+            description: An indicator that the applicant's email address has changed.
+            type: boolean
+        PublicInsuranceChangedIndicator:
+            description: An indicator that the applicant's insurance coverage has changed.
+            type: boolean
+        BenefitApplicationDetailIdentification:
+            description: Benefit Application Detail identifier and value
+            required:
+                - BenefitApplicationDetailID
+            type: object
+            properties:
+                BenefitApplicationDetailID:
+                    type: string
+                BenefitApplicationDetailValue:
+                    type: string
+                BenefitApplicationDetailValues:
+                    type: array
+                    items:
+                        type: string
+                BenefitApplicationDetailIndicator:
+                    type: boolean
