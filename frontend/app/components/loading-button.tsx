@@ -1,5 +1,3 @@
-import { forwardRef } from 'react';
-
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import type { FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 
@@ -14,7 +12,7 @@ export interface LoadingButtonProps extends ButtonProps {
   loadingPosition?: 'end' | 'start';
 }
 
-const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(({ children, endIcon, endIconProps, disabled = false, loading = false, loadingIcon, loadingIconProps, loadingPosition = 'end', startIcon, startIconProps, ...props }, ref) => {
+export function LoadingButton({ children, endIcon, endIconProps, disabled = false, loading = false, loadingIcon, loadingIconProps, loadingPosition = 'end', startIcon, startIconProps, ...props }: LoadingButtonProps) {
   const resolvedLoadingIconProps = {
     icon: loadingIcon ?? faSpinner,
     spin: true,
@@ -28,14 +26,10 @@ const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(({ child
   const resolvedEndIcon = isLoadingAtEndPosition ? resolvedLoadingIconProps : { icon: endIcon, ...(endIconProps ?? {}) };
 
   return (
-    <Button ref={ref} disabled={disabled || loading} {...props}>
+    <Button disabled={disabled || loading} {...props}>
       {resolvedStartIcon.icon && <ButtonStartIcon {...resolvedStartIcon} icon={resolvedStartIcon.icon} />}
       <span>{children}</span>
       {resolvedEndIcon.icon && <ButtonEndIcon {...resolvedEndIcon} icon={resolvedEndIcon.icon} />}
     </Button>
   );
-});
-
-LoadingButton.displayName = 'LoadingButton';
-
-export { LoadingButton };
+}
