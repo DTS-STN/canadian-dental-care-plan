@@ -123,12 +123,12 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
         <Progress value={52} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('apply:optional-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
             <p className="mb-4">{t('apply-adult-child:phone-number.help-message')}</p>
+            <p className="mb-4 italic">{t('apply:optional-label')}</p>
             <div className="grid items-end gap-6">
               <InputPhoneField
                 id="phone-number"
