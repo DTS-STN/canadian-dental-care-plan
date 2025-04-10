@@ -22,7 +22,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.index,
-  pageTitleI18nKey: 'protected-apply:terms-and-conditions.page-title',
+  pageTitleI18nKey: 'protected-apply:terms-and-conditions.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
