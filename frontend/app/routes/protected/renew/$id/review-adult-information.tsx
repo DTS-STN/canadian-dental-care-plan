@@ -52,6 +52,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -200,6 +202,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-adult-information', { userId: idToken.sub });
 
+  instrumentationService.countHttpStatus('protected.renew.review-adult-information', 200);
+
   return {
     id: state.id,
     userInfo,
@@ -215,6 +219,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -222,6 +228,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearProtectedRenewState({ params, request, session });
+    instrumentationService.countHttpStatus('protected.renew.review-adult-information', 302);
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
@@ -229,6 +236,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const state = loadProtectedRenewState({ params, request, session });
+
+  instrumentationService.countHttpStatus('protected.renew.review-adult-information', 302);
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {

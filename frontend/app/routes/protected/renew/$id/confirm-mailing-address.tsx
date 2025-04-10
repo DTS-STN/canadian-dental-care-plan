@@ -49,6 +49,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -64,6 +66,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-mailing-address', { userId: idToken.sub });
 
+  instrumentationService.countHttpStatus('protected.renew.confirm-mailing-address', 200);
+
   return {
     meta,
     defaultState: {
@@ -76,6 +80,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   const locale = getLocale(request);
@@ -101,6 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!validatedResult.success) {
+    instrumentationService.countHttpStatus('protected.renew.confirm-mailing-address', 400);
     return data({ errors: validatedResult.errors }, { status: 400 });
   }
 
@@ -134,6 +141,7 @@ export async function action({ context: { appContainer, session }, params, reque
     const idToken: IdToken = session.get('idToken');
     appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-mailing-address', { userId: idToken.sub });
 
+    instrumentationService.countHttpStatus('protected.renew.confirm-mailing-address', 302);
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
 
@@ -161,6 +169,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (addressCorrectionResult.status === 'not-correct') {
+    instrumentationService.countHttpStatus('protected.renew.confirm-mailing-address.address-invalid', 200);
     return {
       invalidAddress: formattedMailingAddress,
       status: 'address-invalid',
@@ -169,6 +178,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (addressCorrectionResult.status === 'corrected') {
     const provinceTerritoryState = provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
+    instrumentationService.countHttpStatus('protected.renew.confirm-mailing-address.address-suggestion', 200);
     return {
       enteredAddress: formattedMailingAddress,
       status: 'address-suggestion',
@@ -195,6 +205,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
+  instrumentationService.countHttpStatus('protected.renew.confirm-mailing-address', 302);
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }
 

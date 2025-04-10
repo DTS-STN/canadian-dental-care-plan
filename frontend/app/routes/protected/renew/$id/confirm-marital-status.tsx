@@ -1,7 +1,7 @@
 import type { ChangeEventHandler } from 'react';
 import { useMemo, useState } from 'react';
 
-import { redirect, useFetcher } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -49,12 +49,15 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, request, session });
 
   if (!isInvitationToApplyClient(state.clientApplication) && !state.editMode) {
+    instrumentationService.countHttpStatus('protected.renew.confirm-marital-status', 404);
     throw new Response('Not Found', { status: 404 });
   }
 
@@ -75,6 +78,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-marital-status', { userId: idToken.sub });
 
+  instrumentationService.countHttpStatus('protected.renew.confirm-marital-status', 200);
+
   return {
     defaultState: {
       maritalStatus: state.maritalStatus ?? (isInvitationToApplyClient(state.clientApplication) ? undefined : state.clientApplication.applicantInformation.maritalStatus),
@@ -87,6 +92,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -143,12 +150,16 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedPartnerInformation = partnerInformationSchema.safeParse(partnerInformationData);
 
   if (!parsedMaritalStatus.success || (renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
-    return {
-      errors: {
-        ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
-        ...(parsedMaritalStatus.success && renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(parsedPartnerInformation.error.flatten()) : {}),
+    instrumentationService.countHttpStatus('protected.renew.confirm-marital-status', 400);
+    return data(
+      {
+        errors: {
+          ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
+          ...(parsedMaritalStatus.success && renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(parsedPartnerInformation.error.flatten()) : {}),
+        },
       },
-    };
+      { status: 400 },
+    );
   }
 
   saveProtectedRenewState({
@@ -160,6 +171,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-marital-status', { userId: idToken.sub });
+
+  instrumentationService.countHttpStatus('protected.renew.confirm-marital-status', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
