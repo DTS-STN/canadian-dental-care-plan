@@ -200,7 +200,7 @@ export const routes = [
           {
             id: 'protected/apply/$id/adult-child/review-adult-information',
             file: 'routes/protected/apply/$id/adult-child/review-adult-information.tsx',
-            paths: { en: '/:lang/protected/apply/:id/adult-child/review-adult-information', fr: '/:lang/protege//demander/:id/adulte-enfant/revue-renseignements-adulte' },
+            paths: { en: '/:lang/protected/apply/:id/adult-child/review-adult-information', fr: '/:lang/protege/demander/:id/adulte-enfant/revue-renseignements-adulte' },
           },
           {
             id: 'protected/apply/$id/adult-child/review-child-information',
