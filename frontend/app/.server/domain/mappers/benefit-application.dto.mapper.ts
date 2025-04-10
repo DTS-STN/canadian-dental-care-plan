@@ -33,14 +33,28 @@ interface ToEmailAddressArgs {
 export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDtoMapper {
   private readonly serverConfig: Pick<
     ServerConfig,
-    'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'COMMUNICATION_METHOD_GC_DIGITAL_ID' | 'COMMUNICATION_METHOD_MAIL_ID' | 'COMMUNICATION_METHOD_EMAIL_ID'
+    | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
+    | 'APPLICANT_CATEGORY_CODE_FAMILY'
+    | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
+    | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
+    | 'COMMUNICATION_METHOD_MAIL_ID'
+    | 'COMMUNICATION_METHOD_EMAIL_ID'
+    | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
+    | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
   >;
 
   constructor(
     @inject(TYPES.configs.ServerConfig)
     serverConfig: Pick<
       ServerConfig,
-      'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'COMMUNICATION_METHOD_GC_DIGITAL_ID' | 'COMMUNICATION_METHOD_MAIL_ID' | 'COMMUNICATION_METHOD_EMAIL_ID'
+      | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
+      | 'APPLICANT_CATEGORY_CODE_FAMILY'
+      | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
+      | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
+      | 'COMMUNICATION_METHOD_MAIL_ID'
+      | 'COMMUNICATION_METHOD_EMAIL_ID'
+      | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
+      | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
     >,
   ) {
     this.serverConfig = serverConfig;
@@ -57,6 +71,8 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
   private toBenefitApplicationRequestEntity(benefitApplication: BenefitApplicationDto, isProtectedRoute: boolean): BenefitApplicationRequestEntity {
     const { applicantInformation, applicationYearId, children, communicationPreferences, contactInformation, dateOfBirth, dentalBenefits, dentalInsurance, livingIndependently, partnerInformation, termsAndConditions, typeOfApplication } =
       benefitApplication;
+
+    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC } = this.serverConfig;
     return {
       BenefitApplication: {
         Applicant: {
@@ -114,7 +130,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           ReferenceDataName: 'New',
         },
         BenefitApplicationChannelCode: {
-          ReferenceDataID: isProtectedRoute ? '775170004' : '775170001', // PP's static values for "MSCA" and "Online"
+          ReferenceDataID: isProtectedRoute ? BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED : BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC,
         },
         BenefitApplicationYear: {
           BenefitApplicationYearIdentification: [
