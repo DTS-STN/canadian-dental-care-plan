@@ -155,6 +155,64 @@ export const routes = [
             paths: { en: '/:lang/protected/apply/:id/adult-child/home-address', fr: '/:lang/protege/demander/:id/adulte-enfant/adresse-domicile' },
           },
           {
+            id: 'protected/apply/$id/adult-child/children/index',
+            file: 'routes/protected/apply/$id/adult-child/children/index.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/children', fr: '/:lang/protege/demander/:id/adulte-enfant/enfants' },
+          },
+          {
+            file: 'routes/protected/apply/$id/adult-child/children/$childId/layout.tsx',
+            children: [
+              {
+                id: 'protected/apply/$id/adult-child/children/$childId/information',
+                file: 'routes/protected/apply/$id/adult-child/children/$childId/information.tsx',
+                paths: { en: '/:lang/protected/apply/:id/adult-child/children/:childId/information', fr: '/:lang/protege/demander/:id/adulte-enfant/enfants/:childId/information' },
+              },
+              {
+                id: 'protected/apply/$id/adult-child/children/$childId/dental-insurance',
+                file: 'routes/protected/apply/$id/adult-child/children/$childId/dental-insurance.tsx',
+                paths: { en: '/:lang/protected/apply/:id/adult-child/children/:childId/dental-insurance', fr: '/:lang/protege/demander/:id/adulte-enfant/enfants/:childId/assurance-dentaire' },
+              },
+              {
+                id: 'protected/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits',
+                file: 'routes/protected/apply/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits.tsx',
+                paths: {
+                  en: '/:lang/protected/apply/:id/adult-child/children/:childId/confirm-federal-provincial-territorial-benefits',
+                  fr: '/:lang/protege/demander/:id/adulte-enfant/enfants/:childId/confirmer-prestations-dentaires-federales-provinciales-territoriales',
+                },
+              },
+              {
+                id: 'protected/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits',
+                file: 'routes/protected/apply/$id/adult-child/children/$childId/federal-provincial-territorial-benefits.tsx',
+                paths: { en: '/:lang/protected/apply/:id/adult-child/children/:childId/federal-provincial-territorial-benefits', fr: '/:lang/protege/demander/:id/adulte-enfant/enfants/:childId/prestations-dentaires-federales-provinciales-territoriales' },
+              },
+              {
+                id: 'protected/apply/$id/adult-child/children/$childId/parent-or-guardian',
+                file: 'routes/protected/apply/$id/adult-child/children/$childId/parent-or-guardian.tsx',
+                paths: { en: '/:lang/protected/apply/:id/adult-child/children/:childId/parent-or-guardian', fr: '/:lang/protege/demander/:id/adulte-enfant/enfants/:childId/parent-ou-tuteur' },
+              },
+              {
+                id: 'protected/apply/$id/adult-child/children/$childId/cannot-apply-child',
+                file: 'routes/protected/apply/$id/adult-child/children/$childId/cannot-apply-child.tsx',
+                paths: { en: '/:lang/protected/apply/:id/adult-child/children/:childId/cannot-apply-child', fr: '/:lang/protege/demander/:id/adulte-enfant/enfants/:childId/pas-demande-enfant' },
+              },
+            ],
+          },
+          {
+            id: 'protected/apply/$id/adult-child/review-adult-information',
+            file: 'routes/protected/apply/$id/adult-child/review-adult-information.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/review-adult-information', fr: '/:lang/protege/demander/:id/adulte-enfant/revue-renseignements-adulte' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/review-child-information',
+            file: 'routes/protected/apply/$id/adult-child/review-child-information.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/review-child-information', fr: '/:lang/protege/demander/:id/adulte-enfant/revue-renseignements-enfant' },
+          },
+          {
+            id: 'protected/apply/$id/adult-child/exit-application',
+            file: 'routes/protected/apply/$id/adult-child/exit-application.tsx',
+            paths: { en: '/:lang/protected/apply/:id/adult-child/exit-application', fr: '/:lang/protege/demander/:id/adulte-enfant/quitter-demande' },
+          },
+          {
             id: 'protected/apply/$id/adult-child/confirmation',
             file: 'routes/protected/apply/$id/adult-child/confirmation.tsx',
             paths: { en: '/:lang/protected/apply/:id/adult-child/confirmation', fr: '/:lang/protege/demander/:id/adulte-enfant/confirmation' },
