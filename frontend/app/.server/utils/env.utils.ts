@@ -55,6 +55,10 @@ const serverEnv = clientEnvSchema.extend({
   APPLICANT_CATEGORY_CODE_FAMILY: z.string().trim().min(1).default("775170001"),
   APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: z.string().trim().min(1).default("775170002"),
 
+  // benefit application channel codes
+  BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC: z.string().trim().min(1).default("775170001"),
+  BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED: z.string().trim().min(1).default("775170004"),
+
   // province/territory lookup identifiers
   ALBERTA_PROVINCE_ID: z.string().trim().min(1).default("3b17d494-35b3-eb11-8236-0022486d8d5f"),
   BRITISH_COLUMBIA_PROVINCE_ID: z.string().trim().min(1).default("9c440baa-35b3-eb11-8236-0022486d8d5f"),
