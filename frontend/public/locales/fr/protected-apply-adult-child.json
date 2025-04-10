@@ -277,7 +277,7 @@
       "select-one": "Choisissez une option",
       "federal-benefits": {
         "title": "Prestations fédérales",
-        "legend": "Est-ce que {{childName}} bénéficie d'une assurance dentaire dans le cadre d'un programme social offert par un programme fédéral?",
+        "legend": "Est-ce que {{childName}} bénéficie d'autres prestations pour soins dentaires dans le cadre d'un programme social fédéral autre que le Régime canadien de soins dentaires?",
         "option-yes": "<strong>Oui</strong>, cet enfant bénéficie de prestations dentaires <strong>fédérales</strong>",
         "option-no": "<strong>Non</strong>, cet enfant ne bénéficie pas de prestations dentaires <strong>fédérales</strong>",
         "social-programs": {
@@ -286,7 +286,7 @@
       },
       "provincial-territorial-benefits": {
         "title": "Prestations provinciales ou territoriales",
-        "legend": "Est-ce que {{childName}} bénéficie d'une assurance dentaire dans le cadre d'un programme social offert par votre province ou territoire?",
+        "legend": "Est-ce que {{childName}} bénéficie d'autres prestations pour soins dentaires dans le cadre d'un programme social provincial ou territorial autre que le Régime canadien de soins dentaires?",
         "option-yes": "<strong>Oui</strong>, cet enfant bénéficie de prestations dentaires <strong>provinciales ou territoriales</strong>",
         "option-no": "<strong>Non</strong>, cet enfant ne bénéficie pas de prestations dentaires <strong>provinciales ou territoriales</strong>",
         "social-programs": {
