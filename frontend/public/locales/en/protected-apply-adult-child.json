@@ -627,6 +627,7 @@
     "goc-comm-pref-title": "Government of Canada communication preference",
     "sun-life-comm-pref-change": "Change Sun Life communication",
     "goc-comm-pref-change": "Change Government of Canada communication",
+    "preferred-notification-method-email": "By email",
     "preferred-notification-method-msca": "Digitally through My Service Canada Account (MSCA)",
     "preferred-notification-method-mail": "By mail",
     "lang-pref-title": "Language preference",
