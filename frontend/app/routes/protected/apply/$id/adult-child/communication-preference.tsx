@@ -176,7 +176,6 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               errorMessage={errors?.preferredMethod}
               required
             />
-
             <InputRadios
               id="preferred-notification-method"
               name="preferredNotificationMethod"
