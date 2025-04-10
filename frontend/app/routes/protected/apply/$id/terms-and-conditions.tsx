@@ -74,13 +74,13 @@ export async function action({ context: { appContainer, session }, request, para
       if (val.doNotConsent) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply:terms-and-conditions.checkboxes.error-message.consent-required'), path: ['doNotConsent'] });
       }
-      if (!val.acknowledgeTerms) {
+      if (!val.doNotConsent && !val.acknowledgeTerms) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required'), path: ['acknowledgeTerms'] });
       }
-      if (!val.acknowledgePrivacy) {
+      if (!val.doNotConsent && !val.acknowledgePrivacy) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required'), path: ['acknowledgePrivacy'] });
       }
-      if (!val.shareData) {
+      if (!val.doNotConsent && !val.shareData) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply:terms-and-conditions.checkboxes.error-message.share-data-required'), path: ['shareData'] });
       }
     })
