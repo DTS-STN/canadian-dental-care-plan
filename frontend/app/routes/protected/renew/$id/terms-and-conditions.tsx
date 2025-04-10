@@ -33,6 +33,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -44,10 +46,13 @@ export async function loader({ context: { appContainer, session }, request, para
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.terms-and-conditions', { userId: idToken.sub });
 
+  instrumentationService.countHttpStatus('protected.renew.terms-and-conditions', 200);
   return { meta };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -64,6 +69,7 @@ export async function action({ context: { appContainer, session }, request, para
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.terms-and-conditions', { userId: idToken.sub });
 
+  instrumentationService.countHttpStatus('protected.renew.terms-and-conditions', 302);
   return redirect(getPathById('protected/renew/$id/tax-filing', params));
 }
 

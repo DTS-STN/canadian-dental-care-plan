@@ -38,6 +38,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -48,6 +50,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-phone', { userId: idToken.sub });
+
+  instrumentationService.countHttpStatus('protected.renew.confirm-phone', 200);
 
   return {
     id: state.id,
@@ -60,6 +64,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -86,6 +92,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('protected.renew.confirm-phone', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -99,6 +106,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-phone', { userId: idToken.sub });
 
+  instrumentationService.countHttpStatus('protected.renew.confirm-phone', 302);
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }
 
@@ -115,52 +123,50 @@ export default function ProtectedRenewConfirmPhone({ loaderData, params }: Route
   });
 
   return (
-    <>
-      <div className="max-w-prose">
-        <p className="mb-4 italic">{t('renew:all-optional-label')}</p>
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="mb-6">
-            <div className="grid items-end gap-6">
-              <InputPhoneField
-                id="phone-number"
-                name="phoneNumber"
-                type="tel"
-                inputMode="tel"
-                className="w-full"
-                autoComplete="tel"
-                defaultValue={defaultState.phoneNumber ?? ''}
-                errorMessage={errors?.phoneNumber}
-                label={t('protected-renew:confirm-phone.phone-number')}
-                maxLength={100}
-                aria-describedby="adding-phone"
-              />
-              <InputPhoneField
-                id="phone-number-alt"
-                name="phoneNumberAlt"
-                type="tel"
-                inputMode="tel"
-                className="w-full"
-                autoComplete="tel"
-                defaultValue={defaultState.phoneNumberAlt ?? ''}
-                errorMessage={errors?.phoneNumberAlt}
-                label={t('protected-renew:confirm-phone.phone-number-alt')}
-                maxLength={100}
-                aria-describedby="adding-phone"
-              />
-            </div>
+    <div className="max-w-prose">
+      <p className="mb-4 italic">{t('renew:all-optional-label')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <div className="mb-6">
+          <div className="grid items-end gap-6">
+            <InputPhoneField
+              id="phone-number"
+              name="phoneNumber"
+              type="tel"
+              inputMode="tel"
+              className="w-full"
+              autoComplete="tel"
+              defaultValue={defaultState.phoneNumber ?? ''}
+              errorMessage={errors?.phoneNumber}
+              label={t('protected-renew:confirm-phone.phone-number')}
+              maxLength={100}
+              aria-describedby="adding-phone"
+            />
+            <InputPhoneField
+              id="phone-number-alt"
+              name="phoneNumberAlt"
+              type="tel"
+              inputMode="tel"
+              className="w-full"
+              autoComplete="tel"
+              defaultValue={defaultState.phoneNumberAlt ?? ''}
+              errorMessage={errors?.phoneNumberAlt}
+              label={t('protected-renew:confirm-phone.phone-number-alt')}
+              maxLength={100}
+              aria-describedby="adding-phone"
+            />
           </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Phone Number click">
-              {t('protected-renew:confirm-phone.save-btn')}
-            </Button>
-            <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Phone Number click">
-              {t('protected-renew:confirm-phone.cancel-btn')}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </div>
-    </>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Phone Number click">
+            {t('protected-renew:confirm-phone.save-btn')}
+          </Button>
+          <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Phone Number click">
+            {t('protected-renew:confirm-phone.cancel-btn')}
+          </ButtonLink>
+        </div>
+      </fetcher.Form>
+    </div>
   );
 }

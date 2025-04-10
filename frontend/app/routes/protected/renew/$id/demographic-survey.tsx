@@ -46,6 +46,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateFeatureEnabled('demographic-survey');
@@ -72,6 +74,8 @@ export async function loader({ context: { appContainer, session }, request, para
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.demographic-survey', { userId: idToken.sub });
 
+  instrumentationService.countHttpStatus('protected.renew.demographic-survey', 200);
+
   return {
     meta,
     indigenousStatuses,
@@ -87,6 +91,8 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -139,6 +145,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('protected.renew.demographic-survey', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -155,6 +162,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.demographic-survey', { userId: idToken.sub });
+
+  instrumentationService.countHttpStatus('protected.renew.demographic-survey', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
@@ -229,83 +238,81 @@ export default function ProtectedDemographicSurveyQuestions({ loaderData, params
   }, [defaultState?.genderStatus, genderStatuses]);
 
   return (
-    <>
-      <div className="max-w-prose">
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="mb-8 space-y-6">
-            <p>{t('protected-renew:demographic-survey.improve-cdcp')}</p>
-            <p>{t('protected-renew:demographic-survey.confidential')}</p>
-            <p>{t('protected-renew:demographic-survey.impact-enrollment')}</p>
-            <Button name="_action" value={FORM_ACTION.save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Prefer not to answer - Voluntary demographic questions click">
-              {t('protected-renew:demographic-survey.prefer-not-to-answer-btn')}
-            </Button>
-            <p className="mb-4 italic">{t('renew:all-questions-optional-label')}</p>
-            <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('protected-renew:demographic-survey.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
-            <InputRadios
-              id="disability-status"
-              name="disabilityStatus"
-              legend={t('protected-renew:demographic-survey.disability-status')}
-              options={disabilityStatusOptions}
-              errorMessage={errors?.disabilityStatus}
-              required
-              helpMessagePrimary={t('protected-renew:demographic-survey.disability-help-message')}
-            />
-            <InputCheckboxes id="ethnic-groups" name="ethnicGroups" legend={t('protected-renew:demographic-survey.ethnic-groups')} options={ethnicGroupOptions} errorMessage={errors?.ethnicGroups} required />
-            <InputRadios id="location-born-status" name="locationBornStatus" legend={t('protected-renew:demographic-survey.location-born-status')} options={locationBornStatusOptions} errorMessage={errors?.locationBornStatus} required />
-            <InputRadios
-              id="gender-status"
-              name="genderStatus"
-              legend={t('protected-renew:demographic-survey.gender-status')}
-              options={genderStatusOptions}
-              errorMessage={errors?.genderStatus}
-              required
-              helpMessagePrimary={t('protected-renew:demographic-survey.gender-help-message')}
-            />
+    <div className="max-w-prose">
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <div className="mb-8 space-y-6">
+          <p>{t('protected-renew:demographic-survey.improve-cdcp')}</p>
+          <p>{t('protected-renew:demographic-survey.confidential')}</p>
+          <p>{t('protected-renew:demographic-survey.impact-enrollment')}</p>
+          <Button name="_action" value={FORM_ACTION.save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Prefer not to answer - Voluntary demographic questions click">
+            {t('protected-renew:demographic-survey.prefer-not-to-answer-btn')}
+          </Button>
+          <p className="mb-4 italic">{t('renew:all-questions-optional-label')}</p>
+          <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('protected-renew:demographic-survey.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
+          <InputRadios
+            id="disability-status"
+            name="disabilityStatus"
+            legend={t('protected-renew:demographic-survey.disability-status')}
+            options={disabilityStatusOptions}
+            errorMessage={errors?.disabilityStatus}
+            required
+            helpMessagePrimary={t('protected-renew:demographic-survey.disability-help-message')}
+          />
+          <InputCheckboxes id="ethnic-groups" name="ethnicGroups" legend={t('protected-renew:demographic-survey.ethnic-groups')} options={ethnicGroupOptions} errorMessage={errors?.ethnicGroups} required />
+          <InputRadios id="location-born-status" name="locationBornStatus" legend={t('protected-renew:demographic-survey.location-born-status')} options={locationBornStatusOptions} errorMessage={errors?.locationBornStatus} required />
+          <InputRadios
+            id="gender-status"
+            name="genderStatus"
+            legend={t('protected-renew:demographic-survey.gender-status')}
+            options={genderStatusOptions}
+            errorMessage={errors?.genderStatus}
+            required
+            helpMessagePrimary={t('protected-renew:demographic-survey.gender-help-message')}
+          />
+        </div>
+        {editMode ? (
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <LoadingButton id="save-button" variant="primary" name="_action" value={FORM_ACTION.continue} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Voluntary demographic questions click">
+              {t('protected-renew:demographic-survey.save-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              routeId="protected/renew/$id/review-adult-information"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Voluntary demographic questions click"
+            >
+              {t('protected-renew:demographic-survey.cancel-btn')}
+            </ButtonLink>
           </div>
-          {editMode ? (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <LoadingButton id="save-button" variant="primary" name="_action" value={FORM_ACTION.continue} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Voluntary demographic questions click">
-                {t('protected-renew:demographic-survey.save-btn')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="protected/renew/$id/review-adult-information"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Voluntary demographic questions click"
-              >
-                {t('protected-renew:demographic-survey.cancel-btn')}
-              </ButtonLink>
-            </div>
-          ) : (
-            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton
-                id="continue-button"
-                name="_action"
-                value={FORM_ACTION.continue}
-                variant="primary"
-                loading={isSubmitting}
-                endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Voluntary demographic questions click"
-              >
-                {t('protected-renew:demographic-survey.continue-btn')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="protected/renew/$id/dental-insurance"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Voluntary demographic questions click"
-              >
-                {t('protected-renew:demographic-survey.back-btn')}
-              </ButtonLink>
-            </div>
-          )}
-        </fetcher.Form>
-      </div>
-    </>
+        ) : (
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton
+              id="continue-button"
+              name="_action"
+              value={FORM_ACTION.continue}
+              variant="primary"
+              loading={isSubmitting}
+              endIcon={faChevronRight}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Voluntary demographic questions click"
+            >
+              {t('protected-renew:demographic-survey.continue-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              routeId="protected/renew/$id/dental-insurance"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Voluntary demographic questions click"
+            >
+              {t('protected-renew:demographic-survey.back-btn')}
+            </ButtonLink>
+          </div>
+        )}
+      </fetcher.Form>
+    </div>
   );
 }
