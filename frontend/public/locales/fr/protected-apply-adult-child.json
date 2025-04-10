@@ -473,7 +473,7 @@
     "select-one": "Choisissez une option",
     "federal-benefits": {
       "title": "Prestations fédérales",
-      "legend": "Bénéficiez-vous d'une assurance dentaire dans le cadre d'un programme social offert par un programme fédéral?",
+      "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social fédéral autre que le Régime canadien de soins dentaires?",
       "option-yes": "<strong>Oui</strong>, je bénéficie de prestations <strong>fédérales</strong> pour soins dentaires.",
       "option-no": "<strong>Non</strong>, je ne bénéficie pas de prestations <strong>fédérales</strong> pour soins dentaires.",
       "social-programs": {
@@ -482,7 +482,7 @@
     },
     "provincial-territorial-benefits": {
       "title": "Assurances provinciales ou territoriales",
-      "legend": "Bénéficiez-vous d'une assurance dentaire dans le cadre d'un programme social offert par votre province ou territoire?",
+      "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social provincial ou territorial autre que le Régime canadien de soins dentaires?",
       "option-yes": "<strong>Oui</strong>, je bénéficie de prestations <strong>provinciales ou territoriales</strong> pour soins dentaires.",
       "option-no": "<strong>Non</strong>, je ne bénéficie pas de prestations <strong>provinciales ou territoriales</strong> pour soins dentaires.",
       "social-programs": {
