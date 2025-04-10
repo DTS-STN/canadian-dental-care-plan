@@ -9,6 +9,7 @@ import gcwebEn from '~/../public/locales/en/gcweb.json';
 import lettersEn from '~/../public/locales/en/letters.json';
 import protectedApplyAdultChildEn from '~/../public/locales/en/protected-apply-adult-child.json';
 import protectedApplyAdultEn from '~/../public/locales/en/protected-apply-adult.json';
+import protectedApplyChildEn from '~/../public/locales/en/protected-apply-child.json';
 import protectedApplyEn from '~/../public/locales/en/protected-apply.json';
 import protectedRenewEn from '~/../public/locales/en/protected-renew.json';
 import renewAdultChildEn from '~/../public/locales/en/renew-adult-child.json';
@@ -30,6 +31,7 @@ import gcwebFr from '~/../public/locales/fr/gcweb.json';
 import lettersFr from '~/../public/locales/fr/letters.json';
 import protectedApplyAdultChildFr from '~/../public/locales/fr/protected-apply-adult-child.json';
 import protectedApplyAdultFr from '~/../public/locales/fr/protected-apply-adult.json';
+import protectedApplyChildFr from '~/../public/locales/fr/protected-apply-child.json';
 import protectedApplyFr from '~/../public/locales/fr/protected-apply.json';
 import protectedRenewFr from '~/../public/locales/fr/protected-renew.json';
 import renewAdultChildFr from '~/../public/locales/fr/renew-adult-child.json';
@@ -56,6 +58,7 @@ const i18nResourcesEn = {
   letters: lettersEn,
   'protected-apply': protectedApplyEn,
   'protected-apply-adult-child': protectedApplyAdultChildEn,
+  'protected-apply-child': protectedApplyChildEn,
   'protected-renew': protectedRenewEn,
   'renew-adult-child': renewAdultChildEn,
   'renew-child': renewChildEn,
@@ -80,6 +83,7 @@ const i18nResourcesFr = {
   letters: lettersFr,
   'protected-apply': protectedApplyFr,
   'protected-apply-adult-child': protectedApplyAdultChildFr,
+  'protected-apply-child': protectedApplyChildFr,
   'protected-renew': protectedRenewFr,
   'renew-adult-child': renewAdultChildFr,
   'renew-child': renewChildFr,
