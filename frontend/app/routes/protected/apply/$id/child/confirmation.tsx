@@ -19,7 +19,6 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
-import { useFeature } from '~/root';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -178,13 +177,10 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowConfirm({ loaderData, params }: Route.ComponentProps) {
-  const viewLettersEnabled = useFeature('view-letters-online-application');
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo } = loaderData;
 
-  const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
-  const mscaLinkChecker = <InlineLink to={t('confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-apply-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
@@ -227,22 +223,6 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
         </p>
         <p className="mt-4">{t('confirm.use-code')}</p>
-      </section>
-      <section>
-        <h2 className="font-lato text-3xl font-bold">{viewLettersEnabled ? t('confirm.register-msca-title-featured') : t('confirm.register-msca-title')}</h2>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey={viewLettersEnabled ? 'confirm.register-msca-text-featured' : 'confirm.register-msca-text'} components={{ mscaLinkAccount }} />
-        </p>
-        <p className="mt-4">{viewLettersEnabled ? t('confirm.register-msca-info-featured') : t('confirm.register-msca-info')}</p>
-        <ul className="list-disc space-y-1 pl-7">
-          <li>{t('confirm.register-msca-correspondence')}</li>
-          <li>{t('confirm.register-msca-confirm')}</li>
-        </ul>
-        {!viewLettersEnabled && (
-          <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-checker" components={{ mscaLinkChecker }} />
-          </p>
-        )}
       </section>
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.how-insurance')}</h2>
