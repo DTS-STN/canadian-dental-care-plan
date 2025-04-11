@@ -12,6 +12,7 @@ import { loadProtectedApplyChildState } from '~/.server/routes/helpers/protected
 import { getAgeCategoryFromDateString, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import type { ApplicantInformationState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -58,6 +59,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:applicant-information.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.child.applicant-information', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.applicant-information', 200);
   return { id: state.id, meta, defaultState: state.applicantInformation, editMode: state.editMode };
@@ -194,6 +198,9 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     });
   }
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.applicant-information', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.applicant-information', 302);
 

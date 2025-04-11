@@ -11,6 +11,7 @@ import { loadProtectedApplyChildState } from '~/.server/routes/helpers/protected
 import type { CommunicationPreferencesState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -51,6 +52,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const preferredLanguages = appContainer.get(TYPES.domain.services.PreferredLanguageService).listAndSortLocalizedPreferredLanguages(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:communication-preference.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.child.communication-preference', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.communication-preference', 200);
 
@@ -93,6 +97,9 @@ export async function action({ context: { appContainer, session }, params, reque
     instrumentationService.countHttpStatus('protected.apply.child.communication-preference', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.communication-preference', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.communication-preference', 302);
 

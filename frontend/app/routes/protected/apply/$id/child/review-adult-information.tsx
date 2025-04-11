@@ -17,6 +17,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyChildStateForReview } from '~/.server/routes/helpers/protected-apply-child-route-helpers';
 import { clearProtectedApplyState, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -118,6 +119,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const benefitApplicationStateMapper = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper);
   const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyChildStateToBenefitApplicationDto(state));
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.child.review-adult-information', { userId: idToken.sub });
+
   instrumentationService.countHttpStatus('protected.apply.child.review-adult-information', 200);
 
   return {
@@ -157,6 +161,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
   saveProtectedApplyState({ params, session, state: { submissionInfo } });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.review-adult-information', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.review-adult-information', 302);
   return redirect(getPathById('protected/apply/$id/child/confirmation', params));

@@ -10,6 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyChildState, loadProtectedApplySingleChildState } from '~/.server/routes/helpers/protected-apply-child-route-helpers';
 import { saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -49,6 +50,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     title: t('gcweb:meta.title.template', { title: t('protected-apply-child:children.dental-insurance.title', { childName }) }),
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-apply-child:children.dental-insurance.title', { childName: childNumber }) }),
   };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.children.dental-insurance', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.dental-insurance', 200);
   return { meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } };
@@ -90,6 +94,9 @@ export async function action({ context: { appContainer, session }, params, reque
       }),
     },
   });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.children.dental-insurance', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.dental-insurance', 302);
 

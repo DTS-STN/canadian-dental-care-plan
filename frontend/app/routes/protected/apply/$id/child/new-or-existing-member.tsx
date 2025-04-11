@@ -12,6 +12,7 @@ import type { Route } from './+types/new-or-existing-member';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyState, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -57,6 +58,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:new-or-existing-member.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.child.new-or-existing-member', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.new-or-existing-member', 200);
   return { id: state.id, meta, defaultState: state.newOrExistingMember, editMode: state.editMode };
@@ -119,6 +123,9 @@ export async function action({ context: { appContainer, session }, params, reque
     instrumentationService.countHttpStatus('protected.apply.child.new-or-existing-member', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.new-or-existing-member', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.new-or-existing-member', 302);
 
