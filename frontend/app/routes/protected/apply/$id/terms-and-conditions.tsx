@@ -9,6 +9,7 @@ import type { Route } from './+types/terms-and-conditions';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyState, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -47,6 +48,9 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply:terms-and-conditions.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.terms-and-conditions', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.terms-and-conditions', 200);
   return { defaultState: state.termsAndConditions, meta };
@@ -109,6 +113,9 @@ export async function action({ context: { appContainer, session }, request, para
       termsAndConditions: parsedDataResult.data,
     },
   });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.terms-and-conditions', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.terms-and-conditions', 302);
   return redirect(getPathById('protected/apply/$id/tax-filing', params));
