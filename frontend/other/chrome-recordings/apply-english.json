@@ -1,0 +1,273 @@
+{
+  "title": "CDCP new application flow",
+  "steps": [
+    {
+      "type": "navigate",
+      "url": "http://localhost:3000/en/apply/"
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#input-checkbox-acknowledge-terms-label"]
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-checkbox-acknowledge-terms-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-checkbox-acknowledge-privacy-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-checkbox-share-data-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#input-radio-tax-filing-2023-option-0-label"]
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-radio-tax-filing-2023-option-0-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#input-radio-type-of-application-option-0-label"]
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-radio-type-of-application-option-0-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#first-name"]
+    },
+    {
+      "type": "change",
+      "selectors": ["#first-name"],
+      "value": "John"
+    },
+    {
+      "type": "change",
+      "selectors": ["#last-name"],
+      "value": "Doe"
+    },
+    {
+      "type": "change",
+      "selectors": ["#date-picker-date-of-birth-month"],
+      "value": "01"
+    },
+    {
+      "type": "change",
+      "selectors": ["#date-picker-date-of-birth-day"],
+      "value": "01"
+    },
+    {
+      "type": "change",
+      "selectors": ["#date-picker-date-of-birth-year"],
+      "value": "2000"
+    },
+    {
+      "type": "change",
+      "selectors": ["#social-insurance-number"],
+      "value": "800 000 002"
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#input-radio-marital-status-option-0-label"]
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-radio-marital-status-option-0-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#mailing-address"]
+    },
+    {
+      "type": "change",
+      "selectors": ["#mailing-address"],
+      "value": "123 Anywhere Street"
+    },
+    {
+      "type": "change",
+      "selectors": ["#mailing-city"],
+      "value": "Any City"
+    },
+    {
+      "type": "change",
+      "selectors": ["#mailing-postal-code"],
+      "value": "A1A 1A1"
+    },
+    {
+      "type": "change",
+      "selectors": ["#mailing-province"],
+      "value": "5abc28c9-38b3-eb11-8236-0022486d8d5f"
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-checkbox-sync-addresses-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#phone-number"]
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#input-radio-preferred-language-option-0-label"]
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-radio-preferred-language-option-0-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-radio-preferred-methods-option-0-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-radio-preferred-notification-method-option-1-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#email"]
+    },
+    {
+      "type": "change",
+      "selectors": ["#email"],
+      "value": "user@example.com"
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#verification-code"]
+    },
+    {
+      "type": "change",
+      "selectors": ["#verification-code"],
+      "value": "12345"
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#input-radio-dental-insurance-option-1-label"]
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-radio-dental-insurance-option-1-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+
+    {
+      "type": "waitForElement",
+      "selectors": ["#input-radio-federal-provincial-territorial-benefits-changed-option-1-label"]
+    },
+    {
+      "type": "click",
+      "selectors": ["#input-radio-federal-provincial-territorial-benefits-changed-option-1-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
+      "type": "click",
+      "selectors": ["#continue-button"],
+      "offsetY": 1,
+      "offsetX": 1
+    }
+  ]
+}
