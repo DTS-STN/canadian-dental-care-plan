@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify';
+import { inject, injectable, optional } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -57,15 +57,15 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
   private readonly benefitRenewalRepository: BenefitRenewalRepository;
   private readonly auditService: AuditService;
   // TODO :: GjB :: the redis service is temporary.. it should be removed when HTTP429 mitigation is removed
-  private readonly redisService: RedisService;
+  private readonly redisService?: RedisService;
   private readonly serverConfig: ServerConfig;
 
   constructor(
     @inject(TYPES.domain.mappers.BenefitRenewalDtoMapper) benefitRenewalDtoMapper: BenefitRenewalDtoMapper,
     @inject(TYPES.domain.repositories.BenefitRenewalRepository) benefitRenewalRepository: BenefitRenewalRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
-    @inject(TYPES.data.services.RedisService) redisService: RedisService,
     @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig,
+    @inject(TYPES.data.services.RedisService) @optional() redisService?: RedisService,
   ) {
     this.log = createLogger('DefaultBenefitRenewalService');
     this.benefitRenewalDtoMapper = benefitRenewalDtoMapper;
@@ -85,7 +85,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
   async createAdultBenefitRenewal(adultBenefitRenewalDto: AdultBenefitRenewalDto): Promise<void> {
     this.log.trace('Creating adult benefit renewal for request [%j]', adultBenefitRenewalDto);
 
-    const killswitchEngaged = await this.redisService.get(KILLSWITCH_KEY);
+    const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
 
     if (killswitchEngaged) {
       this.log.info('Request to create benefit application is unavailable due to killswitch engagement.');
@@ -102,7 +102,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.warn('Received XAPI_TOO_MANY_REQUESTS... killswitch engage!');
-        await this.redisService.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
+        await this.redisService?.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
       }
 
       throw error;
@@ -112,7 +112,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
   async createAdultChildBenefitRenewal(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): Promise<void> {
     this.log.trace('Creating adult child benefit renewal for request [%j]', adultChildBenefitRenewalDto);
 
-    const killswitchEngaged = await this.redisService.get(KILLSWITCH_KEY);
+    const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
 
     if (killswitchEngaged) {
       this.log.info('Request to create benefit application is unavailable due to killswitch engagement.');
@@ -129,7 +129,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.warn('Received XAPI_TOO_MANY_REQUESTS... killswitch engage!');
-        await this.redisService.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
+        await this.redisService?.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
       }
 
       throw error;
@@ -139,7 +139,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
   async createItaBenefitRenewal(itaBenefitRenewalDto: ItaBenefitRenewalDto): Promise<void> {
     this.log.trace('Creating ITA benefit renewal for request [%j]', itaBenefitRenewalDto);
 
-    const killswitchEngaged = await this.redisService.get(KILLSWITCH_KEY);
+    const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
 
     if (killswitchEngaged) {
       this.log.info('Request to create benefit application is unavailable due to killswitch engagement.');
@@ -156,7 +156,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.warn('Received XAPI_TOO_MANY_REQUESTS... killswitch engage!');
-        await this.redisService.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
+        await this.redisService?.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
       }
 
       throw error;
@@ -166,7 +166,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
   async createChildBenefitRenewal(childBenefitRenewalDto: ChildBenefitRenewalDto): Promise<void> {
     this.log.trace('Creating child benefit renewal for request [%j]', childBenefitRenewalDto);
 
-    const killswitchEngaged = await this.redisService.get(KILLSWITCH_KEY);
+    const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
 
     if (killswitchEngaged) {
       this.log.info('Request to create benefit application is unavailable due to killswitch engagement.');
@@ -183,7 +183,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.warn('Received XAPI_TOO_MANY_REQUESTS... killswitch engage!');
-        await this.redisService.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
+        await this.redisService?.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
       }
 
       throw error;
@@ -193,7 +193,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
   async createProtectedBenefitRenewal(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): Promise<void> {
     this.log.trace('Creating protected benefit renewal for request [%j]', protectedBenefitRenewalDto);
 
-    const killswitchEngaged = await this.redisService.get(KILLSWITCH_KEY);
+    const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
 
     if (killswitchEngaged) {
       this.log.info('Request to create benefit application is unavailable due to killswitch engagement.');
@@ -210,7 +210,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.warn('Received XAPI_TOO_MANY_REQUESTS... killswitch engage!');
-        await this.redisService.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
+        await this.redisService?.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
       }
 
       throw error;

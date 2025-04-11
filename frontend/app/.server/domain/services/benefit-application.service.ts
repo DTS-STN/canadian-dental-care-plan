@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify';
+import { inject, injectable, optional } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -38,15 +38,15 @@ export class DefaultBenefitApplicationService implements BenefitApplicationServi
   private readonly benefitApplicationRepository: BenefitApplicationRepository;
   private readonly auditService: AuditService;
   // TODO :: GjB :: the redis service is temporary.. it should be removed when HTTP429 mitigation is removed
-  private readonly redisService: RedisService;
+  private readonly redisService?: RedisService;
   private readonly serverConfig: ServerConfig;
 
   constructor(
     @inject(TYPES.domain.mappers.BenefitApplicationDtoMapper) benefitApplicationDtoMapper: BenefitApplicationDtoMapper,
     @inject(TYPES.domain.repositories.BenefitApplicationRepository) benefitApplicationRepository: BenefitApplicationRepository,
     @inject(TYPES.domain.services.AuditService) auditService: AuditService,
-    @inject(TYPES.data.services.RedisService) redisService: RedisService,
     @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig,
+    @inject(TYPES.data.services.RedisService) @optional() redisService?: RedisService,
   ) {
     this.log = createLogger('DefaultBenefitApplicationService');
     this.benefitApplicationDtoMapper = benefitApplicationDtoMapper;
@@ -66,7 +66,7 @@ export class DefaultBenefitApplicationService implements BenefitApplicationServi
   async createBenefitApplication(benefitApplicationRequestDto: BenefitApplicationDto): Promise<string> {
     this.log.trace('Creating benefit application for request [%j]', benefitApplicationRequestDto);
 
-    const killswitchEngaged = await this.redisService.get(KILLSWITCH_KEY);
+    const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
 
     if (killswitchEngaged) {
       this.log.info('Request to create benefit application is unavailable due to killswitch engagement.');
@@ -85,7 +85,7 @@ export class DefaultBenefitApplicationService implements BenefitApplicationServi
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.warn('Received XAPI_TOO_MANY_REQUESTS... killswitch engage!');
-        await this.redisService.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
+        await this.redisService?.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
       }
 
       throw error;
