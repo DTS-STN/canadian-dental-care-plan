@@ -15,6 +15,7 @@ import type { PartnerInformationState } from '~/.server/routes/helpers/apply-rou
 import { loadProtectedApplyAdultChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
 import { applicantInformationStateHasPartner, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -71,6 +72,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:marital-status.page-title') }) };
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.marital-status', 200);
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.marital-status', { userId: idToken.sub });
+
   return { isNewUser, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
 }
 
@@ -162,6 +167,9 @@ export async function action({ context: { appContainer, session }, params, reque
       partnerInformation: parsedPartnerInformation.data,
     },
   });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.marital-status', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.marital-status', 302);
 

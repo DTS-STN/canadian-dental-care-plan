@@ -11,6 +11,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
 import { saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -50,6 +51,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
   const backToEmail = state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail';
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.dental-insurance', { userId: idToken.sub });
+
   instrumentationService.countHttpStatus('protected.apply.adult-child.dental-insurance', 200);
   return { id: state, meta, defaultState: state.dentalInsurance, backToEmail, editMode: state.editMode };
 }
@@ -81,6 +85,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   saveProtectedApplyState({ params, session, state: { dentalInsurance: parsedDataResult.data.dentalInsurance } });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.dental-insurance', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.dental-insurance', 302);
 

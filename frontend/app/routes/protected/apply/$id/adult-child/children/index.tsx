@@ -15,6 +15,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
 import { getChildrenState, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -74,6 +75,9 @@ export async function loader({ context: { appContainer, session }, params, reque
         ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
         : undefined;
 
+    const idToken: IdToken = session.get('idToken');
+    appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.children.index', { userId: idToken.sub });
+
     instrumentationService.countHttpStatus('protected.apply.adult-child.children', 200);
 
     return {
@@ -103,6 +107,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.children', 302);
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.children.index', { userId: idToken.sub });
 
   if (formAction === FORM_ACTION.add) {
     const childId = randomUUID();

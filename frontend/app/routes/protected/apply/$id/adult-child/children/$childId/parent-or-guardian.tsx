@@ -10,6 +10,7 @@ import type { Route } from './+types/parent-or-guardian';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultSingleChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -41,6 +42,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:children.parent-or-guardian.page-title') }) };
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.children.parent-guardian', { userId: idToken.sub });
+
   instrumentationService.countHttpStatus('protected.apply.adult-child.children.parent-or-guardian', 200);
   return { meta };
 }
@@ -54,6 +58,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
 
   securityHandler.validateCsrfToken({ formData, session });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.children.parent-guardian', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.children.parent-or-guardian', 302);
   return redirect(getPathById('protected/apply/$id/adult-child/children/index', params));

@@ -13,6 +13,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
 import { saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -64,6 +65,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:address.mailing-address.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.mailing-address', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.mailing-address', 200);
 
@@ -208,6 +212,9 @@ export async function action({ context: { appContainer, session }, params, reque
       ...(homeAddress && { homeAddress }),
     },
   });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.mailing-address', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.mailing-address', 302);
 
