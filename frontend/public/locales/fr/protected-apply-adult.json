@@ -9,7 +9,7 @@
     "dob": "Date de naissance",
     "single-legal-name": "Si vous utilisez un seul nom légal",
     "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
-    "dtc-question": "Avez-vous un certificat valide pour le crédit d'impôt pour personnes handicapées (CIPH) auprès de l'Agence du revenu du Canada pour {{taxYear}}?",
+    "dtc-question": "Avez-vous un certificat valide pour le crédit d'impôt pour personnes handicapées (CIPH) auprès de l'Agence du revenu du Canada?",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
