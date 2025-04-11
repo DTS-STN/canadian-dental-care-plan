@@ -79,7 +79,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-apply-child:children.dental-benefits.title', { childName: childNumber }) }),
   };
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.children.federal-provincial-territorial-benefits', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.children.federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.federal-provincial-territorial-benefits', 200);
 
@@ -216,7 +216,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.children.federal-provincial-territorial-benefits', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.children.federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.federal-provincial-territorial-benefits', 302);
 

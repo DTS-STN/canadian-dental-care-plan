@@ -58,7 +58,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.children.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.children.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.confirm-federal-provincial-territorial-benefits', 200);
 
@@ -123,7 +123,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.children.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.children.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.confirm-federal-provincial-territorial-benefits', 302);
 

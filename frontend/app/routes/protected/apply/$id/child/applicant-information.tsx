@@ -61,7 +61,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:applicant-information.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.child.applicant-information', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.applicant-information', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.applicant-information', 200);
   return { id: state.id, meta, defaultState: state.applicantInformation, editMode: state.editMode };

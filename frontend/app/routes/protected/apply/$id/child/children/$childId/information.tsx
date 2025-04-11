@@ -70,7 +70,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.children.information', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.children.information', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.information', 200);
   return { meta, defaultState: state.information, childName, editMode: state.editMode, isNew: state.isNew };
@@ -224,7 +224,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.children.information', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.children.information', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.information', 302);
 

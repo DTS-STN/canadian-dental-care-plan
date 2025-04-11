@@ -85,7 +85,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       : undefined;
 
     const idToken: IdToken = session.get('idToken');
-    appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.child.review-child-information', { userId: idToken.sub });
+    appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.review-child-information', { userId: idToken.sub });
 
     instrumentationService.countHttpStatus('protected.apply.child.review-child-information', 200);
 
