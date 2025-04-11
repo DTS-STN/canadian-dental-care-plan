@@ -153,7 +153,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedApplyChildStateForReview({ params, request, session });
   const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyChildStateToBenefitApplicationDto(state);
-  const confirmationCode = await appContainer.get(TYPES.domain.services.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
+  const confirmationCode = await appContainer.get(TYPES.domain.services.BenefitApplicationService).createProtectedBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
   saveProtectedApplyState({ params, session, state: { submissionInfo } });
