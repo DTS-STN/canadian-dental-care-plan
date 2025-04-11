@@ -176,14 +176,14 @@ export async function action({ context: { appContainer, session }, params, reque
 
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearProtectedApplyState({ params, session });
-    instrumentationService.countHttpStatus('protected-.apply.adult.review-information', 302);
+    instrumentationService.countHttpStatus('protected.apply.adult.review-information', 302);
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveProtectedApplyState({ params, session, state: { editMode: false } });
-    instrumentationService.countHttpStatus('protected-.apply.adult.review-information', 302);
+    instrumentationService.countHttpStatus('protected.apply.adult.review-information', 302);
     if (state.hasFederalProvincialTerritorialBenefits) {
       return redirect(getPathById('protected/apply/$id/adult/federal-provincial-territorial-benefits', params));
     }
@@ -196,7 +196,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveProtectedApplyState({ params, session, state: { submissionInfo } });
 
-  instrumentationService.countHttpStatus('protected-.apply.adult.review-information', 302);
+  instrumentationService.countHttpStatus('protected.apply.adult.review-information', 302);
   return redirect(getPathById('protected/apply/$id/adult/confirmation', params));
 }
 
