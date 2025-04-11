@@ -63,7 +63,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult:verify-email.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.adult.verify-email', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult.verify-email', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult.verify-email', 200);
 

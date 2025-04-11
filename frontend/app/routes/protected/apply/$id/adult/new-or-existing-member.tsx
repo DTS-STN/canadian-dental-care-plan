@@ -64,7 +64,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.adult.new-or-existing-member', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult.new-or-existing-member', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult.new-or-existing-member', 200);
   return { id: state.id, meta, defaultState: state.newOrExistingMember, userAgeCategory: ageCategory, editMode: state.editMode };

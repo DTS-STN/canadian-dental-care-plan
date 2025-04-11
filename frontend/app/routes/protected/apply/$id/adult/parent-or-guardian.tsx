@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const ageCategory = state.editModeApplicantInformation?.dateOfBirth ? getAgeCategoryFromDateString(state.editModeApplicantInformation.dateOfBirth) : getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.adult.parent-or-guardian', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult.parent-or-guardian', { userId: idToken.sub });
 
   if (ageCategory !== 'children' && ageCategory !== 'youth') {
     instrumentationService.countHttpStatus('protected.apply.adult.parent-or-guardian', 302);
