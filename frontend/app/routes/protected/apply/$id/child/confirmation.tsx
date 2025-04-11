@@ -10,6 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyChildState } from '~/.server/routes/helpers/protected-apply-child-route-helpers';
 import { clearProtectedApplyState, getChildrenState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -139,6 +140,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:confirm.page-title') }) };
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.child.confirmation', { userId: idToken.sub });
+
   instrumentationService.countHttpStatus('protected.apply.child.confirmation', 200);
 
   return {
@@ -165,6 +169,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   loadProtectedApplyChildState({ params, request, session });
   clearProtectedApplyState({ params, session });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.confirmation', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.confirmation', 302);
   return redirect(t('confirm.exit-link'));

@@ -15,6 +15,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyChildState } from '~/.server/routes/helpers/protected-apply-child-route-helpers';
 import { getChildrenState, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -69,6 +70,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     instrumentationService.countHttpStatus('protected.apply.child.children', 200);
     return { ...child, dentalBenefits: { ...child.dentalBenefits, federalSocialProgram: federalGovernmentInsurancePlanService?.name, provincialTerritorialSocialProgram: provincialTerritorialSocialProgram?.name } };
   });
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.children.index', { userId: idToken.sub });
 
   return { meta, children, editMode: state.editMode };
 }

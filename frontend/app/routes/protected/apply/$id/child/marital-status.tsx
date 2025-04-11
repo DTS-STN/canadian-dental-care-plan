@@ -14,6 +14,7 @@ import { loadProtectedApplyChildState } from '~/.server/routes/helpers/protected
 import type { PartnerInformationState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { applicantInformationStateHasPartner, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -61,6 +62,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:marital-status.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.child.marital-status', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.marital-status', 200);
   return { defaultState: { newUser: state.newOrExistingMember?.isNewOrExistingMember, maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
@@ -153,6 +157,9 @@ export async function action({ context: { appContainer, session }, params, reque
       partnerInformation: parsedPartnerInformation.data,
     },
   });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.marital-status', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.marital-status', 302);
 
