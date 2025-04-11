@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply:application-delegate.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.apply.application-delegate', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.application-delegate', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply/application-delegate', 200);
   return { id, meta };
@@ -63,7 +63,7 @@ export async function action({ context: { appContainer, session }, params, reque
   clearProtectedApplyState({ params, session });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.apply.application-delegate', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.application-delegate', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.application-delegate', 302);
   return redirect(t('protected-apply:application-delegate.return-btn-link'));

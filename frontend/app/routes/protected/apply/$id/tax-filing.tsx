@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply:tax-filing.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.apply.tax-filing', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.tax-filing', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.tax-filing', 200);
   return { id: state.id, meta, defaultState: state.hasFiledTaxes, taxYear: state.applicationYear.taxYear };
@@ -77,7 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
   saveProtectedApplyState({ params, session, state: { hasFiledTaxes: parsedDataResult.data.hasFiledTaxes === TAX_FILING_OPTION.yes } });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.apply.tax-filing', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.tax-filing', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.tax-filing', 302);
 

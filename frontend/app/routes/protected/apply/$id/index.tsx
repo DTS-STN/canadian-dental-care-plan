@@ -17,7 +17,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   saveProtectedApplyState({ params, session, state: {} });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.apply.index', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.index', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply', 302);
   return redirect(getPathById('protected/apply/$id/terms-and-conditions', params));

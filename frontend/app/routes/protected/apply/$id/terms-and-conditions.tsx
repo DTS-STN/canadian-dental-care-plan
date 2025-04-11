@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply:terms-and-conditions.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.apply.terms-and-conditions', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.terms-and-conditions', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.terms-and-conditions', 200);
   return { defaultState: state.termsAndConditions, meta };
@@ -115,7 +115,7 @@ export async function action({ context: { appContainer, session }, request, para
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.apply.terms-and-conditions', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.terms-and-conditions', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.terms-and-conditions', 302);
   return redirect(getPathById('protected/apply/$id/tax-filing', params));
