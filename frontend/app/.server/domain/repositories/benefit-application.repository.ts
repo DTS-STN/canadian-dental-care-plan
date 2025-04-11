@@ -4,8 +4,11 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { BenefitApplicationRequestEntity, BenefitApplicationResponseEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
-import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
+import { createLogger } from '~/.server/logging';
+import { HttpStatusCodes } from '~/constants/http-status-codes';
+import { AppError } from '~/errors/app-error';
+import { ErrorCodes } from '~/errors/error-codes';
 
 export interface BenefitApplicationRepository {
   /**
@@ -55,6 +58,12 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
         url: url,
         responseBody: await response.text(),
       });
+
+      if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
+        // TODO ::: GjB ::: this throw is to facilitate enabling the application kill switch -- it should be removed once the killswitch functionality is removed
+        throw new AppError('Failed to POST to /benefit-application. Status: 429, Status Text: Too Many Requests', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
+      }
+
       throw new Error(`Failed to 'POST' for benefit application. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
