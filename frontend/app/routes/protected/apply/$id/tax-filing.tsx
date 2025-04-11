@@ -112,10 +112,17 @@ export default function ProtectedApplyFlowTaxFiling({ loaderData, params }: Rout
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Tax filing click">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Continue - Tax filing click">
               {t('protected-apply:tax-filing.continue-btn')}
             </LoadingButton>
-            <ButtonLink id="back-button" routeId="protected/apply/$id/terms-and-conditions" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Tax filing click">
+            <ButtonLink
+              id="back-button"
+              routeId="protected/apply/$id/terms-and-conditions"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Back - Tax filing click"
+            >
               {t('protected-apply:tax-filing.back-btn')}
             </ButtonLink>
           </div>

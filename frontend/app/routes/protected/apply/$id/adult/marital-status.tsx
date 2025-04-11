@@ -232,10 +232,10 @@ export default function ProtectedApplyAdultMaritalStatus({ loaderData, params }:
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Marital status click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Save - Marital status click">
                 {t('protected-apply-adult:marital-status.save-btn')}
               </Button>
-              <LoadingButton id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Marital status click">
+              <LoadingButton id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Marital status click">
                 {t('protected-apply-adult:marital-status.cancel-btn')}
               </LoadingButton>
             </div>
@@ -248,7 +248,7 @@ export default function ProtectedApplyAdultMaritalStatus({ loaderData, params }:
                 variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Marital status click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Continue - Marital status click"
               >
                 {t('protected-apply-adult:marital-status.continue-btn')}
               </LoadingButton>
@@ -258,7 +258,7 @@ export default function ProtectedApplyAdultMaritalStatus({ loaderData, params }:
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Marital status click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Back - Marital status click"
               >
                 {t('protected-apply-adult:marital-status.back-btn')}
               </ButtonLink>

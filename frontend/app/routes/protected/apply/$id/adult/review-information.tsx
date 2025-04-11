@@ -473,11 +473,11 @@ export default function ProtectedReviewInformation({ loaderData, params }: Route
             variant="green"
             disabled={isSubmitting}
             loading={isSubmitting && submitAction === FORM_ACTION.submit}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Submit - Review your information click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Submit - Review your information click"
           >
             {t('protected-apply-adult:review-information.submit-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Review your information click">
+          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Exit - Review your information click">
             {t('protected-apply-adult:review-information.back-button')}
           </Button>
         </fetcher.Form>

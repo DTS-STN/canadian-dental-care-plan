@@ -160,16 +160,22 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Phone Number click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Phone Number click">
                 {t('protected-apply-child:phone-number.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="protected/apply/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Phone Number click">
+              <ButtonLink
+                id="cancel-button"
+                routeId="protected/apply/$id/child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Phone Number click"
+              >
                 {t('protected-apply-child:phone-number.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Phone number click">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Continue - Phone number click">
                 {t('protected-apply-child:phone-number.continue-btn')}
               </LoadingButton>
               <ButtonLink
@@ -178,7 +184,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Phone number click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Back - Phone number click"
               >
                 {t('protected-apply-child:phone-number.back-btn')}
               </ButtonLink>

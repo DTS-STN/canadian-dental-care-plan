@@ -334,7 +334,7 @@ export default function ApplyAdultChildHomeAddress({ loaderData, params }: Route
                     name="_action"
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Save - Home address click"
                   >
                     {t('protected-apply-adult-child:address.save-btn')}
                   </LoadingButton>
@@ -348,7 +348,7 @@ export default function ApplyAdultChildHomeAddress({ loaderData, params }: Route
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Home address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Cancel - Home address click">
                 {t('protected-apply-adult-child:address.cancel-btn')}
               </Button>
             </div>
@@ -365,7 +365,7 @@ export default function ApplyAdultChildHomeAddress({ loaderData, params }: Route
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Continue - Home address click"
                   >
                     {t('protected-apply-adult-child:address.continue')}
                   </LoadingButton>
@@ -385,7 +385,7 @@ export default function ApplyAdultChildHomeAddress({ loaderData, params }: Route
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Home address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Back - Home address click"
               >
                 {t('protected-apply-adult-child:address.back')}
               </ButtonLink>

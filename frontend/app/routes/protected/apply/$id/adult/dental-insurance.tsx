@@ -176,7 +176,7 @@ export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, p
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Access to other dental insurance click">
+              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Save - Access to other dental insurance click">
                 {t('dental-insurance.button.save-btn')}
               </Button>
               <ButtonLink
@@ -184,14 +184,14 @@ export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, p
                 routeId="protected/apply/$id/adult/review-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Access to other dental insurance click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Access to other dental insurance click"
               >
                 {t('dental-insurance.button.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Access to other dental insurance click">
+              <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Continue - Access to other dental insurance click">
                 {t('dental-insurance.button.continue')}
               </LoadingButton>
               <ButtonLink
@@ -200,7 +200,7 @@ export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, p
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Access to other dental insurance click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Back - Access to other dental insurance click"
               >
                 {t('dental-insurance.button.back')}
               </ButtonLink>

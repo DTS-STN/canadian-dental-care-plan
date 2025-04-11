@@ -157,10 +157,10 @@ export default function ProtectedApplyFlowLivingIndependently({ loaderData, para
           />
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Living independently click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Save - Living independently click">
                 {t('protected-apply-adult:living-independently.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Living independently click">
+              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Living independently click">
                 {t('protected-apply-adult:living-independently.cancel-btn')}
               </Button>
             </div>
@@ -173,7 +173,7 @@ export default function ProtectedApplyFlowLivingIndependently({ loaderData, para
                 value={FORM_ACTION.continue}
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Living independently click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Continue - Living independently click"
               >
                 {t('protected-apply-adult:living-independently.continue-btn')}
               </LoadingButton>
@@ -183,7 +183,7 @@ export default function ProtectedApplyFlowLivingIndependently({ loaderData, para
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Living independently click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Back - Living independently click"
               >
                 {t('protected-apply-adult:living-independently.back-btn')}
               </ButtonLink>

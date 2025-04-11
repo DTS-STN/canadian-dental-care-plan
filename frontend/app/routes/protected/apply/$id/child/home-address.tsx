@@ -329,7 +329,7 @@ export default function ApplyChildHomeAddress({ loaderData, params }: Route.Comp
                     name="_action"
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Home address click"
                   >
                     {t('protected-apply-child:address.save-btn')}
                   </LoadingButton>
@@ -343,7 +343,7 @@ export default function ApplyChildHomeAddress({ loaderData, params }: Route.Comp
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Home address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Home address click">
                 {t('protected-apply-child:address.cancel-btn')}
               </Button>
             </div>
@@ -360,7 +360,7 @@ export default function ApplyChildHomeAddress({ loaderData, params }: Route.Comp
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Continue - Home address click"
                   >
                     {t('protected-apply-child:address.continue')}
                   </LoadingButton>
@@ -380,7 +380,7 @@ export default function ApplyChildHomeAddress({ loaderData, params }: Route.Comp
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Home address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Back - Home address click"
               >
                 {t('protected-apply-child:address.back')}
               </ButtonLink>

@@ -248,11 +248,17 @@ export default function ProtectedApplyTermsAndConditions({ loaderData, params }:
             id="continue-button"
             loading={isSubmitting}
             endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Terms and Conditions click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Continue - Terms and Conditions click"
           >
             {t('protected-apply:terms-and-conditions.apply.continue-button')}
           </LoadingButton>
-          <ButtonLink id="back-button" to={t('protected-apply:terms-and-conditions.apply.link')} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click">
+          <ButtonLink
+            id="back-button"
+            to={t('protected-apply:terms-and-conditions.apply.link')}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Back - Terms and Conditions click"
+          >
             {t('protected-apply:terms-and-conditions.apply.back-button')}
           </ButtonLink>
         </div>

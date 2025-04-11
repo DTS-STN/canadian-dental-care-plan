@@ -363,7 +363,7 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
                     name="_action"
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Mailing address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Mailing address click"
                   >
                     {t('protected-apply-child:address.save-btn')}
                   </LoadingButton>
@@ -377,7 +377,7 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Mailing address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Mailing address click">
                 {t('protected-apply-child:address.cancel-btn')}
               </Button>
             </div>
@@ -394,7 +394,7 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Mailing address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Continue - Mailing address click"
                   >
                     {t('protected-apply-child:address.continue')}
                   </LoadingButton>
@@ -415,7 +415,7 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Mailing address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Back - Mailing address click"
               >
                 {t('protected-apply-child:address.back')}
               </ButtonLink>

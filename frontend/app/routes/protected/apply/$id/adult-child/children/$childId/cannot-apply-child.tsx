@@ -105,11 +105,18 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - You cannot apply for your child click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Back - You cannot apply for your child click"
         >
           {t('protected-apply-adult-child:eligibility.cannot-apply-child.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Proceed - You cannot apply for your child click">
+        <LoadingButton
+          type="submit"
+          variant="primary"
+          id="proceed-button"
+          loading={isSubmitting}
+          endIcon={faChevronRight}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Proceed - You cannot apply for your child click"
+        >
           {t('protected-apply-adult-child:eligibility.cannot-apply-child.proceed-btn')}
         </LoadingButton>
       </fetcher.Form>

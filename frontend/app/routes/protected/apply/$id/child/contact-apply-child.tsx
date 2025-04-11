@@ -98,11 +98,11 @@ export default function ApplyFlowContactApplyChild({ loaderData, params }: Route
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Contact us to apply for your child click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Back - Contact us to apply for your child click"
         >
           {t('protected-apply-child:contact-apply-child.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Contact us to apply for your child click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Exit - Contact us to apply for your child click">
           {t('protected-apply-child:contact-apply-child.return-btn')}
         </LoadingButton>
       </fetcher.Form>

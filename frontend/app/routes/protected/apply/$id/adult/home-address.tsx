@@ -332,7 +332,7 @@ export default function ProtectedApplyAdultHomeAddress({ loaderData, params }: R
                     name="_action"
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Save - Home address click"
                   >
                     {t('protected-apply-adult:address.save-btn')}
                   </LoadingButton>
@@ -346,7 +346,7 @@ export default function ProtectedApplyAdultHomeAddress({ loaderData, params }: R
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Home address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Home address click">
                 {t('protected-apply-adult:address.cancel-btn')}
               </Button>
             </div>
@@ -363,7 +363,7 @@ export default function ProtectedApplyAdultHomeAddress({ loaderData, params }: R
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Home address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Continue - Home address click"
                   >
                     {t('protected-apply-adult:address.continue')}
                   </LoadingButton>
@@ -383,7 +383,7 @@ export default function ProtectedApplyAdultHomeAddress({ loaderData, params }: R
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Home address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Back - Home address click"
               >
                 {t('protected-apply-adult:address.back')}
               </ButtonLink>

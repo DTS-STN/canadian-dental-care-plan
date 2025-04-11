@@ -276,11 +276,11 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             disabled={isSubmitting}
             loading={isSubmitting && submitAction === FORM_ACTION.submit}
             endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Review child information click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Continue - Review child information click"
           >
             {t('protected-apply-child:review-child-information.continue-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Review child information click">
+          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Exit - Review child information click">
             {t('protected-apply-child:review-child-information.back-button')}
           </Button>
         </fetcher.Form>

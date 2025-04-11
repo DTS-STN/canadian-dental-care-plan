@@ -194,7 +194,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Communication preference click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Communication preference click">
                 {t('protected-apply-child:communication-preference.save-btn')}
               </Button>
               <ButtonLink
@@ -202,14 +202,14 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
                 routeId="protected/apply/$id/child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Communication preference click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Communication preference click"
               >
                 {t('protected-apply-child:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Communication click">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Continue - Communication click">
                 {t('protected-apply-child:communication-preference.continue')}
               </LoadingButton>
               <ButtonLink
@@ -218,7 +218,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Communication click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Back - Communication click"
               >
                 {t('protected-apply-child:communication-preference.back')}
               </ButtonLink>
