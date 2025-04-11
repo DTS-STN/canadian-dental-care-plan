@@ -88,6 +88,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.children.index', { userId: idToken.sub });
+
   instrumentationService.countHttpStatus('protected.apply.child.children', 302);
 
   if (formAction === FORM_ACTION.add) {
