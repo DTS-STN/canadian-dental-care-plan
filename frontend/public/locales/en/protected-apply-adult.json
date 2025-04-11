@@ -9,7 +9,7 @@
     "dob": "Date of birth",
     "single-legal-name": "If you have one legal name",
     "name-instructions": "If using one legal name, please enter that name in BOTH the first name and last name fields.",
-    "dtc-question": "Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for {{taxYear}}?",
+    "dtc-question": "Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency?",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",

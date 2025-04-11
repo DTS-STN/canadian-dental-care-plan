@@ -73,7 +73,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.applicant-information', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.applicant-information', 200);
-  return { defaultState: state.applicantInformation, taxYear: state.applicationYear.taxYear, editMode: state.editMode, id: state.id, meta };
+  return { defaultState: state.applicantInformation, editMode: state.editMode, id: state.id, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -267,7 +267,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowApplicationInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { currentLanguage } = useCurrentLanguage();
-  const { defaultState, taxYear, editMode } = loaderData;
+  const { defaultState, editMode } = loaderData;
   const applyEligibilityEnabled = useFeature('apply-eligibility');
 
   const fetcher = useFetcher<typeof action>();
@@ -297,15 +297,15 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
         <Progress value={28} size="lg" label={t('protected-apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4">{t('applicant-information.form-instructions-sin')}</p>
-        <p className="mb-6">{t('applicant-information.form-instructions-info')}</p>
-        <p className="mb-4 italic">{t('protected-apply:required-label')}</p>
         <ErrorAlert>
           <h2 className="mb-2 font-bold">{t('applicant-information.error-message.alert.heading')}</h2>
           <p className="mb-2">{t('applicant-information.error-message.alert.detail')}</p>
           <p className="mb-2">{t('applicant-information.error-message.alert.applyDate', { startDate: fetcherEligibilityStartDate })}</p>
         </ErrorAlert>
         <errorSummary.ErrorSummary />
+        <p className="mb-4">{t('applicant-information.form-instructions-sin')}</p>
+        <p className="mb-6">{t('applicant-information.form-instructions-info')}</p>
+        <p className="mb-4 italic">{t('protected-apply:required-label')}</p>
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
@@ -350,7 +350,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               <InputRadios
                 id="dtc"
                 name="dtc"
-                legend={t('applicant-information.dtc-question', { taxYear })}
+                legend={t('applicant-information.dtc-question')}
                 options={[
                   {
                     value: DTC_OPTION.yes,
