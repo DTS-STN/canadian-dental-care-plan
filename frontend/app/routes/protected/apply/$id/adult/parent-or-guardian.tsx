@@ -12,6 +12,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultState } from '~/.server/routes/helpers/protected-apply-adult-route-helpers';
 import { clearProtectedApplyState, getAgeCategoryFromDateString } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -46,6 +47,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
   const ageCategory = state.editModeApplicantInformation?.dateOfBirth ? getAgeCategoryFromDateString(state.editModeApplicantInformation.dateOfBirth) : getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.adult.parent-or-guardian', { userId: idToken.sub });
+
   if (ageCategory !== 'children' && ageCategory !== 'youth') {
     instrumentationService.countHttpStatus('protected.apply.adult.parent-or-guardian', 302);
     return redirect(getPathById('protected/apply/$id/adult/applicant-information', params));
@@ -67,6 +71,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearProtectedApplyState({ params, session });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.parent-or-guardian', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult.parent-or-guardian', 302);
   return redirect(t('protected-apply-adult:parent-or-guardian.return-btn-link'));

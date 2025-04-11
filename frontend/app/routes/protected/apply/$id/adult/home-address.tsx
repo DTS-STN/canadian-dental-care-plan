@@ -13,6 +13,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultState } from '~/.server/routes/helpers/protected-apply-adult-route-helpers';
 import { saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -64,6 +65,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult:address.home-address.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.adult.home-address', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult.home-address', 200);
   return {
@@ -186,6 +190,10 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   saveProtectedApplyState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.home-address', { userId: idToken.sub });
+
   instrumentationService.countHttpStatus('protected.apply.adult.home-address', 302);
 
   if (state.editMode) {
