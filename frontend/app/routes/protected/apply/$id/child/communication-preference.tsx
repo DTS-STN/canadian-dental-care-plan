@@ -127,7 +127,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLinkAccount = <InlineLink to={t('communication-preference.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
