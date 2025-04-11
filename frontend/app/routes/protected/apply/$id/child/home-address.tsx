@@ -51,6 +51,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplyChildState({ params, request, session });
@@ -75,6 +77,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
@@ -85,7 +89,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
   const countryService = appContainer.get(TYPES.domain.services.CountryService);
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
 
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadProtectedApplyChildState({ params, request, session });
