@@ -16,6 +16,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultChildStateForReview } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
 import { clearProtectedApplyState, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
@@ -115,6 +116,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     };
   });
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.review-child-information', { userId: idToken.sub });
+
   instrumentationService.countHttpStatus('protected.apply.adult-child.review-child-information', 200);
 
   return { id: state.id, children, meta, payload };
@@ -147,6 +151,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
   saveProtectedApplyState({ params, session, state: { submissionInfo } });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.review-child-information', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.review-child-information', 302);
   return redirect(getPathById('protected/apply/$id/adult-child/confirmation', params));

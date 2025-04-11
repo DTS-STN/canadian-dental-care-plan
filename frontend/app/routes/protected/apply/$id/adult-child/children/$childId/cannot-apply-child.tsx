@@ -10,6 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultChildState, loadProtectedApplyAdultSingleChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -51,6 +52,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const isBeforeCoverageStartDate = currentDate < coverageStartDate;
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.children.cannot-apply-child', { userId: idToken.sub });
+
   instrumentationService.countHttpStatus('protected.apply.adult-child.children.cannot-apply-child', 200);
   return { meta, isBeforeCoverageStartDate, coverageStartDate: formattedDate };
 }
@@ -64,6 +68,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
 
   securityHandler.validateCsrfToken({ formData, session });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.children.cannot-apply-child', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.children.cannot-apply-child', 302);
   return redirect(getPathById('protected/apply/$id/adult-child/children/index', params));
