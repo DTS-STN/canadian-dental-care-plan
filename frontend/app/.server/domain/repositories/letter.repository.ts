@@ -4,9 +4,12 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { LetterEntity, PdfEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
-import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
+import { createLogger } from '~/.server/logging';
 import getPdfByLetterIdJson from '~/.server/resources/cct/get-pdf-by-letter-id.json';
+import { HttpStatusCodes } from '~/constants/http-status-codes';
+import { AppError } from '~/errors/app-error';
+import { ErrorCodes } from '~/errors/error-codes';
 
 /**
  * A repository that provides access to letters.
@@ -89,6 +92,11 @@ export class DefaultLetterRepository implements LetterRepository {
         responseBody: await response.text(),
       });
 
+      if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
+        // TODO ::: GjB ::: this throw is to facilitate enabling the application kill switch -- it should be removed once the killswitch functionality is removed
+        throw new AppError('Failed to GET /GetDocInfoByClientId. Status: 429, Status Text: Too Many Requests', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
+      }
+
       throw new Error(`Failed to find letters. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
@@ -120,6 +128,11 @@ export class DefaultLetterRepository implements LetterRepository {
         url: url,
         responseBody: await response.text(),
       });
+
+      if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
+        // TODO ::: GjB ::: this throw is to facilitate enabling the application kill switch -- it should be removed once the killswitch functionality is removed
+        throw new AppError('Failed to GET /GetPdfByLetterId. Status: 429, Status Text: Too Many Requests', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
+      }
 
       throw new Error(`Failed to get PDF. Status: ${response.status}, Status Text: ${response.statusText}`);
     }

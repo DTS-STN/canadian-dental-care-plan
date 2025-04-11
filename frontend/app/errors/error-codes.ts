@@ -11,4 +11,5 @@ export const ErrorCodes = {
 
   // external api error codes
   XAPI_API_ERROR: 'XAPI-0001',
+  XAPI_TOO_MANY_REQUESTS: 'XAPI-0002',
 } as const;
