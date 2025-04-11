@@ -294,12 +294,17 @@
         "provincial-territorial-required": "Sélectionnez une province ou territoire"
       }
     },
+    "parent-or-guardian": {
+      "page-title": "Vous devez être le parent ou le tuteur légal",
+      "must-be": "Vous devez être un parent ou un tuteur légal.",
+      "unable-to-apply": "Vous devez être le parent ou le tuteur légal. Vous ne pouvez pas présenter de demande pour cet enfant. Vous devez être le parent ou le tuteur légal d'un enfant pour présenter une demande en son nom.",
+      "back-btn": "Retour"
+    },
     "cannot-apply-child": {
       "page-title": "Votre enfant doit présenter une demande",
       "ineligible-to-apply": "Votre enfant a 18 ans ou plus. Votre enfant doit présenter sa propre demande au Régime canadien de soins dentaires.",
       "eligibility-info": "Si votre enfant est un adulte à charge et que vous êtes son représentant légal ou son mandataire, vous devez vous adresser à un représentant de Service Canada pour présenter une demande en son nom. Vous pouvez contacter Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
-      "back-btn": "Retour",
-      "continue-btn": "Continuer"
+      "back-btn": "Retour"
     }
   },
   "communication-preference": {

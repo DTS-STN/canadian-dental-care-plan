@@ -22,7 +22,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.child.childParentOrGuardian,
   pageTitleI18nKey: 'protected-apply-child:children.parent-or-guardian.page-title',
 } as const satisfies RouteHandleData;
@@ -52,6 +52,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
   const formData = await request.formData();
 
@@ -67,7 +68,7 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.children.parent-guardian', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.parent-or-guardian', 302);
-  return redirect(t('protected-apply-child:children.parent-or-guardian.return-btn-link'));
+  return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 
 export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
@@ -100,8 +101,8 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
         >
           {t('protected-apply-child:children.parent-or-guardian.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Exit - Child parent or guardian needs to apply click">
-          {t('protected-apply-child:children.parent-or-guardian.return-btn')}
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Return to my dashboard - Child parent or guardian needs to apply click">
+          {t('protected-apply:return-dashboard')}
         </LoadingButton>
       </fetcher.Form>
     </>

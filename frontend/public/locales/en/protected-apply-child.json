@@ -294,12 +294,17 @@
         "provincial-territorial-required": "Select a province or territory"
       }
     },
+    "parent-or-guardian": {
+      "page-title": "You must be a parent or legal guardian",
+      "must-be": "You must be a parent or legal guardian.",
+      "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
+      "back-btn": "Back"
+    },
     "cannot-apply-child": {
       "page-title": "Your child must apply",
       "ineligible-to-apply": "Your child is 18 years or older. Your child must submit their own application to the Canadian Dental Care Plan.",
       "eligibility-info": "If your child is a dependant adult and you are their legal delegate or Power of Attorney, you must speak to a Service Canada representative to apply on their behalf. You can contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
-      "back-btn": "Back",
-      "continue-btn": "Continue"
+      "back-btn": "Back"
     }
   },
   "communication-preference": {
