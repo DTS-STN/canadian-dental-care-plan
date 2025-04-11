@@ -74,48 +74,58 @@ interface ToEmailAddressArgs {
 
 @injectable()
 export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
-  private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>;
+  private readonly serverConfig: Pick<
+    ServerConfig,
+    'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
+  >;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>) {
+  constructor(
+    @inject(TYPES.configs.ServerConfig)
+    serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'>,
+  ) {
     this.serverConfig = serverConfig;
   }
 
   mapAdultBenefitRenewalDtoToBenefitRenewalRequestEntity(adultBenefitRenewalDto: AdultBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(adultBenefitRenewalDto);
+    return this.toBenefitRenewalRequestEntity(adultBenefitRenewalDto, false);
   }
 
   mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(adultChildBenefitRenewalDto);
+    return this.toBenefitRenewalRequestEntity(adultChildBenefitRenewalDto, false);
   }
 
   mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(itaBenefitRenewalDto);
+    return this.toBenefitRenewalRequestEntity(itaBenefitRenewalDto, false);
   }
 
   mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(childBenefitRenewalDto: ChildBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(childBenefitRenewalDto);
+    return this.toBenefitRenewalRequestEntity(childBenefitRenewalDto, false);
   }
 
   mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(protectedBenefitRenewalDto);
+    return this.toBenefitRenewalRequestEntity(protectedBenefitRenewalDto, true);
   }
 
-  private toBenefitRenewalRequestEntity({
-    applicantInformation,
-    applicationYearId,
-    changeIndicators,
-    children,
-    communicationPreferences,
-    contactInformation,
-    dateOfBirth,
-    demographicSurvey,
-    dentalBenefits,
-    dentalInsurance,
-    disabilityTaxCredit,
-    livingIndependently,
-    partnerInformation,
-    typeOfApplication,
-  }: ToBenefitRenewalRequestEntityArgs): BenefitRenewalRequestEntity {
+  private toBenefitRenewalRequestEntity(
+    {
+      applicantInformation,
+      applicationYearId,
+      changeIndicators,
+      children,
+      communicationPreferences,
+      contactInformation,
+      dateOfBirth,
+      demographicSurvey,
+      dentalBenefits,
+      dentalInsurance,
+      disabilityTaxCredit,
+      livingIndependently,
+      partnerInformation,
+      typeOfApplication,
+    }: ToBenefitRenewalRequestEntityArgs,
+    isProtectedRoute: boolean,
+  ): BenefitRenewalRequestEntity {
+    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC } = this.serverConfig;
     return {
       BenefitApplication: {
         Applicant: {
@@ -181,7 +191,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
           ReferenceDataName: 'Renewal',
         },
         BenefitApplicationChannelCode: {
-          ReferenceDataID: '775170001', // PP's static value for "Online"
+          ReferenceDataID: isProtectedRoute ? BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED : BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC,
         },
         BenefitApplicationYear: {
           BenefitApplicationYearIdentification: [
