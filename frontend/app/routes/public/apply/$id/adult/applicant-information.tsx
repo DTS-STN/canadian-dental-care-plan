@@ -278,15 +278,15 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
         <Progress value={30} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4">{t('applicant-information.form-instructions-sin')}</p>
-        <p className="mb-6">{t('applicant-information.form-instructions-info')}</p>
-        <p className="mb-4 italic">{t('apply:required-label')}</p>
-        <ErrorAlert>
+      <ErrorAlert>
           <h2 className="mb-2 font-bold">{t('apply-adult:applicant-information.error-message.alert.heading')}</h2>
           <p className="mb-2">{t('apply-adult:applicant-information.error-message.alert.detail')}</p>
           <p className="mb-2">{t('apply-adult:applicant-information.error-message.alert.applyDate', { startDate: fetcherEligibilityStartDate })}</p>
         </ErrorAlert>
         <errorSummary.ErrorSummary />
+        <p className="mb-4">{t('applicant-information.form-instructions-sin')}</p>
+        <p className="mb-6">{t('applicant-information.form-instructions-info')}</p>
+        <p className="mb-4 italic">{t('apply:required-label')}</p>
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
