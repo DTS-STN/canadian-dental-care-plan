@@ -16,6 +16,7 @@
     "label": "Application progress"
   },
   "required-label": "Complete all fields.",
+  "return-dashboard": "Return to my dashboard",
   "optional-label": "Complete all fields unless marked as optional.",
   "terms-and-conditions": {
     "page-title": "Terms and conditions",

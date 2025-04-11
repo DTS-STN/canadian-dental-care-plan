@@ -294,14 +294,6 @@
         "provincial-territorial-required": "Select a province or territory"
       }
     },
-    "parent-or-guardian": {
-      "page-title": "You must be a parent or legal guardian",
-      "must-be": "You must be a parent or legal guardian.",
-      "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
-      "back-btn": "Back",
-      "return-btn": "Return to main page",
-      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
-    },
     "cannot-apply-child": {
       "page-title": "Your child must apply",
       "ineligible-to-apply": "Your child is 18 years or older. Your child must submit their own application to the Canadian Dental Care Plan.",
@@ -422,14 +414,12 @@
     "no": "No",
     "exit": "Exit",
     "close-application": "Close application",
-    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
     "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
     "modal": {
       "header": "Close application",
       "info": "By closing the application, you will end your session and any information entered will be cleared from your browser. Make sure you printed or save a copy of your application code.",
       "are-you-sure": "Are you sure you want to close the application?",
-      "back-btn": "Back",
-      "close-btn": "Close application"
+      "back-btn": "Back"
     }
   },
   "contact-apply-child": {
@@ -438,16 +428,14 @@
     "contact-service-canada": "Please contact Service Canada by calling <noWrap>1-833-537-4342</noWrap> or visit a <serviceCanadaOfficeLink>Service Canada Office</serviceCanadaOfficeLink>.",
     "service-canada-office-link": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=eng",
     "back-btn": "Back",
-    "return-btn": "Return to main page",
-    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+    "return-btn": "Return to main page"
   },
   "exit-application": {
     "page-title": "Exiting the application",
     "are-you-sure": "Are you sure you want to exit this application? If you click \"Exit\", the form will reset and the information will be lost.",
     "click-back": "Click \"Back\" to return to the form.",
     "back-btn": "Back",
-    "exit-btn": "Exit",
-    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+    "exit-btn": "Exit"
   },
   "review-adult-information": {
     "read-carefully": "Please review this information carefully.",

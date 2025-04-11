@@ -294,14 +294,6 @@
         "provincial-territorial-required": "Sélectionnez une province ou territoire"
       }
     },
-    "parent-or-guardian": {
-      "page-title": "Vous devez être le parent ou le tuteur légal",
-      "must-be": "Vous devez être un parent ou un tuteur légal.",
-      "unable-to-apply": "Vous devez être le parent ou le tuteur légal. Vous ne pouvez pas présenter de demande pour cet enfant. Vous devez être le parent ou le tuteur légal d'un enfant pour présenter une demande en son nom.",
-      "back-btn": "Retour",
-      "return-btn": "Procédez à faire la demande vous-même",
-      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
-    },
     "cannot-apply-child": {
       "page-title": "Votre enfant doit présenter une demande",
       "ineligible-to-apply": "Votre enfant a 18 ans ou plus. Votre enfant doit présenter sa propre demande au Régime canadien de soins dentaires.",
@@ -422,14 +414,12 @@
     "no": "Non",
     "exit": "Sortie",
     "close-application": "Fermer la demande",
-    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
     "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
     "modal": {
       "header": "Fermer la demande",
       "info": "En fermant cette demande, vous mettrez fin à votre session et les informations saisies seront effacées de votre navigateur. Assurez-vous d'avoir une copie de votre code de demande.",
       "are-you-sure": "Êtes-vous sûr de vouloir fermer la demande?",
-      "back-btn": "Retour",
-      "close-btn": "Fermer la demande"
+      "back-btn": "Retour"
     }
   },
   "contact-apply-child": {
@@ -438,16 +428,14 @@
     "contact-service-canada": "Veuillez communiquer avec Service Canada au <noWrap>1-833-537-4342<noWrap> ou vous rendre dans un <serviceCanadaOfficeLink>bureau de Service Canada</serviceCanadaOfficeLink>.",
     "service-canada-office-link": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=fra",
     "back-btn": "Retour",
-    "return-btn": "Revenir à la page principale",
-    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+    "return-btn": "Revenir à la page principale"
   },
   "exit-application": {
     "page-title": "Quitter la demande",
     "are-you-sure": "Êtes-vous certain de vouloir quitter cette demande? Si vous cliquez sur «\u00a0Quitter\u00a0», le formulaire sera réinitialisé et vos renseignements seront perdus.",
     "click-back": "Cliquez sur «\u00a0Retour\u00a0» pour retourner au formulaire.",
     "back-btn": "Retour",
-    "exit-btn": "Quitter",
-    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+    "exit-btn": "Quitter"
   },
   "review-adult-information": {
     "read-carefully": "Veuillez examiner attentivement les renseignements suivants.",

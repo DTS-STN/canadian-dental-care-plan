@@ -56,6 +56,8 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearProtectedApplyState({ params, session });
@@ -64,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.exit-application', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult.exit-application', 302);
-  return redirect(t('exit-application.exit-link'));
+  return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 
 export default function ProtectedApplyFlowTaxFiling({ loaderData, params }: Route.ComponentProps) {
@@ -91,8 +93,8 @@ export default function ProtectedApplyFlowTaxFiling({ loaderData, params }: Rout
         >
           {t('protected-apply-adult:exit-application.back-btn')}
         </ButtonLink>
-        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Exit - Exiting the application click">
-          {t('protected-apply-adult:exit-application.exit-btn')}
+        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Return to my dashboard - Exiting the application click">
+          {t('protected-apply:return-dashboard')}
         </LoadingButton>
       </fetcher.Form>
     </div>

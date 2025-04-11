@@ -428,14 +428,12 @@
     "no": "No",
     "exit": "Exit",
     "close-application": "Close application",
-    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
     "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
     "modal": {
       "header": "Close application",
       "info": "By closing the application, you will end your session and any information entered will be cleared from your browser. Make sure you printed or save a copy of your application code.",
       "are-you-sure": "Are you sure you want to close the application?",
-      "back-btn": "Back",
-      "close-btn": "Close application"
+      "back-btn": "Back"
     }
   },
   "confirm-dental-benefits": {
@@ -554,8 +552,7 @@
     "are-you-sure": "Are you sure you want to exit this application? If you click \"Exit\", the form will reset and the information will be lost.",
     "click-back": "Click \"Back\" to return to the form.",
     "back-btn": "Back",
-    "exit-btn": "Exit",
-    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+    "exit-btn": "Exit"
   },
   "living-independently": {
     "page-title": "Living independently",
@@ -578,8 +575,7 @@
     "unable-to-apply": "You are under 18 and are not able to apply for the Canadian Dental Care Plan for yourself. A parent or legal guardian must apply on your behalf.",
     "apply-for-yourself": "If you have previously applied for a child, and now want to apply for yourself, you must speak to a Service Canada representative. Contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
     "back-btn": "Back",
-    "return-btn": "Return to main page",
-    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+    "return-btn": "Return to main page"
   },
   "review-adult-information": {
     "read-carefully": "Please review this information carefully. The information provided will be used by Sun Life to create your member account.",
