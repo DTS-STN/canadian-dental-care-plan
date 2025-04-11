@@ -105,7 +105,7 @@ export async function action({ context: { appContainer, session }, params, reque
   saveProtectedApplyState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.adult.phone-number', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.phone-number', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult.phone-number', 302);
 
