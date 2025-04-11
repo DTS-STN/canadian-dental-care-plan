@@ -12,6 +12,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultState } from '~/.server/routes/helpers/protected-apply-adult-route-helpers';
 import { saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -48,6 +49,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult:email.page-title') }) };
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.adult.email', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult.email', 200);
   return {
@@ -111,6 +115,9 @@ export async function action({ context: { appContainer, session }, params, reque
       userId: 'anonymous',
     });
   }
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.email', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult.email', 302);
 

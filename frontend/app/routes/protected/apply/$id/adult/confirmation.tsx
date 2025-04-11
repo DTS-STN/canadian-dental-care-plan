@@ -10,6 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultState } from '~/.server/routes/helpers/protected-apply-adult-route-helpers';
 import { clearProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -119,6 +120,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult:confirm.page-title') }) };
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.adult.confirmation', { userId: idToken.sub });
+
   instrumentationService.countHttpStatus('protected.apply.adult.confirmation', 200);
 
   return {
@@ -145,6 +149,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   loadProtectedApplyAdultState({ params, request, session });
   clearProtectedApplyState({ params, session });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.confirmation', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult.confirmation', 302);
   return redirect(t('confirm.exit-link'));
