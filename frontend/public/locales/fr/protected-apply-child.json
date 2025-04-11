@@ -304,7 +304,8 @@
       "page-title": "Votre enfant doit présenter une demande",
       "ineligible-to-apply": "Votre enfant a 18 ans ou plus. Votre enfant doit présenter sa propre demande au Régime canadien de soins dentaires.",
       "eligibility-info": "Si votre enfant est un adulte à charge et que vous êtes son représentant légal ou son mandataire, vous devez vous adresser à un représentant de Service Canada pour présenter une demande en son nom. Vous pouvez contacter Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
-      "back-btn": "Retour"
+      "back-btn": "Retour",
+      "continue-btn": "Continuer"
     }
   },
   "communication-preference": {

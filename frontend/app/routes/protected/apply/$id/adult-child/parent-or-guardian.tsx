@@ -23,7 +23,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-adult-child', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-adult-child', 'protected-apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.adultChild.parentOrGuardian,
   pageTitleI18nKey: 'protected-apply-adult-child:parent-or-guardian.page-title',
 } as const satisfies RouteHandleData;
