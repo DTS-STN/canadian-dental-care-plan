@@ -9,7 +9,7 @@
     "build:application": "react-router build",
     "build:server": "vite build --config ./vite.server.config.ts",
     "dev": "nodemon --config nodemon.json",
-    "start": "cross-env NODE_ENV=production node --env-file-if-exists=./.env --import ./build/server/opentelemetry.server.js ./build/server/express.server.js",
+    "start": "cross-env NODE_ENV=production node --import ./build/server/opentelemetry.server.js ./build/server/express.server.js",
     "check:all": "npm run format:check && npm run lint && npm run typecheck",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
