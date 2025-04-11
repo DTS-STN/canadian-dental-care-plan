@@ -198,7 +198,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Communication click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Save - Communication click">
                 {t('protected-apply-adult-child:communication-preference.save-btn')}
               </Button>
               <ButtonLink
@@ -206,14 +206,14 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
                 routeId="protected/apply/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Communication click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Cancel - Communication click"
               >
                 {t('protected-apply-adult-child:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Communication click">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Continue - Communication click">
                 {t('protected-apply-adult-child:communication-preference.continue')}
               </LoadingButton>
               <ButtonLink
@@ -222,7 +222,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Communication click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Back - Communication click"
               >
                 {t('protected-apply-adult-child:communication-preference.back')}
               </ButtonLink>

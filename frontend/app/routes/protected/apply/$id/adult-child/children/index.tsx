@@ -225,7 +225,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                       routeId="protected/apply/$id/adult-child/children/$childId/information"
                       params={{ ...params, childId: child.id }}
                       startIcon={faEdit}
-                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Edit child - Child(ren) application click"
+                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Edit child - Child(ren) application click"
                     >
                       {t('protected-apply-adult-child:children.index.edit-child')}
                     </ButtonLink>
@@ -256,7 +256,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                               disabled={isSubmitting}
                               variant="primary"
                               size="sm"
-                              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Remove child - Child(ren) application click"
+                              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Remove child - Child(ren) application click"
                               onClick={() => setSrMessage(t('protected-apply-adult-child:children.index.removed-child', { childName }))}
                             >
                               {t('protected-apply-adult-child:children.index.modal.remove-btn')}
@@ -281,7 +281,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
             value={FORM_ACTION.add}
             disabled={isSubmitting}
             startIcon={faPlus}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Add child - Child(ren) application click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Add child - Child(ren) application click"
           >
             {children.length === 0 ? t('protected-apply-adult-child:children.index.add-child') : t('protected-apply-adult-child:children.index.add-another-child')}
           </Button>
@@ -293,7 +293,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                 routeId="protected/apply/$id/adult-child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Child(ren) application click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Save - Child(ren) application click"
                 variant="primary"
               >
                 {t('children.index.save-btn')}
@@ -303,7 +303,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                 routeId="protected/apply/$id/adult-child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Child(ren) application click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Cancel - Child(ren) application click"
               >
                 {t('children.index.cancel-btn')}
               </ButtonLink>
@@ -318,11 +318,18 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                 disabled={!hasChildren || isSubmitting}
                 loading={isSubmitting && submitAction === FORM_ACTION.continue}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Child(ren) application click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Continue - Child(ren) application click"
               >
                 {t('protected-apply-adult-child:children.index.continue-btn')}
               </LoadingButton>
-              <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child(ren) application click">
+              <Button
+                id="back-button"
+                name="_action"
+                value={FORM_ACTION.back}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Back - Child(ren) application click"
+              >
                 {t('protected-apply-adult-child:children.index.back-btn')}
               </Button>
             </div>

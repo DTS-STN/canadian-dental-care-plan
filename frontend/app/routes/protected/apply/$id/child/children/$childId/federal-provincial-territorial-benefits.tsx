@@ -385,7 +385,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                 name="_action"
                 value={FORM_ACTION.save}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Child access to other federal, provincial or territorial dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Child access to other federal, provincial or territorial dental benefits click"
               >
                 {t('protected-apply-child:children.dental-benefits.button.save-btn')}
               </Button>
@@ -394,7 +394,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                 name="_action"
                 value={FORM_ACTION.cancel}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Child access to other federal, provincial or territorial dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Child access to other federal, provincial or territorial dental benefits click"
               >
                 {t('protected-apply-child:children.dental-benefits.button.cancel-btn')}
               </LoadingButton>
@@ -408,7 +408,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                 value={FORM_ACTION.continue}
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child access to other federal, provincial or territorial dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Continue - Child access to other federal, provincial or territorial dental benefits click"
               >
                 {t('protected-apply-child:children.dental-benefits.button.continue')}
               </LoadingButton>
@@ -418,7 +418,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child access to other federal, provincial or territorial dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Back - Child access to other federal, provincial or territorial dental benefits click"
               >
                 {t('protected-apply-child:children.dental-benefits.button.back')}
               </ButtonLink>

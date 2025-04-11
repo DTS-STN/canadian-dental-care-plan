@@ -368,7 +368,7 @@ export default function ApplyAdultChildMailingAddress({ loaderData, params }: Ro
                     name="_action"
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Mailing address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Save - Mailing address click"
                   >
                     {t('protected-apply-adult-child:address.save-btn')}
                   </LoadingButton>
@@ -382,7 +382,7 @@ export default function ApplyAdultChildMailingAddress({ loaderData, params }: Ro
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Mailing address click">
+              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Cancel - Mailing address click">
                 {t('protected-apply-adult-child:address.cancel-btn')}
               </Button>
             </div>
@@ -399,7 +399,7 @@ export default function ApplyAdultChildMailingAddress({ loaderData, params }: Ro
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Mailing address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Continue - Mailing address click"
                   >
                     {t('protected-apply-adult-child:address.continue')}
                   </LoadingButton>
@@ -420,7 +420,7 @@ export default function ApplyAdultChildMailingAddress({ loaderData, params }: Ro
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Mailing address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Back - Mailing address click"
               >
                 {t('protected-apply-adult-child:address.back')}
               </ButtonLink>

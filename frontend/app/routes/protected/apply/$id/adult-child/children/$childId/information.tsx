@@ -372,7 +372,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Child information click">
+              <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Save - Child information click">
                 {t('protected-apply-adult-child:children.information.save-btn')}
               </Button>
               <ButtonLink
@@ -380,14 +380,14 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 routeId="protected/apply/$id/adult-child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Child information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Cancel - Child information click"
               >
                 {t('protected-apply-adult-child:children.information.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Child information click">
+              <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Continue - Child information click">
                 {t('protected-apply-adult-child:children.information.continue-btn')}
               </LoadingButton>
               <ButtonLink
@@ -396,7 +396,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Back - Child information click"
               >
                 {t('protected-apply-adult-child:children.information.back-btn')}
               </ButtonLink>

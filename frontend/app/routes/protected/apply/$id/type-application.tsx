@@ -147,10 +147,17 @@ export default function ProtectedApplyFlowTypeOfApplication({ loaderData, params
             errorMessage={errors?.typeOfApplication}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Type of application click">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Continue - Type of application click">
               {t('protected-apply:type-of-application.continue-btn')}
             </LoadingButton>
-            <ButtonLink id="back-button" routeId="protected/apply/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Type of application click">
+            <ButtonLink
+              id="back-button"
+              routeId="protected/apply/$id/tax-filing"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Back - Type of application click"
+            >
               {t('protected-apply:type-of-application.back-btn')}
             </ButtonLink>
           </div>

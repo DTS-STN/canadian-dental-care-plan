@@ -367,10 +367,10 @@ export default function ProtectedApplyFlowApplicationInformation({ loaderData, p
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Applicant information click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Save - Applicant information click">
                 {t('protected-apply-adult:applicant-information.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Applicant information click">
+              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Applicant information click">
                 {t('protected-apply-adult:applicant-information.cancel-btn')}
               </Button>
             </div>
@@ -383,7 +383,7 @@ export default function ProtectedApplyFlowApplicationInformation({ loaderData, p
                 variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Applicant information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Continue - Applicant information click"
               >
                 {t('protected-apply-adult:applicant-information.continue-btn')}
               </LoadingButton>
@@ -393,7 +393,7 @@ export default function ProtectedApplyFlowApplicationInformation({ loaderData, p
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Applicant information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Back - Applicant information click"
               >
                 {t('protected-apply-adult:applicant-information.back-btn')}
               </ButtonLink>

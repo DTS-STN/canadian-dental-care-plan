@@ -311,11 +311,11 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 value={FORM_ACTION.save}
                 variant="primary"
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Parent or legal guardian personal information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Parent or legal guardian personal information click"
               >
                 {t('protected-apply-child:applicant-information.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Parent or legal guardian personal information click">
+              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Parent or legal guardian personal information click">
                 {t('protected-apply-child:applicant-information.cancel-btn')}
               </Button>
             </div>
@@ -328,7 +328,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 variant="primary"
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Parent or legal guardian personal information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Continue - Parent or legal guardian personal information click"
               >
                 {t('protected-apply-child:applicant-information.continue-btn')}
               </LoadingButton>
@@ -338,7 +338,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Parent or legal guardian personal information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Back - Parent or legal guardian personal information click"
               >
                 {t('protected-apply-child:applicant-information.back-btn')}
               </ButtonLink>

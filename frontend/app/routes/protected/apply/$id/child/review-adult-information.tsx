@@ -402,11 +402,11 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
               variant="green"
               disabled={isSubmitting}
               loading={isSubmitting && submitAction === FORM_ACTION.submit}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Submit - Review adult information click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Submit - Review adult information click"
             >
               {t('protected-apply-child:review-adult-information.submit-button')}
             </LoadingButton>
-            <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Review adult information click">
+            <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Exit - Review adult information click">
               {t('protected-apply-child:review-adult-information.back-button')}
             </Button>
           </div>

@@ -378,10 +378,23 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
           </fieldset>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="save-button" name="_action" value={FORM_ACTION.save} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Child access to other dental benefits click">
+              <Button
+                variant="primary"
+                id="save-button"
+                name="_action"
+                value={FORM_ACTION.save}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Save - Child access to other dental benefits click"
+              >
                 {t('protected-apply-adult-child:children.dental-benefits.button.save-btn')}
               </Button>
-              <LoadingButton id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Child access to other dental benefits click">
+              <LoadingButton
+                id="cancel-button"
+                name="_action"
+                value={FORM_ACTION.cancel}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Cancel - Child access to other dental benefits click"
+              >
                 {t('protected-apply-adult-child:children.dental-benefits.button.cancel-btn')}
               </LoadingButton>
             </div>
@@ -394,7 +407,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                 value={FORM_ACTION.continue}
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Child access to other dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Continue - Child access to other dental benefits click"
               >
                 {t('protected-apply-adult-child:children.dental-benefits.button.continue')}
               </LoadingButton>
@@ -404,7 +417,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child access to other dental benefits click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Back - Child access to other dental benefits click"
               >
                 {t('protected-apply-adult-child:children.dental-benefits.button.back')}
               </ButtonLink>

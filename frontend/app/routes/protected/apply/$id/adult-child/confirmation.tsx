@@ -221,7 +221,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Print top - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Print top - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -414,7 +414,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Print bottom - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Print bottom - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -425,7 +425,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
           <button
             aria-expanded={undefined}
             className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Application successfully submitted click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Exit - Application successfully submitted click"
           >
             {t('confirm.close-application')}
           </button>
@@ -438,7 +438,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
           <p>{t('confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back exit modal - Application successfully submitted click">
+              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Back exit modal - Application successfully submitted click">
                 {t('confirm.modal.back-btn')}
               </Button>
             </DialogClose>
@@ -449,7 +449,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 variant="primary"
                 size="sm"
                 onClick={() => sessionStorage.removeItem('flow.state')}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Confirmation exit modal - Application successfully submitted click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Confirmation exit modal - Application successfully submitted click"
               >
                 {t('confirm.modal.close-btn')}
               </Button>

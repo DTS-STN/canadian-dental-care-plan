@@ -210,10 +210,10 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
           )}
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - New or existing member click">
+              <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - New or existing member click">
                 {t('protected-apply-child:new-or-existing-member.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - New or existing member click">
+              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - New or existing member click">
                 {t('protected-apply-child:new-or-existing-member.cancel-btn')}
               </Button>
             </div>
@@ -226,7 +226,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
                 value={FORM_ACTION.continue}
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - New or existing member click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Continue - New or existing member click"
               >
                 {t('protected-apply-child:new-or-existing-member.continue-btn')}
               </LoadingButton>
@@ -236,7 +236,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - New or existing member click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Back - New or existing member click"
               >
                 {t('protected-apply-child:new-or-existing-member.back-btn')}
               </ButtonLink>

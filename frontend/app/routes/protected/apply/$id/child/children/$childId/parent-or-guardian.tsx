@@ -89,11 +89,11 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child parent or guardian needs to apply click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Back - Child parent or guardian needs to apply click"
         >
           {t('protected-apply-child:children.parent-or-guardian.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Child parent or guardian needs to apply click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Exit - Child parent or guardian needs to apply click">
           {t('protected-apply-child:children.parent-or-guardian.return-btn')}
         </LoadingButton>
       </fetcher.Form>
