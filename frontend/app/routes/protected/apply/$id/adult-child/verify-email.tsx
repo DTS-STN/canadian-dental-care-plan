@@ -173,7 +173,7 @@ export async function action({ context: { appContainer, session }, params, reque
       });
 
       const idToken: IdToken = session.get('idToken');
-      appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.verify-email', { userId: idToken.sub });
+      appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.verify-email', { userId: idToken.sub });
 
       instrumentationService.countHttpStatus('protected.apply.adult-child.verify-email.verification-code-mismatch', 200);
       return { status: 'verification-code-mismatch' } as const;
