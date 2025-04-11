@@ -30,7 +30,7 @@ import { formatSin } from '~/utils/sin-utils';
 export const applyIdParamSchema = z.string().uuid();
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.child.confirmation,
   pageTitleI18nKey: 'protected-apply-child:confirm.page-title',
 } as const satisfies RouteHandleData;
@@ -159,6 +159,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
   const formData = await request.formData();
 
@@ -173,7 +174,7 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.confirmation', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.confirmation', 302);
-  return redirect(t('confirm.exit-link'));
+  return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 
 export default function ApplyFlowConfirm({ loaderData, params }: Route.ComponentProps) {
@@ -406,9 +407,9 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 variant="primary"
                 size="sm"
                 onClick={() => sessionStorage.removeItem('flow.state')}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Confirmation exit modal - Application successfully submitted click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Return to my dashboard - Application successfully submitted click"
               >
-                {t('confirm.modal.close-btn')}
+                {t('protected-apply:return-dashboard')}
               </Button>
             </fetcher.Form>
           </DialogFooter>

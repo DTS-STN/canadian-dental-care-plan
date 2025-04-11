@@ -68,6 +68,8 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearProtectedApplyState({ params, session });
@@ -76,7 +78,7 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.parent-or-guardian', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult.parent-or-guardian', 302);
-  return redirect(t('protected-apply-adult:parent-or-guardian.return-btn-link'));
+  return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 
 export default function ProtectedApplyFlowParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
@@ -122,8 +124,8 @@ export default function ProtectedApplyFlowParentOrGuardian({ loaderData, params 
         >
           {t('protected-apply-adult:parent-or-guardian.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Exit - Parent or guardian needs to apply click">
-          {t('protected-apply-adult:parent-or-guardian.return-btn')}
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Return to my dashboard - Parent or guardian needs to apply click">
+          {t('protected-apply:return-dashboard')}
         </LoadingButton>
       </fetcher.Form>
     </>

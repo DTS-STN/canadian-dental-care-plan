@@ -25,7 +25,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.child.contactApplyChild,
   pageTitleI18nKey: 'protected-apply-child:contact-apply-child.page-title',
 } as const satisfies RouteHandleData;
@@ -63,6 +63,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
   const formData = await request.formData();
 
@@ -74,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.contact-apply-child', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.contact-apply-child', 302);
-  return redirect(t('protected-apply-child:contact-apply-child.return-btn-link'));
+  return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 
 export default function ApplyFlowContactApplyChild({ loaderData, params }: Route.ComponentProps) {
@@ -112,8 +113,8 @@ export default function ApplyFlowContactApplyChild({ loaderData, params }: Route
         >
           {t('protected-apply-child:contact-apply-child.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Exit - Contact us to apply for your child click">
-          {t('protected-apply-child:contact-apply-child.return-btn')}
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Return to my dashboard - Contact us to apply for your child click">
+          {t('protected-apply:return-dashboard')}
         </LoadingButton>
       </fetcher.Form>
     </div>

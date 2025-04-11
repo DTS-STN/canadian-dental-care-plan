@@ -58,6 +58,8 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearProtectedApplyState({ params, session });
@@ -66,7 +68,7 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.file-taxes', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.file-taxes', 302);
-  return redirect(t('protected-apply:file-your-taxes.return-btn-link'));
+  return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 
 export default function ProtectedApplyFlowFileYourTaxes({ loaderData, params }: Route.ComponentProps) {
@@ -99,8 +101,8 @@ export default function ProtectedApplyFlowFileYourTaxes({ loaderData, params }: 
         <ButtonLink id="back-button" routeId="protected/apply/$id/tax-filing" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Back - File your taxes click">
           {t('protected-apply:file-your-taxes.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Exit - File your taxes click">
-          {t('protected-apply:file-your-taxes.return-btn')}
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Return dashboard - File your taxes click">
+          {t('protected-apply:return-dashboard')}
         </LoadingButton>
       </fetcher.Form>
     </div>
