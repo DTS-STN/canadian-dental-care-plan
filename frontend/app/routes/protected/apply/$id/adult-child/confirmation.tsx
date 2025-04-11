@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/confirmation';
-import { PREFERRED_NOTIFICATION_METHOD } from './communication-preference';
+import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
@@ -18,7 +18,6 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
-import { useFeature } from '~/root';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -74,7 +73,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name : undefined;
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
-  const communicationSunLifePreference = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -86,7 +84,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
     contactInformationEmail: state.email,
-    communicationSunLifePreference: communicationSunLifePreference.name,
+    communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     previouslyEnrolled: state.newOrExistingMember,
   };
@@ -188,13 +186,10 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowConfirm({ loaderData, params }: Route.ComponentProps) {
-  const viewLettersEnabled = useFeature('view-letters-online-application');
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo } = loaderData;
 
-  const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
-  const mscaLinkChecker = <InlineLink to={t('confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-apply-adult-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
@@ -243,23 +238,6 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
         </p>
         <p className="mt-4">{t('confirm.use-code')}</p>
-      </section>
-
-      <section>
-        <h2 className="font-lato text-3xl font-bold">{viewLettersEnabled ? t('confirm.register-msca-title-featured') : t('confirm.register-msca-title')}</h2>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey={viewLettersEnabled ? 'confirm.register-msca-text-featured' : 'confirm.register-msca-text'} components={{ mscaLinkAccount }} />
-        </p>
-        <p className="mt-4">{viewLettersEnabled ? t('confirm.register-msca-info-featured') : t('confirm.register-msca-info')}</p>
-        <ul className="list-disc space-y-1 pl-7">
-          <li>{t('confirm.register-msca-correspondence')}</li>
-          <li>{t('confirm.register-msca-confirm')}</li>
-        </ul>
-        {!viewLettersEnabled && (
-          <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-checker" components={{ mscaLinkChecker }} />
-          </p>
-        )}
       </section>
 
       <section>
@@ -364,7 +342,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.lang-pref')}> {userInfo.preferredLanguage}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.sun-life-comm-pref-title')}>
-              <p>{userInfo.communicationSunLifePreference}</p>
+              <p>{userInfo.communicationSunLifePreference === PREFERRED_SUN_LIFE_METHOD.email ? t('confirm.preferred-notification-method-email') : t('confirm.preferred-notification-method-mail')}</p>
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.goc-comm-pref-title')}>
               <p>{userInfo.communicationGOCPreference === PREFERRED_NOTIFICATION_METHOD.msca ? t('confirm.preferred-notification-method-msca') : t('confirm.preferred-notification-method-mail')}</p>
