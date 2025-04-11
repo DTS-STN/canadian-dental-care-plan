@@ -288,7 +288,7 @@ export default function ProtectedApplyFlowApplicationInformation({ loaderData, p
         <Progress value={30} size="lg" label={t('protected-apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-      <ErrorAlert>
+        <ErrorAlert>
           <h2 className="mb-2 font-bold">{t('protected-apply-adult:applicant-information.error-message.alert.heading')}</h2>
           <p className="mb-2">{t('protected-apply-adult:applicant-information.error-message.alert.detail')}</p>
           <p className="mb-2">{t('protected-apply-adult:applicant-information.error-message.alert.applyDate', { startDate: fetcherEligibilityStartDate })}</p>
