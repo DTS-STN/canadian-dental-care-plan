@@ -2,11 +2,11 @@ import { Outlet } from 'react-router';
 
 import type { Route } from './+types/layout';
 
-import { transformChildrenRouteAdobeAnalyticsUrl } from '~/route-helpers/protected-apply-route-helpers';
+import { transformChildChildrenRouteAdobeAnalyticsUrl } from '~/route-helpers/protected-apply-route-helpers';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  transformAdobeAnalyticsUrl: transformChildrenRouteAdobeAnalyticsUrl,
+  transformAdobeAnalyticsUrl: transformChildChildrenRouteAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
 
 /**
