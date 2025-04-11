@@ -9,6 +9,7 @@ import type { Route } from './+types/type-application';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyState, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -49,6 +50,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply:type-of-application.page-title') }) };
 
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.apply.type-application', { userId: idToken.sub });
+
   instrumentationService.countHttpStatus('protected.apply.type-of-application', 200);
   return { id: state.id, meta, defaultState: state.typeOfApplication };
 }
@@ -78,6 +82,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   saveProtectedApplyState({ params, session, state: { editMode: false, typeOfApplication: parsedDataResult.data.typeOfApplication } });
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.apply.type-application', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.type-of-application', 302);
 
