@@ -40,7 +40,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:children.cannot-apply-child.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.children.cannot-apply-child', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.children.cannot-apply-child', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.cannot-apply-child', 200);
   return { meta };
@@ -56,7 +56,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.children.cannot-apply-child', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.children.cannot-apply-child', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.cannot-apply-child', 302);
   return redirect(getPathById('protected/apply/$id/child/children/index', params));

@@ -42,7 +42,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:children.parent-or-guardian.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.children.parent-guardian', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.children.parent-guardian', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.parent-or-guardian', 200);
   return { meta };
@@ -64,7 +64,7 @@ export async function action({ context: { appContainer, session }, params, reque
   clearProtectedApplyState({ params, session });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.children.parent-guardian', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.children.parent-guardian', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.children.parent-or-guardian', 302);
   return redirect(t('protected-apply-child:children.parent-or-guardian.return-btn-link'));

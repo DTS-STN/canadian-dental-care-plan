@@ -120,7 +120,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyChildStateToBenefitApplicationDto(state));
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('view-page.apply.child.review-adult-information', { userId: idToken.sub });
+  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.review-adult-information', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.review-adult-information', 200);
 
