@@ -10,9 +10,7 @@ spec:
     spec:
       containers:
         - name: canada-dental-care-plan-frontend
-          # `perftest` is a feature branch that includes cherry-picked commits from main
-          # see https://github.com/DTS-STN/canadian-dental-care-plan/tree/feature/perftest
-          image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:perftest-latest
+          image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:0.0.0-bda3d4a4
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
