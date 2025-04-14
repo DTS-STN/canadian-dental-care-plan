@@ -322,9 +322,11 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 <DescriptionListItem term={t('confirm.alt-phone-number')}>
                   <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
                 </DescriptionListItem>
-                <DescriptionListItem term={t('confirm.email')}>
-                  <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
-                </DescriptionListItem>
+                {userInfo.contactInformationEmail && (
+                  <DescriptionListItem term={t('confirm.email')}>
+                    <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
+                  </DescriptionListItem>
+                )}
                 <DescriptionListItem term={t('confirm.mailing')}>
                   <Address
                     address={{
