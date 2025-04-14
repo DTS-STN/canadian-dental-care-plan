@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   instrumentationService.countHttpStatus('public.apply.adult-child.parent-or-guardian', 200);
-  return { id: state.id, meta, ageCategory };
+  return { meta, ageCategory };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

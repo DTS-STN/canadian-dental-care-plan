@@ -58,7 +58,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:applicant-information.page-title') }) };
 
   instrumentationService.countHttpStatus('public.apply.child.applicant-information', 200);
-  return { id: state.id, meta, defaultState: state.applicantInformation, editMode: state.editMode };
+  return { meta, defaultState: state.applicantInformation, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

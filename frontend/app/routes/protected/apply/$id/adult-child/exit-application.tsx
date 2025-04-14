@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/exit-application';
 
 import { TYPES } from '~/.server/constants';
-import { loadProtectedApplyAdultChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
 import { clearProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
@@ -35,8 +34,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
-  const { id } = loadProtectedApplyAdultChildState({ params, request, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:exit-application.page-title') }) };
 
@@ -44,7 +41,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.exit-application', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.exit-application', 200);
-  return { id, meta };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

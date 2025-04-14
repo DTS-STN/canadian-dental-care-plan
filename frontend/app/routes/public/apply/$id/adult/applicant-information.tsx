@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   instrumentationService.countHttpStatus('public.apply.adult.applicant-information', 200);
 
-  return { defaultState: state.applicantInformation, editMode: state.editMode, id: state.id, meta };
+  return { defaultState: state.applicantInformation, editMode: state.editMode, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

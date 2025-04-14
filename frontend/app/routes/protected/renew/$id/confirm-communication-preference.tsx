@@ -65,7 +65,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     communicationMethodEmail,
-    id: state.id,
     meta,
     preferredCommunicationMethods,
     preferredLanguages,

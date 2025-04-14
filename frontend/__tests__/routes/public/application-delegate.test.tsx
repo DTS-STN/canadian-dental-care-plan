@@ -33,7 +33,6 @@ describe('_public.apply.id.application-delegate', () => {
       });
 
       expect(response).toEqual({
-        id: '123',
         meta: { title: 'gcweb:meta.title.template' },
       });
     });

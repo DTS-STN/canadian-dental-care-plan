@@ -31,12 +31,12 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const { id, applicationYear } = loadRenewState({ params, session });
+  const { applicationYear } = loadRenewState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:file-your-taxes.page-title') }) };
 
-  return { id, meta, taxYear: applicationYear.taxYear };
+  return { meta, taxYear: applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

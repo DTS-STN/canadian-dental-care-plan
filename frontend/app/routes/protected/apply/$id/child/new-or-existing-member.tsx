@@ -63,7 +63,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.new-or-existing-member', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.child.new-or-existing-member', 200);
-  return { id: state.id, meta, defaultState: state.newOrExistingMember, editMode: state.editMode };
+  return { meta, defaultState: state.newOrExistingMember, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

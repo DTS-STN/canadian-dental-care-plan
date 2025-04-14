@@ -60,7 +60,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('protected.apply.adult-child.communication-preference', 200);
 
   return {
-    id: state.id,
     meta,
     preferredLanguages,
     defaultState: {

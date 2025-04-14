@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const { id, applicationYear } = loadProtectedApplyState({ params, session });
+  const { applicationYear } = loadProtectedApplyState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply:file-your-taxes.page-title') }) };
@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.file-taxes', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.file-taxes', 200);
-  return { id, meta, taxYear: applicationYear.taxYear };
+  return { meta, taxYear: applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

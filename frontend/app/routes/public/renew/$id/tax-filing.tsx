@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:tax-filing.page-title') }) };
 
-  return { id: state.id, meta, defaultState: state.taxFiling, taxYear: state.applicationYear.taxYear };
+  return { meta, defaultState: state.taxFiling, taxYear: state.applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

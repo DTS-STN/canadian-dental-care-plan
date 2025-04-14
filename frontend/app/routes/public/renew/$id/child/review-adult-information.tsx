@@ -111,7 +111,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const payload = viewPayloadEnabled && benefitRenewalDtoMapper.mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalStateMapper.mapRenewChildStateToChildBenefitRenewalDto(state));
 
   return {
-    id: state.id,
     userInfo,
     spouseInfo,
     homeAddressInfo,

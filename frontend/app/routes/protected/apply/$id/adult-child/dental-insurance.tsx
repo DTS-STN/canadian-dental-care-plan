@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.dental-insurance', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.dental-insurance', 200);
-  return { id: state, meta, defaultState: state.dentalInsurance, backToEmail, editMode: state.editMode };
+  return { meta, defaultState: state.dentalInsurance, backToEmail, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

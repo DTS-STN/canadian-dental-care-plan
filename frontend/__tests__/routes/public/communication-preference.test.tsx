@@ -59,7 +59,6 @@ describe('_public.apply.id.communication-preference', () => {
       });
 
       expect(response).toMatchObject({
-        id: '123',
         meta: {},
         preferredLanguages: [
           { id: 'en', name: 'English' },

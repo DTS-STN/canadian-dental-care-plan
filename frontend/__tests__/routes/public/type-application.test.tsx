@@ -25,7 +25,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await loader({ request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application'), context: mockContext, params: { id: '123', lang: 'en' } });
 
-      expect(response).toMatchObject({ id: '123', meta: { title: 'gcweb:meta.title.template' }, defaultState: 'delegate' });
+      expect(response).toMatchObject({ meta: { title: 'gcweb:meta.title.template' }, defaultState: 'delegate' });
     });
   });
 

@@ -64,7 +64,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   instrumentationService.countHttpStatus('public.apply.adult.home-address', 200);
   return {
-    id: state.id,
     meta,
     defaultState: state,
     countryList,

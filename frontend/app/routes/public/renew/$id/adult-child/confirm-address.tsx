@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:confirm-address.page-title') }) };
 
-  return { id: state.id, meta, defaultState: { hasAddressChanged: state.hasAddressChanged }, editMode: state.editMode };
+  return { meta, defaultState: { hasAddressChanged: state.hasAddressChanged }, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

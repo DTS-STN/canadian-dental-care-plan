@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   instrumentationService.countHttpStatus('public.apply.child.contact-apply-child', 200);
-  return { id: state.id, meta };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

@@ -32,7 +32,7 @@ describe('_public.apply.id.file-your-taxes', () => {
 
       const response = await loader({ request: new Request('http://localhost:3000/en/apply/123/file-your-taxes'), context: mockContext, params: { id: '123', lang: 'en' } });
 
-      expect(response).toEqual({ id: '123', meta: { title: 'gcweb:meta.title.template' }, taxYear: '2024' });
+      expect(response).toEqual({ meta: { title: 'gcweb:meta.title.template' }, taxYear: '2024' });
     });
   });
 });
