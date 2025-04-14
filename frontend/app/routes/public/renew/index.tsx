@@ -28,6 +28,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -37,6 +39,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
   const applicationYear = await applicationYearService.findRenewalApplicationYear(currentDate);
   if (!applicationYear?.renewalYearId) {
+    instrumentationService.countHttpStatus('public.renew', 302);
     throw redirect(getPathById('public/apply/index', params));
   }
 
@@ -52,6 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:terms-and-conditions.page-title') }) };
 
+  instrumentationService.countHttpStatus('public.renew', 200);
   return { id: state.id, locale, meta };
 }
 

@@ -42,15 +42,20 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:type-of-renewal.page-title') }) };
 
+  instrumentationService.countHttpStatus('public.renew.type-renewal', 200);
   return { meta, defaultState: state.typeOfRenewal, hasFiledTaxes: state.clientApplication?.hasFiledTaxes };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -72,6 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('public.renew.type-renewal', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -86,6 +92,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   invariant(state.clientApplication, 'Expected state.clientApplication to be defined');
   const isInvitationToApplyClient = state.clientApplication.isInvitationToApplyClient || state.clientApplication.applicantInformation.maritalStatus === undefined;
+
+  instrumentationService.countHttpStatus('public.renew.type-renewal', 302);
 
   if (parsedDataResult.data.typeOfRenewal === RENEWAL_TYPE.adult) {
     if (isInvitationToApplyClient) {

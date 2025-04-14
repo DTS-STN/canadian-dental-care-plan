@@ -43,15 +43,20 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:applicant-information.page-title') }) };
 
+  instrumentationService.countHttpStatus('public.renew.applicant-information', 200);
   return { meta, defaultState: state.applicantInformation };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -132,6 +137,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('public.renew.applicant-information', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -146,10 +152,13 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!clientApplication) {
+    instrumentationService.countHttpStatus('public.renew.applicant-information.status-not-found', 200);
     return { status: 'status-not-found' } as const;
   }
 
   saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data, clientApplication, editMode: false } });
+
+  instrumentationService.countHttpStatus('public.renew.applicant-information', 302);
 
   if (clientApplication.hasFiledTaxes) {
     return redirect(getPathById('public/renew/$id/type-renewal', params));

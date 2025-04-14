@@ -31,15 +31,20 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   loadRenewState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:terms-and-conditions.page-title') }) };
 
+  instrumentationService.countHttpStatus('public.renew.terms-and-conditions', 200);
   return { meta };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -47,6 +52,7 @@ export async function action({ context: { appContainer, session }, request, para
 
   saveRenewState({ params, session, state: {} });
 
+  instrumentationService.countHttpStatus('public.renew.terms-and-conditions', 302);
   return redirect(getPathById('public/renew/$id/applicant-information', params));
 }
 
