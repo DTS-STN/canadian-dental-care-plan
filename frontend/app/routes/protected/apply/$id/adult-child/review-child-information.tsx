@@ -121,7 +121,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.review-child-information', 200);
 
-  return { id: state.id, children, meta, payload };
+  return { children, meta, payload };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

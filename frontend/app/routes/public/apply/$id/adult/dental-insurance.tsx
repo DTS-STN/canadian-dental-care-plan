@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const backToEmail = state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail';
 
   instrumentationService.countHttpStatus('public.apply.adult.dental-insurance', 200);
-  return { id: state, meta, defaultState: state.dentalInsurance, backToEmail, editMode: state.editMode };
+  return { meta, defaultState: state.dentalInsurance, backToEmail, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

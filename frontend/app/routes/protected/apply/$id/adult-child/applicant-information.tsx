@@ -73,7 +73,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.applicant-information', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.applicant-information', 200);
-  return { defaultState: state.applicantInformation, editMode: state.editMode, id: state.id, meta };
+  return { defaultState: state.applicantInformation, editMode: state.editMode, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

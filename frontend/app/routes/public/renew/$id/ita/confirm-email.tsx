@@ -56,8 +56,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:confirm-email.page-title') }) };
 
   return {
-    id: state.id,
-
     meta,
     defaultState: {
       isNewOrUpdatedEmail: state.contactInformation?.isNewOrUpdatedEmail,

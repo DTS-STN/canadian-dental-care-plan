@@ -72,7 +72,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('protected.apply.adult-child.home-address', 200);
 
   return {
-    id: state.id,
     meta,
     defaultState: state,
     countryList,

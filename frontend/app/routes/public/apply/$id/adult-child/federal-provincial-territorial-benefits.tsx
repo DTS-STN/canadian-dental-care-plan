@@ -76,7 +76,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     defaultState: state.dentalBenefits,
     editMode: state.editMode,
     federalSocialPrograms,
-    id: state.id,
     meta,
     provincialTerritorialSocialPrograms,
     regions,

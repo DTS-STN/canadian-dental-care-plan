@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm-address.page-title') }) };
 
   instrumentationService.countHttpStatus('protected.renew.confirm-address', 200);
-  return { id: state.id, meta, defaultState: { isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress }, editMode: state.editMode };
+  return { meta, defaultState: { isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress }, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
   instrumentationService.countHttpStatus('public.apply.adult.new-or-existing-member', 200);
-  return { id: state.id, meta, defaultState: state.newOrExistingMember, userAgeCategory: ageCategory, editMode: state.editMode };
+  return { meta, defaultState: state.newOrExistingMember, userAgeCategory: ageCategory, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

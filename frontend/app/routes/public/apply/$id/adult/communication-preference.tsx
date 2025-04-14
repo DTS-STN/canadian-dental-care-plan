@@ -52,12 +52,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('public.apply.adult.communication-preference', 200);
 
   return {
-    id: state.id,
     meta,
     preferredLanguages,
-    defaultState: {
-      ...(state.communicationPreferences ?? {}),
-    },
+    defaultState: { ...(state.communicationPreferences ?? {}) },
     editMode: state.editMode,
   };
 }

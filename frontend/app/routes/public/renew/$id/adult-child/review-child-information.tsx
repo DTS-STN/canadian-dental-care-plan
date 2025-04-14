@@ -102,7 +102,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     };
   });
 
-  return { id: state.id, children, meta, payload };
+  return { children, meta, payload };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

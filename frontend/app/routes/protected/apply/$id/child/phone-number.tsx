@@ -57,7 +57,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('protected.apply.child.phone-number', 200);
 
   return {
-    id: state.id,
     meta,
     defaultState: {
       phoneNumber: state.contactInformation?.phoneNumber,

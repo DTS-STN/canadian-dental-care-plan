@@ -8,7 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/application-delegate';
 
 import { TYPES } from '~/.server/constants';
-import { clearProtectedApplyState, loadProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
+import { clearProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -37,8 +37,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const { id } = loadProtectedApplyState({ params, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply:application-delegate.page-title') }) };
 
@@ -46,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.application-delegate', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply/application-delegate', 200);
-  return { id, meta };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

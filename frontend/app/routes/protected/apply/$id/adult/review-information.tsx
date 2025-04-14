@@ -153,7 +153,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('protected.apply.adult.review-information', 200);
 
   return {
-    id: state.id,
     userInfo,
     spouseInfo,
     preferredLanguage: preferredLanguage.name,

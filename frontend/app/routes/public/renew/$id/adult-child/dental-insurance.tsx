@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:dental-insurance.title') }) };
 
-  return { id: state, meta, defaultState: state.dentalInsurance, editMode: state.editMode };
+  return { meta, defaultState: state.dentalInsurance, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

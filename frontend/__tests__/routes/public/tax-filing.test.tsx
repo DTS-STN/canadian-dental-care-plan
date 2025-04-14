@@ -34,7 +34,7 @@ describe('_public.apply.id.tax-filing', () => {
 
       const response = await loader({ request: new Request('http://localhost:3000/en/apply/123/tax-filing'), context: mockContext, params: { id: '123', lang: 'en' } });
 
-      expect(response).toMatchObject({ id: '123', meta: {}, defaultState: true });
+      expect(response).toMatchObject({ meta: {}, defaultState: true });
     });
   });
 

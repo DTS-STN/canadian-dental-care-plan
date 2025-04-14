@@ -79,7 +79,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     childName,
     editMode: state.editMode,
     federalSocialPrograms,
-    id: state.id,
     meta,
     provincialTerritorialSocialPrograms,
     provinceTerritoryStates,

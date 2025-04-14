@@ -29,13 +29,13 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
-  const { id, applicationYear } = loadApplyState({ params, session });
+  const { applicationYear } = loadApplyState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:file-your-taxes.page-title') }) };
 
   instrumentationService.countHttpStatus('public.apply.file-taxes', 200);
-  return { id, meta, taxYear: applicationYear.taxYear };
+  return { meta, taxYear: applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

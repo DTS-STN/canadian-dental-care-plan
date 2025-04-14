@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:applicant-information.page-title') }) };
 
-  return { id: state.id, meta, defaultState: state.applicantInformation };
+  return { meta, defaultState: state.applicantInformation };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

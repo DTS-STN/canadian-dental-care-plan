@@ -11,7 +11,6 @@ import { z } from 'zod';
 import type { Route } from './+types/parent-intro';
 
 import { TYPES } from '~/.server/constants';
-import { loadRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -40,12 +39,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const { id } = loadRenewState({ params, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-child:parent-intro.page-title') }) };
 
-  return { id, meta };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

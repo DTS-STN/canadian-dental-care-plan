@@ -54,7 +54,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('protected.renew.confirm-phone', 200);
 
   return {
-    id: state.id,
     meta,
     defaultState: {
       phoneNumber: state.contactInformation?.phoneNumber,

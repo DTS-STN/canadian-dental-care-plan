@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/exit-application';
 
 import { TYPES } from '~/.server/constants';
-import { loadRenewItaState } from '~/.server/routes/helpers/renew-ita-route-helpers';
 import { clearRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -29,12 +28,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const { id } = loadRenewItaState({ params, request, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:exit-application.page-title') }) };
 
-  return { id, meta };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

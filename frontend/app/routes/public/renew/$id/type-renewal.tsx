@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:type-of-renewal.page-title') }) };
 
-  return { id: state.id, meta, defaultState: state.typeOfRenewal, hasFiledTaxes: state.clientApplication?.hasFiledTaxes };
+  return { meta, defaultState: state.typeOfRenewal, hasFiledTaxes: state.clientApplication?.hasFiledTaxes };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

@@ -148,7 +148,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     children,
-
     dentalInsurance,
     homeAddressInfo,
     mailingAddressInfo,

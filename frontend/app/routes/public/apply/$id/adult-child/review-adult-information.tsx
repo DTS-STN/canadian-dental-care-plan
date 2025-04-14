@@ -135,7 +135,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('public.apply.adult-child.review-adult-information', 200);
 
   return {
-    id: state.id,
     userInfo,
     spouseInfo,
     preferredLanguage: preferredLanguage.name,
@@ -143,7 +142,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     mailingAddressInfo,
     dentalInsurance,
     dentalBenefit,
-
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,

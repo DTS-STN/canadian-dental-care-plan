@@ -57,7 +57,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     statusResult: { alertType, clientFriendlyStatus },
-
     meta,
   };
 }

@@ -8,7 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/renewal-delegate';
 
 import { TYPES } from '~/.server/constants';
-import { clearRenewState, loadRenewState } from '~/.server/routes/helpers/renew-route-helpers';
+import { clearRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -31,12 +31,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const { id } = loadRenewState({ params, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:renewal-delegate.page-title') }) };
 
-  return { id, meta };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

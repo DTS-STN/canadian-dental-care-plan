@@ -76,7 +76,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.marital-status', { userId: idToken.sub });
 
-  return { isNewUser, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
+  return { isNewUser, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, maritalStatuses, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

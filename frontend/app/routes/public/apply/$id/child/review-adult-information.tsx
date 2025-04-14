@@ -119,7 +119,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('public.apply.child.review-adult-information', 200);
 
   return {
-    id: state.id,
     userInfo,
     spouseInfo,
     preferredLanguage: preferredLanguage.name,

@@ -56,7 +56,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('protected.apply.adult-child.email', 200);
 
   return {
-    id: state.id,
     meta,
     defaultState: state.email,
     editMode: state.editMode,

@@ -61,7 +61,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   instrumentationService.countHttpStatus('public.apply.adult.verify-email', 200);
 
   return {
-    id: state.id,
     meta,
     email: state.editModeEmail ?? state.email,
     editMode: state.editMode,

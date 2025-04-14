@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:type-of-application.page-title') }) };
 
   instrumentationService.countHttpStatus('public.apply.type-application', 200);
-  return { id: state.id, meta, defaultState: state.typeOfApplication };
+  return { meta, defaultState: state.typeOfApplication };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.parent-or-guardian', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.adult-child.parent-or-guardian', 200);
-  return { id: state.id, meta, ageCategory };
+  return { meta, ageCategory };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:living-independently.page-title') }) };
 
   instrumentationService.countHttpStatus('public.apply.adult-child.living-independently', 200);
-  return { id: state.id, meta, defaultState: state.livingIndependently, editMode: state.editMode };
+  return { meta, defaultState: state.livingIndependently, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

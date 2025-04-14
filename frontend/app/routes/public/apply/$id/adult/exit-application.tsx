@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/exit-application';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
 import { clearApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -31,13 +30,11 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
-  const { id } = loadApplyAdultState({ params, request, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:exit-application.page-title') }) };
 
   instrumentationService.countHttpStatus('public.apply.adult.exit-application', 200);
-  return { id, meta };
+  return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

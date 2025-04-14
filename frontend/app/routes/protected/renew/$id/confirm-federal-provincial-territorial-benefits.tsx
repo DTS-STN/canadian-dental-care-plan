@@ -109,7 +109,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     defaultState: dentalBenefits,
     federalSocialPrograms,
-    id: state.id,
     meta,
     provincialTerritorialSocialPrograms,
     provinceTerritoryStates,

@@ -61,7 +61,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:marital-status.page-title') }) };
 
-  return { defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, id: state.id, maritalStatuses, meta };
+  return { defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, maritalStatuses, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

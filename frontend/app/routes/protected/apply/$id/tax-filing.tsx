@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.tax-filing', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('protected.apply.tax-filing', 200);
-  return { id: state.id, meta, defaultState: state.hasFiledTaxes, taxYear: state.applicationYear.taxYear };
+  return { meta, defaultState: state.hasFiledTaxes, taxYear: state.applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

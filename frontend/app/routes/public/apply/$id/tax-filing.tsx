@@ -40,7 +40,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:tax-filing.page-title') }) };
 
   instrumentationService.countHttpStatus('public.apply.tax-filing', 200);
-  return { id: state.id, meta, defaultState: state.hasFiledTaxes, taxYear: state.applicationYear.taxYear };
+  return { meta, defaultState: state.hasFiledTaxes, taxYear: state.applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
