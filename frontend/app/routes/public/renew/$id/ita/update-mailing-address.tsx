@@ -52,6 +52,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -60,6 +62,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-ita:update-address.mailing-address.page-title') }) };
+
+  instrumentationService.countHttpStatus('public.renew.ita.update-mailing-address', 200);
 
   return {
     meta,
@@ -71,6 +75,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
   const locale = getLocale(request);
 
@@ -94,6 +100,7 @@ export async function action({ context: { appContainer, session }, params, reque
         isHomeAddressSameAsMailingAddress: state.previousAddressState?.isHomeAddressSameAsMailingAddress,
       },
     });
+    instrumentationService.countHttpStatus('public.renew.ita.update-mailing-address', 302);
     return redirect(getPathById('public/renew/$id/ita/review-information', params));
   }
 
@@ -107,6 +114,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!validatedResult.success) {
+    instrumentationService.countHttpStatus('public.renew.ita.update-mailing-address', 400);
     return data({ errors: validatedResult.errors }, { status: 400 });
   }
 
@@ -135,6 +143,8 @@ export async function action({ context: { appContainer, session }, params, reque
         ...(homeAddress && { homeAddress }),
       },
     });
+
+    instrumentationService.countHttpStatus('public.renew.ita.update-mailing-address', 302);
 
     if (state.editMode) {
       return redirect(isCopyMailingToHome ? getPathById('public/renew/$id/ita/review-information', params) : getPathById('public/renew/$id/ita/update-home-address', params));
@@ -166,6 +176,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (addressCorrectionResult.status === 'not-correct') {
+    instrumentationService.countHttpStatus('public.renew.ita.update-mailing-address.address-invalid', 200);
     return {
       invalidAddress: formattedMailingAddress,
       status: 'address-invalid',
@@ -174,6 +185,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (addressCorrectionResult.status === 'corrected') {
     const provinceTerritoryState = provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
+    instrumentationService.countHttpStatus('public.renew.ita.update-mailing-address.address-suggestion', 200);
     return {
       enteredAddress: formattedMailingAddress,
       status: 'address-suggestion',
@@ -198,6 +210,8 @@ export async function action({ context: { appContainer, session }, params, reque
       ...(homeAddress && { homeAddress }),
     },
   });
+
+  instrumentationService.countHttpStatus('public.renew.ita.update-mailing-address', 302);
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/ita/review-information', params));

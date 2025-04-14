@@ -51,6 +51,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadRenewItaStateForReview({ params, request, session });
 
   // renew state is valid then edit mode can be set to true
@@ -134,6 +136,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const benefitRenewalStateMapper = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper);
   const payload = viewPayloadEnabled && benefitRenewalDtoMapper.mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalStateMapper.mapRenewItaStateToItaBenefitRenewalDto(state));
 
+  instrumentationService.countHttpStatus('public.renew.ita.review-information', 200);
+
   return {
     userInfo,
     spouseInfo,
@@ -148,11 +152,14 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearRenewState({ params, session });
+    instrumentationService.countHttpStatus('public.renew.ita.review-information', 302);
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
@@ -162,6 +169,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveRenewState({ params, session, state: { editMode: false } });
+    instrumentationService.countHttpStatus('public.renew.ita.review-information', 302);
     if (demographicSurveyEnabled) {
       return redirect(getPathById('public/renew/$id/ita/demographic-survey', params));
     }
@@ -175,6 +183,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const submissionInfo = { submittedOn: new UTCDate().toISOString() };
   saveRenewState({ params, session, state: { submissionInfo } });
 
+  instrumentationService.countHttpStatus('public.renew.ita.review-information', 302);
   return redirect(getPathById('public/renew/$id/ita/confirmation', params));
 }
 
