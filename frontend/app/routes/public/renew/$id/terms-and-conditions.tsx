@@ -6,7 +6,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/terms-and-conditions';
 
 import { TYPES } from '~/.server/constants';
-import { loadRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -31,8 +30,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  loadRenewState({ params, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew:terms-and-conditions.page-title') }) };
 
@@ -44,8 +41,6 @@ export async function action({ context: { appContainer, session }, request, para
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
-
-  saveRenewState({ params, session, state: {} });
 
   return redirect(getPathById('public/renew/$id/applicant-information', params));
 }

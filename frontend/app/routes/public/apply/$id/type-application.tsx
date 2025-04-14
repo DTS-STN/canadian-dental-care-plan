@@ -53,7 +53,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
-  loadApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**

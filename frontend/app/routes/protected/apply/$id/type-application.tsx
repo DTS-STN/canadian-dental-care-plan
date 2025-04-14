@@ -66,7 +66,6 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  loadProtectedApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**

@@ -6,7 +6,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/terms-and-conditions';
 
 import { TYPES } from '~/.server/constants';
-import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -38,8 +37,6 @@ export async function loader({ context: { appContainer, session }, request, para
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  loadProtectedRenewState({ params, request, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:terms-and-conditions.page-title') }) };
 
@@ -58,13 +55,6 @@ export async function action({ context: { appContainer, session }, request, para
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
-
-  saveProtectedRenewState({
-    params,
-    request,
-    session,
-    state: {},
-  });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.terms-and-conditions', { userId: idToken.sub });

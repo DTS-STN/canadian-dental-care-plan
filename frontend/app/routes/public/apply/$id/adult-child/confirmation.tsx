@@ -174,7 +174,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  loadApplyAdultChildState({ params, request, session });
   clearApplyState({ params, session });
 
   instrumentationService.countHttpStatus('public.apply.adult-child.confirmation', 302);

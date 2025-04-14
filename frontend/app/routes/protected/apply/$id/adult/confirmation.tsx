@@ -148,7 +148,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  loadProtectedApplyAdultState({ params, request, session });
   clearProtectedApplyState({ params, session });
 
   const idToken: IdToken = session.get('idToken');

@@ -160,7 +160,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  loadApplyChildState({ params, request, session });
   clearApplyState({ params, session });
 
   instrumentationService.countHttpStatus('public.apply.child.confirmation', 302);
