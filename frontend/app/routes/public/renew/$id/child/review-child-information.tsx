@@ -48,6 +48,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadRenewChildState({ params, request, session });
   validateChildrenStateForReview({ childrenState: state.children, params });
 
@@ -95,18 +97,24 @@ export async function loader({ context: { appContainer, session }, params, reque
     };
   });
 
+  instrumentationService.countHttpStatus('public.renew.child.review-child-information', 200);
   return { children, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearRenewState({ params, session });
+    instrumentationService.countHttpStatus('public.renew.child.review-child-information', 302);
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
+
+  instrumentationService.countHttpStatus('public.renew.child.review-child-information', 302);
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {

@@ -31,15 +31,20 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   loadRenewSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-child:children.parent-or-guardian.page-title') }) };
 
+  instrumentationService.countHttpStatus('public.renew.child.children.parent-or-guardian', 200);
   return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -47,6 +52,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   loadRenewSingleChildState({ params, request, session });
 
+  instrumentationService.countHttpStatus('public.renew.child.children.parent-or-guardian', 302);
   return redirect(getPathById('public/renew/$id/child/children/index', params));
 }
 

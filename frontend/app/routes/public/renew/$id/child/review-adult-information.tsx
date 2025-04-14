@@ -51,6 +51,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadRenewChildStateForReview({ params, request, session });
 
   // renew state is valid then edit mode can be set to true
@@ -110,6 +112,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const benefitRenewalStateMapper = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper);
   const payload = viewPayloadEnabled && benefitRenewalDtoMapper.mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalStateMapper.mapRenewChildStateToChildBenefitRenewalDto(state));
 
+  instrumentationService.countHttpStatus('public.renew.child.review-adult-information', 200);
+
   return {
     userInfo,
     spouseInfo,
@@ -121,18 +125,22 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearRenewState({ params, session });
+    instrumentationService.countHttpStatus('public.renew.child.review-adult-information', 302);
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveRenewState({ params, session, state: {} });
+    instrumentationService.countHttpStatus('public.renew.child.review-adult-information', 302);
     return redirect(getPathById('public/renew/$id/child/review-child-information', params));
   }
 
@@ -143,6 +151,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const submissionInfo = { submittedOn: new UTCDate().toISOString() };
   saveRenewState({ params, session, state: { submissionInfo } });
 
+  instrumentationService.countHttpStatus('public.renew.child.review-adult-information', 302);
   return redirect(getPathById('public/renew/$id/child/confirmation', params));
 }
 

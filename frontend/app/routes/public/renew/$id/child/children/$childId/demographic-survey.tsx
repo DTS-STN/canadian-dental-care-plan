@@ -47,6 +47,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateFeatureEnabled('demographic-survey');
 
@@ -71,6 +73,8 @@ export async function loader({ context: { appContainer, session }, request, para
   const locationBornStatuses = demographicSurveyService.listLocalizedLocationBornStatuses(locale);
   const genderStatuses = demographicSurveyService.listLocalizedGenderStatuses(locale);
 
+  instrumentationService.countHttpStatus('public.renew.child.children.demographic-survey', 200);
+
   return {
     meta,
     indigenousStatuses,
@@ -87,6 +91,8 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -139,6 +145,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('public.renew.child.children.demographic-survey', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -152,6 +159,8 @@ export async function action({ context: { appContainer, session }, params, reque
       }),
     },
   });
+
+  instrumentationService.countHttpStatus('public.renew.child.children.demographic-survey', 302);
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/child/review-child-information', params));
