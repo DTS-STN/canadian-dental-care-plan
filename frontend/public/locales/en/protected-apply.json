@@ -138,7 +138,7 @@
     "info-alert": {
       "heading": "Applications are opening in phases",
       "eligibility-requirements": "The Canadian Dental Care Plan (CDCP) is opening in phases. Make sure you meet all four of the <eligibilityRequirements>eligibility requirements</eligibilityRequirements> before applying.",
-      "schedule-when": "Check the schedule to find out <whenApply>when you can apply.</whenApply>",
+      "schedule-when": "Check the schedule to find out <whenApply>when you can apply</whenApply>.",
       "links": {
         "apply-qualify": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
         "apply-when": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when"
