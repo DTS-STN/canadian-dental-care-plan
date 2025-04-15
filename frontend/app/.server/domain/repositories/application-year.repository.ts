@@ -6,6 +6,8 @@ import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
+import { createInteropClient } from '~/.server/shared/api/interop-client';
+import type { InteropClient } from '~/.server/shared/api/interop-client';
 import { HttpStatusCodes } from '~/constants/http-status-codes';
 import { AppError } from '~/errors/app-error';
 import { ErrorCodes } from '~/errors/error-codes';
@@ -25,36 +27,43 @@ export class DefaultApplicationYearRepository implements ApplicationYearReposito
   private readonly log: Logger;
   private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
   private readonly httpClient: HttpClient;
+  private readonly interopClient: InteropClient;
 
   constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultApplicationYearRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
+
+    this.interopClient = createInteropClient({
+      baseUrl: `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/`,
+    });
   }
 
   async listApplicationYears(date: string): Promise<ApplicationYearResultEntity> {
     this.log.trace('Fetching all application year entities for date: [%s]', date);
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/retrieve-benefit-application-config-dates`);
-    url.searchParams.set('date', date);
-
-    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.retrieve-benefit-application-config-dates.gets', url, {
-      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
-      method: 'GET',
-      headers: {
-        'Accept-Language': 'en-CA',
-        'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+    const { response, data, error } = await this.interopClient.GET('/retrieve-benefit-application-config-dates', {
+      meta: {
+        metricPrefix: 'http.client.interop-api.retrieve-benefit-application-config-dates.gets',
+      },
+      params: {
+        header: {
+          'Accept-Language': 'en-CA',
+          'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+        query: {
+          date: date,
+        },
       },
     });
 
-    if (!response.ok) {
+    if (error) {
       this.log.error('%j', {
         message: 'Failed to fetch application year(s)',
         status: response.status,
         statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
+        url: response.url,
+        responseBody: error,
       });
 
       if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
@@ -65,10 +74,8 @@ export class DefaultApplicationYearRepository implements ApplicationYearReposito
       throw new Error(`Failed to fetch application year(s). Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const applicationYearResults: ApplicationYearResultEntity = await response.json();
-    this.log.trace('Application year response: [%j]', applicationYearResults);
-
-    return applicationYearResults;
+    this.log.trace('Application year response: [%j]', data);
+    return data;
   }
 }
 

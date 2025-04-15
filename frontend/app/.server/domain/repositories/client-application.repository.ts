@@ -8,6 +8,8 @@ import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
 import clientApplicationItaJsonDataSource from '~/.server/resources/power-platform/client-application-ita.json';
 import clientApplicationJsonDataSource from '~/.server/resources/power-platform/client-application.json';
+import { createInteropClient } from '~/.server/shared/api/interop-client';
+import type { InteropClient } from '~/.server/shared/api/interop-client';
 import { HttpStatusCodes } from '~/constants/http-status-codes';
 import { AppError } from '~/errors/app-error';
 import { ErrorCodes } from '~/errors/error-codes';
@@ -38,93 +40,101 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
   private readonly log: Logger;
   private readonly serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
   private readonly httpClient: HttpClient;
+  private readonly interopClient: InteropClient;
 
   constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultClientApplicationRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
+    this.interopClient = createInteropClient({
+      baseUrl: `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/`,
+    });
   }
 
   async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null> {
     this.log.trace('Fetching client application for basic info [%j]', clientApplicationBasicInfoRequestEntity);
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/retrieve-benefit-application`);
-    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.retrieve-benefit-application_by-basic-info.posts', url, {
-      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+    const { response, data, error } = await this.interopClient.POST('/retrieve-benefit-application', {
+      meta: {
+        metricPrefix: 'http.client.interop-api.retrieve-benefit-application_by-basic-info.posts',
       },
-      body: JSON.stringify(clientApplicationBasicInfoRequestEntity),
+      params: {
+        header: {
+          'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+      },
+      body: clientApplicationBasicInfoRequestEntity,
     });
 
-    if (response.status === 200) {
-      const data = await response.json();
-      this.log.trace('Client application [%j]', data);
-      return data;
+    if (error) {
+      this.log.error('%j', {
+        message: "Failed to 'POST' for client application data by basic info",
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url,
+        responseBody: error,
+      });
+
+      if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
+        // TODO ::: GjB ::: this throw is to facilitate enabling the application kill switch -- it should be removed once the killswitch functionality is removed
+        throw new AppError('Failed to POST for benefit application. Status: 429, Status Text: Too Many Requests', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
+      }
+
+      throw new Error(`Failed to 'POST' for client application data by basic info. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    if (response.status === 204) {
+    if (!data) {
+      // 204 response
       this.log.trace('Client application not found for basic info [%j]', clientApplicationBasicInfoRequestEntity);
       return null;
     }
 
-    this.log.error('%j', {
-      message: "Failed to 'POST' for client application data by basic info",
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
-      // TODO ::: GjB ::: this throw is to facilitate enabling the application kill switch -- it should be removed once the killswitch functionality is removed
-      throw new AppError('Failed to POST for benefit application. Status: 429, Status Text: Too Many Requests', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
-    }
-
-    throw new Error(`Failed to 'POST' for client application data by basic info. Status: ${response.status}, Status Text: ${response.statusText}`);
+    // 200 response
+    this.log.trace('Client application [%j]', data);
+    return data;
   }
 
   async findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<ClientApplicationEntity | null> {
     this.log.trace('Fetching client application for sin [%j]', clientApplicationSinRequestEntity);
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/retrieve-benefit-application`);
-    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.retrieve-benefit-application_by-sin.posts', url, {
-      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+    const { response, data, error } = await this.interopClient.POST('/retrieve-benefit-application', {
+      meta: {
+        metricPrefix: 'http.client.interop-api.retrieve-benefit-application_by-sin.posts',
       },
-      body: JSON.stringify(clientApplicationSinRequestEntity),
+      params: {
+        header: {
+          'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+      },
+      body: clientApplicationSinRequestEntity,
     });
 
-    if (response.status === 200) {
-      const data = await response.json();
-      this.log.trace('Client application [%j]', data);
-      return data;
+    if (error) {
+      this.log.error('%j', {
+        message: "Failed to 'POST' for client application data by sin",
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url,
+        responseBody: error,
+      });
+
+      if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
+        // TODO ::: GjB ::: this throw is to facilitate enabling the application kill switch -- it should be removed once the killswitch functionality is removed
+        throw new AppError('Failed to POST to /retrieve-benefit-application. Status: 429, Status Text: Too Many Requests', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
+      }
+
+      throw new Error(`Failed to 'POST' for client application data by sin. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    if (response.status === 204) {
+    if (!data) {
+      // 204 response
       this.log.trace('Client application not found for sin [%j]', clientApplicationSinRequestEntity);
       return null;
     }
 
-    this.log.error('%j', {
-      message: "Failed to 'POST' for client application data by sin",
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
-      // TODO ::: GjB ::: this throw is to facilitate enabling the application kill switch -- it should be removed once the killswitch functionality is removed
-      throw new AppError('Failed to POST to /retrieve-benefit-application. Status: 429, Status Text: Too Many Requests', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
-    }
-
-    throw new Error(`Failed to 'POST' for client application data by sin. Status: ${response.status}, Status Text: ${response.statusText}`);
+    // 200 response
+    this.log.trace('Client application [%j]', data);
+    return data;
   }
 }
 

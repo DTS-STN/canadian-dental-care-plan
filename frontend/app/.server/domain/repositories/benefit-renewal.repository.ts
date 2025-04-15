@@ -6,6 +6,8 @@ import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '
 import type { HttpClient } from '~/.server/http';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
+import { createInteropClient } from '~/.server/shared/api/interop-client';
+import type { InteropClient } from '~/.server/shared/api/interop-client';
 import { HttpStatusCodes } from '~/constants/http-status-codes';
 import { AppError } from '~/errors/app-error';
 import { ErrorCodes } from '~/errors/error-codes';
@@ -25,36 +27,43 @@ export class DefaultBenefitRenewalRepository implements BenefitRenewalRepository
   private readonly log: Logger;
   private readonly serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
   private readonly httpClient: HttpClient;
+  private readonly interopClient: InteropClient;
 
   constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultBenefitRenewalRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
+
+    this.interopClient = createInteropClient({
+      baseUrl: `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/`,
+    });
   }
 
   async createBenefitRenewal(benefitRenewalRequest: BenefitRenewalRequestEntity): Promise<BenefitRenewalResponseEntity> {
     this.log.trace('Submiting benefit renewal for request [%j]', benefitRenewalRequest);
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`);
-    url.searchParams.set('scenario', 'RENEWAL');
-
-    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.benefit-application-renewal.posts', url, {
-      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+    const { response, data, error } = await this.interopClient.POST('/benefit-application', {
+      meta: {
+        metricPrefix: 'http.client.interop-api.benefit-application-renewal.posts',
       },
-      body: JSON.stringify(benefitRenewalRequest),
+      params: {
+        header: {
+          'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+        query: {
+          scenario: 'RENEWAL',
+        },
+      },
+      body: benefitRenewalRequest,
     });
 
-    if (!response.ok) {
+    if (error) {
       this.log.error('%j', {
         message: "Failed to 'POST' for benefit renewal data",
         status: response.status,
         statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
+        url: response.url,
+        responseBody: error,
       });
 
       if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
@@ -65,9 +74,7 @@ export class DefaultBenefitRenewalRepository implements BenefitRenewalRepository
       throw new Error(`Failed to 'POST' for benefit renewal data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const data = await response.json();
     this.log.trace('Benefit renewal: [%j]', data);
-
     return data;
   }
 }

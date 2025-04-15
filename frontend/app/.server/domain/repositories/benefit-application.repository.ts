@@ -6,6 +6,8 @@ import type { BenefitApplicationRequestEntity, BenefitApplicationResponseEntity 
 import type { HttpClient } from '~/.server/http';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
+import { createInteropClient } from '~/.server/shared/api/interop-client';
+import type { InteropClient } from '~/.server/shared/api/interop-client';
 import { HttpStatusCodes } from '~/constants/http-status-codes';
 import { AppError } from '~/errors/app-error';
 import { ErrorCodes } from '~/errors/error-codes';
@@ -25,6 +27,7 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
   private readonly log: Logger;
   private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_BENEFIT_APPLICATION_API_BASE_URI' | 'INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY'>;
   private readonly httpClient: HttpClient;
+  private readonly interopClient: InteropClient;
 
   constructor(
     @inject(TYPES.configs.ServerConfig)
@@ -34,29 +37,34 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
     this.log = createLogger('DefaultBenefitApplicationRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
+
+    this.interopClient = createInteropClient({
+      baseUrl: `${this.serverConfig.INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/`,
+    });
   }
 
   async createBenefitApplication(benefitApplicationRequestEntity: BenefitApplicationRequestEntity): Promise<BenefitApplicationResponseEntity> {
     this.log.trace('Creating benefit application for request [%j]', benefitApplicationRequestEntity);
 
-    const url = `${this.serverConfig.INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`;
-    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.benefit-application.posts', url, {
-      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY ?? this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+    const { response, data, error } = await this.interopClient.POST('/benefit-application', {
+      meta: {
+        metricPrefix: 'http.client.interop-api.benefit-application.posts',
       },
-      body: JSON.stringify(benefitApplicationRequestEntity),
+      params: {
+        header: {
+          'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY ?? this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+      },
+      body: benefitApplicationRequestEntity,
     });
 
-    if (!response.ok) {
+    if (error) {
       this.log.error('%j', {
         message: `Failed to 'POST' for benefit application`,
         status: response.status,
         statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
+        url: response.url,
+        responseBody: error,
       });
 
       if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
@@ -67,9 +75,8 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
       throw new Error(`Failed to 'POST' for benefit application. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const benefitApplicationResponseEntity: BenefitApplicationResponseEntity = await response.json();
-    this.log.trace('Returning benefit application response [%j]', benefitApplicationResponseEntity);
-    return benefitApplicationResponseEntity;
+    this.log.trace('Returning benefit application response [%j]', data);
+    return data;
   }
 }
 
