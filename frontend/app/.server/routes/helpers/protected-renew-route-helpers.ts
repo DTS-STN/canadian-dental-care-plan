@@ -1,4 +1,4 @@
-import { redirect, redirectDocument } from 'react-router';
+import { redirect } from 'react-router';
 
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
@@ -6,9 +6,7 @@ import { z } from 'zod';
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
-import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
-import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -159,22 +157,20 @@ interface LoadStateArgs {
  */
 export function loadProtectedRenewState({ params, request, session }: LoadStateArgs) {
   const log = createLogger('protected-renew-route-helpers.server/loadProtectedRenewState');
-  const locale = getLocaleFromParams(params);
   const { pathname } = new URL(request.url);
-  const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
 
   const parsedId = idSchema.safeParse(params.id);
 
   if (!parsedId.success) {
-    log.warn('Invalid "id" query string format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, params.id, session.id);
-    throw redirectDocument(cdcpWebsiteApplyUrl);
+    log.warn('Invalid "id" query string format; redirecting to protected/renew; id: [%s], sessionId: [%s]', params.id, session.id);
+    throw redirect(getPathById('protected/renew/index', params));
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
-    log.warn('Protected renew session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
-    throw redirectDocument(cdcpWebsiteApplyUrl);
+    log.warn('Protected renew session state has not been found; redirecting to protected/renew; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+    throw redirect(getPathById('protected/renew/index', params));
   }
 
   const state: ProtectedRenewState = session.get(sessionName);
