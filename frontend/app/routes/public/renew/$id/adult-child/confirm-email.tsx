@@ -55,10 +55,14 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:confirm-email.page-title') }) };
+
+  instrumentationService.countHttpStatus('public.renew.adult-child.confirm-email', 200);
 
   return {
     meta,
@@ -72,6 +76,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -132,10 +138,13 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('public.renew.adult-child.confirm-email', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   saveRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
+
+  instrumentationService.countHttpStatus('public.renew.adult-child.confirm-email', 302);
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));

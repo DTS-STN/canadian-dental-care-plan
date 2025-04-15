@@ -49,6 +49,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const state = loadRenewAdultSingleChildState({ params, request, session });
 
   if (!state.isNew) {
@@ -64,10 +66,13 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('renew-adult-child:children.information.page-title', { childName }) }),
   };
 
+  instrumentationService.countHttpStatus('public.renew.adult-child.children.information', 200);
   return { meta, defaultState: state.information, childName, editMode: state.editMode, i18nOptions: { childName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -171,6 +176,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('public.renew.adult-child.children.information', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -183,6 +189,7 @@ export async function action({ context: { appContainer, session }, params, reque
   );
 
   if (matches && !matches.includes(true)) {
+    instrumentationService.countHttpStatus('public.renew.adult-child.children.information.child-not-found', 200);
     return { status: 'child-not-found' } as const;
   }
 
@@ -197,6 +204,8 @@ export async function action({ context: { appContainer, session }, params, reque
       }),
     },
   });
+
+  instrumentationService.countHttpStatus('public.renew.adult-child.children.information', 302);
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/adult-child/review-child-information', params));
