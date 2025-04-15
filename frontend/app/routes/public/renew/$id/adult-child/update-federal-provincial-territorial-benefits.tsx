@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { redirect, useFetcher } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -55,6 +55,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   const state = loadRenewAdultChildState({ params, request, session });
@@ -67,6 +69,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:update-dental-benefits.title') }) };
 
+  instrumentationService.countHttpStatus('public.renew.adult-child.update-federal-provincial-territorial-benefits', 200);
+
   return {
     defaultState: state.dentalBenefits,
     editMode: state.editMode,
@@ -78,6 +82,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -99,6 +105,7 @@ export async function action({ context: { appContainer, session }, params, reque
         },
       });
     }
+    instrumentationService.countHttpStatus('public.renew.adult-child.update-federal-provincial-territorial-benefits', 302);
     return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
   }
 
@@ -158,12 +165,16 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedProvincialTerritorialBenefitsResult = provincialTerritorialBenefitsSchema.safeParse(dentalBenefits);
 
   if (!parsedFederalBenefitsResult.success || !parsedProvincialTerritorialBenefitsResult.success) {
-    return {
-      errors: {
-        ...(!parsedFederalBenefitsResult.success ? transformFlattenedError(parsedFederalBenefitsResult.error.flatten()) : {}),
-        ...(!parsedProvincialTerritorialBenefitsResult.success ? transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten()) : {}),
+    instrumentationService.countHttpStatus('public.renew.adult-child.update-federal-provincial-territorial-benefits', 400);
+    return data(
+      {
+        errors: {
+          ...(!parsedFederalBenefitsResult.success ? transformFlattenedError(parsedFederalBenefitsResult.error.flatten()) : {}),
+          ...(!parsedProvincialTerritorialBenefitsResult.success ? transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten()) : {}),
+        },
       },
-    };
+      { status: 400 },
+    );
   }
 
   saveRenewState({
@@ -176,6 +187,8 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     },
   });
+
+  instrumentationService.countHttpStatus('public.renew.adult-child.update-federal-provincial-territorial-benefits', 302);
 
   if (state.editMode) {
     return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));

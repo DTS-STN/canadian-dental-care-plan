@@ -47,6 +47,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateFeatureEnabled('demographic-survey');
 
@@ -66,6 +68,8 @@ export async function loader({ context: { appContainer, session }, request, para
   const locationBornStatuses = demographicSurveyService.listLocalizedLocationBornStatuses(locale);
   const genderStatuses = demographicSurveyService.listLocalizedGenderStatuses(locale);
 
+  instrumentationService.countHttpStatus('public.renew.adult-child.demographic-survey', 200);
+
   return {
     meta,
     indigenousStatuses,
@@ -81,6 +85,8 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -91,6 +97,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.back) {
+    instrumentationService.countHttpStatus('public.renew.adult-child.demographic-survey', 302);
+
     if (state.hasFederalProvincialTerritorialBenefitsChanged) {
       return redirect(getPathById('public/renew/$id/adult-child/update-federal-provincial-territorial-benefits', params));
     }
@@ -141,6 +149,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('public.renew.adult-child.demographic-survey', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -152,6 +161,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
+  instrumentationService.countHttpStatus('public.renew.adult-child.demographic-survey', 302);
   return redirect(getPathById('public/renew/$id/adult-child/children/index', params));
 }
 
