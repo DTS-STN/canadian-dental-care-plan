@@ -333,8 +333,8 @@
     "msca-link-account": "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
     "error-message": {
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
-      "preferred-method-required": "Sélectionnez le moyen de communication préféré",
-      "preferred-notification-method-required": "(FR) Select preferred notification method"
+      "preferred-method-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life",
+      "preferred-notification-method-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada"
     }
   },
   "email": {
