@@ -1,15 +1,22 @@
 import createClient from 'openapi-fetch';
 import type { Client, ClientOptions } from 'openapi-fetch';
 
-import type { paths } from '~/.server/shared/api/dts-applicant-info-openapi-schema';
-import { instrumentationMiddleware } from '~/.server/shared/api/instrumentation-middleware';
-import type { GeneratePathMethodKeys } from '~/.server/shared/api/openapi-schema-types';
+import type { GeneratePathMethodKeys } from '~/.server/shared/api/generate-path-method-keys';
+import { instrumentationMiddleware } from '~/.server/shared/api/middlewares/instrumentation-middleware';
+import type { Paths } from '~/.server/shared/api/paths/paths';
+import { getEnv } from '~/.server/utils/env.utils';
+import { getFetchFn } from '~/.server/utils/http.utils';
 
-export type InteropClient = Client<paths>;
-export type InteropClientPathMethodKeys = GeneratePathMethodKeys<paths>;
+export type InteropClient = Client<Paths>;
+export type InteropClientPathMethodKeys = GeneratePathMethodKeys<Paths>;
 
 export function createInteropClient(clientOptions?: ClientOptions): InteropClient {
-  const client = createClient<paths>(clientOptions);
+  const env = getEnv();
+
+  const client = createClient<Paths>({
+    fetch: getFetchFn({ proxyUrl: env.HTTP_PROXY_URL }),
+    ...clientOptions,
+  });
 
   // Add any custom middleware or interceptors here
   client.use(instrumentationMiddleware());

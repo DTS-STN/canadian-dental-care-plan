@@ -1,7 +1,4 @@
-/**
- * Standard HTTP Methods
- */
-type HttpMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
+import type { HttpMethod } from 'openapi-typescript-helpers';
 
 /**
  * Intermediate type to generate the raw "path|method" union, potentially including undefined/never.

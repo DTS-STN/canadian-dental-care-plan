@@ -27,28 +27,16 @@ export function instrumentationMiddleware(): Middleware {
       log.trace('HTTP request completed; url: [%s], status: [%d]', request.url, response.status);
       instrumentationService.countHttpStatus(metricPrefix, response.status);
     },
-    onError: ({ options, error, request, schemaPath }) => {
-      const metricPrefix = metrixPrefixMap.get(schemaPath);
-
-      // skip middleware
-      if (typeof metricPrefix !== 'string') {
-        log.warn('Skipping instrumentation middleware; onError; url: [%s]', request.url);
-        return;
-      }
-
-      log.error('HTTP request failed; error: [%s]', error);
-      instrumentationService.countHttpStatus(metricPrefix, 500);
-    },
   };
 }
 
 export const pathMetricPrefix = {
   '/applicant|post': 'http.client.interop-api.client-application_by-sin.posts',
   '/benefit-application|post': 'http.client.interop-api.benefit-application.posts',
-  '/benefit-application|post': 'http.client.interop-api.benefit-application-renewal.posts',
+  //'/benefit-application|post': 'http.client.interop-api.benefit-application-renewal.posts',
   '/retrieve-benefit-application-config-dates|get': 'http.client.interop-api.retrieve-benefit-application-config-dates.gets',
   '/retrieve-benefit-application|post': 'http.client.interop-api.retrieve-benefit-application_by-basic-info.posts',
-  '/retrieve-benefit-application|post': 'http.client.interop-api.retrieve-benefit-application_by-sin.posts',
+  //'/retrieve-benefit-application|post': 'http.client.interop-api.retrieve-benefit-application_by-sin.posts',
 } as const satisfies Record<InteropClientPathMethodKeys, string>;
 
 export const metrixPrefixMap: ReadonlyMap<string, string> = new Map(Object.entries(pathMetricPrefix));
