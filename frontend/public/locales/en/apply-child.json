@@ -327,8 +327,8 @@
     "msca-link-account": "https://www.canada.ca/en/employment-social-development/services/my-account.html",
     "error-message": {
       "preferred-language-required": "Select preferred language of communication",
-      "preferred-method-required": "Select preferred method of communication",
-      "preferred-notification-method-required": "Select preferred notification method"
+      "preferred-method-required": "Select preferred method of communication for Sun Life",
+      "preferred-notification-method-required": "Select preferred method of communication for the Government of Canada"
     }
   },
   "email": {
