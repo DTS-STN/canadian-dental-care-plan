@@ -5,8 +5,8 @@ import { z } from 'zod';
 import { singleton } from './instance-registry';
 
 import { generateCryptoKey } from '~/.server/utils/crypto.utils';
-import { clientEnvSchema } from '~/utils/env-utils';
 import type { ClientEnv } from '~/utils/env-utils';
+import { clientEnvSchema } from '~/utils/env-utils';
 
 // none, error, warn, info, debug, verbose, all
 const otelLogLevels = Object.keys(DiagLogLevel).map((key) => key.toLowerCase());
@@ -211,7 +211,19 @@ const serverEnv = clientEnvSchema.extend({
   HEALTH_AUTH_TOKEN_AUDIENCE: z.string().default('00000000-0000-0000-0000-000000000000'), // intentional default to enforce an audience check when verifying JWTs
   HEALTH_AUTH_TOKEN_ISSUER: z.string().default('https://auth.example.com/'), // intentional default to enforce an issuer check when verifying JWTs
   HEALTH_PLACEHOLDER_REQUEST_VALUE: z.string().default('CDCP_HEALTH_CHECK'),
-  APPLY_ELIGIBILITY_RULES: z.string().default('[{"minAge":55,"maxAge":64,"startDate":"2025-05-01"},{"minAge":18,"maxAge":34,"startDate":"2025-05-15"},{"minAge":35,"maxAge":54,"startDate":"2025-05-29"}]')
+  APPLY_ELIGIBILITY_RULES: z.string().default('[{"minAge":55,"maxAge":64,"startDate":"2025-05-01"},{"minAge":18,"maxAge":34,"startDate":"2025-05-15"},{"minAge":35,"maxAge":54,"startDate":"2025-05-29"}]'),
+
+  /**
+   * Defines the duration (in seconds) the application killswitch remains active once engaged.
+   *
+   * When the killswitch is active (triggered by heavy system load), users
+   * attempting to access application or renewal forms will be shown a
+   * notification dialog and prevented from proceeding for this specified time
+   * period.
+   *
+   * TODO ::: GjB ::: this is a temporary fix that should eventually be removed
+   */
+  APPLICATION_KILLSWITCH_TTL_SECONDS: z.coerce.number().default(5 * 60),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
