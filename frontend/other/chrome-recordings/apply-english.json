@@ -99,6 +99,12 @@
       "value": "2000"
     },
     {
+      "type": "click",
+      "selectors": ["#input-radio-dtc-option-0-label"],
+      "offsetY": 1,
+      "offsetX": 1
+    },
+    {
       "type": "change",
       "selectors": ["#social-insurance-number"],
       "value": "800 000 002"
