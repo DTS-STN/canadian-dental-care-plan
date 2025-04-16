@@ -137,7 +137,7 @@
     "info-alert": {
       "heading": "Les demandes sont ouvertes progressivement",
       "eligibility-requirements": "Le Régime canadien de soins dentaires (RCSD) sera offert progressivement. Veuillez vérifier que vous répondez aux quatre <eligibilityRequirements>critères d'admissibilité</eligibilityRequirements> avant de soumettre votre demande.",
-      "schedule-when": "Consultez le calendrier ci-dessous pour savoir <whenApply>quand vous pouvez faire une demande.</whenApply>",
+      "schedule-when": "Consultez le calendrier ci-dessous pour savoir <whenApply>quand vous pouvez faire une demande</whenApply>.",
       "links": {
         "apply-qualify": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/admissibilite.html",
         "apply-when": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand"
