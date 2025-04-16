@@ -1,4 +1,4 @@
-import { redirectDocument } from 'react-router';
+import { redirect } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
@@ -8,10 +8,9 @@ import { z } from 'zod';
 
 import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
-import { getLocaleFromParams } from '~/.server/utils/locale.utils';
-import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 import { getAgeFromDateString } from '~/utils/date-utils';
+import { getPathById } from '~/utils/route-utils';
 
 export type ProtectedApplyState = ReadonlyDeep<{
   id: string;
@@ -192,21 +191,19 @@ interface LoadStateArgs {
  */
 export function loadProtectedApplyState({ params, session }: LoadStateArgs) {
   const log = createLogger('apply-route-helpers.server/loadProtectedApplyState');
-  const locale = getLocaleFromParams(params);
-  const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
 
   const parsedId = idSchema.safeParse(params.id);
 
   if (!parsedId.success) {
-    log.warn('Invalid "id" param format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, params.id, session.id);
-    throw redirectDocument(cdcpWebsiteApplyUrl);
+    log.warn('Invalid "id" param format; redirecting to protected/apply; id: [%s], sessionId: [%s]', params.id, session.id);
+    throw redirect(getPathById('protected/apply/index', params));
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
-    log.warn('Apply session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
-    throw redirectDocument(cdcpWebsiteApplyUrl);
+    log.warn('Apply session state has not been found; redirecting to protected/apply; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+    throw redirect(getPathById('protected/apply/index', params));
   }
 
   const state: ProtectedApplyState = session.get(sessionName);
@@ -218,8 +215,8 @@ export function loadProtectedApplyState({ params, session }: LoadStateArgs) {
 
   if (differenceInMinutes(now, lastUpdatedOn) >= 20) {
     session.unset(sessionName);
-    log.warn('Protected apply session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
-    throw redirectDocument(cdcpWebsiteApplyUrl);
+    log.warn('Protected apply session state has expired; redirecting to protected/apply; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+    throw redirect(getPathById('protected/apply/index', params));
   }
 
   return state;
