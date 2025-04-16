@@ -49,7 +49,7 @@ export const meta: Route.MetaFunction = ({ data }) => {
 
 export const headers: Route.HeadersFunction = () => {
   return {
-    'Cache-Control': `private, no-cache, no-store, must-revalidate, max-age=0`,
+    'Cache-Control': 'private, no-cache, no-store, must-revalidate, max-age=0',
   };
 };
 
