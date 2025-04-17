@@ -4,7 +4,9 @@ import { minimatch } from 'minimatch';
 import morganMiddleware from 'morgan';
 import { randomUUID } from 'node:crypto';
 
+import { getAppContainerProvider } from '~/.server/app.container';
 import type { ServerConfig } from '~/.server/configs';
+import { TYPES } from '~/.server/constants';
 import { createMemoryStore, createRedisStore } from '~/.server/express-server/session.server';
 import { createLogger } from '~/.server/logging';
 
@@ -113,5 +115,33 @@ export function session(isProduction: boolean, serverConfig: ServerConfig): Requ
     }
 
     return middleware(request, response, next);
+  };
+}
+
+export function tracing(): RequestHandler {
+  const log = createLogger('express.server/tracingRequestHandler');
+
+  const appContainer = getAppContainerProvider();
+  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+
+  const ignorePatterns: string[] = [];
+
+  return (request, response, next) => {
+    if (shouldIgnore(ignorePatterns, request.path)) {
+      log.trace('Skipping tracing: [%s]', request.path);
+      return next();
+    }
+
+    instrumentationService.startActiveSpan(`${request.method} ${request.path}`, (span) => {
+      span.setAttribute('http.method', request.method);
+      span.setAttribute('http.url', request.url);
+
+      response.on('finish', () => {
+        span.setAttribute('http.status_code', response.statusCode);
+        span.end();
+      });
+    });
+
+    return next();
   };
 }

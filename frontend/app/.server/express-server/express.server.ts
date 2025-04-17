@@ -2,7 +2,7 @@ import compression from 'compression';
 import express from 'express';
 import sourceMapSupport from 'source-map-support';
 
-import { logging, securityHeaders, session } from '~/.server/express-server/middleware.server';
+import { logging, securityHeaders, session, tracing } from '~/.server/express-server/middleware.server';
 import { globalErrorHandler, rrRequestHandler } from '~/.server/express-server/request-handlers.server';
 import { createViteDevServer } from '~/.server/express-server/vite.server';
 import { createLogger } from '~/.server/logging';
@@ -35,6 +35,9 @@ log.info('  ‼️ configuring express middlewares...');
 
 log.info('    ✓ compression middleware');
 app.use(compression());
+
+log.info('    ✓ tracing middleware');
+app.use(tracing());
 
 log.info('    ✓ logging middleware');
 app.use(logging(isProduction));
