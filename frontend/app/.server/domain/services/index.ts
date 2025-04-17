@@ -18,3 +18,9 @@ export * from './preferred-language.service';
 export * from './province-territory-state.service';
 export * from './provincial-government-insurance-plan.service';
 export * from './verification-code.service';
+
+/**
+ * Key that holds the killswitch boolean value in redis.
+ * TODO ::: GjB ::: this is temporary.. it should be removed when HTTP429 mitigation is removed
+ */
+export const KILLSWITCH_KEY = 'APPLICATION_KILLSWITCH_ENGAGED';
