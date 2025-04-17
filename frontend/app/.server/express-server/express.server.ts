@@ -2,6 +2,7 @@ import compression from 'compression';
 import express from 'express';
 import sourceMapSupport from 'source-map-support';
 
+import { routeRequestCounter } from '~/.server/express-server/instrumentation.server';
 import { logging, securityHeaders, session } from '~/.server/express-server/middleware.server';
 import { globalErrorHandler, rrRequestHandler } from '~/.server/express-server/request-handlers.server';
 import { createViteDevServer } from '~/.server/express-server/vite.server';
@@ -65,6 +66,9 @@ if (viteDevServer) {
   log.info('    ✓ vite dev server middlewares');
   app.use(viteDevServer.middlewares);
 }
+
+log.info('  ✓ registering route request counter');
+app.use(routeRequestCounter());
 
 log.info('  ✓ registering react router request handler');
 // In Express v5, the path route matching syntax has changed.
