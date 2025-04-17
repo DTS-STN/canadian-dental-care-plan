@@ -14,13 +14,13 @@ describe('InputRadio', () => {
     const labelText = 'Radio Label';
     const appendContent = <div data-testid="append-content">Appended Content</div>;
     const { getByLabelText, getByTestId } = render(
-      <InputRadio id="test-radio" name="test-radio" append={appendContent}>
+      <InputRadio id="test" name="test" append={appendContent}>
         {labelText}
       </InputRadio>,
     );
 
     // Check if radio button and label are rendered correctly
-    const radioButton = getByTestId('input-radio');
+    const radioButton = getByTestId('input-radio-test');
     const label = getByLabelText(labelText);
     expect(radioButton).toBeInTheDocument();
     expect(label).toBeInTheDocument();
@@ -33,24 +33,24 @@ describe('InputRadio', () => {
   it('fires onChange event when radio button is clicked', () => {
     const onChangeMock = vi.fn();
     const { getByTestId } = render(
-      <InputRadio id="test-radio" name="test-radio" onChange={onChangeMock}>
+      <InputRadio id="test" name="test" onChange={onChangeMock}>
         Radio Label
       </InputRadio>,
     );
 
-    const radioButton = getByTestId('input-radio');
+    const radioButton = getByTestId('input-radio-test');
     fireEvent.click(radioButton);
     expect(onChangeMock).toHaveBeenCalledOnce();
   });
 
   it('disables radio button when disabled prop is provided', () => {
     const { getByTestId } = render(
-      <InputRadio id="test-radio" name="test-radio" disabled>
+      <InputRadio id="test" name="test" disabled>
         Radio Label
       </InputRadio>,
     );
 
-    const radioButton = getByTestId('input-radio');
+    const radioButton = getByTestId('input-radio-test');
     expect(radioButton).toBeDisabled();
   });
 });

@@ -9,15 +9,13 @@ interface FillOutAddressArgs {
   page: Page;
   postalCode: string;
   province: string;
-  unit: string;
 }
 
 // Reusable function to fill out address
-export async function fillOutAddress({ address, city, country, group, page, postalCode, province, unit }: FillOutAddressArgs) {
-  const groupLocator = page.getByRole('group', { name: group });
+export async function fillOutAddress({ address, city, country, page, postalCode, province, group }: FillOutAddressArgs) {
+  const groupLocator = page.locator(group);
   await expect(groupLocator).toBeVisible();
   await groupLocator.getByRole('textbox', { name: 'Address', exact: true }).fill(address);
-  await groupLocator.getByRole('textbox', { name: 'Apartment, suite, etc. (optional)', exact: true }).fill(unit);
   await groupLocator.getByRole('combobox', { name: 'Country', exact: true }).selectOption(country);
   await groupLocator.getByRole('combobox', { name: 'Province, territory, state, or region', exact: true }).selectOption(province);
   await groupLocator.getByRole('textbox', { name: 'City or town', exact: true }).fill(city);
@@ -31,4 +29,20 @@ export function calculateDOB(age: number, date: Date = new Date()): { year: stri
   const day = date.getDate().toString().padStart(2, '0');
 
   return { year: year.toString(), month, day };
+}
+
+export async function acceptLegalCheckboxes(page: Page) {
+  const checkboxes = ['I have read the Terms and Conditions', 'I have read the Privacy Notice Statement', 'I consent to the sharing of data'];
+
+  for (const label of checkboxes) {
+    const checkbox = page.getByRole('checkbox', { name: label });
+    await expect(checkbox).toBeVisible();
+    await checkbox.check();
+  }
+}
+
+export async function clickContinue(page: Page) {
+  const continueButton = page.getByRole('button', { name: 'Continue' });
+  await expect(continueButton).toBeEnabled();
+  await continueButton.click();
 }

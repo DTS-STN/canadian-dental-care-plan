@@ -29,7 +29,7 @@ export function InputRadio({ append, appendClassName, children, className, hasEr
           id={inputRadioId}
           aria-labelledby={inputLabelId}
           className={cn(inputBaseClassName, restProps.readOnly && inputReadOnlyClassName, restProps.disabled && inputDisabledClassName, hasError && inputErrorClassName, inputClassName)}
-          data-testid="input-radio"
+          data-testid={inputRadioId}
           {...restProps}
         />
         <label id={inputLabelId} htmlFor={inputRadioId} className={cn('block pl-3 leading-6', restProps.readOnly && inputReadOnlyClassName, restProps.disabled && inputDisabledClassName, labelClassName)}>

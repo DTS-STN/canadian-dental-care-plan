@@ -262,7 +262,7 @@ export default function ProtectedApplyAdultHomeAddress({ loaderData, params }: R
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <fieldset className="mb-8">
+          <fieldset className="mb-8" data-testid="home-address-fieldset">
             <div className="space-y-6">
               <InputSanitizeField
                 id="home-address"
