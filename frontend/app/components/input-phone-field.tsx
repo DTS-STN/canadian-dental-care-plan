@@ -35,6 +35,7 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
   const inputHelpMessagePrimaryId = `${inputWrapperId}-help-primary`;
   const inputHelpMessageSecondaryId = `${inputWrapperId}-help-secondary`;
   const inputLabelId = `${inputWrapperId}-label`;
+  const inputPhoneTest = `test-${id}`;
 
   function getAriaDescribedby() {
     const describedby = [];
@@ -69,7 +70,7 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        data-testid="input-phone-field"
+        data-testid={inputPhoneTest}
         defaultCountry={defaultCountry ?? 'CA'}
         id={id}
         className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, errorMessage && inputErrorClassName, className)}
