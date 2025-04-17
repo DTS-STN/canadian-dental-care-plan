@@ -256,7 +256,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [hasSocialInsuranceNumberValue, setHasSocialInsuranceNumberValue] = useState(defaultState?.hasSocialInsuranceNumber ?? true);
+  const [hasSocialInsuranceNumberValue, setHasSocialInsuranceNumberValue] = useState(defaultState?.hasSocialInsuranceNumber);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -279,7 +279,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
     {
       children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-apply-adult-child:children.information.sin-yes" components={{ bold: <strong /> }} />,
       value: YES_NO_OPTION.yes,
-      defaultChecked: defaultState?.hasSocialInsuranceNumber ?? true,
+      defaultChecked: defaultState?.hasSocialInsuranceNumber,
       append: hasSocialInsuranceNumberValue === true && (
         <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
           <InputPatternField
