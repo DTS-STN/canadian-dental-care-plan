@@ -46,4 +46,9 @@ export const routes = [
     file: 'routes/api/session.ts',
     path: '/api/session',
   },
+  {
+    id: 'api/killswitch',
+    file: 'routes/api/killswitch.ts',
+    path: '/api/killswitch',
+  },
 ] as const satisfies RouteConfig;
