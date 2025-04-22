@@ -8,7 +8,7 @@ export type CollapsibleSummaryProps = ComponentProps<'summary'>;
 export function CollapsibleSummary({ children, className, ...props }: CollapsibleSummaryProps) {
   return (
     <summary className={cn('cursor-pointer marker:text-blue-900', className)} {...props}>
-      <div className="ml-4 inline-block text-blue-900 hover:underline">{children}</div>
+      <span className="ml-4 inline-block text-blue-900 hover:underline">{children}</span>
     </summary>
   );
 }
