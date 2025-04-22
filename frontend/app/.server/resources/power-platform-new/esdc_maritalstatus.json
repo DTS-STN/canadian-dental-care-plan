@@ -1,0 +1,32 @@
+[
+  {
+    "id": 775170000,
+    "labelEn": "Single",
+    "labelFr": "Célibataire"
+  },
+  {
+    "id": 775170001,
+    "labelEn": "Married",
+    "labelFr": "Marié(e)"
+  },
+  {
+    "id": 775170002,
+    "labelEn": "Common-Law",
+    "labelFr": "Conjoint(e) de fait"
+  },
+  {
+    "id": 775170003,
+    "labelEn": "Separated",
+    "labelFr": "Séparé(e)"
+  },
+  {
+    "id": 775170004,
+    "labelEn": "Divorced",
+    "labelFr": "Divorcé(e)"
+  },
+  {
+    "id": 775170005,
+    "labelEn": "Widowed",
+    "labelFr": "Veuf ou veuve"
+  }
+]

@@ -1,0 +1,485 @@
+[
+  {
+    "id": "701091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "AL",
+    "nameEn": "Alabama",
+    "nameFr": "Alabama",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "721091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "AK",
+    "nameEn": "Alaska",
+    "nameFr": "Alaska",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "741091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "AZ",
+    "nameEn": "Arizona",
+    "nameFr": "Arizona",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "761091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "AR",
+    "nameEn": "Arkansas",
+    "nameFr": "Arkansas",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "781091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "CA",
+    "nameEn": "California",
+    "nameFr": "Californie",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "7a1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "CO",
+    "nameEn": "Colorado",
+    "nameFr": "Colorado",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "7c1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "CT",
+    "nameEn": "Connecticut",
+    "nameFr": "Connecticut",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "7e1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "DE",
+    "nameEn": "Delaware",
+    "nameFr": "Delaware",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "801091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "FL",
+    "nameEn": "Florida",
+    "nameFr": "Floride",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "821091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "GA",
+    "nameEn": "Georgia",
+    "nameFr": "Géorgie",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "841091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "HI",
+    "nameEn": "Hawaii",
+    "nameFr": "Hawaï",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "861091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "ID",
+    "nameEn": "Idaho",
+    "nameFr": "Idaho",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "881091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "IL",
+    "nameEn": "Illinois",
+    "nameFr": "Illinois",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "8a1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "IN",
+    "nameEn": "Indiana",
+    "nameFr": "Indiana",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "8c1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "IA",
+    "nameEn": "Iowa",
+    "nameFr": "Iowa",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "8e1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "KS",
+    "nameEn": "Kansas",
+    "nameFr": "Kansas",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "901091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "KY",
+    "nameEn": "Kentucky",
+    "nameFr": "Kentucky",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "921091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "LA",
+    "nameEn": "Louisiana",
+    "nameFr": "Louisiane",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "941091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "ME",
+    "nameEn": "Maine",
+    "nameFr": "Maine",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "961091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "MD",
+    "nameEn": "Maryland",
+    "nameFr": "Maryland",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "981091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "MA",
+    "nameEn": "Massachusetts",
+    "nameFr": "Massachusetts",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "9a1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "MI",
+    "nameEn": "Michigan",
+    "nameFr": "Michigan",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "9c1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "MN",
+    "nameEn": "Minnesota",
+    "nameFr": "Minnesota",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "9e1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "MS",
+    "nameEn": "Mississippi",
+    "nameFr": "Mississippi",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "a01091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "MO",
+    "nameEn": "Missouri",
+    "nameFr": "Missouri",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "a21091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "MT",
+    "nameEn": "Montana",
+    "nameFr": "Montana",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "a41091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "NE",
+    "nameEn": "Nebraska",
+    "nameFr": "Nebraska",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "a61091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "NV",
+    "nameEn": "Nevada",
+    "nameFr": "Nevada",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "a81091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "NH",
+    "nameEn": "New Hampshire",
+    "nameFr": "New Hampshire",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "aa1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "NJ",
+    "nameEn": "New Jersey",
+    "nameFr": "New Jersey",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "ac1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "NM",
+    "nameEn": "New Mexico",
+    "nameFr": "Nouveau-Mexique",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "ae1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "NY",
+    "nameEn": "New York",
+    "nameFr": "État de New York",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "b01091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "NC",
+    "nameEn": "North Carolina",
+    "nameFr": "Caroline du Nord",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "b21091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "ND",
+    "nameEn": "North Dakota",
+    "nameFr": "Dakota du Nord",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "b41091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "OH",
+    "nameEn": "Ohio",
+    "nameFr": "Ohio",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "b61091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "OK",
+    "nameEn": "Oklahoma",
+    "nameFr": "Oklahoma",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "b81091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "OR",
+    "nameEn": "Oregon",
+    "nameFr": "Oregon",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "ba1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "PA",
+    "nameEn": "Pennsylvania",
+    "nameFr": "Pennsylvanie",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "bc1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "RI",
+    "nameEn": "Rhode Island",
+    "nameFr": "Rhode Island",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "c01091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "SC",
+    "nameEn": "South Carolina",
+    "nameFr": "Caroline du Sud",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "c21091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "SD",
+    "nameEn": "South Dakota",
+    "nameFr": "Dakota du Sud",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "c41091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "TN",
+    "nameEn": "Tennessee",
+    "nameFr": "Tennessee",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "c61091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "TX",
+    "nameEn": "Texas",
+    "nameFr": "Texas",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "c81091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "UT",
+    "nameEn": "Utah",
+    "nameFr": "Utah",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "ca1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "VT",
+    "nameEn": "Vermont",
+    "nameFr": "Vermont",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "cc1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "VA",
+    "nameEn": "Virginia",
+    "nameFr": "Virginie",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "ce1091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "WA",
+    "nameEn": "Washington",
+    "nameFr": "État de Washington",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "d01091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "WV",
+    "nameEn": "West Virginia",
+    "nameFr": "Virginie-Occidentale",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "d21091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "WI",
+    "nameEn": "Wisconsin",
+    "nameFr": "Wisconsin",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "d41091c1-03b4-eb11-8236-0022486d8555",
+    "aplhaCode": "WY",
+    "nameEn": "Wyoming",
+    "nameFr": "Wyoming",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "3b17d494-35b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "AB",
+    "nameEn": "Alberta",
+    "nameFr": "Alberta",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "9c440baa-35b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "BC",
+    "nameEn": "British Columbia",
+    "nameFr": "Colombie-Britannique",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "6d861c55-36b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "MB",
+    "nameEn": "Manitoba",
+    "nameFr": "Manitoba",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "23dc27a2-36b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "NB",
+    "nameEn": "New Brunswick",
+    "nameFr": "Nouveau-Brunswick",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "fc2243c9-36b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "NS",
+    "nameEn": "Nova Scotia",
+    "nameFr": "Nouvelle-Écosse",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "daf4d05b-37b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "ON",
+    "nameEn": "Ontario",
+    "nameFr": "Ontario",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "39449f70-37b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "QC",
+    "nameEn": "Quebec",
+    "nameFr": "Québec",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "5bc09caf-38b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "SK",
+    "nameEn": "Saskatchewan",
+    "nameFr": "Saskatchewan",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "5abc28c9-38b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "NL",
+    "nameEn": "Newfoundland and Labrador",
+    "nameFr": "Terre-Neuve-et-Labrador",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "3b8110df-38b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "PE",
+    "nameEn": "Prince Edward Island",
+    "nameFr": "Île-du-Prince-Édouard",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "9936c08e-39b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "NU",
+    "nameEn": "Nunavut",
+    "nameFr": "Nunavut",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "6026aca2-39b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "NT",
+    "nameEn": "Northwest Territories",
+    "nameFr": "Territoires du Nord-Ouest",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "8fef32b7-39b3-eb11-8236-0022486d8d5f",
+    "aplhaCode": "YT",
+    "nameEn": "Yukon",
+    "nameFr": "Yukon",
+    "countryId": "0cf5389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "21341235-1ae4-eb11-bacb-0022486d8f50",
+    "aplhaCode": "DC",
+    "nameEn": "District of Columbia",
+    "nameFr": "District de Colombie",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "18c5680b-1be4-eb11-bacb-0022486d8f50",
+    "aplhaCode": "AS",
+    "nameEn": "American Samoa",
+    "nameFr": "Samoa américaines",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "18dd6b1d-1be4-eb11-bacb-0022486d8f50",
+    "aplhaCode": "GU",
+    "nameEn": "Guam",
+    "nameFr": "Guam",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "90f46e2f-1be4-eb11-bacb-0022486d8f50",
+    "aplhaCode": "MP",
+    "nameEn": "Northern Mariana Islands",
+    "nameFr": "Îles Mariannes du Nord",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "06ca9e47-1be4-eb11-bacb-0022486d8f50",
+    "aplhaCode": "PR",
+    "nameEn": "Puerto Rico",
+    "nameFr": "Porto Rico",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  },
+  {
+    "id": "cf6c8c59-1be4-eb11-bacb-0022486d8f50",
+    "aplhaCode": "VI",
+    "nameEn": "U.S. Virgin Islands",
+    "nameFr": "Îles Vierges américaines",
+    "countryId": "fcf7389e-97ae-eb11-8236-000d3af4bfc3"
+  }
+]
