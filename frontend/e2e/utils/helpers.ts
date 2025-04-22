@@ -5,23 +5,18 @@ interface FillOutAddressArgs {
   address: string;
   city: string;
   country: string;
-  group: string;
   page: Page;
   postalCode: string;
   province: string;
-  unit: string;
 }
 
 // Reusable function to fill out address
-export async function fillOutAddress({ address, city, country, group, page, postalCode, province, unit }: FillOutAddressArgs) {
-  const groupLocator = page.getByRole('group', { name: group });
-  await expect(groupLocator).toBeVisible();
-  await groupLocator.getByRole('textbox', { name: 'Address', exact: true }).fill(address);
-  await groupLocator.getByRole('textbox', { name: 'Apartment, suite, etc. (optional)', exact: true }).fill(unit);
-  await groupLocator.getByRole('combobox', { name: 'Country', exact: true }).selectOption(country);
-  await groupLocator.getByRole('combobox', { name: 'Province, territory, state, or region', exact: true }).selectOption(province);
-  await groupLocator.getByRole('textbox', { name: 'City or town', exact: true }).fill(city);
-  await groupLocator.getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
+export async function fillOutAddress({ address, city, country, page, postalCode, province }: FillOutAddressArgs) {
+  await page.getByRole('textbox', { name: 'Address', exact: true }).fill(address);
+  await page.getByRole('combobox', { name: 'Country', exact: true }).selectOption(country);
+  await page.getByRole('combobox', { name: 'Province, territory, state, or region', exact: true }).selectOption(province);
+  await page.getByRole('textbox', { name: 'City or town', exact: true }).fill(city);
+  await page.getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
 }
 
 // Calculate date based on the given age
@@ -31,4 +26,20 @@ export function calculateDOB(age: number, date: Date = new Date()): { year: stri
   const day = date.getDate().toString().padStart(2, '0');
 
   return { year: year.toString(), month, day };
+}
+
+export async function acceptLegalCheckboxes(page: Page) {
+  const checkboxes = ['I have read the Terms and Conditions', 'I have read the Privacy Notice Statement', 'I consent to the sharing of data'];
+
+  for (const label of checkboxes) {
+    const checkbox = page.getByRole('checkbox', { name: label });
+    await expect(checkbox).toBeVisible();
+    await checkbox.check();
+  }
+}
+
+export async function clickContinue(page: Page) {
+  const continueButton = page.getByRole('button', { name: 'Continue' });
+  await expect(continueButton).toBeEnabled();
+  await continueButton.click();
 }
