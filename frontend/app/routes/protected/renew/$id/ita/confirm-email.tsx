@@ -49,8 +49,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -63,8 +61,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm-email.page-title') }) };
 
-  instrumentationService.countHttpStatus('protected.renew.ita.confirm-email', 200);
-
   return {
     meta,
     defaultState: {
@@ -76,8 +72,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -89,7 +83,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
-    instrumentationService.countHttpStatus('protected.renew.ita.confirm-email', 302);
     if (!state.isHomeAddressSameAsMailingAddress) {
       return redirect(getPathById('protected/renew/$id/confirm-home-address', params));
     }
@@ -133,13 +126,10 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('protected.renew.ita.confirm-email', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   saveProtectedRenewState({ params, request, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
-
-  instrumentationService.countHttpStatus('protected.renew.ita.confirm-email', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
