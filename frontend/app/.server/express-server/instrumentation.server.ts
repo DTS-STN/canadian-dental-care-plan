@@ -60,7 +60,7 @@ export function routeRequestCounter(): RequestHandler {
 
         if (routeId) {
           // Construct metric identifier (e.g., POST '/user/$id/profile' → 'user._id.profile.posts')
-          const metricPrefix = `${routeId.replaceAll('/', '.').replace(/.\$([^.]+)/g, '_$1')}.${req.method.toLowerCase()}s`;
+          const metricPrefix = `${routeId.replaceAll('/', '.').replace(/\$([^.]+)/g, '_$1')}.${req.method.toLowerCase()}s`;
           instrumentationService.countHttpStatus(metricPrefix, res.statusCode);
         }
       } catch (error) {
