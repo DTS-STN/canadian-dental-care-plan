@@ -19,7 +19,7 @@ describe('Collapsible Details', () => {
     expect(collapsibleDetailsElement.id).toBe(additionalProps.id + '-content');
 
     const collapsibleDetailsSummaryElement = getByText(additionalProps.summary);
-    expect(collapsibleDetailsSummaryElement.tagName).toBe('DIV');
+    expect(collapsibleDetailsSummaryElement.tagName).toBe('SPAN');
     expect(collapsibleDetailsSummaryElement.parentElement?.tagName).toBe('SUMMARY');
     expect(collapsibleDetailsSummaryElement.parentElement?.id).toBe(additionalProps.id + '-summary');
   });
