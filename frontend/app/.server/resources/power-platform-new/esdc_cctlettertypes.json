@@ -1,0 +1,232 @@
+[
+  {
+    "id": "invite-775170013",
+    "order": 3,
+    "nameEn": "Invitation to Renew Letter- Primary",
+    "nameFr": "Lettre d'invitation à renouveler  - Principal",
+    "parentId": "invite",
+    "parentOrder": 0,
+    "parentNameEn": "Invitation Letter",
+    "parentNameFr": "Lettre d'invitation"
+  },
+  {
+    "id": "775170000",
+    "order": 1,
+    "nameEn": "Invitation to Apply Letter",
+    "nameFr": "Lettre d'invitation à postuler",
+    "parentId": "invite",
+    "parentOrder": 0,
+    "parentNameEn": "Invitation Letter",
+    "parentNameFr": "Lettre d'invitation"
+  },
+  {
+    "id": "775170001",
+    "order": 2,
+    "nameEn": "Determination Letter",
+    "nameFr": "Lettre de détermination",
+    "parentId": null,
+    "parentOrder": null,
+    "parentNameEn": null,
+    "parentNameFr": null
+  },
+  {
+    "id": "775170001-775170000",
+    "order": 100,
+    "nameEn": "Eligible",
+    "nameFr": "Admissible",
+    "parentId": "775170001",
+    "parentOrder": 2,
+    "parentNameEn": "Determination Letter",
+    "parentNameFr": "Lettre de détermination"
+  },
+  {
+    "id": "775170001-775170001",
+    "order": 200,
+    "nameEn": "Ineligible",
+    "nameFr": "Non admissible",
+    "parentId": "775170001",
+    "parentOrder": 2,
+    "parentNameEn": "Determination Letter",
+    "parentNameFr": "Lettre de détermination"
+  },
+  {
+    "id": "775170002-775170002",
+    "order": 400,
+    "nameEn": "Duplicate",
+    "nameFr": "Doublon",
+    "parentId": "775170002",
+    "parentOrder": 1,
+    "parentNameEn": "Validation Letter",
+    "parentNameFr": "Lettre de validation"
+  },
+  {
+    "id": "775170001-775170007",
+    "order": 101,
+    "nameEn": "Eligible Dependant",
+    "nameFr": "Personne à charge admissible",
+    "parentId": "775170001",
+    "parentOrder": 2,
+    "parentNameEn": "Determination Letter",
+    "parentNameFr": "Lettre de détermination"
+  },
+  {
+    "id": "775170001-775170008",
+    "order": 201,
+    "nameEn": "Ineligible Dependant",
+    "nameFr": "Personne à charge non admissible",
+    "parentId": "775170001",
+    "parentOrder": 2,
+    "parentNameEn": "Determination Letter",
+    "parentNameFr": "Lettre de détermination"
+  },
+  {
+    "id": "775170001-775170009",
+    "order": 301,
+    "nameEn": "Re-Assess Child Dependant",
+    "nameFr": "Réévaluer l'enfant à charge",
+    "parentId": "775170001",
+    "parentOrder": 2,
+    "parentNameEn": "Determination Letter",
+    "parentNameFr": "Lettre de détermination"
+  },
+  {
+    "id": "775170001-775170010",
+    "order": 300,
+    "nameEn": "Re-Assess Applicant",
+    "nameFr": "Réévaluer le demandeur",
+    "parentId": "775170001",
+    "parentOrder": 2,
+    "parentNameEn": "Determination Letter",
+    "parentNameFr": "Lettre de détermination"
+  },
+  {
+    "id": "775170002-775170011",
+    "order": 401,
+    "nameEn": "Duplicate Child",
+    "nameFr": "Doublon - Enfant",
+    "parentId": "775170002",
+    "parentOrder": 1,
+    "parentNameEn": "Validation Letter",
+    "parentNameFr": "Lettre de validation"
+  },
+  {
+    "id": "775170002-775170012",
+    "order": 500,
+    "nameEn": "Independent Child",
+    "nameFr": "Enfant indépendant",
+    "parentId": "775170002",
+    "parentOrder": 1,
+    "parentNameEn": "Validation Letter",
+    "parentNameFr": "Lettre de validation"
+  },
+  {
+    "id": "775170001-775170002",
+    "order": 2,
+    "nameEn": "Eligible Renewal - Primary",
+    "nameFr": "Renouvellement Admissible - Principal",
+    "parentId": "775170001",
+    "parentOrder": 2,
+    "parentNameEn": "Determination Letter",
+    "parentNameFr": "Lettre de détermination"
+  },
+  {
+    "id": "775170001-775170003",
+    "order": 3,
+    "nameEn": "Eligible Renewal - Dependant",
+    "nameFr": "Renouvellement Admissible - Personne à charge",
+    "parentId": "775170001",
+    "parentOrder": 2,
+    "parentNameEn": "Determination Letter",
+    "parentNameFr": "Lettre de détermination"
+  },
+  {
+    "id": "775170001-775170004",
+    "order": 4,
+    "nameEn": "Ineligible Renewal - Primary",
+    "nameFr": "Renouvellement Non admissible  - Principal",
+    "parentId": "775170001",
+    "parentOrder": 2,
+    "parentNameEn": "Determination Letter",
+    "parentNameFr": "Lettre de détermination"
+  },
+  {
+    "id": "775170001-775170005",
+    "order": 5,
+    "nameEn": "Ineligible Renewal -  Dependant",
+    "nameFr": "Renouvellement Non admissible - Personne à charge",
+    "parentId": "775170001",
+    "parentOrder": 2,
+    "parentNameEn": "Determination Letter",
+    "parentNameFr": "Lettre de détermination"
+  },
+  {
+    "id": "invite-775170014",
+    "order": 4,
+    "nameEn": "Invitation to Renew Letter - Dependant",
+    "nameFr": "Lettre d'invitation à renouveler dependant",
+    "parentId": "invite",
+    "parentOrder": 0,
+    "parentNameEn": "Invitation Letter",
+    "parentNameFr": "Lettre d'invitation"
+  },
+  {
+    "id": "invite-775170015",
+    "order": 5,
+    "nameEn": "New Adult Invitation",
+    "nameFr": "Invitation - Nouveaux adultes",
+    "parentId": "invite",
+    "parentOrder": 0,
+    "parentNameEn": "Invitation Letter",
+    "parentNameFr": "Lettre d'invitation"
+  },
+  {
+    "id": "invite-775170016",
+    "order": 6,
+    "nameEn": "Renewal Reminder- Primary",
+    "nameFr": "Rappel de renouvellement pour le demandeur principal",
+    "parentId": "invite",
+    "parentOrder": 0,
+    "parentNameEn": "Invitation Letter",
+    "parentNameFr": "Lettre d'invitation"
+  },
+  {
+    "id": "invite-775170017",
+    "order": 7,
+    "nameEn": "Renewal Reminder-  Dependant",
+    "nameFr": "Rappel de renouvellement pour les personnes à charge",
+    "parentId": "invite",
+    "parentOrder": 0,
+    "parentNameEn": "Invitation Letter",
+    "parentNameFr": "Lettre d'invitation"
+  },
+  {
+    "id": "notice-775170018",
+    "order": 8,
+    "nameEn": "Benefits Expired - Primary",
+    "nameFr": "Prestations expirées pour le demandeur principal",
+    "parentId": "notice",
+    "parentOrder": 3,
+    "parentNameEn": "Notice Letter",
+    "parentNameFr": "Lettre de préavis"
+  },
+  {
+    "id": "notice-775170019",
+    "order": 9,
+    "nameEn": "Benefits Expired - Dependant",
+    "nameFr": "Prestations expirées pour les personnes à charge",
+    "parentId": "notice",
+    "parentOrder": 3,
+    "parentNameEn": "Notice Letter",
+    "parentNameFr": "Lettre de préavis"
+  },
+  {
+    "id": "notice-775170020",
+    "order": 10,
+    "nameEn": "Pre-Renewal SIR Account Revision Letter",
+    "nameFr": "Lettre de révision du dossier RAS pré-renouvellement",
+    "parentId": "notice",
+    "parentOrder": 3,
+    "parentNameEn": "Notice Letter",
+    "parentNameFr": "Lettre de préavis"
+  }
+]
