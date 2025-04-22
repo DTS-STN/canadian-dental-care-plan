@@ -292,7 +292,7 @@ export default function ProtectedApplyAdultMailingAddress({ loaderData, params }
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <fieldset className="mb-6" data-testid="mailing-address-fieldset">
+          <fieldset className="mb-6">
             <div className="space-y-6">
               <InputSanitizeField
                 id="mailing-address"

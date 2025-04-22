@@ -5,21 +5,18 @@ interface FillOutAddressArgs {
   address: string;
   city: string;
   country: string;
-  group: string;
   page: Page;
   postalCode: string;
   province: string;
 }
 
 // Reusable function to fill out address
-export async function fillOutAddress({ address, city, country, page, postalCode, province, group }: FillOutAddressArgs) {
-  const groupLocator = page.locator(group);
-  await expect(groupLocator).toBeVisible();
-  await groupLocator.getByRole('textbox', { name: 'Address', exact: true }).fill(address);
-  await groupLocator.getByRole('combobox', { name: 'Country', exact: true }).selectOption(country);
-  await groupLocator.getByRole('combobox', { name: 'Province, territory, state, or region', exact: true }).selectOption(province);
-  await groupLocator.getByRole('textbox', { name: 'City or town', exact: true }).fill(city);
-  await groupLocator.getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
+export async function fillOutAddress({ address, city, country, page, postalCode, province }: FillOutAddressArgs) {
+  await page.getByRole('textbox', { name: 'Address', exact: true }).fill(address);
+  await page.getByRole('combobox', { name: 'Country', exact: true }).selectOption(country);
+  await page.getByRole('combobox', { name: 'Province, territory, state, or region', exact: true }).selectOption(province);
+  await page.getByRole('textbox', { name: 'City or town', exact: true }).fill(city);
+  await page.getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
 }
 
 // Calculate date based on the given age

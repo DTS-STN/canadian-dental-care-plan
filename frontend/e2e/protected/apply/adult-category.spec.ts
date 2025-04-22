@@ -60,14 +60,14 @@ test.describe('Adult category', () => {
 
     await test.step('Should navigate to mailing address page', async () => {
       await applyAdultPage.isLoaded('mailing-address');
-      await fillOutAddress({ address: '123 Fake Street', city: 'Ottawa', country: 'Canada', province: 'Ontario', postalCode: 'K1A 0B1', page, group: '[data-testid="mailing-address-fieldset"]' });
+      await fillOutAddress({ address: '123 Fake Street', city: 'Ottawa', country: 'Canada', province: 'Ontario', postalCode: 'K1A 0B1', page });
       await clickContinue(page);
       await page.getByRole('button', { name: 'Use selected address' }).click();
     });
 
     await test.step('Should navigate to home address page', async () => {
       await applyAdultPage.isLoaded('home-address');
-      await fillOutAddress({ address: '123 Maple Street', city: 'Ottawa', country: 'Canada', province: 'Ontario', postalCode: 'K1A 0B1', page, group: '[data-testid="home-address-fieldset"]' });
+      await fillOutAddress({ address: '123 Maple Street', city: 'Ottawa', country: 'Canada', province: 'Ontario', postalCode: 'K1A 0B1', page });
       await clickContinue(page);
       await page.getByRole('button', { name: 'Use selected address' }).click();
     });
@@ -98,7 +98,7 @@ test.describe('Adult category', () => {
       await clickContinue(page);
     });
 
-    await test.step('Should navigate to email page', async () => {
+    await test.step('Should navigate to verify email page', async () => {
       await applyAdultPage.isLoaded('verify-email');
       await page.getByRole('textbox', { name: 'Verification code' }).fill('12345');
       await clickContinue(page);
