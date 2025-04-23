@@ -44,8 +44,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -63,13 +61,10 @@ export async function loader({ context: { appContainer, session }, params, reque
       : [{ id: state.id, applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`, previouslyReviewed: state.previouslyReviewed, typeOfApplicant: 'primary' }]
   ).concat(state.children.map((child) => ({ id: child.id, applicantName: `${child.information?.firstName} ${child.information?.lastName}`, previouslyReviewed: child.previouslyReviewed, typeOfApplicant: 'child' })));
 
-  instrumentationService.countHttpStatus('protected.renew.member-selection', 200);
   return { meta, members, isItaCandidate: isInvitationToApplyClient(state.clientApplication) };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -84,11 +79,8 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.member-selection', { userId: idToken.sub });
 
   if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) && !isChildrenStateComplete(state, demographicSurveyEnabled)) {
-    instrumentationService.countHttpStatus('protected.renew.member-selection.select-member', 200);
     return { status: 'select-member' };
   }
-
-  instrumentationService.countHttpStatus('protected.renew.member-selection', 302);
 
   if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
     return redirect(getPathById('protected/renew/$id/review-child-information', params));

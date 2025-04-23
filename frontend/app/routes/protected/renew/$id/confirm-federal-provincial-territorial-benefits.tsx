@@ -54,15 +54,12 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, request, session });
 
   if (!isInvitationToApplyClient(state.clientApplication) && !state.editMode) {
-    instrumentationService.countHttpStatus('protected.renew.confirm-federal-provincial-territorial-benefits', 404);
     throw new Response('Not Found', { status: 404 });
   }
 
@@ -104,8 +101,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.renew.confirm-federal-provincial-territorial-benefits', 200);
-
   return {
     defaultState: dentalBenefits,
     federalSocialPrograms,
@@ -117,8 +112,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -190,7 +183,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedProvincialTerritorialBenefitsResult = provincialTerritorialBenefitsSchema.safeParse(dentalProvincialTerritorialBenefits);
 
   if (!parsedFederalBenefitsResult.success || !parsedProvincialTerritorialBenefitsResult.success) {
-    instrumentationService.countHttpStatus('protected.renew.confirm-federal-provincial-territorial-benefits', 400);
     return data(
       {
         errors: {
@@ -217,8 +209,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.renew.confirm-federal-provincial-territorial-benefits', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));

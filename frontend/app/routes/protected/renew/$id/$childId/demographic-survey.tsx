@@ -46,8 +46,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateFeatureEnabled('demographic-survey');
@@ -76,8 +74,6 @@ export async function loader({ context: { appContainer, session }, request, para
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.child-demographic-survey', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.renew.children.demographic-survey', 200);
-
   return {
     meta,
     indigenousStatuses,
@@ -94,8 +90,6 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -149,7 +143,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('protected.renew.children.demographic-survey', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -167,8 +160,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.child-demographic-survey', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.renew.children.demographic-survey', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-child-information', params));

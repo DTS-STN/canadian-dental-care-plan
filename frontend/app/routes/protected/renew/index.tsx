@@ -30,8 +30,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -45,14 +43,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
   const applicationYear = await applicationYearService.findRenewalApplicationYear(currentDate);
   if (!applicationYear?.renewalYearId) {
-    instrumentationService.countHttpStatus('protected.renew', 302);
     throw redirect(getPathById('protected/apply/index', params));
   }
 
   const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
   const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.renewalYearId, userId: userInfoToken.sub });
   if (!clientApplication) {
-    instrumentationService.countHttpStatus('protected.renew', 302);
     throw redirect(getPathById('protected/data-unavailable', params));
   }
 
@@ -73,7 +69,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.index', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.renew', 200);
   return { id: state.id, locale, meta };
 }
 

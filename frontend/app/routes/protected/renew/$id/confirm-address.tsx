@@ -44,8 +44,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -53,19 +51,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   if (!isInvitationToApplyClient(state.clientApplication) && !state.editMode) {
-    instrumentationService.countHttpStatus('protected.renew.confirm-address', 404);
     throw new Response('Not Found', { status: 404 });
   }
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm-address.page-title') }) };
-
-  instrumentationService.countHttpStatus('protected.renew.confirm-address', 200);
   return { meta, defaultState: { isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress }, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -84,7 +77,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('protected.renew.confirm-address', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -108,8 +100,6 @@ export async function action({ context: { appContainer, session }, params, reque
       homeAddress,
     },
   });
-
-  instrumentationService.countHttpStatus('protected.renew.confirm-address', 302);
 
   if (parsedDataResult.data.isHomeAddressSameAsMailingAddress === ADDRESS_RADIO_OPTIONS.no) {
     return redirect(getPathById('protected/renew/$id/confirm-home-address', params));

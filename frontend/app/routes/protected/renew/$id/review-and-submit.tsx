@@ -44,8 +44,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -78,8 +76,6 @@ export async function loader({ context: { appContainer, session }, params, reque
         .get(TYPES.domain.mappers.BenefitRenewalDtoMapper)
         .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(copiedState, userInfoToken.sub, isPrimaryApplicantStateComplete(state,demographicSurveyEnabled)));
 
-  instrumentationService.countHttpStatus('protected.renew.review-and-submit', 200);
-
   return {
     meta,
     primaryApplicantName,
@@ -91,15 +87,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearProtectedRenewState({ params, request, session });
-    instrumentationService.countHttpStatus('protected.renew.review-and-submit', 302);
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
@@ -111,7 +104,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
-    instrumentationService.countHttpStatus('protected.renew.review-and-submit', 302);
     if (!primaryApplicantStateCompleted || validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).length === 0) {
       return redirect(getPathById('protected/renew/$id/review-adult-information', params));
     }
@@ -133,7 +125,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-and-submit', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.renew.review-and-submit', 302);
   return redirect(getPathById('protected/renew/$id/confirmation', params));
 }
 
