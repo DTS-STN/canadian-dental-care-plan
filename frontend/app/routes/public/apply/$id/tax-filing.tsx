@@ -32,20 +32,15 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:tax-filing.page-title') }) };
 
-  instrumentationService.countHttpStatus('public.apply.tax-filing', 200);
   return { meta, defaultState: state.hasFiledTaxes, taxYear: state.applicationYear.taxYear };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -58,13 +53,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDataResult = taxFilingSchema.safeParse({ hasFiledTaxes: formData.get('hasFiledTaxes') });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('public.apply.tax-filing', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   saveApplyState({ params, session, state: { hasFiledTaxes: parsedDataResult.data.hasFiledTaxes === TAX_FILING_OPTION.yes } });
-
-  instrumentationService.countHttpStatus('public.apply.tax-filing', 302);
 
   if (parsedDataResult.data.hasFiledTaxes === TAX_FILING_OPTION.no) {
     return redirect(getPathById('public/apply/$id/file-taxes', params));

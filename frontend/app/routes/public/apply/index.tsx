@@ -28,8 +28,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -41,7 +39,6 @@ export async function loader({ context: { appContainer, session }, request }: Ro
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:index.page-title') }) };
 
-  instrumentationService.countHttpStatus('public.apply', 200);
   return { id: state.id, locale, meta };
 }
 
