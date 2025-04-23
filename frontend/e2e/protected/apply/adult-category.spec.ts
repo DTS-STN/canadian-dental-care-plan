@@ -33,7 +33,7 @@ test.describe('Adult category', () => {
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
-            const { year, month, day } = calculateDOB(35);
+      const { year, month, day } = calculateDOB(35);
       await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
 
       // DTC question
