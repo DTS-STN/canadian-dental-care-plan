@@ -5,6 +5,7 @@ import sourceMapSupport from 'source-map-support';
 import { routeRequestCounter } from '~/.server/express-server/instrumentation.server';
 import { logging, securityHeaders, session } from '~/.server/express-server/middleware.server';
 import { globalErrorHandler, rrRequestHandler } from '~/.server/express-server/request-handlers.server';
+import { initServerBuild } from '~/.server/express-server/server-build.server';
 import { createViteDevServer } from '~/.server/express-server/vite.server';
 import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -24,6 +25,10 @@ sourceMapSupport.install();
 
 log.info(`Initializing %s mode express server...`, environment.NODE_ENV);
 const viteDevServer = await createViteDevServer(isProduction);
+
+log.info('Initializing server build...');
+const build = await initServerBuild(viteDevServer);
+
 const app = express();
 
 log.info('  ✓ disabling X-Powered-By response header');
@@ -68,14 +73,14 @@ if (viteDevServer) {
 }
 
 log.info('  ✓ registering route request counter');
-app.use(routeRequestCounter());
+app.use(routeRequestCounter(build));
 
 log.info('  ✓ registering react router request handler');
 // In Express v5, the path route matching syntax has changed.
 // The wildcard "*" must now have a name, similar to parameters ":".
 // Use "/*splat" instead of "/*" to match the updated behavior.
 // Reference: https://expressjs.com/en/guide/migrating-5.html#path-syntax
-app.all('*splat', rrRequestHandler(environment.NODE_ENV, viteDevServer));
+app.all('*splat', rrRequestHandler(build, environment.NODE_ENV));
 
 log.info('  ✓ registering global error handler');
 app.use(globalErrorHandler(isProduction));
