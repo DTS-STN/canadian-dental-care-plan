@@ -11,6 +11,8 @@
       "add-child": "Renouveler pour un enfant",
       "add-another-child": "Renouveler pour un autre enfant",
       "remove-child": "Retirer l'enfant",
+      "edit-child-aria": "Modifier les renseignements sur l'enfant {{childName}}",
+      "remove-child-aria": "Retirer l'enfant {{childName}}",
       "back-btn": "Retour",
       "continue-btn": "Poursuivre la demande",
       "cancel-btn": "Annuler",

@@ -177,6 +177,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                   <div className="flex flex-wrap items-center gap-3">
                     <ButtonLink
                       id="edit-child"
+                      aria-label={t('apply-child:children.index.edit-child-aria', { childName })}
                       disabled={isSubmitting}
                       size="sm"
                       variant="alternative"
@@ -189,7 +190,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                     </ButtonLink>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button aria-expanded={undefined} id="remove-child" disabled={isSubmitting} size="sm" variant="alternative" startIcon={faRemove}>
+                        <Button aria-expanded={undefined} id="remove-child" aria-label={t('apply-child:children.index.remove-child-aria', { childName })} disabled={isSubmitting} size="sm" variant="alternative" startIcon={faRemove}>
                           {t('apply-child:children.index.remove-btn')}
                         </Button>
                       </DialogTrigger>

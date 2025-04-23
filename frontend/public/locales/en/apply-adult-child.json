@@ -153,6 +153,8 @@
       "add-child": "Add a child",
       "add-another-child": "Add another child",
       "remove-child": "Remove child",
+      "edit-child-aria": "Edit child's information {{childName}}",
+      "remove-child-aria": "Remove child {{childName}}",
       "back-btn": "Back",
       "continue-btn": "Continue with application",
       "cancel-btn": "Cancel",

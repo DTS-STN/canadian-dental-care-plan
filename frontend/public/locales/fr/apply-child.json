@@ -139,6 +139,8 @@
       "add-child": "Ajouter un enfant",
       "add-another-child": "Ajouter un autre enfant",
       "remove-btn": "Retirer l'enfant",
+      "edit-child-aria": "Modifier les renseignements sur l'enfant {{childName}}",
+      "remove-child-aria": "Retirer l'enfant {{childName}}",
       "back-btn": "Retour",
       "continue-btn": "Continuer avec la demande",
       "cancel-btn": "Annuler",
