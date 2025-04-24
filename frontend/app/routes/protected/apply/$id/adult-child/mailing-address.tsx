@@ -56,8 +56,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -68,8 +66,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.mailing-address', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.adult-child.mailing-address', 200);
 
   return {
     meta,
@@ -83,8 +79,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
   const locale = getLocale(request);
@@ -100,7 +94,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
 
   if (formAction === FORM_ACTION.cancel) {
-    instrumentationService.countHttpStatus('protected.apply.adult-child.mailing-address', 302);
     return redirect(getPathById('protected/apply/$id/adult-child/review-adult-information', params));
   }
 
@@ -114,7 +107,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!validatedResult.success) {
-    instrumentationService.countHttpStatus('protected.apply.adult-child.mailing-address', 400);
     return data({ errors: validatedResult.errors }, { status: 400 });
   }
 
@@ -143,8 +135,6 @@ export async function action({ context: { appContainer, session }, params, reque
         ...(homeAddress && { homeAddress }),
       },
     });
-
-    instrumentationService.countHttpStatus('protected.apply.adult-child.mailing-address', 302);
 
     if (state.editMode) {
       return redirect(isCopyMailingToHome ? getPathById('protected/apply/$id/adult-child/review-adult-information', params) : getPathById('protected/apply/$id/adult-child/home-address', params));
@@ -177,7 +167,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (addressCorrectionResult.status === 'not-correct') {
-    instrumentationService.countHttpStatus('protected.apply.adult-child.mailing-address.address-invalid', 200);
     return {
       invalidAddress: formattedMailingAddress,
       status: 'address-invalid',
@@ -186,7 +175,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (addressCorrectionResult.status === 'corrected') {
     const provinceTerritoryState = provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
-    instrumentationService.countHttpStatus('protected.apply.adult-child.mailing-address.address-suggestion', 200);
     return {
       enteredAddress: formattedMailingAddress,
       status: 'address-suggestion',
@@ -214,8 +202,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.mailing-address', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.adult-child.mailing-address', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/apply/$id/adult-child/review-adult-information', params));

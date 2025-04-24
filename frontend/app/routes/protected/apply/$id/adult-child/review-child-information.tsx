@@ -55,8 +55,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadProtectedApplyAdultChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
@@ -119,8 +117,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.review-child-information', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.adult-child.review-child-information', 200);
-
   return { children, meta, payload };
 }
 
@@ -128,20 +124,16 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearProtectedApplyState({ params, session });
-    instrumentationService.countHttpStatus('protected.apply.adult-child.review-child-information', 302);
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveProtectedApplyState({ params, session, state: {} });
-    instrumentationService.countHttpStatus('protected.apply.adult-child.review-child-information', 302);
     return redirect(getPathById('protected/apply/$id/adult-child/review-adult-information', params));
   }
 
@@ -155,7 +147,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.review-child-information', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.adult-child.review-child-information', 302);
   return redirect(getPathById('protected/apply/$id/adult-child/confirmation', params));
 }
 

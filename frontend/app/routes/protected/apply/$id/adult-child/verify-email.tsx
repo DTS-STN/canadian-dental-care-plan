@@ -55,8 +55,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -64,8 +62,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.verify-email', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.adult-child.verify-email', 200);
 
   return {
     meta,
@@ -77,8 +73,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
 
@@ -118,7 +112,6 @@ export async function action({ context: { appContainer, session }, params, reque
         preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
         userId: 'anonymous',
       });
-      instrumentationService.countHttpStatus('protected.apply.adult-child.verify-email.verification-code-sent', 200);
       return { status: 'verification-code-sent' } as const;
     } else if (state.email && state.communicationPreferences?.preferredLanguage) {
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
@@ -128,7 +121,6 @@ export async function action({ context: { appContainer, session }, params, reque
         preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
         userId: 'anonymous',
       });
-      instrumentationService.countHttpStatus('protected.apply.adult-child.verify-email.verification-code-sent', 200);
       return { status: 'verification-code-sent' } as const;
     }
   }
@@ -152,7 +144,6 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (!parsedDataResult.success) {
-      instrumentationService.countHttpStatus('protected.apply.adult-child.verify-email', 400);
       return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
     }
 
@@ -173,12 +164,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
       const idToken: IdToken = session.get('idToken');
       appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.verify-email', { userId: idToken.sub });
-
-      instrumentationService.countHttpStatus('protected.apply.adult-child.verify-email.verification-code-mismatch', 200);
       return { status: 'verification-code-mismatch' } as const;
     }
-
-    instrumentationService.countHttpStatus('protected.apply.adult-child.verify-email', 302);
 
     if (state.verifyEmail) {
       if (state.editMode) {

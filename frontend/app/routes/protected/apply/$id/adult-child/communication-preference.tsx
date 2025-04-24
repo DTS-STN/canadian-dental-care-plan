@@ -44,8 +44,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -56,8 +54,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.communication-preference', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.adult-child.communication-preference', 200);
 
   return {
     meta,
@@ -72,8 +68,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
 
@@ -95,14 +89,11 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('protected.apply.adult-child.communication-preference', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.communication-preference', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.adult-child.communication-preference', 302);
 
   if (state.editMode) {
     if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {

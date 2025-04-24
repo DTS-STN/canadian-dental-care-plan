@@ -32,15 +32,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:exit-application.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.exit-application', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.adult-child.exit-application', 200);
   return { meta };
 }
 
@@ -48,7 +45,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
   const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
   const formData = await request.formData();
@@ -62,7 +58,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.exit-application', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.adult-child.exit-application', 302);
   return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 

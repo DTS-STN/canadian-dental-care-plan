@@ -37,8 +37,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -54,7 +52,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.parent-or-guardian', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.adult-child.parent-or-guardian', 200);
   return { meta, ageCategory };
 }
 
@@ -62,7 +59,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
   const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
   const formData = await request.formData();
@@ -76,7 +72,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.parent-or-guardian', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.adult-child.parent-or-guardian', 302);
   return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 
