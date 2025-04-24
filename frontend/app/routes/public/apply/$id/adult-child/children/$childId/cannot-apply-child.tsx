@@ -32,8 +32,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   loadApplyAdultSingleChildState({ params, request, session });
   const state = loadApplyAdultChildState({ params, request, session });
   const { APPLICATION_CURRENT_DATE } = getEnv();
@@ -48,19 +46,15 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const isBeforeCoverageStartDate = currentDate < coverageStartDate;
 
-  instrumentationService.countHttpStatus('public.apply.adult-child.children.cannot-apply-child', 200);
   return { meta, isBeforeCoverageStartDate, coverageStartDate: formattedDate };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  instrumentationService.countHttpStatus('public.apply.adult-child.children.cannot-apply-child', 302);
   return redirect(getPathById('public/apply/$id/adult-child/children/index', params));
 }
 

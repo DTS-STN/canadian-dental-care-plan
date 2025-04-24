@@ -51,8 +51,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadApplyAdultChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
@@ -112,27 +110,21 @@ export async function loader({ context: { appContainer, session }, params, reque
     };
   });
 
-  instrumentationService.countHttpStatus('public.apply.adult-child.review-child-information', 200);
-
   return { children, meta, payload };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearApplyState({ params, session });
-    instrumentationService.countHttpStatus('public.apply.adult-child.review-child-information', 302);
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveApplyState({ params, session, state: {} });
-    instrumentationService.countHttpStatus('public.apply.adult-child.review-child-information', 302);
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
   }
 
@@ -143,7 +135,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   saveApplyState({ params, session, state: { submissionInfo } });
 
-  instrumentationService.countHttpStatus('public.apply.adult-child.review-child-information', 302);
   return redirect(getPathById('public/apply/$id/adult-child/confirmation', params));
 }
 
