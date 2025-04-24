@@ -17,7 +17,7 @@ interface fillApplicantInformationFormArgs {
   day: string;
   month: string;
   year: string;
-  dtcEligible: boolean;
+  dtcEligible?: boolean;
   page: Page;
 }
 
@@ -74,10 +74,8 @@ export async function fillApplicantInformationForm({ firstName, lastName, sin, d
   await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
   await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
   await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-  if (dtcEligible) {
-    await page.getByRole('radio', { name: 'Yes', exact: true }).check();
-  } else {
-    await page.getByRole('radio', { name: 'No', exact: true }).check();
+  if (dtcEligible !== undefined) {
+    await page.getByRole('radio', { name: dtcEligible ? 'Yes' : 'No', exact: true }).check();
   }
 }
 
