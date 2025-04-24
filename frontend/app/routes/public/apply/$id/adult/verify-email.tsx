@@ -51,14 +51,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:verify-email.page-title') }) };
-
-  instrumentationService.countHttpStatus('public.apply.adult.verify-email', 200);
 
   return {
     meta,
@@ -68,8 +64,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -110,7 +104,6 @@ export async function action({ context: { appContainer, session }, params, reque
         preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
         userId: 'anonymous',
       });
-      instrumentationService.countHttpStatus('public.apply.adult.verify-email.verification-code-sent', 200);
       return { status: 'verification-code-sent' } as const;
     } else if (state.email && state.communicationPreferences?.preferredLanguage) {
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name;
@@ -120,7 +113,6 @@ export async function action({ context: { appContainer, session }, params, reque
         preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
         userId: 'anonymous',
       });
-      instrumentationService.countHttpStatus('public.apply.adult.verify-email.verification-code-sent', 200);
       return { status: 'verification-code-sent' } as const;
     }
   }
@@ -144,7 +136,6 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (!parsedDataResult.success) {
-      instrumentationService.countHttpStatus('public.apply.adult.verify-email', 400);
       return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
     }
 
@@ -162,11 +153,8 @@ export async function action({ context: { appContainer, session }, params, reque
         },
       });
 
-      instrumentationService.countHttpStatus('public.apply.adult.verify-email.verification-code-mismatch', 200);
       return { status: 'verification-code-mismatch' } as const;
     }
-
-    instrumentationService.countHttpStatus('public.apply.adult.verify-email', 302);
 
     if (state.verifyEmail) {
       if (state.editMode) {
