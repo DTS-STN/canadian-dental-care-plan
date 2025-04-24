@@ -53,8 +53,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -150,8 +148,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult.review-information', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.adult.review-information', 200);
-
   return {
     userInfo,
     spouseInfo,
@@ -167,8 +163,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -179,14 +173,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearProtectedApplyState({ params, session });
-    instrumentationService.countHttpStatus('protected.apply.adult.review-information', 302);
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveProtectedApplyState({ params, session, state: { editMode: false } });
-    instrumentationService.countHttpStatus('protected.apply.adult.review-information', 302);
     if (state.hasFederalProvincialTerritorialBenefits) {
       return redirect(getPathById('protected/apply/$id/adult/federal-provincial-territorial-benefits', params));
     }
@@ -202,7 +194,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.review-information', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.adult.review-information', 302);
   return redirect(getPathById('protected/apply/$id/adult/confirmation', params));
 }
 

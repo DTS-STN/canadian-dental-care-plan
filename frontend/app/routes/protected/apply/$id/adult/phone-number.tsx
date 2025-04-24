@@ -45,8 +45,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadProtectedApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -54,8 +52,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult.phone-number', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.adult.phone-number', 200);
 
   return {
     meta,
@@ -69,8 +65,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -97,7 +91,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('protected.apply.adult.phone-number', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -105,8 +98,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.phone-number', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.adult.phone-number', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/apply/$id/adult/review-information', params));
