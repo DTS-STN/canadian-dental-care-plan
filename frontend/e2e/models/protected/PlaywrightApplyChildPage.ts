@@ -8,27 +8,17 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
       | 'mailing-address'
       | 'home-address'
       | 'phone-number'
-      | 'children-cannot-apply-child'
       | 'children-dental-insurance'
       | 'children-confirm-federal-provincial-territorial-benefits'
       | 'children-federal-provincial-territorial-benefits'
       | 'children-information'
-      | 'children-parent-or-guardian'
       | 'children'
       | 'confirmation'
       | 'communication-preference'
       | 'email'
       | 'verify-email'
-      | 'date-of-birth'
-      | 'dental-insurance'
-      | 'dob-eligibility'
-      | 'confirm-federal-provincial-territorial-benefits'
-      | 'federal-provincial-territorial-benefits'
-      | 'living-independently'
-      | 'parent-or-guardian'
       | 'review-adult-information'
-      | 'review-child-information'
-      | 'new-or-existing-member',
+      | 'review-child-information',
     heading?: string | RegExp,
   ) {
     let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
@@ -81,6 +71,7 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
       case 'email':
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/child\/email/, heading: 'Email' };
         break;
+
       case 'verify-email':
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/child\/verify-email/, heading: 'Verify your email address' };
         break;
@@ -88,6 +79,7 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
       case 'review-child-information':
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/child\/review-child-information/, heading: 'Review child(ren) information' };
         break;
+
       case 'review-adult-information':
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/child\/review-adult-information/, heading: 'Review your information' };
         break;
@@ -95,6 +87,7 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
       case 'confirmation':
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/child\/confirmation/, heading: 'Application successfully submitted' };
         break;
+
       default:
         pageInfo = undefined;
         break;
