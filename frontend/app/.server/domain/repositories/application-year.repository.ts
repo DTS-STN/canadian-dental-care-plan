@@ -74,3 +74,54 @@ export class DefaultApplicationYearRepository implements ApplicationYearReposito
     return applicationYearResultEntity;
   }
 }
+
+@injectable()
+export class MockApplicationYearRepository implements ApplicationYearRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('MockApplicationYearRepository');
+  }
+
+  getIntakeApplicationYear(date: string): ApplicationYearResultEntity {
+    this.log.trace('Retrieving intake application year entity for date: [%s]', date);
+
+    const applicationYearResultEntity = {
+      BenefitApplicationYear: {
+        BenefitApplicationYearIdentification: {
+          IdentificationID: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
+        },
+        BenefitApplicationYearTaxYear: {
+          YearDate: '2024',
+        },
+        DependentEligibilityEndDate: {
+          date: '2025-06-01',
+        },
+      },
+    };
+
+    this.log.trace('Returning intake application year entity: [%j]', applicationYearResultEntity);
+    return applicationYearResultEntity;
+  }
+
+  getRenewalApplicationYear(date: string): ApplicationYearResultEntity {
+    this.log.trace('Retrieving renewal application year entity for date: [%s]', date);
+
+    const applicationYearResultEntity = {
+      BenefitApplicationYear: {
+        BenefitApplicationYearIdentification: {
+          IdentificationID: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
+        },
+        BenefitApplicationYearTaxYear: {
+          YearDate: '2024',
+        },
+        DependentEligibilityEndDate: {
+          date: '2025-06-30',
+        },
+      },
+    };
+
+    this.log.trace('Returning renewal application year entity: [%j]', applicationYearResultEntity);
+    return applicationYearResultEntity;
+  }
+}

@@ -43,7 +43,7 @@ describe('DefaultApplicationYearRepository', () => {
             YearDate: '2024',
           },
           DependentEligibilityEndDate: {
-            date: '2025-06-30',
+            date: '2025-06-01',
           },
         },
       });

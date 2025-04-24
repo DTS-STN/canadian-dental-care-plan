@@ -41,13 +41,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
-  const applicationYear = await applicationYearService.findRenewalApplicationYear(currentDate);
-  if (!applicationYear?.renewalYearId) {
-    throw redirect(getPathById('protected/apply/index', params));
-  }
+  const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
 
   const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
-  const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.renewalYearId, userId: userInfoToken.sub });
+  const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
   if (!clientApplication) {
     throw redirect(getPathById('protected/data-unavailable', params));
   }
@@ -55,9 +52,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const id = randomUUID().toString();
   const state = startProtectedRenewState({
     applicationYear: {
-      renewalYearId: applicationYear.renewalYearId,
+      renewalYearId: applicationYear.applicationYearId,
       taxYear: applicationYear.taxYear,
-      coverageEndDate: applicationYear.coverageEndDate,
+      coverageEndDate: applicationYear.dependentEligibilityEndDate,
     },
     clientApplication,
     id,

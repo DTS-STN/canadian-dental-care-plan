@@ -191,7 +191,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
         maritalStatus,
         newOrExistingMember,
       }),
-      applicationYearId: applicationYear.intakeYearId,
+      applicationYearId: applicationYear.applicationYearId,
       children: this.toChildren(children),
       communicationPreferences: this.toCommunicationPreferences({ communicationPreferences, email, emailVerified }),
       contactInformation: this.toContactInformation({ contactInformation, email, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),

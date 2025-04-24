@@ -198,9 +198,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const currentDate = APPLICATION_CURRENT_DATE ? parseDateString(APPLICATION_CURRENT_DATE) : new UTCDate();
-  const coverageStartDate = parseDateString(applyState.applicationYear.coverageStartDate);
+  const coverageStartDate = parseDateString(applyState.applicationYear.dependentEligibilityEndDate);
 
-  const ageCategory = currentDate < coverageStartDate ? getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, applyState.applicationYear.coverageStartDate) : getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  const ageCategory = currentDate < coverageStartDate ? getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, applyState.applicationYear.dependentEligibilityEndDate) : getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
   saveApplyState({
     params,

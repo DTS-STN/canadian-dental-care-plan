@@ -54,7 +54,6 @@ export class DefaultApplicationYearService implements ApplicationYearService {
       matchesKey: (cacheKey, key) => cacheKey.every((item, idx) => item.date === key[idx].date),
       maxAge: this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS * 1000,
       maxSize: Infinity,
-      isPromise: true,
       onCacheAdd: () => this.log.info('Creating new getIntakeApplicationYear memo'),
     });
 
@@ -62,7 +61,6 @@ export class DefaultApplicationYearService implements ApplicationYearService {
       matchesKey: (cacheKey, key) => cacheKey.every((item, idx) => item.date === key[idx].date),
       maxAge: this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS * 1000,
       maxSize: Infinity,
-      isPromise: true,
       onCacheAdd: () => this.log.info('Creating new getRenewalApplicationYear memo'),
     });
 

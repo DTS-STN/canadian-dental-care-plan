@@ -24,7 +24,7 @@ describe('apply-child-route-helpers', () => {
       id: '00000000-0000-0000-0000-000000000000',
       editMode: false,
       lastUpdatedOn: '2000-01-01',
-      applicationYear: { intakeYearId: '2025', taxYear: '2025', coverageStartDate: '2025-06-01' },
+      applicationYear: { applicationYearId: '2025', taxYear: '2025', dependentEligibilityEndDate: '2025-06-01' },
       children: [],
       termsAndConditions: { acknowledgePrivacy: true, acknowledgeTerms: true, shareData: true },
     } satisfies ApplyState;
@@ -301,7 +301,7 @@ describe('apply-child-route-helpers', () => {
         ],
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
         maritalStatus: '1',
-        applicationYear: { intakeYearId: '2025', taxYear: '2025', coverageStartDate: '2025-06-01' },
+        applicationYear: { applicationYearId: '2025', taxYear: '2025', dependentEligibilityEndDate: '2025-06-01' },
         partnerInformation: { confirm: true, yearOfBirth: '1900', socialInsuranceNumber: '000-000-002' },
         mailingAddress: {
           address: '123 Maple St',
@@ -333,7 +333,7 @@ describe('apply-child-route-helpers', () => {
       expect(act).toEqual({
         ageCategory: 'seniors',
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
-        applicationYear: { intakeYearId: '2025', taxYear: '2025', coverageStartDate: '2025-06-01' },
+        applicationYear: { applicationYearId: '2025', taxYear: '2025', dependentEligibilityEndDate: '2025-06-01' },
         children: [
           {
             ageCategory: 'children',
