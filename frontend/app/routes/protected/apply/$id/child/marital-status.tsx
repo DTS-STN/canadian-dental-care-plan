@@ -53,7 +53,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplyChildState({ params, request, session });
 
@@ -66,14 +65,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.marital-status', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.child.marital-status', 200);
   return { defaultState: { newUser: state.newOrExistingMember?.isNewOrExistingMember, maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, maritalStatuses, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
 
@@ -84,7 +81,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.cancel) {
-    instrumentationService.countHttpStatus('protected.apply.child.marital-status', 302);
     return redirect(getPathById('protected/apply/$id/child/review-adult-information', params));
   }
 
@@ -137,7 +133,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedPartnerInformation = partnerInformationSchema.safeParse(partnerInformationData);
 
   if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
-    instrumentationService.countHttpStatus('protected.apply.child.marital-status', 400);
     return data(
       {
         errors: {
@@ -160,8 +155,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.marital-status', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.child.marital-status', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/apply/$id/child/review-adult-information', params));
