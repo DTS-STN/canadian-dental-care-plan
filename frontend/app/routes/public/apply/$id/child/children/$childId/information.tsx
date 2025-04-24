@@ -53,8 +53,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadApplySingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -66,13 +64,10 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('apply-child:children.information.page-title', { childName: childNumber }) }),
   };
 
-  instrumentationService.countHttpStatus('public.apply.child.children.information', 200);
   return { meta, defaultState: state.information, childName, editMode: state.editMode, isNew: state.isNew };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -187,7 +182,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success || !parsedSinDataResult.success) {
-    instrumentationService.countHttpStatus('public.apply.child.children.information', 400);
     return data(
       {
         errors: {
@@ -215,8 +209,6 @@ export async function action({ context: { appContainer, session }, params, reque
       }),
     },
   });
-
-  instrumentationService.countHttpStatus('public.apply.child.children.information', 302);
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/child/review-child-information', params));
