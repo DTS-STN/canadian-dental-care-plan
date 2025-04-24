@@ -40,8 +40,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -52,13 +50,10 @@ export async function loader({ context: { appContainer, session }, request, para
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.terms-and-conditions', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.terms-and-conditions', 200);
   return { defaultState: state.termsAndConditions, meta };
 }
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -102,7 +97,6 @@ export async function action({ context: { appContainer, session }, request, para
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('protected.apply.terms-and-conditions', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -117,7 +111,6 @@ export async function action({ context: { appContainer, session }, request, para
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.terms-and-conditions', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.terms-and-conditions', 302);
   return redirect(getPathById('protected/apply/$id/tax-filing', params));
 }
 
