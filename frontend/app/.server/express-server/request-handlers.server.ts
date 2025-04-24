@@ -1,12 +1,11 @@
 import { createRequestHandler } from '@react-router/express';
+import type { AppLoadContext, ServerBuild } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
-import type { ErrorRequestHandler, RequestHandler } from 'express';
+import type { ErrorRequestHandler, Request, RequestHandler, Response } from 'express';
 import path from 'node:path';
-import type { ViteDevServer } from 'vite';
 
 import { getAppContainerProvider } from '~/.server/app.container';
-import { TYPES } from '~/.server/constants';
 import { createLogger } from '~/.server/logging';
 import { ExpressSession, NoopSession } from '~/.server/web/session';
 import { randomString } from '~/utils/string-utils';
@@ -37,41 +36,31 @@ export function globalErrorHandler(isProduction: boolean): ErrorRequestHandler {
   };
 }
 
-export function rrRequestHandler(mode: string, viteDevServer?: ViteDevServer): RequestHandler {
-  // dynamically declare the path to avoid static analysis errors 💩
-  const remixServerBuild = './app.js';
+export function rrRequestHandler(build: ServerBuild, mode: string | undefined = process.env.NODE_ENV): RequestHandler {
+  return createRequestHandler({ mode, build, getLoadContext });
+}
 
+function getLoadContext(request: Request, response: Response): AppLoadContext {
   const appContainer = getAppContainerProvider();
-  const serverConfig = appContainer.get(TYPES.configs.ServerConfig);
 
-  return createRequestHandler({
-    mode: serverConfig.NODE_ENV,
-    build: viteDevServer //
-      ? async () => await viteDevServer.ssrLoadModule('virtual:react-router/server-build')
-      : async () => await import(remixServerBuild),
-    getLoadContext: (request, response) => {
-      const appContainer = getAppContainerProvider();
+  // `request.session` may be undefined if session middleware is not applied,
+  // so a fallback `NoopSession` is used in that case.
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  const session = request.session ? new ExpressSession(request.session) : new NoopSession();
 
-      // `request.session` may be undefined if session middleware is not applied,
-      // so a fallback `NoopSession` is used in that case.
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      const session = request.session ? new ExpressSession(request.session) : new NoopSession();
+  if (session instanceof ExpressSession) {
+    // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
+    // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
+    if (!session.has('csrfToken')) {
+      const csrfToken = randomString(32);
+      log.debug('Adding CSRF token [%s] to session', csrfToken);
+      session.set('csrfToken', csrfToken);
+    }
 
-      if (session instanceof ExpressSession) {
-        // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
-        // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
-        if (!session.has('csrfToken')) {
-          const csrfToken = randomString(32);
-          log.debug('Adding CSRF token [%s] to session', csrfToken);
-          session.set('csrfToken', csrfToken);
-        }
+    const lastAccessTime = new UTCDate().toISOString();
+    log.debug('Setting session.lastAccessTime to [%s]', lastAccessTime);
+    session.set('lastAccessTime', lastAccessTime);
+  }
 
-        const lastAccessTime = new UTCDate().toISOString();
-        log.debug('Setting session.lastAccessTime to [%s]', lastAccessTime);
-        session.set('lastAccessTime', lastAccessTime);
-      }
-
-      return { appContainer, session };
-    },
-  });
+  return { appContainer, session };
 }

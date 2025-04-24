@@ -1,11 +1,12 @@
 import { matchRoutes } from 'react-router';
+import type { ServerBuild } from 'react-router';
 
 import type { RequestHandler } from 'express';
 
 import { getAppContainerProvider } from '~/.server/app.container';
 import { TYPES } from '~/.server/constants';
 import { createLogger } from '~/.server/logging';
-import routes from '~/routes';
+import { createServerRoutes } from '~/.server/utils/server-build.utils';
 
 // Define a type for the cache value (can be string or null/undefined if no match/id)
 type CachedRouteId = string | null | undefined;
@@ -16,9 +17,9 @@ type CachedRouteId = string | null | undefined;
  *
  * @returns Express RequestHandler middleware.
  */
-export function routeRequestCounter(): RequestHandler {
+export function routeRequestCounter(build: ServerBuild): RequestHandler {
   const log = createLogger('express.server/routeRequestCounter');
-
+  const serverRoutes = createServerRoutes(build.routes);
   const appContainer = getAppContainerProvider();
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
@@ -46,7 +47,7 @@ export function routeRequestCounter(): RequestHandler {
           log.debug(`Cache miss for path: ${normalizedPath}. Matching routes...`);
 
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const matches = matchRoutes(routes as any, normalizedPath);
+          const matches = matchRoutes(serverRoutes as any, normalizedPath, build.basename);
 
           // Get the ID from the most specific matched route (last in the array)
           // Ensure the route and ID exist
