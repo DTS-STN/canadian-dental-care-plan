@@ -41,7 +41,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   securityHandler.validateFeatureEnabled('view-letters');
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
 
@@ -72,7 +71,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.letters', { userId: idToken.sub });
-  instrumentationService.countHttpStatus('letters.view', 200);
 
   return { letters, letterTypes, meta, sortOrder, SCCH_BASE_URI };
 }
