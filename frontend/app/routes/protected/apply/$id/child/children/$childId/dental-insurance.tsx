@@ -38,7 +38,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplySingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -54,14 +53,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.children.dental-insurance', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.child.children.dental-insurance', 200);
   return { meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
 
@@ -80,7 +77,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDataResult = dentalInsuranceSchema.safeParse(dentalInsurance);
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('protected.apply.child.children.dental-insurance', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -97,8 +93,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.children.dental-insurance', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.child.children.dental-insurance', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/apply/$id/child/review-child-information', params));

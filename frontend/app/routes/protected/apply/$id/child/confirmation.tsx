@@ -42,7 +42,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -142,8 +141,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.confirmation', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.child.confirmation', 200);
-
   return {
     children,
     homeAddressInfo,
@@ -158,7 +155,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
   const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
 
   const formData = await request.formData();
@@ -173,7 +169,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.confirmation', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.child.confirmation', 302);
   return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }
 

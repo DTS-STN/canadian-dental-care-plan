@@ -52,7 +52,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplyChildStateForReview({ params, request, session });
 
@@ -87,8 +86,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     const idToken: IdToken = session.get('idToken');
     appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.review-child-information', { userId: idToken.sub });
 
-    instrumentationService.countHttpStatus('protected.apply.child.review-child-information', 200);
-
     return {
       id: child.id,
       firstName: child.information.firstName,
@@ -117,7 +114,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
   const state = loadProtectedApplyChildStateForReview({ params, request, session });
@@ -125,7 +121,6 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearProtectedApplyState({ params, session });
-    instrumentationService.countHttpStatus('protected.apply.child.review-child-information', 302);
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
@@ -136,7 +131,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveProtectedApplyState({ params, session, state: { editMode: false } });
-    instrumentationService.countHttpStatus('protected.apply.child.review-child-information', 302);
     return backToEmail ? redirect(getPathById('protected/apply/$id/child/email', params)) : redirect(getPathById('protected/apply/$id/child/communication-preference', params));
   }
 
@@ -149,7 +143,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.review-child-information', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.child.review-child-information', 302);
   return redirect(getPathById('protected/apply/$id/child/review-adult-information', params));
 }
 

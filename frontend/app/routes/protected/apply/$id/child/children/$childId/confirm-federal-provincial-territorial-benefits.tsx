@@ -44,7 +44,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplySingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -60,8 +59,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.children.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.child.children.confirm-federal-provincial-territorial-benefits', 200);
-
   return {
     defaultState: state.hasFederalProvincialTerritorialBenefits,
     editMode: state.editMode,
@@ -74,7 +71,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
 
@@ -97,7 +93,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedDentalBenefitsResult = dentalBenefitsChangedSchema.safeParse(dentalBenefits);
 
   if (!parsedDentalBenefitsResult.success) {
-    instrumentationService.countHttpStatus('protected.apply.child.children.confirm-federal-provincial-territorial-benefits', 400);
     return data(
       {
         errors: {
@@ -124,8 +119,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.children.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.child.children.confirm-federal-provincial-territorial-benefits', 302);
 
   if (dentalBenefits.hasFederalProvincialTerritorialBenefits === true) {
     return redirect(getPathById('protected/apply/$id/child/children/$childId/federal-provincial-territorial-benefits', params));

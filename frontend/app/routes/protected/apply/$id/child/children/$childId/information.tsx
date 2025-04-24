@@ -56,7 +56,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplySingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -72,14 +71,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.children.information', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.child.children.information', 200);
   return { meta, defaultState: state.information, childName, editMode: state.editMode, isNew: state.isNew };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
 
@@ -194,7 +191,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success || !parsedSinDataResult.success) {
-    instrumentationService.countHttpStatus('protected.apply.child.children.information', 400);
     return data(
       {
         errors: {
@@ -225,8 +221,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.children.information', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.child.children.information', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/apply/$id/child/review-child-information', params));

@@ -54,7 +54,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -68,8 +67,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.home-address', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.child.home-address', 200);
-
   return {
     meta,
     defaultState: state,
@@ -82,7 +79,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
@@ -97,7 +93,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplyChildState({ params, request, session });
 
   if (formAction === FORM_ACTION.cancel) {
-    instrumentationService.countHttpStatus('protected.apply.child.home-address', 302);
     return redirect(getPathById('protected/apply/$id/child/review-adult-information', params));
   }
 
@@ -112,7 +107,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('protected.apply.child.home-address', 400);
     return data({ errors: parsedDataResult.errors }, { status: 400 });
   }
 
@@ -131,8 +125,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (canProceedToDental) {
     saveProtectedApplyState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
-
-    instrumentationService.countHttpStatus('protected.apply.child.home-address', 302);
 
     if (state.editMode) {
       return redirect(getPathById('protected/apply/$id/child/review-adult-information', params));
@@ -163,7 +155,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (addressCorrectionResult.status === 'not-correct') {
-    instrumentationService.countHttpStatus('protected.apply.child.home-address.address-invalid', 200);
     return {
       invalidAddress: formattedHomeAddress,
       status: 'address-invalid',
@@ -172,7 +163,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (addressCorrectionResult.status === 'corrected') {
     const provinceTerritoryState = provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
-    instrumentationService.countHttpStatus('protected.apply.child.home-address.address-suggestion', 200);
     return {
       enteredAddress: formattedHomeAddress,
       status: 'address-suggestion',
@@ -191,8 +181,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.home-address', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.child.home-address', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/apply/$id/child/review-adult-information', params));

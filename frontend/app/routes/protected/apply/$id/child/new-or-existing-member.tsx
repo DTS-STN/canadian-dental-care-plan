@@ -52,7 +52,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const state = loadProtectedApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -62,14 +61,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.new-or-existing-member', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.child.new-or-existing-member', 200);
   return { meta, defaultState: state.newOrExistingMember, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
   const state = loadProtectedApplyState({ params, session });
@@ -81,7 +78,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.cancel) {
-    instrumentationService.countHttpStatus('protected.apply.child.new-or-existing-member', 302);
     return redirect(getPathById('protected/apply/$id/child/review-adult-information', params));
   }
 
@@ -120,14 +116,11 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('protected.apply.child.new-or-existing-member', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.new-or-existing-member', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.child.new-or-existing-member', 302);
 
   if (state.editMode) {
     // Save editMode data to state.
