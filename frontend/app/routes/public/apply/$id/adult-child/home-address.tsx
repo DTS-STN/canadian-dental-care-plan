@@ -51,8 +51,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -61,8 +59,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:address.home-address.page-title') }) };
-
-  instrumentationService.countHttpStatus('public.apply.adult-child.home-address', 200);
 
   return {
     meta,
@@ -74,8 +70,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   const locale = getLocale(request);
@@ -90,7 +84,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultChildState({ params, request, session });
 
   if (formAction === FORM_ACTION.cancel) {
-    instrumentationService.countHttpStatus('public.apply.adult-child.home-address', 302);
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
   }
 
@@ -105,7 +98,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('public.apply.adult-child.home-address', 400);
     return data({ errors: parsedDataResult.errors }, { status: 400 });
   }
 
@@ -124,8 +116,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (canProceedToDental) {
     saveApplyState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
-
-    instrumentationService.countHttpStatus('public.apply.adult-child.home-address', 302);
 
     if (state.editMode) {
       return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));
@@ -156,7 +146,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (addressCorrectionResult.status === 'not-correct') {
-    instrumentationService.countHttpStatus('public.apply.adult-child.home-address.address-invalid', 200);
     return {
       invalidAddress: formattedHomeAddress,
       status: 'address-invalid',
@@ -165,7 +154,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (addressCorrectionResult.status === 'corrected') {
     const provinceTerritoryState = provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
-    instrumentationService.countHttpStatus('public.apply.adult-child.home-address.address-suggestion', 200);
     return {
       enteredAddress: formattedHomeAddress,
       status: 'address-suggestion',
@@ -181,8 +169,6 @@ export async function action({ context: { appContainer, session }, params, reque
     } as const satisfies AddressSuggestionResponse;
   }
   saveApplyState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
-
-  instrumentationService.countHttpStatus('public.apply.adult-child.home-address', 302);
 
   if (state.editMode) {
     return redirect(getPathById('public/apply/$id/adult-child/review-adult-information', params));

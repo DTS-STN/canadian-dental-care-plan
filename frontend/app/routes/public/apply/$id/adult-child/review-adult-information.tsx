@@ -49,8 +49,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadApplyAdultChildStateForReview({ params, request, session });
 
   invariant(state.mailingAddress?.country, `Unexpected mailing address country: ${state.mailingAddress?.country}`);
@@ -132,8 +130,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:review-adult-information.page-title') }) };
 
-  instrumentationService.countHttpStatus('public.apply.adult-child.review-adult-information', 200);
-
   return {
     userInfo,
     spouseInfo,
@@ -149,14 +145,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearApplyState({ params, session });
-    instrumentationService.countHttpStatus('public.apply.adult-child.review-adult-information', 302);
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
@@ -164,13 +157,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (formAction === FORM_ACTION.back) {
     saveApplyState({ params, session, state: { editMode: false } });
-    instrumentationService.countHttpStatus('public.apply.adult-child.review-adult-information', 302);
     return redirect(getPathById('public/apply/$id/adult-child/children/index', params));
   }
 
   saveApplyState({ params, session, state: {} });
 
-  instrumentationService.countHttpStatus('public.apply.adult-child.review-adult-information', 302);
   return redirect(getPathById('public/apply/$id/adult-child/review-child-information', params));
 }
 
