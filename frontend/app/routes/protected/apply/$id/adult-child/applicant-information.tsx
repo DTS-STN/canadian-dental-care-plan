@@ -62,8 +62,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -72,15 +70,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.applicant-information', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.adult-child.applicant-information', 200);
   return { defaultState: state.applicantInformation, editMode: state.editMode, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
   const formData = await request.formData();
 
@@ -96,7 +91,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (formAction === FORM_ACTION.cancel) {
     invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
-    instrumentationService.countHttpStatus('protected.apply.adult-child.applicant-information', 302);
     return redirect(getPathById('protected/apply/$id/adult-child/review-adult-information', params));
   }
 
@@ -186,7 +180,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('protected.apply.adult-child.applicant-information', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -244,8 +237,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.applicant-information', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.adult-child.applicant-information', 302);
 
   if (ageCategory === 'youth') {
     return redirect(getPathById('protected/apply/$id/adult-child/living-independently', params));

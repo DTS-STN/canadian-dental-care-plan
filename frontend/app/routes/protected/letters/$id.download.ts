@@ -15,10 +15,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   securityHandler.validateFeatureEnabled('view-letters');
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   if (!params.id) {
-    instrumentationService.countHttpStatus('letters.download', 400);
     throw data(null, { status: 400 });
   }
 
@@ -26,7 +23,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const letters: ReadonlyArray<LetterDto> | undefined = session.get('letters');
   const letter = letters?.find((letter) => letter.id === params.id);
   if (!letter) {
-    instrumentationService.countHttpStatus('letters.download', 404);
     throw data(null, { status: 404 });
   }
 
@@ -37,7 +33,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
   const pdfBytes = await appContainer.get(TYPES.domain.services.LetterService).getPdfByLetterId({ letterId: params.id, userId: userInfoToken.sub });
-  instrumentationService.countHttpStatus('letters.download', 200);
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('download.letter', { userId: idToken.sub });

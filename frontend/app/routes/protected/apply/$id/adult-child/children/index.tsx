@@ -56,8 +56,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -78,8 +76,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     const idToken: IdToken = session.get('idToken');
     appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.children.index', { userId: idToken.sub });
 
-    instrumentationService.countHttpStatus('protected.apply.adult-child.children', 200);
-
     return {
       ...child,
       dentalBenefits: {
@@ -97,16 +93,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadProtectedApplyAdultChildState({ params, request, session });
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
-
-  instrumentationService.countHttpStatus('protected.apply.adult-child.children', 302);
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.children.index', { userId: idToken.sub });
