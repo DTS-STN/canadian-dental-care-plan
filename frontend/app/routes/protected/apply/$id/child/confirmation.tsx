@@ -199,7 +199,6 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
       </ContextualAlert>
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.keep-copy')}</h2>
-        <p className="mt-4">{t('confirm.print-copy-text')}</p>
         <p className="mt-4">{t('confirm.print-copy-important')}</p>
         <Button
           variant="primary"
