@@ -448,7 +448,7 @@
   "confirm": {
     "page-title": "Votre demande de renouvellement au Régime canadien de soins dentaires est terminée!",
     "keep-copy": "Imprimez ou sauvegardez une copie de votre demande.",
-    "print-copy-text": "Vous ne recevrez pas de courriel de confirmation. Il est important de conserver une copie de votre demande.",
+    "print-copy-text": "Vous ne recevrez <strong>pas</strong> de courriel de confirmation. Il est important de conserver une copie de votre demande.",
     "print-btn": "Imprimer",
     "print-or-save-btn": "Imprimer ou sauvegarder",
     "whats-next": "Vous recevrez une lettre confirmant votre admissibilité",
