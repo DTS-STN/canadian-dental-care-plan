@@ -1,11 +1,11 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyAdultPage } from '../../models/protected/PlaywrightApplyAdultPage';
+import { PlaywrightApplyAdultChildPage } from '../../models/protected/PlaywrightApplyAdultChildPage';
 import { PlaywrightApplyPage } from '../../models/protected/PlaywrightApplyPage';
-import { acceptLegalCheckboxes, calculateDOB, clickContinue, fillApplicantInformationForm, fillOutAddress } from '../../utils/helpers';
+import { acceptLegalCheckboxes, calculateDOB, clickContinue, fillApplicantInformationForm, fillChildrenInformationForm, fillOutAddress } from '../../utils/helpers';
 
-test.describe('Adult category', () => {
-  test.beforeEach('Navigate to adult application', async ({ page }) => {
+test.describe('Adult-Child category', () => {
+  test.beforeEach('Navigate to adult-child application', async ({ page }) => {
     test.setTimeout(60000);
 
     const applyPage = new PlaywrightApplyPage(page);
@@ -23,21 +23,19 @@ test.describe('Adult category', () => {
 
     // Type of Application
     await applyPage.isLoaded('type-application');
-    await page.getByRole('radio', { name: 'I am applying for myself', exact: true }).check();
+    await page.getByRole('radio', { name: 'I am applying for myself and my child(ren)', exact: true }).check();
     await clickContinue(page);
   });
 
   // TODO: Add test cases for living-independently and new-or-existing-user
-  test('Should complete flow as adult applicant', async ({ page }) => {
-    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+  test('Should complete flow as adult-child applicant', async ({ page }) => {
+    const applyAdultPage = new PlaywrightApplyAdultChildPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(35);
       await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
 
-      // DTC question
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
       await clickContinue(page);
     });
 
@@ -121,8 +119,54 @@ test.describe('Adult category', () => {
       await clickContinue(page);
     });
 
-    await test.step('Should navigate to review informaton page', async () => {
-      await applyAdultPage.isLoaded('review-information');
+    await test.step('Should navigate to children page', async () => {
+      await applyAdultPage.isLoaded('children');
+      const addChildButton = page.getByRole('button', { name: 'Add a child' });
+      await addChildButton.click();
+    });
+
+    await test.step('Should navigate to children-information page', async () => {
+      await applyAdultPage.isLoaded('children-information');
+      const { year, month, day } = calculateDOB(10);
+      await fillChildrenInformationForm({ firstName: 'John Jr.', lastName: 'Smith', sin: '800000002', day: day, month: month, year: year, hasSin: true, isGuardian: true, page });
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to children-dental-insurance page', async () => {
+      await applyAdultPage.isLoaded('children-dental-insurance');
+      await page.getByRole('radio', { name: 'Yes, this child has access to dental insurance or coverage', exact: true }).check();
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to children-confirm-federal-provincial-territorial-benefits page', async () => {
+      await applyAdultPage.isLoaded('children-confirm-federal-provincial-territorial-benefits');
+      await page.getByRole('radio', { name: 'Yes, this child has federal, provincial or territorial dental benefits', exact: true }).check();
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to children-federal-provincial-territorial-benefits page', async () => {
+      await applyAdultPage.isLoaded('children-federal-provincial-territorial-benefits');
+      await page.getByTestId('input-radio-has-federal-benefits-option-0').check();
+      await page.getByTestId('input-radio-federal-social-programs-option-0').check();
+      await page.getByTestId('input-radio-has-provincial-territorial-benefits-option-0').check();
+      await page.getByTestId('input-province-test').selectOption('Alberta');
+      await page.getByTestId('input-radio-provincial-territorial-social-programs-option-0').check();
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to children page', async () => {
+      await applyAdultPage.isLoaded('children');
+      const continueButton = page.getByRole('button', { name: 'Continue with application' });
+      await continueButton.click();
+    });
+
+    await test.step('Should navigate to review adult informaton page', async () => {
+      await applyAdultPage.isLoaded('review-adult-information');
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to review child informaton page', async () => {
+      await applyAdultPage.isLoaded('review-child-information');
       await page.getByRole('button', { name: 'Submit Application' }).click();
     });
 

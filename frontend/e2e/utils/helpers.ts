@@ -10,6 +10,29 @@ interface FillOutAddressArgs {
   province: string;
 }
 
+interface fillApplicantInformationFormArgs {
+  firstName: string;
+  lastName: string;
+  sin: string;
+  day: string;
+  month: string;
+  year: string;
+  dtcEligible: boolean;
+  page: Page;
+}
+
+interface fillChildrenInformationFormArgs {
+  firstName: string;
+  lastName: string;
+  sin: string;
+  day: string;
+  month: string;
+  year: string;
+  hasSin: boolean;
+  isGuardian: boolean;
+  page: Page;
+}
+
 // Reusable function to fill out address
 export async function fillOutAddress({ address, city, country, page, postalCode, province }: FillOutAddressArgs) {
   await page.getByRole('textbox', { name: 'Address', exact: true }).fill(address);
@@ -42,4 +65,37 @@ export async function clickContinue(page: Page) {
   const continueButton = page.getByRole('button', { name: 'Continue' });
   await expect(continueButton).toBeEnabled();
   await continueButton.click();
+}
+
+export async function fillApplicantInformationForm({ firstName, lastName, sin, day, month, year, dtcEligible, page }: fillApplicantInformationFormArgs) {
+  await page.getByRole('textbox', { name: 'First name' }).fill(firstName);
+  await page.getByRole('textbox', { name: 'Last name' }).fill(lastName);
+  await page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill(sin);
+  await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
+  await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
+  await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
+  if (dtcEligible) {
+    await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+  } else {
+    await page.getByRole('radio', { name: 'No', exact: true }).check();
+  }
+}
+
+export async function fillChildrenInformationForm({ firstName, lastName, sin, day, month, year, hasSin, isGuardian, page }: fillChildrenInformationFormArgs) {
+  await page.getByRole('textbox', { name: 'First name' }).fill(firstName);
+  await page.getByRole('textbox', { name: 'Last name' }).fill(lastName);
+  await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
+  await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
+  await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
+  if (hasSin) {
+    await page.getByRole('radio', { name: "Yes, enter the child's 9-digit SIN", exact: true }).check();
+    await page.getByRole('textbox', { name: 'Enter the 9-digit SIN' }).fill(sin);
+  } else {
+    await page.getByRole('radio', { name: 'No, this child does not have a SIN', exact: true }).check();
+  }
+  if (isGuardian) {
+    await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+  } else {
+    await page.getByRole('radio', { name: 'No', exact: true }).check();
+  }
 }
