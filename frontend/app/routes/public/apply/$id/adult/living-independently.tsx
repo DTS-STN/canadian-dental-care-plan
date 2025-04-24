@@ -46,20 +46,14 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:living-independently.page-title') }) };
-
-  instrumentationService.countHttpStatus('public.apply.adult.living-independently', 200);
   return { meta, defaultState: state.livingIndependently, editMode: state.editMode };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
   const state = loadApplyAdultState({ params, request, session });
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -69,7 +63,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.cancel) {
-    instrumentationService.countHttpStatus('public.apply.adult.living-independently', 302);
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
@@ -87,7 +80,6 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('public.apply.adult.living-independently', 400);
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
@@ -99,8 +91,6 @@ export async function action({ context: { appContainer, session }, params, reque
   } else {
     saveApplyState({ params, session, state: { livingIndependently: isLivingindependently } });
   }
-
-  instrumentationService.countHttpStatus('public.apply.adult.living-independently', 302);
 
   if (isLivingindependently) {
     return redirect(getPathById('public/apply/$id/adult/new-or-existing-member', params));
