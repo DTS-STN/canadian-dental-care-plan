@@ -56,8 +56,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const state = loadProtectedApplyAdultState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -74,13 +72,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult.marital-status', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.adult.marital-status', 200);
   return { isNewUser, defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, maritalStatuses, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -132,7 +127,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedPartnerInformation = partnerInformationSchema.safeParse(partnerInformationData);
 
   if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
-    instrumentationService.countHttpStatus('protected.apply.adult.marital-status', 400);
     return data(
       {
         errors: {
@@ -155,8 +149,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.marital-status', { userId: idToken.sub });
-
-  instrumentationService.countHttpStatus('protected.apply.adult.marital-status', 302);
 
   if (state.editMode) {
     return redirect(getPathById('protected/apply/$id/adult/review-information', params));

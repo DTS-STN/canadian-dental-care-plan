@@ -6,7 +6,6 @@ import { mock, mockDeep } from 'vitest-mock-extended';
 import type { ClientConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantService, AuditService, LetterService, LetterTypeService } from '~/.server/domain/services';
-import type { InstrumentationService } from '~/.server/observability';
 import type { SecurityHandler } from '~/.server/routes/security';
 import { loader } from '~/routes/protected/letters/index';
 
@@ -25,7 +24,6 @@ describe('Letters Page', () => {
       mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999', sub: '1111111' });
 
       mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
         SCCH_BASE_URI: 'https://api.example.com',
       } satisfies Partial<ClientConfig>);
@@ -71,7 +69,6 @@ describe('Letters Page', () => {
     mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999' });
 
     mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.observability.InstrumentationService).mockReturnValueOnce(mock<InstrumentationService>());
     mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValue({
       SCCH_BASE_URI: 'https://api.example.com',
     } satisfies Partial<ClientConfig>);
