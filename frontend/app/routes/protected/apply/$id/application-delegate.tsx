@@ -32,8 +32,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -43,13 +41,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.application-delegate', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply/application-delegate', 200);
   return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -63,7 +58,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.application-delegate', { userId: idToken.sub });
 
-  instrumentationService.countHttpStatus('protected.apply.application-delegate', 302);
   return redirect(t('protected-apply:application-delegate.return-btn-link'));
 }
 
