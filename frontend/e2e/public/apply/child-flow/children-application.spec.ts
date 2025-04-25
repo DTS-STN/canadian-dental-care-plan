@@ -100,13 +100,13 @@ test.describe('Children application', () => {
     await test.step('Should navigate to children other dental benefits page', async () => {
       await applyChildPage.isLoaded('children-federal-provincial-territorial-benefits');
 
-      await page.getByRole('group', { name: 'Federal benefits' }).getByRole('radio', { name: 'Yes, this child has federal dental benefits' }).check();
-      await page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Yes, this child has provincial or territorial dental benefits' }).check();
+      await page.getByRole('radiogroup', { name: 'Federal benefits' }).getByRole('radio', { name: 'Yes, this child has federal dental benefits' }).check();
+      await page.getByRole('radiogroup', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Yes, this child has provincial or territorial dental benefits' }).check();
 
-      await page.getByRole('group', { name: 'Federal benefits' }).getByRole('radio', { name: 'Correctional Service Canada Health Services' }).check();
-      await page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('combobox', { name: 'If yes, through which province or territory?' }).selectOption('Alberta');
+      await page.getByRole('radiogroup', { name: 'Federal benefits' }).getByRole('radio', { name: 'Correctional Service Canada Health Services' }).check();
+      await page.getByRole('radiogroup', { name: 'Provincial or territorial benefits' }).getByRole('combobox', { name: 'If yes, through which province or territory?' }).selectOption('Alberta');
 
-      await page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Alberta Adult Health Benefit' }).check();
+      await page.getByRole('radiogroup', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Alberta Adult Health Benefit' }).check();
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
