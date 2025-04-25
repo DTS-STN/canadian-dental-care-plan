@@ -42,7 +42,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const id = randomUUID().toString();
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
-  const applicationYear = await applicationYearService.getIntakeApplicationYear(currentDate);
+  const applicationYear = applicationYearService.getIntakeApplicationYear(currentDate);
 
   const state = startProtectedApplyState({
     applicationYear,

@@ -33,9 +33,9 @@ export type ApplyState = ReadonlyDeep<{
     disabilityTaxCredit?: string;
   };
   applicationYear: {
-    intakeYearId: string;
+    applicationYearId: string;
     taxYear: string;
-    coverageStartDate: string;
+    dependentEligibilityEndDate: string;
   };
   children: {
     id: string;

@@ -24,7 +24,7 @@ describe('apply-adult-route-helpers', () => {
       id: '00000000-0000-0000-0000-000000000000',
       editMode: true,
       lastUpdatedOn: '2000-01-01',
-      applicationYear: { intakeYearId: '2025', taxYear: '2025', coverageStartDate: '2025-06-01' },
+      applicationYear: { applicationYearId: '2025', taxYear: '2025', dependentEligibilityEndDate: '2025-06-01' },
       children: [],
       termsAndConditions: { acknowledgePrivacy: true, acknowledgeTerms: true, shareData: true },
     } satisfies ApplyState;
@@ -222,7 +222,7 @@ describe('apply-adult-route-helpers', () => {
       expect(act).toEqual({
         ageCategory: 'seniors',
         applicantInformation: { firstName: 'First Name', lastName: 'Last Name', dateOfBirth: '1900-01-01', socialInsuranceNumber: '000-000-001' },
-        applicationYear: { intakeYearId: '2025', taxYear: '2025', coverageStartDate: '2025-06-01' },
+        applicationYear: { applicationYearId: '2025', taxYear: '2025', dependentEligibilityEndDate: '2025-06-01' },
         communicationPreferences: { preferredLanguage: 'en', preferredMethod: 'email', preferredNotificationMethod: 'mail' },
         maritalStatus: '1',
         hasFederalProvincialTerritorialBenefits: false,

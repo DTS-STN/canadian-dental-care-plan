@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { redirect, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import { randomUUID } from 'crypto';
 
@@ -35,16 +35,13 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
-  const applicationYear = await applicationYearService.findRenewalApplicationYear(currentDate);
-  if (!applicationYear?.renewalYearId) {
-    throw redirect(getPathById('public/apply/index', params));
-  }
+  const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
 
   const state = startRenewState({
     applicationYear: {
-      renewalYearId: applicationYear.renewalYearId,
+      renewalYearId: applicationYear.applicationYearId,
       taxYear: applicationYear.taxYear,
-      coverageEndDate: applicationYear.coverageEndDate,
+      coverageEndDate: applicationYear.dependentEligibilityEndDate,
     },
     id,
     session,

@@ -1,10 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mock } from 'vitest-mock-extended';
 
-import type { ServerConfig } from '~/.server/configs';
-import type { ApplicationYearResultEntity } from '~/.server/domain/entities';
 import { DefaultApplicationYearRepository } from '~/.server/domain/repositories';
-import type { HttpClient } from '~/.server/http';
 
 describe('DefaultApplicationYearRepository', () => {
   afterEach(() => {
@@ -12,76 +8,45 @@ describe('DefaultApplicationYearRepository', () => {
     vi.clearAllMocks();
   });
 
-  describe('getApplicationYearResult', () => {
-    it('should return address correction results on successful fetch', async () => {
-      const mockResponseData: ApplicationYearResultEntity = {
-        BenefitApplicationYear: [
-          {
-            BenefitApplicationYearIdentification: [
-              {
-                IdentificationID: '37e5aa05-813c-ef11-a317-000d3af4f3ef',
-              },
-            ],
-            BenefitApplicationYearEffectivePeriod: {
-              StartDate: {
-                YearDate: '2025',
-              },
-            },
-            BenefitApplicationYearTaxYear: {
-              YearDate: '2024',
-            },
-            BenefitApplicationYearIntakePeriod: {
-              StartDate: {
-                date: '2025-02-14',
-              },
-              EndDate: {
-                date: '2026-06-30',
-              },
-            },
-            BenefitApplicationYearRenewalPeriod: {
-              StartDate: {
-                date: '2024-12-01',
-              },
-              EndDate: {
-                date: '2025-06-30',
-              },
-            },
-            BenefitApplicationYearNext: {
-              BenefitApplicationYearIdentification: {},
-            },
-            BenefitApplicationYearCoveragePeriod: {
-              StartDate: {
-                date: '2025-04-01',
-              },
-              EndDate: {
-                date: '2026-06-30',
-              },
-            },
+  describe('getIntakeApplicationYear', () => {
+    it('should return intake application year entity', () => {
+      const repository = new DefaultApplicationYearRepository();
+
+      const result = repository.getIntakeApplicationYear('2024-11-13');
+      expect(result).toEqual({
+        BenefitApplicationYear: {
+          BenefitApplicationYearIdentification: {
+            IdentificationID: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
           },
-        ],
-      };
-
-      const mockServerConfig = mock<ServerConfig>();
-      mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
-
-      const mockHttpClient = mock<HttpClient>();
-      mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(mockResponseData));
-
-      const repository = new DefaultApplicationYearRepository(mockServerConfig, mockHttpClient);
-
-      const result = await repository.listApplicationYears('2024-11-13');
-      expect(result).toEqual(mockResponseData);
+          BenefitApplicationYearTaxYear: {
+            YearDate: '2024',
+          },
+          DependentEligibilityEndDate: {
+            date: '2025-06-01',
+          },
+        },
+      });
     });
+  });
 
-    it('should throw an error when fetch response is not ok', async () => {
-      const mockServerConfig = mock<ServerConfig>();
-      mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
+  describe('getRenewalApplicationYear', () => {
+    it('should return renewal application year entity', () => {
+      const repository = new DefaultApplicationYearRepository();
 
-      const mockHttpClient = mock<HttpClient>();
-      mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(null, { status: 500 }));
-
-      const repository = new DefaultApplicationYearRepository(mockServerConfig, mockHttpClient);
-      await expect(async () => await repository.listApplicationYears('2024-11-13')).rejects.toThrowError();
+      const result = repository.getIntakeApplicationYear('2024-11-13');
+      expect(result).toEqual({
+        BenefitApplicationYear: {
+          BenefitApplicationYearIdentification: {
+            IdentificationID: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
+          },
+          BenefitApplicationYearTaxYear: {
+            YearDate: '2024',
+          },
+          DependentEligibilityEndDate: {
+            date: '2025-06-01',
+          },
+        },
+      });
     });
   });
 });
