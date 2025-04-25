@@ -17,6 +17,7 @@ resources:
   - ../../base/frontend/
   - ../../base/fluentd-archiver/
   - ../../base/redis/
+  - ./external-secrets.yaml
   - ./hpas.yaml
   - ./ingresses.yaml
 patches:
