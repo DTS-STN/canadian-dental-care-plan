@@ -15,6 +15,7 @@ labels:
       app.kubernetes.io/tier: nonprod
 resources:
   - ../../base/frontend/
+  - ./external-secrets.yaml
   - ./ingresses.yaml
 patches:
   - path: ./patches/deployments.yaml
