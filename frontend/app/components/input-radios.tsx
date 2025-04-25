@@ -5,7 +5,6 @@ import { InputHelp } from './input-help';
 import { InputRadio } from './input-radio';
 
 import { InputLegend } from '~/components/input-legend';
-import { cn } from '~/utils/tw-utils';
 
 export interface InputRadiosProps {
   errorMessage?: string;
@@ -21,32 +20,33 @@ export interface InputRadiosProps {
   legendClassName?: string;
 }
 
-const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required, legendClassName }: InputRadiosProps) => {
+export function InputRadios({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required, legendClassName }: InputRadiosProps) {
   const inputErrorId = `input-radios-${id}-error`;
   const inputHelpMessagePrimaryId = `input-radios-${id}-help-primary`;
   const inputHelpMessageSecondaryId = `input-radios-${id}-help-secondary`;
   const inputLegendId = `input-radios-${id}-legend`;
   const inputWrapperId = `input-radios-${id}`;
 
-  function getAriaDescribedby() {
-    const ariaDescribedby = [];
-    if (helpMessagePrimary) ariaDescribedby.push(inputHelpMessagePrimaryId);
-    if (helpMessageSecondary) ariaDescribedby.push(inputHelpMessageSecondaryId);
-    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
-  }
+  const ariaDescribedbyIds =
+    [
+      !!helpMessagePrimary && inputHelpMessagePrimaryId, //
+      !!helpMessageSecondary && inputHelpMessageSecondaryId,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
   return (
-    <fieldset id={inputWrapperId} data-testid={inputWrapperId} aria-labelledby={`${inputLegendId} ${inputHelpMessagePrimaryId}`} aria-required={required}>
-      <InputLegend id={inputLegendId} className={cn('mb-2', legendClassName)} aria-describedby={getAriaDescribedby()}>
+    <fieldset role="radiogroup" id={inputWrapperId} className="space-y-2" aria-labelledby={inputLegendId} aria-describedby={ariaDescribedbyIds} aria-required={required}>
+      <InputLegend id={inputLegendId} className={legendClassName}>
         {legend}
       </InputLegend>
       {errorMessage && (
-        <p className="mb-2">
+        <p>
           <InputError id={inputErrorId}>{errorMessage}</InputError>
         </p>
       )}
       {helpMessagePrimary && (
-        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-field-help-primary">
+        <InputHelp id={inputHelpMessagePrimaryId} className={helpMessagePrimaryClassName}>
           {helpMessagePrimary}
         </InputHelp>
       )}
@@ -61,14 +61,10 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
         })}
       </ul>
       {helpMessageSecondary && (
-        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="input-field-help-secondary">
+        <InputHelp id={inputHelpMessageSecondaryId} className={helpMessageSecondaryClassName}>
           {helpMessageSecondary}
         </InputHelp>
       )}
     </fieldset>
   );
-};
-
-InputRadios.displayName = 'InputRadios';
-
-export { InputRadios };
+}
