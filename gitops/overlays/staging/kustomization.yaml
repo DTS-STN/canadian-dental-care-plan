@@ -18,6 +18,7 @@ resources:
   - ../../base/frontend/
   - ../../base/fluentd-archiver/
   - ../../base/redis/
+  - ./external-secrets.yaml
   - ./hpas.yaml
   # For renewal application downtime with a 404 response, uncomment ./ingresses-renew-error-404.yaml and comment ./ingresses.yaml
   - ./ingresses.yaml
