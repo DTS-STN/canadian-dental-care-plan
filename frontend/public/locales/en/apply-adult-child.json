@@ -71,7 +71,7 @@
       "yob-is-future": "Year of birth must be in the past",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
-      "sin-unique": "The Social Insurance Number (SIN) must be unique"
+      "sin-unique": "SIN must be unique"
     }
   },
   "new-or-existing-member": {
@@ -349,7 +349,7 @@
     "cancel-btn": "Cancel",
     "save-btn": "Save",
     "error-message": {
-      "email-required": "Enter email address",
+      "email-required": "Enter email address, for example name@example.com",
       "email-valid": "Enter an email address in the correct format, such as name@example.com"
     }
   },

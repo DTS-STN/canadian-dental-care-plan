@@ -71,7 +71,7 @@
       "yob-is-future": "L'année de naissance doit être dans le passé",
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
       "sin-valid": "Le NAS doit être valide",
-      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
+      "sin-unique": "NAS doit être unique"
     }
   },
   "new-or-existing-member": {
@@ -349,7 +349,7 @@
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
     "error-message": {
-      "email-required": "Entrez l'adresse courriel",
+      "email-required": "Entrez l'adresse courriel, par exemple nom@exemple.com",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com"
     }
   },

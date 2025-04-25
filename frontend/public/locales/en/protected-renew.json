@@ -214,7 +214,7 @@
       "yob-is-future": "Year of birth must be in the past",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
-      "sin-unique": "The Social Insurance Number (SIN) must be unique"
+      "sin-unique": "SIN must be unique"
     }
   },
   "children": {
