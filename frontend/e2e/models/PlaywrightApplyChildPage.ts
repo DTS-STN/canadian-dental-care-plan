@@ -90,10 +90,10 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
     await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
     await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
 
-    await this.page.getByRole('group', { name: 'Does this child have a Social Insurance Number (SIN)?' }).getByRole('radio', { name: "Yes, enter the child's 9-digit SIN" }).check();
+    await this.page.getByRole('radiogroup', { name: 'Does this child have a Social Insurance Number (SIN)?' }).getByRole('radio', { name: "Yes, enter the child's 9-digit SIN" }).check();
     await this.page.getByRole('textbox', { name: 'Enter the 9-digit SIN' }).fill('700000003');
 
-    await this.page.getByRole('group', { name: 'Are you the parent or legal guardian of this child?' }).getByRole('radio', { name: isParentOrGuardian }).check();
+    await this.page.getByRole('radiogroup', { name: 'Are you the parent or legal guardian of this child?' }).getByRole('radio', { name: isParentOrGuardian }).check();
   }
 
   async fillApplicantInformationForm() {
@@ -109,7 +109,7 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
   async fillCommunicationForm() {
     await this.isLoaded('communication-preference');
 
-    await this.page.getByRole('group', { name: 'What is your preferred official language of communication?' }).getByRole('radio', { name: 'English' }).check();
-    await this.page.getByRole('group', { name: 'What is your preferred method of communication for Sun Life?' }).getByRole('radio', { name: 'Email' }).check();
+    await this.page.getByRole('radiogroup', { name: 'What is your preferred official language of communication?' }).getByRole('radio', { name: 'English' }).check();
+    await this.page.getByRole('radiogroup', { name: 'What is your preferred method of communication for Sun Life?' }).getByRole('radio', { name: 'Email' }).check();
   }
 }

@@ -134,8 +134,8 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
   async fillCommunicationForm() {
     await this.isLoaded('communication-preference');
 
-    await this.page.getByRole('group', { name: 'What is your preferred official language of communication?' }).getByRole('radio', { name: 'English' }).check();
-    await this.page.getByRole('group', { name: 'What is your preferred method of communication for Sun Life?' }).getByRole('radio', { name: 'Email' }).check();
+    await this.page.getByRole('radiogroup', { name: 'What is your preferred official language of communication?' }).getByRole('radio', { name: 'English' }).check();
+    await this.page.getByRole('radiogroup', { name: 'What is your preferred method of communication for Sun Life?' }).getByRole('radio', { name: 'Email' }).check();
   }
 
   async fillDentalInsuranceForm() {
@@ -151,12 +151,12 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
   async fillOtherDentalBenefitsForm() {
     await this.isLoaded('federal-provincial-territorial-benefits');
 
-    await this.page.getByRole('group', { name: 'Federal benefits' }).getByRole('radio', { name: 'Yes, I have federal dental benefits' }).check();
-    await this.page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Yes, I have provincial or territorial dental benefits' }).check();
+    await this.page.getByRole('radiogroup', { name: 'Federal benefits' }).getByRole('radio', { name: 'Yes, I have federal dental benefits' }).check();
+    await this.page.getByRole('radiogroup', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Yes, I have provincial or territorial dental benefits' }).check();
 
-    await this.page.getByRole('group', { name: 'Federal benefits' }).getByRole('radio', { name: 'Correctional Service Canada Health Services' }).check();
+    await this.page.getByRole('radiogroup', { name: 'Federal benefits' }).getByRole('radio', { name: 'Correctional Service Canada Health Services' }).check();
     await this.page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('combobox', { name: 'If yes, through which province or territory?' }).selectOption('Alberta');
 
-    await this.page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Alberta Adult Health Benefit' }).check();
+    await this.page.getByRole('radiogroup', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Alberta Adult Health Benefit' }).check();
   }
 }
