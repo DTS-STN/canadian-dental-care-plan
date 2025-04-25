@@ -215,15 +215,17 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       </p>
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
-        <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgeTerms} errorMessage={errors?.acknowledgeTerms} required>
-          {t('apply:terms-and-conditions.checkboxes.acknowledge-terms')}
-        </InputCheckbox>
-        <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgePrivacy} errorMessage={errors?.acknowledgePrivacy} required>
-          {t('apply:terms-and-conditions.checkboxes.acknowledge-privacy')}
-        </InputCheckbox>
-        <InputCheckbox id="share-data" name="shareData" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.shareData} errorMessage={errors?.shareData} required>
-          {t('apply:terms-and-conditions.checkboxes.share-data')}
-        </InputCheckbox>
+        <div className="space-y-2">
+          <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgeTerms} errorMessage={errors?.acknowledgeTerms} required>
+            {t('apply:terms-and-conditions.checkboxes.acknowledge-terms')}
+          </InputCheckbox>
+          <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgePrivacy} errorMessage={errors?.acknowledgePrivacy} required>
+            {t('apply:terms-and-conditions.checkboxes.acknowledge-privacy')}
+          </InputCheckbox>
+          <InputCheckbox id="share-data" name="shareData" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.shareData} errorMessage={errors?.shareData} required>
+            {t('apply:terms-and-conditions.checkboxes.share-data')}
+          </InputCheckbox>
+        </div>
         <InputCheckbox id="do-not-consent" name="doNotConsent" value={CHECKBOX_VALUE.yes} className="my-8" errorMessage={errors?.doNotConsent}>
           <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.checkboxes.do-not-consent" />
         </InputCheckbox>
