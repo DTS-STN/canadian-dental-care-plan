@@ -16,6 +16,7 @@ labels:
 resources:
   - ../../base/frontend/
   - ../../base/redis/
+  - ./external-secrets.yaml
   - ./ingresses.yaml
 patches:
   - path: ./patches/deployments.yaml
