@@ -330,7 +330,7 @@
         "client-number-valid": "Le numéro de client doit être composé de 11 chiffres",
         "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
         "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
-        "first-name-no-digits": "Le prénom doit contenir uniquement des lettres",
+        "first-name-no-digits": "Le nom prénom doit contenir uniquement des lettres",
         "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres",
         "no-record": "Aucun dossier correspondant trouvé pour votre enfant"
       }
