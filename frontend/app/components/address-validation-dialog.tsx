@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -73,17 +73,19 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
     await fetcher.submit(formData, { method: 'POST' });
   }
 
+  const dialogDescriptionId = useId();
+
   return (
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
         <DialogTitle>{t('common:dialog.address-suggestion.header')}</DialogTitle>
-        <DialogDescription id="verify-description">{t('common:dialog.address-suggestion.description')}</DialogDescription>
+        <DialogDescription id={dialogDescriptionId}>{t('common:dialog.address-suggestion.description')}</DialogDescription>
       </DialogHeader>
       <InputRadios
         id="addressSelection"
         name="addressSelection"
         legend={t('common:dialog.address-suggestion.address-selection-legend')}
-        outerAriaDescribedById="verify-description"
+        outerAriaDescribedById={dialogDescriptionId}
         options={[
           {
             value: enteredAddressOptionValue,
