@@ -14,9 +14,9 @@ import { extractDateParts, useMonths } from '~/utils/date-utils';
 import { padWithZero } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
-const inputBaseClassName = 'block rounded-lg border-gray-500 focus:border-blue-500 focus:outline-hidden focus:ring-3 focus:ring-blue-500';
-const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
-const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
+const inputBaseStyles = 'block rounded-lg border-gray-500 focus:border-blue-500 focus:ring-3 focus:ring-blue-500 focus:outline-hidden';
+const inputDisabledStyles = 'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-70';
+const inputErrorStyles = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
 export interface DatePickerFieldProps {
   defaultValue: string;
@@ -225,7 +225,7 @@ function DatePickerMonth({ ariaErrorMessage, className, defaultValue, disabled, 
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseClassName, inputDisabledClassName, ariaErrorMessage && inputErrorClassName, className)}
+        className={cn(inputBaseStyles, inputDisabledStyles, ariaErrorMessage && inputErrorStyles, className)}
         data-testid="date-picker-month-select"
         defaultValue={defaultValue}
         disabled={disabled}
@@ -274,7 +274,7 @@ function DatePickerYear({ ariaErrorMessage, className, defaultValue, disabled, i
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseClassName, inputDisabledClassName, ariaErrorMessage && inputErrorClassName, className)}
+        className={cn(inputBaseStyles, inputDisabledStyles, ariaErrorMessage && inputErrorStyles, className)}
         data-testid="date-picker-year-input"
         defaultValue={defaultValue}
         disabled={disabled}
@@ -316,7 +316,7 @@ function DatePickerDay({ ariaErrorMessage, className, defaultValue, disabled, id
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseClassName, inputDisabledClassName, ariaErrorMessage && inputErrorClassName, className)}
+        className={cn(inputBaseStyles, inputDisabledStyles, ariaErrorMessage && inputErrorStyles, className)}
         data-testid="date-picker-day-input"
         defaultValue={defaultValue}
         disabled={disabled}
