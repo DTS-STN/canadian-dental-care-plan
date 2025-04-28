@@ -6,11 +6,6 @@ import { InputHelp } from './input-help';
 import { InputLabel } from '~/components/input-label';
 import { cn } from '~/utils/tw-utils';
 
-const inputBaseClassName = 'block rounded-lg border-gray-500 focus:border-blue-500 focus:outline-hidden focus:ring-3 focus:ring-blue-500';
-const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
-const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-none read-only:cursor-not-allowed read-only:opacity-70';
-const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
-
 export interface InputPatternFieldProps extends OmitStrict<React.ComponentProps<typeof PatternFormat>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'value' | 'onChange'> {
   defaultValue: string;
   errorMessage?: string;
@@ -64,7 +59,13 @@ export function InputPatternField(props: InputPatternFieldProps) {
         aria-required={required}
         data-testid="input-pattern-field"
         id={id}
-        className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, errorMessage && inputErrorClassName, className)}
+        className={cn(
+          'block rounded-lg border-gray-500 focus:border-blue-500 focus:ring-3 focus:ring-blue-500 focus:outline-hidden', //
+          'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-70',
+          'read-only:pointer-events-none read-only:cursor-not-allowed read-only:bg-gray-100 read-only:opacity-70',
+          errorMessage && 'border-red-500 focus:border-red-500 focus:ring-red-500',
+          className,
+        )}
         required={required}
         value={defaultValue}
         {...restProps}
