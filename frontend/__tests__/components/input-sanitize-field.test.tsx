@@ -19,7 +19,7 @@ describe('InputSanitizeField', () => {
     ['Welcome*Home', 'WelcomeHome'],
     ['800--000-----000', '800-000-000'],
   ])('should render %s -> %s', (defaultValue, expected) => {
-    render(<InputSanitizeField id="test-id" name="test" label="label test" defaultValue={defaultValue} />);
+    render(<InputSanitizeField id="test-id" data-testid="input-sanitize-field" name="test" label="label test" defaultValue={defaultValue} />);
 
     const actual: HTMLInputElement = screen.getByTestId('input-sanitize-field');
 
@@ -33,7 +33,7 @@ describe('InputSanitizeField', () => {
 
   it('should render with help message', () => {
     const defaultValue = "Hi, my name is Smith's.";
-    render(<InputSanitizeField id="test-id" name="test" label="label test" defaultValue={defaultValue} helpMessageSecondary="help message" />);
+    render(<InputSanitizeField id="test-id" data-testid="input-sanitize-field" name="test" label="label test" defaultValue={defaultValue} helpMessageSecondary="help message" />);
 
     const actual = screen.getByTestId('input-sanitize-field');
 
@@ -47,7 +47,7 @@ describe('InputSanitizeField', () => {
 
   it('should render with required', () => {
     const defaultValue = "Hi, my name is Smith's.";
-    render(<InputSanitizeField id="test-id" name="test" label="label test" defaultValue={defaultValue} required />);
+    render(<InputSanitizeField id="test-id" data-testid="input-sanitize-field" name="test" label="label test" defaultValue={defaultValue} required />);
 
     const actual = screen.getByTestId('input-sanitize-field');
 
@@ -60,7 +60,7 @@ describe('InputSanitizeField', () => {
 
   it('should render with error message', () => {
     const defaultValue = "Hi, my name is Smith's.";
-    render(<InputSanitizeField id="test-id" name="test" label="label test" defaultValue={defaultValue} errorMessage="error message" />);
+    render(<InputSanitizeField id="test-id" data-testid="input-sanitize-field" name="test" label="label test" defaultValue={defaultValue} errorMessage="error message" />);
 
     const actual = screen.getByTestId('input-sanitize-field');
 

@@ -14,7 +14,7 @@ describe('InputRadio', () => {
     const labelText = 'Radio Label';
     const appendContent = <div data-testid="append-content">Appended Content</div>;
     const { getByLabelText, getByTestId } = render(
-      <InputRadio id="test" name="test" append={appendContent}>
+      <InputRadio id="test" data-testid="input-radio-test" name="test" append={appendContent}>
         {labelText}
       </InputRadio>,
     );
@@ -33,7 +33,7 @@ describe('InputRadio', () => {
   it('fires onChange event when radio button is clicked', () => {
     const onChangeMock = vi.fn();
     const { getByTestId } = render(
-      <InputRadio id="test" name="test" onChange={onChangeMock}>
+      <InputRadio id="test" data-testid="input-radio-test" name="test" onChange={onChangeMock}>
         Radio Label
       </InputRadio>,
     );
@@ -45,7 +45,7 @@ describe('InputRadio', () => {
 
   it('disables radio button when disabled prop is provided', () => {
     const { getByTestId } = render(
-      <InputRadio id="test" name="test" disabled>
+      <InputRadio id="test" data-testid="input-radio-test" name="test" disabled>
         Radio Label
       </InputRadio>,
     );

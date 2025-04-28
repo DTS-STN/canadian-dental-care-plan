@@ -67,8 +67,8 @@ test.describe('Adult-Child category', () => {
 
     await test.step('Should navigate to phone number page', async () => {
       await applyAdultChildPage.isLoaded('phone-number');
-      await page.getByTestId('test-phone-number').fill('819-888-8888');
-      await page.getByTestId('test-phone-number-alt').fill('819-777-7777');
+      await page.getByRole(`textbox`, { name: 'Phone number (optional)', exact: true }).fill('819-888-8888');
+      await page.getByRole(`textbox`, { name: 'Alternate phone number (optional)', exact: true }).fill('819-777-7777');
       await clickContinue(page);
     });
 
@@ -76,11 +76,8 @@ test.describe('Adult-Child category', () => {
       await applyAdultChildPage.isLoaded('communication-preference');
       await page.getByRole('radio', { name: 'English', exact: true }).check();
 
-      // Using getByTestId since there are two radio buttons with the same label.
-      // Gets "By email"
-      await page.getByTestId('input-radio-preferred-methods-option-0').check();
-      // Gets "Digitally through My Service Canada Account (MSCA)"
-      await page.getByTestId('input-radio-preferred-notification-method-option-0').check();
+      await page.getByRole('radio', { name: 'By email', exact: true }).check();
+      await page.getByRole('radio', { name: 'Digitally through My Service Canada Account (MSCA)' }).check();
 
       await clickContinue(page);
     });
@@ -99,23 +96,28 @@ test.describe('Adult-Child category', () => {
 
     await test.step('Should navigate to dental insurance page', async () => {
       await applyAdultChildPage.isLoaded('dental-insurance');
-      await page.getByTestId('input-radio-dental-insurance-option-0').check();
+      await page.getByRole('radio', { name: 'Yes' }).check();
       await clickContinue(page);
     });
 
     await test.step('Should navigate to confirm FPT insurance page', async () => {
       await applyAdultChildPage.isLoaded('confirm-federal-provincial-territorial-benefits');
-      await page.getByTestId('input-radio-federal-provincial-territorial-benefits-changed-option-0').check();
+      await page.getByRole('radio', { name: 'Yes' }).check();
       await clickContinue(page);
     });
 
     await test.step('Should navigate to FPT benefits page', async () => {
       await applyAdultChildPage.isLoaded('federal-provincial-territorial-benefits');
-      await page.getByTestId('input-radio-has-federal-benefits-option-0').check();
-      await page.getByTestId('input-radio-federal-social-programs-option-0').check();
-      await page.getByTestId('input-radio-has-provincial-territorial-benefits-option-0').check();
-      await page.getByTestId('input-province-test').selectOption('Alberta');
-      await page.getByTestId('input-radio-provincial-territorial-social-programs-option-0').check();
+
+      const fedGroup = page.getByRole('group', { name: 'Federal benefits' });
+      await fedGroup.getByRole('radio', { name: 'Yes' }).check();
+      await fedGroup.getByRole('radio', { name: 'Correctional Service' }).check();
+
+      const provGroup = page.getByRole('group', { name: 'Provincial or territorial benefits' });
+      await provGroup.getByRole('radio', { name: 'Yes' }).check();
+      await provGroup.getByRole('combobox', { name: 'through which province or territory' }).selectOption('Alberta');
+      await provGroup.getByRole('radio', { name: 'Alberta Adult' }).check();
+
       await clickContinue(page);
     });
 
@@ -146,11 +148,16 @@ test.describe('Adult-Child category', () => {
 
     await test.step('Should navigate to children-federal-provincial-territorial-benefits page', async () => {
       await applyAdultChildPage.isLoaded('children-federal-provincial-territorial-benefits');
-      await page.getByTestId('input-radio-has-federal-benefits-option-0').check();
-      await page.getByTestId('input-radio-federal-social-programs-option-0').check();
-      await page.getByTestId('input-radio-has-provincial-territorial-benefits-option-0').check();
-      await page.getByTestId('input-province-test').selectOption('Alberta');
-      await page.getByTestId('input-radio-provincial-territorial-social-programs-option-0').check();
+
+      const fedGroup = page.getByRole('group', { name: 'Federal benefits' });
+      await fedGroup.getByRole('radio', { name: 'Yes' }).check();
+      await fedGroup.getByRole('radio', { name: 'Correctional Service' }).check();
+
+      const provGroup = page.getByRole('group', { name: 'Provincial or territorial benefits' });
+      await provGroup.getByRole('radio', { name: 'Yes' }).check();
+      await provGroup.getByRole('combobox', { name: 'through which province or territory' }).selectOption('Alberta');
+      await provGroup.getByRole('radio', { name: 'Alberta Adult' }).check();
+
       await clickContinue(page);
     });
 

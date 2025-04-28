@@ -9,6 +9,7 @@ describe('InputSelect', () => {
     render(
       <InputSelect
         id="some-id"
+        data-testid="input-some-id-test"
         name="test"
         label="label test"
         defaultValue="first"
@@ -33,6 +34,7 @@ describe('InputSelect', () => {
     render(
       <InputSelect
         id="some-id"
+        data-testid="input-some-id-test"
         name="test"
         label="label test"
         defaultValue="first"
@@ -58,6 +60,7 @@ describe('InputSelect', () => {
     render(
       <InputSelect
         id="some-id"
+        data-testid="input-some-id-test"
         name="test"
         label="label test"
         defaultValue="first"
@@ -82,6 +85,7 @@ describe('InputSelect', () => {
     render(
       <InputSelect
         id="some-id"
+        data-testid="input-some-id-test"
         name="test"
         label="label test"
         defaultValue="first"

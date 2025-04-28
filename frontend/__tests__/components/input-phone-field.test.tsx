@@ -12,7 +12,7 @@ describe('InputPhoneField', () => {
 
   it('should render', () => {
     const phoneNumber = '+15146667777';
-    render(<InputPhoneField id="id" name="test" label="label test" defaultValue={phoneNumber} />);
+    render(<InputPhoneField id="id" data-testid="test-id" name="test" label="label test" defaultValue={phoneNumber} />);
 
     const actual: HTMLInputElement = screen.getByTestId('test-id');
 
@@ -26,7 +26,7 @@ describe('InputPhoneField', () => {
 
   it('should render international phone number', () => {
     const phoneNumber = '+50644444444';
-    render(<InputPhoneField id="id" name="test" label="label test" defaultValue={phoneNumber} />);
+    render(<InputPhoneField id="id" data-testid="test-id" name="test" label="label test" defaultValue={phoneNumber} />);
 
     const actual: HTMLInputElement = screen.getByTestId('test-id');
 
@@ -40,7 +40,7 @@ describe('InputPhoneField', () => {
 
   it('should render with help message', () => {
     const phoneNumber = '+15146667777';
-    render(<InputPhoneField id="id" name="test" label="label test" defaultValue={phoneNumber} helpMessageSecondary="help message" />);
+    render(<InputPhoneField id="id" data-testid="test-id" name="test" label="label test" defaultValue={phoneNumber} helpMessageSecondary="help message" />);
 
     const actual = screen.getByTestId('test-id');
 
@@ -54,7 +54,7 @@ describe('InputPhoneField', () => {
 
   it('should render with required', () => {
     const phoneNumber = '+15146667777';
-    render(<InputPhoneField id="id" name="test" label="label test" defaultValue={phoneNumber} required />);
+    render(<InputPhoneField id="id" data-testid="test-id" name="test" label="label test" defaultValue={phoneNumber} required />);
 
     const actual = screen.getByTestId('test-id');
 
@@ -67,7 +67,7 @@ describe('InputPhoneField', () => {
 
   it('should render with error message', () => {
     const phoneNumber = '+15146667777';
-    render(<InputPhoneField id="id" name="test" label="label test" defaultValue={phoneNumber} errorMessage="error message" />);
+    render(<InputPhoneField id="id" data-testid="test-id" name="test" label="label test" defaultValue={phoneNumber} errorMessage="error message" />);
 
     const actual = screen.getByTestId('test-id');
 

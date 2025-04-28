@@ -20,7 +20,7 @@ describe('InputPatternField', () => {
     ['800000 002', '800 000 002'],
     ['800000-002', '800 000 002'],
   ])('should render %s -> %s', (defaultValue, expected) => {
-    render(<InputPatternField id="test-id" name="test" label="label test" defaultValue={defaultValue} format={testFormat} />);
+    render(<InputPatternField id="test-id" data-testid="input-pattern-field" name="test" label="label test" defaultValue={defaultValue} format={testFormat} />);
 
     const actual: HTMLInputElement = screen.getByTestId('input-pattern-field');
 
@@ -33,7 +33,7 @@ describe('InputPatternField', () => {
   });
 
   it('should render with help message', () => {
-    render(<InputPatternField id="test-id" name="test" label="label test" format={testFormat} defaultValue="800000002" helpMessageSecondary="help message" />);
+    render(<InputPatternField id="test-id" data-testid="input-pattern-field" name="test" label="label test" format={testFormat} defaultValue="800000002" helpMessageSecondary="help message" />);
 
     const actual = screen.getByTestId('input-pattern-field');
 
@@ -46,7 +46,7 @@ describe('InputPatternField', () => {
   });
 
   it('should render with required', () => {
-    render(<InputPatternField id="test-id" name="test" label="label test" format={testFormat} defaultValue="800000002" required />);
+    render(<InputPatternField id="test-id" data-testid="input-pattern-field" name="test" label="label test" format={testFormat} defaultValue="800000002" required />);
 
     const actual = screen.getByTestId('input-pattern-field');
 
@@ -58,7 +58,7 @@ describe('InputPatternField', () => {
   });
 
   it('should render with error message', () => {
-    render(<InputPatternField id="test-id" name="test" label="label test" format={testFormat} defaultValue="800000002" errorMessage="error message" />);
+    render(<InputPatternField id="test-id" data-testid="input-pattern-field" name="test" label="label test" format={testFormat} defaultValue="800000002" errorMessage="error message" />);
 
     const actual = screen.getByTestId('input-pattern-field');
 

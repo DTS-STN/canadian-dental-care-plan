@@ -11,7 +11,7 @@ describe('InputTextarea', () => {
   });
 
   it('should render', () => {
-    render(<InputTextarea id="test-id" name="test" label="label test" defaultValue="default value" />);
+    render(<InputTextarea id="test-id" data-testid="input-textarea" name="test" label="label test" defaultValue="default value" />);
 
     const actual: HTMLInputElement = screen.getByTestId('input-textarea');
 
@@ -24,7 +24,7 @@ describe('InputTextarea', () => {
   });
 
   it('should render with help message', () => {
-    render(<InputTextarea id="test-id" name="test" label="label test" defaultValue="default value" helpMessage="help message" />);
+    render(<InputTextarea id="test-id" data-testid="input-textarea" name="test" label="label test" defaultValue="default value" helpMessage="help message" />);
 
     const actual = screen.getByTestId('input-textarea');
 
@@ -37,7 +37,7 @@ describe('InputTextarea', () => {
   });
 
   it('should render with required', () => {
-    render(<InputTextarea id="test-id" name="test" label="label test" defaultValue="default value" required />);
+    render(<InputTextarea id="test-id" data-testid="input-textarea" name="test" label="label test" defaultValue="default value" required />);
 
     const actual = screen.getByTestId('input-textarea');
 
@@ -49,7 +49,7 @@ describe('InputTextarea', () => {
   });
 
   it('should render with error message', () => {
-    render(<InputTextarea id="test-id" name="test" label="label test" defaultValue="default value" errorMessage="error message" />);
+    render(<InputTextarea id="test-id" data-testid="input-textarea" name="test" label="label test" defaultValue="default value" errorMessage="error message" />);
 
     const actual = screen.getByTestId('input-textarea');
 

@@ -18,7 +18,7 @@ describe('CsrfTokenInput', () => {
     const csrfToken = 'mock-csrf-token';
     vi.mocked(useCsrfToken).mockReturnValue(csrfToken);
 
-    render(<CsrfTokenInput name="_csrf" id="csrf-token" />);
+    render(<CsrfTokenInput name="_csrf" id="csrf-token" data-testid="csrf-token-input" />);
 
     const csrfInput = screen.getByTestId('csrf-token-input');
     expect(csrfInput).toBeInTheDocument();
