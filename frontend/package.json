@@ -41,7 +41,7 @@
     "@radix-ui/react-progress": "^1.1.4",
     "@react-router/node": "^7.5.2",
     "@react-router/serve": "^7.5.2",
-    "@rollup/wasm-node": "^4.40.0",
+    "@rollup/wasm-node": "^4.40.1",
     "clsx": "^2.1.1",
     "compression": "^1.8.0",
     "connect-redis": "^8.0.3",
