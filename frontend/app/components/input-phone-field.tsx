@@ -30,7 +30,6 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
   const inputHelpMessagePrimaryId = `${inputWrapperId}-help-primary`;
   const inputHelpMessageSecondaryId = `${inputWrapperId}-help-secondary`;
   const inputLabelId = `${inputWrapperId}-label`;
-  const inputPhoneTest = `test-${id}`;
 
   function getAriaDescribedby() {
     const describedby = [];
@@ -45,7 +44,7 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
   }
 
   return (
-    <div id={inputWrapperId} data-testid={inputWrapperId}>
+    <div id={inputWrapperId}>
       <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
         {label}
       </InputLabel>
@@ -55,7 +54,7 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
         </p>
       )}
       {helpMessagePrimary && (
-        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-phone-field-help-primary">
+        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)}>
           {helpMessagePrimary}
         </InputHelp>
       )}
@@ -65,7 +64,6 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        data-testid={inputPhoneTest}
         defaultCountry={defaultCountry ?? 'CA'}
         id={id}
         className={cn(
@@ -81,7 +79,7 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
         {...restProps}
       />
       {helpMessageSecondary && (
-        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="input-phone-field-help-secondary">
+        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)}>
           {helpMessageSecondary}
         </InputHelp>
       )}

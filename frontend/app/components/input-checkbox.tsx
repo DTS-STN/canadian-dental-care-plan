@@ -39,7 +39,6 @@ export function InputCheckbox({ errorMessage, append, appendClassName, children,
             (errorMessage ?? hasError) && 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500',
             inputClassName,
           )}
-          data-testid="input-checkbox"
           {...restProps}
         />
         <label

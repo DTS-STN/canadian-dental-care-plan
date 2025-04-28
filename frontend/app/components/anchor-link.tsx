@@ -34,7 +34,7 @@ export function AnchorLink(props: AnchorLinkProps) {
   }
 
   return (
-    <a href={`#${anchorElementId}`} onClick={handleOnSkipLinkClick} data-testid="anchor-link" {...restProps}>
+    <a href={`#${anchorElementId}`} onClick={handleOnSkipLinkClick} {...restProps}>
       {children}
     </a>
   );

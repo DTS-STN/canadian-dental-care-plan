@@ -28,7 +28,7 @@ export function LanguageSwitcher({ children, ...props }: LanguageSwitcherProps) 
   const search = searchParams.toString();
 
   return (
-    <InlineLink data-testid="language-switcher" reloadDocument to={{ pathname, search }} {...props}>
+    <InlineLink reloadDocument to={{ pathname, search }} {...props}>
       {children}
     </InlineLink>
   );

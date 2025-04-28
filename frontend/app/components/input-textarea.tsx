@@ -27,7 +27,7 @@ export function InputTextarea(props: InputTextareaProps) {
   }
 
   return (
-    <div id={inputWrapperId} data-testid={inputWrapperId} className="form-group">
+    <div id={inputWrapperId} className="form-group">
       <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
         {label}
       </InputLabel>
@@ -49,14 +49,13 @@ export function InputTextarea(props: InputTextareaProps) {
           errorMessage && 'border-red-500 focus:border-red-500 focus:ring-red-500',
           className,
         )}
-        data-testid="input-textarea"
         id={id}
         required={required}
         rows={rows ?? 3}
         {...restInputProps}
       />
       {helpMessage && (
-        <InputHelp id={inputHelpMessageId} className="mt-2" data-testid="input-textarea-help">
+        <InputHelp id={inputHelpMessageId} className="mt-2">
           {helpMessage}
         </InputHelp>
       )}

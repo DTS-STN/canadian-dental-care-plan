@@ -4,7 +4,6 @@ import { InputCheckbox } from '~/components/input-checkbox';
 import { InputError } from '~/components/input-error';
 import { InputHelp } from '~/components/input-help';
 import { InputLegend } from '~/components/input-legend';
-import { cn } from '~/utils/tw-utils';
 
 export interface InputCheckboxesProps {
   errorMessage?: string;
@@ -26,25 +25,24 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
   const inputLegendId = `input-checkboxes-${id}-legend`;
   const inputWrapperId = `input-checkboxes-${id}`;
 
-  function getAriaDescribedby() {
-    const ariaDescribedby = [];
-    if (helpMessagePrimary) ariaDescribedby.push(inputHelpMessagePrimaryId);
-    if (helpMessageSecondary) ariaDescribedby.push(inputHelpMessageSecondaryId);
-    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
-  }
+  const ariaDescribedbyIds =
+    [
+      !!helpMessagePrimary && inputHelpMessagePrimaryId, //
+      !!helpMessageSecondary && inputHelpMessageSecondaryId,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
   return (
-    <fieldset id={inputWrapperId} data-testid={inputWrapperId} aria-labelledby={`${inputLegendId} ${inputHelpMessagePrimaryId}`}>
-      <InputLegend id={inputLegendId} className="mb-2" aria-describedby={getAriaDescribedby()}>
-        {legend}
-      </InputLegend>
+    <fieldset id={inputWrapperId} className="space-y-2" aria-labelledby={inputLegendId} aria-describedby={ariaDescribedbyIds}>
+      <InputLegend id={inputLegendId}>{legend}</InputLegend>
       {errorMessage && (
-        <p className="mb-2">
+        <p>
           <InputError id={inputErrorId}>{errorMessage}</InputError>
         </p>
       )}
       {helpMessagePrimary && (
-        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-field-help-primary">
+        <InputHelp id={inputHelpMessagePrimaryId} className={helpMessagePrimaryClassName}>
           {helpMessagePrimary}
         </InputHelp>
       )}
@@ -59,7 +57,7 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
         })}
       </ul>
       {helpMessageSecondary && (
-        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="input-field-help-secondary">
+        <InputHelp id={inputHelpMessageSecondaryId} className={helpMessageSecondaryClassName}>
           {helpMessageSecondary}
         </InputHelp>
       )}

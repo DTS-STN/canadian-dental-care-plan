@@ -29,7 +29,6 @@ export function InputRadio({ append, appendClassName, children, className, hasEr
             hasError && 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500',
             inputClassName,
           )}
-          data-testid={inputRadioId}
           {...restProps}
         />
         <label

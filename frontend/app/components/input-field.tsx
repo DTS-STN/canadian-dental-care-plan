@@ -34,7 +34,7 @@ export function InputField(props: InputFieldProps) {
   }
 
   return (
-    <div id={inputWrapperId} data-testid={inputWrapperId}>
+    <div id={inputWrapperId}>
       <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
         {label}
       </InputLabel>
@@ -44,7 +44,7 @@ export function InputField(props: InputFieldProps) {
         </p>
       )}
       {helpMessagePrimary && (
-        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-field-help-primary">
+        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)}>
           {helpMessagePrimary}
         </InputHelp>
       )}
@@ -61,14 +61,13 @@ export function InputField(props: InputFieldProps) {
           errorMessage && 'border-red-500 focus:border-red-500 focus:ring-red-500',
           className,
         )}
-        data-testid="input-field"
         id={id}
         required={required}
         type={type}
         {...restInputProps}
       />
       {helpMessageSecondary && (
-        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="input-field-help-secondary">
+        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)}>
           {helpMessageSecondary}
         </InputHelp>
       )}
