@@ -1,39 +1,35 @@
 {
-  "[javascript]": {
+  "[javascript][json][jsonc][typescript][typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.tabSize": 2
   },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.tabSize": 2
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.removeUnusedImports": "explicit",
+    // rely on prettier to sort imports
+    "source.sortImports": "never"
   },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.tabSize": 2
-  },
-  "[typescript]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
-      "source.removeUnusedImports": "explicit"
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.tabSize": 2
-  },
-  "[typescriptreact]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
-      "source.removeUnusedImports": "explicit"
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.tabSize": 2
-  },
-  // clsx Tailwind Support
-  // https://github.com/lukeed/clsx/tree/master?tab=readme-ov-file#tailwind-support
+  // Tailwind Regex List
+  // see: https://github.com/paolotiu/tailwind-intellisense-regex-list?tab=readme-ov-file#classnames
   "tailwindCSS.experimental.classRegex": [
     ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
-    ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ]
+    ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+    [
+      // JavaScript string that likely contains tailwind classes.
+      // This regex looks for lines of JavaScript code that:
+      //
+      // 1. Optionally start with `const`, `let`, or `var`.
+      // 2. Have a variable name, that:
+      // 3. End with `styles`, `classes`, or `classnames`.
+      // 4. Have an equals sign (=) or +=.
+      // 5. Have a string in single or double quotes.
+      "(?:\\b(?:const|let|var)\\s+)?[\\w$_]*(?:[Ss]tyles|[Cc]lasses|[Cc]lassnames)[\\w\\d]*\\s*(?:=|\\+=)\\s*['\"]([^'\"]*)['\"]"
+    ],
+    // https://github.com/paolotiu/tailwind-intellisense-regex-list/pull/44
+    ["(?:\\b(?:const|let|var)\\s+)?[\\w$_]*(?:[Ss]tyles|[Cc]lasses|[Cc]lassnames)[\\w\\d]*\\s*=\\s*{([\\s\\S]*?)}", "\\s?[\\w].*:\\s*?[\"'`]([^\"'`]*).*?,?\\s?"]
+  ],
+  // always import files from the root (~) of the project
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "vitest.disableWorkspaceWarning": true
 }

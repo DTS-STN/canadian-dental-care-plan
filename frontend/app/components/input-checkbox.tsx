@@ -4,11 +4,6 @@ import { InputError } from './input-error';
 
 import { cn } from '~/utils/tw-utils';
 
-const inputBaseClassName = 'mt-0.5 size-5 rounded-sm border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden';
-const inputDisabledClassName = 'pointer-events-none cursor-not-allowed opacity-70';
-const inputErrorClassName = 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500';
-const inputReadOnlyClassName = 'pointer-events-none cursor-not-allowed opacity-70';
-
 export interface InputCheckboxProps extends OmitStrict<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
   append?: ReactNode;
   appendClassName?: string;
@@ -38,11 +33,24 @@ export function InputCheckbox({ errorMessage, append, appendClassName, children,
           id={inputCheckboxId}
           aria-labelledby={inputLabelId}
           aria-errormessage={errorMessage ? inputErrorId : undefined}
-          className={cn(inputBaseClassName, restProps.readOnly && inputReadOnlyClassName, restProps.disabled && inputDisabledClassName, (errorMessage ?? hasError) && inputErrorClassName, inputClassName)}
+          className={cn(
+            'mt-0.5 size-5 rounded-sm border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden', //
+            (restProps.readOnly === true || restProps.disabled === true) && 'pointer-events-none cursor-not-allowed opacity-70',
+            (errorMessage ?? hasError) && 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500',
+            inputClassName,
+          )}
           data-testid="input-checkbox"
           {...restProps}
         />
-        <label id={inputLabelId} htmlFor={inputCheckboxId} className={cn('block pl-3 leading-6', restProps.readOnly && inputReadOnlyClassName, restProps.disabled && inputDisabledClassName, labelClassName)}>
+        <label
+          id={inputLabelId}
+          htmlFor={inputCheckboxId}
+          className={cn(
+            'block pl-3 leading-6', //
+            (restProps.readOnly === true || restProps.disabled === true) && 'pointer-events-none cursor-not-allowed opacity-70',
+            labelClassName,
+          )}
+        >
           {children}
         </label>
       </div>

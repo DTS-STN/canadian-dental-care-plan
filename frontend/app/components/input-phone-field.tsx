@@ -9,11 +9,6 @@ import { InputHelp } from './input-help';
 import { InputLabel } from '~/components/input-label';
 import { cn } from '~/utils/tw-utils';
 
-const inputBaseClassName = 'block rounded-lg border-gray-500 focus:border-blue-500 focus:outline-hidden focus:ring-3 focus:ring-blue-500';
-const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
-const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-none read-only:cursor-not-allowed read-only:opacity-70';
-const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
-
 export interface InputPhoneFieldProps extends OmitStrict<React.ComponentProps<typeof PhoneInput>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children' | 'value'> {
   defaultValue?: string;
   errorMessage?: string;
@@ -73,7 +68,13 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
         data-testid={inputPhoneTest}
         defaultCountry={defaultCountry ?? 'CA'}
         id={id}
-        className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, errorMessage && inputErrorClassName, className)}
+        className={cn(
+          'block rounded-lg border-gray-500 focus:border-blue-500 focus:ring-3 focus:ring-blue-500 focus:outline-hidden', //
+          'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-70',
+          'read-only:pointer-events-none read-only:cursor-not-allowed read-only:bg-gray-100 read-only:opacity-70',
+          errorMessage && 'border-red-500 focus:border-red-500 focus:ring-red-500',
+          className,
+        )}
         onChange={handleOnPhoneInputChange}
         required={required}
         value={value}

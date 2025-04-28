@@ -2,11 +2,6 @@ import type { ReactNode } from 'react';
 
 import { cn } from '~/utils/tw-utils';
 
-const inputBaseClassName = 'mt-0.5 size-5 border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden';
-const inputDisabledClassName = 'pointer-events-none cursor-not-allowed opacity-70';
-const inputErrorClassName = 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500';
-const inputReadOnlyClassName = 'pointer-events-none cursor-not-allowed opacity-70';
-
 export interface InputRadioProps extends OmitStrict<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
   append?: ReactNode;
   appendClassName?: string;
@@ -28,11 +23,24 @@ export function InputRadio({ append, appendClassName, children, className, hasEr
           type="radio"
           id={inputRadioId}
           aria-labelledby={inputLabelId}
-          className={cn(inputBaseClassName, restProps.readOnly && inputReadOnlyClassName, restProps.disabled && inputDisabledClassName, hasError && inputErrorClassName, inputClassName)}
+          className={cn(
+            'mt-0.5 size-5 border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden', //
+            (restProps.readOnly === true || restProps.disabled === true) && 'pointer-events-none cursor-not-allowed opacity-70',
+            hasError && 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500',
+            inputClassName,
+          )}
           data-testid={inputRadioId}
           {...restProps}
         />
-        <label id={inputLabelId} htmlFor={inputRadioId} className={cn('block pl-3 leading-6', restProps.readOnly && inputReadOnlyClassName, restProps.disabled && inputDisabledClassName, labelClassName)}>
+        <label
+          id={inputLabelId}
+          htmlFor={inputRadioId}
+          className={cn(
+            'block pl-3 leading-6', //
+            (restProps.readOnly === true || restProps.disabled === true) && 'pointer-events-none cursor-not-allowed opacity-70',
+            labelClassName,
+          )}
+        >
           {children}
         </label>
       </div>
