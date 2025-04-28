@@ -11,7 +11,7 @@ describe('InputField', () => {
   });
 
   it('should render', () => {
-    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" />);
+    render(<InputField id="test-id" data-testid="input-field" name="test" label="label test" defaultValue="default value" />);
 
     const actual: HTMLInputElement = screen.getByTestId('input-field');
 
@@ -24,7 +24,7 @@ describe('InputField', () => {
   });
 
   it('should render with help message', () => {
-    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" helpMessageSecondary="help message" />);
+    render(<InputField id="test-id" data-testid="input-field" name="test" label="label test" defaultValue="default value" helpMessageSecondary="help message" />);
 
     const actual = screen.getByTestId('input-field');
 
@@ -37,7 +37,7 @@ describe('InputField', () => {
   });
 
   it('should render with required', () => {
-    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" required />);
+    render(<InputField id="test-id" data-testid="input-field" name="test" label="label test" defaultValue="default value" required />);
 
     const actual = screen.getByTestId('input-field');
 
@@ -49,7 +49,7 @@ describe('InputField', () => {
   });
 
   it('should render with error message', () => {
-    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" errorMessage="error message" />);
+    render(<InputField id="test-id" data-testid="input-field" name="test" label="label test" defaultValue="default value" errorMessage="error message" />);
 
     const actual = screen.getByTestId('input-field');
 

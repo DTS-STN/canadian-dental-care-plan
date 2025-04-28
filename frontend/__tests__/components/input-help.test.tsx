@@ -10,7 +10,11 @@ describe('InputHelp', () => {
   });
 
   it('should render', () => {
-    render(<InputHelp id="id">input help</InputHelp>);
+    render(
+      <InputHelp id="id" data-testid="input-help">
+        input help
+      </InputHelp>,
+    );
 
     const actualLabel = screen.getByTestId('input-help');
     expect(actualLabel).toBeInTheDocument();

@@ -10,6 +10,6 @@ describe('ContextualAlert', () => {
     render(<ContextualAlert type="success">{mockChildren}</ContextualAlert>);
 
     expect(screen.getByText('Text test')).toBeInTheDocument();
-    expect(screen.getByTestId('success')).toBeInTheDocument();
+    expect(screen.getByRole('img', { hidden: true })).toBeInTheDocument();
   });
 });

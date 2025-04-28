@@ -64,7 +64,7 @@ function NavigationMenu() {
     <div className="sm:w-[260px]">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <button className="inline-flex w-full items-center justify-between bg-slate-200 px-4 py-3 align-middle font-bold text-slate-700 outline-offset-2 hover:bg-neutral-300 focus:bg-neutral-300" id="dropdownNavbarLink" data-testid="menuButton">
+          <button className="inline-flex w-full items-center justify-between bg-slate-200 px-4 py-3 align-middle font-bold text-slate-700 outline-offset-2 hover:bg-neutral-300 focus:bg-neutral-300" id="dropdownNavbarLink">
             <span className="inline-flex w-full appearance-none items-center gap-4">
               <FontAwesomeIcon icon={faCircleUser} className="size-9 shrink-0" />
               <span>{t('header.menu-title')}</span>

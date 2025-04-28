@@ -37,7 +37,7 @@ export function InputPatternField(props: InputPatternFieldProps) {
   }
 
   return (
-    <div id={inputWrapperId} data-testid={inputWrapperId}>
+    <div id={inputWrapperId}>
       <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
         {label}
       </InputLabel>
@@ -47,7 +47,7 @@ export function InputPatternField(props: InputPatternFieldProps) {
         </p>
       )}
       {helpMessagePrimary && (
-        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-pattern-field-help-primary">
+        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)}>
           {helpMessagePrimary}
         </InputHelp>
       )}
@@ -57,7 +57,6 @@ export function InputPatternField(props: InputPatternFieldProps) {
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        data-testid="input-pattern-field"
         id={id}
         className={cn(
           'block rounded-lg border-gray-500 focus:border-blue-500 focus:ring-3 focus:ring-blue-500 focus:outline-hidden', //
@@ -71,7 +70,7 @@ export function InputPatternField(props: InputPatternFieldProps) {
         {...restProps}
       />
       {helpMessageSecondary && (
-        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="input-pattern-field-help-secondary">
+        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)}>
           {helpMessageSecondary}
         </InputHelp>
       )}

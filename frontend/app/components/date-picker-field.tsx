@@ -113,35 +113,15 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
 
   const datePickerErrorMessages = useMemo(() => {
     return {
-      all:
-        typeof errorMessages?.all === 'string' ? (
-          <InputError id={inputErrorIdAll} data-testid="date-picker-error-all">
-            {errorMessages.all}
-          </InputError>
-        ) : undefined,
-      month:
-        typeof errorMessages?.month === 'string' ? (
-          <InputError id={inputErrorIdMonth} data-testid="date-picker-error-month">
-            {errorMessages.month}
-          </InputError>
-        ) : undefined,
-      day:
-        typeof errorMessages?.day === 'string' ? (
-          <InputError id={inputErrorIdDay} data-testid="date-picker-error-day">
-            {errorMessages.day}
-          </InputError>
-        ) : undefined,
-      year:
-        typeof errorMessages?.year === 'string' ? (
-          <InputError id={inputErrorIdYear} data-testid="date-picker-error-year">
-            {errorMessages.year}
-          </InputError>
-        ) : undefined,
+      all: typeof errorMessages?.all === 'string' ? <InputError id={inputErrorIdAll}>{errorMessages.all}</InputError> : undefined,
+      month: typeof errorMessages?.month === 'string' ? <InputError id={inputErrorIdMonth}>{errorMessages.month}</InputError> : undefined,
+      day: typeof errorMessages?.day === 'string' ? <InputError id={inputErrorIdDay}>{errorMessages.day}</InputError> : undefined,
+      year: typeof errorMessages?.year === 'string' ? <InputError id={inputErrorIdYear}>{errorMessages.year}</InputError> : undefined,
     };
   }, [errorMessages?.all, errorMessages?.day, errorMessages?.month, errorMessages?.year, inputErrorIdAll, inputErrorIdDay, inputErrorIdMonth, inputErrorIdYear]);
 
   return (
-    <div id={inputWrapperId} data-testid="date-picker-field" aria-labelledby={`${inputLegendId} ${inputHelpMessagePrimaryId}`}>
+    <div id={inputWrapperId} aria-labelledby={`${inputLegendId} ${inputHelpMessagePrimaryId}`}>
       <fieldset>
         <InputLegend id={inputLegendId} className="mb-2" aria-describedby={getAriaDescribedBy()}>
           {legend}
@@ -165,7 +145,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
           </div>
         )}
         {helpMessagePrimary && (
-          <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="date-picker-help-primary">
+          <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)}>
             {helpMessagePrimary}
           </InputHelp>
         )}
@@ -185,7 +165,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
           )}
         </div>
         {helpMessageSecondary && (
-          <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="date-picker-help-secondary">
+          <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)}>
             {helpMessageSecondary}
           </InputHelp>
         )}
@@ -216,7 +196,7 @@ function DatePickerMonth({ ariaErrorMessage, className, defaultValue, disabled, 
   const inputOptionUnselectedId = `date-picker-${id}-month-option-unselected`;
 
   return (
-    <div id={wrapperId} data-testid="date-picker-month">
+    <div id={wrapperId}>
       <InputLabel id={inputLabelId} htmlFor={selectId} className="mb-2">
         {label}
       </InputLabel>
@@ -226,7 +206,6 @@ function DatePickerMonth({ ariaErrorMessage, className, defaultValue, disabled, 
         aria-labelledby={inputLabelId}
         aria-required={required}
         className={cn(inputBaseStyles, inputDisabledStyles, ariaErrorMessage && inputErrorStyles, className)}
-        data-testid="date-picker-month-select"
         defaultValue={defaultValue}
         disabled={disabled}
         id={selectId}
@@ -265,7 +244,7 @@ function DatePickerYear({ ariaErrorMessage, className, defaultValue, disabled, i
   const inputLabelId = `date-picker-${id}-year-label`;
 
   return (
-    <div id={wrapperId} data-testid="date-picker-year">
+    <div id={wrapperId}>
       <InputLabel id={inputLabelId} htmlFor={inputId} className="mb-2">
         {label}
       </InputLabel>
@@ -275,7 +254,6 @@ function DatePickerYear({ ariaErrorMessage, className, defaultValue, disabled, i
         aria-labelledby={inputLabelId}
         aria-required={required}
         className={cn(inputBaseStyles, inputDisabledStyles, ariaErrorMessage && inputErrorStyles, className)}
-        data-testid="date-picker-year-input"
         defaultValue={defaultValue}
         disabled={disabled}
         id={inputId}
@@ -307,7 +285,7 @@ function DatePickerDay({ ariaErrorMessage, className, defaultValue, disabled, id
   const inputLabelId = `date-picker-${id}-day-label`;
 
   return (
-    <div id={wrapperId} data-testid="date-picker-day">
+    <div id={wrapperId}>
       <InputLabel id={inputLabelId} htmlFor={inputId} className="mb-2">
         {label}
       </InputLabel>
@@ -317,7 +295,6 @@ function DatePickerDay({ ariaErrorMessage, className, defaultValue, disabled, id
         aria-labelledby={inputLabelId}
         aria-required={required}
         className={cn(inputBaseStyles, inputDisabledStyles, ariaErrorMessage && inputErrorStyles, className)}
-        data-testid="date-picker-day-input"
         defaultValue={defaultValue}
         disabled={disabled}
         id={inputId}

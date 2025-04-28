@@ -6,7 +6,7 @@ import { Banner } from '~/components/banner';
 
 describe('Banner', () => {
   it('should render the Banner', () => {
-    render(<Banner alert="test" description="test" />);
+    render(<Banner data-testid="banner-id" alert="test" description="test" />);
     const actual = screen.getByTestId('banner-id');
     expect(actual).toBeInTheDocument();
   });

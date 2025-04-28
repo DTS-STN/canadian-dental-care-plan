@@ -15,14 +15,12 @@ export interface InputSelectProps extends OmitStrict<ComponentProps<'select'>, '
   name: string;
   options: OmitStrict<ComponentProps<typeof InputOption>, 'id'>[];
 }
-
 export function InputSelect(props: InputSelectProps) {
   const { errorMessage, helpMessage, id, label, options, className, required, ...restInputProps } = props;
 
   const inputErrorId = `input-${id}-error`;
   const inputHelpMessageId = `input-${id}-help`;
   const inputLabelId = `input-${id}-label`;
-  const inputTestId = `input-${id}-test`;
   const inputWrapperId = `input-${id}`;
 
   function getAriaDescribedby() {
@@ -32,7 +30,7 @@ export function InputSelect(props: InputSelectProps) {
   }
 
   return (
-    <div id={inputWrapperId} data-testid={inputWrapperId}>
+    <div id={inputWrapperId}>
       <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
         {label}
       </InputLabel>
@@ -53,7 +51,6 @@ export function InputSelect(props: InputSelectProps) {
           errorMessage && 'border-red-500 focus:border-red-500 focus:ring-red-500',
           className,
         )}
-        data-testid={inputTestId}
         id={id}
         required={required}
         {...restInputProps}
@@ -64,7 +61,7 @@ export function InputSelect(props: InputSelectProps) {
         })}
       </select>
       {helpMessage && (
-        <InputHelp id={inputHelpMessageId} className="mt-2" data-testid="input-select-help">
+        <InputHelp id={inputHelpMessageId} className="mt-2">
           {helpMessage}
         </InputHelp>
       )}

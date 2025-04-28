@@ -26,7 +26,7 @@ export interface AddressProps extends ComponentProps<'address'> {
 export function Address({ address, format = 'standard', className, ...restProps }: AddressProps) {
   const formattedAddress = formatAddress({ ...address, format });
   return (
-    <address className={cn('whitespace-pre-wrap not-italic', className)} data-testid="address-id" {...restProps}>
+    <address className={cn('whitespace-pre-wrap not-italic', className)} {...restProps}>
       {formattedAddress}
     </address>
   );
