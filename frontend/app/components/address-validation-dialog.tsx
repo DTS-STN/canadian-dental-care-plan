@@ -77,12 +77,13 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
     <DialogContent aria-describedby={undefined} className="sm:max-w-md">
       <DialogHeader>
         <DialogTitle>{t('common:dialog.address-suggestion.header')}</DialogTitle>
-        <DialogDescription>{t('common:dialog.address-suggestion.description')}</DialogDescription>
+        <DialogDescription id="verify-description">{t('common:dialog.address-suggestion.description')}</DialogDescription>
       </DialogHeader>
       <InputRadios
         id="addressSelection"
         name="addressSelection"
         legend={t('common:dialog.address-suggestion.address-selection-legend')}
+        outerAriaDescribedById="verify-description"
         options={[
           {
             value: enteredAddressOptionValue,

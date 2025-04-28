@@ -18,9 +18,10 @@ export interface InputRadiosProps {
   name: string;
   required?: boolean;
   legendClassName?: string;
+  outerAriaDescribedById?: string;
 }
 
-export function InputRadios({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required, legendClassName }: InputRadiosProps) {
+export function InputRadios({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required, legendClassName, outerAriaDescribedById }: InputRadiosProps) {
   const inputErrorId = `input-radios-${id}-error`;
   const inputHelpMessagePrimaryId = `input-radios-${id}-help-primary`;
   const inputHelpMessageSecondaryId = `input-radios-${id}-help-secondary`;
@@ -31,6 +32,7 @@ export function InputRadios({ errorMessage, helpMessagePrimary, helpMessagePrima
     [
       !!helpMessagePrimary && inputHelpMessagePrimaryId, //
       !!helpMessageSecondary && inputHelpMessageSecondaryId,
+      !!outerAriaDescribedById && outerAriaDescribedById,
     ]
       .filter(Boolean)
       .join(' ') || undefined;
