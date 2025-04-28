@@ -1,8 +1,8 @@
-import type { ServerBuild } from 'react-router';
+import type { ServerBuild, matchRoutes } from 'react-router';
 
-type ServerRouteManifest = ServerBuild['routes'];
-type ServerRouteManifestEntry = NonNullable<ServerRouteManifest[string]>;
-type ServerRoute = ServerRouteManifestEntry & {
+export type ServerRouteManifest = ServerBuild['routes'];
+export type ServerRouteManifestEntry = NonNullable<ServerRouteManifest[string]>;
+export type ServerRoute = ServerRouteManifestEntry & {
   children: ServerRoute[];
 };
 
@@ -60,4 +60,62 @@ function groupServerRoutesByParentId(serverRouteManifest: ServerRouteManifest): 
     });
 
   return routesByParent;
+}
+
+/**
+ * Represents a route object shape that is agnostic enough to be used by
+ * React Router's utility functions like `matchRoutes`. It's derived directly
+ * from the type expected by `matchRoutes`. This type distinguishes between
+ * index routes (which cannot have children) and non-index routes (which can).
+ */
+export type AgnosticRoute = Parameters<typeof matchRoutes>[0][number];
+
+/**
+ * Converts an array of server-defined routes (`ServerRoute[]`), typically representing
+ * the top level of a route tree, into an array of `AgnosticRoute` objects
+ * compatible with React Router utilities like `matchRoutes`.
+ *
+ * @param serverRoutes An array of ServerRoute objects representing the route hierarchy.
+ *                     Each object in this top-level array is treated as a root or
+ *                     a main branch in the route tree.
+ * @returns An array of AgnosticRoute objects, preserving the hierarchy defined
+ *          in `serverRoutes`, ready for use with React Router. Returns an empty
+ *          array if the input is empty.
+ */
+export function createAgnosticRoutes(serverRoutes: ServerRoute[]): AgnosticRoute[] {
+  return serverRoutes.map((route) => {
+    return mapServerRouteToAgnosticRoute(route);
+  });
+}
+
+/**
+ * Recursively transforms a single ServerRoute node (and its descendants)
+ * into the AgnosticRoute format. It handles the distinction between index
+ * and non-index routes and processes children accordingly.
+ *
+ * @param serverRoute The input ServerRoute object to transform.
+ * @returns The corresponding AgnosticRoute object. If it's a non-index route
+ *          with children, the returned object will contain a `children` property
+ *          populated with recursively transformed AgnosticRoute objects.
+ *          Index routes will not have a `children` property in the returned object.
+ */
+function mapServerRouteToAgnosticRoute(serverRoute: ServerRoute): AgnosticRoute {
+  const { children, ...agnosticRoute } = serverRoute;
+
+  // Check if the route is an index route (index: true).
+  if (agnosticRoute.index === true) {
+    return agnosticRoute;
+  }
+  // Handle non-index routes (index: false or undefined).
+  else {
+    const nonIndexRoute: AgnosticRoute = agnosticRoute;
+
+    if (children.length > 0) {
+      nonIndexRoute.children = children.map((route) => {
+        return mapServerRouteToAgnosticRoute(route);
+      });
+    }
+
+    return nonIndexRoute;
+  }
 }
