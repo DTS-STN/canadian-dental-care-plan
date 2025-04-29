@@ -42,9 +42,9 @@ export function InputSanitizeField(props: InputSanitizeFieldProps) {
         {label}
       </InputLabel>
       {errorMessage && (
-        <p className="mb-2">
-          <InputError id={inputErrorId}>{errorMessage}</InputError>
-        </p>
+        <InputError id={inputErrorId} className="mb-2">
+          {errorMessage}
+        </InputError>
       )}
       {helpMessagePrimary && (
         <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)}>
