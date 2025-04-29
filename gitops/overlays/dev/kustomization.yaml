@@ -32,9 +32,12 @@ configMapGenerator:
 secretGenerator:
   - name: frontend
     behavior: replace
-    envs:
-      - ./configs/frontend/secrets.conf
+    options:
+      # disable suffix hash so it can effectively
+      # be managed by external secrets operator
+      disableNameSuffixHash: true
   - name: oauth-proxy
-    behavior: create
-    envs:
-      - ./configs/oauth-proxy/secrets.conf
+    options:
+      # disable suffix hash so it can effectively
+      # be managed by external secrets operator
+      disableNameSuffixHash: true
