@@ -23,11 +23,10 @@ export function InputSelect(props: InputSelectProps) {
   const inputLabelId = `input-${id}-label`;
   const inputWrapperId = `input-${id}`;
 
-  function getAriaDescribedby() {
-    const ariaDescribedby = [];
-    if (helpMessage) ariaDescribedby.push(inputHelpMessageId);
-    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
-  }
+  const ariaDescribedbyIds =
+    [!!helpMessage && inputHelpMessageId]
+      .filter(Boolean) //
+      .join(' ') || undefined;
 
   return (
     <div id={inputWrapperId}>
@@ -40,7 +39,7 @@ export function InputSelect(props: InputSelectProps) {
         </InputError>
       )}
       <select
-        aria-describedby={getAriaDescribedby()}
+        aria-describedby={ariaDescribedbyIds}
         aria-errormessage={errorMessage && inputErrorId}
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}

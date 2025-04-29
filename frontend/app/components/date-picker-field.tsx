@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -56,121 +56,134 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
   const inputHelpMessageSecondaryId = `${inputWrapperId}-help-secondary`;
   const inputLegendId = `${inputWrapperId}-legend`;
 
-  const getAriaDescribedBy = useCallback(() => {
-    const ariaDescribedby = [inputLegendId];
-    if (helpMessagePrimary) ariaDescribedby.push(inputHelpMessagePrimaryId);
-    if (helpMessageSecondary) ariaDescribedby.push(inputHelpMessageSecondaryId);
-    return ariaDescribedby.join(' ');
-  }, [helpMessagePrimary, helpMessageSecondary, inputHelpMessagePrimaryId, inputHelpMessageSecondaryId, inputLegendId]);
+  const ariaDescribedbyIds =
+    [
+      !!helpMessagePrimary && inputHelpMessagePrimaryId, //
+      !!helpMessageSecondary && inputHelpMessageSecondaryId,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
-  const getAriaErrorMessageYear = useCallback(() => {
-    const ariaDescribedby = [];
-    if (errorMessages?.all) ariaDescribedby.push(inputErrorIdAll);
-    if (errorMessages?.year) ariaDescribedby.push(inputErrorIdYear);
-    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
-  }, [errorMessages?.all, errorMessages?.year, inputErrorIdAll, inputErrorIdYear]);
+  const ariaErrorMessageYear =
+    [
+      !!errorMessages?.all && inputErrorIdAll, //
+      !!errorMessages?.year && inputErrorIdYear,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
-  const datePickerYear = useMemo(
-    () => <DatePickerYear id={id} defaultValue={value.year ?? ''} name={names.year} label={t('gcweb:date-picker.year.label')} className="w-full sm:w-32" ariaErrorMessage={getAriaErrorMessageYear()} required={required} disabled={disabled} />,
-    [disabled, getAriaErrorMessageYear, id, names.year, required, t, value.year],
+  const datePickerYear = (
+    <DatePickerYear
+      id={id} //
+      defaultValue={value.year ?? ''}
+      name={names.year}
+      label={t('gcweb:date-picker.year.label')}
+      className="w-full sm:w-32"
+      ariaErrorMessage={ariaErrorMessageYear}
+      required={required}
+      disabled={disabled}
+    />
   );
 
-  const getAriaErrorMessageMonth = useCallback(() => {
-    const ariaDescribedby = [];
-    if (errorMessages?.all) ariaDescribedby.push(inputErrorIdAll);
-    if (errorMessages?.month) ariaDescribedby.push(inputErrorIdMonth);
-    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
-  }, [errorMessages?.all, errorMessages?.month, inputErrorIdAll, inputErrorIdMonth]);
+  const ariaErrorMessageMonth =
+    [
+      !!errorMessages?.all && inputErrorIdAll, //
+      !!errorMessages?.month && inputErrorIdMonth,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
-  const datePickerMonth = useMemo(
-    () => (
-      <DatePickerMonth
-        id={id}
-        defaultValue={value.month ?? ''}
-        name={names.month}
-        label={t('gcweb:date-picker.month.label')}
-        placeholder={t('gcweb:date-picker.month.placeholder')}
-        className="w-full sm:w-auto"
-        ariaErrorMessage={getAriaErrorMessageMonth()}
-        required={required}
-        disabled={disabled}
-      />
-    ),
-    [disabled, getAriaErrorMessageMonth, id, names.month, required, t, value.month],
+  const datePickerMonth = (
+    <DatePickerMonth
+      id={id} //
+      defaultValue={value.month ?? ''}
+      name={names.month}
+      label={t('gcweb:date-picker.month.label')}
+      placeholder={t('gcweb:date-picker.month.placeholder')}
+      className="w-full sm:w-auto"
+      ariaErrorMessage={ariaErrorMessageMonth}
+      required={required}
+      disabled={disabled}
+    />
   );
 
-  const getAriaErrorMessageDay = useCallback(() => {
-    const ariaDescribedby = [];
-    if (errorMessages?.all) ariaDescribedby.push(inputErrorIdAll);
-    if (errorMessages?.day) ariaDescribedby.push(inputErrorIdDay);
-    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
-  }, [errorMessages?.all, errorMessages?.day, inputErrorIdAll, inputErrorIdDay]);
+  const ariaErrorMessageDay =
+    [
+      !!errorMessages?.all && inputErrorIdAll, //
+      !!errorMessages?.day && inputErrorIdDay,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
-  const datePickerDay = useMemo(
-    () => <DatePickerDay id={id} defaultValue={value.day ?? ''} name={names.day} label={t('gcweb:date-picker.day.label')} className="w-full sm:w-20" ariaErrorMessage={getAriaErrorMessageDay()} required={required} disabled={disabled} />,
-    [disabled, getAriaErrorMessageDay, id, names.day, required, t, value.day],
+  const datePickerDay = (
+    <DatePickerDay
+      id={id} //
+      defaultValue={value.day ?? ''}
+      name={names.day}
+      label={t('gcweb:date-picker.day.label')}
+      className="w-full sm:w-20"
+      ariaErrorMessage={ariaErrorMessageDay}
+      required={required}
+      disabled={disabled}
+    />
   );
 
-  const datePickerErrorMessages = useMemo(() => {
-    return {
-      all: typeof errorMessages?.all === 'string' ? <InputError id={inputErrorIdAll}>{errorMessages.all}</InputError> : undefined,
-      month: typeof errorMessages?.month === 'string' ? <InputError id={inputErrorIdMonth}>{errorMessages.month}</InputError> : undefined,
-      day: typeof errorMessages?.day === 'string' ? <InputError id={inputErrorIdDay}>{errorMessages.day}</InputError> : undefined,
-      year: typeof errorMessages?.year === 'string' ? <InputError id={inputErrorIdYear}>{errorMessages.year}</InputError> : undefined,
-    };
-  }, [errorMessages?.all, errorMessages?.day, errorMessages?.month, errorMessages?.year, inputErrorIdAll, inputErrorIdDay, inputErrorIdMonth, inputErrorIdYear]);
+  const datePickerErrorMessages = {
+    all: typeof errorMessages?.all === 'string' ? <InputError id={inputErrorIdAll}>{errorMessages.all}</InputError> : undefined,
+    month: typeof errorMessages?.month === 'string' ? <InputError id={inputErrorIdMonth}>{errorMessages.month}</InputError> : undefined,
+    day: typeof errorMessages?.day === 'string' ? <InputError id={inputErrorIdDay}>{errorMessages.day}</InputError> : undefined,
+    year: typeof errorMessages?.year === 'string' ? <InputError id={inputErrorIdYear}>{errorMessages.year}</InputError> : undefined,
+  };
 
   return (
-    <div id={inputWrapperId} aria-labelledby={`${inputLegendId} ${inputHelpMessagePrimaryId}`}>
-      <fieldset>
-        <InputLegend id={inputLegendId} className="mb-2" aria-describedby={getAriaDescribedBy()}>
-          {legend}
-        </InputLegend>
-        {(datePickerErrorMessages.all !== undefined || datePickerErrorMessages.year !== undefined || datePickerErrorMessages.month !== undefined || datePickerErrorMessages.day !== undefined) && (
-          <div className="mb-2 space-y-2">
-            {datePickerErrorMessages.all && <p>{datePickerErrorMessages.all}</p>}
-            {currentLanguage === 'fr' ? (
-              <>
-                {datePickerErrorMessages.day}
-                {datePickerErrorMessages.month}
-                {datePickerErrorMessages.year}
-              </>
-            ) : (
-              <>
-                {datePickerErrorMessages.month}
-                {datePickerErrorMessages.day}
-                {datePickerErrorMessages.year}
-              </>
-            )}
-          </div>
-        )}
-        {helpMessagePrimary && (
-          <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)}>
-            {helpMessagePrimary}
-          </InputHelp>
-        )}
-        <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+    <fieldset id={inputWrapperId} aria-labelledby={inputLegendId} aria-describedby={ariaDescribedbyIds}>
+      <InputLegend id={inputLegendId} className="mb-2">
+        {legend}
+      </InputLegend>
+      {(datePickerErrorMessages.all !== undefined || datePickerErrorMessages.year !== undefined || datePickerErrorMessages.month !== undefined || datePickerErrorMessages.day !== undefined) && (
+        <div className="mb-2 space-y-2">
+          {datePickerErrorMessages.all && <p>{datePickerErrorMessages.all}</p>}
           {currentLanguage === 'fr' ? (
             <>
-              {datePickerDay}
-              {datePickerMonth}
-              {datePickerYear}
+              {datePickerErrorMessages.day}
+              {datePickerErrorMessages.month}
+              {datePickerErrorMessages.year}
             </>
           ) : (
             <>
-              {datePickerMonth}
-              {datePickerDay}
-              {datePickerYear}
+              {datePickerErrorMessages.month}
+              {datePickerErrorMessages.day}
+              {datePickerErrorMessages.year}
             </>
           )}
         </div>
-        {helpMessageSecondary && (
-          <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)}>
-            {helpMessageSecondary}
-          </InputHelp>
+      )}
+      {helpMessagePrimary && (
+        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)}>
+          {helpMessagePrimary}
+        </InputHelp>
+      )}
+      <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+        {currentLanguage === 'fr' ? (
+          <>
+            {datePickerDay}
+            {datePickerMonth}
+            {datePickerYear}
+          </>
+        ) : (
+          <>
+            {datePickerMonth}
+            {datePickerDay}
+            {datePickerYear}
+          </>
         )}
-      </fieldset>
-    </div>
+      </div>
+      {helpMessageSecondary && (
+        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)}>
+          {helpMessageSecondary}
+        </InputHelp>
+      )}
+    </fieldset>
   );
 };
 

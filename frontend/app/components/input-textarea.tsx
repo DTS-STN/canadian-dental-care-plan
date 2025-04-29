@@ -20,14 +20,13 @@ export function InputTextarea(props: InputTextareaProps) {
   const inputLabelId = `input-${id}-label`;
   const inputWrapperId = `input-${id}`;
 
-  function getAriaDescribedby() {
-    const ariaDescribedby = [];
-    if (helpMessage) ariaDescribedby.push(inputHelpMessageId);
-    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
-  }
+  const ariaDescribedbyIds =
+    [!!helpMessage && inputHelpMessageId]
+      .filter(Boolean) //
+      .join(' ') || undefined;
 
   return (
-    <div id={inputWrapperId} className="form-group">
+    <div id={inputWrapperId}>
       <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
         {label}
       </InputLabel>
@@ -37,7 +36,7 @@ export function InputTextarea(props: InputTextareaProps) {
         </InputError>
       )}
       <textarea
-        aria-describedby={getAriaDescribedby()}
+        aria-describedby={ariaDescribedbyIds}
         aria-errormessage={errorMessage && inputErrorId}
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
