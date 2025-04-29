@@ -28,13 +28,14 @@ export function InputSanitizeField(props: InputSanitizeFieldProps) {
   const inputHelpMessageSecondaryId = `${inputWrapperId}-help-secondary`;
   const inputLabelId = `${inputWrapperId}-label`;
 
-  function getAriaDescribedby() {
-    const describedby = [];
-    if (ariaDescribedby) describedby.push(ariaDescribedby);
-    if (helpMessagePrimary) describedby.push(inputHelpMessagePrimaryId);
-    if (helpMessageSecondary) describedby.push(inputHelpMessageSecondaryId);
-    return describedby.length > 0 ? describedby.join(' ') : undefined;
-  }
+  const ariaDescribedbyIds =
+    [
+      !!ariaDescribedby && ariaDescribedby, //
+      !!helpMessagePrimary && inputHelpMessagePrimaryId,
+      !!helpMessageSecondary && inputHelpMessageSecondaryId,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
   return (
     <div id={inputWrapperId}>
@@ -52,7 +53,7 @@ export function InputSanitizeField(props: InputSanitizeFieldProps) {
         </InputHelp>
       )}
       <NumberFormatBase
-        aria-describedby={getAriaDescribedby()}
+        aria-describedby={ariaDescribedbyIds}
         aria-errormessage={errorMessage ? inputErrorId : undefined}
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
