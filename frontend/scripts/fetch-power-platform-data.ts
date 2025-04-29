@@ -273,18 +273,22 @@ class DataFetcher {
   }
 
   /**
-   * Replaces problematic Unicode characters in a string:
-   * - Replaces typographic apostrophes (’) with straight apostrophes (').
-   * - Escapes NO-BREAK SPACE (U+00A0) and NO-BREAK HYPHEN (U+2011) using Unicode escapes.
-   * @param data - The string to clean.
-   * @returns The cleaned string with normalized and escaped Unicode characters.
+   * Normalizes and escapes certain Unicode characters in a string:
+   * - Replaces typographic apostrophes (U+2019) with straight apostrophes (U+0027).
+   * - Escapes all non-ASCII characters (code points > 0xFF) using Unicode escape sequences (\uXXXX).
+   *
+   * @param data - The input string to sanitize.
+   * @returns A new string with normalized apostrophes and escaped non-ASCII characters.
    */
   private cleanUnicode(data: string): string {
-    return data
-      .replace(/’/g, "'") //
-      .replace(/[\u00A0\u2011]/g, (char) => {
-        return `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`;
-      });
+    return (
+      data
+        .replace(/\u2019/g, '\u0027') //
+        // eslint-disable-next-line no-control-regex
+        .replace(/[^\x00-\xff]/g, (char) => {
+          return `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`;
+        })
+    );
   }
 
   /**
@@ -319,7 +323,6 @@ class DataFetcher {
         }
       }
 
-      console.log(url.toString());
       const response = await request(url, {
         method: 'GET',
         headers: {
