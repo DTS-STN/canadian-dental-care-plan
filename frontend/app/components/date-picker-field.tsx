@@ -131,15 +131,15 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
             {datePickerErrorMessages.all && <p>{datePickerErrorMessages.all}</p>}
             {currentLanguage === 'fr' ? (
               <>
-                {datePickerErrorMessages.day && <p>{datePickerErrorMessages.day}</p>}
-                {datePickerErrorMessages.month && <p>{datePickerErrorMessages.month}</p>}
-                {datePickerErrorMessages.year && <p>{datePickerErrorMessages.year}</p>}
+                {datePickerErrorMessages.day}
+                {datePickerErrorMessages.month}
+                {datePickerErrorMessages.year}
               </>
             ) : (
               <>
-                {datePickerErrorMessages.month && <p>{datePickerErrorMessages.month}</p>}
-                {datePickerErrorMessages.day && <p>{datePickerErrorMessages.day}</p>}
-                {datePickerErrorMessages.year && <p>{datePickerErrorMessages.year}</p>}
+                {datePickerErrorMessages.month}
+                {datePickerErrorMessages.day}
+                {datePickerErrorMessages.year}
               </>
             )}
           </div>

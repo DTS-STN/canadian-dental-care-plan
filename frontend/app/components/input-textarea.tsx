@@ -32,9 +32,9 @@ export function InputTextarea(props: InputTextareaProps) {
         {label}
       </InputLabel>
       {errorMessage && (
-        <div className="mb-2">
-          <InputError id={inputErrorId}>{errorMessage}</InputError>
-        </div>
+        <InputError id={inputErrorId} className="mb-2">
+          {errorMessage}
+        </InputError>
       )}
       <textarea
         aria-describedby={getAriaDescribedby()}
