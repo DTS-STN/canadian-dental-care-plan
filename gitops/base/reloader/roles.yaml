@@ -1,0 +1,76 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: reloader-role
+  labels:
+    app.kubernetes.io/name: reloader-role
+rules:
+  - apiGroups:
+      - '' # core API group
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+
+  - apiGroups:
+      - '' # core API group
+    resources:
+      - configmaps
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+
+  - apiGroups:
+      - apps
+    resources:
+      - daemonsets
+      - deployments
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+
+  - apiGroups:
+      - extensions
+    resources:
+      - daemonsets
+      - deployments
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+
+  - apiGroups:
+      - batch
+    resources:
+      - cronjobs
+    verbs:
+      - get
+      - list
+
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+    verbs:
+      - create
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: reloader-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: reloader-role
+subjects:
+  - kind: ServiceAccount
+    name: reloader
