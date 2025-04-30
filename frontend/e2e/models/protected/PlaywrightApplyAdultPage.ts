@@ -17,6 +17,7 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
       | 'federal-provincial-territorial-benefits'
       | 'living-independently'
       | 'parent-or-guardian'
+      | 'new-or-existing-member'
       | 'review-information',
     heading?: string | RegExp,
   ) {
@@ -75,7 +76,11 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
         break;
 
       case 'parent-or-guardian':
-        pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult\/parent-or-guardian/, heading: 'Parent or guardian needs to apply' };
+        pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult\/parent-or-guardian/, heading: 'Parent or legal guardian needs to apply' };
+        break;
+
+      case 'new-or-existing-member':
+        pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult\/new-or-existing-member/, heading: 'New or existing member' };
         break;
 
       case 'review-information':
