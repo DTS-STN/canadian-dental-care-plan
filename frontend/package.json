@@ -131,7 +131,7 @@
     "type-fest": "^4.40.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.1",
-    "vite": "^6.3.3",
+    "vite": "^6.3.4",
     "vite-plugin-static-copy": "^2.3.1",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.1.2",
