@@ -41,6 +41,6 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: frontend
+                name: maintenance
                 port:
-                  name: oauth-proxy
+                  name: http
