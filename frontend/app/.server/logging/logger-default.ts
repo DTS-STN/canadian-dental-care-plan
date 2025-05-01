@@ -84,7 +84,7 @@ export class DefaultLogger implements Logger {
 
     // Scenario 1: Logging with an object (messageOrObject is an object)
     if (splat.length === 0 && typeof messageOrObject === 'object' && messageOrObject !== null && !Array.isArray(messageOrObject)) {
-      const entry = { ...messageOrObject, ...baseEntry }; // Merge object and base entry.
+      const entry = Object.assign(messageOrObject, baseEntry); // Merge object and base entry.
       this.logger.log(entry as any); // Log the merged entry.
       return;
     }
@@ -92,7 +92,8 @@ export class DefaultLogger implements Logger {
     // Scenario 2: Standard message logging with no splat args.
     const msg = String(messageOrObject); // Ensure message is a string.
     if (splat.length === 0) {
-      const entry: LogEntry = { ...baseEntry, message: msg }; // Merge baseEntry with message.
+      // Merge baseEntry with message.
+      const entry: LogEntry = Object.assign(baseEntry, { message: msg });
       this.logger.log(entry);
       return;
     }
@@ -101,14 +102,14 @@ export class DefaultLogger implements Logger {
     const formatRegExp = /%[scdjifoO%]/g; // Regex for detecting format specifiers like %s, %d.
     const tokens = msg.match(formatRegExp); // Find all tokens.
 
-    if (!tokens && typeof splat[0] === 'object') {
-      const entry: LogEntry = { ...splat[0], ...baseEntry, message: msg, [SPLAT]: splat };
+    if (!tokens && splat[0] !== null && typeof splat[0] === 'object') {
+      const entry: LogEntry = Object.assign(splat[0], baseEntry, { message: msg, [SPLAT]: splat });
       this.logger.log(entry);
       return;
     }
 
     // Scenario 4: Logging with splat args for more complex messages.
-    const entry: LogEntry = { ...baseEntry, message: msg, [SPLAT]: splat };
+    const entry: LogEntry = Object.assign(baseEntry, { message: msg, [SPLAT]: splat });
     this.logger.log(entry);
   }
 }
