@@ -25,8 +25,8 @@ resources:
   #
   # For renewal application downtime with a 404 response, uncomment ./ingresses-renew-error-404.yaml
   #
-  - ./ingresses.yaml
-  # - ./ingresses-maintenance.yaml
+  # - ./ingresses.yaml
+  - ./ingresses-maintenance.yaml
   # - ./ingresses-apply-maintenance.yaml
   # - ./ingresses-renew-error-404.yaml
 patches:
@@ -57,10 +57,10 @@ configMapGenerator:
   - name: maintenance
     behavior: merge
     literals:
-      - startTimeEn=10:00pm EST December 6, 2024
-      - startTimeFr=22 h 00 HNE le 6 décembre 2024
-      - endTimeEn=10:00pm December 8, 2024
-      - endTimeFr=22 h 00 le 8 décembre 2024
+      - startTimeEn=10:00pm EDT April 30, 2025
+      - startTimeFr=30 avril 2025 à 22 h 00 HAE
+      - endTimeEn=7:00am EDT May 1, 2025
+      - endTimeFr=1 mai 2025 à 7 h 00 HAE
 secretGenerator:
   - name: frontend
     behavior: replace
