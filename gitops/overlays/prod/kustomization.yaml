@@ -25,10 +25,9 @@ resources:
   #
   # For renewal application downtime with a 404 response, uncomment ./ingresses-renew-error-404.yaml
   #
-  # - ./ingresses.yaml
+  - ./ingresses.yaml
   # - ./ingresses-maintenance.yaml
   # - ./ingresses-apply-maintenance.yaml
-  - ./ingresses-letters-maintenance.yaml
   # - ./ingresses-renew-error-404.yaml
 patches:
   - path: ./patches/deployments-error-404.yaml
@@ -57,10 +56,6 @@ configMapGenerator:
       - ./configs/oauth-proxy/config.conf
   - name: maintenance
     behavior: merge
-    # TODO :: GjB :: this is a temporary override of the maintenance page HTML
-    #                it should be removed when the letters are brought back online
-    files:
-      - ./configs/maintenance/503.html
     literals:
       - startTimeEn=10:00pm EDT April 30, 2025
       - startTimeFr=30 avril 2025 à 22 h 00 HAE
