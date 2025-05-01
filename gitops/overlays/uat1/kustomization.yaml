@@ -15,11 +15,15 @@ labels:
       app.kubernetes.io/tier: nonprod
 resources:
   - ../../base/frontend/
+  - ../../base/maintenance/
   - ../../base/redis/
   - ./external-secrets.yaml
-  - ./ingresses.yaml
+  # TODO :: Remove when letters maintenance is no longer needed
+  # - ./ingresses.yaml
+  - ./ingresses-letters-maintenance.yaml
 patches:
   - path: ./patches/deployments.yaml
+  - path: ./patches/deployments-maintenance.yaml
   - path: ./patches/services.yaml
   - path: ./patches/stateful-sets.yaml
 configMapGenerator:
@@ -36,6 +40,11 @@ configMapGenerator:
     behavior: create
     files:
       - ./configs/oauth-proxy/config.conf
+  - name: maintenance
+    behavior: merge
+  # TODO :: Remove when letters maintenance is no longer needed
+    files:
+      - ./configs/maintenance/503.html
 secretGenerator:
   - name: frontend
     behavior: replace
