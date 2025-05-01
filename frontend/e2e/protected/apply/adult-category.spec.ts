@@ -132,4 +132,101 @@ test.describe('Adult category', () => {
       await page.getByRole('button', { name: 'Return to my dashboard' }).click();
     });
   });
+
+  test('Applicant is under 16 years old', async ({ page }) => {
+    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+
+    await test.step('Should navigate to applicant information page', async () => {
+      await applyAdultPage.isLoaded('applicant-information');
+      const { year, month, day } = calculateDOB(15);
+      await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to parent or guardian page', async () => {
+      await applyAdultPage.isLoaded('parent-or-guardian');
+      await page.getByRole('button', { name: 'Return to my dashboard' }).click();
+    });
+  });
+
+  test('Applicant is 16 or 17 years old and lives with parents', async ({ page }) => {
+    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+
+    await test.step('Should navigate to applicant information page', async () => {
+      await applyAdultPage.isLoaded('applicant-information');
+      const { year, month, day } = calculateDOB(17);
+      await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to living independently page', async () => {
+      await applyAdultPage.isLoaded('living-independently');
+      await page.getByRole('radio', { name: 'No' }).check();
+
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to parent or guardian page', async () => {
+      await applyAdultPage.isLoaded('parent-or-guardian');
+      await page.getByRole('button', { name: 'Return to my dashboard' }).click();
+    });
+  });
+
+  test('Applicant is 16 or 17 years old and does not lives with parents', async ({ page }) => {
+    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+
+    await test.step('Should navigate to applicant information page', async () => {
+      await applyAdultPage.isLoaded('applicant-information');
+      const { year, month, day } = calculateDOB(17);
+      await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to living independently page', async () => {
+      await applyAdultPage.isLoaded('living-independently');
+      await page.getByRole('radio', { name: 'Yes' }).check();
+
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to new-or-existing-member page', async () => {
+      await applyAdultPage.isLoaded('new-or-existing-member');
+      await page.getByRole('radio', { name: 'Yes' }).check();
+      await page.getByRole(`textbox`, { name: 'Client Number', exact: true }).fill('12345678912');
+
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to marital-status page', async () => {
+      // Checking if correct page is loaded.
+      await applyAdultPage.isLoaded('marital-status');
+    });
+  });
+
+  test('Applicantis born on 2006', async ({ page }) => {
+    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+
+    await test.step('Should navigate to applicant information page', async () => {
+      await applyAdultPage.isLoaded('applicant-information');
+      await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: '10', month: '10', year: '2006', dtcEligible: true, page });
+
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to new-or-existing-member page', async () => {
+      await applyAdultPage.isLoaded('new-or-existing-member');
+      await page.getByRole('radio', { name: 'Yes' }).check();
+      await page.getByRole(`textbox`, { name: 'Client Number', exact: true }).fill('12345678912');
+
+      await clickContinue(page);
+    });
+
+    await test.step('Should navigate to marital-status page', async () => {
+      // Checking if correct page is loaded.
+      await applyAdultPage.isLoaded('marital-status');
+    });
+  });
 });

@@ -4,6 +4,10 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
   async isLoaded(
     applyChildPage:
       | 'applicant-information'
+      | 'parent-or-guardian'
+      | 'contact-apply-child'
+      | 'children-cannot-apply-child'
+      | 'new-or-existing-member'
       | 'marital-status'
       | 'mailing-address'
       | 'home-address'
@@ -30,6 +34,22 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
 
       case 'children-information':
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/information/, heading: /.*: information/ };
+        break;
+
+      case 'parent-or-guardian':
+        pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/parent-or-guardian/, heading: 'You must be a parent or legal guardian' };
+        break;
+
+      case 'children-cannot-apply-child':
+        pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/child\/children\/[a-f0-9-]+\/cannot-apply-child/, heading: 'Your child must apply' };
+        break;
+
+      case 'contact-apply-child':
+        pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/child\/contact-apply-child/, heading: 'Contact us to apply for your child' };
+        break;
+
+      case 'new-or-existing-member':
+        pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/child\/new-or-existing-member/, heading: 'New or existing member' };
         break;
 
       case 'children-dental-insurance':

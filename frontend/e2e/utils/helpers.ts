@@ -24,7 +24,7 @@ interface fillApplicantInformationFormArgs {
 interface fillChildrenInformationFormArgs {
   firstName: string;
   lastName: string;
-  sin: string;
+  sin?: string;
   day: string;
   month: string;
   year: string;
@@ -85,7 +85,7 @@ export async function fillChildrenInformationForm({ firstName, lastName, sin, da
   await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
   await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
   await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-  if (hasSin) {
+  if (hasSin && sin) {
     await page.getByRole('radio', { name: "Yes, enter the child's 9-digit SIN", exact: true }).check();
     await page.getByRole('textbox', { name: 'Enter the 9-digit SIN' }).fill(sin);
   } else {
