@@ -1,12 +1,22 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ServerConfig } from '~/.server/configs';
 import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
 import { DefaultAddressValidationRepository, MockAddressValidationRepository } from '~/.server/domain/repositories';
+import type { DefaultAddressValidationRepositoryServerConfig } from '~/.server/domain/repositories';
 import type { HttpClient } from '~/.server/http';
 
 describe('DefaultAddressValidationRepository', () => {
+  let serverConfigMock: DefaultAddressValidationRepositoryServerConfig;
+
+  beforeEach(() => {
+    serverConfigMock = {
+      INTEROP_API_BASE_URI: 'https://api.example.com',
+      INTEROP_ADDRESS_VALIDATION_REQUEST_CITY_MAX_LENGTH: 30,
+      INTEROP_API_SUBSCRIPTION_KEY: 'SUBSCRIPTION_KEY',
+    };
+  });
+
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
@@ -14,7 +24,15 @@ describe('DefaultAddressValidationRepository', () => {
 
   describe('getAddressCorrectionResult', () => {
     it('should return address correction results on successful fetch', async () => {
-      const mockResponseData = {
+      // arrange
+      const requestEntityMock: AddressCorrectionRequestEntity = {
+        address: '123 Fake Street',
+        city: 'North Pole',
+        provinceCode: 'ON',
+        postalCode: 'H0H 0H0',
+      };
+
+      const responseDataMock = {
         'wsaddr:CorrectionResults': {
           'nc:AddressFullText': '123 Fake St',
           'nc:AddressCityName': 'North Pole',
@@ -26,27 +44,92 @@ describe('DefaultAddressValidationRepository', () => {
         },
       };
 
-      const mockServerConfig = mock<ServerConfig>();
-      mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
+      const httpClientMock = mock<HttpClient>();
+      httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
 
-      const mockHttpClient = mock<HttpClient>();
-      mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(mockResponseData));
+      // act
+      const repository = new DefaultAddressValidationRepository(serverConfigMock, httpClientMock);
+      const actual = await repository.getAddressCorrectionResult(requestEntityMock);
 
-      const repository = new DefaultAddressValidationRepository(mockServerConfig, mockHttpClient);
+      // assert
+      expect(actual).toEqual(responseDataMock);
+      expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
+        'http.client.interop-api.address-validation-correct.gets',
+        new URL('https://api.example.com/address/validation/v1/CAN/correct?AddressFullText=123+Fake+Street&AddressCityName=North+Pole&AddressPostalCode=H0H+0H0&ProvinceCode=ON'),
+        {
+          proxyUrl: serverConfigMock.HTTP_PROXY_URL,
+          method: 'GET',
+          headers: {
+            'Accept-Language': 'en-CA',
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
+          },
+        },
+      );
+    });
 
-      const result = await repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' });
-      expect(result).toEqual(mockResponseData);
+    it('should truncate city to configured max length when preparing the request data', async () => {
+      // arrange
+      serverConfigMock.INTEROP_ADDRESS_VALIDATION_REQUEST_CITY_MAX_LENGTH = 4;
+
+      const requestEntityMock: AddressCorrectionRequestEntity = {
+        address: '123 Fake Street',
+        city: 'North Pole',
+        provinceCode: 'ON',
+        postalCode: 'H0H 0H0',
+      };
+
+      const responseDataMock = {
+        'wsaddr:CorrectionResults': {
+          'nc:AddressFullText': '123 Fake St',
+          'nc:AddressCityName': 'North Pole',
+          'nc:AddressPostalCode': 'H0H 0H0',
+          'can:ProvinceCode': 'ON',
+          'wsaddr:Information': {
+            'wsaddr:StatusCode': 'Corrected',
+          },
+        },
+      };
+
+      const httpClientMock = mock<HttpClient>();
+      httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
+
+      // act
+      const repository = new DefaultAddressValidationRepository(serverConfigMock, httpClientMock);
+      const actual = await repository.getAddressCorrectionResult(requestEntityMock);
+
+      // assert
+      expect(actual).toEqual(responseDataMock);
+      expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
+        'http.client.interop-api.address-validation-correct.gets',
+        new URL('https://api.example.com/address/validation/v1/CAN/correct?AddressFullText=123+Fake+Street&AddressCityName=Nort&AddressPostalCode=H0H+0H0&ProvinceCode=ON'),
+        {
+          proxyUrl: serverConfigMock.HTTP_PROXY_URL,
+          method: 'GET',
+          headers: {
+            'Accept-Language': 'en-CA',
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
+          },
+        },
+      );
     });
 
     it('should throw an error when fetch response is not ok', async () => {
-      const mockServerConfig = mock<ServerConfig>();
-      mockServerConfig.INTEROP_API_BASE_URI = 'https://api.example.com';
+      // arrange
+      const requestEntityMock: AddressCorrectionRequestEntity = {
+        address: '123 Fake Street',
+        city: 'North Pole',
+        provinceCode: 'ON',
+        postalCode: 'H0H 0H0',
+      };
 
       const mockHttpClient = mock<HttpClient>();
       mockHttpClient.instrumentedFetch.mockResolvedValue(Response.json(null, { status: 500 }));
 
-      const repository = new DefaultAddressValidationRepository(mockServerConfig, mockHttpClient);
-      await expect(async () => await repository.getAddressCorrectionResult({ address: '123 Fake Street', city: 'North Pole', provinceCode: 'ON', postalCode: 'H0H 0H0' })).rejects.toThrowError();
+      // act & assert
+      const repository = new DefaultAddressValidationRepository(serverConfigMock, mockHttpClient);
+      await expect(async () => await repository.getAddressCorrectionResult(requestEntityMock)).rejects.toThrowError();
     });
   });
 });
