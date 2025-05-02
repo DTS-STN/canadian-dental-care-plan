@@ -34,6 +34,7 @@ import { extractDigits } from '~/utils/string-utils';
 const FORM_ACTION = {
   request: 'request',
   submit: 'submit',
+  cancel: 'cancel',
 } as const;
 
 const MAX_ATTEMPTS = 5;
@@ -188,6 +189,17 @@ export async function action({ context: { appContainer, session }, params, reque
 
     return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
   }
+
+  if (formAction === FORM_ACTION.cancel) {
+    saveApplyState({
+      params,
+      session,
+      state: {
+        emailVerified: true,
+      },
+    });
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
+  }
 }
 
 export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.ComponentProps) {
@@ -269,9 +281,9 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Verify email click">
                 {t('apply-adult:verify-email.save-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Verify email click">
+              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Verify email click">
                 {t('apply-adult:verify-email.cancel-btn')}
-              </ButtonLink>
+              </Button>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
