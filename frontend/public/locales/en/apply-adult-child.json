@@ -68,6 +68,7 @@
       "marital-status-required": "Select marital status",
       "confirm-required": "Consent from spouse or common-law partner is required to proceed",
       "date-of-birth-year-required": "Enter year of birth, for example 1950",
+      "yob-is-past": "Year of birth too far in the past",
       "yob-is-future": "Year of birth must be in the past",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",

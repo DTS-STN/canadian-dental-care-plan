@@ -33,14 +33,16 @@ export interface AddressValidationRepository {
   checkHealth(): Promise<void>;
 }
 
+export type DefaultAddressValidationRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_ADDRESS_VALIDATION_REQUEST_CITY_MAX_LENGTH'>;
+
 @injectable()
 export class DefaultAddressValidationRepository implements AddressValidationRepository {
   private readonly log: Logger;
-  private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
+  private readonly serverConfig: DefaultAddressValidationRepositoryServerConfig;
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultAddressValidationRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultAddressValidationRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
@@ -53,7 +55,7 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
 
     const url = new URL(`${this.baseUrl}/CAN/correct`);
     url.searchParams.set('AddressFullText', address);
-    url.searchParams.set('AddressCityName', city);
+    url.searchParams.set('AddressCityName', city.substring(0, this.serverConfig.INTEROP_ADDRESS_VALIDATION_REQUEST_CITY_MAX_LENGTH));
     url.searchParams.set('AddressPostalCode', postalCode);
     url.searchParams.set('ProvinceCode', provinceCode);
 
