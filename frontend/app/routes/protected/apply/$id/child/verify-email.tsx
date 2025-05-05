@@ -34,7 +34,6 @@ import { extractDigits } from '~/utils/string-utils';
 const FORM_ACTION = {
   request: 'request',
   submit: 'submit',
-  cancel: 'cancel',
 } as const;
 
 const MAX_ATTEMPTS = 5;
@@ -195,17 +194,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
     return redirect(getPathById('protected/apply/$id/child/review-child-information', params));
   }
-
-  if (formAction === FORM_ACTION.cancel) {
-    saveProtectedApplyState({
-      params,
-      session,
-      state: {
-        emailVerified: true,
-      },
-    });
-    return redirect(getPathById('protected/apply/$id/child/review-adult-information', params));
-  }
 }
 
 export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.ComponentProps) {
@@ -287,9 +275,15 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Verify email click">
                 {t('protected-apply-child:verify-email.save-btn')}
               </LoadingButton>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Verify email click">
+              <ButtonLink
+                id="cancel-button"
+                routeId="protected/apply/$id/child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Verify email click"
+              >
                 {t('protected-apply-child:verify-email.cancel-btn')}
-              </Button>
+              </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">

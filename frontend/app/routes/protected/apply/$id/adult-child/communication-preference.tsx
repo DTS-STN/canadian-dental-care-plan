@@ -97,7 +97,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (state.editMode) {
     if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
-      saveProtectedApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined } });
+      saveProtectedApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined, emailVerified: undefined } });
       return redirect(getPathById('protected/apply/$id/adult-child/review-adult-information', params));
     }
     saveProtectedApplyState({ params, session, state: { editModeCommunicationPreferences: parsedDataResult.data } });
@@ -105,7 +105,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
-    saveProtectedApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined } });
+    saveProtectedApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined, emailVerified: undefined } });
     return redirect(getPathById('protected/apply/$id/adult-child/dental-insurance', params));
   }
   saveProtectedApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
