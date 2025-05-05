@@ -39,11 +39,9 @@ const endpoints: readonly Endpoint[] = [
     },
     jsonFilter: `value[].{
       id: esdc_value,
-      order: esdc_order,
       nameEn: esdc_nameenglish,
       nameFr: esdc_namefrench,
       parentId: esdc_ParentId.esdc_value,
-      parentOrder: esdc_ParentId.esdc_order,
       parentNameEn: esdc_ParentId.esdc_nameenglish,
       parentNameFr: esdc_ParentId.esdc_namefrench
     }`,
