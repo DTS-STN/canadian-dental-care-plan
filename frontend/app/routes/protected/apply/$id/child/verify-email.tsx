@@ -276,7 +276,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
                 {t('protected-apply-child:verify-email.save-btn')}
               </LoadingButton>
               <ButtonLink
-                id="back-button"
+                id="cancel-button"
                 routeId="protected/apply/$id/child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}

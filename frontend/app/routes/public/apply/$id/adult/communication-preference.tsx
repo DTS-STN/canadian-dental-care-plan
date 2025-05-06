@@ -82,7 +82,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (state.editMode) {
     if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
-      saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined } });
+      saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined, emailVerified: undefined } });
       return redirect(getPathById('public/apply/$id/adult/review-information', params));
     }
     saveApplyState({ params, session, state: { editModeCommunicationPreferences: parsedDataResult.data } });
@@ -90,7 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
-    saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined } });
+    saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined, emailVerified: undefined } });
     return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
   }
   saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
