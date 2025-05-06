@@ -280,7 +280,7 @@ export default function ProtectedApplyFlowVerifyEmail({ loaderData, params }: Ro
               <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Save - Verify email click">
                 {t('protected-apply-adult:verify-email.save-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId="protected/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Verify email click">
+              <ButtonLink id="cancel-button" routeId="protected/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Verify email click">
                 {t('protected-apply-adult:verify-email.cancel-btn')}
               </ButtonLink>
             </div>
