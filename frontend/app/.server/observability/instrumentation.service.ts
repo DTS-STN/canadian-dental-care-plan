@@ -70,14 +70,16 @@ export class DefaultInstrumentationService implements InstrumentationService {
    * @see https://opentelemetry.io/docs/languages/js/instrumentation/#create-counters
    */
   createCounter(name: string, options?: MetricOptions): Counter<Attributes> {
-    return metrics.getMeter(this.serverConfig.OTEL_SERVICE_NAME, this.buildInfo.buildVersion).createCounter(name, options);
+    const sanitizedName = this.sanitizeMetricName(name);
+    return metrics.getMeter(this.serverConfig.OTEL_SERVICE_NAME, this.buildInfo.buildVersion).createCounter(sanitizedName, options);
   }
 
   /**
    * @see https://opentelemetry.io/docs/languages/js/instrumentation/#using-histograms
    */
   createHistogram(name: string, options?: MetricOptions): Histogram<Attributes> {
-    return metrics.getMeter(this.serverConfig.OTEL_SERVICE_NAME, this.buildInfo.buildVersion).createHistogram(name, options);
+    const sanitizedName = this.sanitizeMetricName(name);
+    return metrics.getMeter(this.serverConfig.OTEL_SERVICE_NAME, this.buildInfo.buildVersion).createHistogram(sanitizedName, options);
   }
 
   /**
@@ -93,7 +95,35 @@ export class DefaultInstrumentationService implements InstrumentationService {
    */
   countHttpStatus(prefix: string, httpStatus: number, options?: MetricOptions): void {
     invariant(httpStatus > 0, 'httpStatus must be a positive integer');
-    this.createCounter(`${prefix}.requests.status.${httpStatus}`, options).add(1);
-    this.createCounter(`${prefix}.requests.status.${httpStatus >= 400 ? 'failed' : 'success'}`, options).add(1);
+
+    const sanitizedPrefix = this.sanitizeMetricName(prefix);
+    this.createCounter(`${sanitizedPrefix}.requests.status.${httpStatus}`, options).add(1);
+    this.createCounter(`${sanitizedPrefix}.requests.status.${httpStatus >= 400 ? 'failed' : 'success'}`, options).add(1);
+  }
+
+  /**
+   * Sanitizes a metric name to follow OpenTelemetry's naming rules:
+   * See https://opentelemetry.io/docs/specs/otel/metrics/api/#instrument-name-syntax.
+   *
+   * Invalid characters are removed, leading non-letters are stripped,
+   * and the name is trimmed to 255 characters. A warning is logged if sanitization occurs.
+   *
+   * @param metricName The raw metric name.
+   * @returns A sanitized metric name.
+   */
+  protected sanitizeMetricName(metricName: string): string {
+    const METRIC_NAME_REGEX = /^[a-z][a-z0-9_.\-/]{0,254}$/i;
+
+    if (METRIC_NAME_REGEX.test(metricName)) {
+      return metricName;
+    }
+
+    const sanitized = metricName
+      .replace(/[^a-zA-Z0-9_.\-/]/g, '_') // Replace all invalid characters with `_`
+      .replace(/^[^a-zA-Z]+/, ''); // Strip leading non-[a-z] chars
+
+    const trimmed = sanitized.slice(0, 255);
+    this.log.warn(`Invalid metric name "${metricName}". Sanitized to "${trimmed}"`);
+    return trimmed;
   }
 }
