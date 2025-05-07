@@ -65,11 +65,11 @@ export function loadProtectedApplyChildStateForReview({ params, request, session
 
   try {
     return validateProtectedApplyChildStateForReview({ params, state });
-  } catch (err) {
-    if (isRedirectResponse(err)) {
+  } catch (error) {
+    if (isRedirectResponse(error)) {
       saveProtectedApplyState({ params, session, state: { editMode: false } });
     }
-    throw err;
+    throw error;
   }
 }
 

@@ -63,11 +63,11 @@ export function loadRenewItaStateForReview({ params, request, session }: LoadRen
 
   try {
     return validateRenewItaStateForReview({ params, state });
-  } catch (err) {
-    if (isRedirectResponse(err)) {
+  } catch (error) {
+    if (isRedirectResponse(error)) {
       saveRenewState({ params, session, state: { editMode: false } });
     }
-    throw err;
+    throw error;
   }
 }
 

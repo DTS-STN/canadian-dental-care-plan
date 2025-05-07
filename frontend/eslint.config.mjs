@@ -118,7 +118,6 @@ export default tseslint.config(
   unicornPlugin.configs.recommended,
   {
     rules: {
-      'unicorn/catch-error-name': 'off',
       'unicorn/consistent-function-scoping': ['error', { checkArrowFunctions: false }],
       'unicorn/error-message': 'off',
       'unicorn/escape-case': 'off',
