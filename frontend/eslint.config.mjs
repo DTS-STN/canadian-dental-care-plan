@@ -120,7 +120,6 @@ export default tseslint.config(
     rules: {
       'unicorn/consistent-function-scoping': ['error', { checkArrowFunctions: false }],
       'unicorn/filename-case': 'off',
-      'unicorn/new-for-builtins': 'off',
       'unicorn/no-array-callback-reference': 'off',
       'unicorn/no-array-for-each': 'off',
       'unicorn/no-array-reduce': 'off',

@@ -51,7 +51,7 @@ export async function action({ context: { appContainer, session }, request }: Ro
     }
 
     default: {
-      throw Error(`Action '${parsedBody.data.action}' not implemented; sessionId: [${sessionId}]`);
+      throw new Error(`Action '${parsedBody.data.action}' not implemented; sessionId: [${sessionId}]`);
     }
   }
 }

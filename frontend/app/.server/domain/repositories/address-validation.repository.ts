@@ -127,7 +127,7 @@ export class MockAddressValidationRepository implements AddressValidationReposit
   protected mockStatusCodeFromProvinceCode(provinceCode: string) {
     // Newfoundland and Labrador
     if (provinceCode === 'NL') {
-      throw Error('Address validation service is currently unavailable');
+      throw new Error('Address validation service is currently unavailable');
     }
 
     // Ontario

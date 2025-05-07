@@ -34,7 +34,7 @@ export class PlaywrightApplyPage extends PlaywrightBasePage {
         break;
     }
 
-    if (!pageInfo) throw Error(`applyPage '${applyPage}' not implemented.`);
+    if (!pageInfo) throw new Error(`applyPage '${applyPage}' not implemented.`);
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
   }
 }

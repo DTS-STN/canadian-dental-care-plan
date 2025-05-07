@@ -92,7 +92,7 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
         break;
     }
 
-    if (!pageInfo) throw Error(`Protected applyAdultPage '${applyAdultPage}' not implemented.`);
+    if (!pageInfo) throw new Error(`Protected applyAdultPage '${applyAdultPage}' not implemented.`);
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
   }
 }

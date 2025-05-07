@@ -74,7 +74,7 @@ export function InputSanitizeField(props: InputSanitizeFieldProps) {
         removeFormatting={(value) => normalizeHyphens(removeInvalidInputCharacters(value))}
         isValidInputCharacter={(char) => isAllValidInputCharacters(char)}
         getCaretBoundary={(value) =>
-          Array(value.length + 1)
+          Array.from({ length: value.length + 1 })
             .fill(0)
             .map((v) => true)
         }
