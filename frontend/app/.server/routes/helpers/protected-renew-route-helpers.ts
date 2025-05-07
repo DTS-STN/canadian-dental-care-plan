@@ -83,11 +83,19 @@ export interface ProtectedRenewState {
     readonly email?: string;
     readonly shouldReceiveEmailCommunication?: boolean;
   };
+  // temporary placeholder for email prior to verifying
+  readonly emailPreValidation?: string;
+  readonly emailPreviouslyValidated?: boolean;
   readonly communicationPreferences?: {
     readonly email?: string;
     readonly preferredLanguage: string;
     readonly preferredMethod: string;
   };
+  readonly verifyEmail?: {
+    verificationCode: string;
+    verificationAttempts: number;
+  };
+  readonly emailVerified?: boolean;
   readonly hasAddressChanged?: boolean;
   readonly isHomeAddressSameAsMailingAddress?: boolean;
   readonly mailingAddress?: {

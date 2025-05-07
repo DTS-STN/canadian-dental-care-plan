@@ -11,6 +11,7 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
         AddressChangedIndicator?: boolean;
         PhoneChangedIndicator?: boolean;
         EmailChangedIndicator?: boolean;
+        ApplicantEmailVerifiedIndicator?: boolean;
         PublicInsuranceChangedIndicator?: boolean;
         TermsAndConditionsIndicator: boolean;
         PrivacyStatementIndicator: boolean;

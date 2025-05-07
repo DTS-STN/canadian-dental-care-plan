@@ -62,6 +62,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
+
   const emailSchema = z
     .object({
       email: z.string().trim().max(64).optional(),
@@ -98,11 +100,35 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     request,
     session,
-    state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } },
+    state: {
+      emailPreValidation: parsedDataResult.data.email,
+      emailPreviouslyValidated: state.emailVerified,
+    },
+    // state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } },
   });
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-email', { userId: idToken.sub });
+
+  if (parsedDataResult.data.email && parsedDataResult.data.email !== state.contactInformation?.email) {
+    // Create a new verification code and store the code in session
+    const verificationCode = verificationCodeService.createVerificationCode('anonymous');
+
+    saveProtectedRenewState({
+      params,
+      request,
+      session,
+      state: {
+        verifyEmail: {
+          verificationCode,
+          verificationAttempts: 0,
+        },
+        emailVerified: false, // Reset emailVerified when requesting a new code
+      },
+    });
+
+    return redirect(getPathById('protected/renew/$id/verify-email', params));
+  }
 
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }

@@ -90,6 +90,7 @@ export type RenewalChildDto = ReadonlyDeep<{
 
 export type RenewalCommunicationPreferencesDto = ReadonlyDeep<{
   email?: string;
+  emailVerified?: boolean;
   preferredLanguage: string;
   preferredMethod: string;
 }>;

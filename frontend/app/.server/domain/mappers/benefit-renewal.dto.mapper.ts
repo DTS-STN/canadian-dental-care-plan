@@ -136,6 +136,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
             PrivacyStatementIndicator: true,
             TermsAndConditionsIndicator: true,
             SharingConsentIndicator: true,
+            ApplicantEmailVerifiedIndicator: communicationPreferences.emailVerified,
             InsurancePlan: this.toInsurancePlan(dentalBenefits),
             ...this.toChangeIndicators(changeIndicators),
           },

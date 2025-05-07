@@ -429,6 +429,11 @@ export const routes = [
             file: 'routes/protected/renew/$id/confirm-address.tsx',
             paths: { en: '/:lang/protected/renew/:id/confirm-address', fr: '/:lang/protege/renouveler/:id/confirmer-adresse' },
           },
+          {
+            id: 'protected/renew/$id/verify-email',
+            file: 'routes/protected/renew/$id/verify-email.tsx',
+            paths: { en: '/:lang/protected/renew/:id/verify-email', fr: '/:lang/protege/renouveler/:id/verifier-courriel' },
+          },
         ],
       },
     ],
