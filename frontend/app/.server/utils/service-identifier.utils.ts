@@ -54,7 +54,7 @@ export function assignServiceIdentifiers<T extends TypesContant>(types: T): T {
 
   // Map each key of the flattenedKeys object to a service identifier.
   Object.keys(flattenedKeys).forEach((identifierKey) => {
-    assert(typeof flattenedKeys[identifierKey as keyof typeof flattenedKeys] === 'symbol', `Expected "${identifierKey}" to be a symbol`);
+    assert.ok(typeof flattenedKeys[identifierKey as keyof typeof flattenedKeys] === 'symbol', `Expected "${identifierKey}" to be a symbol`);
     set(newTypes, identifierKey, serviceIdentifier(identifierKey));
   });
 

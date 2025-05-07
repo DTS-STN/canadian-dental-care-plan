@@ -119,7 +119,6 @@ export default tseslint.config(
   {
     rules: {
       'unicorn/catch-error-name': 'off',
-      'unicorn/consistent-assert': 'off',
       'unicorn/consistent-function-scoping': 'off',
       'unicorn/error-message': 'off',
       'unicorn/escape-case': 'off',
