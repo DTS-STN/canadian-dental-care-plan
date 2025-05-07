@@ -40,7 +40,7 @@ describe('isAppError', () => {
   });
 
   it('should return false for a regular Error', () => {
-    expect(isAppError(new Error())).toEqual(false);
+    expect(isAppError(new Error('Something went wrong'))).toEqual(false);
   });
 
   it('should return false for a non-object', () => {
