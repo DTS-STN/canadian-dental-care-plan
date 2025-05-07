@@ -6,6 +6,9 @@ export const ErrorCodes = {
   // instance error codes
   NO_FACTORY_PROVIDED: 'INST-0001',
 
+  // route error codes
+  ROUTE_NOT_FOUND: 'RTE-0001',
+
   // dev-only error codes
   TEST_ERROR_CODE: 'DEV-0001',
 

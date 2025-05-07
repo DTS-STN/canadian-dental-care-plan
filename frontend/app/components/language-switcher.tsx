@@ -2,6 +2,8 @@ import { useMatches, useParams, useSearchParams } from 'react-router';
 
 import type { InlineLinkProps } from '~/components/inline-link';
 import { InlineLink } from '~/components/inline-link';
+import { AppError } from '~/errors/app-error';
+import { ErrorCodes } from '~/errors/error-codes';
 import { useCurrentLanguage } from '~/hooks';
 import { isI18nPageRoute } from '~/routes/routes';
 import { findRouteById, getPathById } from '~/utils/route-utils';
@@ -18,7 +20,12 @@ export function LanguageSwitcher({ children, ...props }: LanguageSwitcherProps) 
   const params = useParams();
   const [searchParams] = useSearchParams();
 
-  const currentRoute = matches[matches.length - 1];
+  const currentRoute = matches.at(-1);
+
+  if (currentRoute === undefined) {
+    throw new AppError(`No current route found (this should never happen)`, ErrorCodes.ROUTE_NOT_FOUND);
+  }
+
   const routeId = currentRoute.id.replace(/-(en|fr)$/, '');
   const route = findRouteById(routeId);
   const pathname = isI18nPageRoute(route) //
