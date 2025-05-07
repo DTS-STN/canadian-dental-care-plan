@@ -62,11 +62,11 @@ describe('padWithZero', () => {
 
 describe('isAllValidInputCharacters', () => {
   it('should return true for input containing the entire valid character set', () => {
-    expect(isAllValidInputCharacters("a-zA-Z0-9'’ \u00a0(),-.ÀÁÂÄÇÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÝàáâäçèéêëìíîïòóôöùúûüýÿ")).toEqual(true);
+    expect(isAllValidInputCharacters("a-zA-Z0-9'’ \u00A0(),-.ÀÁÂÄÇÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÝàáâäçèéêëìíîïòóôöùúûüýÿ")).toEqual(true);
   });
 
   it('should return false for input containing invalid characters', () => {
-    expect(isAllValidInputCharacters('!"#$%&*+/:;<=>?@[\\]^_`{|}~¡¢£¤¥¦§¨©ª«¬\u00ad®¯±²³\u00b4µ-m¶·\u00b8¹º»¼½¾¿ÃãÅåÆæÐðÑñÕõ\u00d7ØøÞþẞß\u00f7')).toEqual(false);
+    expect(isAllValidInputCharacters('!"#$%&*+/:;<=>?@[\\]^_`{|}~¡¢£¤¥¦§¨©ª«¬\u00AD®¯±²³\u00B4µ-m¶·\u00B8¹º»¼½¾¿ÃãÅåÆæÐðÑñÕõ\u00D7ØøÞþẞß\u00F7')).toEqual(false);
   });
 });
 
@@ -118,9 +118,9 @@ describe('formatPercent', () => {
   });
 
   it.each([
-    [0, '0\u00a0%'],
-    [50, '50\u00a0%'],
-    [100, '100\u00a0%'],
+    [0, '0\u00A0%'],
+    [50, '50\u00A0%'],
+    [100, '100\u00A0%'],
   ])('should format percentage in French', (input, expected) => {
     expect(formatPercent(input, 'fr')).toEqual(expected);
   });

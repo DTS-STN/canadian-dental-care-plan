@@ -36,7 +36,7 @@ export const padWithZero = (value: number, maxLength: number) => {
   return value.toString().padStart(maxLength, '0');
 };
 
-export const invalidInputCharactersRegex = /[^a-zA-Z0-9(),\-.'\u2019\s\u00a0ÀÁÂÄÇÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÝàáâäçèéêëìíîïòóôöùúûüýÿ]/g;
+export const invalidInputCharactersRegex = /[^a-zA-Z0-9(),\-.'\u2019\s\u00A0ÀÁÂÄÇÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÝàáâäçèéêëìíîïòóôöùúûüýÿ]/g;
 
 /**
  * Checks if the input string contains only valid characters.
@@ -107,7 +107,7 @@ export function extractDigits(input: string) {
  * @returns The normalized string with all spaces replaced by regular spaces.
  */
 export function normalizeSpaces(str: string) {
-  return str.replace(/[\s\u00a0]/g, ' ');
+  return str.replace(/[\s\u00A0]/g, ' ');
 }
 
 /**
