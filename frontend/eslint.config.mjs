@@ -142,7 +142,6 @@ export default tseslint.config(
       'unicorn/no-zero-fractions': 'off',
       'unicorn/numeric-separators-style': 'off',
       'unicorn/prefer-array-some': 'off',
-      'unicorn/prefer-at': 'off',
       'unicorn/prefer-code-point': 'off',
       'unicorn/prefer-global-this': 'off',
       'unicorn/prefer-math-min-max': 'off',
