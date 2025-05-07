@@ -145,7 +145,6 @@ export default tseslint.config(
       'unicorn/prefer-code-point': 'off',
       'unicorn/prefer-global-this': 'off',
       'unicorn/prefer-math-min-max': 'off',
-      'unicorn/prefer-node-protocol': 'off',
       'unicorn/prefer-number-properties': 'off',
       'unicorn/prefer-object-from-entries': 'off',
       'unicorn/prefer-query-selector': 'off',

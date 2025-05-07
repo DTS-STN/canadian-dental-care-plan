@@ -1,5 +1,5 @@
-import { randomUUID } from 'crypto';
 import { inject, injectable } from 'inversify';
+import { randomUUID } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';

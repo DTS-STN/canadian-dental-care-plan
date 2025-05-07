@@ -1,11 +1,11 @@
 import checkbox from '@inquirer/checkbox';
 import chalk from 'chalk';
 import { Command } from 'commander';
-import fs from 'fs';
 import jmespath from 'jmespath';
+import fs from 'node:fs';
+import path from 'node:path';
 import ora from 'ora';
 import type { Ora } from 'ora';
-import path from 'path';
 import prettier from 'prettier';
 import { request } from 'undici';
 import * as v from 'valibot';

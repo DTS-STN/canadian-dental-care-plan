@@ -5,7 +5,7 @@ import { data, redirect } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
