@@ -1,5 +1,5 @@
-import assert from 'assert';
 import { flatKeys, set } from 'moderndash';
+import assert from 'node:assert';
 
 import type { ServiceIdentifier, TypesContant } from '~/.server/constants';
 
