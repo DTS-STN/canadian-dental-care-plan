@@ -12,8 +12,6 @@ describe('mergeMeta', () => {
       { name: 'description', content: 'Parent Description' },
     ];
 
-    const leafMeta = () => [{ title: 'Leaf Title' }];
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     type MetaArgs = CreateMetaArgs<any>;
 
@@ -32,7 +30,9 @@ describe('mergeMeta', () => {
       params: {},
     };
 
-    const mergedMeta = mergeMeta(leafMeta)(args);
+    const mergedMeta = mergeMeta(() => {
+      return [{ title: 'Leaf Title' }];
+    })(args);
 
     expect(mergedMeta).toEqual([
       { title: 'Leaf Title' }, //

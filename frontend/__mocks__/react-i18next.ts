@@ -5,7 +5,9 @@ import { vi } from 'vitest';
  */
 export const useTranslation = vi.fn(() => ({
   i18n: {
-    getFixedT: (lang: string) => (key: string) => key,
+    getFixedT: (lang: string) => {
+      return (key: string) => key;
+    },
   },
   t: (key: string) => key,
 }));

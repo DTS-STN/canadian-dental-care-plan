@@ -78,13 +78,6 @@ export class DefaultRedisService implements RedisService {
   }
 
   private getRedisConfig(serverConfig: ServerConfig): RedisOptions {
-    const retryStrategy = (times: number): number => {
-      // exponential backoff starting at 250ms to a maximum of 5s
-      const retryIn = Math.min(250 * Math.pow(2, times - 1), 5000);
-      this.log.error('Could not connect to Redis (attempt #%s); retry in %s ms', times, retryIn);
-      return retryIn;
-    };
-
     if (serverConfig.REDIS_SENTINEL_NAME) {
       this.log.debug('      configuring Redis client in sentinel mode');
 
@@ -99,7 +92,7 @@ export class DefaultRedisService implements RedisService {
         username: serverConfig.REDIS_USERNAME,
         password: serverConfig.REDIS_PASSWORD,
         commandTimeout: serverConfig.REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
-        retryStrategy,
+        retryStrategy: this.retryStrategy,
       };
     }
 
@@ -110,7 +103,14 @@ export class DefaultRedisService implements RedisService {
       username: serverConfig.REDIS_USERNAME,
       password: serverConfig.REDIS_PASSWORD,
       commandTimeout: serverConfig.REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
-      retryStrategy,
+      retryStrategy: this.retryStrategy,
     };
+  }
+
+  retryStrategy(times: number): number {
+    // exponential backoff starting at 250ms to a maximum of 5s
+    const retryIn = Math.min(250 * Math.pow(2, times - 1), 5000);
+    this.log.error('Could not connect to Redis (attempt #%s); retry in %s ms', times, retryIn);
+    return retryIn;
   }
 }
