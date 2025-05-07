@@ -107,11 +107,11 @@ export function loadRenewAdultChildStateForReview({ params, request, session }: 
 
   try {
     return validateRenewAdultChildStateForReview({ params, state });
-  } catch (err) {
-    if (isRedirectResponse(err)) {
+  } catch (error) {
+    if (isRedirectResponse(error)) {
       saveRenewState({ params, session, state: { editMode: false } });
     }
-    throw err;
+    throw error;
   }
 }
 

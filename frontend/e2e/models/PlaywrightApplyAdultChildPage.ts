@@ -112,7 +112,7 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
         break;
     }
 
-    if (!pageInfo) throw Error(`applyAdultChildPage '${applyAdultChildPage}' not implemented.`);
+    if (!pageInfo) throw new Error(`applyAdultChildPage '${applyAdultChildPage}' not implemented.`);
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
   }
 

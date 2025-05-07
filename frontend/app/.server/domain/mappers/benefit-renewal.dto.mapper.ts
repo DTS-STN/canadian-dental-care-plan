@@ -382,7 +382,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     if (partnerInformation) {
       relatedPersons.push(this.toRelatedPersonSpouse(partnerInformation));
     }
-    if (children.length !== 0) {
+    if (children.length > 0) {
       relatedPersons.push(...this.toRelatedPersonDependent(children));
     }
 

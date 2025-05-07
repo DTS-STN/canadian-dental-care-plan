@@ -102,11 +102,11 @@ export function loadApplyAdultChildStateForReview({ params, request, session }: 
 
   try {
     return validateApplyAdultChildStateForReview({ params, state });
-  } catch (err) {
-    if (isRedirectResponse(err)) {
+  } catch (error) {
+    if (isRedirectResponse(error)) {
       saveApplyState({ params, session, state: { editMode: false } });
     }
-    throw err;
+    throw error;
   }
 }
 

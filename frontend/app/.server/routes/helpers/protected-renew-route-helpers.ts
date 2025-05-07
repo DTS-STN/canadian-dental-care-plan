@@ -354,11 +354,11 @@ export function loadProtectedRenewStateForReview({ params, request, session, dem
 
   try {
     return validateProtectedRenewStateForReview({ params, state, demographicSurveyEnabled });
-  } catch (err) {
-    if (isRedirectResponse(err)) {
+  } catch (error) {
+    if (isRedirectResponse(error)) {
       saveProtectedRenewState({ params, request, session, state: { editMode: false } });
     }
-    throw err;
+    throw error;
   }
 }
 

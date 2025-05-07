@@ -63,11 +63,11 @@ export function loadRenewAdultStateForReview({ params, request, session }: LoadR
 
   try {
     return validateRenewAdultStateForReview({ params, state });
-  } catch (err) {
-    if (isRedirectResponse(err)) {
+  } catch (error) {
+    if (isRedirectResponse(error)) {
       saveRenewState({ params, session, state: { editMode: false } });
     }
-    throw err;
+    throw error;
   }
 }
 

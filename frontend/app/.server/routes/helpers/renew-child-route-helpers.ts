@@ -65,11 +65,11 @@ export function loadRenewChildStateForReview({ params, request, session }: LoadR
 
   try {
     return validateRenewChildStateForReview({ params, state });
-  } catch (err) {
-    if (isRedirectResponse(err)) {
+  } catch (error) {
+    if (isRedirectResponse(error)) {
       saveRenewState({ params, session, state: { editMode: false } });
     }
-    throw err;
+    throw error;
   }
 }
 

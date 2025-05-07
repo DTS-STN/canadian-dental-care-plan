@@ -48,8 +48,6 @@ function purgeExpiredSessions(memoryStore: MemoryStore): void {
   const log = createLogger('session.server/purgeExpiredSessions');
   log.trace('Purging expired sessions');
 
-  const isPast = (date: Date): boolean => date.getTime() < Date.now();
-
   memoryStore.all((error, sessions) => {
     if (sessions) {
       const sessionEntries = Object.entries(sessions);
@@ -63,7 +61,7 @@ function purgeExpiredSessions(memoryStore: MemoryStore): void {
         const expiresAt = sessionData.cookie.expires;
 
         log.trace('Checking session %s (expires at %s)', sessionId, expiresAt);
-        if (expiresAt && isPast(new Date(expiresAt))) {
+        if (expiresAt && expiresAt.getTime() < Date.now()) {
           log.trace('Purging expired session %s', sessionId);
           memoryStore.destroy(sessionId);
         }

@@ -222,12 +222,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }: RenewAdultState): AdultBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
-      throw Error('Expected hasEmailChanged to be defined');
+      throw new Error('Expected hasEmailChanged to be defined');
     }
 
     const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
     if (hasPhoneChanged === undefined) {
-      throw Error('Expected hasPhoneChanged to be defined');
+      throw new Error('Expected hasPhoneChanged to be defined');
     }
 
     return {
@@ -296,12 +296,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }: RenewAdultChildState): AdultChildBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
-      throw Error('Expected hasEmailChanged to be defined');
+      throw new Error('Expected hasEmailChanged to be defined');
     }
 
     const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
     if (hasPhoneChanged === undefined) {
-      throw Error('Expected hasPhoneChanged to be defined');
+      throw new Error('Expected hasPhoneChanged to be defined');
     }
 
     return {
@@ -429,12 +429,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }: RenewChildState): ChildBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
-      throw Error('Expected hasEmailChanged to be defined');
+      throw new Error('Expected hasEmailChanged to be defined');
     }
 
     const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
     if (hasPhoneChanged === undefined) {
-      throw Error('Expected hasPhoneChanged to be defined');
+      throw new Error('Expected hasPhoneChanged to be defined');
     }
 
     return {

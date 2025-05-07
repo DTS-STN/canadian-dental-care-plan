@@ -416,10 +416,10 @@ export function generateRandomState(len = 32) {
 /**
  * Generate a random string, duh.
  */
-export function generateRandomString(len: number) {
+export function generateRandomString(length: number) {
   const allowedChars = '0123456789abcdefghijklmnopqrstuvwxyz';
   const toRandomChar = () => allowedChars[Math.floor(Math.random() * allowedChars.length)];
-  return Array(len).fill(undefined).map(toRandomChar).join('');
+  return Array.from({ length }).fill(undefined).map(toRandomChar).join('');
 }
 
 function validateAuthorizationToken(tokenEndpointResponse: TokenEndpointResponse) {

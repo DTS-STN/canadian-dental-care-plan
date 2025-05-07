@@ -95,7 +95,7 @@ export class ExpressSession implements Session {
 
   constructor(session: RequestSession) {
     this.session = session;
-    assert(session, 'Session object is undefined. Ensure session middleware is properly configured.');
+    assert.ok(session, 'Session object is undefined. Ensure session middleware is properly configured.');
     this.log = createLogger('~/.server/web/Session');
     this.log.trace('Session initialized with ID: %s', this.id);
   }
@@ -171,7 +171,7 @@ export class ExpressSession implements Session {
   }
 
   protected sanitizeKey(key: string): string {
-    assert(!validator.isEmpty(key, { ignore_whitespace: true }), 'Session key cannot be empty');
+    assert.ok(!validator.isEmpty(key, { ignore_whitespace: true }), 'Session key cannot be empty');
     let sanitized = key.replace(/[^a-zA-Z0-9_$]/g, '_');
     if (!/^[a-zA-Z_$]/.test(sanitized)) {
       sanitized = '_' + sanitized;
@@ -185,7 +185,7 @@ export class ExpressSession implements Session {
   }
 
   protected assertNotReservedKey(key: string): void {
-    assert(!this.isReservedKey(key), `Session key '${key}' is reserved and cannot be used.`);
+    assert.ok(!this.isReservedKey(key), `Session key '${key}' is reserved and cannot be used.`);
   }
 }
 

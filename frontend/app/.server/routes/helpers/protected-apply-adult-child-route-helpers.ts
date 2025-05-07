@@ -103,11 +103,11 @@ export function loadProtectedApplyAdultChildStateForReview({ params, request, se
 
   try {
     return validateProtectedApplyAdultChildStateForReview({ params, state });
-  } catch (err) {
-    if (isRedirectResponse(err)) {
+  } catch (error) {
+    if (isRedirectResponse(error)) {
       saveProtectedApplyState({ params, session, state: { editMode: false } });
     }
-    throw err;
+    throw error;
   }
 }
 

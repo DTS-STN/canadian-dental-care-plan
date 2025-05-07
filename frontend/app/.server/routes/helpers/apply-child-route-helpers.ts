@@ -65,11 +65,11 @@ export function loadApplyChildStateForReview({ params, request, session }: LoadA
 
   try {
     return validateApplyChildStateForReview({ params, state });
-  } catch (err) {
-    if (isRedirectResponse(err)) {
+  } catch (error) {
+    if (isRedirectResponse(error)) {
       saveApplyState({ params, session, state: { editMode: false } });
     }
-    throw err;
+    throw error;
   }
 }
 

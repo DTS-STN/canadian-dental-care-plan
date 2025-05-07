@@ -49,7 +49,7 @@ export function useApiSession(): {
         }
 
         default: {
-          throw Error(`Action '${action}' not implemented`);
+          throw new Error(`Action '${action}' not implemented`);
         }
       }
     },
