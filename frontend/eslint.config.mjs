@@ -5,6 +5,7 @@ import importPlugin from 'eslint-plugin-import';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import unicornPlugin from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -112,6 +113,50 @@ export default tseslint.config(
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    ...unicornPlugin.configs.recommended,
+    rules: {
+      'unicorn/catch-error-name': 'off',
+      'unicorn/consistent-assert': 'off',
+      'unicorn/consistent-function-scoping': 'off',
+      'unicorn/error-message': 'off',
+      'unicorn/escape-case': 'off',
+      'unicorn/explicit-length-check': 'off',
+      'unicorn/filename-case': 'off',
+      'unicorn/new-for-builtins': 'off',
+      'unicorn/no-array-callback-reference': 'off',
+      'unicorn/no-array-for-each': 'off',
+      'unicorn/no-array-reduce': 'off',
+      'unicorn/no-for-loop': 'off',
+      'unicorn/no-lonely-if': 'off',
+      'unicorn/no-negated-condition': 'off',
+      'unicorn/no-nested-ternary': 'off',
+      'unicorn/no-null': 'off',
+      'unicorn/no-process-exit': 'off',
+      'unicorn/no-typeof-undefined': 'off',
+      'unicorn/no-useless-fallback-in-spread': 'off',
+      'unicorn/no-useless-undefined': 'off',
+      'unicorn/no-zero-fractions': 'off',
+      'unicorn/numeric-separators-style': 'off',
+      'unicorn/prefer-array-some': 'off',
+      'unicorn/prefer-at': 'off',
+      'unicorn/prefer-global-this': 'off',
+      'unicorn/prefer-math-min-max': 'off',
+      'unicorn/prefer-number-properties': 'off',
+      'unicorn/prefer-object-from-entries': 'off',
+      'unicorn/prefer-query-selector': 'off',
+      'unicorn/prefer-set-has': 'off',
+      'unicorn/prefer-spread': 'off',
+      'unicorn/prefer-string-replace-all': 'off',
+      'unicorn/prefer-string-slice': 'off',
+      'unicorn/prefer-structured-clone': 'off',
+      'unicorn/prefer-ternary': 'off',
+      'unicorn/prefer-top-level-await': 'off',
+      'unicorn/prevent-abbreviations': 'off',
+      'unicorn/switch-case-braces': 'off',
+      'unicorn/throw-new-error': 'off',
     },
   },
 );
