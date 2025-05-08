@@ -127,7 +127,6 @@ export default defineConfig(
     rules: {
       'unicorn/consistent-function-scoping': ['error', { checkArrowFunctions: false }],
       'unicorn/no-array-callback-reference': 'off',
-      'unicorn/no-array-for-each': 'off',
       'unicorn/no-array-reduce': 'off',
       'unicorn/no-for-loop': 'off',
       'unicorn/no-hex-escape': 'off',

@@ -53,7 +53,7 @@ function purgeExpiredSessions(memoryStore: MemoryStore): void {
       const sessionEntries = Object.entries(sessions);
       log.trace('%s sessions in session store', Object.keys(sessions).length);
 
-      sessionEntries.forEach(([sessionId, sessionData]) => {
+      for (const [sessionId, sessionData] of sessionEntries) {
         // express-session adds the cookie data to the session
         // so we can use this to check when the session is due to expire
 
@@ -65,7 +65,7 @@ function purgeExpiredSessions(memoryStore: MemoryStore): void {
           log.trace('Purging expired session %s', sessionId);
           memoryStore.destroy(sessionId);
         }
-      });
+      }
     }
   });
 }
