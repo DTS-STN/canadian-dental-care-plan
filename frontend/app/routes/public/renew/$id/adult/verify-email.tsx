@@ -105,7 +105,7 @@ export async function action({ context: { appContainer, session }, params, reque
       });
       return { status: 'verification-code-sent' } as const;
     } else if (state.contactInformation?.email) {
-      invariant(state.clientApplication?.communicationPreferences, 'Expected communicationPreferences to be defined');
+      invariant(state.clientApplication, 'Expected clientApplication to be defined');
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
       await verificationCodeService.sendVerificationCodeEmail({
         email: state.contactInformation.email,
