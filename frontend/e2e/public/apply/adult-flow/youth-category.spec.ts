@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyAdultPage } from '../../../models/PlaywrightApplyAdultPage';
-import { PlaywrightApplyPage } from '../../../models/PlaywrightApplyPage';
+import { PlaywrightApplyAdultPage } from '../../../models/playwright-apply-adult-page';
+import { PlaywrightApplyPage } from '../../../models/playwright-apply-page';
 import { calculateDOB } from '../../../utils/helpers';
 
 test.describe('Youth category', () => {

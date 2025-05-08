@@ -1,4 +1,4 @@
-import { PlaywrightBasePage } from './PlaywrightBasePage';
+import { PlaywrightBasePage } from './playwright-base-page';
 
 interface fillApplicantInformationFormArgs {
   day: string;

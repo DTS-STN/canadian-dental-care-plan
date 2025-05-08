@@ -1,8 +1,8 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyAdultChildPage } from '../../../models/PlaywrightApplyAdultChildPage';
+import { PlaywrightApplyAdultChildPage } from '../../../models/playwright-apply-adult-child-page';
 // import { PlaywrightApplyAdultPage } from '../../../models/PlaywrightApplyAdultPage';
-import { PlaywrightApplyPage } from '../../../models/PlaywrightApplyPage';
+import { PlaywrightApplyPage } from '../../../models/playwright-apply-page';
 import { calculateDOB } from '../../../utils/helpers';
 
 test.describe('Children application', () => {
