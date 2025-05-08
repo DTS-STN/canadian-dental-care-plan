@@ -135,7 +135,6 @@ export default defineConfig(
       'unicorn/no-process-exit': 'off',
       'unicorn/no-useless-fallback-in-spread': 'off',
       'unicorn/no-useless-undefined': 'off',
-      'unicorn/no-zero-fractions': 'off',
       'unicorn/numeric-separators-style': 'off',
       'unicorn/prefer-array-some': 'off',
       'unicorn/prefer-code-point': 'off',

@@ -52,7 +52,7 @@ describe('DefaultHCaptchaValidator', () => {
 
   it('should return isValid: false when the hCaptcha score exceeds the threshold', async () => {
     serverConfig.HCAPTCHA_MAX_SCORE = 0.9;
-    hCaptchaService.verifyHCaptchaResponse.mockResolvedValue({ success: true, score: 1.0 });
+    hCaptchaService.verifyHCaptchaResponse.mockResolvedValue({ success: true, score: 1 });
 
     const result = await validator.validateHCaptchaResponse({
       hCaptchaResponse: 'valid-token',
@@ -64,7 +64,7 @@ describe('DefaultHCaptchaValidator', () => {
       isValid: false,
       errorMessage: 'hCaptcha response validation failed; hCaptcha score exceeds threshold.',
     });
-    expect(mockLogger.warn).toHaveBeenCalledWith('hCaptcha score exceeds max threshold for user: %s, score: %s', 'test-user', 1.0);
+    expect(mockLogger.warn).toHaveBeenCalledWith('hCaptcha score exceeds max threshold for user: %s, score: %s', 'test-user', 1);
   });
 
   it('should return isValid: true when an error occurs during validation', async () => {
