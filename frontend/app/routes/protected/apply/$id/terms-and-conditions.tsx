@@ -11,7 +11,7 @@ import { loadProtectedApplyState, saveProtectedApplyState } from '~/.server/rout
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
@@ -24,6 +24,11 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+const FORM_ACTION = {
+  continue: 'continue',
+  back: 'cancel',
+} as const;
 
 const CHECKBOX_VALUE = {
   yes: 'yes',
@@ -60,7 +65,13 @@ export async function action({ context: { appContainer, session }, request, para
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+
+  if (formAction === FORM_ACTION.back) {
+    return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
+  }
 
   const consentSchema = z
     .object({
@@ -248,21 +259,17 @@ export default function ProtectedApplyTermsAndConditions({ loaderData, params }:
             aria-describedby="application-consent"
             variant="primary"
             id="continue-button"
+            name="_action"
+            value={FORM_ACTION.continue}
             loading={isSubmitting}
             endIcon={faChevronRight}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Continue - Terms and Conditions click"
           >
             {t('protected-apply:terms-and-conditions.apply.continue-button')}
           </LoadingButton>
-          <ButtonLink
-            id="back-button"
-            to={t('protected-apply:terms-and-conditions.apply.link')}
-            disabled={isSubmitting}
-            startIcon={faChevronLeft}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Back - Terms and Conditions click"
-          >
+          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected:Back - Terms and Conditions click">
             {t('protected-apply:terms-and-conditions.apply.back-button')}
-          </ButtonLink>
+          </Button>
         </div>
       </fetcher.Form>
     </div>
