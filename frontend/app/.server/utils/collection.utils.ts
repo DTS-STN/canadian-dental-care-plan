@@ -11,8 +11,8 @@ export function moveToTop<T>(array: ReadonlyArray<T>, predicate: (item: T) => bo
 
   // Find all indices of elements that match the predicate
   const matchingIndices: number[] = [];
-  for (let i = 0; i < newArray.length; i++) {
-    if (predicate(newArray[i])) {
+  for (const [i, element] of newArray.entries()) {
+    if (predicate(element)) {
       matchingIndices.push(i);
     }
   }
