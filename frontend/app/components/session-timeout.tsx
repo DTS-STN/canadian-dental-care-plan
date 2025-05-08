@@ -58,7 +58,7 @@ const SessionTimeout = ({ promptBeforeIdle, timeout, onSessionEnd, onSessionExte
 
   // Track fetcher states to activate the IdleTimer during submissions.
   const fetchers = useFetchers();
-  const fetcherSubmitting = fetchers.filter(({ state }) => state === 'submitting').length > 0;
+  const fetcherSubmitting = fetchers.some(({ state }) => state === 'submitting');
 
   useEffect(() => {
     // Activate the IdleTimer if any fetcher is submitting.
