@@ -395,6 +395,7 @@ export const routes = [
           { id: 'public/renew/$id/adult/marital-status', file: 'routes/public/renew/$id/adult/marital-status.tsx', paths: { en: '/:lang/renew/:id/adult/marital-status', fr: '/:lang/renouveler/:id/adulte/etat-civil' } },
           { id: 'public/renew/$id/adult/confirm-phone', file: 'routes/public/renew/$id/adult/confirm-phone.tsx', paths: { en: '/:lang/renew/:id/adult/confirm-phone', fr: '/:lang/renouveler/:id/adulte/confirmer-telephone' } },
           { id: 'public/renew/$id/adult/confirm-email', file: 'routes/public/renew/$id/adult/confirm-email.tsx', paths: { en: '/:lang/renew/:id/adult/confirm-email', fr: '/:lang/renouveler/:id/adulte/confirmer-courriel' } },
+          { id: 'public/renew/$id/adult/verify-email', file: 'routes/public/renew/$id/adult/verify-email.tsx', paths: { en: '/:lang/renew/:id/adult/verify-email', fr: '/:lang/renouveler/:id/adulte/verifier-courriel' } },
           { id: 'public/renew/$id/adult/confirm-address', file: 'routes/public/renew/$id/adult/confirm-address.tsx', paths: { en: '/:lang/renew/:id/adult/confirm-address', fr: '/:lang/renouveler/:id/adulte/confirmer-adresse' } },
           {
             id: 'public/renew/$id/adult/update-mailing-address',
