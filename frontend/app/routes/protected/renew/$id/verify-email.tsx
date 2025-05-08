@@ -11,6 +11,7 @@ import type { Route } from './+types/verify-email';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -70,6 +71,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -94,7 +96,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (formAction === FORM_ACTION.request) {
     // Create a new verification code and store the code in session
-    const verificationCode = verificationCodeService.createVerificationCode('anonymous');
+    const verificationCode = verificationCodeService.createVerificationCode(idToken.sub);
 
     saveProtectedRenewState({
       params,

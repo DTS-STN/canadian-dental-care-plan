@@ -59,6 +59,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -107,12 +108,11 @@ export async function action({ context: { appContainer, session }, params, reque
     // state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } },
   });
 
-  const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-email', { userId: idToken.sub });
 
   if (parsedDataResult.data.email && parsedDataResult.data.email !== state.contactInformation?.email) {
     // Create a new verification code and store the code in session
-    const verificationCode = verificationCodeService.createVerificationCode('anonymous');
+    const verificationCode = verificationCodeService.createVerificationCode(idToken.sub);
 
     saveProtectedRenewState({
       params,

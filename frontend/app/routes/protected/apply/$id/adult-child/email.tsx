@@ -66,6 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
+  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -95,7 +96,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const isNewEmail = state.email !== parsedDataResult.data.email;
-  const verificationCode = isNewEmail || state.verifyEmail === undefined ? verificationCodeService.createVerificationCode('anonymous') : state.verifyEmail.verificationCode;
+  const verificationCode = isNewEmail || state.verifyEmail === undefined ? verificationCodeService.createVerificationCode(idToken.sub) : state.verifyEmail.verificationCode;
 
   invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
   if (isNewEmail) {
@@ -110,7 +111,6 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
-  const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.email', { userId: idToken.sub });
 
   if (state.editMode) {
