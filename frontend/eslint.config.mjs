@@ -1,17 +1,14 @@
-import { fixupConfigRules } from '@eslint/compat';
-import { FlatCompat } from '@eslint/eslintrc';
 import eslint from '@eslint/js';
 import importPlugin from 'eslint-plugin-import';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import unicornPlugin from 'eslint-plugin-unicorn';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-const compat = new FlatCompat({ baseDirectory: import.meta.name });
-
-export default tseslint.config(
+export default defineConfig(
   {
     ignores: [
       '**/.react-router/', //
@@ -21,6 +18,7 @@ export default tseslint.config(
       '**/tmp/',
     ],
   },
+  eslint.configs.recommended,
   {
     //
     // base config
@@ -35,6 +33,7 @@ export default tseslint.config(
         ecmaFeatures: {
           jsx: true,
         },
+        // type linting: https://typescript-eslint.io/getting-started/typed-linting/
         projectService: true,
         tsconfigRootDir: import.meta.name,
       },
@@ -55,7 +54,11 @@ export default tseslint.config(
     // typescript
     //
     files: ['**/*.{ts,tsx}'],
-    extends: [eslint.configs.recommended, ...tseslint.configs.strict, ...fixupConfigRules(compat.config(importPlugin.configs.recommended))],
+    extends: [
+      eslint.configs.recommended, //
+      tseslint.configs.strict,
+      importPlugin.flatConfigs.recommended,
+    ],
     rules: {
       'no-param-reassign': 'error',
       '@typescript-eslint/await-thenable': 'error',
@@ -95,10 +98,10 @@ export default tseslint.config(
     //
     files: ['**/*.tsx'],
     extends: [
-      ...compat.config(jsxA11yPlugin.configs.recommended),
-      ...fixupConfigRules(compat.config(reactPlugin.configs.recommended)),
-      ...fixupConfigRules(compat.config(reactPlugin.configs['jsx-runtime'])),
-      ...fixupConfigRules(compat.config(reactHooksPlugin.configs.recommended)),
+      jsxA11yPlugin.flatConfigs.recommended, //
+      reactPlugin.configs.flat.recommended,
+      reactPlugin.configs.flat['jsx-runtime'],
+      reactHooksPlugin.configs['recommended-latest'],
     ],
     rules: {
       'react/no-unknown-property': ['error', { ignore: ['property', 'resource', 'typeof', 'vocab'] }],
@@ -115,6 +118,10 @@ export default tseslint.config(
       },
     },
   },
+  //
+  // unicorn plugin
+  // https://github.com/sindresorhus/eslint-plugin-unicorn
+  //
   unicornPlugin.configs.recommended,
   {
     rules: {
