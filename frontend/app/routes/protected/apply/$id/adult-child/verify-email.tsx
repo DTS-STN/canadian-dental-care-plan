@@ -78,6 +78,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
+  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -89,7 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (formAction === FORM_ACTION.request) {
     // Create a new verification code and store the code in session
-    const verificationCode = verificationCodeService.createVerificationCode('anonymous');
+    const verificationCode = verificationCodeService.createVerificationCode(idToken.sub);
 
     saveProtectedApplyState({
       params,
@@ -162,7 +163,6 @@ export async function action({ context: { appContainer, session }, params, reque
         },
       });
 
-      const idToken: IdToken = session.get('idToken');
       appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.verify-email', { userId: idToken.sub });
       return { status: 'verification-code-mismatch' } as const;
     }

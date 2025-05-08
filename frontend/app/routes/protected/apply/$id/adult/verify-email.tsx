@@ -77,6 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -88,7 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (formAction === FORM_ACTION.request) {
     // Create a new verification code and store the code in session
-    const verificationCode = verificationCodeService.createVerificationCode('anonymous');
+    const verificationCode = verificationCodeService.createVerificationCode(idToken.sub);
 
     saveProtectedApplyState({
       params,
@@ -143,7 +144,6 @@ export async function action({ context: { appContainer, session }, params, reque
       verificationCode: formData.get('verificationCode') ?? '',
     });
 
-    const idToken: IdToken = session.get('idToken');
     appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.verify-email', { userId: idToken.sub });
 
     if (!parsedDataResult.success) {
