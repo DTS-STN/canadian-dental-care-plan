@@ -144,7 +144,7 @@ export async function action({ context: { appContainer, session }, params, reque
     const isNewEmail = state.contactInformation?.email !== parsedDataResult.data.email;
     const verificationCode = isNewEmail || state.verifyEmail === undefined ? verificationCodeService.createVerificationCode('anonymous') : state.verifyEmail.verificationCode;
 
-    invariant(state.clientApplication?.communicationPreferences.preferredLanguage, 'Expected preferredLanguage to be defined');
+    invariant(state.clientApplication, 'Expected clientApplication to be defined');
     if (isNewEmail) {
       const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
       const preferredLanguage = preferredLanguageService.getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
