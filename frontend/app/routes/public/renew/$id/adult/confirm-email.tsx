@@ -182,7 +182,7 @@ export async function action({ context: { appContainer, session }, params, reque
         state: {
           contactInformation: {
             ...state.contactInformation,
-            email: parsedDataResult.data.email,
+            ...parsedDataResult.data,
           },
           emailVerified: state.emailVerified,
           verifyEmail: {
