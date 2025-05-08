@@ -10,7 +10,10 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
       | 'confirm-federal-provincial-territorial-benefits'
       | 'federal-provincial-territorial-benefits'
       | 'living-independently'
+      | 'mailing-address'
+      | 'marital-status'
       | 'parent-or-guardian'
+      | 'phone-number'
       | 'review-information',
     heading?: string | RegExp,
   ) {
@@ -30,7 +33,7 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
         break;
 
       case 'dental-insurance':
-        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/dental-insurance/, heading: 'Access to other dental insurance' };
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/dental-insurance/, heading: 'Access to private dental insurance' };
         break;
 
       case 'confirm-federal-provincial-territorial-benefits':
@@ -45,8 +48,20 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/living-independently/, heading: 'Living independently' };
         break;
 
+      case 'mailing-address':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/mailing-address/, heading: 'Mailing address' };
+        break;
+
+      case 'marital-status':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/marital-status/, heading: 'Marital status' };
+        break;
+
       case 'parent-or-guardian':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/parent-or-guardian/, heading: 'Parent or guardian needs to apply' };
+        break;
+
+      case 'phone-number':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult\/phone-number/, heading: 'Phone number' };
         break;
 
       case 'review-information':
