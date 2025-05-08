@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyChildPage } from '../../models/protected/PlaywrightApplyChildPage';
-import { PlaywrightApplyPage } from '../../models/protected/PlaywrightApplyPage';
+import { PlaywrightApplyChildPage } from '../../models/protected/playwright-apply-child-page';
+import { PlaywrightApplyPage } from '../../models/protected/playwright-apply-page';
 import { acceptLegalCheckboxes, calculateDOB, clickContinue, fillApplicantInformationForm, fillChildrenInformationForm, fillOutAddress } from '../../utils/helpers';
 
 test.describe('Child category', () => {

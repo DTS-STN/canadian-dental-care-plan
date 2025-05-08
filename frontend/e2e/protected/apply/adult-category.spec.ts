@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyAdultPage } from '../../models/protected/PlaywrightApplyAdultPage';
-import { PlaywrightApplyPage } from '../../models/protected/PlaywrightApplyPage';
+import { PlaywrightApplyAdultPage } from '../../models/protected/playwright-apply-adult-page';
+import { PlaywrightApplyPage } from '../../models/protected/playwright-apply-page';
 import { acceptLegalCheckboxes, calculateDOB, clickContinue, fillApplicantInformationForm, fillOutAddress } from '../../utils/helpers';
 
 test.describe('Adult category', () => {

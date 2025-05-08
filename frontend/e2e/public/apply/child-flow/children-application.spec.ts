@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-import { PlaywrightApplyChildPage } from '../../../models/PlaywrightApplyChildPage';
-import { PlaywrightApplyPage } from '../../../models/PlaywrightApplyPage';
+import { PlaywrightApplyChildPage } from '../../../models/playwright-apply-child-page';
+import { PlaywrightApplyPage } from '../../../models/playwright-apply-page';
 
 test.describe('Children application', () => {
   test.beforeEach('Navigate to child application', async ({ page }) => {
