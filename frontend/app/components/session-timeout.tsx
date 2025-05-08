@@ -120,7 +120,7 @@ const SessionTimeout = ({ promptBeforeIdle, timeout, onSessionEnd, onSessionExte
     const updateRemainingTime = () => {
       const remainingTime = getRemainingTime();
       const minutes = Math.floor(remainingTime / 60_000);
-      const seconds = Math.floor((remainingTime % 60_000) / 1_000);
+      const seconds = Math.floor((remainingTime % 60_000) / 1000);
       const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
       setTimeRemaining(formattedTime);
     };

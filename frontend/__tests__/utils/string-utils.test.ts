@@ -55,8 +55,8 @@ describe('padWithZero', () => {
   });
 
   it('should return the value as a string if its length is greater than or equal to maxLength', () => {
-    expect(padWithZero(12345, 5)).toBe('12345');
-    expect(padWithZero(123456, 5)).toBe('123456');
+    expect(padWithZero(12_345, 5)).toBe('12345');
+    expect(padWithZero(123_456, 5)).toBe('123456');
   });
 });
 

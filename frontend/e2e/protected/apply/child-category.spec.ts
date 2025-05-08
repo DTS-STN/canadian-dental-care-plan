@@ -6,7 +6,7 @@ import { acceptLegalCheckboxes, calculateDOB, clickContinue, fillApplicantInform
 
 test.describe('Child category', () => {
   test.beforeEach('Navigate to child application', async ({ page }) => {
-    test.setTimeout(60000);
+    test.setTimeout(60_000);
 
     const applyPage = new PlaywrightApplyPage(page);
     await applyPage.gotoIndexPage();
@@ -216,7 +216,7 @@ test.describe('Child category', () => {
 
 test.describe('Child category - parent or legual guardian miscellaneous checks', () => {
   test.beforeEach('Navigate to child application', async ({ page }) => {
-    test.setTimeout(60000);
+    test.setTimeout(60_000);
 
     const applyPage = new PlaywrightApplyPage(page);
     const applyChildPage = new PlaywrightApplyChildPage(page);

@@ -6,7 +6,7 @@ import { calculateDOB } from '../../../utils/helpers';
 
 test.describe('Senior category', () => {
   test.beforeEach('Navigate to adult application', async ({ page }) => {
-    test.setTimeout(60000);
+    test.setTimeout(60_000);
     const applyPage = new PlaywrightApplyPage(page);
     await applyPage.gotoIndexPage();
 

@@ -41,17 +41,17 @@ export const clientEnvSchema = z.object({
   SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce.number().min(0).default(5 * 60),
 
   // demographic survey codes
-  IS_APPLICANT_FIRST_NATIONS_YES_OPTION: z.coerce.number().default(775170000),
-  ANOTHER_ETHNIC_GROUP_OPTION: z.coerce.number().default(775170009),
-  INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775170003),
-  DISABILITY_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775170004),
-  ETHNIC_GROUP_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775170011),
-  LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775170003),
-  GENDER_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775170004),
+  IS_APPLICANT_FIRST_NATIONS_YES_OPTION: z.coerce.number().default(775_170_000),
+  ANOTHER_ETHNIC_GROUP_OPTION: z.coerce.number().default(775_170_009),
+  INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_003),
+  DISABILITY_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_004),
+  ETHNIC_GROUP_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_011),
+  LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_003),
+  GENDER_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_004),
 
   // marital status codes
-  MARITAL_STATUS_CODE_MARRIED: z.coerce.number().default(775170001),
-  MARITAL_STATUS_CODE_COMMONLAW:z.coerce.number().default(775170002),
+  MARITAL_STATUS_CODE_MARRIED: z.coerce.number().default(775_170_001),
+  MARITAL_STATUS_CODE_COMMONLAW:z.coerce.number().default(775_170_002),
 
   // lookup identifiers
   CANADA_COUNTRY_ID: z.string().trim().min(1).default('0cf5389e-97ae-eb11-8236-000d3af4bfc3'),

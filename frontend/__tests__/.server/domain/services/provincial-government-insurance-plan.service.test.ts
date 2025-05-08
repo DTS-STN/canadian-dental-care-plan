@@ -24,7 +24,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockProvincialGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
 
-      expect((service.listProvincialGovernmentInsurancePlans as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect((service.listProvincialGovernmentInsurancePlans as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
       expect((service.getProvincialGovernmentInsurancePlanById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });

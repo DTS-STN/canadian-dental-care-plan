@@ -24,7 +24,7 @@ describe('DefaultProvinceTerritoryStateService', () => {
 
       const service = new DefaultProvinceTerritoryStateService(mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig); // Act and Assert
 
-      expect((service.listProvinceTerritoryStates as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect((service.listProvinceTerritoryStates as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
       expect((service.getProvinceTerritoryStateById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
