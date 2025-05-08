@@ -67,7 +67,7 @@ export function KillswitchDialog({ timeoutSecs }: KillswitchDialogProps) {
  * before conversion.
  */
 function getTimeComponents(seconds: number): { mins: number; secs: number } {
-  const time = seconds < 0 ? 0 : seconds;
+  const time = Math.max(seconds, 0);
 
   const mins = Math.floor(time / 60);
   const secs = time % 60;
