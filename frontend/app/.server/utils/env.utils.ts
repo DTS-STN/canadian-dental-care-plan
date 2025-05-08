@@ -9,7 +9,7 @@ import type { ClientEnv } from '~/utils/env-utils';
 import { clientEnvSchema } from '~/utils/env-utils';
 
 // none, error, warn, info, debug, verbose, all
-const otelLogLevels = Object.keys(DiagLogLevel).map((key) => key.toLowerCase());
+const otelLogLevels = new Set(Object.keys(DiagLogLevel).map((key) => key.toLowerCase()));
 
 /**
  * returns false if and only if the passed-in function throws
@@ -178,7 +178,7 @@ const serverEnv = clientEnvSchema.extend({
   LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 
   // OpenTelemetry/Dynatrace settings
-  OTEL_LOG_LEVEL: z.string().refine((val) => otelLogLevels.includes(val)).default('info'),
+  OTEL_LOG_LEVEL: z.string().refine((val) => otelLogLevels.has(val)).default('info'),
   OTEL_API_KEY: z.string().trim().transform(emptyToUndefined).optional(),
   OTEL_ENVIRONMENT: z.string().trim().min(1).default('localhost'),
   OTEL_METRICS_ENDPOINT: z.string().trim().transform(emptyToUndefined).optional(),

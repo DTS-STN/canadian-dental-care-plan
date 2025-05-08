@@ -137,7 +137,6 @@ export default defineConfig(
       'unicorn/no-useless-undefined': 'off',
       'unicorn/prefer-global-this': 'off',
       'unicorn/prefer-query-selector': 'off',
-      'unicorn/prefer-set-has': 'off',
       'unicorn/prefer-spread': 'off',
       'unicorn/prefer-string-replace-all': 'off',
       'unicorn/prefer-string-slice': 'off',
