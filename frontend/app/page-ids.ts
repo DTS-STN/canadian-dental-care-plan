@@ -102,6 +102,7 @@ export const pageIds = {
       reviewSubmit: 'CDCP-PROT-RENW-0019',
       confirmation: 'CDCP-PROT-RENW-0020',
       confirmAddress: 'CDCP-PROT-RENW-0021',
+      verifyEmail: 'CDCP-PROT-RENW-0022',
     },
     dataUnavailable: 'CDCP-PROT-0099',
     unableToProcessRequest: 'CDCP-PROT-0999',

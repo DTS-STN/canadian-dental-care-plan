@@ -124,6 +124,7 @@ export interface ProtectedRenewState {
   maritalStatus?: string;
   partnerInformation?: ProtectedPartnerInformationState;
   communicationPreferences?: ProtectedConmmunicationPreferenceState;
+  emailVerified?: boolean;
 }
 
 export interface BenefitRenewalStateMapper {
@@ -152,6 +153,7 @@ interface ToCommunicationPreferencesArgs {
   hasEmailChanged: boolean;
   renewedEmail?: string;
   renewedReceiveEmailCommunication?: boolean;
+  emailVerified?: boolean;
 }
 
 interface ToContactInformationArgs {
@@ -492,6 +494,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       partnerInformation,
       clientApplication,
       communicationPreferences,
+      emailVerified,
     }: ProtectedRenewState,
     userId: string,
     applicantStateCompleted: boolean,
@@ -516,6 +519,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasEmailChanged: !!contactInformation?.email,
         renewedEmail: contactInformation?.email,
         renewedReceiveEmailCommunication: contactInformation?.shouldReceiveEmailCommunication,
+        emailVerified,
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
@@ -740,11 +744,13 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     renewedReceiveEmailCommunication,
     hasPreferredLanguageChanged,
     renewedPreferredLanguage,
+    emailVerified,
   }: ToCommunicationPreferencesArgs): RenewalCommunicationPreferencesDto {
     if (!hasEmailChanged && !hasPreferredLanguageChanged) return existingCommunicationPreferences;
 
     return {
       email: renewedReceiveEmailCommunication ? renewedEmail : undefined,
+      emailVerified,
       preferredLanguage: renewedPreferredLanguage ?? existingCommunicationPreferences.preferredLanguage,
       preferredMethod: renewedReceiveEmailCommunication ? this.serverConfig.COMMUNICATION_METHOD_EMAIL_ID : this.serverConfig.COMMUNICATION_METHOD_MAIL_ID,
     };
