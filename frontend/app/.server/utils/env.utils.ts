@@ -41,7 +41,7 @@ const isValidPrivateKey = (val: string) =>
 const csvToArray = (csv?: string) => csv?.split(',').map((str) => str.trim()) ?? [];
 const emptyToUndefined = (val?: string) => (val === '' ? undefined : val);
 const toBoolean = (val?: string) => val === 'true';
-const toNumber = (val?: string) => (val ? parseInt(val) : undefined);
+const toNumber = (val?: string) => (val ? Number.parseInt(val) : undefined);
 
 /**
  * Environment variables that will be available to server only.

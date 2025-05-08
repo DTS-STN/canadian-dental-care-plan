@@ -136,7 +136,6 @@ export default defineConfig(
       'unicorn/no-useless-fallback-in-spread': 'off',
       'unicorn/no-useless-undefined': 'off',
       'unicorn/prefer-global-this': 'off',
-      'unicorn/prefer-number-properties': 'off',
       'unicorn/prefer-object-from-entries': 'off',
       'unicorn/prefer-query-selector': 'off',
       'unicorn/prefer-set-has': 'off',

@@ -51,7 +51,7 @@ describe('padWithZero', () => {
   });
 
   it('should return the value as a string if it is not a number', () => {
-    expect(padWithZero(NaN, 5)).toBe('NaN');
+    expect(padWithZero(Number.NaN, 5)).toBe('NaN');
   });
 
   it('should return the value as a string if its length is greater than or equal to maxLength', () => {

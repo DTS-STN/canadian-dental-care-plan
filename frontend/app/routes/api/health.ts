@@ -59,6 +59,6 @@ function toArray(str?: string): string[] | undefined {
  * Will return undefined if the string can't be transformed.
  */
 function toNumber(str?: string): number | undefined {
-  const num = parseInt(str ?? '');
-  return isNaN(num) ? undefined : num;
+  const num = Number.parseInt(str ?? '');
+  return Number.isNaN(num) ? undefined : num;
 }

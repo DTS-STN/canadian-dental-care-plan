@@ -111,8 +111,8 @@ export async function action({ context: { appContainer, session }, params, reque
       .string()
       .trim()
       .min(1, t('protected-renew:marital-status.error-message.date-of-birth-year-required'))
-      .refine((year) => parseInt(year) > currentYear - 150, t('protected-renew:marital-status.error-message.yob-is-past'))
-      .refine((year) => parseInt(year) < currentYear, t('protected-renew:marital-status.error-message.yob-is-future')),
+      .refine((year) => Number.parseInt(year) > currentYear - 150, t('protected-renew:marital-status.error-message.yob-is-past'))
+      .refine((year) => Number.parseInt(year) < currentYear, t('protected-renew:marital-status.error-message.yob-is-future')),
     socialInsuranceNumber: z
       .string()
       .trim()
