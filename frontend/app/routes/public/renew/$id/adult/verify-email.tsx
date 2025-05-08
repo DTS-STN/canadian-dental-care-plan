@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
@@ -19,7 +19,6 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
 import { useErrorAlert } from '~/components/error-alert';
 import { useErrorSummary } from '~/components/error-summary';
-import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
@@ -109,7 +108,7 @@ export async function action({ context: { appContainer, session }, params, reque
       invariant(state.clientApplication?.communicationPreferences, 'Expected communicationPreferences to be defined');
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
       await verificationCodeService.sendVerificationCodeEmail({
-        email: state.contactInformation?.email,
+        email: state.contactInformation.email,
         verificationCode: verificationCode,
         preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
         userId: 'anonymous',
@@ -205,8 +204,6 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, { verificationCode: 'verification-code' });
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'verification-code-mismatch');
-
-  const communicationLink = <InlineLink routeId="public/apply/$id/adult/communication-preference" params={params} />;
 
   useEffect(() => {
     if (fetcherStatus === 'verification-code-sent') {
