@@ -286,7 +286,10 @@ class DataFetcher {
         .replace(/\u2019/g, '\u0027') //
         // eslint-disable-next-line no-control-regex
         .replace(/[^\u0000-\u00FF]/g, (char) => {
-          return `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`;
+          const codePoint = char.codePointAt(0);
+          return codePoint //
+            ? `\\u${codePoint.toString(16).padStart(4, '0')}`
+            : char;
         })
     );
   }
