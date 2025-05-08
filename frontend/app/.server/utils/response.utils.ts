@@ -19,7 +19,7 @@ export function isResponse(value: unknown): value is Response {
     'status' in value && typeof value.status === "number" &&
     'statusText' in value && typeof value.statusText === "string" &&
     'headers' in value && typeof value.headers === "object" &&
-    'body' in value && typeof value.body !== "undefined"
+    'body' in value && value.body !== undefined
   );
 }
 

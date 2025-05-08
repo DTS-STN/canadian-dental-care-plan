@@ -133,7 +133,6 @@ export default defineConfig(
       'unicorn/no-nested-ternary': 'off',
       'unicorn/no-null': 'off',
       'unicorn/no-process-exit': 'off',
-      'unicorn/no-typeof-undefined': 'off',
       'unicorn/no-useless-fallback-in-spread': 'off',
       'unicorn/no-useless-undefined': 'off',
       'unicorn/no-zero-fractions': 'off',
