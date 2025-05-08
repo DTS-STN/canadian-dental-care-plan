@@ -174,9 +174,10 @@ export class MockApplicationStatusRepository implements ApplicationStatusReposit
    *    '000003': 'e882086c-c4e6-ee11-a204-000d3a09d1b8',
    *  }
    */
-  private readonly MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP: Record<string, string> = clientFriendlyStatusDataSource.value.reduce(
-    (acc, { esdc_clientfriendlystatusid }, i) => ({ ...acc, [(i + 1).toString().padStart(6, '0')]: esdc_clientfriendlystatusid }),
-    {},
+  private readonly MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP: Record<string, string> = Object.fromEntries(
+    clientFriendlyStatusDataSource.value.map(({ esdc_clientfriendlystatusid }, i) => {
+      return [(i + 1).toString().padStart(6, '0'), esdc_clientfriendlystatusid];
+    }),
   );
 
   private readonly log: Logger;
