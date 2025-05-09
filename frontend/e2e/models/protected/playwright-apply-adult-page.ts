@@ -21,7 +21,7 @@ export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
       | 'review-information',
     heading?: string | RegExp,
   ) {
-    let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
+    let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined;
 
     switch (applyAdultPage) {
       case 'applicant-information':

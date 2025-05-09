@@ -257,7 +257,7 @@ interface SaveStateArgs {
  * @param args - The arguments.
  * @returns The new protected apply state.
  */
-export function saveProtectedApplyState({ params, session, state, remove = undefined }: SaveStateArgs) {
+export function saveProtectedApplyState({ params, session, state, remove }: SaveStateArgs) {
   const log = createLogger('protected-apply-route-helpers.server/saveProtectedApplyState');
   const currentState = loadProtectedApplyState({ params, session });
 

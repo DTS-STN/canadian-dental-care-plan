@@ -31,7 +31,7 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'new-or-existing-member',
     heading?: string | RegExp,
   ) {
-    let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
+    let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined;
 
     switch (applyAdultChildPage) {
       case 'applicant-information':

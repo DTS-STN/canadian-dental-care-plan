@@ -134,7 +134,7 @@ export default defineConfig(
       'unicorn/no-null': 'off',
       'unicorn/no-process-exit': 'off',
       'unicorn/no-useless-fallback-in-spread': 'off',
-      'unicorn/no-useless-undefined': 'off',
+      'unicorn/no-useless-undefined': ['error', { checkArguments: false }],
       'unicorn/prefer-global-this': 'off',
       'unicorn/prefer-query-selector': 'off',
       'unicorn/prefer-spread': 'off',

@@ -38,7 +38,7 @@ export function routeRequestCounter(build: ServerBuild): RequestHandler {
         // Normalize path (e.g., remove trailing .data for React Router loaders/actions)
         const normalizedPath = req.path.replace(/\.data$/, '');
 
-        let routeId: CachedRouteId = undefined;
+        let routeId: CachedRouteId;
 
         // Check cache first
         if (pathCache.has(normalizedPath)) {

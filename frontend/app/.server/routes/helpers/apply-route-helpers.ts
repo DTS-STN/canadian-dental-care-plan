@@ -231,7 +231,7 @@ interface SaveStateArgs {
  * @param args - The arguments.
  * @returns The new apply state.
  */
-export function saveApplyState({ params, session, state, remove = undefined }: SaveStateArgs) {
+export function saveApplyState({ params, session, state, remove }: SaveStateArgs) {
   const log = createLogger('apply-route-helpers.server/saveApplyState');
   const currentState = loadApplyState({ params, session });
 

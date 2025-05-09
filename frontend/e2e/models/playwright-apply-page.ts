@@ -6,7 +6,7 @@ export class PlaywrightApplyPage extends PlaywrightBasePage {
   }
 
   async isLoaded(applyPage: 'index' | 'file-taxes' | 'tax-filing' | 'terms-and-conditions' | 'type-application', heading?: string | RegExp) {
-    let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
+    let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined;
 
     switch (applyPage) {
       case 'index':

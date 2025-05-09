@@ -25,7 +25,7 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
       | 'review-child-information',
     heading?: string | RegExp,
   ) {
-    let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
+    let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined;
 
     switch (applyChildPage) {
       case 'children':
