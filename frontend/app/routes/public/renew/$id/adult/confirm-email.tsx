@@ -165,7 +165,10 @@ export async function action({ context: { appContainer, session }, params, reque
           session,
           state: {
             editModeEmail: parsedDataResult.data.email,
-            ...parsedDataResult.data,
+            contactInformation: {
+              ...state.contactInformation,
+              ...parsedDataResult.data,
+            },
             ...(isNewEmail && {
               verifyEmail: {
                 verificationCode,
