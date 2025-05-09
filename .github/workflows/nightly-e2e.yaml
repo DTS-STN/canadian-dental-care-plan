@@ -1,0 +1,27 @@
+name: Nightly e2e tests (main & release)
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch: {}
+
+env:
+  CI: true
+
+permissions: read-all
+
+jobs:
+  run-e2e-tests:
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/release/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - run: npm clean-install
+        working-directory: frontend/
+      - run: npx playwright install chromium --with-deps
+        working-directory: frontend/
+      - run: npm run test:e2e
+        working-directory: frontend/
