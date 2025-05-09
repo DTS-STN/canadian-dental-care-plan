@@ -107,7 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
       email: parsedDataResult.data.email,
       verificationCode,
       preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
-      userId: 'anonymous',
+      userId: idToken.sub,
     });
   }
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.email', { userId: idToken.sub });
