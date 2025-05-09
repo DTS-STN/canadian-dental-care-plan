@@ -89,6 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const idToken: IdToken = session.get('idToken');
   const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
 
   const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
@@ -131,7 +132,6 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     });
 
-    const idToken: IdToken = session.get('idToken');
     appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-mailing-address', { userId: idToken.sub });
 
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
@@ -157,7 +157,7 @@ export async function action({ context: { appContainer, session }, params, reque
     city: formattedMailingAddress.city,
     postalCode: formattedMailingAddress.postalZipCode,
     provinceCode: formattedMailingAddress.provinceState,
-    userId: 'anonymous',
+    userId: idToken.sub,
   });
 
   if (addressCorrectionResult.status === 'not-correct') {

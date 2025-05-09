@@ -89,6 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const countryService = appContainer.get(TYPES.domain.services.CountryService);
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
 
+  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedApplyAdultState({ params, request, session });
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
@@ -136,7 +137,6 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     });
 
-    const idToken: IdToken = session.get('idToken');
     appContainer.get(TYPES.domain.services.AuditService).createAudit('update-address.apply.adult.mailing-address', { userId: idToken.sub });
 
     if (state.editMode) {
@@ -166,7 +166,7 @@ export async function action({ context: { appContainer, session }, params, reque
     city: formattedMailingAddress.city,
     postalCode: formattedMailingAddress.postalZipCode,
     provinceCode: formattedMailingAddress.provinceState,
-    userId: 'anonymous',
+    userId: idToken.sub,
   });
 
   if (addressCorrectionResult.status === 'not-correct') {

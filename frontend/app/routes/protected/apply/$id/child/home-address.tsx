@@ -90,6 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
 
   securityHandler.validateCsrfToken({ formData, session });
+  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedApplyChildState({ params, request, session });
 
   if (formAction === FORM_ACTION.cancel) {
@@ -151,7 +152,7 @@ export async function action({ context: { appContainer, session }, params, reque
     city: formattedHomeAddress.city,
     postalCode: formattedHomeAddress.postalZipCode,
     provinceCode: formattedHomeAddress.provinceState,
-    userId: 'anonymous',
+    userId: idToken.sub,
   });
 
   if (addressCorrectionResult.status === 'not-correct') {
@@ -179,7 +180,6 @@ export async function action({ context: { appContainer, session }, params, reque
   }
   saveProtectedApplyState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
 
-  const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.home-address', { userId: idToken.sub });
 
   if (state.editMode) {
