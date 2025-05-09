@@ -1,14 +1,14 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyChildPage } from '../../models/protected/playwright-apply-child-page';
-import { PlaywrightApplyPage } from '../../models/protected/playwright-apply-page';
+import { ChildPage } from '../../pages/protected/apply/child-page';
+import { InitialPage } from '../../pages/protected/apply/initial-page';
 import { acceptLegalCheckboxes, calculateDOB, clickContinue, fillApplicantInformationForm, fillChildrenInformationForm, fillOutAddress } from '../../utils/helpers';
 
 test.describe('Child category', () => {
   test.beforeEach('Navigate to child application', async ({ page }) => {
     test.setTimeout(60_000);
 
-    const applyPage = new PlaywrightApplyPage(page);
+    const applyPage = new InitialPage(page);
     await applyPage.gotoIndexPage();
 
     // Accept Terms
@@ -29,7 +29,7 @@ test.describe('Child category', () => {
 
   // TODO: Add test cases for living-independently and new-or-existing-user
   test('Should complete flow as child applicant', async ({ page }) => {
-    const applyChildPage = new PlaywrightApplyChildPage(page);
+    const applyChildPage = new ChildPage(page);
 
     await test.step('Should navigate to children page', async () => {
       await applyChildPage.isLoaded('children');
@@ -150,7 +150,7 @@ test.describe('Child category', () => {
   });
 
   test('Applicant is not parent or legal guardian of child', async ({ page }) => {
-    const applyChildPage = new PlaywrightApplyChildPage(page);
+    const applyChildPage = new ChildPage(page);
 
     await test.step('Should navigate to children page', async () => {
       await applyChildPage.isLoaded('children');
@@ -172,7 +172,7 @@ test.describe('Child category', () => {
   });
 
   test('Child is 18 or older and has no sin', async ({ page }) => {
-    const applyChildPage = new PlaywrightApplyChildPage(page);
+    const applyChildPage = new ChildPage(page);
 
     await test.step('Should navigate to children page', async () => {
       await applyChildPage.isLoaded('children');
@@ -193,7 +193,7 @@ test.describe('Child category', () => {
   });
 
   test('Child is 17 or younger and has no sin', async ({ page }) => {
-    const applyChildPage = new PlaywrightApplyChildPage(page);
+    const applyChildPage = new ChildPage(page);
 
     await test.step('Should navigate to children page', async () => {
       await applyChildPage.isLoaded('children');
@@ -218,8 +218,8 @@ test.describe('Child category - parent or legual guardian miscellaneous checks',
   test.beforeEach('Navigate to child application', async ({ page }) => {
     test.setTimeout(60_000);
 
-    const applyPage = new PlaywrightApplyPage(page);
-    const applyChildPage = new PlaywrightApplyChildPage(page);
+    const applyPage = new InitialPage(page);
+    const applyChildPage = new ChildPage(page);
 
     await applyPage.gotoIndexPage();
 
@@ -274,7 +274,7 @@ test.describe('Child category - parent or legual guardian miscellaneous checks',
   });
 
   test('Parent or guardian is 15 or younger', async ({ page }) => {
-    const applyChildPage = new PlaywrightApplyChildPage(page);
+    const applyChildPage = new ChildPage(page);
     await test.step('Should navigate to applicant information page', async () => {
       await applyChildPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(15);
@@ -289,7 +289,7 @@ test.describe('Child category - parent or legual guardian miscellaneous checks',
   });
 
   test('Parent or guardian born or 2006', async ({ page }) => {
-    const applyChildPage = new PlaywrightApplyChildPage(page);
+    const applyChildPage = new ChildPage(page);
     await test.step('Should navigate to applicant information page', async () => {
       await applyChildPage.isLoaded('applicant-information');
       await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: '10', month: '10', year: '2006', dtcEligible: undefined, page });

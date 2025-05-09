@@ -1,13 +1,13 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyAdultPage } from '../../../models/playwright-apply-adult-page';
-import { PlaywrightApplyPage } from '../../../models/playwright-apply-page';
+import { AdultPage } from '../../../pages/public/apply/adult-page';
+import { InitialPage } from '../../../pages/public/apply/initial-page';
 import { calculateDOB } from '../../../utils/helpers';
 
 test.describe('Senior category', () => {
   test.beforeEach('Navigate to adult application', async ({ page }) => {
     test.setTimeout(60_000);
-    const applyPage = new PlaywrightApplyPage(page);
+    const applyPage = new InitialPage(page);
     await applyPage.gotoIndexPage();
 
     await applyPage.isLoaded('terms-and-conditions');
@@ -28,7 +28,7 @@ test.describe('Senior category', () => {
   });
 
   test('Should complete flow as senior applicant', async ({ page }) => {
-    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+    const applyAdultPage = new AdultPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');

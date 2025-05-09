@@ -1,15 +1,15 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyAdultPage } from '../../models/playwright-apply-adult-page';
-import { PlaywrightApplyPage } from '../../models/playwright-apply-page';
+import { AdultPage } from '../../pages/public/apply/adult-page';
+import { InitialPage } from '../../pages/public/apply/initial-page';
 import { acceptLegalCheckboxes, clickContinue, fillApplicantInformationForm, fillOutAddress } from '../../utils/helpers';
 
 test.describe('Public Apply Flow - Minimal Scenario', { tag: '@smoke' }, () => {
   test.describe.configure({ timeout: 60_000 });
 
   test('Should complete minimal public apply adult flow', async ({ page }) => {
-    const applyPage = new PlaywrightApplyPage(page);
-    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+    const applyPage = new InitialPage(page);
+    const applyAdultPage = new AdultPage(page);
 
     await test.step('Should accept terms and conditions and proceed', async () => {
       await applyPage.gotoIndexPage();
