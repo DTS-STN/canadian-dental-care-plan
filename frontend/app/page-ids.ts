@@ -209,6 +209,7 @@ export const pageIds = {
         reviewAdultInformation: 'CDCP-RENW-AD-0012',
         confirmation: 'CDCP-RENW-AD-0013',
         exitApplication: 'CDCP-RENW-AD-0014',
+        verifyEmail: 'CDCP-RENW-AD-0015',
       },
       ita: {
         maritalStatus: 'CDCP-RENW-ITA-0001',

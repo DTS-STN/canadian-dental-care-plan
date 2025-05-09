@@ -70,6 +70,12 @@ export interface RenewState {
     email?: string;
     shouldReceiveEmailCommunication?: boolean;
   };
+  editModeEmail?: string;
+  verifyEmail?: {
+    verificationCode: string;
+    verificationAttempts: number;
+  };
+  emailVerified?: boolean;
   readonly hasAddressChanged?: boolean;
   readonly isHomeAddressSameAsMailingAddress?: boolean;
   readonly previousAddressState?: {
