@@ -139,7 +139,6 @@ export default defineConfig(
       'unicorn/prefer-string-slice': 'off',
       'unicorn/prefer-structured-clone': 'off',
       'unicorn/prefer-ternary': 'off',
-      'unicorn/prefer-top-level-await': 'off',
       'unicorn/prevent-abbreviations': 'off',
     },
   },

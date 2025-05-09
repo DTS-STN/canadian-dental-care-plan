@@ -55,6 +55,9 @@ export const defaultsConfig = {
  * This schema enforces type constraints and provides intelligent fallbacks to
  * ensure the application always has valid logging configuration.
  */
+/* eslint-disable unicorn/prefer-top-level-await */
+// unicorn/prefer-top-level-await ruel issue with zod
+// https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2149
 const loggingConfigSchema = z.object({
   LOG_LEVEL: z
     .enum(logLevels) // Ensures the log level is one of the predefined levels
@@ -77,6 +80,7 @@ const loggingConfigSchema = z.object({
     .min(1, 'Audit log file name pattern cannot be empty.')
     .catch(defaultsConfig.AUDIT_LOG_FILENAME),
 });
+/* eslint-enable unicorn/prefer-top-level-await */
 
 /**
  * Retrieves and validates logging configuration from environment variables.
