@@ -109,7 +109,7 @@ export async function action({ context: { appContainer, session }, params, reque
         email: state.editModeEmail,
         verificationCode: verificationCode,
         preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
-        userId: 'anonymous',
+        userId: idToken.sub,
       });
       return { status: 'verification-code-sent' } as const;
     } else if (state.email && state.communicationPreferences?.preferredLanguage) {
@@ -118,7 +118,7 @@ export async function action({ context: { appContainer, session }, params, reque
         email: state.email,
         verificationCode: verificationCode,
         preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
-        userId: 'anonymous',
+        userId: idToken.sub,
       });
       return { status: 'verification-code-sent' } as const;
     }
