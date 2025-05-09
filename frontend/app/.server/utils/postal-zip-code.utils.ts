@@ -77,12 +77,12 @@ export function formatPostalCode(countryCode: string, postalCode: string) {
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
   if (countryCode === CANADA_COUNTRY_ID) {
-    const sanitizedPostalCode = postalCode.replace(/\s/g, '');
+    const sanitizedPostalCode = postalCode.replaceAll(/\s/g, '');
     return `${sanitizedPostalCode.slice(0, 3)} ${sanitizedPostalCode.slice(3)}`.toUpperCase();
   }
 
   if (countryCode === USA_COUNTRY_ID) {
-    const sanitizedPostalCode = postalCode.replace(/\D/g, '');
+    const sanitizedPostalCode = postalCode.replaceAll(/\D/g, '');
     return sanitizedPostalCode.length === 9 ? `${sanitizedPostalCode.slice(0, 5)}-${sanitizedPostalCode.slice(5)}` : sanitizedPostalCode;
   }
 

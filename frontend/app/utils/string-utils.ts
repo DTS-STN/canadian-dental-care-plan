@@ -56,7 +56,7 @@ export function isAllValidInputCharacters(value: string) {
  * @returns - The filtered string with invalid characters removed.
  */
 export function removeInvalidInputCharacters(value: string) {
-  return value.replace(invalidInputCharactersRegex, '');
+  return value.replaceAll(invalidInputCharactersRegex, '');
 }
 
 /**
@@ -75,7 +75,7 @@ export function hasDigits(value: string) {
  * @returns - The normalized string with sequences of hyphens replaced by a single hyphen.
  */
 export function normalizeHyphens(str: string) {
-  return str.replace(/-{2,}/g, '-');
+  return str.replaceAll(/-{2,}/g, '-');
 }
 
 /**
@@ -107,7 +107,7 @@ export function extractDigits(input: string) {
  * @returns The normalized string with all spaces replaced by regular spaces.
  */
 export function normalizeSpaces(str: string) {
-  return str.replace(/[\s\u00A0]/g, ' ');
+  return str.replaceAll(/[\s\u00A0]/g, ' ');
 }
 
 /**

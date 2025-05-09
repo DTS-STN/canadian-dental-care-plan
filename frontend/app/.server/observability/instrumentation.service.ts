@@ -119,7 +119,7 @@ export class DefaultInstrumentationService implements InstrumentationService {
     }
 
     const sanitized = metricName
-      .replace(/[^a-zA-Z0-9_.\-/]/g, '_') // Replace all invalid characters with `_`
+      .replaceAll(/[^a-zA-Z0-9_.\-/]/g, '_') // Replace all invalid characters with `_`
       .replace(/^[^a-zA-Z]+/, ''); // Strip leading non-[a-z] chars
 
     const trimmed = sanitized.slice(0, 255);
