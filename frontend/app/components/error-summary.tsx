@@ -42,7 +42,7 @@ export function createErrorSummaryItems(obj: Record<string, string | undefined>)
   return Object.keys(obj)
     .map((key) => {
       const value = obj[key];
-      if (!value) return undefined;
+      if (!value) return;
       return createErrorSummaryItem(key, value);
     })
     .filter((item) => item !== undefined);
@@ -138,7 +138,7 @@ export function useErrorSummary<T extends Record<string, string | undefined>, U 
          validator.isEmpty(fieldId) ||
          typeof errorMessage !== 'string' ||
          validator.isEmpty(errorMessage)) {
-         return undefined;
+         return;
        }
 
         return { errorMessage, fieldId };

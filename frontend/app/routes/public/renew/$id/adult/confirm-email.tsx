@@ -90,10 +90,8 @@ export async function action({ context: { appContainer, session }, params, reque
       shouldReceiveEmailCommunication: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.isNewOrUpdatedEmail === ADD_OR_UPDATE_EMAIL_OPTION.yes) {
-        if (!val.email) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:confirm-email.error-message.email-required'), path: ['email'] });
-        }
+      if (val.isNewOrUpdatedEmail === ADD_OR_UPDATE_EMAIL_OPTION.yes && !val.email) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:confirm-email.error-message.email-required'), path: ['email'] });
       }
 
       if (val.email ?? val.confirmEmail) {
@@ -112,10 +110,8 @@ export async function action({ context: { appContainer, session }, params, reque
         }
       }
 
-      if (val.isNewOrUpdatedEmail === ADD_OR_UPDATE_EMAIL_OPTION.yes) {
-        if (val.shouldReceiveEmailCommunication === undefined) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:confirm-email.error-message.receive-comms-required'), path: ['shouldReceiveEmailCommunication'] });
-        }
+      if (val.isNewOrUpdatedEmail === ADD_OR_UPDATE_EMAIL_OPTION.yes && val.shouldReceiveEmailCommunication === undefined) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:confirm-email.error-message.receive-comms-required'), path: ['shouldReceiveEmailCommunication'] });
       }
     })
     .transform((val) => ({

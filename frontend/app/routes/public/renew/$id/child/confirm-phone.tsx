@@ -91,10 +91,8 @@ export async function action({ context: { appContainer, session }, params, reque
       }).optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.isNewOrUpdatedPhoneNumber === ADD_OR_UPDATE_PHONE_OPTION.yes) {
-        if (!val.phoneNumber) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:confirm-phone.error-message.phone-required'), path: ['phoneNumber'] });
-        }
+      if (val.isNewOrUpdatedPhoneNumber === ADD_OR_UPDATE_PHONE_OPTION.yes && !val.phoneNumber) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:confirm-phone.error-message.phone-required'), path: ['phoneNumber'] });
       }
     })
     .transform((val) => ({

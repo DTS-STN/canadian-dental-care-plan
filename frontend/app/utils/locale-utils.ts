@@ -38,12 +38,15 @@ export function isAppLocale(value: unknown): value is AppLocale {
  */
 export function getAltLanguage(language: string): AppLocale {
   switch (language) {
-    case 'en':
+    case 'en': {
       return 'fr';
-    case 'fr':
+    }
+    case 'fr': {
       return 'en';
-    default:
+    }
+    default: {
       throw new Error(`Could not determine altLanguage for language: ${language}.`);
+    }
   }
 }
 

@@ -62,6 +62,6 @@ export function isValidClientNumberRenewal(clientNumber: string) {
  * @returns submission code in the format of XXX XXX XXX XXXX if it is valid otherwise the input
  */
 export function formatSubmissionApplicationCode(applicationCode: string) {
-  const strippedCode = applicationCode.replace(/ /g, '');
+  const strippedCode = applicationCode.replaceAll(' ', '');
   return /^\d{13}$/.test(strippedCode) ? (strippedCode.match(/....$|.../g) ?? []).join(' ') : applicationCode;
 }

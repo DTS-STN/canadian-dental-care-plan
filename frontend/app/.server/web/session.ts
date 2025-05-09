@@ -172,7 +172,7 @@ export class ExpressSession implements Session {
 
   protected sanitizeKey(key: string): string {
     assert.ok(!validator.isEmpty(key, { ignore_whitespace: true }), 'Session key cannot be empty');
-    let sanitized = key.replace(/[^a-zA-Z0-9_$]/g, '_');
+    let sanitized = key.replaceAll(/[^a-zA-Z0-9_$]/g, '_');
     if (!/^[a-zA-Z_$]/.test(sanitized)) {
       sanitized = '_' + sanitized;
     }

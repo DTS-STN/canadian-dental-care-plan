@@ -283,9 +283,9 @@ class DataFetcher {
   private cleanUnicode(data: string): string {
     return (
       data
-        .replace(/\u2019/g, '\u0027') //
+        .replaceAll(/[\u2019]/g, '\u0027') //
         // eslint-disable-next-line no-control-regex
-        .replace(/[^\u0000-\u00FF]/g, (char) => {
+        .replaceAll(/[^\u0000-\u00FF]/g, (char) => {
           const codePoint = char.codePointAt(0);
           return codePoint //
             ? `\\u${codePoint.toString(16).padStart(4, '0')}`

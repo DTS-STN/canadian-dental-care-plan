@@ -132,10 +132,8 @@ export async function action({ context: { appContainer, session }, params, reque
       federalSocialProgram: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.hasFederalBenefits) {
-        if (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:update-dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
-        }
+      if (val.hasFederalBenefits && (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram))) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:update-dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
       }
     })
     .transform((val) => {
