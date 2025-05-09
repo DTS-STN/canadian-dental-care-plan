@@ -27,7 +27,7 @@ describe('DefaultPreferredLanguageService', () => {
       const service = new DefaultPreferredLanguageService(mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       // Act and Assert
-      expect((service.listPreferredLanguages as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect((service.listPreferredLanguages as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
       expect((service.getPreferredLanguageById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });

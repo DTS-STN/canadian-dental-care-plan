@@ -31,8 +31,8 @@ describe('SessionTimeout', () => {
 
   const setup = (props: Partial<SessionTimeoutProps> = {}) => {
     const defaultProps = {
-      promptBeforeIdle: 30000,
-      timeout: 60000,
+      promptBeforeIdle: 30_000,
+      timeout: 60_000,
       onSessionEnd: vi.fn(),
       onSessionExtend: vi.fn(),
     };
@@ -97,7 +97,7 @@ describe('SessionTimeout', () => {
 
   it('should update the remaining time every second', () => {
     mockIsPrompted.mockReturnValue(true);
-    mockGetRemainingTime.mockReturnValue(50000);
+    mockGetRemainingTime.mockReturnValue(50_000);
 
     vi.useFakeTimers({ shouldAdvanceTime: true });
 
@@ -106,7 +106,7 @@ describe('SessionTimeout', () => {
     expect(screen.getByText(`session-timeout.description{"timeRemaining":"0:50"}`)).toBeInTheDocument();
 
     act(() => {
-      mockGetRemainingTime.mockReturnValue(49000);
+      mockGetRemainingTime.mockReturnValue(49_000);
       vi.advanceTimersByTime(1000);
     });
 

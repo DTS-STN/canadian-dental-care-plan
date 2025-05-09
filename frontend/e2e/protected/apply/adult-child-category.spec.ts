@@ -6,7 +6,7 @@ import { acceptLegalCheckboxes, calculateDOB, clickContinue, fillApplicantInform
 
 test.describe('Adult-Child category', () => {
   test.beforeEach('Navigate to adult-child application', async ({ page }) => {
-    test.setTimeout(60000);
+    test.setTimeout(60_000);
 
     const applyPage = new PlaywrightApplyPage(page);
     await applyPage.gotoIndexPage();

@@ -51,13 +51,11 @@ function buildRouteTreeRecursive(parentId: string, routesByParentId: Record<stri
 function groupServerRoutesByParentId(serverRouteManifest: ServerRouteManifest): Record<string, ServerRouteManifestEntry[]> {
   const routesByParent: Record<string, ServerRouteManifestEntry[]> = {};
 
-  Object.values(serverRouteManifest)
-    .filter((routeEntry) => routeEntry !== undefined)
-    .forEach((routeEntry) => {
-      const parentId = routeEntry.parentId ?? '';
-      routesByParent[parentId] ??= [];
-      routesByParent[parentId].push(routeEntry);
-    });
+  for (const routeEntry of Object.values(serverRouteManifest).filter((routeEntry) => routeEntry !== undefined)) {
+    const parentId = routeEntry.parentId ?? '';
+    routesByParent[parentId] ??= [];
+    routesByParent[parentId].push(routeEntry);
+  }
 
   return routesByParent;
 }

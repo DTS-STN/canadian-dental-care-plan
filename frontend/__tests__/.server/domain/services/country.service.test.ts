@@ -25,7 +25,7 @@ describe('DefaultCountryService', () => {
 
       const service = new DefaultCountryService(mockCountryDtoMapper, mockCountryRepository, mockServerConfig); // Act and Assert
 
-      expect((service.listCountries as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect((service.listCountries as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
       expect((service.getCountryById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });

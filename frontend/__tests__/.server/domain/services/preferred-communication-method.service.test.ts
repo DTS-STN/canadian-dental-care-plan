@@ -24,7 +24,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
 
       const service = new DefaultPreferredCommunicationMethodService(mockPreferredCommunicationMethodDtoMapper, mockPreferredCommunicationMethodRepository, mockServerConfig); // Act and Assert
 
-      expect((service.listPreferredCommunicationMethods as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect((service.listPreferredCommunicationMethods as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
       expect((service.getPreferredCommunicationMethodById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });

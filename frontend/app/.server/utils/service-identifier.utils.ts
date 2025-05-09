@@ -53,10 +53,10 @@ export function assignServiceIdentifiers<T extends TypesContant>(types: T): T {
   const flattenedKeys = flatKeys(types); // Get all nested key paths as an object.
 
   // Map each key of the flattenedKeys object to a service identifier.
-  Object.keys(flattenedKeys).forEach((identifierKey) => {
+  for (const identifierKey of Object.keys(flattenedKeys)) {
     assert.ok(typeof flattenedKeys[identifierKey as keyof typeof flattenedKeys] === 'symbol', `Expected "${identifierKey}" to be a symbol`);
     set(newTypes, identifierKey, serviceIdentifier(identifierKey));
-  });
+  }
 
   return newTypes;
 }

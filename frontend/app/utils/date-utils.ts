@@ -23,7 +23,7 @@ export function extractDateParts(date: string) {
   const month = Number.parseInt(dateParts[1]);
   const day = Number.parseInt(dateParts[2]);
 
-  if (isNaN(year) || isNaN(month) || isNaN(day)) {
+  if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) {
     return {};
   }
 

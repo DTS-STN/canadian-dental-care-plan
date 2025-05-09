@@ -62,7 +62,7 @@ describe('DefaultRaoidcService', () => {
       const serviceTest = new DefaultRaoidcServiceTest(mockServerConfig, mockHttpClient);
 
       // Act and Assert
-      expect((serviceTest.fetchServerMetadataTest as Moized).options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect((serviceTest.fetchServerMetadataTest as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
     });
   });
 
