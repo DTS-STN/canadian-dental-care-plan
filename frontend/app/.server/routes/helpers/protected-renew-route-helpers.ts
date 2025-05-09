@@ -389,10 +389,8 @@ export function validateProtectedRenewStateForReview({ params, state, demographi
 
   const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
-  if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
-    if (children.length === 0) {
-      throw redirect(getPathById('protected/renew/$id/member-selection', params));
-    }
+  if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) && children.length === 0) {
+    throw redirect(getPathById('protected/renew/$id/member-selection', params));
   }
 
   return {

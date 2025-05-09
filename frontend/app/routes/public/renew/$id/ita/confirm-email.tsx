@@ -83,10 +83,8 @@ export async function action({ context: { appContainer, session }, params, reque
       confirmEmail: z.string().trim().max(64).optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.isNewOrUpdatedEmail === ADD_OR_UPDATE_EMAIL_OPTION.yes) {
-        if (!val.email) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-email.error-message.email-required'), path: ['email'] });
-        }
+      if (val.isNewOrUpdatedEmail === ADD_OR_UPDATE_EMAIL_OPTION.yes && !val.email) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-email.error-message.email-required'), path: ['email'] });
       }
 
       if (val.email ?? val.confirmEmail) {

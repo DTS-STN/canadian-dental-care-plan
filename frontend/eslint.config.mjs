@@ -128,7 +128,6 @@ export default defineConfig(
       'unicorn/consistent-function-scoping': ['error', { checkArrowFunctions: false }],
       'unicorn/no-array-callback-reference': 'off',
       'unicorn/no-array-reduce': 'off',
-      'unicorn/no-lonely-if': 'off',
       'unicorn/no-negated-condition': 'off',
       'unicorn/no-nested-ternary': 'off',
       'unicorn/no-null': 'off',
