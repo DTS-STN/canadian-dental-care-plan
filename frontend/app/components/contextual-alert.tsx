@@ -45,17 +45,23 @@ export function ContextualAlert(props: ContextualAlertProps) {
 
 function Icon({ type }: { type: string }) {
   switch (type) {
-    case 'warning':
+    case 'warning': {
       return <FontAwesomeIcon icon={faExclamationTriangle} className="h-6 w-6 text-amber-700" />;
-    case 'success':
+    }
+    case 'success': {
       return <FontAwesomeIcon icon={faCheckCircle} className="h-6 w-6 text-green-700" />;
-    case 'danger':
+    }
+    case 'danger': {
       return <FontAwesomeIcon icon={faExclamationCircle} className="h-6 w-6 text-red-700" />;
-    case 'info':
+    }
+    case 'info': {
       return <FontAwesomeIcon icon={faCircleInfo} className="h-6 w-6 text-cyan-700" />;
-    case 'comment':
+    }
+    case 'comment': {
       return <FontAwesomeIcon icon={faCommentDots} className="h-6 w-6 text-sky-800" />;
-    default:
+    }
+    default: {
       break;
+    }
   }
 }

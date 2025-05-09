@@ -143,7 +143,6 @@ export default defineConfig(
       'unicorn/prefer-ternary': 'off',
       'unicorn/prefer-top-level-await': 'off',
       'unicorn/prevent-abbreviations': 'off',
-      'unicorn/switch-case-braces': 'off',
     },
   },
 );

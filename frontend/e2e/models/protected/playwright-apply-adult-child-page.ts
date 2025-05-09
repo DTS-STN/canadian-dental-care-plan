@@ -34,104 +34,129 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
     let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined;
 
     switch (applyAdultChildPage) {
-      case 'applicant-information':
+      case 'applicant-information': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/applicant-information/, heading: 'Applicant information' };
         break;
+      }
 
-      case 'marital-status':
+      case 'marital-status': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/marital-status/, heading: 'Marital Status' };
         break;
+      }
 
-      case 'mailing-address':
+      case 'mailing-address': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/mailing-address/, heading: 'Mailing Address' };
         break;
+      }
 
-      case 'home-address':
+      case 'home-address': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/home-address/, heading: 'Home Address' };
         break;
+      }
 
-      case 'phone-number':
+      case 'phone-number': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/phone-number/, heading: 'Phone Number' };
         break;
+      }
 
-      case 'communication-preference':
+      case 'communication-preference': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/communication-preference/, heading: 'Communication' };
         break;
+      }
 
-      case 'email':
+      case 'email': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/email/, heading: 'Email' };
         break;
-      case 'verify-email':
+      }
+      case 'verify-email': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/verify-email/, heading: 'Verify your email address' };
         break;
+      }
 
-      case 'children':
+      case 'children': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/children/, heading: "Child(ren)'s application" };
         break;
+      }
 
-      case 'children-cannot-apply-child':
+      case 'children-cannot-apply-child': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/children\/[a-f0-9-]+\/cannot-apply-child/, heading: 'Your child must apply' };
         break;
+      }
 
-      case 'children-dental-insurance':
+      case 'children-dental-insurance': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/children\/[a-f0-9-]+\/dental-insurance/, heading: /.*: access to private dental insurance/ };
         break;
+      }
 
-      case 'children-confirm-federal-provincial-territorial-benefits':
+      case 'children-confirm-federal-provincial-territorial-benefits': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/children\/[a-f0-9-]+\/confirm-federal-provincial-territorial-benefits/, heading: /.*: access to other government dental benefits/ };
         break;
+      }
 
-      case 'children-federal-provincial-territorial-benefits':
+      case 'children-federal-provincial-territorial-benefits': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/children\/[a-f0-9-]+\/federal-provincial-territorial-benefits/, heading: /.*: access to other federal, provincial or territorial dental benefits/ };
         break;
+      }
 
-      case 'children-information':
+      case 'children-information': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/children\/[a-f0-9-]+\/information/, heading: /.*: information/ };
         break;
+      }
 
-      case 'children-parent-or-guardian':
+      case 'children-parent-or-guardian': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/children\/[a-f0-9-]+\/parent-or-guardian/, heading: 'You must be a parent or legal guardian' };
         break;
+      }
 
-      case 'confirmation':
+      case 'confirmation': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/confirmation/, heading: 'Application successfully submitted' };
         break;
+      }
 
-      case 'dental-insurance':
+      case 'dental-insurance': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/dental-insurance/, heading: 'Access to private dental insurance' };
         break;
+      }
 
-      case 'confirm-federal-provincial-territorial-benefits':
+      case 'confirm-federal-provincial-territorial-benefits': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/confirm-federal-provincial-territorial-benefits/, heading: 'Access to other government dental benefits' };
         break;
+      }
 
-      case 'federal-provincial-territorial-benefits':
+      case 'federal-provincial-territorial-benefits': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/federal-provincial-territorial-benefits/, heading: 'Access to other federal, provincial or territorial dental benefits' };
         break;
+      }
 
-      case 'living-independently':
+      case 'living-independently': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/living-independently/, heading: 'Living independently' };
         break;
+      }
 
-      case 'parent-or-guardian':
+      case 'parent-or-guardian': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/parent-or-guardian/, heading: 'Parent or legal guardian needs to apply' };
         break;
+      }
 
-      case 'new-or-existing-member':
+      case 'new-or-existing-member': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/new-or-existing-member/, heading: 'New or existing member' };
         break;
+      }
 
-      case 'review-adult-information':
+      case 'review-adult-information': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/review-adult-information/, heading: 'Review your information' };
         break;
+      }
 
-      case 'review-child-information':
+      case 'review-child-information': {
         pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/adult-child\/review-child-information/, heading: 'Review child(ren) information' };
         break;
+      }
 
-      default:
+      default: {
         pageInfo = undefined;
         break;
+      }
     }
 
     if (!pageInfo) throw new Error(`applyAdultChildPage '${applyAdultChildPage}' not implemented.`);

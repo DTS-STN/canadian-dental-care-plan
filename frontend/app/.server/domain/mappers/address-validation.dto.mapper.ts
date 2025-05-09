@@ -50,14 +50,18 @@ export class DefaultAddressValidationDtoMapper implements AddressValidationDtoMa
 
   protected mapAddressCorrectionResultEntityStatusCodeToStatus(statusCode: string): AddressCorrectionStatus {
     switch (statusCode) {
-      case 'Corrected':
+      case 'Corrected': {
         return 'corrected';
-      case 'NotCorrect':
+      }
+      case 'NotCorrect': {
         return 'not-correct';
-      case 'Valid':
+      }
+      case 'Valid': {
         return 'valid';
-      default:
+      }
+      default: {
         throw new Error(`Unknown correction result status: [${statusCode}]`);
+      }
     }
   }
 }
