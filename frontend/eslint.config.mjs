@@ -143,7 +143,6 @@ export default defineConfig(
       'unicorn/prefer-structured-clone': 'off',
       'unicorn/prefer-ternary': 'off',
       'unicorn/prefer-top-level-await': 'off',
-      'unicorn/prefer-type-error': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/switch-case-braces': 'off',
       'unicorn/throw-new-error': 'off',
