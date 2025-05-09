@@ -89,6 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const countryService = appContainer.get(TYPES.domain.services.CountryService);
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
+  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedRenewState({ params, request, session });
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -149,7 +150,7 @@ export async function action({ context: { appContainer, session }, params, reque
     city: formattedHomeAddress.city,
     postalCode: formattedHomeAddress.postalZipCode,
     provinceCode: formattedHomeAddress.provinceState,
-    userId: 'anonymous',
+    userId: idToken.sub,
   });
 
   if (addressCorrectionResult.status === 'not-correct') {
@@ -182,7 +183,6 @@ export async function action({ context: { appContainer, session }, params, reque
     state: { homeAddress, isHomeAddressSameAsMailingAddress: false },
   });
 
-  const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-home-address', { userId: idToken.sub });
 
   if (state.editMode === false && isInvitationToApplyClient(state.clientApplication)) {

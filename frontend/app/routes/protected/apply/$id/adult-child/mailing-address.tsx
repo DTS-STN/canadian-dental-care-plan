@@ -89,6 +89,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
 
   securityHandler.validateCsrfToken({ formData, session });
+
+  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
@@ -163,7 +165,7 @@ export async function action({ context: { appContainer, session }, params, reque
     city: formattedMailingAddress.city,
     postalCode: formattedMailingAddress.postalZipCode,
     provinceCode: formattedMailingAddress.provinceState,
-    userId: 'anonymous',
+    userId: idToken.sub,
   });
 
   if (addressCorrectionResult.status === 'not-correct') {
@@ -200,7 +202,6 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.mailing-address', { userId: idToken.sub });
 
   if (state.editMode) {
