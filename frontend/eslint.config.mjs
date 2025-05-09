@@ -145,7 +145,6 @@ export default defineConfig(
       'unicorn/prefer-top-level-await': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/switch-case-braces': 'off',
-      'unicorn/throw-new-error': 'off',
     },
   },
 );
