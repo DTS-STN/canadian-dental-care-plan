@@ -1,6 +1,6 @@
-import { PlaywrightBasePage } from './playwright-base-page';
+import { BasePage } from '../../base-page';
 
-export class PlaywrightApplyPage extends PlaywrightBasePage {
+export class InitialPage extends BasePage {
   async gotoIndexPage() {
     await this.page.goto('/en/apply');
   }

@@ -1,14 +1,14 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyAdultPage } from '../../models/protected/playwright-apply-adult-page';
-import { PlaywrightApplyPage } from '../../models/protected/playwright-apply-page';
+import { AdultPage } from '../../pages/protected/apply/adult-page';
+import { InitialPage } from '../../pages/protected/apply/initial-page';
 import { acceptLegalCheckboxes, calculateDOB, clickContinue, fillApplicantInformationForm, fillOutAddress } from '../../utils/helpers';
 
 test.describe('Adult category', () => {
   test.beforeEach('Navigate to adult application', async ({ page }) => {
     test.setTimeout(60_000);
 
-    const applyPage = new PlaywrightApplyPage(page);
+    const applyPage = new InitialPage(page);
     await applyPage.gotoIndexPage();
 
     // Accept Terms
@@ -29,7 +29,7 @@ test.describe('Adult category', () => {
 
   // TODO: Add test cases for living-independently and new-or-existing-user
   test('Should complete flow as adult applicant', async ({ page }) => {
-    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+    const applyAdultPage = new AdultPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
@@ -134,7 +134,7 @@ test.describe('Adult category', () => {
   });
 
   test('Applicant is under 16 years old', async ({ page }) => {
-    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+    const applyAdultPage = new AdultPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
@@ -151,7 +151,7 @@ test.describe('Adult category', () => {
   });
 
   test('Applicant is 16 or 17 years old and lives with parents', async ({ page }) => {
-    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+    const applyAdultPage = new AdultPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
@@ -175,7 +175,7 @@ test.describe('Adult category', () => {
   });
 
   test('Applicant is 16 or 17 years old and does not lives with parents', async ({ page }) => {
-    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+    const applyAdultPage = new AdultPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
@@ -207,7 +207,7 @@ test.describe('Adult category', () => {
   });
 
   test('Applicantis born on 2006', async ({ page }) => {
-    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+    const applyAdultPage = new AdultPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');

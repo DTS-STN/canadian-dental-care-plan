@@ -1,6 +1,6 @@
-import { PlaywrightBasePage } from '../playwright-base-page';
+import { BasePage } from '../../base-page';
 
-export class PlaywrightApplyAdultPage extends PlaywrightBasePage {
+export class AdultPage extends BasePage {
   async isLoaded(
     applyAdultPage:
       | 'applicant-information'

@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
 
-import { PlaywrightApplyChildPage } from '../../../models/playwright-apply-child-page';
-import { PlaywrightApplyPage } from '../../../models/playwright-apply-page';
+import { ChildPage } from '../../../pages/public/apply/child-page';
+import { InitialPage } from '../../../pages/public/apply/initial-page';
 
 test.describe('Children application', () => {
   test.beforeEach('Navigate to child application', async ({ page }) => {
     test.setTimeout(60_000);
-    const applyPage = new PlaywrightApplyPage(page);
+    const applyPage = new InitialPage(page);
     await applyPage.gotoIndexPage();
 
     await applyPage.isLoaded('terms-and-conditions');
@@ -25,7 +25,7 @@ test.describe('Children application', () => {
   });
 
   test('Should return to CDCP main page if child is over 18', async ({ page }) => {
-    const applyChildPage = new PlaywrightApplyChildPage(page);
+    const applyChildPage = new ChildPage(page);
 
     await test.step('Should navigate to children application page', async () => {
       await applyChildPage.isLoaded('children');
@@ -48,7 +48,7 @@ test.describe('Children application', () => {
   });
 
   test('Should return to CDCP main page if applicant is not legal guardian', async ({ page }) => {
-    const applyChildPage = new PlaywrightApplyChildPage(page);
+    const applyChildPage = new ChildPage(page);
 
     await test.step('Should navigate to children application page', async () => {
       await applyChildPage.isLoaded('children');
@@ -71,7 +71,7 @@ test.describe('Children application', () => {
   });
 
   test('Should complete application for children', async ({ page }) => {
-    const applyChildPage = new PlaywrightApplyChildPage(page);
+    const applyChildPage = new ChildPage(page);
 
     await test.step('Should navigate to children application page', async () => {
       await applyChildPage.isLoaded('children');

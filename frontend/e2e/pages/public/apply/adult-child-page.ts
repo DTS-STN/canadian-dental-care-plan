@@ -1,13 +1,13 @@
-import { PlaywrightBasePage } from './playwright-base-page';
+import { BasePage } from '../../base-page';
 
-interface fillApplicantInformationFormArgs {
+interface FillApplicantInformationFormArgs {
   day: string;
   month: string;
   year: string;
   dtcEligible: boolean;
 }
 
-export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
+export class AdultChildPage extends BasePage {
   async isLoaded(
     applyAdultChildPage:
       | 'applicant-information'
@@ -135,7 +135,7 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
   }
 
-  async fillApplicantInformationForm({ day, month, year, dtcEligible }: fillApplicantInformationFormArgs) {
+  async fillApplicantInformationForm({ day, month, year, dtcEligible }: FillApplicantInformationFormArgs) {
     await this.isLoaded('applicant-information');
     await this.page.getByRole('textbox', { name: 'First name' }).fill('John');
     await this.page.getByRole('textbox', { name: 'Last name' }).fill('Smith');

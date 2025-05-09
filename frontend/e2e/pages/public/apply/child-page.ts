@@ -1,7 +1,7 @@
-import { calculateDOB } from '../utils/helpers';
-import { PlaywrightBasePage } from './playwright-base-page';
+import { calculateDOB } from '../../../utils/helpers';
+import { BasePage } from '../../base-page';
 
-export class PlaywrightApplyChildPage extends PlaywrightBasePage {
+export class ChildPage extends BasePage {
   async isLoaded(
     applyChildPage:
       | 'applicant-information'
