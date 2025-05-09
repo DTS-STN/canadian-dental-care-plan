@@ -58,7 +58,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     preferredLanguages,
     defaultState: {
-      ...(state.communicationPreferences ?? {}),
+      ...state.communicationPreferences,
     },
     editMode: state.editMode,
   };

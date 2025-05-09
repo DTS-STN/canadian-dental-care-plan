@@ -65,7 +65,7 @@ function useEnhancedFetcherWithResetInternal<TData = unknown>(options?: UseEnhan
  * @returns Enhanced fetcher with CSRF token option and `isSubmitting` status
  */
 function useEnhancedFetcherInternal<TData = unknown>(key: string, options?: UseEnhancedFetcherOptions): EnhancedFetcher<TData> {
-  const { includeCsrfToken } = { ...DEFAULT_OPTIONS, ...(options ?? {}) };
+  const { includeCsrfToken } = { ...DEFAULT_OPTIONS, ...options };
 
   const fetcher = useFetcher<TData>({ key });
   const FetcherForm = fetcher.Form;
