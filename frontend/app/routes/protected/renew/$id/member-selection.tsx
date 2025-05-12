@@ -43,12 +43,12 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-type Members = {
+type Member = {
   id: string;
   applicantName: string;
   previouslyReviewed: boolean | undefined;
   typeOfApplicant: 'child' | 'primary';
-}[];
+};
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
@@ -62,21 +62,27 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.member-selection', { userId: idToken.sub });
 
-  const members: Members = state.children.map((child) => ({
-    id: child.id,
-    applicantName: `${child.information?.firstName} ${child.information?.lastName}`,
-    previouslyReviewed: child.previouslyReviewed,
-    typeOfApplicant: 'child',
-  }));
+  const members: Member[] = [];
 
-  if (state.clientApplication.typeOfApplication === 'child') {
-    members.unshift({
+  // primary member
+  if (state.clientApplication.typeOfApplication !== 'child') {
+    members.push({
       id: state.id,
       applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`,
       previouslyReviewed: state.previouslyReviewed,
       typeOfApplicant: 'primary',
     });
   }
+
+  // children members
+  members.push(
+    ...state.children.map<Member>((child) => ({
+      id: child.id,
+      applicantName: `${child.information?.firstName} ${child.information?.lastName}`,
+      previouslyReviewed: child.previouslyReviewed,
+      typeOfApplicant: 'child',
+    })),
+  );
 
   return { meta, members, isItaCandidate: isInvitationToApplyClient(state.clientApplication) };
 }
