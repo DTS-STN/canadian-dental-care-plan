@@ -43,6 +43,13 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
+type Members = {
+  id: string;
+  applicantName: string;
+  previouslyReviewed: boolean | undefined;
+  typeOfApplicant: 'child' | 'primary';
+}[];
+
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
@@ -55,11 +62,21 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.member-selection', { userId: idToken.sub });
 
-  const members = (
-    state.clientApplication.typeOfApplication === 'child'
-      ? []
-      : [{ id: state.id, applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`, previouslyReviewed: state.previouslyReviewed, typeOfApplicant: 'primary' }]
-  ).concat(state.children.map((child) => ({ id: child.id, applicantName: `${child.information?.firstName} ${child.information?.lastName}`, previouslyReviewed: child.previouslyReviewed, typeOfApplicant: 'child' })));
+  const members: Members = state.children.map((child) => ({
+    id: child.id,
+    applicantName: `${child.information?.firstName} ${child.information?.lastName}`,
+    previouslyReviewed: child.previouslyReviewed,
+    typeOfApplicant: 'child',
+  }));
+
+  if (state.clientApplication.typeOfApplication === 'child') {
+    members.unshift({
+      id: state.id,
+      applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`,
+      previouslyReviewed: state.previouslyReviewed,
+      typeOfApplicant: 'primary',
+    });
+  }
 
   return { meta, members, isItaCandidate: isInvitationToApplyClient(state.clientApplication) };
 }
