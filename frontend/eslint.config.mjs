@@ -136,7 +136,6 @@ export default defineConfig(
       'unicorn/prefer-global-this': 'off',
       'unicorn/prefer-query-selector': 'off',
       'unicorn/prefer-spread': 'off',
-      'unicorn/prefer-string-slice': 'off',
       'unicorn/prefer-structured-clone': 'off',
       'unicorn/prefer-ternary': 'off',
       'unicorn/prevent-abbreviations': 'off',
