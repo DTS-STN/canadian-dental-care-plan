@@ -165,10 +165,7 @@ export async function action({ context: { appContainer, session }, params, reque
           session,
           state: {
             editModeEmail: parsedDataResult.data.email,
-            contactInformation: {
-              ...state.contactInformation,
-              ...parsedDataResult.data,
-            },
+            editModeCommunicationPreferences: parsedDataResult.data.shouldReceiveEmailCommunication,
             ...(isNewEmail && {
               verifyEmail: {
                 verificationCode,
@@ -186,7 +183,9 @@ export async function action({ context: { appContainer, session }, params, reque
         state: {
           contactInformation: {
             ...state.contactInformation,
-            ...parsedDataResult.data,
+            email: parsedDataResult.data.email,
+            shouldReceiveEmailCommunication: state.editModeCommunicationPreferences,
+            isNewOrUpdatedEmail: parsedDataResult.data.isNewOrUpdatedEmail,
           },
           emailVerified: state.emailVerified,
           verifyEmail: {

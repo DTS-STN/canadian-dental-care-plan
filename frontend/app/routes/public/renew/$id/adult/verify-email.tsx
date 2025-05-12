@@ -164,6 +164,7 @@ export async function action({ context: { appContainer, session }, params, reque
           state: {
             contactInformation: {
               ...state.contactInformation,
+              shouldReceiveEmailCommunication: state.editModeCommunicationPreferences ?? state.contactInformation?.shouldReceiveEmailCommunication,
               email: state.editModeEmail,
             },
             verifyEmail: {

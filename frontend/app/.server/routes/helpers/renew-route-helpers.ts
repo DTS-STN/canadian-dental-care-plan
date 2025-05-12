@@ -70,6 +70,7 @@ export interface RenewState {
     email?: string;
     shouldReceiveEmailCommunication?: boolean;
   };
+  editModeCommunicationPreferences?: boolean
   editModeEmail?: string;
   verifyEmail?: {
     verificationCode: string;
