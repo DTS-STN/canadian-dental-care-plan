@@ -55,7 +55,7 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
 
     const url = new URL(`${this.baseUrl}/CAN/correct`);
     url.searchParams.set('AddressFullText', address);
-    url.searchParams.set('AddressCityName', city.substring(0, this.serverConfig.INTEROP_ADDRESS_VALIDATION_REQUEST_CITY_MAX_LENGTH));
+    url.searchParams.set('AddressCityName', city.slice(0, this.serverConfig.INTEROP_ADDRESS_VALIDATION_REQUEST_CITY_MAX_LENGTH));
     url.searchParams.set('AddressPostalCode', postalCode);
     url.searchParams.set('ProvinceCode', provinceCode);
 
