@@ -1,3 +1,6 @@
+import type { Page } from '@playwright/test';
+import { expect } from '@playwright/test';
+
 import { BasePage } from '../../base-page';
 
 export class InitialPage extends BasePage {
@@ -42,5 +45,15 @@ export class InitialPage extends BasePage {
 
     if (!pageInfo) throw new Error(`applyPage '${applyPage}' not implemented.`);
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
+  }
+
+  async acceptLegalCheckboxes(page: Page) {
+    const checkboxes = ['I have read the Terms and Conditions', 'I have read the Privacy Notice Statement', 'I consent to the sharing of data'];
+
+    for (const label of checkboxes) {
+      const checkbox = page.getByRole('checkbox', { name: label });
+      await expect(checkbox).toBeVisible();
+      await checkbox.check();
+    }
   }
 }
