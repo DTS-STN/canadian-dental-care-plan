@@ -32,6 +32,7 @@ import {
   MockBenefitRenewalRepository,
   MockClientApplicationRepository,
   MockLetterRepository,
+  MockLetterTypeRepository,
   MockVerificationCodeRepository,
 } from '~/.server/domain/repositories';
 import type { MockName } from '~/.server/utils/env.utils';
@@ -96,7 +97,9 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
     options.bind(TYPES.domain.repositories.LetterRepository).to(DefaultLetterRepository).when(isMockEnabled(serverConfig, 'cct', false));
     options.bind(TYPES.domain.repositories.LetterRepository).to(MockLetterRepository).when(isMockEnabled(serverConfig, 'cct', true));
 
-    options.bind(TYPES.domain.repositories.LetterTypeRepository).to(DefaultLetterTypeRepository);
+    options.bind(TYPES.domain.repositories.LetterTypeRepository).to(DefaultLetterTypeRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
+    options.bind(TYPES.domain.repositories.LetterTypeRepository).to(MockLetterTypeRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+
     options.bind(TYPES.domain.repositories.MaritalStatusRepository).to(DefaultMaritalStatusRepository);
 
     options.bind(TYPES.domain.repositories.VerificationCodeRepository).to(DefaultVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', false));
