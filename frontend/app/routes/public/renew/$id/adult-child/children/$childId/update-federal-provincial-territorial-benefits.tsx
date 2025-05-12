@@ -173,8 +173,8 @@ export async function action({ context: { appContainer, session }, params, reque
   if (!parsedFederalBenefitsResult.success || !parsedProvincialTerritorialBenefitsResult.success) {
     return {
       errors: {
-        ...(!parsedFederalBenefitsResult.success ? transformFlattenedError(parsedFederalBenefitsResult.error.flatten()) : {}),
-        ...(!parsedProvincialTerritorialBenefitsResult.success ? transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten()) : {}),
+        ...(parsedFederalBenefitsResult.success ? {} : transformFlattenedError(parsedFederalBenefitsResult.error.flatten())),
+        ...(parsedProvincialTerritorialBenefitsResult.success ? {} : transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten())),
       },
     };
   }

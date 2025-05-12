@@ -198,8 +198,8 @@ export async function action({ context: { appContainer, session }, params, reque
     return data(
       {
         errors: {
-          ...(!parsedDataResult.success ? transformFlattenedError(parsedDataResult.error.flatten()) : {}),
-          ...(!parsedSinDataResult.success ? transformFlattenedError(parsedSinDataResult.error.flatten()) : {}),
+          ...(parsedDataResult.success ? {} : transformFlattenedError(parsedDataResult.error.flatten())),
+          ...(parsedSinDataResult.success ? {} : transformFlattenedError(parsedSinDataResult.error.flatten())),
         },
       },
       { status: 400 },
