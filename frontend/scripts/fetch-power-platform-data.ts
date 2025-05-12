@@ -412,51 +412,50 @@ class DataFetcher {
   public async run(): Promise<void> {
     console.log(chalk.green.bold('🚀 Starting Power Platform Data Fetcher!\n'));
 
-    try {
-      const config = this.getConfig();
-      this.ensureOutputDir(config.outputDir);
+    const config = this.getConfig();
+    this.ensureOutputDir(config.outputDir);
 
-      // Get endpoints to fetch (from CLI, all, or interactive selection)
-      const endpointsToFetch = await this.getEndpointsToFetch(config);
+    // Get endpoints to fetch (from CLI, all, or interactive selection)
+    const endpointsToFetch = await this.getEndpointsToFetch(config);
 
-      // Get access token
-      const accessToken = await this.getAccessToken(config);
+    // Get access token
+    const accessToken = await this.getAccessToken(config);
 
-      // Track success and failure counts
-      const results = {
-        succeeded: 0,
-        failed: 0,
-        total: endpointsToFetch.length,
-      };
+    // Track success and failure counts
+    const results = {
+      succeeded: 0,
+      failed: 0,
+      total: endpointsToFetch.length,
+    };
 
-      // Process endpoints sequentially but continue on error
-      for (const endpoint of endpointsToFetch) {
-        const success = await this.fetchAndSaveData(accessToken, config.resourceUrl, endpoint, config.outputDir);
-        if (success) {
-          results.succeeded++;
-        } else {
-          results.failed++;
-          this.hasErrors = true;
-        }
-      }
-
-      // Final summary message
-      if (this.hasErrors) {
-        console.log(chalk.yellow(`\n⚠️ Data sync completed with some errors: ${results.succeeded}/${results.total} endpoints succeeded, ${results.failed}/${results.total} failed`));
+    // Process endpoints sequentially but continue on error
+    for (const endpoint of endpointsToFetch) {
+      const success = await this.fetchAndSaveData(accessToken, config.resourceUrl, endpoint, config.outputDir);
+      if (success) {
+        results.succeeded++;
       } else {
-        console.log(chalk.green(`\n✨ Data sync completed successfully! ${results.succeeded}/${results.total} endpoints processed 🎉`));
+        results.failed++;
+        this.hasErrors = true;
       }
-    } catch (error) {
-      console.error(chalk.red('\nError in data sync process:'));
-      if (error instanceof Error) {
-        console.error(chalk.red(`  ${error.message}`));
-      } else {
-        console.error(chalk.red(`  ${error}`));
-      }
-      process.exit(1);
+    }
+
+    // Final summary message
+    if (this.hasErrors) {
+      console.log(chalk.yellow(`\n⚠️ Data sync completed with some errors: ${results.succeeded}/${results.total} endpoints succeeded, ${results.failed}/${results.total} failed`));
+    } else {
+      console.log(chalk.green(`\n✨ Data sync completed successfully! ${results.succeeded}/${results.total} endpoints processed 🎉`));
     }
   }
 }
 
-const fetcher = new DataFetcher();
-await fetcher.run();
+try {
+  const fetcher = new DataFetcher();
+  await fetcher.run();
+} catch (error) {
+  console.error(chalk.red('\n❌ Error in Power Platform Data Fetcher process:'));
+  if (error instanceof Error) {
+    console.error(chalk.red(`  ${error.message}`));
+  } else {
+    console.error(chalk.red(`  ${error}`));
+  }
+}
