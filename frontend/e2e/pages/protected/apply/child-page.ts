@@ -205,10 +205,6 @@ export class ChildPage extends BasePage {
     } else {
       await page.getByRole('radio', { name: 'No, this child does not have a SIN', exact: true }).check();
     }
-    if (isGuardian) {
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
-    } else {
-      await page.getByRole('radio', { name: 'No', exact: true }).check();
-    }
+    await (isGuardian ? page.getByRole('radio', { name: 'Yes', exact: true }).check() : page.getByRole('radio', { name: 'No', exact: true }).check());
   }
 }
