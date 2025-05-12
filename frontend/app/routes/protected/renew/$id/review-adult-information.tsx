@@ -71,39 +71,38 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const communicationPreference = state.communicationPreferences
-    ? appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.communicationPreferences.preferredMethod, locale)
-    : appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService).getLocalizedPreferredCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethod, locale);
-  const maritalStatus = state.maritalStatus
-    ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name
-    : state.clientApplication.applicantInformation.maritalStatus
-      ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.clientApplication.applicantInformation.maritalStatus, locale).name
-      : (() => {
-          throw new Error('Expected state.clientApplication.applicantInformation.maritalStatus to be defined');
-        })();
-  const preferredLanguage = state.communicationPreferences?.preferredLanguage
-    ? appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale).name
-    : appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
+  const preferredCommunicationMethodService = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService);
+  const maritalStatusService = appContainer.get(TYPES.domain.services.MaritalStatusService);
+  const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
+  const countryService = appContainer.get(TYPES.domain.services.CountryService);
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
+  const communicationPreferredMethodId = state.communicationPreferences?.preferredMethod ?? state.clientApplication.communicationPreferences.preferredMethod;
+  const communicationPreferredMethodName = preferredCommunicationMethodService.getLocalizedPreferredCommunicationMethodById(communicationPreferredMethodId, locale).name;
+
+  const maritalStatusId = state.maritalStatus ?? state.clientApplication.applicantInformation.maritalStatus;
+  invariant(typeof maritalStatusId === 'string', 'Expected maritalStatusId to be defined');
+  const maritalStatusName = maritalStatusService.getLocalizedMaritalStatusById(maritalStatusId, locale).name;
+
+  const communicationPreferredLanguageId = state.communicationPreferences?.preferredLanguage ?? state.clientApplication.communicationPreferences.preferredLanguage;
+  const communicationPreferredLanguageName = preferredLanguageService.getLocalizedPreferredLanguageById(communicationPreferredLanguageId, locale).name;
+
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? provinceTerritoryStateService.getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
   const clientApplicationMailingProvinceTerritoryStateAbbr = state.clientApplication.contactInformation.mailingProvince
-    ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince).abbr
-    : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
-  const clientApplicationHomeProvinceTerritoryStateAbbr = state.clientApplication.contactInformation.homeProvince
-    ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince).abbr
+    ? provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince).abbr
     : undefined;
 
-  const mailingCountryAbbr = state.mailingAddress?.country
-    ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale).name
-    : appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.mailingCountry, locale).name;
-  const homeCountryAbbr = state.homeAddress?.country
-    ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale).name
-    : state.clientApplication.contactInformation.homeCountry
-      ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale).name
-      : (() => {
-          throw new Error('Expected state.clientApplication.contactInformation.homeCountry to be defined');
-        })();
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? provinceTerritoryStateService.getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
+  const clientApplicationHomeProvinceTerritoryStateAbbr = state.clientApplication.contactInformation.homeProvince ? provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince).abbr : undefined;
+
+  const mailingCountryId = state.mailingAddress?.country ?? state.clientApplication.contactInformation.mailingCountry;
+  const mailingCountryName = countryService.getLocalizedCountryById(mailingCountryId, locale).name;
+
+  const homeCountryId = state.homeAddress?.country ?? state.clientApplication.contactInformation.homeCountry;
+  invariant(typeof homeCountryId === 'string', 'Expected homeCountryId to be defined');
+  const homeCountryName = countryService.getLocalizedCountryById(homeCountryId, locale).name;
 
   const userInfo = {
     firstName: state.clientApplication.applicantInformation.firstName,
@@ -113,10 +112,10 @@ export async function loader({ context: { appContainer, session }, params, reque
     phoneNumber: state.contactInformation?.phoneNumber,
     altPhoneNumber: state.contactInformation?.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
-    maritalStatus: maritalStatus,
+    maritalStatus: maritalStatusName,
     contactInformationEmail: state.contactInformation?.email,
-    communicationPreference: communicationPreference.name,
-    preferredLanguage: preferredLanguage,
+    communicationPreference: communicationPreferredMethodName,
+    preferredLanguage: communicationPreferredLanguageName,
     clientApplicationEmail: state.clientApplication.communicationPreferences.email,
     isItaClient: isInvitationToApplyClient(state.clientApplication),
   };
@@ -136,14 +135,14 @@ export async function loader({ context: { appContainer, session }, params, reque
         city: state.mailingAddress.city,
         province: mailingProvinceTerritoryStateAbbr,
         postalCode: state.mailingAddress.postalCode,
-        country: mailingCountryAbbr,
+        country: mailingCountryName,
       }
     : {
         address: state.clientApplication.contactInformation.mailingAddress,
         city: state.clientApplication.contactInformation.mailingCity,
         province: clientApplicationHomeProvinceTerritoryStateAbbr,
         postalCode: state.clientApplication.contactInformation.mailingPostalCode,
-        country: mailingCountryAbbr,
+        country: mailingCountryName,
         apartment: state.clientApplication.contactInformation.mailingApartment,
       };
 
@@ -155,7 +154,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       city: state.homeAddress.city,
       provinceState: homeProvinceTerritoryStateAbbr,
       postalZipCode: state.homeAddress.postalCode,
-      country: homeCountryAbbr,
+      country: homeCountryName,
     };
   } else {
     invariant(state.clientApplication.contactInformation.homeAddress, 'Expected state.clientApplication.contactInformation.homeAddress to be defined');
@@ -166,26 +165,24 @@ export async function loader({ context: { appContainer, session }, params, reque
       city: state.clientApplication.contactInformation.homeCity,
       provinceState: clientApplicationMailingProvinceTerritoryStateAbbr,
       postalZipCode: state.clientApplication.contactInformation.homePostalCode,
-      country: homeCountryAbbr,
+      country: homeCountryName,
       apartment: state.clientApplication.contactInformation.homeApartment,
     };
   }
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
-    ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
-    : undefined;
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram ? federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
 
   const selectedProvincialBenefit = state.dentalBenefits?.provincialTerritorialSocialProgram
-    ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    ? provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const clientDentalBenefits = state.clientApplication.dentalBenefits.flatMap((id) => {
-    const federalProgram = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findLocalizedFederalGovernmentInsurancePlanById(id, locale);
+    const federalProgram = federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
     if (federalProgram) return [federalProgram.name];
 
-    const provincialProgram = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
+    const provincialProgram = provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
     if (provincialProgram) return [provincialProgram.name];
 
     return [];

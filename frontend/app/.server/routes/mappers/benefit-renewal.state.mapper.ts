@@ -22,6 +22,7 @@ import type {
   RenewalCommunicationPreferencesDto,
   RenewalContactInformationDto,
   RenewalPartnerInformationDto,
+  TypeOfApplicationDto,
 } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
 import type {
@@ -189,6 +190,11 @@ interface ToPartnerInformationArgs {
   existingPartnerInformation?: ReadonlyObjectDeep<ClientPartnerInformationDto>;
   hasMaritalStatusChanged: boolean;
   renewedPartnerInformation?: PartnerInformationState;
+}
+
+interface ToTypeOfApplicationArgs {
+  applicantStateCompleted: boolean;
+  renewedChildren: ChildState[];
 }
 
 @injectable()
@@ -545,8 +551,19 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedPartnerInformation: partnerInformation,
       }),
       userId,
-      typeOfApplication: applicantStateCompleted === false && children.length > 0 ? 'child' : children.length === 0 ? 'adult' : 'adult-child',
+      typeOfApplication: this.toTypeOfApplication({
+        applicantStateCompleted,
+        renewedChildren: children,
+      }),
     };
+  }
+
+  private toTypeOfApplication({ applicantStateCompleted, renewedChildren }: ToTypeOfApplicationArgs): TypeOfApplicationDto {
+    if (applicantStateCompleted === false && renewedChildren.length > 0) {
+      return 'child';
+    }
+
+    return renewedChildren.length === 0 ? 'adult' : 'adult-child';
   }
 
   private toApplicantInformation({ existingApplicantInformation, hasMaritalStatusChanged, renewedMaritalStatus }: ToApplicantInformationArgs): RenewalApplicantInformationDto {
