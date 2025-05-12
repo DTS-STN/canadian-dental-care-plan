@@ -143,11 +143,7 @@ export class AdultChildPage extends BasePage {
     await this.page.getByRole('combobox', { name: 'Month' }).selectOption(month);
     await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
     await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-    if (dtcEligible) {
-      await this.page.getByRole('radio', { name: 'Yes', exact: true }).check();
-    } else {
-      await this.page.getByRole('radio', { name: 'No', exact: true }).check();
-    }
+    await this.page.getByRole('radio', { name: dtcEligible ? 'Yes' : 'No', exact: true }).check();
   }
 
   async fillCommunicationForm() {
