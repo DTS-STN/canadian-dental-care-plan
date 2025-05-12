@@ -1,14 +1,13 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyAdultChildPage } from '../../../models/playwright-apply-adult-child-page';
-// import { PlaywrightApplyAdultPage } from '../../../models/PlaywrightApplyAdultPage';
-import { PlaywrightApplyPage } from '../../../models/playwright-apply-page';
+import { AdultChildPage } from '../../../pages/public/apply/adult-child-page';
+import { InitialPage } from '../../../pages/public/apply/initial-page';
 import { calculateDOB } from '../../../utils/helpers';
 
-test.describe('Children application', () => {
+test.describe('Adult category', () => {
   test.beforeEach('Navigate to adult and child application', async ({ page }) => {
     test.setTimeout(60_000);
-    const applyPage = new PlaywrightApplyPage(page);
+    const applyPage = new InitialPage(page);
     await applyPage.gotoIndexPage();
 
     await applyPage.isLoaded('terms-and-conditions');
@@ -28,36 +27,39 @@ test.describe('Children application', () => {
     await page.getByRole('button', { name: 'Continue' }).click();
   });
 
-  test('Child is not eligible, applicant want tp apply for themself', async ({ page }) => {
-    const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  test('Should return to CDCP main page if applicant and child are not eligible', async ({ page }) => {
+    const applyAdultChildPage = new AdultChildPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
-      const { year, month, day } = calculateDOB(70);
+      const { year, month, day } = calculateDOB(35);
       await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
-    // TODO: Add the rest of the children flow tests.
+
+    // TODO: Add remaining tests when pages are added/reworked.
   });
 
-  test('applicant is not eligible to apply for children, but want to apply for themself', async ({ page }) => {
-    const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  test('Should navigate to child flow if applicant is not eligible but wish to apply for children', async ({ page }) => {
+    const applyAdultChildPage = new AdultChildPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
-      const { year, month, day } = calculateDOB(70);
+      const { year, month, day } = calculateDOB(35);
       await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
-    // TODO: Add the rest of the children flow tests.
+
+    // TODO: Add remaining tests when pages are added/reworked.
   });
 
-  test('Should complete application if applicant is senior and child is under 18', async ({ page }) => {
-    const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  test('Should navigate to adult flow if child is not eligible but applicant wish to apply for themself', async ({ page }) => {
+    const applyAdultChildPage = new AdultChildPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
-      const { year, month, day } = calculateDOB(70);
+      const { year, month, day } = calculateDOB(35);
       await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
-    // TODO: Add the rest of the children flow tests.
+
+    // TODO: Add remaining tests when pages are added/reworked.
   });
 });

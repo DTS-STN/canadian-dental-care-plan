@@ -1,13 +1,13 @@
 import { test } from '@playwright/test';
 
-import { PlaywrightApplyAdultPage } from '../../../models/playwright-apply-adult-page';
-import { PlaywrightApplyPage } from '../../../models/playwright-apply-page';
+import { AdultPage } from '../../../pages/public/apply/adult-page';
+import { InitialPage } from '../../../pages/public/apply/initial-page';
 import { calculateDOB } from '../../../utils/helpers';
 
-test.describe('Adult category', () => {
+test.describe('Youth category', () => {
   test.beforeEach('Navigate to adult application', async ({ page }) => {
     test.setTimeout(60_000);
-    const applyPage = new PlaywrightApplyPage(page);
+    const applyPage = new InitialPage(page);
     await applyPage.gotoIndexPage();
 
     await applyPage.isLoaded('terms-and-conditions');
@@ -27,8 +27,8 @@ test.describe('Adult category', () => {
     await page.getByRole('button', { name: 'Continue' }).click();
   });
 
-  test('Should complete flow as adult applicant', async ({ page }) => {
-    const applyAdultPage = new PlaywrightApplyAdultPage(page);
+  test('Should return to CDCP main page if applicant is 16 or 17 and not living independently', async ({ page }) => {
+    const applyAdultPage = new AdultPage(page);
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
@@ -37,7 +37,26 @@ test.describe('Adult category', () => {
       await page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
       await page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('900000001');
 
-      const { year, month, day } = calculateDOB(35);
+      const { year, month, day } = calculateDOB(16);
+      await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
+      await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
+      await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
+
+      await page.getByRole('button', { name: 'Continue' }).click();
+    });
+  });
+
+  test('Should complete flow as youth applicant', async ({ page }) => {
+    const applyAdultPage = new AdultPage(page);
+
+    await test.step('Should navigate to applicant information page', async () => {
+      await applyAdultPage.isLoaded('applicant-information');
+
+      await page.getByRole('textbox', { name: 'First name' }).fill('John');
+      await page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
+      await page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('900000001');
+
+      const { year, month, day } = calculateDOB(16);
       await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
       await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
       await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
