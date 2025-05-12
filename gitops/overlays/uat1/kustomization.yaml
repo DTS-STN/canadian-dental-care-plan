@@ -18,9 +18,9 @@ resources:
   - ../../base/maintenance/
   - ../../base/redis/
   - ./external-secrets.yaml
-  # TODO :: Remove when letters maintenance is no longer needed
-  # - ./ingresses.yaml
-  - ./ingresses-letters-maintenance.yaml
+  - ./ingresses.yaml
+  # Uncomment if we want to enable letters maintenance
+  # - ./ingresses-letters-maintenance.yaml
 patches:
   - path: ./patches/deployments.yaml
   - path: ./patches/deployments-maintenance.yaml
