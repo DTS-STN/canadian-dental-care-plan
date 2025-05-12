@@ -182,8 +182,8 @@ export async function action({ context: { appContainer, session }, params, reque
     return data(
       {
         errors: {
-          ...(!parsedFederalBenefitsResult.success ? transformFlattenedError(parsedFederalBenefitsResult.error.flatten()) : {}),
-          ...(!parsedProvincialTerritorialBenefitsResult.success ? transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten()) : {}),
+          ...(parsedFederalBenefitsResult.success ? {} : transformFlattenedError(parsedFederalBenefitsResult.error.flatten())),
+          ...(parsedProvincialTerritorialBenefitsResult.success ? {} : transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten())),
         },
       },
       { status: 400 },
