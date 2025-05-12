@@ -1,5 +1,4 @@
 import type { FormEvent } from 'react';
-import { useEffect } from 'react';
 
 import { data, redirect } from 'react-router';
 
@@ -132,16 +131,6 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
 
     await fetcher.submit(formData, { method: 'POST' });
   }
-
-  useEffect(() => {
-    if (fetcher.data && 'statusId' in fetcher.data) {
-      const targetElement = document.getElementById('status');
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
-        targetElement.focus();
-      }
-    }
-  }, [fetcher.data]);
 
   return (
     <div className="max-w-prose">

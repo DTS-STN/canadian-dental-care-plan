@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { redirect } from 'react-router';
 
@@ -248,16 +248,6 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
 
     await fetcher.submit(formData, { method: 'POST' });
   }
-
-  useEffect(() => {
-    if (fetcher.data && 'statusId' in fetcher.data) {
-      const targetElement = document.getElementById('status');
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
-        targetElement.focus();
-      }
-    }
-  }, [fetcher.data]);
 
   function handleOnChildHasSinChanged(e: React.ChangeEvent<HTMLInputElement>) {
     setChildHasSinState(e.target.value === CHILD_HAS_SIN.yes);
