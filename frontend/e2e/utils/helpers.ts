@@ -91,9 +91,5 @@ export async function fillChildrenInformationForm({ firstName, lastName, sin, da
   } else {
     await page.getByRole('radio', { name: 'No, this child does not have a SIN', exact: true }).check();
   }
-  if (isGuardian) {
-    await page.getByRole('radio', { name: 'Yes', exact: true }).check();
-  } else {
-    await page.getByRole('radio', { name: 'No', exact: true }).check();
-  }
+  await page.getByRole('radio', { name: isGuardian ? 'Yes' : 'No', exact: true }).check();
 }
