@@ -81,7 +81,6 @@ class ScriptRunner {
         console.log(chalk.yellow('🛑 Terminating running scripts...'));
         this.currentProcess.kill('SIGTERM');
       }
-      process.exit(0);
     };
 
     process.on('SIGINT', shutdown);
@@ -162,42 +161,44 @@ class ScriptRunner {
     console.log(chalk.green.bold('🚀 Welcome to the Script Runner!\n'));
     console.log(chalk.magenta('📋 Select scripts to run. They will be executed in the order selected.\n'));
 
-    try {
-      const scriptList = await this.getScriptList();
+    const scriptList = await this.getScriptList();
 
-      if (scriptList.length === 0) {
-        console.log(chalk.yellow('⚠️ No scripts found in package.json.'));
-        return;
-      }
-
-      const selected = await checkbox({
-        message: 'Select the scripts to run:',
-        choices: scriptList.map((script) => ({
-          value: script.value,
-          name: `${script.emoji} ${script.name}`,
-          description: script.description,
-          checked: script.checked,
-        })),
-        loop: false,
-        required: true,
-        pageSize: 10,
-      });
-
-      const selectedScripts = scriptList.filter((script) => selected.includes(script.value));
-
-      for (const script of selectedScripts) {
-        await this.execScript(script);
-      }
-
-      console.log(chalk.green('\n✨ All selected scripts completed successfully! 🎉'));
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(chalk.red('\n❌ Error:', error.message));
-      }
-      process.exit(1);
+    if (scriptList.length === 0) {
+      console.log(chalk.yellow('⚠️ No scripts found in package.json.'));
+      return;
     }
+
+    const selected = await checkbox({
+      message: 'Select the scripts to run:',
+      choices: scriptList.map((script) => ({
+        value: script.value,
+        name: `${script.emoji} ${script.name}`,
+        description: script.description,
+        checked: script.checked,
+      })),
+      loop: false,
+      required: true,
+      pageSize: 10,
+    });
+
+    const selectedScripts = scriptList.filter((script) => selected.includes(script.value));
+
+    for (const script of selectedScripts) {
+      await this.execScript(script);
+    }
+
+    console.log(chalk.green('\n✨ All selected scripts completed successfully! 🎉'));
   }
 }
 
-const runner = new ScriptRunner();
-await runner.run();
+try {
+  const runner = new ScriptRunner();
+  await runner.run();
+} catch (error) {
+  console.error(chalk.red('\n❌ Error in Script Runner process:'));
+  if (error instanceof Error) {
+    console.error(chalk.red(`  ${error.message}`));
+  } else {
+    console.error(chalk.red(`  ${error}`));
+  }
+}

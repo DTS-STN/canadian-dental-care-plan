@@ -130,7 +130,6 @@ export default defineConfig(
       'unicorn/no-array-reduce': 'off',
       'unicorn/no-nested-ternary': 'off',
       'unicorn/no-null': 'off',
-      'unicorn/no-process-exit': 'off',
       'unicorn/no-useless-undefined': ['error', { checkArguments: false }],
       'unicorn/prefer-global-this': 'off',
       'unicorn/prefer-structured-clone': 'off',
