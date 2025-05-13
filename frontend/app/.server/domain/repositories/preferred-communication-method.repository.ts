@@ -29,6 +29,25 @@ export class DefaultPreferredCommunicationMethodRepository implements PreferredC
   }
 
   listAllPreferredCommunicationMethods(): PreferredCommunicationMethodEntity[] {
+    throw new Error('Preferred communication method service is not yet implemented');
+    //TODO: Implement findPreferredCommunicationMethodById service
+  }
+
+  findPreferredCommunicationMethodById(id: string): PreferredCommunicationMethodEntity | null {
+    throw new Error('Preferred communication method service is not yet implemented');
+    //TODO: Implement findPreferredCommunicationMethodById service
+  }
+}
+
+@injectable()
+export class MockPreferredCommunicationMethodRepository implements PreferredCommunicationMethodRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('MockPreferredCommunicationMethodRepository');
+  }
+
+  listAllPreferredCommunicationMethods(): PreferredCommunicationMethodEntity[] {
     this.log.debug('Fetching all preferred communication methods');
     const preferredCommunicationMethodEntities = preferredCommunicationMethodJsonDataSource.value.at(0)?.OptionSet.Options;
 

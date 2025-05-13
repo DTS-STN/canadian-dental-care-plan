@@ -29,6 +29,25 @@ export class DefaultPreferredLanguageRepository implements PreferredLanguageRepo
   }
 
   listAllPreferredLanguages(): PreferredLanguageEntity[] {
+    throw new Error('Preferred language service is not yet implemented');
+    //TODO: Implement listAllPreferredLanguages service
+  }
+
+  findPreferredLanguageById(id: string): PreferredLanguageEntity | null {
+    throw new Error('Preferred language service is not yet implemented');
+    //TODO: Implement listAllPreferredLanguages service
+  }
+}
+
+@injectable()
+export class MockPreferredLanguageRepository implements PreferredLanguageRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('MockPreferredLanguageRepository');
+  }
+
+  listAllPreferredLanguages(): PreferredLanguageEntity[] {
     this.log.debug('Fetching all preferred languages');
     const preferredLanguageEntities = preferredLanguageJsonDataSource.value.at(0)?.OptionSet.Options;
 
