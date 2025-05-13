@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { DefaultMaritalStatusRepository } from '~/.server/domain/repositories';
+import { DefaultMaritalStatusRepository, MockMaritalStatusRepository } from '~/.server/domain/repositories';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -53,8 +53,27 @@ describe('DefaultMaritalStatusRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all marital statuses', () => {
+  it('should throw error on listAllMaritalStatuses call', () => {
     const repository = new DefaultMaritalStatusRepository();
+
+    expect(() => repository.listAllMaritalStatuses()).toThrowError('Marital status service is not yet implemented');
+  });
+
+  it('should throw error on findMaritalStatusById call', () => {
+    const repository = new DefaultMaritalStatusRepository();
+
+    expect(() => repository.findMaritalStatusById('1')).toThrowError('Marital status service is not yet implemented');
+  });
+});
+
+describe('MockMaritalStatusRepository', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
+
+  it('should get all marital statuses', () => {
+    const repository = new MockMaritalStatusRepository();
 
     const maritalStatuses = repository.listAllMaritalStatuses();
 
@@ -95,7 +114,7 @@ describe('DefaultMaritalStatusRepository', () => {
   it('should handle empty marital statuses data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const repository = new DefaultMaritalStatusRepository();
+    const repository = new MockMaritalStatusRepository();
 
     const maritalStatuses = repository.listAllMaritalStatuses();
 
@@ -103,7 +122,7 @@ describe('DefaultMaritalStatusRepository', () => {
   });
 
   it('should get a marital status by id', () => {
-    const repository = new DefaultMaritalStatusRepository();
+    const repository = new MockMaritalStatusRepository();
 
     const maritalStatus = repository.findMaritalStatusById('1');
 
@@ -125,7 +144,7 @@ describe('DefaultMaritalStatusRepository', () => {
   });
 
   it('should return null for non-existent marital status id', () => {
-    const repository = new DefaultMaritalStatusRepository();
+    const repository = new MockMaritalStatusRepository();
 
     const maritalStatus = repository.findMaritalStatusById('non-existent-id');
 

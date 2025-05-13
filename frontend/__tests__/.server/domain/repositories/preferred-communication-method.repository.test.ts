@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { DefaultPreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
+import { DefaultPreferredCommunicationMethodRepository, MockPreferredCommunicationMethodRepository } from '~/.server/domain/repositories';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -53,8 +53,27 @@ describe('DefaultPreferredCommunicationMethodRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all preferred communication methods', () => {
+  it('should throw error on listAllPreferredCommunicationMethods call', () => {
     const repository = new DefaultPreferredCommunicationMethodRepository();
+
+    expect(() => repository.listAllPreferredCommunicationMethods()).toThrowError('Preferred communication method service is not yet implemented');
+  });
+
+  it('should throw error on findPreferredCommunicationMethodById call', () => {
+    const repository = new DefaultPreferredCommunicationMethodRepository();
+
+    expect(() => repository.findPreferredCommunicationMethodById('1')).toThrowError('Preferred communication method service is not yet implemented');
+  });
+});
+
+describe('MockPreferredCommunicationMethodRepository', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
+
+  it('should get all preferred communication methods', () => {
+    const repository = new MockPreferredCommunicationMethodRepository();
 
     const preferredCommunicationMethods = repository.listAllPreferredCommunicationMethods();
 
@@ -95,7 +114,7 @@ describe('DefaultPreferredCommunicationMethodRepository', () => {
   it('should handle empty preferred communication methods data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const repository = new DefaultPreferredCommunicationMethodRepository();
+    const repository = new MockPreferredCommunicationMethodRepository();
 
     const preferredCommunicationMethods = repository.listAllPreferredCommunicationMethods();
 
@@ -103,7 +122,7 @@ describe('DefaultPreferredCommunicationMethodRepository', () => {
   });
 
   it('should get a preferred communication method by id', () => {
-    const repository = new DefaultPreferredCommunicationMethodRepository();
+    const repository = new MockPreferredCommunicationMethodRepository();
 
     const preferredCommunicationMethod = repository.findPreferredCommunicationMethodById('1');
 
@@ -125,7 +144,7 @@ describe('DefaultPreferredCommunicationMethodRepository', () => {
   });
 
   it('should return null for non-existent preferred communication method id', () => {
-    const repository = new DefaultPreferredCommunicationMethodRepository();
+    const repository = new MockPreferredCommunicationMethodRepository();
 
     const preferredCommunicationMethod = repository.findPreferredCommunicationMethodById('non-existent-id');
 
