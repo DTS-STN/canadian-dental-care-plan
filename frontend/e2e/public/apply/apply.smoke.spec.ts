@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 
 import { AdultPage } from '../../pages/public/apply/adult-page';
 import { InitialPage } from '../../pages/public/apply/initial-page';
-import { acceptLegalCheckboxes, clickContinue, fillApplicantInformationForm, fillOutAddress } from '../../utils/helpers';
+import { clickContinue } from '../../utils/helpers';
 
 test.describe('Public Apply Flow - Minimal Scenario', { tag: '@smoke' }, () => {
   test.describe.configure({ timeout: 60_000 });
@@ -14,7 +14,7 @@ test.describe('Public Apply Flow - Minimal Scenario', { tag: '@smoke' }, () => {
     await test.step('Should accept terms and conditions and proceed', async () => {
       await applyPage.gotoIndexPage();
       await applyPage.isLoaded('terms-and-conditions');
-      await acceptLegalCheckboxes(page);
+      await applyPage.acceptLegalCheckboxes(page);
       await clickContinue(page);
     });
 
@@ -32,7 +32,7 @@ test.describe('Public Apply Flow - Minimal Scenario', { tag: '@smoke' }, () => {
 
     await test.step('Should fill out applicant information form and proceed', async () => {
       await applyAdultPage.isLoaded('applicant-information');
-      await fillApplicantInformationForm({ firstName: 'John', lastName: 'Doe', sin: '900000001', day: '1', month: '01', year: '1970', dtcEligible: true, page });
+      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Doe', sin: '900000001', day: '1', month: '01', year: '1970', dtcEligible: true, page });
       await clickContinue(page);
     });
 
@@ -44,7 +44,7 @@ test.describe('Public Apply Flow - Minimal Scenario', { tag: '@smoke' }, () => {
 
     await test.step('Should fill out mailing address and proceed', async () => {
       await applyAdultPage.isLoaded('mailing-address');
-      await fillOutAddress({ address: '123 Fake Street', city: 'Ottawa', country: 'Canada', province: 'Ontario', postalCode: 'K1A 0B1', page });
+      await applyAdultPage.fillOutAddress({ address: '123 Fake Street', city: 'Ottawa', country: 'Canada', province: 'Ontario', postalCode: 'K1A 0B1', page });
       await page.getByRole('checkbox', { name: 'My mailing address is the same as my home address', exact: true }).check();
       await clickContinue(page);
       await page.getByRole('button', { name: 'Use selected address', exact: true }).click();

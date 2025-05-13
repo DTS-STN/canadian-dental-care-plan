@@ -1,4 +1,26 @@
+import type { Page } from '@playwright/test';
+
 import { BasePage } from '../../base-page';
+
+interface FillOutAddressArgs {
+  address: string;
+  city: string;
+  country: string;
+  page: Page;
+  postalCode: string;
+  province: string;
+}
+
+interface FillApplicantInformationFormArgs {
+  firstName: string;
+  lastName: string;
+  sin: string;
+  day: string;
+  month: string;
+  year: string;
+  dtcEligible?: boolean;
+  page: Page;
+}
 
 export class AdultPage extends BasePage {
   async isLoaded(
@@ -111,5 +133,26 @@ export class AdultPage extends BasePage {
 
     if (!pageInfo) throw new Error(`Protected applyAdultPage '${applyAdultPage}' not implemented.`);
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
+  }
+
+  // Reusable function to fill out address
+  async fillOutAddress({ address, city, country, page, postalCode, province }: FillOutAddressArgs) {
+    await page.getByRole('textbox', { name: 'Address', exact: true }).fill(address);
+    await page.getByRole('combobox', { name: 'Country', exact: true }).selectOption(country);
+    await page.getByRole('combobox', { name: 'Province, territory, state, or region', exact: true }).selectOption(province);
+    await page.getByRole('textbox', { name: 'City or town', exact: true }).fill(city);
+    await page.getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
+  }
+
+  async fillApplicantInformationForm({ firstName, lastName, sin, day, month, year, dtcEligible, page }: FillApplicantInformationFormArgs) {
+    await page.getByRole('textbox', { name: 'First name' }).fill(firstName);
+    await page.getByRole('textbox', { name: 'Last name' }).fill(lastName);
+    await page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill(sin);
+    await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
+    await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
+    await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
+    if (dtcEligible !== undefined) {
+      await page.getByRole('radio', { name: dtcEligible ? 'Yes' : 'No', exact: true }).check();
+    }
   }
 }

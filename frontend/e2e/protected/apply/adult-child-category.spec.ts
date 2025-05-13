@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 
 import { AdultChildPage } from '../../pages/protected/apply/adult-child-page';
 import { InitialPage } from '../../pages/protected/apply/initial-page';
-import { acceptLegalCheckboxes, calculateDOB, clickContinue, fillApplicantInformationForm, fillChildrenInformationForm, fillOutAddress } from '../../utils/helpers';
+import { calculateDOB, clickContinue } from '../../utils/helpers';
 
 test.describe('Adult-Child category', () => {
   test.beforeEach('Navigate to adult-child application', async ({ page }) => {
@@ -13,7 +13,7 @@ test.describe('Adult-Child category', () => {
 
     // Accept Terms
     await applyPage.isLoaded('terms-and-conditions');
-    await acceptLegalCheckboxes(page);
+    await applyPage.acceptLegalCheckboxes(page);
     await clickContinue(page);
 
     // Tax Filing Section
@@ -34,7 +34,7 @@ test.describe('Adult-Child category', () => {
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultChildPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(35);
-      await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+      await applyAdultChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
 
       await clickContinue(page);
     });
@@ -53,14 +53,14 @@ test.describe('Adult-Child category', () => {
 
     await test.step('Should navigate to mailing address page', async () => {
       await applyAdultChildPage.isLoaded('mailing-address');
-      await fillOutAddress({ address: '123 Fake Street', city: 'Ottawa', country: 'Canada', province: 'Ontario', postalCode: 'K1A 0B1', page });
+      await applyAdultChildPage.fillOutAddress({ address: '123 Fake Street', city: 'Ottawa', country: 'Canada', province: 'Ontario', postalCode: 'K1A 0B1', page });
       await clickContinue(page);
       await page.getByRole('button', { name: 'Use selected address' }).click();
     });
 
     await test.step('Should navigate to home address page', async () => {
       await applyAdultChildPage.isLoaded('home-address');
-      await fillOutAddress({ address: '123 Maple Street', city: 'Ottawa', country: 'Canada', province: 'Ontario', postalCode: 'K1A 0B1', page });
+      await applyAdultChildPage.fillOutAddress({ address: '123 Maple Street', city: 'Ottawa', country: 'Canada', province: 'Ontario', postalCode: 'K1A 0B1', page });
       await clickContinue(page);
       await page.getByRole('button', { name: 'Use selected address' }).click();
     });
@@ -130,7 +130,7 @@ test.describe('Adult-Child category', () => {
     await test.step('Should navigate to children-information page', async () => {
       await applyAdultChildPage.isLoaded('children-information');
       const { year, month, day } = calculateDOB(10);
-      await fillChildrenInformationForm({ firstName: 'John Jr.', lastName: 'Smith', sin: '800000002', day: day, month: month, year: year, hasSin: true, isGuardian: true, page });
+      await applyAdultChildPage.fillChildrenInformationForm({ firstName: 'John Jr.', lastName: 'Smith', sin: '800000002', day: day, month: month, year: year, hasSin: true, isGuardian: true, page });
       await clickContinue(page);
     });
 
@@ -190,7 +190,7 @@ test.describe('Adult-Child category', () => {
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultChildPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(15);
-      await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+      await applyAdultChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
 
       await clickContinue(page);
     });
@@ -207,7 +207,7 @@ test.describe('Adult-Child category', () => {
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultChildPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(17);
-      await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+      await applyAdultChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
 
       await clickContinue(page);
     });
@@ -231,7 +231,7 @@ test.describe('Adult-Child category', () => {
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultChildPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(17);
-      await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+      await applyAdultChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
 
       await clickContinue(page);
     });
@@ -262,7 +262,7 @@ test.describe('Adult-Child category', () => {
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultChildPage.isLoaded('applicant-information');
-      await fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: '10', month: '10', year: '2006', dtcEligible: true, page });
+      await applyAdultChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: '10', month: '10', year: '2006', dtcEligible: true, page });
 
       await clickContinue(page);
     });
