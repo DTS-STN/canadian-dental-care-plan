@@ -95,6 +95,8 @@ export interface ProtectedRenewState {
     verificationCode: string;
     verificationAttempts: number;
   };
+  readonly editModeEmail?: string;
+  readonly editModeCommunicationPreferences?: boolean;
   readonly emailVerified?: boolean;
   readonly hasAddressChanged?: boolean;
   readonly isHomeAddressSameAsMailingAddress?: boolean;

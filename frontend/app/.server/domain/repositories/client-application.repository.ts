@@ -155,6 +155,13 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
       },
     ],
     [
+      '800000648',
+      {
+        InvitationToApplyIndicator: true,
+        PreviousTaxesFiledIndicator: true,
+      },
+    ],
+    [
       '700000003',
       {
         InvitationToApplyIndicator: false,

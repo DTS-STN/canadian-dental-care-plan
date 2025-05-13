@@ -11,9 +11,10 @@ import type { Route } from './+types/confirm-email';
 
 import { TYPES } from '~/.server/constants';
 import { isInvitationToApplyClient, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { Button } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
@@ -37,6 +38,8 @@ const SHOULD_RECEIVE_EMAIL_COMMUNICATION_OPTION = {
   yes: 'yes',
   no: 'no',
 } as const;
+
+export const PREFERRED_LANGUAGE = { en: 'English', fr: 'French' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -78,8 +81,10 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
@@ -127,6 +132,82 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+  }
+
+  if (parsedDataResult.data.email) {
+    const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
+    const isNewEmail = state.contactInformation?.email !== parsedDataResult.data.email;
+    const verificationCode = isNewEmail || state.verifyEmail === undefined ? verificationCodeService.createVerificationCode(idToken.sub) : state.verifyEmail.verificationCode;
+
+    if (isNewEmail) {
+      const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
+      const preferredLanguage = preferredLanguageService.getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
+
+      await verificationCodeService.sendVerificationCodeEmail({
+        email: parsedDataResult.data.email,
+        verificationCode,
+        preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
+        userId: idToken.sub,
+      });
+    }
+
+    if (state.editMode) {
+      // Redirect to /verify-email only if emailVerified is false
+      if (isNewEmail || !state.emailVerified) {
+        saveProtectedRenewState({
+          params,
+          request,
+          session,
+          state: {
+            editModeEmail: parsedDataResult.data.email,
+            editModeCommunicationPreferences: parsedDataResult.data.shouldReceiveEmailCommunication,
+            ...(isNewEmail && {
+              verifyEmail: {
+                verificationCode,
+                verificationAttempts: 0,
+              },
+            }),
+          },
+        });
+        return redirect(getPathById('protected/renew/$id/ita/verify-email', params));
+      }
+      // Save editMode data to state.
+      saveProtectedRenewState({
+        params,
+        request,
+        session,
+        state: {
+          contactInformation: {
+            ...state.contactInformation,
+            ...parsedDataResult.data,
+          },
+          emailVerified: state.emailVerified,
+          verifyEmail: {
+            verificationCode,
+            verificationAttempts: 0,
+          },
+        },
+      });
+      return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+    }
+
+    saveProtectedRenewState({
+      params,
+      request,
+      session,
+      state: {
+        contactInformation: { ...state.contactInformation, ...parsedDataResult.data },
+        emailVerified: isNewEmail ? false : state.emailVerified,
+        ...(isNewEmail && {
+          verifyEmail: {
+            verificationCode,
+            verificationAttempts: 0,
+          },
+        }),
+      },
+    });
+
+    return redirect(getPathById('protected/renew/$id/ita/verify-email', params));
   }
 
   saveProtectedRenewState({ params, request, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
@@ -224,9 +305,9 @@ export default function ProtectedRenewProtectedConfirmEmail({ loaderData, params
             <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Email click">
               {t('protected-renew:confirm-email.save-btn')}
             </Button>
-            <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Email click">
+            <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Email click">
               {t('protected-renew:confirm-email.cancel-btn')}
-            </Button>
+            </ButtonLink>
           </div>
         ) : (
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
