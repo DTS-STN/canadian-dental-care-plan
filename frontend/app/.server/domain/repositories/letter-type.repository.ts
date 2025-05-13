@@ -29,6 +29,25 @@ export class DefaultLetterTypeRepository implements LetterTypeRepository {
   }
 
   listAllLetterTypes(): ReadonlyArray<LetterTypeEntity> {
+    throw new Error('Letter type service is not yet implemented');
+    //TODO: Implement listAllLetterTypes service
+  }
+
+  findLetterTypeById(id: string): LetterTypeEntity | null {
+    throw new Error('Letter type service is not yet implemented');
+    //TODO: Implement findLetterTypeById service
+  }
+}
+
+@injectable()
+export class MockLetterTypeRepository implements LetterTypeRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('MockLetterTypeRepository');
+  }
+
+  listAllLetterTypes(): ReadonlyArray<LetterTypeEntity> {
     this.log.debug('Fetching all letter types');
     const letterTypeEntities = letterTypeJsonDataSource.value.at(0)?.OptionSet.Options;
 
