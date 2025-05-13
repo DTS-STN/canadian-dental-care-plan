@@ -11,7 +11,7 @@ interface FillOutAddressArgs {
   province: string;
 }
 
-interface fillApplicantInformationFormArgs {
+interface FillApplicantInformationFormArgs {
   firstName: string;
   lastName: string;
   sin: string;
@@ -120,7 +120,7 @@ export class AdultPage extends BasePage {
     await page.getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
   }
 
-  async fillApplicantInformationForm({ firstName, lastName, sin, day, month, year, dtcEligible, page }: fillApplicantInformationFormArgs) {
+  async fillApplicantInformationForm({ firstName, lastName, sin, day, month, year, dtcEligible, page }: FillApplicantInformationFormArgs) {
     await page.getByRole('textbox', { name: 'First name' }).fill(firstName);
     await page.getByRole('textbox', { name: 'Last name' }).fill(lastName);
     await page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill(sin);

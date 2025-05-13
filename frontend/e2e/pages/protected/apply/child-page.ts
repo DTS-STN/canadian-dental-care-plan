@@ -11,7 +11,7 @@ interface FillOutAddressArgs {
   province: string;
 }
 
-interface fillApplicantInformationFormArgs {
+interface FillApplicantInformationFormArgs {
   firstName: string;
   lastName: string;
   sin: string;
@@ -22,7 +22,7 @@ interface fillApplicantInformationFormArgs {
   page: Page;
 }
 
-interface fillChildrenInformationFormArgs {
+interface FillChildrenInformationFormArgs {
   firstName: string;
   lastName: string;
   sin?: string;
@@ -181,7 +181,7 @@ export class ChildPage extends BasePage {
     await page.getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
   }
 
-  async fillApplicantInformationForm({ firstName, lastName, sin, day, month, year, dtcEligible, page }: fillApplicantInformationFormArgs) {
+  async fillApplicantInformationForm({ firstName, lastName, sin, day, month, year, dtcEligible, page }: FillApplicantInformationFormArgs) {
     await page.getByRole('textbox', { name: 'First name' }).fill(firstName);
     await page.getByRole('textbox', { name: 'Last name' }).fill(lastName);
     await page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill(sin);
@@ -193,7 +193,7 @@ export class ChildPage extends BasePage {
     }
   }
 
-  async fillChildrenInformationForm({ firstName, lastName, sin, day, month, year, hasSin, isGuardian, page }: fillChildrenInformationFormArgs) {
+  async fillChildrenInformationForm({ firstName, lastName, sin, day, month, year, hasSin, isGuardian, page }: FillChildrenInformationFormArgs) {
     await page.getByRole('textbox', { name: 'First name' }).fill(firstName);
     await page.getByRole('textbox', { name: 'Last name' }).fill(lastName);
     await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
