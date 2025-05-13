@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { DefaultPreferredLanguageRepository } from '~/.server/domain/repositories';
+import { DefaultPreferredLanguageRepository, MockPreferredLanguageRepository } from '~/.server/domain/repositories';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -41,8 +41,27 @@ describe('DefaultPreferredLanguageRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all preferred languages', () => {
+  it('should throw error on listAllPreferredLanguages call', () => {
     const repository = new DefaultPreferredLanguageRepository();
+
+    expect(() => repository.listAllPreferredLanguages()).toThrowError('Preferred language service is not yet implemented');
+  });
+
+  it('should throw error on findPreferredLanguageById call', () => {
+    const repository = new DefaultPreferredLanguageRepository();
+
+    expect(() => repository.findPreferredLanguageById('1033')).toThrowError('Preferred language service is not yet implemented');
+  });
+});
+
+describe('MockPreferredLanguageRepository', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
+
+  it('should get all preferred languages', () => {
+    const repository = new MockPreferredLanguageRepository();
 
     const preferredLanguages = repository.listAllPreferredLanguages();
 
@@ -73,7 +92,7 @@ describe('DefaultPreferredLanguageRepository', () => {
       value: [],
     });
 
-    const repository = new DefaultPreferredLanguageRepository();
+    const repository = new MockPreferredLanguageRepository();
 
     const preferredLanguages = repository.listAllPreferredLanguages();
 
@@ -81,7 +100,7 @@ describe('DefaultPreferredLanguageRepository', () => {
   });
 
   it('should get a preferred language by id', () => {
-    const repository = new DefaultPreferredLanguageRepository();
+    const repository = new MockPreferredLanguageRepository();
 
     const preferredLanguage = repository.findPreferredLanguageById('1033');
 
@@ -103,7 +122,7 @@ describe('DefaultPreferredLanguageRepository', () => {
   });
 
   it('should return null for non-existent preferred language id', () => {
-    const repository = new DefaultPreferredLanguageRepository();
+    const repository = new MockPreferredLanguageRepository();
 
     const preferredLanguage = repository.findPreferredLanguageById('non-existent-id');
 

@@ -29,6 +29,25 @@ export class DefaultMaritalStatusRepository implements MaritalStatusRepository {
   }
 
   listAllMaritalStatuses(): MaritalStatusEntity[] {
+    throw new Error('Marital status service is not yet implemented');
+    //TODO: Implement listAllMaritalStatuses service
+  }
+
+  findMaritalStatusById(id: string): MaritalStatusEntity | null {
+    throw new Error('Marital status service is not yet implemented');
+    //TODO: Implement findMaritalStatusById service
+  }
+}
+
+@injectable()
+export class MockMaritalStatusRepository implements MaritalStatusRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('MockMaritalStatusRepository');
+  }
+
+  listAllMaritalStatuses(): MaritalStatusEntity[] {
     this.log.debug('Fetching all marital statuses');
     const maritalStatusEntities = maritalStatusJsonDataSource.value.at(0)?.OptionSet.Options;
 
