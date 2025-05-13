@@ -109,12 +109,11 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
     options.bind(TYPES.domain.repositories.VerificationCodeRepository).to(DefaultVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', false));
     options.bind(TYPES.domain.repositories.VerificationCodeRepository).to(MockVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', true));
 
+    options.bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(DefaultPreferredCommunicationMethodRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
+    options.bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(MockPreferredCommunicationMethodRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
 
-    options.bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(DefaultPreferredCommunicationMethodRepository).when(isMockEnabled(serverConfig, 'gc-notify', false));
-    options.bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(MockPreferredCommunicationMethodRepository).when(isMockEnabled(serverConfig, 'gc-notify', true));
-
-    options.bind(TYPES.domain.repositories.PreferredLanguageRepository).to(DefaultPreferredLanguageRepository).when(isMockEnabled(serverConfig, 'gc-notify', false));
-    options.bind(TYPES.domain.repositories.PreferredLanguageRepository).to(MockPreferredLanguageRepository).when(isMockEnabled(serverConfig, 'gc-notify', true));
+    options.bind(TYPES.domain.repositories.PreferredLanguageRepository).to(DefaultPreferredLanguageRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
+    options.bind(TYPES.domain.repositories.PreferredLanguageRepository).to(MockPreferredLanguageRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
 
     options.bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(DefaultProvinceTerritoryStateRepository);
     options.bind(TYPES.domain.repositories.ProvincialGovernmentInsurancePlanRepository).to(DefaultProvincialGovernmentInsurancePlanRepository);
