@@ -767,7 +767,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
     return {
       email: renewedReceiveEmailCommunication ? renewedEmail : undefined,
-      emailVerified,
+      emailVerified: renewedReceiveEmailCommunication ? emailVerified : undefined,
       preferredLanguage: renewedPreferredLanguage ?? existingCommunicationPreferences.preferredLanguage,
       preferredMethod: renewedReceiveEmailCommunication ? this.serverConfig.COMMUNICATION_METHOD_EMAIL_ID : this.serverConfig.COMMUNICATION_METHOD_MAIL_ID,
     };
