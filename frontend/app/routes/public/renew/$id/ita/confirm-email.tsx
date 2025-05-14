@@ -4,6 +4,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -58,7 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     defaultState: {
-      isNewOrUpdatedEmail: state.contactInformation?.isNewOrUpdatedEmail,
+      shouldReceiveEmailCommunication: state.contactInformation?.shouldReceiveEmailCommunication,
       email: state.contactInformation?.email,
     },
     editMode: state.editMode,
@@ -73,17 +74,18 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadRenewItaState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.configs.ServerConfig);
 
   const emailSchema = z
     .object({
-      isNewOrUpdatedEmail: z.nativeEnum(ADD_OR_UPDATE_EMAIL_OPTION, {
+      shouldReceiveEmailCommunication: z.nativeEnum(ADD_OR_UPDATE_EMAIL_OPTION, {
         errorMap: () => ({ message: t('renew-ita:confirm-email.error-message.add-or-update-required') }),
       }),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.isNewOrUpdatedEmail === ADD_OR_UPDATE_EMAIL_OPTION.yes && !val.email) {
+      if (val.shouldReceiveEmailCommunication === ADD_OR_UPDATE_EMAIL_OPTION.yes && !val.email) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-email.error-message.email-required'), path: ['email'] });
       }
 
@@ -105,17 +107,91 @@ export async function action({ context: { appContainer, session }, params, reque
     })
     .transform((val) => ({
       ...val,
-      isNewOrUpdatedEmail: val.isNewOrUpdatedEmail === ADD_OR_UPDATE_EMAIL_OPTION.yes,
+      shouldReceiveEmailCommunication: val.shouldReceiveEmailCommunication === ADD_OR_UPDATE_EMAIL_OPTION.yes,
     }));
 
   const parsedDataResult = emailSchema.safeParse({
-    isNewOrUpdatedEmail: formData.get('isNewOrUpdatedEmail'),
+    shouldReceiveEmailCommunication: formData.get('shouldReceiveEmailCommunication'),
     email: formData.get('email') ? String(formData.get('email')) : undefined,
     confirmEmail: formData.get('confirmEmail') ? String(formData.get('confirmEmail')) : undefined,
   });
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+  }
+
+  if (parsedDataResult.data.email) {
+    const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
+    const isNewEmail = state.contactInformation?.email !== parsedDataResult.data.email;
+    const verificationCode = isNewEmail || state.verifyEmail === undefined ? verificationCodeService.createVerificationCode('anonymous') : state.verifyEmail.verificationCode;
+
+    invariant(state.clientApplication, 'Expected clientApplication to be defined');
+    if (isNewEmail) {
+      await verificationCodeService.sendVerificationCodeEmail({
+        email: parsedDataResult.data.email,
+        verificationCode,
+        preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
+        userId: 'anonymous',
+      });
+    }
+
+    if (state.editMode) {
+      // Redirect to /verify-email only if emailVerified is false
+      if (isNewEmail || !state.emailVerified) {
+        saveRenewState({
+          params,
+          session,
+          state: {
+            editModeCommunicationPreferences: {
+              email: parsedDataResult.data.email,
+              shouldReceiveEmailCommunication: parsedDataResult.data.shouldReceiveEmailCommunication,
+            },
+            ...(isNewEmail && {
+              verifyEmail: {
+                verificationCode,
+                verificationAttempts: 0,
+              },
+            }),
+          },
+        });
+        return redirect(getPathById('public/renew/$id/ita/verify-email', params));
+      }
+      // Save editMode data to state.
+      saveRenewState({
+        params,
+        session,
+        state: {
+          contactInformation: {
+            ...state.contactInformation,
+            email: parsedDataResult.data.email,
+            shouldReceiveEmailCommunication: state.editModeCommunicationPreferences?.shouldReceiveEmailCommunication,
+          },
+          emailVerified: state.emailVerified,
+          verifyEmail: {
+            verificationCode,
+            verificationAttempts: 0,
+          },
+        },
+      });
+      return redirect(getPathById('public/renew/$id/ita/review-information', params));
+    }
+
+    saveRenewState({
+      params,
+      session,
+      state: {
+        contactInformation: { ...state.contactInformation, ...parsedDataResult.data },
+        emailVerified: isNewEmail ? false : state.emailVerified,
+        ...(isNewEmail && {
+          verifyEmail: {
+            verificationCode,
+            verificationAttempts: 0,
+          },
+        }),
+      },
+    });
+
+    return redirect(getPathById('public/renew/$id/ita/verify-email', params));
   }
 
   saveRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
@@ -136,15 +212,15 @@ export default function RenewAdultChildConfirmEmail({ loaderData, params }: Rout
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
-    isNewOrUpdatedEmail: 'input-radio-is-new-or-updated-email-option-0',
+    shouldReceiveEmailCommunication: 'input-radio-is-new-or-updated-email-option-0',
     email: 'email',
     confirmEmail: 'confirm-email',
   });
 
-  const [isNewOrUpdatedEmail, setIsNewOrUpdatedEmail] = useState(defaultState.isNewOrUpdatedEmail);
+  const [shouldReceiveEmailCommunication, setshouldReceiveEmailCommunication] = useState(defaultState.shouldReceiveEmailCommunication);
 
   function handleNewOrUpdateEmailChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setIsNewOrUpdatedEmail(e.target.value === ADD_OR_UPDATE_EMAIL_OPTION.yes);
+    setshouldReceiveEmailCommunication(e.target.value === ADD_OR_UPDATE_EMAIL_OPTION.yes);
   }
 
   return (
@@ -161,15 +237,15 @@ export default function RenewAdultChildConfirmEmail({ loaderData, params }: Rout
             <p className="mb-4">{t('renew-ita:confirm-email.add-or-update.help-message')}</p>
             <InputRadios
               id="is-new-or-updated-email"
-              name="isNewOrUpdatedEmail"
+              name="shouldReceiveEmailCommunication"
               legend={t('renew-ita:confirm-email.add-or-update.legend')}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-ita:confirm-email.option-yes" />,
                   value: ADD_OR_UPDATE_EMAIL_OPTION.yes,
-                  defaultChecked: isNewOrUpdatedEmail === true,
+                  defaultChecked: shouldReceiveEmailCommunication === true,
                   onChange: handleNewOrUpdateEmailChanged,
-                  append: isNewOrUpdatedEmail === true && (
+                  append: shouldReceiveEmailCommunication === true && (
                     <div className="grid gap-6 md:grid-cols-2">
                       <InputField
                         id="email"
@@ -203,11 +279,11 @@ export default function RenewAdultChildConfirmEmail({ loaderData, params }: Rout
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-ita:confirm-email.option-no" />,
                   value: ADD_OR_UPDATE_EMAIL_OPTION.no,
-                  defaultChecked: isNewOrUpdatedEmail === false,
+                  defaultChecked: shouldReceiveEmailCommunication === false,
                   onChange: handleNewOrUpdateEmailChanged,
                 },
               ]}
-              errorMessage={errors?.isNewOrUpdatedEmail}
+              errorMessage={errors?.shouldReceiveEmailCommunication}
               required
             />
           </div>

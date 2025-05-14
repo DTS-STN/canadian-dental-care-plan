@@ -224,6 +224,7 @@ export const pageIds = {
         confirmation: 'CDCP-RENW-ITA-0010',
         exitApplication: 'CDCP-RENW-ITA-0011',
         demographicSurvey: 'CDCP-RENW-ITA-0012',
+        verifyEmail: 'CDCP-RENW-ITA-0013',
       },
       adultChild: {
         confirmMaritalStatus: 'CDCP-RENW-ADCH-001',
