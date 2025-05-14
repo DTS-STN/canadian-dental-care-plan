@@ -28,7 +28,7 @@ import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useFeature } from '~/root';
-import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, parseDateString, toLocaleDateString } from '~/utils/date-utils';
+import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -183,7 +183,7 @@ export async function action({ context: { appContainer, session }, params, reque
     const eligibilityResult = getEligibilityByAge(parsedDataResult.data.dateOfBirth);
 
     if (!eligibilityResult.eligible) {
-      return { status: 'not-eligible', startDate: toLocaleDateString(parseDateString(eligibilityResult.startDate ?? ''), locale) } as const;
+      return { status: 'not-eligible', startDate: toLocaleDateString(parseDateTimeString(eligibilityResult.startDate ?? ''), locale) } as const;
     }
   }
 
