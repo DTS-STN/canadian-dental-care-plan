@@ -47,7 +47,7 @@ const SHOULD_RECEIVE_EMAIL_COMMUNICATION_OPTION = {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adult.confirmEmail,
+  pageIdentifier: pageIds.public.renew.adultChild.confirmEmail,
   pageTitleI18nKey: 'renew-adult-child:confirm-email.page-title',
 } as const satisfies RouteHandleData;
 
@@ -218,7 +218,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/renew/$id/adult-child/confirm-address', params));
 }
 
-export default function RenewAdultConfirmEmail({ loaderData, params }: Route.ComponentProps) {
+export default function RenewAdultChildConfirmEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode } = loaderData;
 
@@ -242,7 +242,7 @@ export default function RenewAdultConfirmEmail({ loaderData, params }: Route.Com
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={55} size="lg" label={t('renew:progress.label')} />
+        <Progress value={47} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('renew:required-label')}</p>
