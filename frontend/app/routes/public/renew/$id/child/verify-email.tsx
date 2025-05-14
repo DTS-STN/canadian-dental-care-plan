@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/verify-email';
 
 import { TYPES } from '~/.server/constants';
-import { loadRenewAdultChildState } from '~/.server/routes/helpers/renew-adult-child-route-helpers';
+import { loadRenewChildState } from '~/.server/routes/helpers/renew-child-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -38,9 +38,9 @@ const FORM_ACTION = {
 const MAX_ATTEMPTS = 5;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adultChild.verifyEmail,
-  pageTitleI18nKey: 'renew-adult-child:verify-email.page-title',
+  i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
+  pageIdentifier: pageIds.public.renew.child.verifyEmail,
+  pageTitleI18nKey: 'renew-child:verify-email.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
@@ -48,10 +48,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const state = loadRenewAdultChildState({ params, request, session });
+  const state = loadRenewChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:verify-email.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-child:verify-email.page-title') }) };
 
   return {
     meta,
@@ -66,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = loadRenewAdultChildState({ params, request, session });
+  const state = loadRenewChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.configs.ServerConfig);
 
@@ -118,11 +118,11 @@ export async function action({ context: { appContainer, session }, params, reque
       verificationCode: z
         .string()
         .trim()
-        .min(1, t('renew-adult-child:verify-email.error-message.verification-code-required'))
+        .min(1, t('renew-child:verify-email.error-message.verification-code-required'))
         .transform(extractDigits)
         .superRefine((val, ctx) => {
           if (state.verifyEmail && state.verifyEmail.verificationAttempts >= MAX_ATTEMPTS) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:verify-email.error-message.verification-code-max-attempts'), path: ['verificationCode'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-child:verify-email.error-message.verification-code-max-attempts'), path: ['verificationCode'] });
           }
         }),
     });
@@ -171,7 +171,7 @@ export async function action({ context: { appContainer, session }, params, reque
             emailVerified: true,
           },
         });
-        return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
+        return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
       }
       saveRenewState({
         params,
@@ -186,7 +186,7 @@ export async function action({ context: { appContainer, session }, params, reque
       });
     }
 
-    return redirect(getPathById('public/renew/$id/adult-child/confirm-address', params));
+    return redirect(getPathById('public/renew/$id/child/confirm-address', params));
   }
 }
 
@@ -216,16 +216,16 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
       </div>
       <div className="max-w-prose">
         <ErrorAlert>
-          <h2 className="mb-2 font-bold">{t('renew-adult-child:verify-email.verification-code-alert.heading')}</h2>
-          <p className="mb-2">{t('renew-adult-child:verify-email.verification-code-alert.detail')}</p>
+          <h2 className="mb-2 font-bold">{t('renew-child:verify-email.verification-code-alert.heading')}</h2>
+          <p className="mb-2">{t('renew-child:verify-email.verification-code-alert.detail')}</p>
         </ErrorAlert>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-6">
-            <p className="mb-4">{t('renew-adult-child:verify-email.verification-code', { email })}</p>
-            <p className="mb-4">{t('renew-adult-child:verify-email.request-new')}</p>
-            <p className="mb-8">{t('renew-adult-child:verify-email.unable-to-verify')}</p>
+            <p className="mb-4">{t('renew-child:verify-email.verification-code', { email })}</p>
+            <p className="mb-4">{t('renew-child:verify-email.request-new')}</p>
+            <p className="mb-8">{t('renew-child:verify-email.unable-to-verify')}</p>
             <p className="mb-4 italic">{t('renew:required-label')}</p>
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
@@ -233,7 +233,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
                 name="verificationCode"
                 className="w-full"
                 errorMessage={errors?.verificationCode}
-                label={t('renew-adult-child:verify-email.verification-code-label')}
+                label={t('renew-child:verify-email.verification-code-label')}
                 aria-describedby="verification-code"
                 inputMode="numeric"
                 required
@@ -246,7 +246,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
               variant="link"
               loading={isSubmitting}
               value={FORM_ACTION.request}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Request new verification code - Verify email click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Request new verification code - Verify email click"
               onClick={async () => {
                 const formData = new FormData();
                 formData.append('_action', FORM_ACTION.request);
@@ -257,22 +257,16 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
                 await fetcher.submit(formData, { method: 'post' });
               }}
             >
-              {t('renew-adult-child:verify-email.request-new-code')}
+              {t('renew-child:verify-email.request-new-code')}
             </LoadingButton>
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Verify email click">
-                {t('renew-adult-child:verify-email.save-btn')}
+              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Verify email click">
+                {t('renew-child:verify-email.save-btn')}
               </LoadingButton>
-              <ButtonLink
-                id="cancel-button"
-                routeId="public/renew/$id/adult-child/review-adult-information"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Verify email click"
-              >
-                {t('renew-adult-child:verify-email.cancel-btn')}
+              <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Verify email click">
+                {t('renew-child:verify-email.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
@@ -284,19 +278,19 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
                 value={FORM_ACTION.submit}
                 loading={isSubmitting}
                 endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Verify email"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Verify email"
               >
-                {t('renew-adult-child:verify-email.continue')}
+                {t('renew-child:verify-email.continue')}
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/confirm-email"
+                routeId="public/renew/$id/child/confirm-email"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Verify email click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Verify email click"
               >
-                {t('renew-adult-child:verify-email.back')}
+                {t('renew-child:verify-email.back')}
               </ButtonLink>
             </div>
           )}
@@ -304,13 +298,13 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{t('renew-adult-child:verify-email.code-sent.heading')}</DialogTitle>
+              <DialogTitle>{t('renew-child:verify-email.code-sent.heading')}</DialogTitle>
             </DialogHeader>
-            <DialogDescription>{t('renew-adult-child:verify-email.code-sent.detail', { email })}</DialogDescription>
+            <DialogDescription>{t('renew-child:verify-email.code-sent.detail', { email })}</DialogDescription>
             <DialogFooter>
               <DialogClose asChild>
                 <Button id="modal-continue" disabled={isSubmitting} variant="primary" endIcon={faChevronRight} size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Modal Continue - Verify email click">
-                  {t('renew-adult-child:verify-email.continue')}
+                  {t('renew-child:verify-email.continue')}
                 </Button>
               </DialogClose>
             </DialogFooter>

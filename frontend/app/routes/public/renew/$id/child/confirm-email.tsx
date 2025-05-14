@@ -4,6 +4,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -46,7 +47,7 @@ const SHOULD_RECEIVE_EMAIL_COMMUNICATION_OPTION = {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.child.confirmEmail,
+  pageIdentifier: pageIds.public.renew.adultChild.confirmEmail,
   pageTitleI18nKey: 'renew-child:confirm-email.page-title',
 } as const satisfies RouteHandleData;
 
@@ -79,6 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadRenewChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.configs.ServerConfig);
 
   const emailSchema = z
     .object({
@@ -131,6 +133,82 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
+  if (parsedDataResult.data.email) {
+    const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
+    const isNewEmail = state.contactInformation?.email !== parsedDataResult.data.email;
+    const verificationCode = isNewEmail || state.verifyEmail === undefined ? verificationCodeService.createVerificationCode('anonymous') : state.verifyEmail.verificationCode;
+
+    invariant(state.clientApplication, 'Expected clientApplication to be defined');
+    if (isNewEmail) {
+      await verificationCodeService.sendVerificationCodeEmail({
+        email: parsedDataResult.data.email,
+        verificationCode,
+        preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
+        userId: 'anonymous',
+      });
+    }
+
+    if (state.editMode) {
+      // Redirect to /verify-email only if emailVerified is false
+      if (isNewEmail || !state.emailVerified) {
+        saveRenewState({
+          params,
+          session,
+          state: {
+            editModeCommunicationPreferences: {
+              email: parsedDataResult.data.email,
+              shouldReceiveEmailCommunication: parsedDataResult.data.shouldReceiveEmailCommunication,
+              isNewOrUpdatedEmail: parsedDataResult.data.isNewOrUpdatedEmail,
+            },
+            ...(isNewEmail && {
+              verifyEmail: {
+                verificationCode,
+                verificationAttempts: 0,
+              },
+            }),
+          },
+        });
+        return redirect(getPathById('public/renew/$id/child/verify-email', params));
+      }
+      // Save editMode data to state.
+      saveRenewState({
+        params,
+        session,
+        state: {
+          contactInformation: {
+            ...state.contactInformation,
+            email: parsedDataResult.data.email,
+            shouldReceiveEmailCommunication: state.editModeCommunicationPreferences?.shouldReceiveEmailCommunication,
+            isNewOrUpdatedEmail: state.editModeCommunicationPreferences?.isNewOrUpdatedEmail,
+          },
+          emailVerified: state.emailVerified,
+          verifyEmail: {
+            verificationCode,
+            verificationAttempts: 0,
+          },
+        },
+      });
+      return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
+    }
+
+    saveRenewState({
+      params,
+      session,
+      state: {
+        contactInformation: { ...state.contactInformation, ...parsedDataResult.data },
+        emailVerified: isNewEmail ? false : state.emailVerified,
+        ...(isNewEmail && {
+          verifyEmail: {
+            verificationCode,
+            verificationAttempts: 0,
+          },
+        }),
+      },
+    });
+
+    return redirect(getPathById('public/renew/$id/child/verify-email', params));
+  }
+
   saveRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });
 
   if (state.editMode) {
@@ -140,7 +218,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/renew/$id/child/confirm-address', params));
 }
 
-export default function RenewAdultChildConfirmEmail({ loaderData, params }: Route.ComponentProps) {
+export default function RenewChildConfirmEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode } = loaderData;
 
@@ -164,7 +242,7 @@ export default function RenewAdultChildConfirmEmail({ loaderData, params }: Rout
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={70} size="lg" label={t('renew:progress.label')} />
+        <Progress value={47} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('renew:required-label')}</p>
