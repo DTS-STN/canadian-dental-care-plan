@@ -10,7 +10,7 @@ import type { Route } from './+types/verify-email';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button } from '~/components/buttons';
@@ -35,8 +35,6 @@ const FORM_ACTION = {
 } as const;
 
 const MAX_ATTEMPTS = 5;
-
-export const PREFERRED_LANGUAGE = { en: 'English', fr: 'French' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -74,7 +72,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
+  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.configs.ServerConfig);
 
   // Fetch verification code service
   const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
@@ -112,11 +110,10 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (state.contactInformation?.email) {
-      const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
       await verificationCodeService.sendVerificationCodeEmail({
         email: state.contactInformation.email,
         verificationCode: verificationCode,
-        preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
+        preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
         userId: idToken.sub,
       });
       return { status: 'verification-code-sent' } as const;
