@@ -57,7 +57,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     meta,
-    email: state.editModeEmail ?? state.contactInformation?.email,
+    email: state.editModeCommunicationPreferences?.email ?? state.contactInformation?.email,
     editMode: state.editMode,
   };
 }
@@ -94,11 +94,11 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (state.editMode) {
-      invariant(state.editModeEmail, 'Expected editModeEmail to be defined');
+      invariant(state.editModeCommunicationPreferences?.email, 'Expected editModeEmail to be defined');
       invariant(state.clientApplication, 'Expected clientApplication to be defined');
       const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
       await verificationCodeService.sendVerificationCodeEmail({
-        email: state.editModeEmail,
+        email: state.editModeCommunicationPreferences.email,
         verificationCode: verificationCode,
         preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
         userId: 'anonymous',
@@ -164,8 +164,8 @@ export async function action({ context: { appContainer, session }, params, reque
           state: {
             contactInformation: {
               ...state.contactInformation,
-              shouldReceiveEmailCommunication: state.editModeCommunicationPreferences ?? state.contactInformation?.shouldReceiveEmailCommunication,
-              email: state.editModeEmail,
+              shouldReceiveEmailCommunication: state.editModeCommunicationPreferences?.shouldReceiveEmailCommunication ?? state.contactInformation?.shouldReceiveEmailCommunication,
+              email: state.editModeCommunicationPreferences?.email,
             },
             verifyEmail: {
               ...state.verifyEmail,
