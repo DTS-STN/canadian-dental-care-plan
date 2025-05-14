@@ -243,6 +243,7 @@ export const pageIds = {
         confirmation: 'CDCP-RENW-ADCH-0015',
         reviewAdultInformation: 'CDCP-RENW-ADCH-0016',
         demographicSurvey: 'CDCP-RENW-ADCH-0017',
+        verifyEmail: 'CDCP-RENW-ADCH-0018',
       },
       child: {
         childInformation: 'CDCP-RENW-CHLD-0001',

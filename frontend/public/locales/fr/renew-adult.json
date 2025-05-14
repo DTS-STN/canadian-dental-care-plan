@@ -92,7 +92,6 @@
       "receive-comms-required": "Sélectionnez si vous souhaitez recevoir des communications par courriel"
     }
   },
-
   "verify-email": {
     "page-title": "Confirmation de votre adresse courriel",
     "verification-code": "Un courriel contenant un code de vérification a été envoyé à {{email}}, veuillez saisir le code ci-dessous et cliquer sur «\u00a0Continuer\u00a0».",
