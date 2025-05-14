@@ -388,9 +388,9 @@ export const routes = [
             paths: { en: '/:lang/renew/:id/child/update-mailing-address', fr: '/:lang/renouveler/:id/enfant/mise-a-jour-adresse-postale' },
           },
           { id: 'public/renew/$id/child/update-home-address', file: 'routes/public/renew/$id/child/update-home-address.tsx', paths: { en: '/:lang/renew/:id/child/update-home-address', fr: '/:lang/renouveler/:id/enfant/mise-a-jour-adresse-domicile' } },
-
           { id: 'public/renew/$id/child/confirm-phone', file: 'routes/public/renew/$id/child/confirm-phone.tsx', paths: { en: '/:lang/renew/:id/child/confirm-phone', fr: '/:lang/renouveler/:id/enfant/confirmer-telephone' } },
           { id: 'public/renew/$id/child/confirm-email', file: 'routes/public/renew/$id/child/confirm-email.tsx', paths: { en: '/:lang/renew/:id/child/confirm-email', fr: '/:lang/renouveler/:id/enfant/confirmer-courriel' } },
+          { id: 'public/renew/$id/child/verify-email', file: 'routes/public/renew/$id/child/verify-email.tsx', paths: { en: '/:lang/renew/:id/child/verify-email', fr: '/:lang/renouveler/:id/enfant/verifier-courriel' } },
 
           { id: 'public/renew/$id/adult/confirmation', file: 'routes/public/renew/$id/adult/confirmation.tsx', paths: { en: '/:lang/renew/:id/adult/confirmation', fr: '/:lang/renouveler/:id/adulte/confirmation' } },
           { id: 'public/renew/$id/adult/confirm-marital-status', file: 'routes/public/renew/$id/adult/confirm-marital-status.tsx', paths: { en: '/:lang/renew/:id/adult/confirm-marital-status', fr: '/:lang/renouveler/:id/adulte/confirmer-etat-civil' } },

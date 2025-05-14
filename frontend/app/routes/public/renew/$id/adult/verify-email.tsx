@@ -190,7 +190,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 }
 
-export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.ComponentProps) {
+export default function RenewFlowVerifyEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { email, editMode } = loaderData;
   const [showDialog, setShowDialog] = useState(false);
