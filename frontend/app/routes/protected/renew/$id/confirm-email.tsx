@@ -105,7 +105,6 @@ export async function action({ context: { appContainer, session }, params, reque
       emailPreValidation: parsedDataResult.data.email,
       emailPreviouslyValidated: state.emailVerified,
     },
-    // state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } },
   });
 
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-email', { userId: idToken.sub });

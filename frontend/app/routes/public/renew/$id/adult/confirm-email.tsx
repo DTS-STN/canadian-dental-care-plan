@@ -13,7 +13,7 @@ import type { Route } from './+types/confirm-email';
 import { TYPES } from '~/.server/constants';
 import { loadRenewAdultState } from '~/.server/routes/helpers/renew-adult-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -44,8 +44,6 @@ const SHOULD_RECEIVE_EMAIL_COMMUNICATION_OPTION = {
   yes: 'yes',
   no: 'no',
 } as const;
-
-export const PREFERRED_LANGUAGE = { en: 'English', fr: 'French' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-adult', 'renew', 'gcweb'),
@@ -82,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadRenewAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
+  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.configs.ServerConfig);
 
   const emailSchema = z
     .object({
@@ -142,13 +140,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
     invariant(state.clientApplication, 'Expected clientApplication to be defined');
     if (isNewEmail) {
-      const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
-      const preferredLanguage = preferredLanguageService.getLocalizedPreferredLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name;
-
       await verificationCodeService.sendVerificationCodeEmail({
         email: parsedDataResult.data.email,
         verificationCode,
-        preferredLanguage: preferredLanguage === PREFERRED_LANGUAGE.en ? 'en' : 'fr',
+        preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
         userId: 'anonymous',
       });
     }
