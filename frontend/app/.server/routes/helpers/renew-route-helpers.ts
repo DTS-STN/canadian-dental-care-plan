@@ -73,6 +73,7 @@ export interface RenewState {
   editModeCommunicationPreferences?: {
     email: string;
     shouldReceiveEmailCommunication?: boolean;
+    isNewOrUpdatedEmail?: boolean;
   };
   verifyEmail?: {
     verificationCode: string;
