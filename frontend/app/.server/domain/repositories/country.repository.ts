@@ -29,6 +29,25 @@ export class DefaultCountryRepository implements CountryRepository {
   }
 
   listAllCountries(): ReadonlyArray<CountryEntity> {
+    throw new Error('Country service is not yet implemented');
+    //TODO: Implement listAllCountries service
+  }
+
+  findCountryById(id: string): CountryEntity | null {
+    throw new Error('Country service is not yet implemented');
+    //TODO: Implement findCountryById service
+  }
+}
+
+@injectable()
+export class MockCountryRepository implements CountryRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('MockCountryRepository');
+  }
+
+  listAllCountries(): ReadonlyArray<CountryEntity> {
     this.log.debug('Fetching all countries');
     const countryEntities = countryJsonDataSource.value;
 

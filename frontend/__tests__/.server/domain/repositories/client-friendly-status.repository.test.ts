@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { DefaultClientFriendlyStatusRepository } from '~/.server/domain/repositories';
+import { DefaultClientFriendlyStatusRepository, MockClientFriendlyStatusRepository } from '~/.server/domain/repositories';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -27,8 +27,27 @@ describe('DefaultClientFriendlyStatusRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all client friendly statuses', () => {
+  it('should throw error on listAllClientFriendlyStatuses call', () => {
     const repository = new DefaultClientFriendlyStatusRepository();
+
+    expect(() => repository.listAllClientFriendlyStatuses()).toThrowError('Client friendly status service is not yet implemented');
+  });
+
+  it('should throw error on findClientFriendlyStatusById call', () => {
+    const repository = new DefaultClientFriendlyStatusRepository();
+
+    expect(() => repository.findClientFriendlyStatusById('1')).toThrowError('Client friendly status service is not yet implemented');
+  });
+});
+
+describe('MockClientFriendlyStatusRepository', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
+
+  it('should get all client friendly statuses', () => {
+    const repository = new MockClientFriendlyStatusRepository();
 
     const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
 
@@ -49,7 +68,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
   it('should handle empty client friendly statuses data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const repository = new DefaultClientFriendlyStatusRepository();
+    const repository = new MockClientFriendlyStatusRepository();
 
     const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
 
@@ -57,7 +76,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
   });
 
   it('should get a client friendly status by id', () => {
-    const repository = new DefaultClientFriendlyStatusRepository();
+    const repository = new MockClientFriendlyStatusRepository();
 
     const clientFriendlyStatus = repository.findClientFriendlyStatusById('1');
 
@@ -69,7 +88,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
   });
 
   it('should return null for non-existent client friendly status id', () => {
-    const repository = new DefaultClientFriendlyStatusRepository();
+    const repository = new MockClientFriendlyStatusRepository();
 
     const clientFriendlyStatus = repository.findClientFriendlyStatusById('non-existent-id');
 

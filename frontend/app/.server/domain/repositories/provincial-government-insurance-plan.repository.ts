@@ -29,6 +29,25 @@ export class DefaultProvincialGovernmentInsurancePlanRepository implements Provi
   }
 
   listAllProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanEntity[] {
+    throw new Error('Provincial government insurance plan service is not yet implemented');
+    //TODO: Implement listAllProvincialGovernmentInsurancePlans service
+  }
+
+  findProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanEntity | null {
+    throw new Error('Provincial government insurance plan service is not yet implemented');
+    //TODO: Implement findProvincialGovernmentInsurancePlanById service
+  }
+}
+
+@injectable()
+export class MockProvincialGovernmentInsurancePlanRepository implements ProvincialGovernmentInsurancePlanRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('MockProvincialGovernmentInsurancePlanRepository');
+  }
+
+  listAllProvincialGovernmentInsurancePlans(): ProvincialGovernmentInsurancePlanEntity[] {
     this.log.debug('Fetching all provincial government insurance plans');
     const provincialGovernmentInsurancePlanEntities = provincialGovernmentInsurancePlanJsonDataSource.value;
 

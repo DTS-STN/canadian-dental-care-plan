@@ -31,11 +31,16 @@ import {
   MockBenefitApplicationRepository,
   MockBenefitRenewalRepository,
   MockClientApplicationRepository,
+  MockClientFriendlyStatusRepository,
+  MockCountryRepository,
+  MockFederalGovernmentInsurancePlanRepository,
   MockLetterRepository,
   MockLetterTypeRepository,
   MockMaritalStatusRepository,
   MockPreferredCommunicationMethodRepository,
   MockPreferredLanguageRepository,
+  MockProvinceTerritoryStateRepository,
+  MockProvincialGovernmentInsurancePlanRepository,
   MockVerificationCodeRepository,
 } from '~/.server/domain/repositories';
 import type { MockName } from '~/.server/utils/env.utils';
@@ -92,31 +97,40 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
     options.bind(TYPES.domain.repositories.ClientApplicationRepository).to(DefaultClientApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
     options.bind(TYPES.domain.repositories.ClientApplicationRepository).to(MockClientApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
 
-    options.bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(DefaultClientFriendlyStatusRepository);
-    options.bind(TYPES.domain.repositories.CountryRepository).to(DefaultCountryRepository);
+    options.bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(DefaultClientFriendlyStatusRepository).when(isMockEnabled(serverConfig, 'power-platform', false) && isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(MockClientFriendlyStatusRepository).when(isMockEnabled(serverConfig, 'power-platform', true) || isMockEnabled(serverConfig, 'code-tables', true));
+
+    options.bind(TYPES.domain.repositories.CountryRepository).to(DefaultCountryRepository).when(isMockEnabled(serverConfig, 'power-platform', false) && isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.domain.repositories.CountryRepository).to(MockCountryRepository).when(isMockEnabled(serverConfig, 'power-platform', true) || isMockEnabled(serverConfig, 'code-tables', true));
+
     options.bind(TYPES.domain.repositories.DemographicSurveyRepository).to(DefaultDemographicSurveyRepository);
-    options.bind(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository).to(DefaultFederalGovernmentInsurancePlanRepository);
+
+    options.bind(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository).to(DefaultFederalGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'power-platform', false) && isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository).to(MockFederalGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'power-platform', true) || isMockEnabled(serverConfig, 'code-tables', true));
 
     options.bind(TYPES.domain.repositories.LetterRepository).to(DefaultLetterRepository).when(isMockEnabled(serverConfig, 'cct', false));
     options.bind(TYPES.domain.repositories.LetterRepository).to(MockLetterRepository).when(isMockEnabled(serverConfig, 'cct', true));
 
-    options.bind(TYPES.domain.repositories.LetterTypeRepository).to(DefaultLetterTypeRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
-    options.bind(TYPES.domain.repositories.LetterTypeRepository).to(MockLetterTypeRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+    options.bind(TYPES.domain.repositories.LetterTypeRepository).to(DefaultLetterTypeRepository).when(isMockEnabled(serverConfig, 'power-platform', false) && isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.domain.repositories.LetterTypeRepository).to(MockLetterTypeRepository).when(isMockEnabled(serverConfig, 'power-platform', true) || isMockEnabled(serverConfig, 'code-tables', true));
 
-    options.bind(TYPES.domain.repositories.MaritalStatusRepository).to(DefaultMaritalStatusRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
-    options.bind(TYPES.domain.repositories.MaritalStatusRepository).to(MockMaritalStatusRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+    options.bind(TYPES.domain.repositories.MaritalStatusRepository).to(DefaultMaritalStatusRepository).when(isMockEnabled(serverConfig, 'power-platform', false) && isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.domain.repositories.MaritalStatusRepository).to(MockMaritalStatusRepository).when(isMockEnabled(serverConfig, 'power-platform', true) || isMockEnabled(serverConfig, 'code-tables', true));
 
     options.bind(TYPES.domain.repositories.VerificationCodeRepository).to(DefaultVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', false));
     options.bind(TYPES.domain.repositories.VerificationCodeRepository).to(MockVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', true));
 
-    options.bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(DefaultPreferredCommunicationMethodRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
-    options.bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(MockPreferredCommunicationMethodRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+    options.bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(DefaultPreferredCommunicationMethodRepository).when(isMockEnabled(serverConfig, 'power-platform', false) && isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(MockPreferredCommunicationMethodRepository).when(isMockEnabled(serverConfig, 'power-platform', true) || isMockEnabled(serverConfig, 'code-tables', true));
 
-    options.bind(TYPES.domain.repositories.PreferredLanguageRepository).to(DefaultPreferredLanguageRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
-    options.bind(TYPES.domain.repositories.PreferredLanguageRepository).to(MockPreferredLanguageRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+    options.bind(TYPES.domain.repositories.PreferredLanguageRepository).to(DefaultPreferredLanguageRepository).when(isMockEnabled(serverConfig, 'power-platform', false) && isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.domain.repositories.PreferredLanguageRepository).to(MockPreferredLanguageRepository).when(isMockEnabled(serverConfig, 'power-platform', true) || isMockEnabled(serverConfig, 'code-tables', true));
 
-    options.bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(DefaultProvinceTerritoryStateRepository);
-    options.bind(TYPES.domain.repositories.ProvincialGovernmentInsurancePlanRepository).to(DefaultProvincialGovernmentInsurancePlanRepository);
+    options.bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(DefaultProvinceTerritoryStateRepository).when(isMockEnabled(serverConfig, 'power-platform', false) && isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(MockProvinceTerritoryStateRepository).when(isMockEnabled(serverConfig, 'power-platform', true) || isMockEnabled(serverConfig, 'code-tables', true));
+
+    options.bind(TYPES.domain.repositories.ProvincialGovernmentInsurancePlanRepository).to(DefaultProvincialGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'power-platform', false) && isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.domain.repositories.ProvincialGovernmentInsurancePlanRepository).to(MockProvincialGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'power-platform', true) || isMockEnabled(serverConfig, 'code-tables', true));
 
     options.bind(TYPES.web.repositories.DynatraceRepository).to(DefaultDynatraceRepository);
     options.bind(TYPES.web.repositories.HCaptchaRepository).to(DefaultHCaptchaRepository);
