@@ -251,7 +251,7 @@ export default function ProtectedRenewItaVerifyEmail({ loaderData, params }: Rou
               variant="link"
               loading={isSubmitting}
               value={FORM_ACTION.request}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Request new verification code - Verify email click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected ITA:Request new verification code - Verify email click"
               onClick={async () => {
                 const formData = new FormData();
                 formData.append('_action', FORM_ACTION.request);
@@ -267,10 +267,10 @@ export default function ProtectedRenewItaVerifyEmail({ loaderData, params }: Rou
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Verify email click">
+              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected ITA:Save - Verify email click">
                 {t('protected-renew:verify-email.save-btn')}
               </LoadingButton>
-              <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Verify email click">
+              <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected ITA:Cancel - Verify email click">
                 {t('protected-renew:verify-email.cancel-btn')}
               </ButtonLink>
             </div>
@@ -308,7 +308,7 @@ export default function ProtectedRenewItaVerifyEmail({ loaderData, params }: Rou
             <DialogDescription>{t('protected-renew:verify-email.code-sent.detail', { email })}</DialogDescription>
             <DialogFooter>
               <DialogClose asChild>
-                <Button id="modal-continue" disabled={isSubmitting} variant="primary" endIcon={faChevronRight} size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Modal Continue - Verify email click">
+                <Button id="modal-continue" disabled={isSubmitting} variant="primary" endIcon={faChevronRight} size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Modal Continue - Verify email click">
                   {t('protected-renew:verify-email.continue')}
                 </Button>
               </DialogClose>
