@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  annotations:
+    # reload the pod whenever the secrets change
+    secret.reloader.stakater.com/auto: 'true'
+spec:
+  serviceName: redis-headless
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+  template:
+    #
+    # pin all versions to v7.2
+    #
+    spec:
+      initContainers:
+        - name: init
+          image: docker.io/redis:7.2
+      containers:
+        - name: redis
+          image: docker.io/redis:7.2
+        - name: redis-sentinel
+          image: docker.io/redis:7.2
