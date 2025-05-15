@@ -246,7 +246,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
               variant="link"
               loading={isSubmitting}
               value={FORM_ACTION.request}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Request new verification code - Verify email click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Request new verification code - Verify email click"
               onClick={async () => {
                 const formData = new FormData();
                 formData.append('_action', FORM_ACTION.request);
@@ -262,7 +262,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Verify email click">
+              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Verify email click">
                 {t('renew-adult-child:verify-email.save-btn')}
               </LoadingButton>
               <ButtonLink
@@ -270,7 +270,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
                 routeId="public/renew/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Verify email click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Verify email click"
               >
                 {t('renew-adult-child:verify-email.cancel-btn')}
               </ButtonLink>
@@ -309,7 +309,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
             <DialogDescription>{t('renew-adult-child:verify-email.code-sent.detail', { email })}</DialogDescription>
             <DialogFooter>
               <DialogClose asChild>
-                <Button id="modal-continue" disabled={isSubmitting} variant="primary" endIcon={faChevronRight} size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Modal Continue - Verify email click">
+                <Button id="modal-continue" disabled={isSubmitting} variant="primary" endIcon={faChevronRight} size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Modal Continue - Verify email click">
                   {t('renew-adult-child:verify-email.continue')}
                 </Button>
               </DialogClose>
