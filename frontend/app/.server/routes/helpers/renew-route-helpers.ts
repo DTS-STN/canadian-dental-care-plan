@@ -14,7 +14,7 @@ import type { Session } from '~/.server/web/session';
 export interface RenewState {
   readonly id: string;
   readonly editMode: boolean;
-  lastUpdatedOn: string;
+  readonly lastUpdatedOn: string;
   readonly applicationYear: {
     renewalYearId: string;
     taxYear: string;
@@ -70,16 +70,16 @@ export interface RenewState {
     email?: string;
     shouldReceiveEmailCommunication?: boolean;
   };
-  editModeCommunicationPreferences?: {
+  readonly editModeCommunicationPreferences?: {
     email: string;
     shouldReceiveEmailCommunication?: boolean;
     isNewOrUpdatedEmail?: boolean;
   };
-  verifyEmail?: {
+  readonly verifyEmail?: {
     verificationCode: string;
     verificationAttempts: number;
   };
-  emailVerified?: boolean;
+  readonly emailVerified?: boolean;
   readonly hasAddressChanged?: boolean;
   readonly isHomeAddressSameAsMailingAddress?: boolean;
   readonly previousAddressState?: {

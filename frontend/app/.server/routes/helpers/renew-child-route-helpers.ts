@@ -138,6 +138,7 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     submissionInfo,
     typeOfRenewal,
     applicantInformation,
+    emailVerified,
   } = state;
 
   if (typeOfRenewal === undefined) {
@@ -208,6 +209,7 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     mailingAddress,
     homeAddress,
     clientApplication,
+    emailVerified,
   };
 }
 

@@ -97,6 +97,7 @@ export function validateRenewAdultStateForReview({ params, state }: ValidateRene
     dentalInsurance,
     demographicSurvey,
     hasFederalProvincialTerritorialBenefitsChanged,
+    emailVerified,
   } = state;
 
   if (typeOfRenewal === undefined) {
@@ -179,5 +180,6 @@ export function validateRenewAdultStateForReview({ params, state }: ValidateRene
     hasAddressChanged,
     demographicSurvey,
     hasFederalProvincialTerritorialBenefitsChanged,
+    emailVerified,
   };
 }
