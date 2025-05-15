@@ -141,6 +141,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     demographicSurvey,
     hasFederalProvincialTerritorialBenefitsChanged,
     isHomeAddressSameAsMailingAddress,
+    emailVerified,
   } = state;
 
   if (typeOfRenewal === undefined) {
@@ -222,6 +223,7 @@ export function validateRenewAdultChildStateForReview({ params, state }: Validat
     demographicSurvey,
     hasFederalProvincialTerritorialBenefitsChanged,
     isHomeAddressSameAsMailingAddress,
+    emailVerified,
   };
 }
 

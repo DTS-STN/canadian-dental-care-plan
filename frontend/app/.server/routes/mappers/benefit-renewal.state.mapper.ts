@@ -63,6 +63,7 @@ export interface RenewAdultState {
   mailingAddress?: MailingAddressState;
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
+  emailVerified?: boolean;
 }
 
 export interface RenewAdultChildState {
@@ -80,6 +81,7 @@ export interface RenewAdultChildState {
   mailingAddress?: MailingAddressState;
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
+  emailVerified?: boolean;
 }
 
 export interface RenewItaState {
@@ -95,6 +97,7 @@ export interface RenewItaState {
   mailingAddress?: MailingAddressState;
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
+  emailVerified?: boolean;
 }
 
 export interface RenewChildState {
@@ -109,6 +112,7 @@ export interface RenewChildState {
   hasMaritalStatusChanged: boolean;
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
+  emailVerified?: boolean;
 }
 
 export interface ProtectedRenewState {
@@ -227,6 +231,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     mailingAddress,
     maritalStatus,
     partnerInformation,
+    emailVerified,
   }: RenewAdultState): AdultBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
@@ -258,6 +263,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasEmailChanged,
         renewedEmail: contactInformation.email,
         renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+        emailVerified,
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
@@ -301,6 +307,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     mailingAddress,
     maritalStatus,
     partnerInformation,
+    emailVerified,
   }: RenewAdultChildState): AdultChildBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
@@ -335,6 +342,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasEmailChanged,
         renewedEmail: contactInformation.email,
         renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+        emailVerified,
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
@@ -376,6 +384,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     mailingAddress,
     maritalStatus,
     partnerInformation,
+    emailVerified,
   }: RenewItaState): ItaBenefitRenewalDto {
     return {
       ...clientApplication,
@@ -401,9 +410,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       communicationPreferences: this.toCommunicationPreferences({
         existingCommunicationPreferences: clientApplication.communicationPreferences,
-        hasEmailChanged: true,
+        hasEmailChanged: !!contactInformation.email,
         renewedEmail: contactInformation.email,
         renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+        emailVerified,
       }),
       demographicSurvey,
       dentalBenefits: this.toDentalBenefits({
@@ -763,8 +773,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     renewedPreferredLanguage,
     emailVerified,
   }: ToCommunicationPreferencesArgs): RenewalCommunicationPreferencesDto {
-    if (!hasEmailChanged && !hasPreferredLanguageChanged) return existingCommunicationPreferences;
-
     return {
       email: renewedReceiveEmailCommunication ? renewedEmail : undefined,
       emailVerified: renewedReceiveEmailCommunication ? emailVerified : undefined,

@@ -95,6 +95,7 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     dentalInsurance,
     hasAddressChanged,
     demographicSurvey,
+    emailVerified,
   } = state;
 
   if (typeOfRenewal === undefined) {
@@ -159,5 +160,6 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     partnerInformation,
     hasAddressChanged,
     demographicSurvey,
+    emailVerified,
   };
 }
