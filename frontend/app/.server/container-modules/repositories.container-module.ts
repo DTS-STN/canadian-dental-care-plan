@@ -76,7 +76,7 @@ function isMockEnabled(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS'>, mockNa
  *
  * @param mockNames - The name of the mocks to check in the server configuration.
  * @param shouldEnable - If `true`, returns `true` if one of the mocks is enabled in the configuration;
- * if `false`, returns `true` if all the mocks are not enabled. Logical OR operation.
+ * if `false`, returns `true` if one of the mocks is not enabled. Logical OR operation.
  * @returns A function that takes an `BindingConstraints` and returns a boolean indicating
  * whether the service implementation should be injected based on the server configuration
  * and the `shouldEnable` parameter.
@@ -91,7 +91,7 @@ function areMocksEnabled(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS'>, mock
   return (metadata: BindingConstraints) => {
     for (const mockName of mockNames) {
       const isMockIncluded = serverConfig.ENABLED_MOCKS.includes(mockName);
-      if (shouldEnable === isMockIncluded) return isMockIncluded;
+      if (shouldEnable === isMockIncluded) return true;
     }
     return false;
   };
