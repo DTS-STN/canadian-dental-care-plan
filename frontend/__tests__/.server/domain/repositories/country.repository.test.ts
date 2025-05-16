@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { DefaultCountryRepository } from '~/.server/domain/repositories';
+import { DefaultCountryRepository, MockCountryRepository } from '~/.server/domain/repositories';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -29,8 +29,27 @@ describe('DefaultCountryRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all countries', () => {
+  it('should throw error on listAllCountries call', () => {
     const repository = new DefaultCountryRepository();
+
+    expect(() => repository.listAllCountries()).toThrowError('Country service is not yet implemented');
+  });
+
+  it('should throw error on findCountryById call', () => {
+    const repository = new DefaultCountryRepository();
+
+    expect(() => repository.findCountryById('1')).toThrowError('Country service is not yet implemented');
+  });
+});
+
+describe('MockCountryRepository', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
+
+  it('should get all countries', () => {
+    const repository = new MockCountryRepository();
 
     const countries = repository.listAllCountries();
 
@@ -53,7 +72,7 @@ describe('DefaultCountryRepository', () => {
   it('should handle empty countries data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const repository = new DefaultCountryRepository();
+    const repository = new MockCountryRepository();
 
     const countries = repository.listAllCountries();
 
@@ -61,7 +80,7 @@ describe('DefaultCountryRepository', () => {
   });
 
   it('should get a country by id', () => {
-    const repository = new DefaultCountryRepository();
+    const repository = new MockCountryRepository();
 
     const country = repository.findCountryById('1');
 
@@ -74,7 +93,7 @@ describe('DefaultCountryRepository', () => {
   });
 
   it('should return null for non-existent country id', () => {
-    const repository = new DefaultCountryRepository();
+    const repository = new MockCountryRepository();
 
     const country = repository.findCountryById('non-existent-id');
 

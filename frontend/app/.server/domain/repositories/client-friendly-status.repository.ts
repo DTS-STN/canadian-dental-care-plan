@@ -29,6 +29,25 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
   }
 
   listAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[] {
+    throw new Error('Client friendly status service is not yet implemented');
+    //TODO: Implement listAllClientFriendlyStatuses service
+  }
+
+  findClientFriendlyStatusById(id: string): ClientFriendlyStatusEntity | null {
+    throw new Error('Client friendly status service is not yet implemented');
+    //TODO: Implement findClientFriendlyStatusById service
+  }
+}
+
+@injectable()
+export class MockClientFriendlyStatusRepository implements ClientFriendlyStatusRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('MockClientFriendlyStatusRepository');
+  }
+
+  listAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[] {
     this.log.debug('Fetching all client-friendly statuses');
     const clientFriendlyStatusEntities = clientFriendlyStatusJsonDataSource.value;
 

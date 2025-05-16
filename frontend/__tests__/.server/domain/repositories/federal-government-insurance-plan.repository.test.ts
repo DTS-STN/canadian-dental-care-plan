@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { DefaultFederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
+import { DefaultFederalGovernmentInsurancePlanRepository, MockFederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -27,8 +27,27 @@ describe('DefaultFederalGovernmentInsurancePlanRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all federal government insurance plans', () => {
+  it('should throw error on listAllFederalGovernmentInsurancePlans call', () => {
     const repository = new DefaultFederalGovernmentInsurancePlanRepository();
+
+    expect(() => repository.listAllFederalGovernmentInsurancePlans()).toThrowError('Federal government insurance plan service is not yet implemented');
+  });
+
+  it('should throw error on findFederalGovernmentInsurancePlanById call', () => {
+    const repository = new DefaultFederalGovernmentInsurancePlanRepository();
+
+    expect(() => repository.findFederalGovernmentInsurancePlanById('1')).toThrowError('Federal government insurance plan service is not yet implemented');
+  });
+});
+
+describe('MockFederalGovernmentInsurancePlanRepository', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
+
+  it('should get all federal government insurance plans', () => {
+    const repository = new MockFederalGovernmentInsurancePlanRepository();
 
     const federalGovernmentInsurancePlans = repository.listAllFederalGovernmentInsurancePlans();
 
@@ -49,7 +68,7 @@ describe('DefaultFederalGovernmentInsurancePlanRepository', () => {
   it('should handle empty federal government insurance plans data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const repository = new DefaultFederalGovernmentInsurancePlanRepository();
+    const repository = new MockFederalGovernmentInsurancePlanRepository();
 
     const federalGovernmentInsurancePlans = repository.listAllFederalGovernmentInsurancePlans();
 
@@ -57,7 +76,7 @@ describe('DefaultFederalGovernmentInsurancePlanRepository', () => {
   });
 
   it('should get a federal government insurance plan by id', () => {
-    const repository = new DefaultFederalGovernmentInsurancePlanRepository();
+    const repository = new MockFederalGovernmentInsurancePlanRepository();
 
     const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('1');
 
@@ -69,7 +88,7 @@ describe('DefaultFederalGovernmentInsurancePlanRepository', () => {
   });
 
   it('should return null for non-existent federal government insurance plan id', () => {
-    const repository = new DefaultFederalGovernmentInsurancePlanRepository();
+    const repository = new MockFederalGovernmentInsurancePlanRepository();
 
     const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('non-existent-id');
 

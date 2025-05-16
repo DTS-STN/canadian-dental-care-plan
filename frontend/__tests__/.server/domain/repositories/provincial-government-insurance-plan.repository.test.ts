@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { DefaultProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
+import { DefaultProvincialGovernmentInsurancePlanRepository, MockProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -29,8 +29,27 @@ describe('DefaultProvincialGovernmentInsurancePlanRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all provincial government insurance plans', () => {
+  it('should throw error on listAllProvincialGovernmentInsurancePlans call', () => {
     const repository = new DefaultProvincialGovernmentInsurancePlanRepository();
+
+    expect(() => repository.listAllProvincialGovernmentInsurancePlans()).toThrowError('Provincial government insurance plan service is not yet implemented');
+  });
+
+  it('should throw error on findProvincialGovernmentInsurancePlanById call', () => {
+    const repository = new DefaultProvincialGovernmentInsurancePlanRepository();
+
+    expect(() => repository.findProvincialGovernmentInsurancePlanById('1')).toThrowError('Provincial government insurance plan service is not yet implemented');
+  });
+});
+
+describe('MockProvincialGovernmentInsurancePlanRepository', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
+
+  it('should get all provincial government insurance plans', () => {
+    const repository = new MockProvincialGovernmentInsurancePlanRepository();
 
     const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
 
@@ -53,7 +72,7 @@ describe('DefaultProvincialGovernmentInsurancePlanRepository', () => {
   it('should handle empty provincial government insurance plans data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const repository = new DefaultProvincialGovernmentInsurancePlanRepository();
+    const repository = new MockProvincialGovernmentInsurancePlanRepository();
 
     const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
 
@@ -61,7 +80,7 @@ describe('DefaultProvincialGovernmentInsurancePlanRepository', () => {
   });
 
   it('should get a provincial government insurance plan by id', () => {
-    const repository = new DefaultProvincialGovernmentInsurancePlanRepository();
+    const repository = new MockProvincialGovernmentInsurancePlanRepository();
 
     const provincialGovernmentInsurancePlans = repository.findProvincialGovernmentInsurancePlanById('1');
 
@@ -74,7 +93,7 @@ describe('DefaultProvincialGovernmentInsurancePlanRepository', () => {
   });
 
   it('should return null for non-existent provincial government insurance plan id', () => {
-    const repository = new DefaultProvincialGovernmentInsurancePlanRepository();
+    const repository = new MockProvincialGovernmentInsurancePlanRepository();
 
     const provincialGovernmentInsurancePlans = repository.findProvincialGovernmentInsurancePlanById('non-existent-id');
 

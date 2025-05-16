@@ -29,6 +29,25 @@ export class DefaultFederalGovernmentInsurancePlanRepository implements FederalG
   }
 
   listAllFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanEntity[] {
+    throw new Error('Federal government insurance plan service is not yet implemented');
+    //TODO: Implement listAllFederalGovernmentInsurancePlans service
+  }
+
+  findFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanEntity | null {
+    throw new Error('Federal government insurance plan service is not yet implemented');
+    //TODO: Implement findFederalGovernmentInsurancePlanById service
+  }
+}
+
+@injectable()
+export class MockFederalGovernmentInsurancePlanRepository implements FederalGovernmentInsurancePlanRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('MockFederalGovernmentInsurancePlanRepository');
+  }
+
+  listAllFederalGovernmentInsurancePlans(): FederalGovernmentInsurancePlanEntity[] {
     this.log.debug('Fetching all federal government insurance plans');
     const federalGovernmentInsurancePlanEntities = federalGovernmentInsurancePlanJsonDataSource.value;
 

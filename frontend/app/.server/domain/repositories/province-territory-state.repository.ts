@@ -36,6 +36,30 @@ export class DefaultProvinceTerritoryStateRepository implements ProvinceTerritor
   }
 
   listAllProvinceTerritoryStates(): ProvinceTerritoryStateEntity[] {
+    throw new Error('Province territory state service is not yet implemented');
+    //TODO: Implement listAllProvinceTerritoryStates service
+  }
+
+  findProvinceTerritoryStateById(id: string): ProvinceTerritoryStateEntity | null {
+    throw new Error('Province territory state service is not yet implemented');
+    //TODO: Implement findProvinceTerritoryStateById service
+  }
+
+  findProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateEntity | null {
+    throw new Error('Province territory state service is not yet implemented');
+    //TODO: Implement findProvinceTerritoryStateByCode service
+  }
+}
+
+@injectable()
+export class MockProvinceTerritoryStateRepository implements ProvinceTerritoryStateRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('MockProvinceTerritoryStateRepository');
+  }
+
+  listAllProvinceTerritoryStates(): ProvinceTerritoryStateEntity[] {
     this.log.debug('Fetching all province territory states');
     const provinceTerritoryStateEntities = provinceTerritoryStateJsonDataSource.value;
 
