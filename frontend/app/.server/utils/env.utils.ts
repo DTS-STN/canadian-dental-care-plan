@@ -212,7 +212,7 @@ const serverEnv = clientEnvSchema.extend({
   HEALTH_AUTH_TOKEN_AUDIENCE: z.string().default('00000000-0000-0000-0000-000000000000'), // intentional default to enforce an audience check when verifying JWTs
   HEALTH_AUTH_TOKEN_ISSUER: z.string().default('https://auth.example.com/'), // intentional default to enforce an issuer check when verifying JWTs
   HEALTH_PLACEHOLDER_REQUEST_VALUE: z.string().default('CDCP_HEALTH_CHECK'),
-  APPLY_ELIGIBILITY_RULES: z.string().default('[{"minAge":55,"maxAge":64,"startDate":"2025-05-01"},{"minAge":18,"maxAge":34,"startDate":"2025-05-15"},{"minAge":35,"maxAge":54,"startDate":"2025-05-29"}]'),
+  APPLY_ELIGIBILITY_RULES: z.string().default('[{"minAge":18,"maxAge":34,"startDate":"2025-05-15T04:00:00.000Z"},{"minAge":35,"maxAge":54,"startDate":"2025-05-29T04:00:00.000Z"}]'),
 
   /**
    * Defines the duration (in seconds) the application killswitch remains active once engaged.
