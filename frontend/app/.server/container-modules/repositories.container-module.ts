@@ -84,8 +84,8 @@ function isMockEnabled(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS'>, mockNa
  * @example
  * // Binds AddressValidationRepository to mocks if the mocks are enabled in server config,
  * // otherwise binds to the actual implementation.
- * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled(serverConfig, ['wsaddress','power-platform'], false));
- * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled(serverConfig, ['wsaddress','power-platform'], true));
+ * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(areMocksEnabled(serverConfig, ['wsaddress','power-platform'], false));
+ * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(areMocksEnabled(serverConfig, ['wsaddress','power-platform'], true));
  */
 function areMocksEnabled(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS'>, mockNames: MockName[], shouldEnable: boolean) {
   return (metadata: BindingConstraints) => {
@@ -111,8 +111,8 @@ function areMocksEnabled(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS'>, mock
  * @example
  * // Binds AddressValidationRepository to mocks if the mocks are enabled in server config,
  * // otherwise binds to the actual implementation.
- * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled(serverConfig, ['wsaddress','power-platform'], false));
- * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled(serverConfig, ['wsaddress','power-platform'], true));
+ * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(areAllMocksEnabled(serverConfig, ['wsaddress','power-platform'], false));
+ * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(areAllMocksEnabled(serverConfig, ['wsaddress','power-platform'], true));
  */
 function areAllMocksEnabled(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS'>, mockNames: MockName[], shouldEnable: boolean) {
   return (metadata: BindingConstraints) => {
