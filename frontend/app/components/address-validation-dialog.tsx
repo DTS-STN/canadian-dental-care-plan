@@ -1,9 +1,9 @@
 import { useId, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 
+import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';

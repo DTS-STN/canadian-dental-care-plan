@@ -2,10 +2,10 @@
  * Utility functions to help with RAOIDC requests.
  */
 import { UTCDate } from '@date-fns/utc';
+import { invariant } from '@dts-stn/invariant';
 import type { JWK, JWTPayload, JWTVerifyResult } from 'jose';
 import { SignJWT, compactDecrypt, decodeProtectedHeader, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
-import invariant from 'tiny-invariant';
 
 import type { FetchFn } from '~/.server/http';
 import { createLogger } from '~/.server/logging';

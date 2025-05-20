@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { redirect } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { faCheck, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/index';

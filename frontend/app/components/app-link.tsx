@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react';
 import type { Params, To } from 'react-router';
 import { Link, useHref } from 'react-router';
 
-import invariant from 'tiny-invariant';
+import { invariant } from '@dts-stn/invariant';
 
 import { NewTabIndicator } from '~/components/new-tab-indicator';
 import { getPathById } from '~/utils/route-utils';

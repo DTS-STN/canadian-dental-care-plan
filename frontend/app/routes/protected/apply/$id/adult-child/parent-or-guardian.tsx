@@ -2,9 +2,9 @@ import type { FormEvent } from 'react';
 
 import { redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 
 import type { Route } from './+types/parent-or-guardian';
 

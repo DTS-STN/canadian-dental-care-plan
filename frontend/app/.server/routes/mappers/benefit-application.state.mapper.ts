@@ -1,5 +1,5 @@
+import { invariant } from '@dts-stn/invariant';
 import { injectable } from 'inversify';
-import invariant from 'tiny-invariant';
 import validator from 'validator';
 
 import type { ApplicantInformationDto, BenefitApplicationDto, CommunicationPreferencesDto } from '~/.server/domain/dtos';

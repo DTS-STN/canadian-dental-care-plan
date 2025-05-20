@@ -2,9 +2,9 @@ import { useContext, useEffect } from 'react';
 
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLocation, useRouteLoaderData } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
 import { Trans, useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 
 import type { Route } from './+types/root';
 

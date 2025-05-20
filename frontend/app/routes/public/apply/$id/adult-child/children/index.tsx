@@ -3,10 +3,10 @@ import { useState } from 'react';
 
 import { redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft, faChevronRight, faEdit, faPlus, faRemove } from '@fortawesome/free-solid-svg-icons';
 import { randomUUID } from 'node:crypto';
 import { useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/index';

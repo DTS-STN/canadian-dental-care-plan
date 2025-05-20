@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
 import { UTCDate } from '@date-fns/utc';
+import { invariant } from '@dts-stn/invariant';
 import { differenceInYears, isExists, isPast } from 'date-fns';
-import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import { padWithZero } from './string-utils';

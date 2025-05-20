@@ -1,8 +1,8 @@
 import type { Params } from 'react-router';
 import { generatePath, useMatches } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import type { FlatNamespace, KeysByTOptions, Namespace, ParseKeysByNamespaces, TOptions } from 'i18next';
-import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
