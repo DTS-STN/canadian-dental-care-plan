@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { DefaultProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
+import { DefaultProvinceTerritoryStateRepository, MockProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -31,8 +31,27 @@ describe('DefaultProvinceTerritoryStateRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all province territory states', () => {
+  it('should throw error on listAllProvinceTerritoryStates call', () => {
     const repository = new DefaultProvinceTerritoryStateRepository();
+
+    expect(() => repository.listAllProvinceTerritoryStates()).toThrowError('Province territory state service is not yet implemented');
+  });
+
+  it('should throw error on findProvinceTerritoryStateById call', () => {
+    const repository = new DefaultProvinceTerritoryStateRepository();
+
+    expect(() => repository.findProvinceTerritoryStateById('1')).toThrowError('Province territory state service is not yet implemented');
+  });
+});
+
+describe('MockProvinceTerritoryStateRepository', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
+
+  it('should get all province territory states', () => {
+    const repository = new MockProvinceTerritoryStateRepository();
 
     const provinceTerritoryStates = repository.listAllProvinceTerritoryStates();
 
@@ -57,7 +76,7 @@ describe('DefaultProvinceTerritoryStateRepository', () => {
   it('should handle empty province territory states data', () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const repository = new DefaultProvinceTerritoryStateRepository();
+    const repository = new MockProvinceTerritoryStateRepository();
 
     const provinceTerritoryStates = repository.listAllProvinceTerritoryStates();
 
@@ -65,7 +84,7 @@ describe('DefaultProvinceTerritoryStateRepository', () => {
   });
 
   it('should get a province territory state by id', () => {
-    const repository = new DefaultProvinceTerritoryStateRepository();
+    const repository = new MockProvinceTerritoryStateRepository();
 
     const provinceTerritoryState = repository.findProvinceTerritoryStateById('1');
 
@@ -79,7 +98,7 @@ describe('DefaultProvinceTerritoryStateRepository', () => {
   });
 
   it('should return null for non-existent province territory state id', () => {
-    const repository = new DefaultProvinceTerritoryStateRepository();
+    const repository = new MockProvinceTerritoryStateRepository();
 
     const provinceTerritoryState = repository.findProvinceTerritoryStateById('non-existent-id');
 
