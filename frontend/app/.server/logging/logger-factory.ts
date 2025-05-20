@@ -1,4 +1,4 @@
-import invariant from 'tiny-invariant';
+import { invariant } from '@dts-stn/invariant';
 import type winston from 'winston';
 
 import { singleton } from '../utils/instance-registry';

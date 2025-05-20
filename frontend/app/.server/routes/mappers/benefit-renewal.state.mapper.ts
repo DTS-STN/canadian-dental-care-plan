@@ -1,5 +1,5 @@
+import { invariant } from '@dts-stn/invariant';
 import { inject, injectable } from 'inversify';
-import invariant from 'tiny-invariant';
 import type { ReadonlyObjectDeep } from 'type-fest/source/readonly-deep';
 import validator from 'validator';
 

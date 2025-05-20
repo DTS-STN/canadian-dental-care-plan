@@ -1,8 +1,8 @@
 import { data, redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 

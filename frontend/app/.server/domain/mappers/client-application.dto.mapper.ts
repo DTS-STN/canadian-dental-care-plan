@@ -1,5 +1,5 @@
+import { invariant } from '@dts-stn/invariant';
 import { inject, injectable } from 'inversify';
-import invariant from 'tiny-invariant';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';

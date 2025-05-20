@@ -2,8 +2,8 @@ import type { ChangeEvent } from 'react';
 
 import { redirect, useSearchParams } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/index';

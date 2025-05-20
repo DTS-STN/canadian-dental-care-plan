@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 
 import { useNavigate } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { randomUUID } from 'node:crypto';
-import invariant from 'tiny-invariant';
 
 import type { Route } from './+types/index';
 

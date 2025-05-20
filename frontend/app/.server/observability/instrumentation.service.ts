@@ -6,10 +6,10 @@
  *   - https://www.npmjs.com/package/@opentelemetry/sdk-node
  *   - https://www.dynatrace.com/support/help/extend-dynatrace/opentelemetry
  */
+import { invariant } from '@dts-stn/invariant';
 import type { Attributes, Counter, Histogram, MetricOptions, Span } from '@opentelemetry/api';
 import { metrics, trace } from '@opentelemetry/api';
 import { inject, injectable } from 'inversify';
-import invariant from 'tiny-invariant';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';

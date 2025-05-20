@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { redirect, useFetcher } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
+import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-child-information';
