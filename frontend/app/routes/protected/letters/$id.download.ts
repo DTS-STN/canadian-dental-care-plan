@@ -20,17 +20,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   // Check if the letters are in the session
-  const hasLetters: ReadonlyArray<LetterDto> | undefined = session.find('letters');
-
+  const letters: ReadonlyArray<LetterDto> | undefined = session.find('letters');
   // Optional TODO: add a check to see if the letter belongs to the user. (Done with LetterService call)
-
-  if (!hasLetters) {
+  if (!letters) {
     throw data(null, { status: 404 });
   }
-
-  // prevent users from entering any ID in the URL and seeing other users' letters
-  const letters: ReadonlyArray<LetterDto> | undefined = session.get('letters');
-  const letter = letters?.find((letter) => letter.id === params.id);
+  
+  const letter = letters.find((letter) => letter.id === params.id);
+  
   if (!letter) {
     throw data(null, { status: 404 });
   }
