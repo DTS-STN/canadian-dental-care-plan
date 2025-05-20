@@ -25,9 +25,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   if (!letters) {
     throw data(null, { status: 404 });
   }
-  
+
   const letter = letters.find((letter) => letter.id === params.id);
-  
+
   if (!letter) {
     throw data(null, { status: 404 });
   }
