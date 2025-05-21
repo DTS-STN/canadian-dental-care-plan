@@ -62,27 +62,22 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.member-selection', { userId: idToken.sub });
 
-  const members: Member[] = [];
-
-  // primary member
-  if (state.clientApplication.typeOfApplication !== 'child') {
-    members.push({
+  const members: Member[] = [
+    // primary member
+    {
       id: state.id,
       applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`,
       previouslyReviewed: state.previouslyReviewed,
       typeOfApplicant: 'primary',
-    });
-  }
-
-  // children members
-  members.push(
+    },
+    // children members
     ...state.children.map<Member>((child) => ({
       id: child.id,
       applicantName: `${child.information?.firstName} ${child.information?.lastName}`,
       previouslyReviewed: child.previouslyReviewed,
       typeOfApplicant: 'child',
     })),
-  );
+  ];
 
   return { meta, members, isItaCandidate: isInvitationToApplyClient(state.clientApplication) };
 }
