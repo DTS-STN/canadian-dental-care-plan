@@ -6,6 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-adult-information';
+import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import {
@@ -71,7 +72,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const preferredCommunicationMethodService = appContainer.get(TYPES.domain.services.PreferredCommunicationMethodService);
   const maritalStatusService = appContainer.get(TYPES.domain.services.MaritalStatusService);
   const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
@@ -79,14 +79,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
 
-  const communicationPreferredMethodId = state.communicationPreferences?.preferredMethod ?? state.clientApplication.communicationPreferences.preferredMethod;
-  const communicationPreferredMethodName = preferredCommunicationMethodService.getLocalizedPreferredCommunicationMethodById(communicationPreferredMethodId, locale).name;
-
   const maritalStatusId = state.maritalStatus ?? state.clientApplication.applicantInformation.maritalStatus;
   invariant(typeof maritalStatusId === 'string', 'Expected maritalStatusId to be defined');
   const maritalStatusName = maritalStatusService.getLocalizedMaritalStatusById(maritalStatusId, locale).name;
 
-  const communicationPreferredLanguageId = state.communicationPreferences?.preferredLanguage ?? state.clientApplication.communicationPreferences.preferredLanguage;
+  const communicationPreferredLanguageId = state.preferredLanguage ?? state.clientApplication.communicationPreferences.preferredLanguage;
   const communicationPreferredLanguageName = preferredLanguageService.getLocalizedPreferredLanguageById(communicationPreferredLanguageId, locale).name;
 
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? provinceTerritoryStateService.getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
@@ -113,8 +110,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     altPhoneNumber: state.contactInformation?.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
     maritalStatus: maritalStatusName,
-    contactInformationEmail: state.contactInformation?.email,
-    communicationPreference: communicationPreferredMethodName,
+    contactInformationEmail: state.email ?? state.clientApplication.contactInformation.email,
+    communicationSunLifePreference: state.communicationPreferences?.preferredMethod,
+    communicationGOCPreference: state.communicationPreferences?.preferredNotificationMethod,
     preferredLanguage: communicationPreferredLanguageName,
     clientApplicationEmail: state.clientApplication.communicationPreferences.email,
     isItaClient: isInvitationToApplyClient(state.clientApplication),
@@ -237,7 +235,7 @@ export async function action({ context: { appContainer, session }, params, reque
     if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
       return redirect(getPathById('protected/renew/$id/review-child-information', params));
     }
-    return redirect(getPathById('protected/renew/$id/member-selection', params));
+    return redirect(getPathById('protected/renew/$id/communication-preference', params));
   }
 
   const idToken: IdToken = session.get('idToken');
@@ -382,11 +380,27 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
         <section className="space-y-6">
           <h2 className="font-lato text-2xl font-bold">{t('protected-renew:review-adult-information.comm-title')}</h2>
           <dl className="divide-y border-y">
-            <DescriptionListItem term={t('protected-renew:review-adult-information.comm-pref-title')}>
-              <p>{userInfo.communicationPreference}</p>
+            <DescriptionListItem term={t('protected-renew:review-adult-information.sun-life-comm-pref-title')}>
               <p>
-                <InlineLink id="change-communication-preference" routeId="protected/renew/$id/confirm-communication-preference" params={params}>
+                {userInfo.communicationSunLifePreference === PREFERRED_SUN_LIFE_METHOD.email
+                  ? t('protected-renew:review-adult-information.preferred-notification-method-email')
+                  : t('protected-renew:review-adult-information.preferred-notification-method-mail')}
+              </p>
+              <p>
+                <InlineLink id="change-communication-preference" routeId="protected/renew/$id/communication-preference" params={params}>
                   {t('protected-renew:review-adult-information.comm-pref-change')}
+                </InlineLink>
+              </p>
+            </DescriptionListItem>
+            <DescriptionListItem term={t('protected-renew:review-adult-information.goc-comm-pref-title')}>
+              <p>
+                {userInfo.communicationGOCPreference === PREFERRED_NOTIFICATION_METHOD.msca
+                  ? t('protected-renew:review-adult-information.preferred-notification-method-msca')
+                  : t('protected-renew:review-adult-information.preferred-notification-method-mail')}
+              </p>
+              <p>
+                <InlineLink id="change-communication-preference" routeId="protected/renew/$id/communication-preference" params={params}>
+                  {t('protected-renew:review-adult-information.goc-comm-pref-change')}
                 </InlineLink>
               </p>
             </DescriptionListItem>

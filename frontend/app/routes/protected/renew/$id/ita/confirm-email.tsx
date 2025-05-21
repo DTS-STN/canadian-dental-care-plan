@@ -42,7 +42,7 @@ const SHOULD_RECEIVE_EMAIL_COMMUNICATION_OPTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.confirmEmail,
-  pageTitleI18nKey: 'protected-renew:confirm-email.page-title',
+  pageTitleI18nKey: 'protected-renew:confirm-email-ita.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw new Response('Not Found', { status: 404 });
   }
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm-email.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm-email-ita.page-title') }) };
 
   return {
     meta,
@@ -95,7 +95,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const emailSchema = z
     .object({
       shouldReceiveEmailCommunication: z.nativeEnum(SHOULD_RECEIVE_EMAIL_COMMUNICATION_OPTION, {
-        errorMap: () => ({ message: t('protected-renew:confirm-email.error-message.ita-add-or-update-required') }),
+        errorMap: () => ({ message: t('protected-renew:confirm-email-ita.error-message.ita-add-or-update-required') }),
       }),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
@@ -103,17 +103,17 @@ export async function action({ context: { appContainer, session }, params, reque
     .superRefine((val, ctx) => {
       if (val.shouldReceiveEmailCommunication === SHOULD_RECEIVE_EMAIL_COMMUNICATION_OPTION.yes) {
         if (typeof val.email !== 'string' || validator.isEmpty(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.email-required'), path: ['email'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email-ita.error-message.email-required'), path: ['email'] });
         } else if (!validator.isEmail(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.email-valid'), path: ['email'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email-ita.error-message.email-valid'), path: ['email'] });
         }
 
         if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.confirm-email-required'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email-ita.error-message.confirm-email-required'), path: ['confirmEmail'] });
         } else if (!validator.isEmail(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.confirm-email-valid'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email-ita.error-message.confirm-email-valid'), path: ['confirmEmail'] });
         } else if (val.email !== val.confirmEmail) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.email-match'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email-ita.error-message.email-match'), path: ['confirmEmail'] });
         }
       }
     })
@@ -155,7 +155,6 @@ export async function action({ context: { appContainer, session }, params, reque
           session,
           state: {
             editModeEmail: parsedDataResult.data.email,
-            editModeCommunicationPreferences: parsedDataResult.data.shouldReceiveEmailCommunication,
             ...(isNewEmail && {
               verifyEmail: {
                 verificationCode,
@@ -241,15 +240,15 @@ export default function ProtectedRenewProtectedConfirmEmail({ loaderData, params
         <CsrfTokenInput />
         <div className="mb-6">
           <p id="adding-email" className="mb-4">
-            {t('protected-renew:confirm-email.add-email')}
+            {t('protected-renew:confirm-email-ita.add-email')}
           </p>
           <InputRadios
             id="should-receive-email-communication"
             name="shouldReceiveEmailCommunication"
-            legend={t('protected-renew:confirm-email.add-or-update.legend')}
+            legend={t('protected-renew:confirm-email-ita.add-or-update.legend')}
             options={[
               {
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:confirm-email.option-yes" />,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:confirm-email-ita.option-yes" />,
                 value: SHOULD_RECEIVE_EMAIL_COMMUNICATION_OPTION.yes,
                 defaultChecked: shouldReceiveEmailCommunication === true,
                 onChange: handleShouldReceiveEmailCommunicationChanged,
@@ -264,7 +263,7 @@ export default function ProtectedRenewProtectedConfirmEmail({ loaderData, params
                       autoComplete="email"
                       defaultValue={defaultState.email}
                       errorMessage={errors?.email}
-                      label={t('protected-renew:confirm-email.email')}
+                      label={t('protected-renew:confirm-email-ita.email')}
                       maxLength={64}
                       aria-describedby="adding-email"
                     />
@@ -277,7 +276,7 @@ export default function ProtectedRenewProtectedConfirmEmail({ loaderData, params
                       autoComplete="email"
                       defaultValue={defaultState.email}
                       errorMessage={errors?.confirmEmail}
-                      label={t('protected-renew:confirm-email.confirm-email')}
+                      label={t('protected-renew:confirm-email-ita.confirm-email')}
                       maxLength={64}
                       aria-describedby="adding-email"
                     />
@@ -285,7 +284,7 @@ export default function ProtectedRenewProtectedConfirmEmail({ loaderData, params
                 ),
               },
               {
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:confirm-email.option-no" />,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:confirm-email-ita.option-no" />,
                 value: SHOULD_RECEIVE_EMAIL_COMMUNICATION_OPTION.no,
                 defaultChecked: shouldReceiveEmailCommunication === false,
                 onChange: handleShouldReceiveEmailCommunicationChanged,
@@ -298,10 +297,10 @@ export default function ProtectedRenewProtectedConfirmEmail({ loaderData, params
         {editMode ? (
           <div className="flex flex-wrap items-center gap-3">
             <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Email click">
-              {t('protected-renew:confirm-email.save-btn')}
+              {t('protected-renew:confirm-email-ita.save-btn')}
             </Button>
             <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Email click">
-              {t('protected-renew:confirm-email.cancel-btn')}
+              {t('protected-renew:confirm-email-ita.cancel-btn')}
             </ButtonLink>
           </div>
         ) : (
@@ -315,10 +314,10 @@ export default function ProtectedRenewProtectedConfirmEmail({ loaderData, params
               endIcon={faChevronRight}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Email click"
             >
-              {t('protected-renew:confirm-email.continue-btn')}
+              {t('protected-renew:confirm-email-ita.continue-btn')}
             </LoadingButton>
             <LoadingButton id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Email click">
-              {t('protected-renew:confirm-email.back-btn')}
+              {t('protected-renew:confirm-email-ita.back-btn')}
             </LoadingButton>
           </div>
         )}

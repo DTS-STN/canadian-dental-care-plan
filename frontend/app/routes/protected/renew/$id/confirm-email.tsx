@@ -1,5 +1,7 @@
 import { data, redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -7,7 +9,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirm-email';
 
 import { TYPES } from '~/.server/constants';
-import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isPrimaryApplicantStateComplete, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -15,17 +17,13 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-
-const FORM_ACTION = {
-  cancel: 'cancel',
-  save: 'save',
-} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -46,10 +44,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm-email.page-title') }) };
 
-  const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-email', { userId: idToken.sub });
-
-  return { meta, defaultState: { email: state.contactInformation?.email } };
+  return {
+    meta,
+    defaultState: state.email,
+    editMode: state.editMode,
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -59,99 +58,135 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const idToken: IdToken = session.get('idToken');
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.configs.ServerConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+  const idToken: IdToken = session.get('idToken');
 
   const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
 
   const emailSchema = z
     .object({
-      email: z.string().trim().max(64).optional(),
-      confirmEmail: z.string().trim().max(64).optional(),
+      email: z
+        .string({ errorMap: () => ({ message: t('protected-renew:confirm-email.error-message.email-required') }) })
+        .trim()
+        .min(1)
+        .max(64),
     })
     .superRefine((val, ctx) => {
-      if (val.email ?? val.confirmEmail) {
-        if (typeof val.email !== 'string' || validator.isEmpty(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.email-required'), path: ['email'] });
-        } else if (!validator.isEmail(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.email-valid'), path: ['email'] });
-        }
-
-        if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.confirm-email-required'), path: ['confirmEmail'] });
-        } else if (!validator.isEmail(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.confirm-email-valid'), path: ['confirmEmail'] });
-        } else if (val.email !== val.confirmEmail) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.email-match'), path: ['confirmEmail'] });
-        }
+      if (!validator.isEmail(val.email)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.email-valid'), path: ['email'] });
       }
     });
 
   const parsedDataResult = emailSchema.safeParse({
-    email: formData.get('email') ? String(formData.get('email')) : undefined,
-    confirmEmail: formData.get('confirmEmail') ? String(formData.get('confirmEmail')) : undefined,
+    email: formData.get('email') ? String(formData.get('email') ?? '') : undefined,
   });
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
   }
 
-  saveProtectedRenewState({
-    params,
-    request,
-    session,
-    state: {
-      emailPreValidation: parsedDataResult.data.email,
-      emailPreviouslyValidated: state.emailVerified,
-    },
-  });
+  const isNewEmail = state.email !== parsedDataResult.data.email;
+  const verificationCode = isNewEmail || state.verifyEmail === undefined ? verificationCodeService.createVerificationCode(idToken.sub) : state.verifyEmail.verificationCode;
 
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-email', { userId: idToken.sub });
+  invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
+  if (isNewEmail) {
+    await verificationCodeService.sendVerificationCodeEmail({
+      email: parsedDataResult.data.email,
+      verificationCode,
+      preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
+      userId: idToken.sub,
+    });
+  }
 
-  if (parsedDataResult.data.email && parsedDataResult.data.email !== state.contactInformation?.email) {
-    // Create a new verification code and store the code in session
-    const verificationCode = verificationCodeService.createVerificationCode(idToken.sub);
-
+  if (state.editMode) {
+    // Redirect to /verify-email only if emailVerified is false
+    if (isNewEmail || !state.emailVerified) {
+      saveProtectedRenewState({
+        params,
+        request,
+        session,
+        state: {
+          editModeEmail: parsedDataResult.data.email,
+          ...(isNewEmail && {
+            verifyEmail: {
+              verificationCode,
+              verificationAttempts: 0,
+            },
+          }),
+        },
+      });
+      return redirect(getPathById('protected/renew/$id/verify-email', params));
+    }
+    // Save editMode data to state.
     saveProtectedRenewState({
       params,
       request,
       session,
       state: {
+        communicationPreferences: state.editModeCommunicationPreferences,
+        email: parsedDataResult.data.email,
+        emailVerified: state.emailVerified,
         verifyEmail: {
           verificationCode,
           verificationAttempts: 0,
         },
-        emailVerified: false, // Reset emailVerified when requesting a new code
       },
     });
+    if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
+      return redirect(getPathById('protected/renew/$id/review-child-information', params));
+    }
+    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  }
+  saveProtectedRenewState({
+    params,
+    request,
+    session,
+    state: {
+      email: parsedDataResult.data.email,
+      emailVerified: isNewEmail ? false : state.emailVerified,
+      ...(isNewEmail && {
+        verifyEmail: {
+          verificationCode,
+          verificationAttempts: 0,
+        },
+      }),
+    },
+  });
 
+  if (isNewEmail || !state.emailVerified) {
     return redirect(getPathById('protected/renew/$id/verify-email', params));
   }
 
+  if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
+    return redirect(getPathById('protected/renew/$id/review-child-information', params));
+  }
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }
 
 export default function ProtectedRenewConfirmEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = loaderData;
+  const { defaultState, editMode } = loaderData;
+
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, {
-    email: 'email',
-    confirmEmail: 'confirm-email',
-  });
+  const errorSummary = useErrorSummary(errors, { email: 'email' });
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('renew:all-optional-label')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
-        <div className="mb-6">
-          <div className="grid gap-6 md:grid-cols-2">
+        <fieldset className="mb-6">
+          <p className="mb-4">{t('protected-renew:confirm-email.provide-email')}</p>
+          <p className="mb-8">{t('protected-renew:confirm-email.verify-email')}</p>
+          <p className="mb-4 italic">{t('renew:required-label')}</p>
+          <div className="grid items-end gap-6 md:grid-cols-2">
             <InputField
               id="email"
               name="email"
@@ -159,35 +194,41 @@ export default function ProtectedRenewConfirmEmail({ loaderData, params }: Route
               inputMode="email"
               className="w-full"
               autoComplete="email"
-              defaultValue={defaultState.email}
+              defaultValue={defaultState}
               errorMessage={errors?.email}
-              label={t('protected-renew:confirm-email.email')}
+              label={t('protected-renew:confirm-email.email-legend')}
               maxLength={64}
               aria-describedby="adding-email"
-            />
-            <InputField
-              id="confirm-email"
-              name="confirmEmail"
-              type="email"
-              inputMode="email"
-              className="w-full"
-              autoComplete="email"
-              defaultValue={defaultState.email}
-              errorMessage={errors?.confirmEmail}
-              label={t('protected-renew:confirm-email.confirm-email')}
-              maxLength={64}
-              aria-describedby="adding-email"
+              required
             />
           </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Email click">
-            {t('protected-renew:confirm-email.save-btn')}
-          </Button>
-          <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Email click">
-            {t('protected-renew:confirm-email.cancel-btn')}
-          </ButtonLink>
-        </div>
+        </fieldset>
+        {editMode ? (
+          <div className="flex flex-wrap items-center gap-3">
+            <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Email click">
+              {t('protected-renew:confirm-email.save-btn')}
+            </Button>
+            <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Email click">
+              {t('protected-renew:confirm-email.cancel-btn')}
+            </ButtonLink>
+          </div>
+        ) : (
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Email click">
+              {t('protected-renew:confirm-email.continue')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              routeId="protected/renew/$id/communication-preference"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Email click"
+            >
+              {t('protected-renew:confirm-email.back')}
+            </ButtonLink>
+          </div>
+        )}
       </fetcher.Form>
     </div>
   );
