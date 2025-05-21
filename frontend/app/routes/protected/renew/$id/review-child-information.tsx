@@ -137,7 +137,7 @@ export async function action({ context: { appContainer, session }, params, reque
       state: { editMode: false },
     });
     if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
-      return redirect(getPathById('protected/renew/$id/member-selection', params));
+      return redirect(getPathById('protected/renew/$id/communication-preference', params));
     }
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }

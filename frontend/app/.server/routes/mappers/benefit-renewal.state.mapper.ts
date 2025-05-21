@@ -130,6 +130,7 @@ export interface ProtectedRenewState {
   partnerInformation?: ProtectedPartnerInformationState;
   communicationPreferences?: ProtectedConmmunicationPreferenceState;
   emailVerified?: boolean;
+  preferredLanguage?: string;
 }
 
 export interface BenefitRenewalStateMapper {
@@ -511,6 +512,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       clientApplication,
       communicationPreferences,
       emailVerified,
+      preferredLanguage,
     }: ProtectedRenewState,
     userId: string,
     applicantStateCompleted: boolean,
@@ -530,8 +532,8 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       communicationPreferences: this.toCommunicationPreferences({
         existingCommunicationPreferences: clientApplication.communicationPreferences,
-        hasPreferredLanguageChanged: !!communicationPreferences?.preferredLanguage,
-        renewedPreferredLanguage: communicationPreferences?.preferredLanguage,
+        hasPreferredLanguageChanged: !!preferredLanguage,
+        renewedPreferredLanguage: preferredLanguage,
         hasEmailChanged: !!contactInformation?.email,
         renewedEmail: contactInformation?.email,
         renewedReceiveEmailCommunication: contactInformation?.shouldReceiveEmailCommunication,

@@ -103,6 +103,7 @@ export const pageIds = {
       confirmation: 'CDCP-PROT-RENW-0020',
       confirmAddress: 'CDCP-PROT-RENW-0021',
       verifyEmail: 'CDCP-PROT-RENW-0022',
+      communicationPreference: 'CDCP-PROT-RENW-0023',
     },
     dataUnavailable: 'CDCP-PROT-0099',
     unableToProcessRequest: 'CDCP-PROT-0999',

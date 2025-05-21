@@ -359,7 +359,7 @@
       "phone-number-alt-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant"
     }
   },
-  "confirm-email": {
+  "confirm-email-ita": {
     "page-title": "Adresse courriel",
     "add-email": "La communication par courriel aidera le gouvernement du Canada et Sun Life à vous contacter au sujet de votre adhésion au Régime canadien de soins dentaires. Sinon, nous vous contacterons par la poste.",
     "add-or-update": {
@@ -381,6 +381,20 @@
       "email-required": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@exemple.com"
+    }
+  },
+  "confirm-email": {
+    "page-title": "Adresse courriel",
+    "provide-email": "Fournissez l'adresse courriel que vous souhaitez que le gouvernement du Canada ou la Sun Life utilise pour communiquer avec vous au sujet de votre adhésion au Régime canadien de soins dentaires.",
+    "verify-email": "Nous devons vérifier votre adresse courriel.",
+    "email-legend": "Adresse courriel",
+    "back": "Retour",
+    "continue": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
+    "error-message": {
+      "email-required": "Entrez l'adresse courriel, par exemple nom@exemple.com",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com"
     }
   },
   "update-address": {
@@ -427,7 +441,7 @@
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer"
   },
-  "communication-preference": {
+  "confirm-communication-preference": {
     "page-title": "Communication",
     "preferred-language": "Quelle langue officielle de communication préférez-vous?",
     "preferred-method": "Comment préférez-vous recevoir les communications au sujet de votre Régime canadien de soins dentaires de la Sun Life et du gouvernement du Canada\u00a0?",
@@ -535,7 +549,14 @@
     "continue-button": "Continuer",
     "yes": "Oui",
     "no": "Non",
-    "no-update": "Pas de mise à jour"
+    "no-update": "Pas de mise à jour",
+    "sun-life-comm-pref-title": "Préférence de communication de Sun Life",
+    "goc-comm-pref-title": "Préférence de communication du gouvernement du Canada",
+    "sun-life-comm-pref-change": "Modifier la préférence de Sun Life",
+    "goc-comm-pref-change": "Modifier la communication du gouvernement du Canada",
+    "preferred-notification-method-email": "Par courriel",
+    "preferred-notification-method-msca": "Numériquement, dans Mon dossier Service Canada (MDSC)",
+    "preferred-notification-method-mail": "Par la poste"
   },
   "review-submit": {
     "page-title": "Soumettre votre demande de renouvellement",
@@ -626,6 +647,25 @@
     "code-sent": {
       "heading": "Nouveau code",
       "detail": "Un nouveau code de vérification a été envoyé à {{email}}."
+    }
+  },
+  "communication-preference": {
+    "page-title": "Communication",
+    "preferred-method": "Comment aimeriez-vous que la Sun Life communique avec vous?",
+    "preferred-method-help-message": "Si vous êtes admissible, nous communiquerons vos renseignements à la Sun Life du Canada, compagnie d'assurance-vie (Sun Life). La Sun Life sera responsable du traitement de l'adhésion des membres et de l'administration des demandes de réclamations et des prestations du Régime canadien de soins dentaires.",
+    "by-email": "Par courriel",
+    "by-mail": "Par la poste",
+    "preferred-notification-method": "Comment aimeriez-vous recevoir les lettres ou notifications du gouvernement du Canada au sujet de votre admissibilité au Régime canadien de soins dentaires?",
+    "preferred-notification-method-msca": "<span>Numériquement, dans Mon dossier Service Canada (MDSC)</span><br>Vous <strong>ne recevrez pas</strong> la décision d'admissibilité au Régime canadien de soins dentaires par la poste. Allez sur le site <mscaLinkAccount>Mon dossier Service Canada</mscaLinkAccount> pour y ouvrir un compte ou pour ouvrir une session.",
+    "preferred-notification-method-mail": "<span>Par la poste</span><br>Vous pouvez également consulter votre décision d'admissibilité au Régime canadien de soins dentaires dans <mscaLinkAccount>Mon dossier Service Canada</mscaLinkAccount>.",
+    "back": "Retour",
+    "continue": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
+    "msca-link-account": "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
+    "error-message": {
+      "preferred-method-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life",
+      "preferred-notification-method-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada"
     }
   }
 }

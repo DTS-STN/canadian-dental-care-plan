@@ -83,20 +83,21 @@ export interface ProtectedRenewState {
     readonly email?: string;
     readonly shouldReceiveEmailCommunication?: boolean;
   };
-  // temporary placeholder for email prior to verifying
-  readonly emailPreValidation?: string;
-  readonly emailPreviouslyValidated?: boolean;
+  readonly preferredLanguage?: string;
   readonly communicationPreferences?: {
-    readonly email?: string;
-    readonly preferredLanguage: string;
     readonly preferredMethod: string;
+    readonly preferredNotificationMethod: string;
   };
   readonly verifyEmail?: {
     verificationCode: string;
     verificationAttempts: number;
   };
+  readonly email?: string;
   readonly editModeEmail?: string;
-  readonly editModeCommunicationPreferences?: boolean;
+  readonly editModeCommunicationPreferences?: {
+    preferredMethod: string;
+    preferredNotificationMethod: string;
+  };
   readonly emailVerified?: boolean;
   readonly hasAddressChanged?: boolean;
   readonly isHomeAddressSameAsMailingAddress?: boolean;
@@ -269,7 +270,6 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
       phoneNumberAlt: clientApplication.contactInformation.phoneNumberAlt,
       email: clientApplication.isInvitationToApplyClient ? undefined : clientApplication.contactInformation.email,
     },
-    communicationPreferences: clientApplication.communicationPreferences,
     children: clientApplication.children
       // filter out children who will be 18 or older at the start of the coverage period as they are ineligible for renewal
       .filter((child) => getAgeFromDateString(child.information.dateOfBirth, applicationYear.coverageEndDate) < 18) //
@@ -387,7 +387,8 @@ interface ValidateProtectedRenewStateForReviewArgs {
 }
 
 export function validateProtectedRenewStateForReview({ params, state, demographicSurveyEnabled }: ValidateProtectedRenewStateForReviewArgs) {
-  const { applicationYear, maritalStatus, partnerInformation, mailingAddress, homeAddress, clientApplication, contactInformation, communicationPreferences, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey } = state;
+  const { applicationYear, maritalStatus, partnerInformation, mailingAddress, homeAddress, clientApplication, contactInformation, communicationPreferences, editMode, id, dentalBenefits, dentalInsurance, demographicSurvey, email, preferredLanguage } =
+    state;
 
   const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
@@ -410,6 +411,8 @@ export function validateProtectedRenewStateForReview({ params, state, demographi
     children,
     dentalBenefits,
     demographicSurvey,
+    email,
+    preferredLanguage,
   };
 }
 

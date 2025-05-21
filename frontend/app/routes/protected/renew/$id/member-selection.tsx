@@ -105,11 +105,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return { status: 'select-member' };
   }
 
-  if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
-    return redirect(getPathById('protected/renew/$id/review-child-information', params));
-  }
-
-  return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  return redirect(getPathById('protected/renew/$id/communication-preference', params));
 }
 
 export default function ProtectedRenewMemberSelection({ loaderData, params }: Route.ComponentProps) {
