@@ -380,16 +380,6 @@ export const routes = [
             paths: { en: '/:lang/protected/renew/:id/confirm-email', fr: '/:lang/protege/renouveler/:id/confirmer-courriel' },
           },
           {
-            id: 'protected/renew/$id/ita/confirm-email',
-            file: 'routes/protected/renew/$id/ita/confirm-email.tsx',
-            paths: { en: '/:lang/protected/renew/:id/ita/confirm-email', fr: '/:lang/protege/renouveler/:id/ita/confirmer-courriel' },
-          },
-          {
-            id: 'protected/renew/$id/ita/verify-email',
-            file: 'routes/protected/renew/$id/ita/verify-email.tsx',
-            paths: { en: '/:lang/protected/renew/:id/ita/verify-email', fr: '/:lang/protege/renouveler/:id/ita/verifier-courriel' },
-          },
-          {
             id: 'protected/renew/$id/confirm-communication-preference',
             file: 'routes/protected/renew/$id/confirm-communication-preference.tsx',
             paths: { en: '/:lang/protected/renew/:id/confirm-communication-preference', fr: '/:lang/protege/renouveler/:id/confirmer-preference-communication' },

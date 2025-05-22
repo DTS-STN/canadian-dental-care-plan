@@ -125,7 +125,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (canProceedToReview) {
     saveProtectedRenewState({ params, request, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
     if (state.editMode === false && isInvitationToApplyClient(state.clientApplication)) {
-      return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
+      return redirect(getPathById('protected/renew/$id/dental-insurance', params));
     }
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }
@@ -186,7 +186,7 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-home-address', { userId: idToken.sub });
 
   if (state.editMode === false && isInvitationToApplyClient(state.clientApplication)) {
-    return redirect(getPathById('protected/renew/$id/ita/confirm-email', params));
+    return redirect(getPathById('protected/renew/$id/dental-insurance', params));
   }
 
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
