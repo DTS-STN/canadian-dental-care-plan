@@ -6,6 +6,14 @@
 */
 @import 'tailwindcss' source('../app');
 
+/*
+  Tailwind 4 color palette in rgb()
+  https://github.com/zounar/tailwind-4-rgb-palette
+
+  Related issue https://github.com/tailwindlabs/tailwindcss/issues/14119
+*/
+@import './palette-rgb.css';
+
 @plugin 'tailwindcss-animate';
 
 @theme {
