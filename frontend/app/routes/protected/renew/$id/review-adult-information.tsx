@@ -334,7 +334,7 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
             <DescriptionListItem term={t('protected-renew:review-adult-information.email')}>
               <p>{userInfo.contactInformationEmail}</p>
               <div className="mt-4">
-                <InlineLink id="change-email" routeId={userInfo.isItaClient ? 'protected/renew/$id/ita/confirm-email' : 'protected/renew/$id/confirm-email'} params={params}>
+                <InlineLink id="change-email" routeId="protected/renew/$id/confirm-email" params={params}>
                   {t('protected-renew:review-adult-information.email-change')}
                 </InlineLink>
               </div>

@@ -359,30 +359,6 @@
       "phone-number-alt-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant"
     }
   },
-  "confirm-email-ita": {
-    "page-title": "Adresse courriel",
-    "add-email": "La communication par courriel aidera le gouvernement du Canada et Sun Life à vous contacter au sujet de votre adhésion au Régime canadien de soins dentaires. Sinon, nous vous contacterons par la poste.",
-    "add-or-update": {
-      "legend": "Souhaitez-vous recevoir des communications par courriel de la part de Sun Life et du gouvernement du Canada concernant votre couverture du Régime canadien de soins dentaires?"
-    },
-    "email": "Adresse courriel",
-    "confirm-email": "Confirmer l'adresse courriel",
-    "back-btn": "Retour",
-    "continue-btn": "Continuer",
-    "cancel-btn": "Annuler",
-    "save-btn": "Enregistrer",
-    "option-yes": "Oui",
-    "option-no": "Non",
-    "error-message": {
-      "add-or-update-required": "Sélectionnez si vous souhaitez mettre à jour ou ajouter une adresse courriel",
-      "ita-add-or-update-required": "Sélectionnez si vous souhaitez recevoir des communications par courriel",
-      "email-match": "Les adresses courriel entrées ne concordent pas",
-      "confirm-email-required": "Confirmez l'adresse courriel",
-      "email-required": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
-      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
-      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@exemple.com"
-    }
-  },
   "confirm-email": {
     "page-title": "Adresse courriel",
     "provide-email": "Fournissez l'adresse courriel que vous souhaitez que le gouvernement du Canada ou la Sun Life utilise pour communiquer avec vous au sujet de votre adhésion au Régime canadien de soins dentaires.",

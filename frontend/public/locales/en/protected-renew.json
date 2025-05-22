@@ -359,30 +359,6 @@
       "phone-number-alt-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front"
     }
   },
-  "confirm-email-ita": {
-    "page-title": "Email",
-    "add-email": "Email communication will help the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan coverage. Otherwise, we'll contact you by mail.",
-    "add-or-update": {
-      "legend": "Would you like to receive email communication from Sun Life and the Government of Canada about your Canadian Dental Care Plan coverage?"
-    },
-    "email": "Email address",
-    "confirm-email": "Confirm email address",
-    "back-btn": "Back",
-    "continue-btn": "Continue",
-    "cancel-btn": "Cancel",
-    "save-btn": "Save",
-    "option-yes": "Yes",
-    "option-no": "No",
-    "error-message": {
-      "add-or-update-required": "Select whether you would like to update or add your email",
-      "ita-add-or-update-required": "Select if you would like to receive email communication",
-      "email-match": "The email addresses entered do not match",
-      "confirm-email-required": "Confirm email address",
-      "email-required": "Enter an email address in the correct format, such as name@example.com",
-      "email-valid": "Enter an email address in the correct format, such as name@example.com",
-      "confirm-email-valid": "Enter confirmation of email address in the correct format, such as name@example.com"
-    }
-  },
   "confirm-email": {
     "page-title": "Email",
     "provide-email": "Provide the email address you'd like the Government of Canada and/or Sun Life to use to contact you about your Canadian Dental Care Plan coverage.",
