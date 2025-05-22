@@ -28,7 +28,6 @@ export interface ApplyAdultState {
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   email?: string;
-  emailVerified?: boolean;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
@@ -49,7 +48,6 @@ export interface ApplyAdultChildState {
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
   email?: string;
-  emailVerified?: boolean;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
@@ -68,7 +66,6 @@ export interface ApplyChildState {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   email?: string;
-  emailVerified?: boolean;
   homeAddress?: HomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
@@ -87,7 +84,6 @@ interface ToBenefitApplicationDtoArgs {
   communicationPreferences: CommunicationPreferencesState;
   contactInformation: ContactInformationState;
   email?: string;
-  emailVerified?: boolean;
   dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance?: boolean;
   livingIndependently?: boolean;
@@ -116,7 +112,6 @@ interface ToHomeAddressArgs {
 interface ToCommunicationPreferencesArgs {
   communicationPreferences: CommunicationPreferencesState;
   email?: string;
-  emailVerified?: boolean;
 }
 
 interface ToContactInformationArgs {
@@ -175,7 +170,6 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     dentalBenefits,
     dentalInsurance,
     email,
-    emailVerified,
     homeAddress,
     isHomeAddressSameAsMailingAddress,
     livingIndependently,
@@ -193,7 +187,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       }),
       applicationYearId: applicationYear.applicationYearId,
       children: this.toChildren(children),
-      communicationPreferences: this.toCommunicationPreferences({ communicationPreferences, email, emailVerified }),
+      communicationPreferences: this.toCommunicationPreferences({ communicationPreferences, email }),
       contactInformation: this.toContactInformation({ contactInformation, email, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
       dateOfBirth: applicantInformation.dateOfBirth,
       maritalStatus,
@@ -241,10 +235,10 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     });
   }
 
-  private toCommunicationPreferences({ communicationPreferences, email, emailVerified }: ToCommunicationPreferencesArgs): CommunicationPreferencesDto {
+  private toCommunicationPreferences({ communicationPreferences, email }: ToCommunicationPreferencesArgs): CommunicationPreferencesDto {
     return {
       email,
-      emailVerified,
+      emailVerified: communicationPreferences.preferredMethod === 'email' || communicationPreferences.preferredNotificationMethod === 'msca' ? true : undefined,
       preferredLanguage: communicationPreferences.preferredLanguage,
       preferredMethod: communicationPreferences.preferredMethod,
       preferredMethodGovernmentOfCanada: communicationPreferences.preferredNotificationMethod,
