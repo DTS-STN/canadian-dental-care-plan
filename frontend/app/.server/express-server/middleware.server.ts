@@ -106,12 +106,12 @@ export function session(isProduction: boolean, serverConfig: ServerConfig): Requ
     },
   });
 
-  return (request, response, next) => {
+  return async (request, response, next) => {
     if (shouldIgnore(ignorePatterns, request.path)) {
       log.trace('Skipping session: [%s]', request.path);
       return next();
     }
 
-    return middleware(request, response, next);
+    return await middleware(request, response, next);
   };
 }

@@ -27,9 +27,9 @@ jobs:
         working-directory: frontend/
       - run: npm run format:check
         working-directory: frontend/
-      - run: npm run lint
-        working-directory: frontend/
       - run: npm run typecheck
+        working-directory: frontend/
+      - run: npm run lint
         working-directory: frontend/
       - run: npm run test:unit:coverage
         working-directory: frontend/
