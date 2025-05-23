@@ -79,6 +79,13 @@ export interface RenewState {
     shouldReceiveEmailCommunication?: boolean;
     isNewOrUpdatedEmail?: boolean;
   };
+  readonly editModeCommunicationPreference?: {
+    preferredLanguage: string;
+    preferredMethod: string;
+    preferredNotificationMethod: string;
+  };
+  readonly editModeEmail?: string;
+  readonly email?: string;
   readonly verifyEmail?: {
     verificationCode: string;
     verificationAttempts: number;
@@ -144,7 +151,7 @@ export type DentalFederalBenefitsState = Pick<NonNullable<RenewState['dentalBene
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<RenewState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ContactInformationState = NonNullable<RenewState['contactInformation']>;
 export type DemographicSurveyState = NonNullable<RenewState['demographicSurvey']>;
-export type ConmmunicationPreferenceState = NonNullable<RenewState['communicationPreferences']>;
+export type CommunicationPreferencesState = NonNullable<RenewState['communicationPreferences']>;
 
 /**
  * Schema for validating UUID.

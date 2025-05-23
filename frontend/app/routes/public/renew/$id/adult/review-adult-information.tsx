@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-adult-information';
+import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewAdultStateForReview } from '~/.server/routes/helpers/renew-adult-route-helpers';
@@ -65,6 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryMailing = state.mailingAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
   const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined;
+  const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -74,7 +76,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     clientNumber: state.applicantInformation.clientNumber,
     maritalStatus: maritalStatus ? maritalStatus.name : undefined,
-    contactInformationEmail: state.contactInformation.email,
+    contactInformationEmail: state.email,
+    communicationSunLifePreference: state.communicationPreferences.preferredMethod,
+    communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -142,6 +146,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     dentalInsurance,
     dentalBenefit,
     demographicSurvey,
+    preferredLanguage: preferredLanguage.name,
     meta,
     payload,
   };
@@ -175,7 +180,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewAdultReviewAdultInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, demographicSurvey, payload } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, preferredLanguage, mailingAddressInfo, dentalInsurance, dentalBenefit, demographicSurvey, payload } = loaderData;
   const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const hCaptchaEnabled = useFeature('hcaptcha');
   const fetcher = useFetcher<typeof action>();
@@ -285,14 +290,16 @@ export default function RenewAdultReviewAdultInformation({ loaderData, params }:
                   </InlineLink>
                 </div>
               </DescriptionListItem>
-              <DescriptionListItem term={t('renew-adult:review-adult-information.email')}>
-                <p>{userInfo.contactInformationEmail ?? t('renew-adult:review-adult-information.no-update')}</p>
-                <div className="mt-4">
-                  <InlineLink id="change-email" routeId="public/renew/$id/adult/confirm-email" params={params}>
-                    {t('renew-adult:review-adult-information.email-change')}
-                  </InlineLink>
-                </div>
-              </DescriptionListItem>
+              {userInfo.contactInformationEmail && (
+                <DescriptionListItem term={t('renew-adult:review-adult-information.email')}>
+                  <p>{userInfo.contactInformationEmail}</p>
+                  <div className="mt-4">
+                    <InlineLink id="change-email" routeId="public/renew/$id/adult/confirm-email" params={params}>
+                      {t('renew-adult:review-adult-information.email-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              )}
               <DescriptionListItem term={t('renew-adult:review-adult-information.mailing-title')}>
                 {mailingAddressInfo ? (
                   <Address
@@ -332,6 +339,41 @@ export default function RenewAdultReviewAdultInformation({ loaderData, params }:
                     {t('renew-adult:review-adult-information.home-change')}
                   </InlineLink>
                 </div>
+              </DescriptionListItem>
+            </dl>
+          </section>
+          <section className="space-y-6">
+            <h2 className="font-lato text-2xl font-bold">{t('renew-adult:review-adult-information.comm-title')}</h2>
+            <dl className="divide-y border-y">
+              {preferredLanguage && (
+                <DescriptionListItem term={t('renew-adult:review-adult-information.lang-pref-title')}>
+                  <p>{preferredLanguage}</p>
+                  <div className="mt-4">
+                    <InlineLink id="change-language-preference" routeId="public/renew/$id/adult/communication-preference" params={params}>
+                      {t('renew-adult:review-adult-information.lang-pref-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              )}
+              <DescriptionListItem term={t('renew-adult:review-adult-information.sun-life-comm-pref-title')}>
+                <p>
+                  {userInfo.communicationSunLifePreference === PREFERRED_SUN_LIFE_METHOD.email ? t('renew-adult:review-adult-information.preferred-notification-method-email') : t('renew-adult:review-adult-information.preferred-notification-method-mail')}
+                </p>
+                <p>
+                  <InlineLink id="change-communication-preference" routeId="public/renew/$id/adult/communication-preference" params={params}>
+                    {t('renew-adult:review-adult-information.sun-life-comm-pref-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('renew-adult:review-adult-information.goc-comm-pref-title')}>
+                <p>
+                  {userInfo.communicationGOCPreference === PREFERRED_NOTIFICATION_METHOD.msca ? t('renew-adult:review-adult-information.preferred-notification-method-msca') : t('renew-adult:review-adult-information.preferred-notification-method-mail')}
+                </p>
+                <p>
+                  <InlineLink id="change-communication-preference" routeId="public/renew/$id/adult/communication-preference" params={params}>
+                    {t('renew-adult:review-adult-information.goc-comm-pref-change')}
+                  </InlineLink>
+                </p>
               </DescriptionListItem>
             </dl>
           </section>
