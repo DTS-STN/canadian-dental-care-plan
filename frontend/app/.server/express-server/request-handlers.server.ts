@@ -1,11 +1,13 @@
 import { createRequestHandler } from '@react-router/express';
-import type { AppLoadContext, ServerBuild } from 'react-router';
+import type { AppLoadContext } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import type { ErrorRequestHandler, Request, RequestHandler, Response } from 'express';
 import path from 'node:path';
+import type { ViteDevServer } from 'vite';
 
 import { getAppContainerProvider } from '~/.server/app.container';
+import { initServerBuild } from '~/.server/express-server/server-build.server';
 import { createLogger } from '~/.server/logging';
 import { ExpressSession, NoopSession } from '~/.server/web/session';
 import { randomString } from '~/utils/string-utils';
@@ -36,8 +38,14 @@ export function globalErrorHandler(isProduction: boolean): ErrorRequestHandler {
   };
 }
 
-export function rrRequestHandler(build: ServerBuild, mode: string | undefined = process.env.NODE_ENV): RequestHandler {
-  return createRequestHandler({ mode, build, getLoadContext });
+export function rrRequestHandler(mode: string, viteDevServer?: ViteDevServer): RequestHandler {
+  return createRequestHandler({
+    mode,
+    build: async () => {
+      return await initServerBuild(viteDevServer);
+    },
+    getLoadContext,
+  });
 }
 
 function getLoadContext(request: Request, response: Response): AppLoadContext {

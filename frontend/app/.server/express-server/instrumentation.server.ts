@@ -1,10 +1,11 @@
 import { matchRoutes } from 'react-router';
-import type { ServerBuild } from 'react-router';
 
 import type { RequestHandler } from 'express';
+import type { ViteDevServer } from 'vite';
 
 import { getAppContainerProvider } from '~/.server/app.container';
 import { TYPES } from '~/.server/constants';
+import { initServerBuild } from '~/.server/express-server/server-build.server';
 import { createLogger } from '~/.server/logging';
 import { createAgnosticRoutes, createServerRoutes } from '~/.server/utils/server-build.utils';
 
@@ -17,10 +18,13 @@ type CachedRouteId = string | null | undefined;
  *
  * @returns Express RequestHandler middleware.
  */
-export function routeRequestCounter(build: ServerBuild): RequestHandler {
+export async function routeRequestCounter(viteDevServer?: ViteDevServer): Promise<RequestHandler> {
   const log = createLogger('express.server/routeRequestCounter');
+
+  const build = await initServerBuild(viteDevServer);
   const serverRoutes = createServerRoutes(build.routes);
   const routes = createAgnosticRoutes(serverRoutes);
+
   const appContainer = getAppContainerProvider();
   const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
 
