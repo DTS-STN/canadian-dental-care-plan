@@ -179,6 +179,10 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           province: 'LA',
         },
         maritalStatus: 'Single',
+        communicationPreferences: {
+          preferredMethod: 'Email',
+          preferredNotificationMethod: 'msca',
+        },
       };
 
       const adultChildBenefitRenewalDto = mapper.mapRenewAdultChildStateToAdultChildBenefitRenewalDto(renewAdultChildState);
@@ -244,6 +248,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
           preferredLanguage: 'English',
           preferredMethod: 'Email',
           email: 'new@example.com',
+          preferredMethodGovernmentOfCanada: 'msca',
         },
         dateOfBirth: '1970-01-01',
         demographicSurvey: {
