@@ -84,6 +84,8 @@ export function validateRenewAdultStateForReview({ params, state }: ValidateRene
     maritalStatus,
     partnerInformation,
     contactInformation,
+    communicationPreferences,
+    email,
     homeAddress,
     mailingAddress,
     isHomeAddressSameAsMailingAddress,
@@ -128,6 +130,10 @@ export function validateRenewAdultStateForReview({ params, state }: ValidateRene
     throw redirect(getPathById('public/renew/$id/adult/confirm-marital-status', params));
   }
 
+  if (communicationPreferences === undefined) {
+    throw redirect(getPathById('public/renew/$id/adult/communication-preference', params));
+  }
+
   if (hasAddressChanged === undefined) {
     throw redirect(getPathById('public/renew/$id/adult/confirm-address', params));
   }
@@ -170,6 +176,8 @@ export function validateRenewAdultStateForReview({ params, state }: ValidateRene
     typeOfRenewal,
     clientApplication,
     contactInformation,
+    communicationPreferences,
+    email,
     applicantInformation,
     dentalBenefits,
     dentalInsurance,
