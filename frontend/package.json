@@ -45,6 +45,7 @@
     "@react-router/node": "^7.6.2",
     "@react-router/serve": "^7.6.2",
     "@rollup/wasm-node": "^4.41.1",
+    "bowser": "^2.11.0",
     "clsx": "^2.1.1",
     "compression": "^1.8.0",
     "connect-redis": "^8.1.0",
