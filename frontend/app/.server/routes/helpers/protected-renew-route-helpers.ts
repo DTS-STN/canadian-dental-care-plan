@@ -396,6 +396,10 @@ export function validateProtectedRenewStateForReview({ params, state, demographi
     throw redirect(getPathById('protected/renew/$id/member-selection', params));
   }
 
+  if (communicationPreferences === undefined) {
+    throw redirect(getPathById('protected/renew/$id/communication-preference', params));
+  }
+
   return {
     applicationYear,
     maritalStatus,

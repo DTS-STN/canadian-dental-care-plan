@@ -12,7 +12,6 @@ import type {
   ClientApplicantInformationDto,
   ClientApplicationDto,
   ClientChildDto,
-  ClientCommunicationPreferencesDto,
   ClientContactInformationDto,
   ClientPartnerInformationDto,
   ItaBenefitRenewalDto,
@@ -40,6 +39,7 @@ import type {
 import type {
   ApplicationYearState,
   ChildState,
+  ConmmunicationPreferenceState,
   ContactInformationState,
   DemographicSurveyState,
   DentalFederalBenefitsState,
@@ -64,6 +64,7 @@ export interface RenewAdultState {
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
   emailVerified?: boolean;
+  communicationPreferences?: ConmmunicationPreferenceState;
 }
 
 export interface RenewAdultChildState {
@@ -82,6 +83,7 @@ export interface RenewAdultChildState {
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
   emailVerified?: boolean;
+  communicationPreferences?: ConmmunicationPreferenceState;
 }
 
 export interface RenewItaState {
@@ -98,6 +100,7 @@ export interface RenewItaState {
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
   emailVerified?: boolean;
+  communicationPreferences?: ConmmunicationPreferenceState;
 }
 
 export interface RenewChildState {
@@ -113,6 +116,7 @@ export interface RenewChildState {
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
   emailVerified?: boolean;
+  communicationPreferences?: ConmmunicationPreferenceState;
 }
 
 export interface ProtectedRenewState {
@@ -130,6 +134,7 @@ export interface ProtectedRenewState {
   partnerInformation?: ProtectedPartnerInformationState;
   communicationPreferences?: ProtectedConmmunicationPreferenceState;
   emailVerified?: boolean;
+  email?: string;
   preferredLanguage?: string;
 }
 
@@ -153,13 +158,10 @@ interface ToChildrenArgs {
 }
 
 interface ToCommunicationPreferencesArgs {
-  existingCommunicationPreferences: ReadonlyObjectDeep<ClientCommunicationPreferencesDto>;
-  hasPreferredLanguageChanged?: boolean;
-  renewedPreferredLanguage?: string;
-  hasEmailChanged: boolean;
-  renewedEmail?: string;
-  renewedReceiveEmailCommunication?: boolean;
+  communicationPreferences: ConmmunicationPreferenceState;
+  email?: string;
   emailVerified?: boolean;
+  preferredLanguage: string;
 }
 
 interface ToContactInformationArgs {
@@ -233,6 +235,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     maritalStatus,
     partnerInformation,
     emailVerified,
+    communicationPreferences,
   }: RenewAdultState): AdultBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
@@ -242,6 +245,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
     if (hasPhoneChanged === undefined) {
       throw new Error('Expected hasPhoneChanged to be defined');
+    }
+
+    if (communicationPreferences === undefined) {
+      throw new Error('Expected communicationPreferences to be defined');
     }
 
     return {
@@ -260,11 +267,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasPhoneChanged,
       },
       communicationPreferences: this.toCommunicationPreferences({
-        existingCommunicationPreferences: clientApplication.communicationPreferences,
-        hasEmailChanged,
-        renewedEmail: contactInformation.email,
-        renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+        communicationPreferences,
+        email: contactInformation.email,
         emailVerified,
+        preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
@@ -309,6 +315,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     maritalStatus,
     partnerInformation,
     emailVerified,
+    communicationPreferences,
   }: RenewAdultChildState): AdultChildBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
@@ -318,6 +325,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
     if (hasPhoneChanged === undefined) {
       throw new Error('Expected hasPhoneChanged to be defined');
+    }
+
+    if (communicationPreferences === undefined) {
+      throw new Error('Expected communicationPreferences to be defined');
     }
 
     return {
@@ -339,11 +350,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasPhoneChanged,
       },
       communicationPreferences: this.toCommunicationPreferences({
-        existingCommunicationPreferences: clientApplication.communicationPreferences,
-        hasEmailChanged,
-        renewedEmail: contactInformation.email,
-        renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+        communicationPreferences,
+        email: contactInformation.email,
         emailVerified,
+        preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
@@ -386,7 +396,11 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     maritalStatus,
     partnerInformation,
     emailVerified,
+    communicationPreferences,
   }: RenewItaState): ItaBenefitRenewalDto {
+    if (communicationPreferences === undefined) {
+      throw new Error('Expected communicationPreferences to be defined');
+    }
     return {
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
@@ -410,11 +424,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedMailingAddress: mailingAddress,
       }),
       communicationPreferences: this.toCommunicationPreferences({
-        existingCommunicationPreferences: clientApplication.communicationPreferences,
-        hasEmailChanged: !!contactInformation.email,
-        renewedEmail: contactInformation.email,
-        renewedReceiveEmailCommunication: contactInformation.shouldReceiveEmailCommunication,
+        communicationPreferences,
+        email: contactInformation.email,
         emailVerified,
+        preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
       }),
       demographicSurvey,
       dentalBenefits: this.toDentalBenefits({
@@ -445,6 +458,8 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     mailingAddress,
     maritalStatus,
     partnerInformation,
+    emailVerified,
+    communicationPreferences,
   }: RenewChildState): ChildBenefitRenewalDto {
     const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
     if (hasEmailChanged === undefined) {
@@ -454,6 +469,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
     if (hasPhoneChanged === undefined) {
       throw new Error('Expected hasPhoneChanged to be defined');
+    }
+
+    if (communicationPreferences === undefined) {
+      throw new Error('Expected communicationPreferences to be defined');
     }
 
     return {
@@ -474,6 +493,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged,
         hasPhoneChanged,
       },
+      communicationPreferences: this.toCommunicationPreferences({
+        communicationPreferences,
+        email: contactInformation.email,
+        emailVerified,
+        preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
+      }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
         hasAddressChanged,
@@ -513,10 +538,14 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       communicationPreferences,
       emailVerified,
       preferredLanguage,
+      email,
     }: ProtectedRenewState,
     userId: string,
     applicantStateCompleted: boolean,
   ): ProtectedBenefitRenewalDto {
+    if (communicationPreferences === undefined) {
+      throw new Error('Expected communicationPreferences to be defined');
+    }
     return {
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
@@ -531,13 +560,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedChildren: children,
       }),
       communicationPreferences: this.toCommunicationPreferences({
-        existingCommunicationPreferences: clientApplication.communicationPreferences,
-        hasPreferredLanguageChanged: !!preferredLanguage,
-        renewedPreferredLanguage: preferredLanguage,
-        hasEmailChanged: !!contactInformation?.email,
-        renewedEmail: contactInformation?.email,
-        renewedReceiveEmailCommunication: contactInformation?.shouldReceiveEmailCommunication,
+        communicationPreferences,
+        email,
         emailVerified,
+        preferredLanguage: preferredLanguage ?? clientApplication.communicationPreferences.preferredLanguage,
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
@@ -766,20 +792,13 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         };
   }
 
-  private toCommunicationPreferences({
-    existingCommunicationPreferences,
-    hasEmailChanged,
-    renewedEmail,
-    renewedReceiveEmailCommunication,
-    hasPreferredLanguageChanged,
-    renewedPreferredLanguage,
-    emailVerified,
-  }: ToCommunicationPreferencesArgs): RenewalCommunicationPreferencesDto {
+  private toCommunicationPreferences({ communicationPreferences, preferredLanguage, email, emailVerified }: ToCommunicationPreferencesArgs): RenewalCommunicationPreferencesDto {
     return {
-      email: renewedReceiveEmailCommunication ? renewedEmail : undefined,
-      emailVerified: renewedReceiveEmailCommunication ? emailVerified : undefined,
-      preferredLanguage: renewedPreferredLanguage ?? existingCommunicationPreferences.preferredLanguage,
-      preferredMethod: renewedReceiveEmailCommunication ? this.serverConfig.COMMUNICATION_METHOD_EMAIL_ID : this.serverConfig.COMMUNICATION_METHOD_MAIL_ID,
+      email,
+      emailVerified,
+      preferredLanguage,
+      preferredMethod: communicationPreferences.preferredMethod,
+      preferredMethodGovernmentOfCanada: communicationPreferences.preferredNotificationMethod,
     };
   }
 

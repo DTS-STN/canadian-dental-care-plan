@@ -93,6 +93,7 @@ export type RenewalCommunicationPreferencesDto = ReadonlyDeep<{
   emailVerified?: boolean;
   preferredLanguage: string;
   preferredMethod: string;
+  preferredMethodGovernmentOfCanada: string;
 }>;
 
 export type RenewalContactInformationDto = ReadonlyDeep<{
