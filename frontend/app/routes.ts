@@ -52,7 +52,7 @@ function toRouteConfigEntries(routes: I18nRoute[]): RouteConfigEntry[] {
  */
 export default [
   index('routes/language-chooser.tsx'), //
-  route('/:lang/*', 'routes/catchall.tsx'),
   ...routes,
   ...toRouteConfigEntries(i18nRoutes),
+  route('*', 'routes/catchall.tsx'),
 ] satisfies RouteConfig;

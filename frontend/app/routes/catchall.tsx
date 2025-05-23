@@ -2,8 +2,7 @@ import { data } from 'react-router';
 
 import type { Route } from './+types/catchall';
 
-import { createLogger } from '~/.server/logging';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { BilingualNotFoundError, NotFoundError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import { pageIds } from '~/page-ids';
 import { isAppLocale } from '~/utils/locale-utils';
@@ -20,24 +19,19 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const log = createLogger('catchall/action');
-
-  if (!isAppLocale(params.lang)) {
-    log.warn('Invalid lang requested [%s]; responding with 404', params.lang);
-    throw data(null, { status: 404, statusText: 'Not Found' });
-  }
-
-  log.warn('Invalid method requested [%s]; responding with 405', request.method);
-  throw data(null, { status: 405, statusText: 'Method Not Allowed' });
-}
-
-export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
-  const t = await getFixedT(request, handle.i18nNamespaces);
+export async function loader({ request }: Route.LoaderArgs) {
+  // Get meta title
+  const locale = getLocale(request);
+  const t = await getFixedT(locale, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('gcweb:public-not-found.document-title') }) };
-  return data({ meta }, { status: 404 });
+
+  // Get request lang param
+  const { pathname } = new URL(request.url);
+  const lang = pathname.split('/').at(1);
+
+  return data({ isAppLocale: isAppLocale(lang), meta }, { status: 404 });
 }
 
-export default function NotFound({ loaderData, params }: Route.ComponentProps) {
-  return isAppLocale(params.lang) ? <NotFoundError /> : <BilingualNotFoundError />;
+export default function NotFound({ loaderData }: Route.ComponentProps) {
+  return loaderData.isAppLocale ? <NotFoundError /> : <BilingualNotFoundError />;
 }
