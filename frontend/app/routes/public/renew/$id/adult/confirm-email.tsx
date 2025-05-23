@@ -136,6 +136,11 @@ export async function action({ context: { appContainer, session }, params, reque
     state: {
       email: parsedDataResult.data.email,
       emailVerified: isNewEmail ? false : state.emailVerified,
+      // TODO: setting contactInformation.isNewOrUpdatedEmail to false since the hasEmailChanged indicator in the benefit renewal dto needs to be defined.
+      contactInformation: {
+        ...state.contactInformation,
+        isNewOrUpdatedEmail: false,
+      },
       ...(isNewEmail && {
         verifyEmail: {
           verificationCode,

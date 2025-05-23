@@ -74,6 +74,7 @@ export interface RenewState {
     readonly preferredMethod: string;
     readonly preferredNotificationMethod: string;
   };
+  // TODO: Remove this state once all the flows are updated.
   readonly editModeCommunicationPreferences?: {
     email: string;
     shouldReceiveEmailCommunication?: boolean;

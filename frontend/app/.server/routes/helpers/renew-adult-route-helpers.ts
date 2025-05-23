@@ -150,10 +150,6 @@ export function validateRenewAdultStateForReview({ params, state }: ValidateRene
     throw redirect(getPathById('public/renew/$id/adult/confirm-phone', params));
   }
 
-  if (contactInformation.isNewOrUpdatedEmail === undefined) {
-    throw redirect(getPathById('public/renew/$id/adult/confirm-email', params));
-  }
-
   if (dentalInsurance === undefined) {
     throw redirect(getPathById('public/renew/$id/adult/dental-insurance', params));
   }
