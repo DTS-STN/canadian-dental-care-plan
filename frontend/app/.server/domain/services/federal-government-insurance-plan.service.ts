@@ -6,7 +6,7 @@ import { TYPES } from '~/.server/constants';
 import type { FederalGovernmentInsurancePlanDto, FederalGovernmentInsurancePlanLocalizedDto } from '~/.server/domain/dtos';
 import { FederalGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions';
 import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
-import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
+import type { FederalProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
@@ -72,17 +72,17 @@ export interface FederalGovernmentInsurancePlanService {
 export class DefaultFederalGovernmentInsurancePlanService implements FederalGovernmentInsurancePlanService {
   private readonly log: Logger;
   private readonly federalGovernmentInsurancePlanDtoMapper: FederalGovernmentInsurancePlanDtoMapper;
-  private readonly federalGovernmentInsurancePlanRepository: FederalGovernmentInsurancePlanRepository;
+  private readonly federalProvincialGovernmentInsurancePlanRepository: FederalProvincialGovernmentInsurancePlanRepository;
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.domain.mappers.FederalGovernmentInsurancePlanDtoMapper) federalGovernmentInsurancePlanDtoMapper: FederalGovernmentInsurancePlanDtoMapper,
-    @inject(TYPES.domain.repositories.FederalGovernmentInsurancePlanRepository) federalGovernmentInsurancePlanRepository: FederalGovernmentInsurancePlanRepository,
+    @inject(TYPES.domain.repositories.FederalProvincialGovernmentInsurancePlanRepository) federalProvincialGovernmentInsurancePlanRepository: FederalProvincialGovernmentInsurancePlanRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
   ) {
     this.log = createLogger('DefaultFederalGovernmentInsurancePlanService');
     this.federalGovernmentInsurancePlanDtoMapper = federalGovernmentInsurancePlanDtoMapper;
-    this.federalGovernmentInsurancePlanRepository = federalGovernmentInsurancePlanRepository;
+    this.federalProvincialGovernmentInsurancePlanRepository = federalProvincialGovernmentInsurancePlanRepository;
     this.serverConfig = serverConfig;
     this.init();
   }
@@ -115,7 +115,7 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
 
   listFederalGovernmentInsurancePlans(): ReadonlyArray<FederalGovernmentInsurancePlanDto> {
     this.log.debug('Get all federal government insurance plans');
-    const federalGovernmentInsurancePlanEntities = this.federalGovernmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans();
+    const federalGovernmentInsurancePlanEntities = this.federalProvincialGovernmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans();
     const federalGovernmentInsurancePlanDtos = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(federalGovernmentInsurancePlanEntities);
     this.log.trace('Returning federal government insurance plans: [%j]', federalGovernmentInsurancePlanDtos);
     return federalGovernmentInsurancePlanDtos;
@@ -123,7 +123,7 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
 
   findFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanDto | null {
     this.log.debug('Finding federal government insurance plan with id: [%s]', id);
-    const federalGovernmentInsurancePlanEntity = this.federalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById(id);
+    const federalGovernmentInsurancePlanEntity = this.federalProvincialGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById(id);
 
     if (!federalGovernmentInsurancePlanEntity) {
       this.log.trace('Federal government insurance plan with id: [%s] not found. Returning null', id);
@@ -137,7 +137,7 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
 
   getFederalGovernmentInsurancePlanById(id: string): FederalGovernmentInsurancePlanDto {
     this.log.debug('Get federal government insurance plan with id: [%s]', id);
-    const federalGovernmentInsurancePlanEntity = this.federalGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById(id);
+    const federalGovernmentInsurancePlanEntity = this.federalProvincialGovernmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById(id);
 
     if (!federalGovernmentInsurancePlanEntity) {
       this.log.error('Federal government insurance plan with id: [%s] not found', id);
