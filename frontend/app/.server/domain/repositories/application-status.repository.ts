@@ -113,6 +113,12 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
       body: JSON.stringify(applicationStatusSinRequestEntity),
+      retryOptions: {
+        retries: 3,
+        retryConditions: {
+          [HttpStatusCodes.UNAUTHORIZED]: [],
+        },
+      },
     });
 
     if (!response.ok) {
