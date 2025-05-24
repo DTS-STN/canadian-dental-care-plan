@@ -1,8 +1,25 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { DefaultProvincialGovernmentInsurancePlanRepository, MockProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
+import { DefaultFederalProvincialGovernmentInsurancePlanRepository, MockFederalProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 
-const dataSource = vi.hoisted(() => ({
+const dataSourceFederal = vi.hoisted(() => ({
+  default: {
+    value: [
+      {
+        esdc_governmentinsuranceplanid: '1',
+        esdc_nameenglish: 'First Insurance Plan',
+        esdc_namefrench: "Premier plan d'assurance",
+      },
+      {
+        esdc_governmentinsuranceplanid: '2',
+        esdc_nameenglish: 'Second Insurance Plan',
+        esdc_namefrench: "Deuxième plan d'assurance",
+      },
+    ],
+  },
+}));
+
+const dataSourceProvincial = vi.hoisted(() => ({
   default: {
     value: [
       {
@@ -21,35 +38,97 @@ const dataSource = vi.hoisted(() => ({
   },
 }));
 
-vi.mock('~/.server/resources/power-platform/provincial-government-insurance-plan.json', () => dataSource);
+vi.mock('~/.server/resources/power-platform/federal-government-insurance-plan.json', () => dataSourceFederal);
+vi.mock('~/.server/resources/power-platform/provincial-government-insurance-plan.json', () => dataSourceProvincial);
 
-describe('DefaultProvincialGovernmentInsurancePlanRepository', () => {
+describe('DefaultFederalProvincialGovernmentInsurancePlanRepository', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
   });
 
+  it('should throw error on listAllFederalGovernmentInsurancePlans call', () => {
+    const repository = new DefaultFederalProvincialGovernmentInsurancePlanRepository();
+
+    expect(() => repository.listAllFederalGovernmentInsurancePlans()).toThrowError('Federal government insurance plan service is not yet implemented');
+  });
+
+  it('should throw error on findFederalGovernmentInsurancePlanById call', () => {
+    const repository = new DefaultFederalProvincialGovernmentInsurancePlanRepository();
+
+    expect(() => repository.findFederalGovernmentInsurancePlanById('1')).toThrowError('Federal government insurance plan service is not yet implemented');
+  });
+
   it('should throw error on listAllProvincialGovernmentInsurancePlans call', () => {
-    const repository = new DefaultProvincialGovernmentInsurancePlanRepository();
+    const repository = new DefaultFederalProvincialGovernmentInsurancePlanRepository();
 
     expect(() => repository.listAllProvincialGovernmentInsurancePlans()).toThrowError('Provincial government insurance plan service is not yet implemented');
   });
 
   it('should throw error on findProvincialGovernmentInsurancePlanById call', () => {
-    const repository = new DefaultProvincialGovernmentInsurancePlanRepository();
+    const repository = new DefaultFederalProvincialGovernmentInsurancePlanRepository();
 
     expect(() => repository.findProvincialGovernmentInsurancePlanById('1')).toThrowError('Provincial government insurance plan service is not yet implemented');
   });
 });
 
-describe('MockProvincialGovernmentInsurancePlanRepository', () => {
+describe('MockFederalProvincialGovernmentInsurancePlanRepository', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
   });
 
+  it('should get all federal government insurance plans', () => {
+    const repository = new MockFederalProvincialGovernmentInsurancePlanRepository();
+
+    const federalGovernmentInsurancePlans = repository.listAllFederalGovernmentInsurancePlans();
+
+    expect(federalGovernmentInsurancePlans).toEqual([
+      {
+        esdc_governmentinsuranceplanid: '1',
+        esdc_nameenglish: 'First Insurance Plan',
+        esdc_namefrench: "Premier plan d'assurance",
+      },
+      {
+        esdc_governmentinsuranceplanid: '2',
+        esdc_nameenglish: 'Second Insurance Plan',
+        esdc_namefrench: "Deuxième plan d'assurance",
+      },
+    ]);
+  });
+
+  it('should handle empty federal government insurance plans data', () => {
+    vi.spyOn(dataSourceFederal, 'default', 'get').mockReturnValueOnce({ value: [] });
+
+    const repository = new MockFederalProvincialGovernmentInsurancePlanRepository();
+
+    const federalGovernmentInsurancePlans = repository.listAllFederalGovernmentInsurancePlans();
+
+    expect(federalGovernmentInsurancePlans).toEqual([]);
+  });
+
+  it('should get a federal government insurance plan by id', () => {
+    const repository = new MockFederalProvincialGovernmentInsurancePlanRepository();
+
+    const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('1');
+
+    expect(federalGovernmentInsurancePlan).toEqual({
+      esdc_governmentinsuranceplanid: '1',
+      esdc_nameenglish: 'First Insurance Plan',
+      esdc_namefrench: "Premier plan d'assurance",
+    });
+  });
+
+  it('should return null for non-existent federal government insurance plan id', () => {
+    const repository = new MockFederalProvincialGovernmentInsurancePlanRepository();
+
+    const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('non-existent-id');
+
+    expect(federalGovernmentInsurancePlan).toBeNull();
+  });
+
   it('should get all provincial government insurance plans', () => {
-    const repository = new MockProvincialGovernmentInsurancePlanRepository();
+    const repository = new MockFederalProvincialGovernmentInsurancePlanRepository();
 
     const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
 
@@ -70,9 +149,9 @@ describe('MockProvincialGovernmentInsurancePlanRepository', () => {
   });
 
   it('should handle empty provincial government insurance plans data', () => {
-    vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
+    vi.spyOn(dataSourceProvincial, 'default', 'get').mockReturnValueOnce({ value: [] });
 
-    const repository = new MockProvincialGovernmentInsurancePlanRepository();
+    const repository = new MockFederalProvincialGovernmentInsurancePlanRepository();
 
     const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
 
@@ -80,7 +159,7 @@ describe('MockProvincialGovernmentInsurancePlanRepository', () => {
   });
 
   it('should get a provincial government insurance plan by id', () => {
-    const repository = new MockProvincialGovernmentInsurancePlanRepository();
+    const repository = new MockFederalProvincialGovernmentInsurancePlanRepository();
 
     const provincialGovernmentInsurancePlans = repository.findProvincialGovernmentInsurancePlanById('1');
 
@@ -93,7 +172,7 @@ describe('MockProvincialGovernmentInsurancePlanRepository', () => {
   });
 
   it('should return null for non-existent provincial government insurance plan id', () => {
-    const repository = new MockProvincialGovernmentInsurancePlanRepository();
+    const repository = new MockFederalProvincialGovernmentInsurancePlanRepository();
 
     const provincialGovernmentInsurancePlans = repository.findProvincialGovernmentInsurancePlanById('non-existent-id');
 
