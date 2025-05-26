@@ -2,6 +2,7 @@ import type { JSX } from 'react';
 
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '~/components/buttons';
 
@@ -10,6 +11,8 @@ interface BrowserCompatibilityBannerProps {
 }
 
 export function BrowserCompatibilityBanner({ onDismiss }: BrowserCompatibilityBannerProps): JSX.Element | undefined {
+  const { t } = useTranslation(['gcweb']);
+
   return (
     <div id="browser-compatibility-banner" className="border-b border-red-700 bg-red-50" role="alert">
       <div className="container">
@@ -18,11 +21,11 @@ export function BrowserCompatibilityBanner({ onDismiss }: BrowserCompatibilityBa
             <FontAwesomeIcon icon={faCircleExclamation} className="size-6 shrink-0 text-red-700" />
           </div>
           <div className="p-4">
-            <h2 className="font-lato mb-1 font-semibold">Browser not supported</h2>
-            <p>This website is not compatible with you browser. Critical functionalities of this application will likely not work, and you may be unable to perform essential actions or save your work.</p>
+            <h2 className="font-lato mb-1 font-semibold">{t('gcweb:browser-compatibility-banner.title')}</h2>
+            <p>{t('gcweb:browser-compatibility-banner.content')}</p>
             <div className="text-right">
               <Button variant="link" type="button" onClick={onDismiss}>
-                Dismiss
+                {t('gcweb:browser-compatibility-banner.dismiss')}
               </Button>
             </div>
           </div>
