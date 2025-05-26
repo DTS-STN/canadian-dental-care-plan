@@ -91,7 +91,7 @@ export async function action({ context: { appContainer, session }, params, reque
     await verificationCodeService.sendVerificationCodeEmail({
       email: parsedDataResult.data.email,
       verificationCode,
-      preferredLanguage: state.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
+      preferredLanguage: state.clientApplication?.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
       userId: 'anonymous',
     });
   }
@@ -201,7 +201,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Email click">
                 {t('renew-adult:confirm-email.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Email click">
+              <ButtonLink id="cancel-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Email click">
                 {t('renew-adult:confirm-email.cancel-btn')}
               </ButtonLink>
             </div>

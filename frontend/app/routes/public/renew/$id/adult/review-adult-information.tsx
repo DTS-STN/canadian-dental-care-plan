@@ -66,7 +66,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryMailing = state.mailingAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
   const countryHome = state.homeAddress?.country ? appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined;
-  const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -146,7 +145,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     dentalInsurance,
     dentalBenefit,
     demographicSurvey,
-    preferredLanguage: preferredLanguage.name,
     meta,
     payload,
   };
@@ -180,7 +178,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewAdultReviewAdultInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, preferredLanguage, mailingAddressInfo, dentalInsurance, dentalBenefit, demographicSurvey, payload } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, demographicSurvey, payload } = loaderData;
   const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const hCaptchaEnabled = useFeature('hcaptcha');
   const fetcher = useFetcher<typeof action>();
@@ -345,16 +343,6 @@ export default function RenewAdultReviewAdultInformation({ loaderData, params }:
           <section className="space-y-6">
             <h2 className="font-lato text-2xl font-bold">{t('renew-adult:review-adult-information.comm-title')}</h2>
             <dl className="divide-y border-y">
-              {preferredLanguage && (
-                <DescriptionListItem term={t('renew-adult:review-adult-information.lang-pref-title')}>
-                  <p>{preferredLanguage}</p>
-                  <div className="mt-4">
-                    <InlineLink id="change-language-preference" routeId="public/renew/$id/adult/communication-preference" params={params}>
-                      {t('renew-adult:review-adult-information.lang-pref-change')}
-                    </InlineLink>
-                  </div>
-                </DescriptionListItem>
-              )}
               <DescriptionListItem term={t('renew-adult:review-adult-information.sun-life-comm-pref-title')}>
                 <p>
                   {userInfo.communicationSunLifePreference === PREFERRED_SUN_LIFE_METHOD.email ? t('renew-adult:review-adult-information.preferred-notification-method-email') : t('renew-adult:review-adult-information.preferred-notification-method-mail')}

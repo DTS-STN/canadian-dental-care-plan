@@ -81,7 +81,6 @@ export interface RenewState {
     isNewOrUpdatedEmail?: boolean;
   };
   readonly editModeCommunicationPreference?: {
-    preferredLanguage: string;
     preferredMethod: string;
     preferredNotificationMethod: string;
   };

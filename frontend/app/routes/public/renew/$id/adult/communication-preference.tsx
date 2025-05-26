@@ -10,7 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { loadRenewAdultState } from '~/.server/routes/helpers/renew-adult-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import type { CommunicationPreferencesState } from '~/.server/routes/helpers/renew-route-helpers';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -42,14 +42,11 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadRenewAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-  const preferredLanguages = appContainer.get(TYPES.domain.services.PreferredLanguageService).listAndSortLocalizedPreferredLanguages(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult:communication-preference.page-title') }) };
 
   return {
     meta,
-    preferredLanguages,
     defaultState: { ...state.communicationPreferences },
     editMode: state.editMode,
   };
@@ -65,13 +62,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema = z.object({
-    preferredLanguage: z.string().trim().min(1, t('renew-adult:communication-preference.error-message.preferred-language-required')),
     preferredMethod: z.string().trim().min(1, t('renew-adult:communication-preference.error-message.preferred-method-required')),
     preferredNotificationMethod: z.string().trim().min(1, t('renew-adult:communication-preference.error-message.preferred-notification-method-required')),
   }) satisfies z.ZodType<CommunicationPreferencesState>;
 
   const parsedDataResult = formSchema.safeParse({
-    preferredLanguage: String(formData.get('preferredLanguage') ?? ''),
     preferredMethod: String(formData.get('preferredMethod') ?? ''),
     preferredNotificationMethod: String(formData.get('preferredNotificationMethod') ?? ''),
   });
@@ -99,7 +94,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { preferredLanguages, defaultState, editMode } = loaderData;
+  const { defaultState, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -108,7 +103,6 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
-    preferredLanguage: 'input-radio-preferred-language-option-0',
     preferredMethod: 'input-radio-preferred-methods-option-0',
     preferredNotificationMethod: 'input-radio-preferred-notification-method-option-0',
   });
@@ -125,20 +119,6 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            {preferredLanguages.length > 0 && (
-              <InputRadios
-                id="preferred-language"
-                name="preferredLanguage"
-                legend={t('renew-adult:communication-preference.preferred-language')}
-                options={preferredLanguages.map((language) => ({
-                  defaultChecked: defaultState.preferredLanguage === language.id,
-                  children: language.name,
-                  value: language.id,
-                }))}
-                errorMessage={errors?.preferredLanguage}
-                required
-              />
-            )}
             <InputRadios
               id="preferred-methods"
               legend={t('renew-adult:communication-preference.preferred-method')}
