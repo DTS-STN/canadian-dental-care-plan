@@ -141,5 +141,10 @@
   },
   "screen-reader": {
     "new-tab": "s'ouvre dans un nouvel onglet"
+  },
+  "browser-compatibility-banner": {
+    "content": "Il semble que vous utilisiez un navigateur qui n'est pas compatible avec ce site Web. Par conséquent, certaines fonctionnalités clés pourraient ne pas fonctionner correctement, et vous pourriez rencontrer des problèmes pour effectuer des tâches essentielles ou enregistrer votre progression.",
+    "dismiss": "Fermer",
+    "title": "Navigateur non pris en charge"
   }
 }
