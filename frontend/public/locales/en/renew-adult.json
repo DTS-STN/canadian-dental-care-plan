@@ -65,31 +65,38 @@
       "phone-required": "Enter a phone number"
     }
   },
-  "confirm-email": {
-    "page-title": "Email",
-    "add-email": "An up-to-date email helps the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan coverage. You can find the email we have on file in the letter from Service Canada.",
-    "add-or-update": {
-      "legend": "Would you like to update or add your email address?"
-    },
-    "receive-comms": {
-      "legend": "Would you like to receive email communication from Sun Life and the Government of Canada about your Canadian Dental Care Plan coverage?"
-    },
-    "email": "Email address",
-    "confirm-email": "Confirm email address",
-    "back-btn": "Back",
-    "continue-btn": "Continue",
+  "communication-preference": {
+    "page-title": "Communication",
+    "preferred-method": "How would you like Sun Life to communicate with you?",
+    "preferred-method-help-message": "If eligible, we will share your information with Sun Life. Sun Life will be responsible for handling member enrolment and claims processing for the Canadian Dental Care Plan.",
+    "by-email": "By email",
+    "by-mail": "By mail",
+    "preferred-notification-method": "How would you like to receive letters or notifications from the Government of Canada about your eligibility for the Canadian Dental Care Plan?",
+    "preferred-notification-method-msca": "<span>Digitally through My Service Canada Account (MSCA)</span><br>You <strong>will not receive</strong> your Canadian Dental Care Plan eligibility decision by mail. Visit <mscaLinkAccount>My Service Canada Account</mscaLinkAccount> to register for an account or to sign in.",
+    "preferred-notification-method-mail": "<span>By mail</span><br>You can also view your Canadian Dental Care Plan eligibility decision in your <mscaLinkAccount>My Service Canada Account</mscaLinkAccount>.",
+    "back": "Back",
+    "continue": "Continue",
     "cancel-btn": "Cancel",
     "save-btn": "Save",
-    "option-yes": "Yes",
-    "option-no": "No",
+    "msca-link-account": "https://www.canada.ca/en/employment-social-development/services/my-account.html",
     "error-message": {
-      "add-or-update-required": "Select whether you would like to update or add your email",
-      "email-match": "The email addresses entered do not match",
-      "confirm-email-required": "Confirm email address",
-      "email-required": "Enter an email address in the correct format, such as name@example.com",
-      "email-valid": "Enter an email address in the correct format, such as name@example.com",
-      "confirm-email-valid": "Enter confirmation of email address in the correct format, such as name@example.com",
-      "receive-comms-required": "Select if you would like to receive email communication"
+      "preferred-language-required": "Select preferred language of communication",
+      "preferred-method-required": "Select preferred method of communication for Sun Life",
+      "preferred-notification-method-required": "Select preferred method of communication for the Government of Canada"
+    }
+  },
+  "confirm-email": {
+    "page-title": "Email",
+    "provide-email": "Provide the email address you'd like the Government of Canada and/or Sun Life to use to contact you about your Canadian Dental Care Plan coverage.",
+    "verify-email": "We will need to verify your email address.",
+    "email-legend": "Email address",
+    "back": "Back",
+    "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "error-message": {
+      "email-required": "Enter email address, for example name@example.com",
+      "email-valid": "Enter an email address in the correct format, such as name@example.com"
     }
   },
   "verify-email": {
@@ -335,6 +342,16 @@
     "mailing-change": "Change mailing address",
     "home-title": "Home address",
     "home-change": "Change home address",
+    "comm-title": "Communication preference",
+    "sun-life-comm-pref-title": "Sun Life communication preference",
+    "goc-comm-pref-title": "Government of Canada communication preference",
+    "sun-life-comm-pref-change": "Change Sun Life communication",
+    "goc-comm-pref-change": "Change Government of Canada communication",
+    "preferred-notification-method-email": "By email",
+    "preferred-notification-method-msca": "Digitally through My Service Canada Account (MSCA)",
+    "preferred-notification-method-mail": "By mail",
+    "lang-pref-title": "Language preference",
+    "lang-pref-change": "Change language preference",
     "dental-title": "Access to dental insurance",
     "dental-insurance-title": "Access to other dental insurance or coverage",
     "dental-insurance-change": "Change answer to dental insurance",
