@@ -198,7 +198,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Email click">
+              <Button variant="primary" id="save-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Email click">
                 {t('renew-adult:confirm-email.save-btn')}
               </Button>
               <ButtonLink id="cancel-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Email click">
