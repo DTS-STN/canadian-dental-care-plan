@@ -22,6 +22,7 @@ import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useI18nNamespaces, usePageTitleI18nKey, usePageTitleI18nOptions } from '~/utils/route-utils';
+import { useBrowserCompatiblityBanner } from '~/hooks/use-browser-compatibility-banner';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
@@ -109,10 +110,12 @@ function NavigationMenu() {
 function PageHeader() {
   const { t } = useTranslation(i18nNamespaces);
   const { SCCH_BASE_URI } = getClientEnv();
+  const browserCompatiblityBanner = useBrowserCompatiblityBanner();
 
   return (
     <header>
       <SkipNavigationLinks />
+      {browserCompatiblityBanner}
       {useFeature('show-prototype-banner') && <Banner alert={t('gcweb:header.banner.alert')} description={t('gcweb:header.banner.desc')} />}
       <PageHeaderBrand />
       <section className="bg-gray-700 text-white">
