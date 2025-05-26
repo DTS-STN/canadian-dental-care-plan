@@ -30,10 +30,7 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export const meta: Route.MetaFunction = ({ data }) => {
-  // Fix: TypeError: Cannot read properties of undefined (reading 'meta')
-  // Related issue https://github.com/remix-run/react-router/issues/13541#issuecomment-2863959552
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (data === undefined) {
+  if (!data) {
     return [];
   }
 

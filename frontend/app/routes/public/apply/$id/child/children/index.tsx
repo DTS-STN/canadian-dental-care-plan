@@ -37,6 +37,10 @@ const FORM_ACTION = { add: 'add', continue: 'continue', cancel: 'cancel', save: 
 export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'), pageIdentifier: pageIds.public.apply.child.childSummary, pageTitleI18nKey: 'apply-child:children.index.page-title' } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
+  if (!data) {
+    return [];
+  }
+
   return getTitleMetaTags(data.meta.title);
 });
 

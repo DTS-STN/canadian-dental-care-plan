@@ -32,6 +32,10 @@ export const handle = {
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
+  if (!data) {
+    return [];
+  }
+
   return getTitleMetaTags(data.meta.title);
 });
 
