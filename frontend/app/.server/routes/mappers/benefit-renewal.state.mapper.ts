@@ -39,7 +39,7 @@ import type {
 import type {
   ApplicationYearState,
   ChildState,
-  ConmmunicationPreferenceState,
+  CommunicationPreferencesState,
   ContactInformationState,
   DemographicSurveyState,
   DentalFederalBenefitsState,
@@ -64,7 +64,7 @@ export interface RenewAdultState {
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
   emailVerified?: boolean;
-  communicationPreferences?: ConmmunicationPreferenceState;
+  communicationPreferences?: CommunicationPreferencesState;
 }
 
 export interface RenewAdultChildState {
@@ -83,7 +83,7 @@ export interface RenewAdultChildState {
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
   emailVerified?: boolean;
-  communicationPreferences?: ConmmunicationPreferenceState;
+  communicationPreferences?: CommunicationPreferencesState;
 }
 
 export interface RenewItaState {
@@ -100,7 +100,7 @@ export interface RenewItaState {
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
   emailVerified?: boolean;
-  communicationPreferences?: ConmmunicationPreferenceState;
+  communicationPreferences?: CommunicationPreferencesState;
 }
 
 export interface RenewChildState {
@@ -116,7 +116,7 @@ export interface RenewChildState {
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
   emailVerified?: boolean;
-  communicationPreferences?: ConmmunicationPreferenceState;
+  communicationPreferences?: CommunicationPreferencesState;
 }
 
 export interface ProtectedRenewState {
@@ -158,7 +158,7 @@ interface ToChildrenArgs {
 }
 
 interface ToCommunicationPreferencesArgs {
-  communicationPreferences: ConmmunicationPreferenceState;
+  communicationPreferences: CommunicationPreferencesState;
   email?: string;
   emailVerified?: boolean;
   preferredLanguage: string;
