@@ -28,6 +28,10 @@ const TAX_FILING_OPTION = { no: 'no', yes: 'yes' } as const;
 export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.taxFiling, pageTitleI18nKey: 'apply:tax-filing.page-title' } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
+  if (!data) {
+    return [];
+  }
+
   return getTitleMetaTags(data.meta.title);
 });
 

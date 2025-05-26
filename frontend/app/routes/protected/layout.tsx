@@ -14,6 +14,10 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
+  if (!data) {
+    return [];
+  }
+
   return [{ name: 'dcterms.accessRights', content: '1' }];
 });
 

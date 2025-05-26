@@ -1,4 +1,4 @@
-import type { CreateMetaArgs } from 'react-router/route-module';
+import type { GetAnnotations } from 'react-router/internal';
 
 import { describe, expect, it } from 'vitest';
 import { mock } from 'vitest-mock-extended';
@@ -13,7 +13,7 @@ describe('mergeMeta', () => {
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    type MetaArgs = CreateMetaArgs<any>;
+    type MetaArgs = GetAnnotations<any>['MetaArgs'];
 
     const args: MetaArgs = {
       data: undefined,

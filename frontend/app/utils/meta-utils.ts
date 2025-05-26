@@ -1,5 +1,5 @@
 import type { MetaDescriptor } from 'react-router';
-import type { CreateMetaArgs, MetaDescriptors } from 'react-router/route-module';
+import type { GetAnnotations } from 'react-router/internal';
 
 /**
  * Merging helper that works
@@ -32,7 +32,7 @@ import type { CreateMetaArgs, MetaDescriptors } from 'react-router/route-module'
  * The resulting meta will contain both `title: 'My Leaf Route'` and `description: 'This is the parent route'`.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function mergeMeta<TMetaArgs extends CreateMetaArgs<any>>(leafMetaFn: (args: TMetaArgs) => MetaDescriptors): (args: TMetaArgs) => MetaDescriptors {
+export function mergeMeta<TMetaArgs extends GetAnnotations<any>['MetaArgs'], TMetaDescriptors extends MetaDescriptor[]>(leafMetaFn: (args: TMetaArgs) => TMetaDescriptors): (args: TMetaArgs) => TMetaDescriptors {
   return (args) => {
     const leafMeta = leafMetaFn(args);
 
