@@ -12,7 +12,9 @@
   https://github.com/tailwindlabs/tailwindcss/blob/main/packages/tailwindcss/index.css
 */
 
-@layer vendor, theme, base, components, utilities;
+@layer vendor;
+@layer properties;
+@layer theme, base, components, utilities;
 
 @import './fonts/lato.css' layer(theme);
 @import './fonts/noto-sans.css' layer(theme);
