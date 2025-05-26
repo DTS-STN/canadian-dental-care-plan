@@ -76,6 +76,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  if (formAction === FORM_ACTION.cancel) {
+    return redirect(getPathById('public/apply/$id/adult/review-information', params));
+  }
+
   // state validation schema
   const maritalStatusSchema = z.object({
     maritalStatus: z
