@@ -52,14 +52,33 @@ export class DefaultLetterRepository implements LetterRepository {
   private readonly log: Logger;
   private readonly serverConfig: Pick<
     ServerConfig,
-    'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_BASE_URI' | 'INTEROP_CCT_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_COMMUNITY'
+    | 'HEALTH_PLACEHOLDER_REQUEST_VALUE'
+    | 'HTTP_PROXY_URL'
+    | 'INTEROP_API_BASE_URI'
+    | 'INTEROP_API_SUBSCRIPTION_KEY'
+    | 'INTEROP_CCT_API_BASE_URI'
+    | 'INTEROP_CCT_API_SUBSCRIPTION_KEY'
+    | 'INTEROP_CCT_API_COMMUNITY'
+    | 'INTEROP_API_MAX_RETRIES'
+    | 'INTEROP_API_BACKOFF_MS'
   >;
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
   constructor(
     @inject(TYPES.configs.ServerConfig)
-    serverConfig: Pick<ServerConfig, 'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_BASE_URI' | 'INTEROP_CCT_API_SUBSCRIPTION_KEY' | 'INTEROP_CCT_API_COMMUNITY'>,
+    serverConfig: Pick<
+      ServerConfig,
+      | 'HEALTH_PLACEHOLDER_REQUEST_VALUE'
+      | 'HTTP_PROXY_URL'
+      | 'INTEROP_API_BASE_URI'
+      | 'INTEROP_API_SUBSCRIPTION_KEY'
+      | 'INTEROP_CCT_API_BASE_URI'
+      | 'INTEROP_CCT_API_SUBSCRIPTION_KEY'
+      | 'INTEROP_CCT_API_COMMUNITY'
+      | 'INTEROP_API_MAX_RETRIES'
+      | 'INTEROP_API_BACKOFF_MS'
+    >,
     @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
     this.log = createLogger('DefaultLetterRepository');
@@ -80,6 +99,13 @@ export class DefaultLetterRepository implements LetterRepository {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_CCT_API_SUBSCRIPTION_KEY ?? this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
         'cct-community': this.serverConfig.INTEROP_CCT_API_COMMUNITY,
+      },
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
       },
     });
 
@@ -117,6 +143,13 @@ export class DefaultLetterRepository implements LetterRepository {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_CCT_API_SUBSCRIPTION_KEY ?? this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
         'cct-community': this.serverConfig.INTEROP_CCT_API_COMMUNITY,
+      },
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
       },
     });
 

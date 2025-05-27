@@ -23,10 +23,13 @@ export interface BenefitRenewalRepository {
 @injectable()
 export class DefaultBenefitRenewalRepository implements BenefitRenewalRepository {
   private readonly log: Logger;
-  private readonly serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
+  private readonly serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
   private readonly httpClient: HttpClient;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+  constructor(
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'INTEROP_API_BASE_URI' | 'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>,
+    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
+  ) {
     this.log = createLogger('DefaultBenefitRenewalRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
@@ -46,6 +49,14 @@ export class DefaultBenefitRenewalRepository implements BenefitRenewalRepository
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
       body: JSON.stringify(benefitRenewalRequest),
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_REQUEST]: [/A record with the same value for Application Confirmation Number already exists/],
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
+      },
     });
 
     if (!response.ok) {
