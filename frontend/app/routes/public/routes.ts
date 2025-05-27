@@ -243,6 +243,11 @@ export const routes = [
           { id: 'public/renew/$id/adult-child/marital-status', file: 'routes/public/renew/$id/adult-child/marital-status.tsx', paths: { en: '/:lang/renew/:id/adult-child/marital-status', fr: '/:lang/renouveler/:id/adulte-enfant/etat-civil' } },
           { id: 'public/renew/$id/adult-child/confirmation', file: 'routes/public/renew/$id/adult-child/confirmation.tsx', paths: { en: '/:lang/renew/:id/adult-child/confirmation', fr: '/:lang/renouveler/:id/adulte-enfant/confirmation' } },
           { id: 'public/renew/$id/adult-child/confirm-phone', file: 'routes/public/renew/$id/adult-child/confirm-phone.tsx', paths: { en: '/:lang/renew/:id/adult-child/confirm-phone', fr: '/:lang/renouveler/:id/adulte-enfant/confirmer-telephone' } },
+          {
+            id: 'public/renew/$id/adult-child/communication-preference',
+            file: 'routes/public/renew/$id/adult-child/communication-preference.tsx',
+            paths: { en: '/:lang/renew/:id/adult-child/communication-preference', fr: '/:lang/renouveler/:id/adulte-enfant/preference-communication' },
+          },
           { id: 'public/renew/$id/adult-child/confirm-email', file: 'routes/public/renew/$id/adult-child/confirm-email.tsx', paths: { en: '/:lang/renew/:id/adult-child/confirm-email', fr: '/:lang/renouveler/:id/adulte-enfant/confirmer-courriel' } },
           { id: 'public/renew/$id/adult-child/verify-email', file: 'routes/public/renew/$id/adult-child/verify-email.tsx', paths: { en: '/:lang/renew/:id/adult-child/verify-email', fr: '/:lang/renouveler/:id/adulte-enfant/verifier-courriel' } },
           { id: 'public/renew/$id/adult-child/confirm-address', file: 'routes/public/renew/$id/adult-child/confirm-address.tsx', paths: { en: '/:lang/renew/:id/adult-child/confirm-address', fr: '/:lang/renouveler/:id/adulte-enfant/confirmer-adresse' } },
