@@ -96,6 +96,11 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/review-child-information.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/review-child-information', fr: '/:lang/demander/:id/adulte-enfant/revue-renseignements-enfant' },
           },
+          {
+            id: 'public/apply/$id/adult-child/communication-preference',
+            file: 'routes/public/apply/$id/adult-child/communication-preference.tsx',
+            paths: { en: '/:lang/apply/:id/adult-child/communication-preference', fr: '/:lang/demander/:id/adulte-enfant/preference-communication' },
+          },
           { id: 'public/apply/$id/adult-child/dental-insurance', file: 'routes/public/apply/$id/adult-child/dental-insurance.tsx', paths: { en: '/:lang/apply/:id/adult-child/dental-insurance', fr: '/:lang/demander/:id/adulte-enfant/assurance-dentaire' } },
           {
             id: 'public/apply/$id/adult-child/parent-or-guardian',
@@ -116,11 +121,6 @@ export const routes = [
             paths: { en: '/:lang/apply/:id/adult-child/new-or-existing-member', fr: '/:lang/demander/:id/adulte-enfant/membre-nouveau-ou-actuel' },
           },
           { id: 'public/apply/$id/adult-child/phone-number', file: 'routes/public/apply/$id/adult-child/phone-number.tsx', paths: { en: '/:lang/apply/:id/adult-child/phone-number', fr: '/:lang/demander/:id/adulte-enfant/numero-telephone' } },
-          {
-            id: 'public/apply/$id/adult-child/communication-preference',
-            file: 'routes/public/apply/$id/adult-child/communication-preference.tsx',
-            paths: { en: '/:lang/apply/:id/adult-child/communication-preference', fr: '/:lang/demander/:id/adulte-enfant/preference-communication' },
-          },
           { id: 'public/apply/$id/adult-child/verify-email', file: 'routes/public/apply/$id/adult-child/verify-email.tsx', paths: { en: '/:lang/apply/:id/adult-child/verify-email', fr: '/:lang/demander/:id/adulte-enfant/verifier-courriel' } },
           { id: 'public/apply/$id/adult-child/email', file: 'routes/public/apply/$id/adult-child/email.tsx', paths: { en: '/:lang/apply/:id/adult-child/email', fr: '/:lang/demander/:id/adulte-enfant/adresse-courriel' } },
           {

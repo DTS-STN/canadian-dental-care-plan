@@ -448,7 +448,7 @@ export default function RenewAdultChildReviewAdultInformation({ loaderData, para
               endIcon={faChevronRight}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Review your information click"
             >
-              {t('renew-adult-child:review-adult-information.continue-btn')}
+              {t('renew-adult-child:review-adult-information.continue-button')}
             </LoadingButton>
           )}
           {!hasChildren && (
