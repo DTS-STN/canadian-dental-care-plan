@@ -96,11 +96,6 @@ export const routes = [
             file: 'routes/public/apply/$id/adult-child/review-child-information.tsx',
             paths: { en: '/:lang/apply/:id/adult-child/review-child-information', fr: '/:lang/demander/:id/adulte-enfant/revue-renseignements-enfant' },
           },
-          {
-            id: 'public/apply/$id/adult-child/communication-preference',
-            file: 'routes/public/apply/$id/adult-child/communication-preference.tsx',
-            paths: { en: '/:lang/apply/:id/adult-child/communication-preference', fr: '/:lang/demander/:id/adulte-enfant/preference-communication' },
-          },
           { id: 'public/apply/$id/adult-child/dental-insurance', file: 'routes/public/apply/$id/adult-child/dental-insurance.tsx', paths: { en: '/:lang/apply/:id/adult-child/dental-insurance', fr: '/:lang/demander/:id/adulte-enfant/assurance-dentaire' } },
           {
             id: 'public/apply/$id/adult-child/parent-or-guardian',
@@ -121,6 +116,11 @@ export const routes = [
             paths: { en: '/:lang/apply/:id/adult-child/new-or-existing-member', fr: '/:lang/demander/:id/adulte-enfant/membre-nouveau-ou-actuel' },
           },
           { id: 'public/apply/$id/adult-child/phone-number', file: 'routes/public/apply/$id/adult-child/phone-number.tsx', paths: { en: '/:lang/apply/:id/adult-child/phone-number', fr: '/:lang/demander/:id/adulte-enfant/numero-telephone' } },
+          {
+            id: 'public/apply/$id/adult-child/communication-preference',
+            file: 'routes/public/apply/$id/adult-child/communication-preference.tsx',
+            paths: { en: '/:lang/apply/:id/adult-child/communication-preference', fr: '/:lang/demander/:id/adulte-enfant/preference-communication' },
+          },
           { id: 'public/apply/$id/adult-child/verify-email', file: 'routes/public/apply/$id/adult-child/verify-email.tsx', paths: { en: '/:lang/apply/:id/adult-child/verify-email', fr: '/:lang/demander/:id/adulte-enfant/verifier-courriel' } },
           { id: 'public/apply/$id/adult-child/email', file: 'routes/public/apply/$id/adult-child/email.tsx', paths: { en: '/:lang/apply/:id/adult-child/email', fr: '/:lang/demander/:id/adulte-enfant/adresse-courriel' } },
           {
@@ -243,6 +243,11 @@ export const routes = [
           { id: 'public/renew/$id/adult-child/marital-status', file: 'routes/public/renew/$id/adult-child/marital-status.tsx', paths: { en: '/:lang/renew/:id/adult-child/marital-status', fr: '/:lang/renouveler/:id/adulte-enfant/etat-civil' } },
           { id: 'public/renew/$id/adult-child/confirmation', file: 'routes/public/renew/$id/adult-child/confirmation.tsx', paths: { en: '/:lang/renew/:id/adult-child/confirmation', fr: '/:lang/renouveler/:id/adulte-enfant/confirmation' } },
           { id: 'public/renew/$id/adult-child/confirm-phone', file: 'routes/public/renew/$id/adult-child/confirm-phone.tsx', paths: { en: '/:lang/renew/:id/adult-child/confirm-phone', fr: '/:lang/renouveler/:id/adulte-enfant/confirmer-telephone' } },
+          {
+            id: 'public/renew/$id/adult-child/communication-preference',
+            file: 'routes/public/renew/$id/adult-child/communication-preference.tsx',
+            paths: { en: '/:lang/renew/:id/adult-child/communication-preference', fr: '/:lang/renouveler/:id/adulte-enfant/preference-communication' },
+          },
           { id: 'public/renew/$id/adult-child/confirm-email', file: 'routes/public/renew/$id/adult-child/confirm-email.tsx', paths: { en: '/:lang/renew/:id/adult-child/confirm-email', fr: '/:lang/renouveler/:id/adulte-enfant/confirmer-courriel' } },
           { id: 'public/renew/$id/adult-child/verify-email', file: 'routes/public/renew/$id/adult-child/verify-email.tsx', paths: { en: '/:lang/renew/:id/adult-child/verify-email', fr: '/:lang/renouveler/:id/adulte-enfant/verifier-courriel' } },
           { id: 'public/renew/$id/adult-child/confirm-address', file: 'routes/public/renew/$id/adult-child/confirm-address.tsx', paths: { en: '/:lang/renew/:id/adult-child/confirm-address', fr: '/:lang/renouveler/:id/adulte-enfant/confirmer-adresse' } },
