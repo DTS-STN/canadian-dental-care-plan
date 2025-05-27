@@ -152,7 +152,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/verify-email', params));
   }
 
-  return redirect(getPathById('public/apply/$id/adult/dental-insurance', params));
+  return redirect(getPathById('public/apply/$id/adult/confirm-address', params));
 }
 
 export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentProps) {
