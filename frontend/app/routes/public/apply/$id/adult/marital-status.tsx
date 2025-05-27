@@ -109,7 +109,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:marital-status.error-message.sin-valid') });
-        } else if (formatSin(sin) === state.applicantInformation?.socialInsuranceNumber) {
+        } else if (state.applicantInformation?.socialInsuranceNumber && formatSin(sin) === formatSin(state.applicantInformation.socialInsuranceNumber)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:marital-status.error-message.sin-unique') });
         }
       }),
