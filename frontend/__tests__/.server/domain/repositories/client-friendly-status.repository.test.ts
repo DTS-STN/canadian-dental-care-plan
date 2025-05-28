@@ -31,6 +31,8 @@ describe('DefaultClientFriendlyStatusRepository', () => {
     serverConfigMock = {
       INTEROP_API_BASE_URI: 'https://api.example.com',
       INTEROP_API_SUBSCRIPTION_KEY: 'SUBSCRIPTION_KEY',
+      INTEROP_API_MAX_RETRIES: 10,
+      INTEROP_API_BACKOFF_MS: 3,
     };
   });
 
@@ -58,12 +60,19 @@ describe('DefaultClientFriendlyStatusRepository', () => {
     expect(actual).toEqual(responseDataMock);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.client-friendly-statuses.gets',
-      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses?$select=esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench&$filter=statecode eq 0'),
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses?%24select=esdc_clientfriendlystatusid%2Cesdc_descriptionenglish%2Cesdc_descriptionfrench&%24filter=statecode+eq+0'),
       {
         proxyUrl: serverConfigMock.HTTP_PROXY_URL,
         method: 'GET',
         headers: {
           'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+        retryOptions: {
+          backoffMs: 3,
+          retries: 10,
+          retryConditions: {
+            '502': [],
+          },
         },
       },
     );
@@ -88,12 +97,19 @@ describe('DefaultClientFriendlyStatusRepository', () => {
     expect(actual).toEqual(responseDataMock[0]);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.client-friendly-statuses.gets',
-      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses?$select=esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench&$filter=statecode eq 0'),
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses?%24select=esdc_clientfriendlystatusid%2Cesdc_descriptionenglish%2Cesdc_descriptionfrench&%24filter=statecode+eq+0'),
       {
         proxyUrl: serverConfigMock.HTTP_PROXY_URL,
         method: 'GET',
         headers: {
           'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+        retryOptions: {
+          backoffMs: 3,
+          retries: 10,
+          retryConditions: {
+            '502': [],
+          },
         },
       },
     );
