@@ -7,15 +7,27 @@ const dataSource = vi.hoisted(() => ({
     value: [
       {
         esdc_governmentinsuranceplanid: '1',
-        esdc_nameenglish: 'First Insurance Plan',
-        esdc_namefrench: "Premier plan d'assurance",
+        esdc_nameenglish: 'First Provincial Insurance Plan',
+        esdc_namefrench: "Premier plan d'assurance provincial",
         _esdc_provinceterritorystateid_value: '10',
       },
       {
         esdc_governmentinsuranceplanid: '2',
-        esdc_nameenglish: 'Second Insurance Plan',
-        esdc_namefrench: "Deuxième plan d'assurance",
+        esdc_nameenglish: 'Second Provincial Insurance Plan',
+        esdc_namefrench: "Deuxième plan d'assurance provincial",
         _esdc_provinceterritorystateid_value: '20',
+      },
+      {
+        esdc_governmentinsuranceplanid: '3',
+        esdc_nameenglish: 'First Insurance Plan Federal',
+        esdc_namefrench: "Premier plan d'assurance fédéral",
+        _esdc_provinceterritorystateid_value: null,
+      },
+      {
+        esdc_governmentinsuranceplanid: '4',
+        esdc_nameenglish: 'Second Insurance Plan Federal',
+        esdc_namefrench: "Deuxième plan d'assurance fédéral",
+        _esdc_provinceterritorystateid_value: null,
       },
     ],
   },
@@ -67,14 +79,16 @@ describe('MockGovernmentInsurancePlanRepository', () => {
 
     expect(federalGovernmentInsurancePlans).toEqual([
       {
-        esdc_governmentinsuranceplanid: '1',
-        esdc_nameenglish: 'First Insurance Plan',
-        esdc_namefrench: "Premier plan d'assurance",
+        esdc_governmentinsuranceplanid: '3',
+        esdc_nameenglish: 'First Insurance Plan Federal',
+        esdc_namefrench: "Premier plan d'assurance fédéral",
+        _esdc_provinceterritorystateid_value: null,
       },
       {
-        esdc_governmentinsuranceplanid: '2',
-        esdc_nameenglish: 'Second Insurance Plan',
-        esdc_namefrench: "Deuxième plan d'assurance",
+        esdc_governmentinsuranceplanid: '4',
+        esdc_nameenglish: 'Second Insurance Plan Federal',
+        esdc_namefrench: "Deuxième plan d'assurance fédéral",
+        _esdc_provinceterritorystateid_value: null,
       },
     ]);
   });
@@ -92,12 +106,13 @@ describe('MockGovernmentInsurancePlanRepository', () => {
   it('should get a federal government insurance plan by id', () => {
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('1');
+    const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('3');
 
     expect(federalGovernmentInsurancePlan).toEqual({
-      esdc_governmentinsuranceplanid: '1',
-      esdc_nameenglish: 'First Insurance Plan',
-      esdc_namefrench: "Premier plan d'assurance",
+      esdc_governmentinsuranceplanid: '3',
+      esdc_nameenglish: 'First Insurance Plan Federal',
+      esdc_namefrench: "Premier plan d'assurance fédéral",
+      _esdc_provinceterritorystateid_value: null,
     });
   });
 
@@ -117,14 +132,14 @@ describe('MockGovernmentInsurancePlanRepository', () => {
     expect(provincialGovernmentInsurancePlans).toEqual([
       {
         esdc_governmentinsuranceplanid: '1',
-        esdc_nameenglish: 'First Insurance Plan',
-        esdc_namefrench: "Premier plan d'assurance",
+        esdc_nameenglish: 'First Provincial Insurance Plan',
+        esdc_namefrench: "Premier plan d'assurance provincial",
         _esdc_provinceterritorystateid_value: '10',
       },
       {
         esdc_governmentinsuranceplanid: '2',
-        esdc_nameenglish: 'Second Insurance Plan',
-        esdc_namefrench: "Deuxième plan d'assurance",
+        esdc_nameenglish: 'Second Provincial Insurance Plan',
+        esdc_namefrench: "Deuxième plan d'assurance provincial",
         _esdc_provinceterritorystateid_value: '20',
       },
     ]);
@@ -147,8 +162,8 @@ describe('MockGovernmentInsurancePlanRepository', () => {
 
     expect(provincialGovernmentInsurancePlans).toEqual({
       esdc_governmentinsuranceplanid: '1',
-      esdc_nameenglish: 'First Insurance Plan',
-      esdc_namefrench: "Premier plan d'assurance",
+      esdc_nameenglish: 'First Provincial Insurance Plan',
+      esdc_namefrench: "Premier plan d'assurance provincial",
       _esdc_provinceterritorystateid_value: '10',
     });
   });
