@@ -394,6 +394,11 @@ export const routes = [
           },
           { id: 'public/renew/$id/child/update-home-address', file: 'routes/public/renew/$id/child/update-home-address.tsx', paths: { en: '/:lang/renew/:id/child/update-home-address', fr: '/:lang/renouveler/:id/enfant/mise-a-jour-adresse-domicile' } },
           { id: 'public/renew/$id/child/confirm-phone', file: 'routes/public/renew/$id/child/confirm-phone.tsx', paths: { en: '/:lang/renew/:id/child/confirm-phone', fr: '/:lang/renouveler/:id/enfant/confirmer-telephone' } },
+          {
+            id: 'public/renew/$id/child/communication-preference',
+            file: 'routes/public/renew/$id/child/communication-preference.tsx',
+            paths: { en: '/:lang/renew/:id/child/communication-preference', fr: '/:lang/renouveler/:id/enfant/preference-communication' },
+          },
           { id: 'public/renew/$id/child/confirm-email', file: 'routes/public/renew/$id/child/confirm-email.tsx', paths: { en: '/:lang/renew/:id/child/confirm-email', fr: '/:lang/renouveler/:id/enfant/confirmer-courriel' } },
           { id: 'public/renew/$id/child/verify-email', file: 'routes/public/renew/$id/child/verify-email.tsx', paths: { en: '/:lang/renew/:id/child/verify-email', fr: '/:lang/renouveler/:id/enfant/verifier-courriel' } },
 

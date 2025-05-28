@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/communication-preference';
 
 import { TYPES } from '~/.server/constants';
-import { loadRenewAdultChildState } from '~/.server/routes/helpers/renew-adult-child-route-helpers';
+import { loadRenewChildState } from '~/.server/routes/helpers/renew-child-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import type { CommunicationPreferencesState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -30,9 +30,9 @@ export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as con
 export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('renew-adult-child', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adultChild.communicationPreference,
-  pageTitleI18nKey: 'renew-adult-child:communication-preference.page-title',
+  i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
+  pageIdentifier: pageIds.public.renew.child.communicationPreference,
+  pageTitleI18nKey: 'renew-child:communication-preference.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
@@ -43,10 +43,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const state = loadRenewAdultChildState({ params, request, session });
+  const state = loadRenewChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:communication-preference.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('renew-child:communication-preference.page-title') }) };
 
   return {
     meta,
@@ -61,12 +61,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = loadRenewAdultChildState({ params, request, session });
+  const state = loadRenewChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema = z.object({
-    preferredMethod: z.string().trim().min(1, t('renew-adult-child:communication-preference.error-message.preferred-method-required')),
-    preferredNotificationMethod: z.string().trim().min(1, t('renew-adult-child:communication-preference.error-message.preferred-notification-method-required')),
+    preferredMethod: z.string().trim().min(1, t('renew-child:communication-preference.error-message.preferred-method-required')),
+    preferredNotificationMethod: z.string().trim().min(1, t('renew-child:communication-preference.error-message.preferred-notification-method-required')),
   }) satisfies z.ZodType<CommunicationPreferencesState>;
 
   const parsedDataResult = formSchema.safeParse({
@@ -81,18 +81,18 @@ export async function action({ context: { appContainer, session }, params, reque
   if (state.editMode) {
     if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
       saveRenewState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined, emailVerified: undefined } });
-      return redirect(getPathById('public/renew/$id/adult-child/review-adult-information', params));
+      return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
     }
     saveRenewState({ params, session, state: { editModeCommunicationPreference: parsedDataResult.data } });
-    return redirect(getPathById('public/renew/$id/adult-child/confirm-email', params));
+    return redirect(getPathById('public/renew/$id/child/confirm-email', params));
   }
 
   if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
     saveRenewState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined, emailVerified: undefined } });
-    return redirect(getPathById('public/renew/$id/adult-child/dental-insurance', params));
+    return redirect(getPathById('public/renew/$id/child/dental-insurance', params));
   }
   saveRenewState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
-  return redirect(getPathById('public/renew/$id/adult-child/confirm-email', params));
+  return redirect(getPathById('public/renew/$id/child/confirm-email', params));
 }
 
 export default function RenewFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
@@ -124,18 +124,18 @@ export default function RenewFlowCommunicationPreferencePage({ loaderData, param
           <div className="mb-8 space-y-6">
             <InputRadios
               id="preferred-methods"
-              legend={t('renew-adult-child:communication-preference.preferred-method')}
+              legend={t('renew-child:communication-preference.preferred-method')}
               name="preferredMethod"
-              helpMessagePrimary={t('renew-adult-child:communication-preference.preferred-method-help-message')}
+              helpMessagePrimary={t('renew-child:communication-preference.preferred-method-help-message')}
               options={[
                 {
                   value: PREFERRED_SUN_LIFE_METHOD.email,
-                  children: t('renew-adult-child:communication-preference.by-email'),
+                  children: t('renew-child:communication-preference.by-email'),
                   defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email,
                 },
                 {
                   value: PREFERRED_SUN_LIFE_METHOD.mail,
-                  children: t('renew-adult-child:communication-preference.by-mail'),
+                  children: t('renew-child:communication-preference.by-mail'),
                   defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.mail,
                 },
               ]}
@@ -146,16 +146,16 @@ export default function RenewFlowCommunicationPreferencePage({ loaderData, param
             <InputRadios
               id="preferred-notification-method"
               name="preferredNotificationMethod"
-              legend={t('renew-adult-child:communication-preference.preferred-notification-method')}
+              legend={t('renew-child:communication-preference.preferred-notification-method')}
               options={[
                 {
                   value: PREFERRED_NOTIFICATION_METHOD.msca,
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:communication-preference.preferred-notification-method-msca" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-child:communication-preference.preferred-notification-method-msca" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
                   defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
                 },
                 {
                   value: PREFERRED_NOTIFICATION_METHOD.mail,
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-adult-child:communication-preference.preferred-notification-method-mail" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="renew-child:communication-preference.preferred-notification-method-mail" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
                   defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail,
                 },
               ]}
@@ -165,33 +165,27 @@ export default function RenewFlowCommunicationPreferencePage({ loaderData, param
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Communication click">
-                {t('renew-adult-child:communication-preference.save-btn')}
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Communication click">
+                {t('renew-child:communication-preference.save-btn')}
               </Button>
-              <ButtonLink
-                id="back-button"
-                routeId="public/renew/$id/adult-child/review-adult-information"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Communication click"
-              >
-                {t('renew-adult-child:communication-preference.cancel-btn')}
+              <ButtonLink id="back-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Communication click">
+                {t('renew-child:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Continue - Communication click">
-                {t('renew-adult-child:communication-preference.continue')}
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Communication click">
+                {t('renew-child:communication-preference.continue')}
               </LoadingButton>
               <ButtonLink
                 id="back-button"
-                routeId="public/renew/$id/adult-child/confirm-phone"
+                routeId="public/renew/$id/child/confirm-phone"
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Communication click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Communication click"
               >
-                {t('renew-adult-child:communication-preference.back')}
+                {t('renew-child:communication-preference.back')}
               </ButtonLink>
             </div>
           )}

@@ -133,6 +133,8 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     maritalStatus,
     partnerInformation,
     contactInformation,
+    communicationPreferences,
+    email,
     editMode,
     id,
     submissionInfo,
@@ -169,6 +171,10 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('public/renew/$id/child/confirm-marital-status', params));
   }
 
+  if (communicationPreferences === undefined) {
+    throw redirect(getPathById('public/renew/$id/child/communication-preference', params));
+  }
+
   if (hasAddressChanged === undefined) {
     throw redirect(getPathById('public/renew/$id/child/confirm-address', params));
   }
@@ -199,6 +205,8 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     submissionInfo,
     typeOfRenewal,
     contactInformation,
+    communicationPreferences,
+    email,
     applicantInformation,
     partnerInformation,
     children,
