@@ -4,7 +4,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/verify-email';
@@ -19,6 +19,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
 import { useErrorAlert } from '~/components/error-alert';
 import { useErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
@@ -59,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     meta,
-    email: state.editModeCommunicationPreferences?.email ?? state.contactInformation?.email,
+    email: state.editModeEmail ?? state.email,
     editMode: state.editMode,
   };
 }
@@ -96,19 +97,11 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (state.editMode) {
-      invariant(state.editModeCommunicationPreferences?.email, 'Expected editModeEmail to be defined');
+      invariant(state.editModeEmail, 'Expected editModeEmail to be defined');
+      invariant(state.editModeCommunicationPreference, 'Expected editModeCommunicationPreferences to be defined');
       invariant(state.clientApplication, 'Expected clientApplication to be defined');
       await verificationCodeService.sendVerificationCodeEmail({
-        email: state.editModeCommunicationPreferences.email,
-        verificationCode: verificationCode,
-        preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
-        userId: 'anonymous',
-      });
-      return { status: 'verification-code-sent' } as const;
-    } else if (state.contactInformation?.email) {
-      invariant(state.clientApplication, 'Expected clientApplication to be defined');
-      await verificationCodeService.sendVerificationCodeEmail({
-        email: state.contactInformation.email,
+        email: state.editModeEmail,
         verificationCode: verificationCode,
         preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
         userId: 'anonymous',
@@ -162,12 +155,8 @@ export async function action({ context: { appContainer, session }, params, reque
           params,
           session,
           state: {
-            contactInformation: {
-              ...state.contactInformation,
-              shouldReceiveEmailCommunication: state.editModeCommunicationPreferences?.shouldReceiveEmailCommunication ?? state.contactInformation?.shouldReceiveEmailCommunication,
-              isNewOrUpdatedEmail: state.editModeCommunicationPreferences?.isNewOrUpdatedEmail ?? state.contactInformation?.isNewOrUpdatedEmail,
-              email: state.editModeCommunicationPreferences?.email,
-            },
+            communicationPreferences: state.editModeCommunicationPreference ?? state.communicationPreferences,
+            email: state.editModeEmail,
             verifyEmail: {
               ...state.verifyEmail,
               verificationAttempts: 0,
@@ -207,6 +196,8 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
   const errorSummary = useErrorSummary(errors, { verificationCode: 'verification-code' });
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'verification-code-mismatch');
 
+  const communicationLink = <InlineLink routeId="public/renew/$id/child/communication-preference" params={params} />;
+
   useEffect(() => {
     if (fetcherStatus === 'verification-code-sent') {
       setShowDialog(true);
@@ -216,6 +207,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
   return (
     <>
       <div className="my-6 sm:my-8">
+        {/* TODO: Update the progress value to reflect the actual progress of the application */}
         <Progress value={76} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
@@ -229,7 +221,9 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
           <fieldset className="mb-6">
             <p className="mb-4">{t('renew-child:verify-email.verification-code', { email })}</p>
             <p className="mb-4">{t('renew-child:verify-email.request-new')}</p>
-            <p className="mb-8">{t('renew-child:verify-email.unable-to-verify')}</p>
+            <p className="mb-8">
+              <Trans ns={handle.i18nNamespaces} i18nKey="renew-child:verify-email.unable-to-verify" components={{ communicationLink }} />
+            </p>
             <p className="mb-4 italic">{t('renew:required-label')}</p>
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
@@ -250,7 +244,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
               variant="link"
               loading={isSubmitting}
               value={FORM_ACTION.request}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renew Form-Child:Request new verification code - Verify email click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Request new verification code - Verify email click"
               onClick={async () => {
                 const formData = new FormData();
                 formData.append('_action', FORM_ACTION.request);
@@ -266,10 +260,10 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renew Form-Child:Save - Verify email click">
+              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Verify email click">
                 {t('renew-child:verify-email.save-btn')}
               </LoadingButton>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renew Form-Child:Cancel - Verify email click">
+              <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Verify email click">
                 {t('renew-child:verify-email.cancel-btn')}
               </ButtonLink>
             </div>
@@ -307,7 +301,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
             <DialogDescription>{t('renew-child:verify-email.code-sent.detail', { email })}</DialogDescription>
             <DialogFooter>
               <DialogClose asChild>
-                <Button id="modal-continue" disabled={isSubmitting} variant="primary" endIcon={faChevronRight} size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renew Form:Modal Continue - Verify email click">
+                <Button id="modal-continue" disabled={isSubmitting} variant="primary" endIcon={faChevronRight} size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form:Modal Continue - Verify email click">
                   {t('renew-child:verify-email.continue')}
                 </Button>
               </DialogClose>

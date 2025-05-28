@@ -120,7 +120,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
   }
 
-  return redirect(getPathById('public/renew/$id/child/confirm-email', params));
+  return redirect(getPathById('public/renew/$id/child/communication-preference', params));
 }
 
 export default function RenewChildConfirmPhone({ loaderData, params }: Route.ComponentProps) {
