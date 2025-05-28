@@ -7,6 +7,7 @@ import type { HttpClient } from '~/.server/http';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import clientFriendlyStatusJsonDataSource from '~/.server/resources/power-platform/client-friendly-status.json';
+import { HttpStatusCodes } from '~/constants/http-status-codes';
 
 export interface ClientFriendlyStatusRepository {
   /**
@@ -23,7 +24,7 @@ export interface ClientFriendlyStatusRepository {
   findClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusEntity | null>;
 }
 
-export type DefaultClientFriendlyStatusRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
+export type DefaultClientFriendlyStatusRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
 
 @injectable()
 export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStatusRepository {
@@ -40,17 +41,26 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
   async listAllClientFriendlyStatuses(): Promise<ClientFriendlyStatusEntity[]> {
     this.log.trace('Fetching all client friendly statuses');
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses?$select=esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench&$filter=statecode eq 0`);
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses`);
+    url.searchParams.set('$select', 'esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench');
+    url.searchParams.set('$filter', 'statecode eq 0');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.client-friendly-statuses.gets', url, {
       method: 'GET',
       headers: {
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
+      },
     });
 
     if (!response.ok) {
       this.log.error('%j', {
-        message: 'Failed fetch client friendly statuses',
+        message: 'Failed to fetch client friendly statuses',
         status: response.status,
         statusText: response.statusText,
         url,
