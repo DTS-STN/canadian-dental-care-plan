@@ -50,13 +50,19 @@ export interface ApplicationStatusRepository {
 @injectable()
 export class DefaultApplicationStatusRepository implements ApplicationStatusRepository {
   private readonly log: Logger;
-  private readonly serverConfig: Pick<ServerConfig, 'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_STATUS_CHECK_API_BASE_URI' | 'INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY'>;
+  private readonly serverConfig: Pick<
+    ServerConfig,
+    'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_STATUS_CHECK_API_BASE_URI' | 'INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'
+  >;
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
   constructor(
     @inject(TYPES.configs.ServerConfig)
-    serverConfig: Pick<ServerConfig, 'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_STATUS_CHECK_API_BASE_URI' | 'INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY'>,
+    serverConfig: Pick<
+      ServerConfig,
+      'HEALTH_PLACEHOLDER_REQUEST_VALUE' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_STATUS_CHECK_API_BASE_URI' | 'INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'
+    >,
     @inject(TYPES.http.HttpClient) httpClient: HttpClient,
   ) {
     this.log = createLogger('DefaultApplicationStatusRepository');
@@ -77,6 +83,13 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
       body: JSON.stringify(applicationStatusBasicInfoRequestEntity),
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
+      },
     });
 
     if (!response.ok) {
@@ -113,6 +126,13 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
       body: JSON.stringify(applicationStatusSinRequestEntity),
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
+      },
     });
 
     if (!response.ok) {

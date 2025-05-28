@@ -81,6 +81,8 @@ const serverEnv = clientEnvSchema.extend({
   // interop api settings
   INTEROP_API_BASE_URI: z.string().url(),
   INTEROP_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
+  INTEROP_API_MAX_RETRIES: z.coerce.number().default(3),
+  INTEROP_API_BACKOFF_MS: z.coerce.number().default(100),
   INTEROP_ADDRESS_VALIDATION_REQUEST_CITY_MAX_LENGTH: z.coerce.number().int().positive().default(30),
   INTEROP_APPLICANT_API_BASE_URI: z.string().trim().transform(emptyToUndefined).optional(),
   INTEROP_APPLICANT_API_SUBSCRIPTION_KEY: z.string().trim().transform(emptyToUndefined).optional(),
