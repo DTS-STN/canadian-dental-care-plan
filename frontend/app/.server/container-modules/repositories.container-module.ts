@@ -15,7 +15,7 @@ import {
   DefaultClientFriendlyStatusRepository,
   DefaultCountryRepository,
   DefaultDemographicSurveyRepository,
-  DefaultFederalProvincialGovernmentInsurancePlanRepository,
+  DefaultGovernmentInsurancePlanRepository,
   DefaultLetterRepository,
   DefaultLetterTypeRepository,
   DefaultMaritalStatusRepository,
@@ -32,7 +32,7 @@ import {
   MockClientApplicationRepository,
   MockClientFriendlyStatusRepository,
   MockCountryRepository,
-  MockFederalProvincialGovernmentInsurancePlanRepository,
+  MockGovernmentInsurancePlanRepository,
   MockLetterRepository,
   MockLetterTypeRepository,
   MockMaritalStatusRepository,
@@ -103,8 +103,8 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
 
     options.bind(TYPES.domain.repositories.DemographicSurveyRepository).to(DefaultDemographicSurveyRepository);
 
-    options.bind(TYPES.domain.repositories.FederalProvincialGovernmentInsurancePlanRepository).to(DefaultFederalProvincialGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
-    options.bind(TYPES.domain.repositories.FederalProvincialGovernmentInsurancePlanRepository).to(MockFederalProvincialGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
+    options.bind(TYPES.domain.repositories.GovernmentInsurancePlanRepository).to(DefaultGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.domain.repositories.GovernmentInsurancePlanRepository).to(MockGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
     
     options.bind(TYPES.domain.repositories.LetterRepository).to(DefaultLetterRepository).when(isMockEnabled(serverConfig, 'cct', false));
     options.bind(TYPES.domain.repositories.LetterRepository).to(MockLetterRepository).when(isMockEnabled(serverConfig, 'cct', true));

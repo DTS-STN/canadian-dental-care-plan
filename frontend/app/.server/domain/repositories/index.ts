@@ -14,5 +14,5 @@ export * from './marital-status.repository';
 export * from './preferred-communication-method.repository';
 export * from './preferred-language.repository';
 export * from './province-territory-state.repository';
-export * from './federal-provincial-government-insurance-plan.repository';
+export * from './government-insurance-plan.repository';
 export * from './verification-code.repository';

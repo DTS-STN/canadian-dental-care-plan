@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 
 import type { ProvincialGovernmentInsurancePlanDto, ProvincialGovernmentInsurancePlanLocalizedDto } from '~/.server/domain/dtos';
-import type { ProvincialGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
+import type { GovernmentInsurancePlanEntity } from '~/.server/domain/entities';
 
 export interface ProvincialGovernmentInsurancePlanDtoMapper {
   mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto(provincialGovernmentInsurancePlanDto: ProvincialGovernmentInsurancePlanDto, locale: AppLocale): ProvincialGovernmentInsurancePlanLocalizedDto;
@@ -9,8 +9,8 @@ export interface ProvincialGovernmentInsurancePlanDtoMapper {
     provincialGovernmentInsurancePlanDtos: ReadonlyArray<ProvincialGovernmentInsurancePlanDto>,
     locale: AppLocale,
   ): ReadonlyArray<ProvincialGovernmentInsurancePlanLocalizedDto>;
-  mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity: ProvincialGovernmentInsurancePlanEntity): ProvincialGovernmentInsurancePlanDto;
-  mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities: ReadonlyArray<ProvincialGovernmentInsurancePlanEntity>): ReadonlyArray<ProvincialGovernmentInsurancePlanDto>;
+  mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity: GovernmentInsurancePlanEntity): ProvincialGovernmentInsurancePlanDto;
+  mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities: ReadonlyArray<GovernmentInsurancePlanEntity>): ReadonlyArray<ProvincialGovernmentInsurancePlanDto>;
 }
 
 @injectable()
@@ -30,15 +30,15 @@ export class DefaultProvincialGovernmentInsurancePlanDtoMapper implements Provin
     return provincialGovernmentInsurancePlanDtos.map((dto) => this.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto(dto, locale));
   }
 
-  mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity: ProvincialGovernmentInsurancePlanEntity): ProvincialGovernmentInsurancePlanDto {
+  mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity: GovernmentInsurancePlanEntity): ProvincialGovernmentInsurancePlanDto {
     const id = provincialGovernmentInsurancePlanEntity.esdc_governmentinsuranceplanid;
     const nameEn = provincialGovernmentInsurancePlanEntity.esdc_nameenglish;
     const nameFr = provincialGovernmentInsurancePlanEntity.esdc_namefrench;
-    const provinceTerritoryStateId = provincialGovernmentInsurancePlanEntity._esdc_provinceterritorystateid_value;
+    const provinceTerritoryStateId = provincialGovernmentInsurancePlanEntity._esdc_provinceterritorystateid_value ?? '';
     return { id, nameEn, nameFr, provinceTerritoryStateId };
   }
 
-  mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities: ProvincialGovernmentInsurancePlanEntity[]): ProvincialGovernmentInsurancePlanDto[] {
-    return provincialGovernmentInsurancePlanEntities.map((entity) => this.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(entity));
+  mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities: GovernmentInsurancePlanEntity[]): ProvincialGovernmentInsurancePlanDto[] {
+    return provincialGovernmentInsurancePlanEntities.map((entity) => this.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(entity));
   }
 }

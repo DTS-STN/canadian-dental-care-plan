@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { FederalGovernmentInsurancePlanDto, FederalGovernmentInsurancePlanLocalizedDto } from '~/.server/domain/dtos';
-import type { FederalGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
+import type { GovernmentInsurancePlanEntity } from '~/.server/domain/entities';
 import { DefaultFederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 
 describe('DefaultFederalGovernmentInsurancePlanDtoMapper', () => {
@@ -39,36 +39,39 @@ describe('DefaultFederalGovernmentInsurancePlanDtoMapper', () => {
     });
   });
 
-  describe('mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto', () => {
-    it('maps a FederalGovernmentInsurancePlanEntity to a FederalGovernmentInsurancePlanDto', () => {
-      const mockEntity: FederalGovernmentInsurancePlanEntity = {
+  describe('mapGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto', () => {
+    it('maps a GovernmentInsurancePlanEntity to a FederalGovernmentInsurancePlanDto', () => {
+      const mockEntity: GovernmentInsurancePlanEntity = {
         esdc_governmentinsuranceplanid: '1',
         esdc_nameenglish: 'First Insurance Plan',
         esdc_namefrench: "Premier plan d'assurance",
+        _esdc_provinceterritorystateid_value: null,
       };
 
       const expectedDto: FederalGovernmentInsurancePlanDto = { id: '1', nameEn: 'First Insurance Plan', nameFr: "Premier plan d'assurance" };
 
       const mapper = new DefaultFederalGovernmentInsurancePlanDtoMapper();
 
-      const dto = mapper.mapFederalGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto(mockEntity);
+      const dto = mapper.mapGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto(mockEntity);
 
       expect(dto).toEqual(expectedDto);
     });
   });
 
-  describe('mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos', () => {
-    it('maps an array of FederalGovernmentInsurancePlanEntity to an array of FederalGovernmentInsurancePlanDto', () => {
-      const mockEntities: FederalGovernmentInsurancePlanEntity[] = [
+  describe('mapGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos', () => {
+    it('maps an array of GovernmentInsurancePlanEntity to an array of FederalGovernmentInsurancePlanDto', () => {
+      const mockEntities: GovernmentInsurancePlanEntity[] = [
         {
           esdc_governmentinsuranceplanid: '1',
           esdc_nameenglish: 'First Insurance Plan',
           esdc_namefrench: "Premier plan d'assurance",
+          _esdc_provinceterritorystateid_value: null,
         },
         {
           esdc_governmentinsuranceplanid: '2',
           esdc_nameenglish: 'Second Insurance Plan',
           esdc_namefrench: "Deuxième plan d'assurance",
+          _esdc_provinceterritorystateid_value: null,
         },
       ];
 
@@ -79,7 +82,7 @@ describe('DefaultFederalGovernmentInsurancePlanDtoMapper', () => {
 
       const mapper = new DefaultFederalGovernmentInsurancePlanDtoMapper();
 
-      const dtos = mapper.mapFederalGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(mockEntities);
+      const dtos = mapper.mapGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(mockEntities);
 
       expect(dtos).toEqual(expectedDtos);
     });

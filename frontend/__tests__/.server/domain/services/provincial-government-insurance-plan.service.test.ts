@@ -6,7 +6,7 @@ import type { ServerConfig } from '~/.server/configs';
 import type { ProvincialGovernmentInsurancePlanDto, ProvincialGovernmentInsurancePlanLocalizedDto } from '~/.server/domain/dtos';
 import { ProvincialGovernmentInsurancePlanNotFoundException } from '~/.server/domain/exceptions';
 import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
-import type { FederalProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
+import type { GovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { DefaultProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
 
 vi.mock('moize');
@@ -20,9 +20,9 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
   describe('constructor', () => {
     it('sets the correct maxAge for moize options', () => {
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
 
       expect((service.listProvincialGovernmentInsurancePlans as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
       expect((service.getProvincialGovernmentInsurancePlanById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
@@ -31,8 +31,8 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
   describe('listProvincialGovernmentInsurancePlans', () => {
     it('fetches all provincial government insurance plans', () => {
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
-      mockFederalProvincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans.mockReturnValueOnce([
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
+      mockGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans.mockReturnValueOnce([
         {
           esdc_governmentinsuranceplanid: '1',
           esdc_nameenglish: 'First Insurance Plan',
@@ -63,23 +63,23 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       ];
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
-      mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos.mockReturnValueOnce(mockDtos);
+      mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos.mockReturnValueOnce(mockDtos);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dtos = service.listProvincialGovernmentInsurancePlans();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockFederalProvincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
+      expect(mockGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
     });
   });
 
   describe('getProvincialGovernmentInsurancePlanById', () => {
     it('fetches provincial government insurance plan by id', () => {
       const id = '1';
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
-      mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce({
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
+      mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce({
         esdc_governmentinsuranceplanid: '1',
         esdc_nameenglish: 'First Insurance Plan',
         esdc_namefrench: "Premier plan d'assurance",
@@ -94,37 +94,37 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       };
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
-      mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
+      mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.getProvincialGovernmentInsurancePlanById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).toHaveBeenCalledOnce();
+      expect(mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).toHaveBeenCalledOnce();
     });
 
     it('fetches provincial government insurance plan by id and throws exception if not found', () => {
       const id = '1033';
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
-      mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce(null);
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
+      mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce(null);
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
       expect(() => service.getProvincialGovernmentInsurancePlanById(id)).toThrow(ProvincialGovernmentInsurancePlanNotFoundException);
-      expect(mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
+      expect(mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
     });
   });
 
   describe('findProvincialGovernmentInsurancePlanById', () => {
     it('fetches provincial government insurance plan by id', () => {
       const id = '1';
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
-      mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce({
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
+      mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce({
         esdc_governmentinsuranceplanid: '1',
         esdc_nameenglish: 'First Insurance Plan',
         esdc_namefrench: "Premier plan d'assurance",
@@ -139,38 +139,38 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       };
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
-      mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
+      mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.findProvincialGovernmentInsurancePlanById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).toHaveBeenCalledOnce();
+      expect(mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).toHaveBeenCalledOnce();
     });
 
     it('fetches provincial government insurance plan by id and returns null if not found', () => {
       const id = '1033';
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
-      mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce(null);
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
+      mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce(null);
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.findProvincialGovernmentInsurancePlanById(id);
 
       expect(dto).toBeNull();
-      expect(mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
+      expect(mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
     });
   });
 
   describe('listAndSortLocalizedProvincialGovernmentInsurancePlans', () => {
     it('should return a list of localized provincial government insurance plans', () => {
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
-      mockFederalProvincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans.mockReturnValueOnce([
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
+      mockGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans.mockReturnValueOnce([
         {
           esdc_governmentinsuranceplanid: '1',
           esdc_nameenglish: 'First Insurance Plan',
@@ -196,16 +196,16 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       ];
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
-      mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos.mockReturnValueOnce(mockDtos);
+      mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos.mockReturnValueOnce(mockDtos);
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtosToProvincialGovernmentInsurancePlanLocalizedDtos.mockReturnValueOnce(mockLocalizedDtos);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dtos = service.listAndSortLocalizedProvincialGovernmentInsurancePlans('en');
 
       expect(dtos).toEqual(mockLocalizedDtos);
-      expect(mockFederalProvincialGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
+      expect(mockGovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtosToProvincialGovernmentInsurancePlanLocalizedDtos).toHaveBeenCalledOnce();
     });
   });
@@ -213,8 +213,8 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
   describe('findLocalizedProvincialGovernmentInsurancePlanById', () => {
     it('fetches provincial government insurance plan by id and locale', () => {
       const id = '1';
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
-      mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce({
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
+      mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce({
         esdc_governmentinsuranceplanid: '1',
         esdc_nameenglish: 'First Insurance Plan',
         esdc_namefrench: "Premier plan d'assurance",
@@ -235,41 +235,41 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       };
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
-      mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
+      mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.findLocalizedProvincialGovernmentInsurancePlanById(id, 'en');
 
       expect(dto).toEqual(mockLocalizedDto);
-      expect(mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).toHaveBeenCalledOnce();
+      expect(mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).toHaveBeenCalledOnce();
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto).toHaveBeenCalledOnce();
     });
 
     it('fetches provincial government insurance plan by id and locale and returns null if not found', () => {
       const id = '1033';
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
-      mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce(null);
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
+      mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce(null);
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dto = service.findLocalizedProvincialGovernmentInsurancePlanById(id, 'en');
 
       expect(dto).toBeNull();
-      expect(mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
+      expect(mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
     });
   });
 
   describe('getLocalizedProvincialGovernmentInsurancePlanById', () => {
     it('should return a localized provincial government insurance plan by id', () => {
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
-      mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce({
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
+      mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce({
         esdc_governmentinsuranceplanid: '1',
         esdc_nameenglish: 'First Insurance Plan',
         esdc_namefrench: "Premier plan d'assurance",
@@ -281,30 +281,30 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
       const mockLocalizedDto: ProvincialGovernmentInsurancePlanLocalizedDto = { id: '1', name: 'First Insurance Plan', provinceTerritoryStateId: '2' };
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
-      mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
+      mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto.mockReturnValueOnce(mockDto);
       mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto.mockReturnValueOnce(mockLocalizedDto);
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
       const dtos = service.getLocalizedProvincialGovernmentInsurancePlanById('1', 'en');
 
       expect(dtos).toEqual(mockLocalizedDto);
-      expect(mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).toHaveBeenCalledOnce();
+      expect(mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).toHaveBeenCalledOnce();
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto).toHaveBeenCalledOnce();
     });
 
     it('should throw an error if no provincial government insurance plan is found', () => {
-      const mockFederalProvincialGovernmentInsurancePlanRepository = mock<FederalProvincialGovernmentInsurancePlanRepository>();
-      mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce(null);
+      const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
+      mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById.mockReturnValueOnce(null);
 
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
 
-      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockFederalProvincialGovernmentInsurancePlanRepository, mockServerConfig);
+      const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
       expect(() => service.getLocalizedProvincialGovernmentInsurancePlanById('1', 'en')).toThrow(ProvincialGovernmentInsurancePlanNotFoundException);
-      expect(mockFederalProvincialGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
+      expect(mockGovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto).not.toHaveBeenCalled();
     });
   });
 });
