@@ -1,6 +1,9 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 
+import type { ServerConfig } from '~/.server/configs';
+import { TYPES } from '~/.server/constants';
 import type { ClientFriendlyStatusEntity } from '~/.server/domain/entities';
+import type { HttpClient } from '~/.server/http';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import clientFriendlyStatusJsonDataSource from '~/.server/resources/power-platform/client-friendly-status.json';
@@ -10,32 +13,71 @@ export interface ClientFriendlyStatusRepository {
    * Fetch all client-friendly status entities.
    * @returns All client-friendly status entities.
    */
-  listAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[];
+  listAllClientFriendlyStatuses(): Promise<ClientFriendlyStatusEntity[]>;
 
   /**
    * Fetch a client-friendly status entity by its id.
    * @param id The id of the client-friendly status entity.
    * @returns The client-friendly status entity or null if not found.
    */
-  findClientFriendlyStatusById(id: string): ClientFriendlyStatusEntity | null;
+  findClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusEntity | null>;
 }
+
+export type DefaultClientFriendlyStatusRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY'>;
 
 @injectable()
 export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStatusRepository {
   private readonly log: Logger;
+  private readonly serverConfig: DefaultClientFriendlyStatusRepositoryServerConfig;
+  private readonly httpClient: HttpClient;
 
-  constructor() {
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultClientFriendlyStatusRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultClientFriendlyStatusRepository');
+    this.serverConfig = serverConfig;
+    this.httpClient = httpClient;
   }
 
-  listAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[] {
-    throw new Error('Client friendly status service is not yet implemented');
-    //TODO: Implement listAllClientFriendlyStatuses service
+  async listAllClientFriendlyStatuses(): Promise<ClientFriendlyStatusEntity[]> {
+    this.log.trace('Fetching all client friendly statuses');
+
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses?$select=esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench&$filter=statecode eq 0`);
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.client-friendly-statuses.gets', url, {
+      method: 'GET',
+      headers: {
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      this.log.error('%j', {
+        message: 'Failed fetch client friendly statuses',
+        status: response.status,
+        statusText: response.statusText,
+        url,
+        responseBody: await response.text(),
+      });
+      throw new Error(`Failed fetch client friendly statuses. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    const clientFriendlyStatusEntities: ClientFriendlyStatusEntity[] = await response.json();
+    this.log.trace('Client friendly statuses: [%j]', clientFriendlyStatusEntities);
+
+    return clientFriendlyStatusEntities;
   }
 
-  findClientFriendlyStatusById(id: string): ClientFriendlyStatusEntity | null {
-    throw new Error('Client friendly status service is not yet implemented');
-    //TODO: Implement findClientFriendlyStatusById service
+  async findClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusEntity | null> {
+    this.log.debug('Fetching client friendly status with id: [%s]', id);
+
+    const clientFriendlyStatusEntities = await this.listAllClientFriendlyStatuses();
+    const clientFriendlyStatusEntity = clientFriendlyStatusEntities.find((status) => status.esdc_clientfriendlystatusid === id);
+
+    if (!clientFriendlyStatusEntity) {
+      this.log.warn('Client friendly status not found; id: [%s]', id);
+      return null;
+    }
+
+    this.log.trace('Returning client friendly status: [%j]', clientFriendlyStatusEntity);
+    return clientFriendlyStatusEntity;
   }
 }
 
@@ -47,7 +89,7 @@ export class MockClientFriendlyStatusRepository implements ClientFriendlyStatusR
     this.log = createLogger('MockClientFriendlyStatusRepository');
   }
 
-  listAllClientFriendlyStatuses(): ClientFriendlyStatusEntity[] {
+  async listAllClientFriendlyStatuses(): Promise<ClientFriendlyStatusEntity[]> {
     this.log.debug('Fetching all client-friendly statuses');
     const clientFriendlyStatusEntities = clientFriendlyStatusJsonDataSource.value;
 
@@ -57,10 +99,10 @@ export class MockClientFriendlyStatusRepository implements ClientFriendlyStatusR
     }
 
     this.log.trace('Returning client-friendly statuses: [%j]', clientFriendlyStatusEntities);
-    return clientFriendlyStatusEntities;
+    return await Promise.resolve(clientFriendlyStatusEntities);
   }
 
-  findClientFriendlyStatusById(id: string): ClientFriendlyStatusEntity | null {
+  async findClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusEntity | null> {
     this.log.debug('Fetching client-friendly status with id: [%s]', id);
 
     const clientFriendlyStatusEntities = clientFriendlyStatusJsonDataSource.value;
@@ -71,6 +113,6 @@ export class MockClientFriendlyStatusRepository implements ClientFriendlyStatusR
       return null;
     }
 
-    return clientFriendlyStatusEntity;
+    return await Promise.resolve(clientFriendlyStatusEntity);
   }
 }
