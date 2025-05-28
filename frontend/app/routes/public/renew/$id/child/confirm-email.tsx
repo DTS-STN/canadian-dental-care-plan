@@ -28,7 +28,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adultChild.confirmEmail,
+  pageIdentifier: pageIds.public.renew.child.confirmEmail,
   pageTitleI18nKey: 'renew-child:confirm-email.page-title',
 } as const satisfies RouteHandleData;
 
@@ -157,7 +157,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/renew/$id/child/verify-email', params));
   }
 
-  return redirect(getPathById('public/renew/$id/child/dental-insurance', params));
+  return redirect(getPathById('public/renew/$id/child/confirm-address', params));
 }
 
 export default function RenewFlowEmail({ loaderData, params }: Route.ComponentProps) {
@@ -173,7 +173,7 @@ export default function RenewFlowEmail({ loaderData, params }: Route.ComponentPr
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={55} size="lg" label={t('renew:progress.label')} />
+        <Progress value={70} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <errorSummary.ErrorSummary />

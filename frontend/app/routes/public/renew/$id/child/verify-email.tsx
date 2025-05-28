@@ -40,7 +40,7 @@ const MAX_ATTEMPTS = 5;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('renew-child', 'renew', 'gcweb'),
-  pageIdentifier: pageIds.public.renew.adultChild.verifyEmail,
+  pageIdentifier: pageIds.public.renew.child.verifyEmail,
   pageTitleI18nKey: 'renew-child:verify-email.page-title',
 } as const satisfies RouteHandleData;
 
