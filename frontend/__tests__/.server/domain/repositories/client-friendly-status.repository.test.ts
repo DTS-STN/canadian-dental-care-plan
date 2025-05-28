@@ -1,6 +1,9 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
+import type { DefaultClientFriendlyStatusRepositoryServerConfig } from '~/.server/domain/repositories';
 import { DefaultClientFriendlyStatusRepository, MockClientFriendlyStatusRepository } from '~/.server/domain/repositories';
+import type { HttpClient } from '~/.server/http';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -22,21 +25,78 @@ const dataSource = vi.hoisted(() => ({
 vi.mock('~/.server/resources/power-platform/client-friendly-status.json', () => dataSource);
 
 describe('DefaultClientFriendlyStatusRepository', () => {
+  let serverConfigMock: DefaultClientFriendlyStatusRepositoryServerConfig;
+
+  beforeEach(() => {
+    serverConfigMock = {
+      INTEROP_API_BASE_URI: 'https://api.example.com',
+      INTEROP_API_SUBSCRIPTION_KEY: 'SUBSCRIPTION_KEY',
+    };
+  });
+
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
   });
 
-  it('should throw error on listAllClientFriendlyStatuses call', () => {
-    const repository = new DefaultClientFriendlyStatusRepository();
+  it('should fetch all client friendly statuses', async () => {
+    const responseDataMock = [
+      {
+        esdc_clientfriendlystatusid: '1',
+        esdc_descriptionenglish: 'english',
+        esdc_descriptionfrench: 'french',
+      },
+    ];
 
-    expect(() => repository.listAllClientFriendlyStatuses()).toThrowError('Client friendly status service is not yet implemented');
+    const httpClientMock = mock<HttpClient>();
+    httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
+
+    // act
+    const repository = new DefaultClientFriendlyStatusRepository(serverConfigMock, httpClientMock);
+    const actual = await repository.listAllClientFriendlyStatuses();
+
+    expect(actual).toEqual(responseDataMock);
+    expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
+      'http.client.interop-api.client-friendly-statuses.gets',
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses?$select=esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench&$filter=statecode eq 0'),
+      {
+        proxyUrl: serverConfigMock.HTTP_PROXY_URL,
+        method: 'GET',
+        headers: {
+          'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+      },
+    );
   });
 
-  it('should throw error on findClientFriendlyStatusById call', () => {
-    const repository = new DefaultClientFriendlyStatusRepository();
+  it('should fetch client friendly status by id', async () => {
+    const responseDataMock = [
+      {
+        esdc_clientfriendlystatusid: '1',
+        esdc_descriptionenglish: 'english',
+        esdc_descriptionfrench: 'french',
+      },
+    ];
 
-    expect(() => repository.findClientFriendlyStatusById('1')).toThrowError('Client friendly status service is not yet implemented');
+    const httpClientMock = mock<HttpClient>();
+    httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
+
+    // act
+    const repository = new DefaultClientFriendlyStatusRepository(serverConfigMock, httpClientMock);
+    const actual = await repository.findClientFriendlyStatusById('1');
+
+    expect(actual).toEqual(responseDataMock[0]);
+    expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
+      'http.client.interop-api.client-friendly-statuses.gets',
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses?$select=esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench&$filter=statecode eq 0'),
+      {
+        proxyUrl: serverConfigMock.HTTP_PROXY_URL,
+        method: 'GET',
+        headers: {
+          'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+      },
+    );
   });
 });
 
@@ -46,10 +106,10 @@ describe('MockClientFriendlyStatusRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all client friendly statuses', () => {
+  it('should get all client friendly statuses', async () => {
     const repository = new MockClientFriendlyStatusRepository();
 
-    const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
+    const clientFriendlyStatuses = await repository.listAllClientFriendlyStatuses();
 
     expect(clientFriendlyStatuses).toEqual([
       {
@@ -65,20 +125,20 @@ describe('MockClientFriendlyStatusRepository', () => {
     ]);
   });
 
-  it('should handle empty client friendly statuses data', () => {
+  it('should handle empty client friendly statuses data', async () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
     const repository = new MockClientFriendlyStatusRepository();
 
-    const clientFriendlyStatuses = repository.listAllClientFriendlyStatuses();
+    const clientFriendlyStatuses = await repository.listAllClientFriendlyStatuses();
 
     expect(clientFriendlyStatuses).toEqual([]);
   });
 
-  it('should get a client friendly status by id', () => {
+  it('should get a client friendly status by id', async () => {
     const repository = new MockClientFriendlyStatusRepository();
 
-    const clientFriendlyStatus = repository.findClientFriendlyStatusById('1');
+    const clientFriendlyStatus = await repository.findClientFriendlyStatusById('1');
 
     expect(clientFriendlyStatus).toEqual({
       esdc_clientfriendlystatusid: '1',
@@ -87,10 +147,10 @@ describe('MockClientFriendlyStatusRepository', () => {
     });
   });
 
-  it('should return null for non-existent client friendly status id', () => {
+  it('should return null for non-existent client friendly status id', async () => {
     const repository = new MockClientFriendlyStatusRepository();
 
-    const clientFriendlyStatus = repository.findClientFriendlyStatusById('non-existent-id');
+    const clientFriendlyStatus = await repository.findClientFriendlyStatusById('non-existent-id');
 
     expect(clientFriendlyStatus).toBeNull();
   });
