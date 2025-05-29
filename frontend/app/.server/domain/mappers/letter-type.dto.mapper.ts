@@ -35,16 +35,9 @@ export class DefaultLetterTypeDtoMapper implements LetterTypeDtoMapper {
   }
 
   mapLetterTypeEntityToLetterTypeDto(LetterTypeEntity: LetterTypeEntity): LetterTypeDto {
-    const { ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = this.serverConfig;
-
-    const id = LetterTypeEntity.Value.toString();
-    const nameEn = LetterTypeEntity.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label;
-    const nameFr = LetterTypeEntity.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label;
-
-    if (nameEn === undefined || nameFr === undefined) {
-      throw new Error(`Letter type missing English or French name; id: [${id}]`);
-    }
-
+    const id = LetterTypeEntity.esdc_value;
+    const nameEn = LetterTypeEntity.esdc_ParentId ? `${LetterTypeEntity.esdc_ParentId.esdc_portalnameenglish} - ${LetterTypeEntity.esdc_portalnameenglish}` : LetterTypeEntity.esdc_portalnameenglish;
+    const nameFr = LetterTypeEntity.esdc_ParentId ? `${LetterTypeEntity.esdc_ParentId.esdc_portalnamefrench} - ${LetterTypeEntity.esdc_portalnamefrench}` : LetterTypeEntity.esdc_portalnamefrench;
     return { id, nameEn, nameFr };
   }
 

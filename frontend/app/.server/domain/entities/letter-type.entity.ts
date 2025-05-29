@@ -1,11 +1,14 @@
 import type { ReadonlyDeep } from 'type-fest';
 
 export type LetterTypeEntity = ReadonlyDeep<{
-  Value: string;
-  Label: {
-    LocalizedLabels: Array<{
-      LanguageCode: number;
-      Label: string;
-    }>;
-  };
+  esdc_value: string;
+  esdc_cctlettertypeid: string;
+  esdc_portalnameenglish: string;
+  esdc_portalnamefrench: string;
+  _esdc_parentid_value: string | null;
+  esdc_ParentId: {
+    esdc_portalnamefrench: string;
+    esdc_portalnameenglish: string;
+    esdc_cctlettertypeid: string;
+  } | null;
 }>;
