@@ -42,10 +42,11 @@ describe('Letters Page', () => {
           ]),
       } satisfies Partial<LetterService>);
       mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterTypeService).mockReturnValue({
-        listLetterTypes: () => [
-          { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
-          { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
-        ],
+        listLetterTypes: async () =>
+          await Promise.resolve([
+            { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
+            { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
+          ]),
       } satisfies Partial<LetterTypeService>);
 
       const response = await loader({
@@ -87,10 +88,11 @@ describe('Letters Page', () => {
         ]),
     } satisfies Partial<LetterService>);
     mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterTypeService).mockReturnValue({
-      listLetterTypes: () => [
-        { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
-        { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
-      ],
+      listLetterTypes: async () =>
+        await Promise.resolve([
+          { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
+          { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
+        ]),
     } satisfies Partial<LetterTypeService>);
 
     const response = await loader({

@@ -63,7 +63,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const allLetters = await appContainer.get(TYPES.domain.services.LetterService).findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
-  const letterTypes = appContainer.get(TYPES.domain.services.LetterTypeService).listLetterTypes();
+  const letterTypes = await appContainer.get(TYPES.domain.services.LetterTypeService).listLetterTypes();
   const letters = allLetters.filter(({ letterTypeId }) => letterTypes.some(({ id }) => letterTypeId === id));
 
   session.set('clientNumber', clientNumber);

@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const locale = getLocale(request);
-  const letterType = appContainer.get(TYPES.domain.services.LetterTypeService).getLocalizedLetterTypeById(letter.letterTypeId, locale);
+  const letterType = await appContainer.get(TYPES.domain.services.LetterTypeService).getLocalizedLetterTypeById(letter.letterTypeId, locale);
   const documentName = sanitize(letterType.name);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
