@@ -95,11 +95,6 @@ export async function action({ context: { appContainer, session }, params, reque
         communicationPreferences: parsedDataResult.data,
         email: undefined,
         emailVerified: undefined,
-        // TODO: setting contactInformation.isNewOrUpdatedEmail to false since the hasEmailChanged indicator in the benefit renewal dto needs to be defined.
-        contactInformation: {
-          ...state.contactInformation,
-          isNewOrUpdatedEmail: false,
-        },
       },
     });
     return redirect(getPathById('public/renew/$id/adult-child/confirm-address', params));
@@ -109,11 +104,6 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       communicationPreferences: parsedDataResult.data,
-      // TODO: setting contactInformation.isNewOrUpdatedEmail to false since the hasEmailChanged indicator in the benefit renewal dto needs to be defined.
-      contactInformation: {
-        ...state.contactInformation,
-        isNewOrUpdatedEmail: false,
-      },
     },
   });
   return redirect(getPathById('public/renew/$id/adult-child/confirm-email', params));
