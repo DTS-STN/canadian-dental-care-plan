@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { ProvincialGovernmentInsurancePlanDto, ProvincialGovernmentInsurancePlanLocalizedDto } from '~/.server/domain/dtos';
-import type { ProvincialGovernmentInsurancePlanEntity } from '~/.server/domain/entities';
+import type { GovernmentInsurancePlanEntity } from '~/.server/domain/entities';
 import { DefaultProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 
 describe('DefaultProvincialGovernmentInsurancePlanDtoMapper', () => {
@@ -42,9 +42,9 @@ describe('DefaultProvincialGovernmentInsurancePlanDtoMapper', () => {
     });
   });
 
-  describe('mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto', () => {
-    it('maps a ProvincialGovernmentInsurancePlanEntity with both English and French labels to a ProvincialGovernmentInsurancePlanDto', () => {
-      const mockEntity: ProvincialGovernmentInsurancePlanEntity = {
+  describe('mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto', () => {
+    it('maps a GovernmentInsurancePlanEntity with both English and French labels to a ProvincialGovernmentInsurancePlanDto', () => {
+      const mockEntity: GovernmentInsurancePlanEntity = {
         esdc_governmentinsuranceplanid: '1',
         esdc_nameenglish: 'First Insurance Plan',
         esdc_namefrench: "Premier plan d'assurance",
@@ -53,7 +53,7 @@ describe('DefaultProvincialGovernmentInsurancePlanDtoMapper', () => {
 
       const mapper = new DefaultProvincialGovernmentInsurancePlanDtoMapper();
 
-      const dto = mapper.mapProvincialGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(mockEntity);
+      const dto = mapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(mockEntity);
 
       expect(dto).toEqual<ProvincialGovernmentInsurancePlanDto>({
         id: '1',
@@ -64,9 +64,9 @@ describe('DefaultProvincialGovernmentInsurancePlanDtoMapper', () => {
     });
   });
 
-  describe('mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos', () => {
-    it('maps an array of ProvincialGovernmentInsurancePlanEntities to an array of ProvincialGovernmentInsurancePlanDtos', () => {
-      const mockEntities: ProvincialGovernmentInsurancePlanEntity[] = [
+  describe('mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos', () => {
+    it('maps an array of GovernmentInsurancePlanEntities to an array of ProvincialGovernmentInsurancePlanDtos', () => {
+      const mockEntities: GovernmentInsurancePlanEntity[] = [
         {
           esdc_governmentinsuranceplanid: '1',
           esdc_nameenglish: 'First Insurance Plan',
@@ -83,7 +83,7 @@ describe('DefaultProvincialGovernmentInsurancePlanDtoMapper', () => {
 
       const mapper = new DefaultProvincialGovernmentInsurancePlanDtoMapper();
 
-      const dtos = mapper.mapProvincialGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(mockEntities);
+      const dtos = mapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(mockEntities);
 
       expect(dtos).toEqual<ProvincialGovernmentInsurancePlanDto[]>([
         { id: '1', nameEn: 'First Insurance Plan', nameFr: "Premier plan d'assurance", provinceTerritoryStateId: '10' },
