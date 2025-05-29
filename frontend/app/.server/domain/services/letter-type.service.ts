@@ -19,7 +19,7 @@ export interface LetterTypeService {
    *
    * @returns An array of letter type DTOs.
    */
-  listLetterTypes(): ReadonlyArray<LetterTypeDto>;
+  listLetterTypes(): Promise<ReadonlyArray<LetterTypeDto>>;
 
   /**
    * Retrieves a specific letter type by its ID.
@@ -28,7 +28,7 @@ export interface LetterTypeService {
    * @returns The letter type DTO corresponding to the specified ID.
    * @throws {LetterTypeNotFoundException} If no letter type is found with the specified ID.
    */
-  getLetterTypeById(id: string): LetterTypeDto;
+  getLetterTypeById(id: string): Promise<LetterTypeDto>;
 
   /**
    * Retrieves a list of all letter types in the specified locale.
@@ -36,7 +36,7 @@ export interface LetterTypeService {
    * @param locale - The desired locale (e.g., 'en' or 'fr').
    * @returns An array of letter type DTOs in the specified locale.
    */
-  listLocalizedLetterTypes(locale: AppLocale): ReadonlyArray<LetterTypeLocalizedDto>;
+  listLocalizedLetterTypes(locale: AppLocale): Promise<ReadonlyArray<LetterTypeLocalizedDto>>;
 
   /**
    * Retrieves a specific letter type by its ID in the specified locale.
@@ -46,7 +46,7 @@ export interface LetterTypeService {
    * @returns The letter type DTO corresponding to the specified ID in the given locale.
    * @throws {LetterTypeNotFoundException} If no letter type is found with the specified ID.
    */
-  getLocalizedLetterTypeById(id: string, locale: AppLocale): LetterTypeLocalizedDto;
+  getLocalizedLetterTypeById(id: string, locale: AppLocale): Promise<LetterTypeLocalizedDto>;
 }
 
 @injectable()
@@ -89,17 +89,18 @@ export class DefaultLetterTypeService implements LetterTypeService {
     this.log.debug('DefaultLetterTypeService initiated.');
   }
 
-  listLetterTypes(): ReadonlyArray<LetterTypeDto> {
+  async listLetterTypes(): Promise<ReadonlyArray<LetterTypeDto>> {
     this.log.trace('Getting all letter types');
-    const letterTypeEntities = this.letterTypeRepository.listAllLetterTypes().filter((letter) => !this.serverConfig.INVALID_LETTER_TYPE_IDS.includes(letter.esdc_value));
-    const letterTypeDtos = this.letterTypeDtoMapper.mapLetterTypeEntitiesToLetterTypeDtos(letterTypeEntities);
+    const letterTypeEntities = await this.letterTypeRepository.listAllLetterTypes();
+    const filteredLetterTypeEntities = letterTypeEntities.filter((letter) => !this.serverConfig.INVALID_LETTER_TYPE_IDS.includes(letter.esdc_value));
+    const letterTypeDtos = this.letterTypeDtoMapper.mapLetterTypeEntitiesToLetterTypeDtos(filteredLetterTypeEntities);
     this.log.trace('Returning letter types: [%j]', letterTypeDtos);
     return letterTypeDtos;
   }
 
-  getLetterTypeById(id: string): LetterTypeDto {
+  async getLetterTypeById(id: string): Promise<LetterTypeDto> {
     this.log.trace('Getting letter type with id: [%s]', id);
-    const letterTypeEntity = this.serverConfig.INVALID_LETTER_TYPE_IDS.includes(id) ? null : this.letterTypeRepository.findLetterTypeById(id);
+    const letterTypeEntity = this.serverConfig.INVALID_LETTER_TYPE_IDS.includes(id) ? null : await this.letterTypeRepository.findLetterTypeById(id);
 
     if (!letterTypeEntity) {
       this.log.error('Letter type with id: [%s] not found', id);
@@ -111,17 +112,17 @@ export class DefaultLetterTypeService implements LetterTypeService {
     return letterTypeDto;
   }
 
-  listLocalizedLetterTypes(locale: AppLocale): ReadonlyArray<LetterTypeLocalizedDto> {
+  async listLocalizedLetterTypes(locale: AppLocale): Promise<ReadonlyArray<LetterTypeLocalizedDto>> {
     this.log.trace('Getting all localized letter types with locale: [%s]', locale);
-    const letterTypeDtos = this.listLetterTypes();
+    const letterTypeDtos = await this.listLetterTypes();
     const localizedLetterTypeDtos = this.letterTypeDtoMapper.mapLetterTypeDtosToLetterTypeLocalizedDtos(letterTypeDtos, locale);
     this.log.trace('Returning localized letter types: [%j]', localizedLetterTypeDtos);
     return localizedLetterTypeDtos;
   }
 
-  getLocalizedLetterTypeById(id: string, locale: AppLocale): LetterTypeLocalizedDto {
+  async getLocalizedLetterTypeById(id: string, locale: AppLocale): Promise<LetterTypeLocalizedDto> {
     this.log.trace('Getting localized letter type with id: [%s] and locale: [%s]', id, locale);
-    const letterTypeDto = this.getLetterTypeById(id);
+    const letterTypeDto = await this.getLetterTypeById(id);
     const localizedLetterTypeDto = this.letterTypeDtoMapper.mapLetterTypeDtoToLetterTypeLocalizedDto(letterTypeDto, locale);
     this.log.trace('Returning localized letter type: [%j]', localizedLetterTypeDto);
     return localizedLetterTypeDto;
