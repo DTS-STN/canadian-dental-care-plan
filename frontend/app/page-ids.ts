@@ -217,7 +217,7 @@ export const pageIds = {
         maritalStatus: 'CDCP-RENW-ITA-0001',
         confirmPhone: 'CDCP-RENW-ITA-0002',
         communicationPreference: 'CDCP-RENW-ITA-0003',
-        confirmEmail: 'CDCP-ITA-0004',
+        confirmEmail: 'CDCP-RENW-ITA-0004',
         confirmAddress: 'CDCP-RENW-ITA-0005',
         updateMailingAddress: 'CDCP-RENW-ITA-0006',
         updateHomeAddress: 'CDCP-RENW-ITA-0007',

@@ -155,7 +155,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/renew/$id/ita/dental-insurance', params));
 }
 
-export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentProps) {
+export default function RenewFlowConfirmEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode } = loaderData;
 
