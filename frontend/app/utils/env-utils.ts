@@ -62,6 +62,7 @@ export const clientEnvSchema = z.object({
   COMMUNICATION_METHOD_GC_MAIL_ID: z.string().trim().min(1).default('775170002'),
   CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1).default('51af5170-614e-ee11-be6f-000d3a09d640'),
   INVALID_CLIENT_FRIENDLY_STATUS: z.string().trim().min(1).default('504fba6e-604e-ee11-be6f-000d3a09d640'),
+  INVALID_LETTER_TYPE_IDS: z.string().trim().transform(csvToArray).default('775170000')
 });
 
 export type ClientEnv = z.infer<typeof clientEnvSchema>;

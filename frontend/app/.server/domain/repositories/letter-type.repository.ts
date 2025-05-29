@@ -49,12 +49,7 @@ export class MockLetterTypeRepository implements LetterTypeRepository {
 
   listAllLetterTypes(): ReadonlyArray<LetterTypeEntity> {
     this.log.debug('Fetching all letter types');
-    const letterTypeEntities = letterTypeJsonDataSource.value.at(0)?.OptionSet.Options;
-
-    if (!letterTypeEntities) {
-      this.log.warn('No letter types found');
-      return [];
-    }
+    const letterTypeEntities = letterTypeJsonDataSource.value;
 
     this.log.trace('Returning letter types: [%j]', letterTypeEntities);
     return letterTypeEntities;
@@ -63,8 +58,8 @@ export class MockLetterTypeRepository implements LetterTypeRepository {
   findLetterTypeById(id: string): LetterTypeEntity | null {
     this.log.debug('Fetching letter type with id: [%s]', id);
 
-    const letterTypeEntities = letterTypeJsonDataSource.value.at(0)?.OptionSet.Options;
-    const letterTypeEntity = letterTypeEntities?.find(({ Value }) => Value.toString() === id);
+    const letterTypeEntities = letterTypeJsonDataSource.value;
+    const letterTypeEntity = letterTypeEntities.find(({ esdc_value }) => esdc_value === id);
 
     if (!letterTypeEntity) {
       this.log.warn('Letter type not found; id: [%s]', id);

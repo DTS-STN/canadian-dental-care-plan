@@ -37,6 +37,7 @@ describe('<ClientEnv>', () => {
       SESSION_TIMEOUT_PROMPT_SECONDS: 30,
       SESSION_TIMEOUT_SECONDS: 120,
       USA_COUNTRY_ID: 'USA',
+      INVALID_LETTER_TYPE_IDS: ['101010'],
     };
 
     const { container } = render(<ClientEnvComponent env={env} nonce={nonce} />);

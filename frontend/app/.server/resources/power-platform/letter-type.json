@@ -1,1104 +1,325 @@
 {
-  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#EntityDefinitions('esdc_cctletter')/Attributes/Microsoft.Dynamics.CRM.PicklistAttributeMetadata(LogicalName,OptionSet(Options))",
+  "@odata.context": "https://canadadental-sandbox.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_cctlettertypes(esdc_portalnameenglish,esdc_portalnamefrench,_esdc_parentid_value,esdc_value,esdc_ParentId(esdc_portalnameenglish,esdc_portalnamefrench))",
   "value": [
     {
-      "LogicalName": "esdc_cctlettertype",
-      "MetadataId": "057c8ddb-c90a-ee11-8f6e-000d3a09d1b8",
-      "OptionSet": {
-        "MetadataId": "629218d3-c80a-ee11-8f6e-000d3a09d1b8",
-        "Options": [
-          {
-            "Value": "775170001",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
-                "HasChanged": null
-              }
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "e88307fb-0ec0-4ccf-be49-6c5d6024f26c",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "e88307fb-0ec0-4ccf-be49-6c5d6024f26c",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170001-775170000",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter - Eligible",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination - Admissible",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "de3afd94-5b3c-48ce-bae1-4e6eb8775629",
-                "HasChanged": null
-              }
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "495e3278-d494-496a-8ce4-f4a370138d14",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "495e3278-d494-496a-8ce4-f4a370138d14",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170001-775170001",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter - Ineligible",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination - Non admissible",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
-                "HasChanged": null
-              }
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170001-775170007",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter - Eligible Dependent",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination - Personne à charge admissible",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
-                "HasChanged": null
-              }
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170001-775170008",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter - Ineligible Dependent",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination - Personne à charge non admissible",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
-                "HasChanged": null
-              }
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170001-775170009",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter - Re-Assess Child Dependent",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination - Réévaluer l’enfant à charge",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
-                "HasChanged": null
-              }
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170001-775170010",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter - Re-Assess Applicant",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination - Réévaluer le demandeur",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
-                "HasChanged": null
-              }
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
-                "HasChanged": null
-              }
-            }
-          },
-
-          {
-            "Value": "775170002-775170002",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Validation Letter - Duplicate",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de validation - Doublon",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "Validation Letter - Duplicate",
-                "LanguageCode": 1036,
-                "IsManaged": false,
-                "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                "HasChanged": null
-              }
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "41f3fdc7-900d-4cf5-b475-0a8292ad9b8e",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "41f3fdc7-900d-4cf5-b475-0a8292ad9b8e",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170002-775170011",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Validation Letter - Duplicate Child",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de validation - Doublon - Enfant",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "invite-775170013",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Invitation Letter - Invitation to Renew Letter - Primary",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre d'invitation - Lettre d'invitation à renouveler  - Principal",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170001-775170002",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter - Eligible Renewal - Primary",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination - Renouvellement Admissible - Principal",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170001-775170003",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter - Eligible Renewal - Dependant",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination - Renouvellement Admissible - Personne à charge",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170001-775170004",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter - Ineligible Renewal - Primary",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination - Renouvellement Non admissible - Principal",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170001-775170005",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Determination Letter - Ineligible Renewal - Dependant",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de détermination - Renouvellement Non admissible - Personne à charge",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "invite-775170014",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Invitation Letter - Invitation to Renew Letter Dependant",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre d'invitation - Lettre d'invitation à renouveler dependant",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "invite-775170015",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Invitation Letter - New Adult Invitation",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre d'invitation - Invitation - Nouveaux adultes",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "invite-775170016",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Invitation Letter - Renewal Reminder Primary",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre d'invitation - Rappel de renouvellement pour le demandeur principal",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "notice-775170018",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Notice Letter - Benefits Expired Primary",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de préavis - Prestations expirées pour le demandeur principal",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "notice-775170019",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Notice Letter - Benefits Expired Dependant",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de préavis - Prestations expirées pour les personnes à charge",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "notice-775170020",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Notice Letter - Pre-Renewal SIR Account Revision Letter",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de révision du dossier RAS pré-renouvellement",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "invite-775170017",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Invitation Letter - Renewal Reminder Dependant",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre d'invitation - Rappel de renouvellement pour les personnes à charge",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          },
-          {
-            "Value": "775170002-775170012",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Validation Letter - Independent Child",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de validation - Enfant indépendant",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ]
-            },
-            "Description": {
-              "LocalizedLabels": [
-                {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              ],
-              "UserLocalizedLabel": {
-                "Label": "",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                "HasChanged": null
-              }
-            }
-          }
-        ]
+      "@odata.etag": "W/\"179302828\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à renouveler  - Principal",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Invitation to Renew Letter - Primary",
+      "esdc_value": "invite-775170013",
+      "esdc_cctlettertypeid": "cc101d6b-5798-ef11-8a69-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_portalnameenglish": "Invitation Letter",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302831\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à postuler",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Invitation to Apply Letter",
+      "esdc_value": "775170000",
+      "esdc_cctlettertypeid": "fe29d928-0a8b-ef11-8a6a-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_portalnameenglish": "Invitation Letter",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302833\"",
+      "esdc_portalnamefrench": "Lettre de détermination",
+      "_esdc_parentid_value": null,
+      "esdc_portalnameenglish": "Determination Letter",
+      "esdc_value": "775170001",
+      "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_ParentId": null
+    },
+    {
+      "@odata.etag": "W/\"179302835\"",
+      "esdc_portalnamefrench": "Admissible",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Eligible",
+      "esdc_value": "775170001-775170000",
+      "esdc_cctlettertypeid": "4523d434-e363-ef11-a671-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_portalnameenglish": "Determination Letter",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302836\"",
+      "esdc_portalnamefrench": "Non admissible",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Ineligible",
+      "esdc_value": "775170001-775170001",
+      "esdc_cctlettertypeid": "b27b7f1a-e563-ef11-a671-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_portalnameenglish": "Determination Letter",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302837\"",
+      "esdc_portalnamefrench": "Doublon",
+      "_esdc_parentid_value": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Duplicate",
+      "esdc_value": "775170002-775170002",
+      "esdc_cctlettertypeid": "a91df267-e963-ef11-a671-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de validation",
+        "esdc_portalnameenglish": "Validation Letter",
+        "esdc_cctlettertypeid": "8afa7d9d-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302845\"",
+      "esdc_portalnamefrench": "Personne à charge admissible",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Eligible Dependent",
+      "esdc_value": "775170001-775170007",
+      "esdc_cctlettertypeid": "4eb26ca7-ea63-ef11-a671-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_portalnameenglish": "Determination Letter",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302846\"",
+      "esdc_portalnamefrench": "Personne à charge non admissible",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Ineligible Dependent",
+      "esdc_value": "775170001-775170008",
+      "esdc_cctlettertypeid": "6488acd9-ea63-ef11-a671-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_portalnameenglish": "Determination Letter",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302847\"",
+      "esdc_portalnamefrench": "Réévaluer l’enfant à charge",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Re-Assess Child Dependent",
+      "esdc_value": "775170001-775170009",
+      "esdc_cctlettertypeid": "a09b34f2-ea63-ef11-a671-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_portalnameenglish": "Determination Letter",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302848\"",
+      "esdc_portalnamefrench": "Réévaluer le demandeur",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Re-Assess Applicant",
+      "esdc_value": "775170001-775170010",
+      "esdc_cctlettertypeid": "ba1d1d0e-eb63-ef11-a671-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_portalnameenglish": "Determination Letter",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302849\"",
+      "esdc_portalnamefrench": "Doublon - Enfant",
+      "_esdc_parentid_value": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Duplicate Child",
+      "esdc_value": "775170002-775170011",
+      "esdc_cctlettertypeid": "209e0e29-eb63-ef11-a671-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de validation",
+        "esdc_portalnameenglish": "Validation Letter",
+        "esdc_cctlettertypeid": "8afa7d9d-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302851\"",
+      "esdc_portalnamefrench": "Enfant indépendant",
+      "_esdc_parentid_value": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Independent Child",
+      "esdc_value": "775170002-775170012",
+      "esdc_cctlettertypeid": "9e17106b-eb63-ef11-a671-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de validation",
+        "esdc_portalnameenglish": "Validation Letter",
+        "esdc_cctlettertypeid": "8afa7d9d-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302852\"",
+      "esdc_portalnamefrench": "Renouvellement Admissible - Principal",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Eligible Renewal - Primary",
+      "esdc_value": "775170001-775170002",
+      "esdc_cctlettertypeid": "107895a1-50b7-ef11-b8e9-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_portalnameenglish": "Determination Letter",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302854\"",
+      "esdc_portalnamefrench": "Renouvellement Admissible - Personne à charge",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Eligible Renewal - Dependant",
+      "esdc_value": "775170001-775170003",
+      "esdc_cctlettertypeid": "b5ab92c0-50b7-ef11-b8e9-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_portalnameenglish": "Determination Letter",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302856\"",
+      "esdc_portalnamefrench": "Renouvellement Non admissible  - Principal",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Ineligible Renewal - Primary",
+      "esdc_value": "775170001-775170004",
+      "esdc_cctlettertypeid": "e42e21d0-50b7-ef11-b8e9-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_portalnameenglish": "Determination Letter",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302858\"",
+      "esdc_portalnamefrench": "Renouvellement Non admissible - Personne à charge",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Ineligible Renewal -  Dependant",
+      "esdc_value": "775170001-775170005",
+      "esdc_cctlettertypeid": "cb6af4ea-50b7-ef11-b8e9-000d3a09dfc2",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_portalnameenglish": "Determination Letter",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302860\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à renouveler dependant",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Invitation to Renew Letter Dependant",
+      "esdc_value": "invite-775170014",
+      "esdc_cctlettertypeid": "07f87f65-bb9a-ef11-8a69-000d3a0a072d",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_portalnameenglish": "Invitation Letter",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302863\"",
+      "esdc_portalnamefrench": "Invitation - Nouveaux adultes",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "New Adult Invitation",
+      "esdc_value": "invite-775170015",
+      "esdc_cctlettertypeid": "5ac02587-959b-ef11-8a6a-000d3af47c23",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_portalnameenglish": "Invitation Letter",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302865\"",
+      "esdc_portalnamefrench": "Rappel de renouvellement pour le demandeur principal",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Renewal Reminder Primary",
+      "esdc_value": "invite-775170016",
+      "esdc_cctlettertypeid": "2520f025-c4a5-ef11-b8e9-000d3af47c23",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_portalnameenglish": "Invitation Letter",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302867\"",
+      "esdc_portalnamefrench": "Rappel de renouvellement pour les personnes à charge",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Renewal Reminder Dependant",
+      "esdc_value": "invite-775170017",
+      "esdc_cctlettertypeid": "3545053a-c4a5-ef11-b8e9-000d3af47c23",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_portalnameenglish": "Invitation Letter",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302869\"",
+      "esdc_portalnamefrench": "Prestations expirées pour le demandeur principal",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_portalnameenglish": "Benefits Expired Primary",
+      "esdc_value": "notice-775170018",
+      "esdc_cctlettertypeid": "11b9fd67-c4a5-ef11-b8e9-000d3af47c23",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de préavis",
+        "esdc_portalnameenglish": "Notice Letter",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302871\"",
+      "esdc_portalnamefrench": "Prestations expirées pour les personnes à charge",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_portalnameenglish": "Benefits Expired Dependant",
+      "esdc_value": "notice-775170019",
+      "esdc_cctlettertypeid": "645e8883-c4a5-ef11-b8e9-000d3af47c23",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de préavis",
+        "esdc_portalnameenglish": "Notice Letter",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179302873\"",
+      "esdc_portalnamefrench": "Lettre de révision du dossier RAS pré-renouvellement",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_portalnameenglish": "Pre-Renewal SIR Account Revision Letter",
+      "esdc_value": "notice-775170020",
+      "esdc_cctlettertypeid": "4fd9a5db-c5a5-ef11-b8e9-000d3af47c23",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de préavis",
+        "esdc_portalnameenglish": "Notice Letter",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179329698\"",
+      "esdc_portalnamefrench": "Suspendu",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_portalnameenglish": "Suspended",
+      "esdc_value": "notice-775170017",
+      "esdc_cctlettertypeid": "be56e6d6-292c-f011-8c4d-7c1e5240714d",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de préavis",
+        "esdc_portalnameenglish": "Notice Letter",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29"
+      }
+    },
+    {
+      "@odata.etag": "W/\"179329775\"",
+      "esdc_portalnamefrench": "Suspendu pour les personnes à charge",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_portalnameenglish": "Suspended - Dependent",
+      "esdc_value": "notice-775170016",
+      "esdc_cctlettertypeid": "82f28ed2-193b-f011-b4cb-7c1e5240714d",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de préavis",
+        "esdc_portalnameenglish": "Notice Letter",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29"
       }
     }
   ]

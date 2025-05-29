@@ -54,12 +54,12 @@ export class DefaultLetterTypeService implements LetterTypeService {
   private readonly log: Logger;
   private readonly letterTypeDtoMapper: LetterTypeDtoMapper;
   private readonly letterTypeRepository: LetterTypeRepository;
-  private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>;
+  private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS' | 'INVALID_LETTER_TYPE_IDS'>;
 
   constructor(
     @inject(TYPES.domain.mappers.LetterTypeDtoMapper) letterTypeDtoMapper: LetterTypeDtoMapper,
     @inject(TYPES.domain.repositories.LetterTypeRepository) letterTypeRepository: LetterTypeRepository,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS' | 'INVALID_LETTER_TYPE_IDS'>,
   ) {
     this.log = createLogger('DefaultLetterTypeService');
     this.letterTypeDtoMapper = letterTypeDtoMapper;
@@ -91,7 +91,7 @@ export class DefaultLetterTypeService implements LetterTypeService {
 
   listLetterTypes(): ReadonlyArray<LetterTypeDto> {
     this.log.trace('Getting all letter types');
-    const letterTypeEntities = this.letterTypeRepository.listAllLetterTypes();
+    const letterTypeEntities = this.letterTypeRepository.listAllLetterTypes().filter((letter) => !this.serverConfig.INVALID_LETTER_TYPE_IDS.includes(letter.esdc_value));
     const letterTypeDtos = this.letterTypeDtoMapper.mapLetterTypeEntitiesToLetterTypeDtos(letterTypeEntities);
     this.log.trace('Returning letter types: [%j]', letterTypeDtos);
     return letterTypeDtos;
@@ -99,7 +99,7 @@ export class DefaultLetterTypeService implements LetterTypeService {
 
   getLetterTypeById(id: string): LetterTypeDto {
     this.log.trace('Getting letter type with id: [%s]', id);
-    const letterTypeEntity = this.letterTypeRepository.findLetterTypeById(id);
+    const letterTypeEntity = this.serverConfig.INVALID_LETTER_TYPE_IDS.includes(id) ? null : this.letterTypeRepository.findLetterTypeById(id);
 
     if (!letterTypeEntity) {
       this.log.error('Letter type with id: [%s] not found', id);
