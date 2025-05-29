@@ -82,6 +82,8 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     maritalStatus,
     partnerInformation,
     contactInformation,
+    communicationPreferences,
+    email,
     editMode,
     id,
     submissionInfo,
@@ -122,8 +124,8 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     throw redirect(getPathById('public/renew/$id/ita/marital-status', params));
   }
 
-  if (contactInformation === undefined) {
-    throw redirect(getPathById('public/renew/$id/ita/confirm-email', params));
+  if (communicationPreferences === undefined) {
+    throw redirect(getPathById('public/renew/$id/ita/communication-preference', params));
   }
 
   if (hasAddressChanged === undefined) {
@@ -151,6 +153,8 @@ export function validateRenewItaStateForReview({ params, state }: ValidateRenewI
     typeOfRenewal,
     clientApplication,
     contactInformation,
+    communicationPreferences,
+    email,
     applicantInformation,
     dentalBenefits,
     dentalInsurance,

@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-information';
+import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewItaStateForReview } from '~/.server/routes/helpers/renew-ita-route-helpers';
@@ -73,12 +74,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
-    phoneNumber: state.contactInformation.phoneNumber,
-    altPhoneNumber: state.contactInformation.phoneNumberAlt,
+    phoneNumber: state.contactInformation?.phoneNumber,
+    altPhoneNumber: state.contactInformation?.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     clientNumber: state.applicantInformation.clientNumber,
     maritalStatus: maritalStatus.name,
-    contactInformationEmail: state.contactInformation.email,
+    contactInformationEmail: state.email,
+    communicationSunLifePreference: state.communicationPreferences.preferredMethod,
+    communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -292,14 +295,16 @@ export default function RenewItaReviewInformation({ loaderData, params }: Route.
                   </InlineLink>
                 </div>
               </DescriptionListItem>
-              <DescriptionListItem term={t('renew-ita:review-information.email')}>
-                <p>{userInfo.contactInformationEmail}</p>
-                <div className="mt-4">
-                  <InlineLink id="change-email" routeId="public/renew/$id/ita/confirm-email" params={params}>
-                    {t('renew-ita:review-information.email-change')}
-                  </InlineLink>
-                </div>
-              </DescriptionListItem>
+              {userInfo.contactInformationEmail && (
+                <DescriptionListItem term={t('renew-ita:review-information.email')}>
+                  <p>{userInfo.contactInformationEmail}</p>
+                  <div className="mt-4">
+                    <InlineLink id="change-email" routeId="public/renew/$id/ita/confirm-email" params={params}>
+                      {t('renew-ita:review-information.email-change')}
+                    </InlineLink>
+                  </div>
+                </DescriptionListItem>
+              )}
               <DescriptionListItem term={t('renew-ita:review-information.mailing-title')}>
                 {mailingAddressInfo ? (
                   <Address
@@ -339,6 +344,27 @@ export default function RenewItaReviewInformation({ loaderData, params }: Route.
                     {t('renew-ita:review-information.home-change')}
                   </InlineLink>
                 </div>
+              </DescriptionListItem>
+            </dl>
+          </section>
+          <section className="space-y-6">
+            <h2 className="font-lato text-2xl font-bold">{t('renew-ita:review-information.comm-title')}</h2>
+            <dl className="divide-y border-y">
+              <DescriptionListItem term={t('renew-ita:review-information.sun-life-comm-pref-title')}>
+                <p>{userInfo.communicationSunLifePreference === PREFERRED_SUN_LIFE_METHOD.email ? t('renew-ita:review-information.preferred-notification-method-email') : t('renew-ita:review-information.preferred-notification-method-mail')}</p>
+                <p>
+                  <InlineLink id="change-communication-preference" routeId="public/renew/$id/ita/communication-preference" params={params}>
+                    {t('renew-ita:review-information.sun-life-comm-pref-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('renew-ita:review-information.goc-comm-pref-title')}>
+                <p>{userInfo.communicationGOCPreference === PREFERRED_NOTIFICATION_METHOD.msca ? t('renew-ita:review-information.preferred-notification-method-msca') : t('renew-ita:review-information.preferred-notification-method-mail')}</p>
+                <p>
+                  <InlineLink id="change-communication-preference" routeId="public/renew/$id/ita/communication-preference" params={params}>
+                    {t('renew-ita:review-information.goc-comm-pref-change')}
+                  </InlineLink>
+                </p>
               </DescriptionListItem>
             </dl>
           </section>

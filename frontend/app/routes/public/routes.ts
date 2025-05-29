@@ -219,6 +219,11 @@ export const routes = [
           { id: 'public/renew/$id/tax-filing', file: 'routes/public/renew/$id/tax-filing.tsx', paths: { en: '/:lang/renew/:id/tax-filing', fr: '/:lang/renouveler/:id/declaration-impot' } },
           { id: 'public/renew/$id/file-taxes', file: 'routes/public/renew/$id/file-taxes.tsx', paths: { en: '/:lang/renew/:id/file-taxes', fr: '/:lang/renouveler/:id/produire-declaration-revenus' } },
           { id: 'public/renew/$id/ita/marital-status', file: 'routes/public/renew/$id/ita/marital-status.tsx', paths: { en: '/:lang/renew/:id/ita/marital-status', fr: '/:lang/renouveler/:id/ita/etat-civil' } },
+          {
+            id: 'public/renew/$id/ita/communication-preference',
+            file: 'routes/public/renew/$id/ita/communication-preference.tsx',
+            paths: { en: '/:lang/renew/:id/ita/communication-preference', fr: '/:lang/renouveler/:id/ita/preference-communication' },
+          },
           { id: 'public/renew/$id/ita/confirm-phone', file: 'routes/public/renew/$id/ita/confirm-phone.tsx', paths: { en: '/:lang/renew/:id/ita/confirm-phone', fr: '/:lang/renouveler/:id/ita/confirmer-telephone' } },
           { id: 'public/renew/$id/ita/confirm-email', file: 'routes/public/renew/$id/ita/confirm-email.tsx', paths: { en: '/:lang/renew/:id/ita/confirm-email', fr: '/:lang/renouveler/:id/ita/confirmer-courriel' } },
           { id: 'public/renew/$id/ita/verify-email', file: 'routes/public/renew/$id/ita/verify-email.tsx', paths: { en: '/:lang/renew/:id/ita/verify-email', fr: '/:lang/renouveler/:id/ita/verifier-courriel' } },
