@@ -253,7 +253,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 export default function ProtectedRenewReviewAdultInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefits, hasChildren, primaryApplicantStateCompleted } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefits, primaryApplicantStateCompleted } = loaderData;
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -481,33 +481,18 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
       </div>
       <fetcher.Form method="post" className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <CsrfTokenInput />
-        {hasChildren && (
-          <LoadingButton
-            variant="primary"
-            id="continue-button"
-            name="_action"
-            value={FORM_ACTION.submit}
-            disabled={isSubmitting}
-            loading={isSubmitting}
-            endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Review your information click"
-          >
-            {t('protected-renew:review-adult-information.continue-button')}
-          </LoadingButton>
-        )}
-        {!hasChildren && (
-          <LoadingButton
-            id="confirm-button"
-            name="_action"
-            value={FORM_ACTION.submit}
-            variant="primary"
-            disabled={isSubmitting}
-            loading={isSubmitting}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Review your information click"
-          >
-            {t('protected-renew:review-adult-information.continue-button')}
-          </LoadingButton>
-        )}
+        <LoadingButton
+          variant="primary"
+          id="continue-button"
+          name="_action"
+          value={FORM_ACTION.submit}
+          disabled={isSubmitting}
+          loading={isSubmitting}
+          endIcon={faChevronRight}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Continue - Review your information click"
+        >
+          {t('protected-renew:review-adult-information.continue-button')}
+        </LoadingButton>
         <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Review your information click">
           {t('protected-renew:review-adult-information.back-button')}
         </Button>
