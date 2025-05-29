@@ -64,23 +64,14 @@ export interface RenewState {
   readonly maritalStatus?: string;
   readonly contactInformation?: {
     isNewOrUpdatedPhoneNumber?: boolean;
-    isNewOrUpdatedEmail?: boolean;
     phoneNumber?: string;
     phoneNumberAlt?: string;
-    email?: string;
-    shouldReceiveEmailCommunication?: boolean;
   };
   readonly communicationPreferences?: {
     readonly preferredMethod: string;
     readonly preferredNotificationMethod: string;
   };
-  // TODO: Remove this state once all the flows are updated.
   readonly editModeCommunicationPreferences?: {
-    email: string;
-    shouldReceiveEmailCommunication?: boolean;
-    isNewOrUpdatedEmail?: boolean;
-  };
-  readonly editModeCommunicationPreference?: {
     preferredMethod: string;
     preferredNotificationMethod: string;
   };
