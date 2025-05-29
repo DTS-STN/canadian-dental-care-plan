@@ -89,10 +89,24 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
-    saveRenewState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined, emailVerified: undefined } });
-    return redirect(getPathById('public/renew/$id/adult/dental-insurance', params));
+    saveRenewState({
+      params,
+      session,
+      state: {
+        communicationPreferences: parsedDataResult.data,
+        email: undefined,
+        emailVerified: undefined,
+      },
+    });
+    return redirect(getPathById('public/renew/$id/adult/confirm-address', params));
   }
-  saveRenewState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
+  saveRenewState({
+    params,
+    session,
+    state: {
+      communicationPreferences: parsedDataResult.data,
+    },
+  });
   return redirect(getPathById('public/renew/$id/adult/confirm-email', params));
 }
 

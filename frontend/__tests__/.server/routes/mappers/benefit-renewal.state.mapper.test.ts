@@ -218,7 +218,6 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         },
         changeIndicators: {
           hasAddressChanged: true,
-          hasEmailChanged: true,
           hasMaritalStatusChanged: true,
           hasPhoneChanged: true,
         },

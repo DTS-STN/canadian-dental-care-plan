@@ -7,7 +7,6 @@ export type AdultBenefitRenewalDto = BenefitRenewalDto &
 
 export type AdultChangeIndicators = ReadonlyDeep<{
   hasAddressChanged: boolean;
-  hasEmailChanged: boolean;
   hasMaritalStatusChanged: boolean;
   hasPhoneChanged: boolean;
 }>;
@@ -19,7 +18,6 @@ export type AdultChildBenefitRenewalDto = BenefitRenewalDto &
 
 export type AdultChildChangeIndicators = ReadonlyDeep<{
   hasAddressChanged: boolean;
-  hasEmailChanged: boolean;
   hasMaritalStatusChanged: boolean;
   hasPhoneChanged: boolean;
 }>;
@@ -40,7 +38,6 @@ export type ChildBenefitRenewalDto = BenefitRenewalDto &
 
 export type ChildChangeIndicators = ReadonlyDeep<{
   hasAddressChanged: boolean;
-  hasEmailChanged: boolean;
   hasMaritalStatusChanged: boolean;
   hasPhoneChanged: boolean;
 }>;

@@ -237,11 +237,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     emailVerified,
     communicationPreferences,
   }: RenewAdultState): AdultBenefitRenewalDto {
-    const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
-    if (hasEmailChanged === undefined) {
-      throw new Error('Expected hasEmailChanged to be defined');
-    }
-
     const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
     if (hasPhoneChanged === undefined) {
       throw new Error('Expected hasPhoneChanged to be defined');
@@ -262,7 +257,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       children: [],
       changeIndicators: {
         hasAddressChanged,
-        hasEmailChanged,
         hasMaritalStatusChanged,
         hasPhoneChanged,
       },
@@ -275,7 +269,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
         hasAddressChanged,
-        hasEmailChanged,
+        hasEmailChanged: !!contactInformation.email,
         hasPhoneChanged,
         isHomeAddressSameAsMailingAddress,
         renewedContactInformation: contactInformation,
@@ -317,11 +311,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     emailVerified,
     communicationPreferences,
   }: RenewAdultChildState): AdultChildBenefitRenewalDto {
-    const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
-    if (hasEmailChanged === undefined) {
-      throw new Error('Expected hasEmailChanged to be defined');
-    }
-
     const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
     if (hasPhoneChanged === undefined) {
       throw new Error('Expected hasPhoneChanged to be defined');
@@ -345,7 +334,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       changeIndicators: {
         hasAddressChanged,
-        hasEmailChanged,
         hasMaritalStatusChanged,
         hasPhoneChanged,
       },
@@ -358,7 +346,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
         hasAddressChanged,
-        hasEmailChanged,
+        hasEmailChanged: !!contactInformation.email,
         hasPhoneChanged,
         isHomeAddressSameAsMailingAddress,
         renewedContactInformation: contactInformation,
@@ -461,11 +449,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     emailVerified,
     communicationPreferences,
   }: RenewChildState): ChildBenefitRenewalDto {
-    const hasEmailChanged = contactInformation.isNewOrUpdatedEmail;
-    if (hasEmailChanged === undefined) {
-      throw new Error('Expected hasEmailChanged to be defined');
-    }
-
     const hasPhoneChanged = contactInformation.isNewOrUpdatedPhoneNumber;
     if (hasPhoneChanged === undefined) {
       throw new Error('Expected hasPhoneChanged to be defined');
@@ -489,7 +472,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       changeIndicators: {
         hasAddressChanged,
-        hasEmailChanged,
         hasMaritalStatusChanged,
         hasPhoneChanged,
       },
@@ -502,7 +484,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
         hasAddressChanged,
-        hasEmailChanged,
+        hasEmailChanged: !!contactInformation.email,
         hasPhoneChanged,
         isHomeAddressSameAsMailingAddress,
         renewedContactInformation: contactInformation,

@@ -191,10 +191,6 @@ export function validateRenewChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('public/renew/$id/child/confirm-phone', params));
   }
 
-  if (contactInformation.isNewOrUpdatedEmail === undefined) {
-    throw redirect(getPathById('public/renew/$id/child/confirm-email', params));
-  }
-
   const children = validateChildrenStateForReview({ childrenState: state.children, params });
 
   return {
