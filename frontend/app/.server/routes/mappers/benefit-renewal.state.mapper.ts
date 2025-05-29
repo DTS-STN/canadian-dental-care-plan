@@ -63,6 +63,7 @@ export interface RenewAdultState {
   mailingAddress?: MailingAddressState;
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
+  email?: string;
   emailVerified?: boolean;
   communicationPreferences?: CommunicationPreferencesState;
 }
@@ -82,6 +83,7 @@ export interface RenewAdultChildState {
   mailingAddress?: MailingAddressState;
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
+  email?: string;
   emailVerified?: boolean;
   communicationPreferences?: CommunicationPreferencesState;
 }
@@ -89,7 +91,7 @@ export interface RenewAdultChildState {
 export interface RenewItaState {
   applicationYear: ApplicationYearState;
   clientApplication: ClientApplicationDto;
-  contactInformation: ContactInformationState;
+  contactInformation?: ContactInformationState;
   demographicSurvey?: DemographicSurveyState;
   dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
   dentalInsurance: boolean;
@@ -99,6 +101,7 @@ export interface RenewItaState {
   mailingAddress?: MailingAddressState;
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
+  email?: string;
   emailVerified?: boolean;
   communicationPreferences?: CommunicationPreferencesState;
 }
@@ -115,6 +118,7 @@ export interface RenewChildState {
   hasMaritalStatusChanged: boolean;
   maritalStatus?: string;
   partnerInformation?: PartnerInformationState;
+  email?: string;
   emailVerified?: boolean;
   communicationPreferences?: CommunicationPreferencesState;
 }
@@ -234,6 +238,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     mailingAddress,
     maritalStatus,
     partnerInformation,
+    email,
     emailVerified,
     communicationPreferences,
   }: RenewAdultState): AdultBenefitRenewalDto {
@@ -262,7 +267,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       },
       communicationPreferences: this.toCommunicationPreferences({
         communicationPreferences,
-        email: contactInformation.email,
+        email,
         emailVerified,
         preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
       }),
@@ -308,6 +313,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     mailingAddress,
     maritalStatus,
     partnerInformation,
+    email,
     emailVerified,
     communicationPreferences,
   }: RenewAdultChildState): AdultChildBenefitRenewalDto {
@@ -339,7 +345,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       },
       communicationPreferences: this.toCommunicationPreferences({
         communicationPreferences,
-        email: contactInformation.email,
+        email,
         emailVerified,
         preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
       }),
@@ -383,6 +389,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     mailingAddress,
     maritalStatus,
     partnerInformation,
+    email,
     emailVerified,
     communicationPreferences,
   }: RenewItaState): ItaBenefitRenewalDto {
@@ -413,7 +420,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       communicationPreferences: this.toCommunicationPreferences({
         communicationPreferences,
-        email: contactInformation.email,
+        email,
         emailVerified,
         preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
       }),
@@ -446,6 +453,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     mailingAddress,
     maritalStatus,
     partnerInformation,
+    email,
     emailVerified,
     communicationPreferences,
   }: RenewChildState): ChildBenefitRenewalDto {
@@ -477,7 +485,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       },
       communicationPreferences: this.toCommunicationPreferences({
         communicationPreferences,
-        email: contactInformation.email,
+        email,
         emailVerified,
         preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
       }),
