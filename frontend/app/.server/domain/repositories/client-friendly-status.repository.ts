@@ -41,7 +41,7 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
   async listAllClientFriendlyStatuses(): Promise<ClientFriendlyStatusEntity[]> {
     this.log.trace('Fetching all client friendly statuses');
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses`);
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/esdc_clientfriendlystatuses`);
     url.searchParams.set('$select', 'esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench');
     url.searchParams.set('$filter', 'statecode eq 0');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.client-friendly-statuses.gets', url, {
@@ -66,7 +66,7 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
         url,
         responseBody: await response.text(),
       });
-      throw new Error(`Failed fetch client friendly statuses. Status: ${response.status}, Status Text: ${response.statusText}`);
+      throw new Error(`Failed to fetch client friendly statuses. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
     const clientFriendlyStatusEntities: ClientFriendlyStatusEntity[] = await response.json();
@@ -100,26 +100,26 @@ export class MockClientFriendlyStatusRepository implements ClientFriendlyStatusR
   }
 
   async listAllClientFriendlyStatuses(): Promise<ClientFriendlyStatusEntity[]> {
-    this.log.debug('Fetching all client-friendly statuses');
+    this.log.debug('Fetching all client friendly statuses');
     const clientFriendlyStatusEntities = clientFriendlyStatusJsonDataSource.value;
 
     if (clientFriendlyStatusEntities.length === 0) {
-      this.log.warn('No client-friendly statuses found');
+      this.log.warn('No client friendly statuses found');
       return [];
     }
 
-    this.log.trace('Returning client-friendly statuses: [%j]', clientFriendlyStatusEntities);
+    this.log.trace('Returning client friendly statuses: [%j]', clientFriendlyStatusEntities);
     return await Promise.resolve(clientFriendlyStatusEntities);
   }
 
   async findClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusEntity | null> {
-    this.log.debug('Fetching client-friendly status with id: [%s]', id);
+    this.log.debug('Fetching client friendly status with id: [%s]', id);
 
     const clientFriendlyStatusEntities = clientFriendlyStatusJsonDataSource.value;
     const clientFriendlyStatusEntity = clientFriendlyStatusEntities.find(({ esdc_clientfriendlystatusid }) => esdc_clientfriendlystatusid === id);
 
     if (!clientFriendlyStatusEntity) {
-      this.log.warn('Client-friendly status not found; id: [%s]', id);
+      this.log.warn('Client friendly status not found; id: [%s]', id);
       return null;
     }
 

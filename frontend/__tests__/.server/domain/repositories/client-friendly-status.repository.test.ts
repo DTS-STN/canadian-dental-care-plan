@@ -60,7 +60,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
     expect(actual).toEqual(responseDataMock);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.client-friendly-statuses.gets',
-      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses?%24select=esdc_clientfriendlystatusid%2Cesdc_descriptionenglish%2Cesdc_descriptionfrench&%24filter=statecode+eq+0'),
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_clientfriendlystatuses?%24select=esdc_clientfriendlystatusid%2Cesdc_descriptionenglish%2Cesdc_descriptionfrench&%24filter=statecode+eq+0'),
       {
         proxyUrl: serverConfigMock.HTTP_PROXY_URL,
         method: 'GET',
@@ -97,7 +97,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
     expect(actual).toEqual(responseDataMock[0]);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.client-friendly-statuses.gets',
-      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdcesdc_clientfriendlystatuses?%24select=esdc_clientfriendlystatusid%2Cesdc_descriptionenglish%2Cesdc_descriptionfrench&%24filter=statecode+eq+0'),
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_clientfriendlystatuses?%24select=esdc_clientfriendlystatusid%2Cesdc_descriptionenglish%2Cesdc_descriptionfrench&%24filter=statecode+eq+0'),
       {
         proxyUrl: serverConfigMock.HTTP_PROXY_URL,
         method: 'GET',
