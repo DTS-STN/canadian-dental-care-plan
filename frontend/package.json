@@ -81,7 +81,7 @@
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
     "winston-error-format": "^3.0.2",
-    "zod": "^3.25.32"
+    "zod": "^3.25.42"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.9",
