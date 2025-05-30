@@ -99,11 +99,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplicationHomeProvinceTerritoryStateAbbr = state.clientApplication.contactInformation.homeProvince ? provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince).abbr : undefined;
 
   const mailingCountryId = state.mailingAddress?.country ?? state.clientApplication.contactInformation.mailingCountry;
-  const mailingCountryName = countryService.getLocalizedCountryById(mailingCountryId, locale).name;
+  const mailingCountryName = await countryService.getLocalizedCountryById(mailingCountryId, locale);
 
   const homeCountryId = state.homeAddress?.country ?? state.clientApplication.contactInformation.homeCountry;
   invariant(typeof homeCountryId === 'string', 'Expected homeCountryId to be defined');
-  const homeCountryName = countryService.getLocalizedCountryById(homeCountryId, locale).name;
+  const homeCountryName = await countryService.getLocalizedCountryById(homeCountryId, locale);
 
   const userInfo = {
     firstName: state.clientApplication.applicantInformation.firstName,
@@ -137,14 +137,14 @@ export async function loader({ context: { appContainer, session }, params, reque
         city: state.mailingAddress.city,
         province: mailingProvinceTerritoryStateAbbr,
         postalCode: state.mailingAddress.postalCode,
-        country: mailingCountryName,
+        country: mailingCountryName.name,
       }
     : {
         address: state.clientApplication.contactInformation.mailingAddress,
         city: state.clientApplication.contactInformation.mailingCity,
         province: clientApplicationHomeProvinceTerritoryStateAbbr,
         postalCode: state.clientApplication.contactInformation.mailingPostalCode,
-        country: mailingCountryName,
+        country: mailingCountryName.name,
         apartment: state.clientApplication.contactInformation.mailingApartment,
       };
 
@@ -156,7 +156,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       city: state.homeAddress.city,
       provinceState: homeProvinceTerritoryStateAbbr,
       postalZipCode: state.homeAddress.postalCode,
-      country: homeCountryName,
+      country: homeCountryName.name,
     };
   } else {
     invariant(state.clientApplication.contactInformation.homeAddress, 'Expected state.clientApplication.contactInformation.homeAddress to be defined');
@@ -167,7 +167,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       city: state.clientApplication.contactInformation.homeCity,
       provinceState: clientApplicationMailingProvinceTerritoryStateAbbr,
       postalZipCode: state.clientApplication.contactInformation.homePostalCode,
-      country: homeCountryName,
+      country: homeCountryName.name,
       apartment: state.clientApplication.contactInformation.homeApartment,
     };
   }

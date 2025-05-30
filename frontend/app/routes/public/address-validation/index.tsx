@@ -57,7 +57,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const validationResult = await mailingAddressValidator.validateMailingAddress(session.find('route.address-validation') ?? {});
   const defaultMailingAddress = validationResult.success ? validationResult.data : undefined;
 
-  const countries = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
+  const countries = await appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const provinceTerritoryStates = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -111,6 +111,8 @@ export async function action({ context: { appContainer, session }, request, para
   invariant(validatedMailingAddress.postalZipCode, 'Postal zip code is required for Canadian addresses');
   invariant(validatedMailingAddress.provinceStateId, 'Province state is required for Canadian addresses');
 
+  const country = await countryService.getLocalizedCountryById(validatedMailingAddress.countryId, locale);
+
   // Build the address object using validated data, transforming unique identifiers
   // for country and province/state into localized names for rendering on the screen.
   // The localized country and province/state names are retrieved based on the user's locale.
@@ -118,7 +120,7 @@ export async function action({ context: { appContainer, session }, request, para
     address: validatedMailingAddress.address,
     city: validatedMailingAddress.city,
     countryId: validatedMailingAddress.countryId,
-    country: countryService.getLocalizedCountryById(validatedMailingAddress.countryId, locale).name,
+    country: country.name,
     postalZipCode: validatedMailingAddress.postalZipCode,
     provinceStateId: validatedMailingAddress.provinceStateId,
     provinceState: validatedMailingAddress.provinceStateId && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceStateId, locale).abbr,

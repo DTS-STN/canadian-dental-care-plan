@@ -59,7 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
+  const countryList = await appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:address.mailing-address.page-title') }) };
@@ -142,12 +142,14 @@ export async function action({ context: { appContainer, session }, params, reque
   invariant(validatedResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
   invariant(validatedResult.data.provinceStateId, 'Province state is required for Canadian addresses');
 
+  const country = await countryService.getLocalizedCountryById(validatedResult.data.countryId, locale);
+
   // Build the address object using validated data, transforming unique identifiers
   const formattedMailingAddress: CanadianAddress = {
     address: validatedResult.data.address,
     city: validatedResult.data.city,
     countryId: validatedResult.data.countryId,
-    country: countryService.getLocalizedCountryById(validatedResult.data.countryId, locale).name,
+    country: country.name,
     postalZipCode: validatedResult.data.postalZipCode,
     provinceStateId: validatedResult.data.provinceStateId,
     provinceState: validatedResult.data.provinceStateId && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedResult.data.provinceStateId, locale).abbr,
