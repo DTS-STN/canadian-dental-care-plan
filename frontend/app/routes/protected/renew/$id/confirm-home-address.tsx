@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const countryList = appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
+  const countryList = await appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-address.home-address.page-title') }) };
@@ -138,12 +138,14 @@ export async function action({ context: { appContainer, session }, params, reque
   invariant(parsedDataResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
   invariant(parsedDataResult.data.provinceStateId, 'Province state is required for Canadian addresses');
 
+  const country = await countryService.getLocalizedCountryById(parsedDataResult.data.countryId, locale);
+
   // Build the address object using validated data, transforming unique identifiers
   const formattedHomeAddress: CanadianAddress = {
     address: parsedDataResult.data.address,
     city: parsedDataResult.data.city,
     countryId: parsedDataResult.data.countryId,
-    country: countryService.getLocalizedCountryById(parsedDataResult.data.countryId, locale).name,
+    country: country.name,
     postalZipCode: parsedDataResult.data.postalZipCode,
     provinceStateId: parsedDataResult.data.provinceStateId,
     provinceState: parsedDataResult.data.provinceStateId && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(parsedDataResult.data.provinceStateId, locale).abbr,

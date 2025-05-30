@@ -42,10 +42,11 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   }
 
   const validatedMailingAddress = validationResult.data;
+  const country = await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(validatedMailingAddress.countryId, locale);
   const formattedMailingAddress = {
     address: validatedMailingAddress.address,
     city: validatedMailingAddress.city,
-    country: appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(validatedMailingAddress.countryId, locale).name,
+    country: country.name,
     postalZipCode: validatedMailingAddress.postalZipCode,
     provinceState: validatedMailingAddress.provinceStateId && appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceStateId, locale).abbr,
   };

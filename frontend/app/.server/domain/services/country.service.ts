@@ -20,7 +20,7 @@ export interface CountryService {
    *
    * @returns An array of Country DTOs.
    */
-  listCountries(): ReadonlyArray<CountryDto>;
+  listCountries(): Promise<ReadonlyArray<CountryDto>>;
 
   /**
    * Retrieves a specific country by its ID.
@@ -29,7 +29,7 @@ export interface CountryService {
    * @returns The Country DTO corresponding to the specified ID.
    * @throws {CountryNotFoundException} If no country is found with the specified ID.
    */
-  getCountryById(id: string): CountryDto;
+  getCountryById(id: string): Promise<CountryDto>;
 
   /**
    * Retrieves a list of all countries in the specified locale.
@@ -37,7 +37,7 @@ export interface CountryService {
    * @param locale - The desired locale (e.g., 'en' or 'fr').
    * @returns An array of Country DTOs in the specified locale.
    */
-  listAndSortLocalizedCountries(locale: AppLocale): ReadonlyArray<CountryLocalizedDto>;
+  listAndSortLocalizedCountries(locale: AppLocale): Promise<ReadonlyArray<CountryLocalizedDto>>;
 
   /**
    * Retrieves a specific country by its ID in the specified locale.
@@ -47,7 +47,7 @@ export interface CountryService {
    * @returns The Country DTO corresponding to the specified ID in the given locale.
    * @throws {CountryNotFoundException} If no country is found with the specified ID.
    */
-  getLocalizedCountryById(id: string, locale: AppLocale): CountryLocalizedDto;
+  getLocalizedCountryById(id: string, locale: AppLocale): Promise<CountryLocalizedDto>;
 }
 
 export type CountryServiceImpl_ServiceConfig = Pick<ServerConfig, 'CANADA_COUNTRY_ID' | 'LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS'>;
@@ -117,9 +117,9 @@ export class DefaultCountryService implements CountryService {
    *
    * @returns An array of Country DTOs.
    */
-  listCountries(): ReadonlyArray<CountryDto> {
+  async listCountries(): Promise<ReadonlyArray<CountryDto>> {
     this.log.debug('Get all countries');
-    const countryEntities = this.countryRepository.listAllCountries();
+    const countryEntities = await this.countryRepository.listAllCountries();
     const countryDtos = this.countryDtoMapper.mapCountryEntitiesToCountryDtos(countryEntities);
     this.log.trace('Returning countries: [%j]', countryDtos);
     return countryDtos;
@@ -132,9 +132,9 @@ export class DefaultCountryService implements CountryService {
    * @returns The Country DTO corresponding to the specified ID.
    * @throws {CountryNotFoundException} If no country is found with the specified ID.
    */
-  getCountryById(id: string): CountryDto {
+  async getCountryById(id: string): Promise<CountryDto> {
     this.log.debug('Get country with id: [%s]', id);
-    const countryEntity = this.countryRepository.findCountryById(id);
+    const countryEntity = await this.countryRepository.findCountryById(id);
 
     if (!countryEntity) {
       this.log.error('Country with id: [%s] not found', id);
@@ -152,9 +152,9 @@ export class DefaultCountryService implements CountryService {
    * @param locale - The desired locale (e.g., 'en' or 'fr').
    * @returns An array of localized Country DTOs.
    */
-  listAndSortLocalizedCountries(locale: AppLocale): ReadonlyArray<CountryLocalizedDto> {
+  async listAndSortLocalizedCountries(locale: AppLocale): Promise<ReadonlyArray<CountryLocalizedDto>> {
     this.log.debug('Get and sort all localized countries with locale: [%s]', locale);
-    const countryDtos = this.listCountries();
+    const countryDtos = await this.listCountries();
     const localizedCountryDtos = this.countryDtoMapper.mapCountryDtosToCountryLocalizedDtos(countryDtos, locale);
     const sortedLocalizedCountryDtos = this.sortLocalizedCountries(localizedCountryDtos, locale);
     this.log.trace('Returning sorted localized countries: [%j]', sortedLocalizedCountryDtos);
@@ -169,9 +169,9 @@ export class DefaultCountryService implements CountryService {
    * @returns The localized Country DTO corresponding to the specified ID.
    * @throws {CountryNotFoundException} If no country is found with the specified ID.
    */
-  getLocalizedCountryById(id: string, locale: AppLocale): CountryLocalizedDto {
+  async getLocalizedCountryById(id: string, locale: AppLocale): Promise<CountryLocalizedDto> {
     this.log.debug('Get localized country with id: [%s] and locale: [%s]', id, locale);
-    const countryDto = this.getCountryById(id);
+    const countryDto = await this.getCountryById(id);
     const localizedCountryDto = this.countryDtoMapper.mapCountryDtoToCountryLocalizedDto(countryDto, locale);
     this.log.trace('Returning localized country: [%j]', localizedCountryDto);
     return localizedCountryDto;

@@ -31,9 +31,9 @@ describe('DefaultCountryService', () => {
   });
 
   describe('listCountries', () => {
-    it('fetches all countries', () => {
+    it('fetches all countries', async () => {
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.listAllCountries.mockReturnValueOnce([
+      mockCountryRepository.listAllCountries.mockResolvedValueOnce([
         {
           esdc_countryid: '1',
           esdc_nameenglish: 'Canada English',
@@ -58,7 +58,7 @@ describe('DefaultCountryService', () => {
 
       const service = new DefaultCountryService(mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      const dtos = service.listCountries();
+      const dtos = await service.listCountries();
 
       expect(dtos).toEqual(mockDtos);
       expect(mockCountryRepository.listAllCountries).toHaveBeenCalledOnce();
@@ -67,10 +67,10 @@ describe('DefaultCountryService', () => {
   });
 
   describe('getCountry', () => {
-    it('fetches country by id', () => {
+    it('fetches country by id', async () => {
       const id = '1';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findCountryById.mockReturnValueOnce({
+      mockCountryRepository.findCountryById.mockResolvedValueOnce({
         esdc_countryid: '1',
         esdc_nameenglish: 'Canada English',
         esdc_namefrench: 'Canada Français',
@@ -84,32 +84,32 @@ describe('DefaultCountryService', () => {
 
       const service = new DefaultCountryService(mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      const dto = service.getCountryById(id);
+      const dto = await service.getCountryById(id);
 
       expect(dto).toEqual(mockDto);
       expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).toHaveBeenCalledOnce();
     });
 
-    it('fetches country by id throws not found exception', () => {
+    it('fetches country by id throws not found exception', async () => {
       const id = '1033';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findCountryById.mockReturnValueOnce(null);
+      mockCountryRepository.findCountryById.mockResolvedValueOnce(null);
 
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
 
       const service = new DefaultCountryService(mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      expect(() => service.getCountryById(id)).toThrow(CountryNotFoundException);
+      await expect(async () => await service.getCountryById(id)).rejects.toThrow(CountryNotFoundException);
       expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).not.toHaveBeenCalled();
     });
   });
 
   describe('listAndSortLocalizedCountries', () => {
-    it('fetches and sorts localized countries with Canada first', () => {
+    it('fetches and sorts localized countries with Canada first', async () => {
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.listAllCountries.mockReturnValueOnce([
+      mockCountryRepository.listAllCountries.mockResolvedValueOnce([
         {
           esdc_countryid: '1',
           esdc_nameenglish: 'Canada English',
@@ -147,7 +147,7 @@ describe('DefaultCountryService', () => {
 
       const service = new DefaultCountryService(mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      const dtos = service.listAndSortLocalizedCountries('en');
+      const dtos = await service.listAndSortLocalizedCountries('en');
 
       expect(dtos).toStrictEqual(expectedCountryLocalizedDtos);
       expect(mockCountryRepository.listAllCountries).toHaveBeenCalledOnce();
@@ -156,10 +156,10 @@ describe('DefaultCountryService', () => {
   });
 
   describe('getLocalizedCountryById', () => {
-    it('fetches localized country by id', () => {
+    it('fetches localized country by id', async () => {
       const id = '1';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findCountryById.mockReturnValueOnce({
+      mockCountryRepository.findCountryById.mockResolvedValueOnce({
         esdc_countryid: '1',
         esdc_nameenglish: 'Canada English',
         esdc_namefrench: 'Canada Français',
@@ -173,23 +173,23 @@ describe('DefaultCountryService', () => {
 
       const service = new DefaultCountryService(mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      const dto = service.getLocalizedCountryById(id, 'en');
+      const dto = await service.getLocalizedCountryById(id, 'en');
 
       expect(dto).toEqual(mockDto);
       expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).toHaveBeenCalledOnce();
     });
 
-    it('fetches localized country by id throws not found exception', () => {
+    it('fetches localized country by id throws not found exception', async () => {
       const id = '1033';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findCountryById.mockReturnValueOnce(null);
+      mockCountryRepository.findCountryById.mockResolvedValueOnce(null);
 
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
 
       const service = new DefaultCountryService(mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      expect(() => service.getLocalizedCountryById(id, 'en')).toThrow(CountryNotFoundException);
+      await expect(async () => await service.getLocalizedCountryById(id, 'en')).rejects.toThrow(CountryNotFoundException);
       expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).not.toHaveBeenCalled();
     });
