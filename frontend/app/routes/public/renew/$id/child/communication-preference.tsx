@@ -83,7 +83,7 @@ export async function action({ context: { appContainer, session }, params, reque
       saveRenewState({ params, session, state: { communicationPreferences: parsedDataResult.data, email: undefined, emailVerified: undefined } });
       return redirect(getPathById('public/renew/$id/child/review-adult-information', params));
     }
-    saveRenewState({ params, session, state: { editModeCommunicationPreference: parsedDataResult.data } });
+    saveRenewState({ params, session, state: { editModeCommunicationPreferences: parsedDataResult.data } });
     return redirect(getPathById('public/renew/$id/child/confirm-email', params));
   }
 

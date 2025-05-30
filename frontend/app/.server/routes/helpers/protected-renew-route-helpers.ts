@@ -81,7 +81,6 @@ export interface ProtectedRenewState {
     readonly phoneNumber?: string;
     readonly phoneNumberAlt?: string;
     readonly email?: string;
-    readonly shouldReceiveEmailCommunication?: boolean;
   };
   readonly preferredLanguage?: string;
   readonly communicationPreferences?: {

@@ -123,7 +123,7 @@ export async function action({ context: { appContainer, session }, params, reque
       params,
       session,
       state: {
-        communicationPreferences: state.editModeCommunicationPreference,
+        communicationPreferences: state.editModeCommunicationPreferences,
         email: parsedDataResult.data.email,
         emailVerified: state.emailVerified,
         verifyEmail: {

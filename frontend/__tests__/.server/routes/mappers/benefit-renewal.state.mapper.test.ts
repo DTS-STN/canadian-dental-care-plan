@@ -142,12 +142,9 @@ describe('DefaultBenefitRenewalStateMapper', () => {
         ],
         clientApplication: mockClientApplication,
         contactInformation: {
-          email: 'new@example.com',
           phoneNumber: '555-555-1234',
           phoneNumberAlt: '555-555-5678',
-          isNewOrUpdatedEmail: true,
           isNewOrUpdatedPhoneNumber: true,
-          shouldReceiveEmailCommunication: true,
         },
         demographicSurvey: {
           ethnicGroups: ['Group 1'],

@@ -177,6 +177,7 @@ interface ToContactInformationArgs {
   renewedContactInformation?: ContactInformationState;
   renewedHomeAddress?: HomeAddressState;
   renewedMailingAddress?: MailingAddressState;
+  renewedEmail?: string;
 }
 
 interface ToDentalBenefitsArgs {
@@ -274,12 +275,13 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
         hasAddressChanged,
-        hasEmailChanged: !!contactInformation.email,
+        hasEmailChanged: !!email,
         hasPhoneChanged,
         isHomeAddressSameAsMailingAddress,
         renewedContactInformation: contactInformation,
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
+        renewedEmail: email,
       }),
       demographicSurvey,
       dentalBenefits: this.toDentalBenefits({
@@ -352,12 +354,13 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
         hasAddressChanged,
-        hasEmailChanged: !!contactInformation.email,
+        hasEmailChanged: !!email,
         hasPhoneChanged,
         isHomeAddressSameAsMailingAddress,
         renewedContactInformation: contactInformation,
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
+        renewedEmail: email,
       }),
       demographicSurvey,
       dentalBenefits: this.toDentalBenefits({
@@ -417,6 +420,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedContactInformation: contactInformation,
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
+        renewedEmail: email,
       }),
       communicationPreferences: this.toCommunicationPreferences({
         communicationPreferences,
@@ -492,12 +496,13 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
         hasAddressChanged,
-        hasEmailChanged: !!contactInformation.email,
+        hasEmailChanged: !!email,
         hasPhoneChanged,
         isHomeAddressSameAsMailingAddress,
         renewedContactInformation: contactInformation,
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
+        renewedEmail: email,
       }),
       dentalBenefits: [],
       dentalInsurance: undefined,
@@ -564,6 +569,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedContactInformation: contactInformation,
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
+        renewedEmail: email,
       }),
       dentalBenefits: applicantStateCompleted
         ? this.toDentalBenefits({
@@ -656,6 +662,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     renewedContactInformation,
     renewedHomeAddress,
     renewedMailingAddress,
+    renewedEmail,
   }: ToContactInformationArgs): RenewalContactInformationDto {
     return {
       ...(hasAddressChanged
@@ -702,7 +709,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
           }),
       ...(hasEmailChanged
         ? {
-            email: renewedContactInformation?.email,
+            email: renewedEmail,
           }
         : {
             email: existingContactInformation.email,
