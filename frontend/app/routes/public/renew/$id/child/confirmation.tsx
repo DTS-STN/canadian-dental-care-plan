@@ -57,8 +57,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
   const countryMailing = state.mailingAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
   const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined;
@@ -83,7 +83,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? {
         address: state.mailingAddress.address,
         city: state.mailingAddress.city,
-        province: mailingProvinceTerritoryStateAbbr,
+        province: mailingProvinceTerritoryStateAbbr?.abbr,
         postalCode: state.mailingAddress.postalCode,
         country: countryMailing?.name ?? '',
       }
@@ -93,7 +93,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? {
         address: state.homeAddress.address,
         city: state.homeAddress.city,
-        province: homeProvinceTerritoryStateAbbr,
+        province: homeProvinceTerritoryStateAbbr?.abbr,
         postalCode: state.homeAddress.postalCode,
         country: countryHome?.name ?? '',
       }

@@ -58,7 +58,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const defaultMailingAddress = validationResult.success ? validationResult.data : undefined;
 
   const countries = await appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
-  const provinceTerritoryStates = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const provinceTerritoryStates = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('address-validation:index.page-title') }) };
@@ -112,6 +112,7 @@ export async function action({ context: { appContainer, session }, request, para
   invariant(validatedMailingAddress.provinceStateId, 'Province state is required for Canadian addresses');
 
   const country = await countryService.getLocalizedCountryById(validatedMailingAddress.countryId, locale);
+  const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceStateId, locale);
 
   // Build the address object using validated data, transforming unique identifiers
   // for country and province/state into localized names for rendering on the screen.
@@ -123,7 +124,7 @@ export async function action({ context: { appContainer, session }, request, para
     country: country.name,
     postalZipCode: validatedMailingAddress.postalZipCode,
     provinceStateId: validatedMailingAddress.provinceStateId,
-    provinceState: validatedMailingAddress.provinceStateId && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedMailingAddress.provinceStateId, locale).abbr,
+    provinceState: validatedMailingAddress.provinceStateId && provinceTerritoryState.abbr,
   };
 
   const addressCorrectionResult = await addressValidationService.getAddressCorrectionResult({
@@ -142,7 +143,7 @@ export async function action({ context: { appContainer, session }, request, para
   }
 
   if (addressCorrectionResult.status === 'corrected') {
-    const provinceTerritoryState = provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
+    const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
     return {
       enteredAddress: formattedMailingAddress,
       status: 'address-suggestion',

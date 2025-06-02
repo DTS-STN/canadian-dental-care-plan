@@ -61,7 +61,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
 
   const countryList = await appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
-  const regionList = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const regionList = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:update-address.mailing-address.page-title') }) };
 
@@ -152,6 +152,7 @@ export async function action({ context: { appContainer, session }, params, reque
   invariant(parsedDataResult.data.provinceStateId, 'Province state is required for Canadian addresses');
 
   const country = await countryService.getLocalizedCountryById(parsedDataResult.data.countryId, locale);
+  const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(parsedDataResult.data.provinceStateId, locale);
 
   // Build the address object using validated data, transforming unique identifiers
   const formattedMailingAddress: CanadianAddress = {
@@ -161,7 +162,7 @@ export async function action({ context: { appContainer, session }, params, reque
     country: country.name,
     postalZipCode: parsedDataResult.data.postalZipCode,
     provinceStateId: parsedDataResult.data.provinceStateId,
-    provinceState: parsedDataResult.data.provinceStateId && provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(parsedDataResult.data.provinceStateId, locale).abbr,
+    provinceState: parsedDataResult.data.provinceStateId && provinceTerritoryState.abbr,
   };
 
   const addressCorrectionResult = await addressValidationService.getAddressCorrectionResult({
@@ -180,7 +181,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (addressCorrectionResult.status === 'corrected') {
-    const provinceTerritoryState = provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
+    const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
     return {
       enteredAddress: formattedMailingAddress,
       status: 'address-suggestion',

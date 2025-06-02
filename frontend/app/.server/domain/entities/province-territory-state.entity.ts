@@ -5,3 +5,9 @@ export type ProvinceTerritoryStateEntity = Readonly<{
   esdc_namefrench: string;
   esdc_internationalalphacode: string;
 }>;
+
+export type CountriesWithProvinceTerritoryStates = Readonly<{
+  value: ReadonlyArray<{
+    esdc_ProvinceTerritoryState_Countryid_esd: Readonly<ProvinceTerritoryStateEntity>;
+  }>;
+}>;
