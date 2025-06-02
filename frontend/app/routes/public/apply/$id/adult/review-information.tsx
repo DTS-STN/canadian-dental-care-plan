@@ -72,8 +72,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
   const countryMailing = await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
   const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
   const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
@@ -103,7 +103,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const mailingAddressInfo = {
     address: state.mailingAddress.address,
     city: state.mailingAddress.city,
-    province: mailingProvinceTerritoryStateAbbr,
+    province: mailingProvinceTerritoryStateAbbr?.abbr,
     postalCode: state.mailingAddress.postalCode,
     country: countryMailing,
   };
@@ -111,7 +111,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeAddressInfo = {
     address: state.homeAddress?.address,
     city: state.homeAddress?.city,
-    province: homeProvinceTerritoryStateAbbr,
+    province: homeProvinceTerritoryStateAbbr?.abbr,
     postalCode: state.homeAddress?.postalCode,
     country: countryHome?.name,
   };

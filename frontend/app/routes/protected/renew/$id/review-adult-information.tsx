@@ -90,13 +90,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const communicationPreferredLanguageId = state.preferredLanguage ?? state.clientApplication.communicationPreferences.preferredLanguage;
   const communicationPreferredLanguageName = preferredLanguageService.getLocalizedPreferredLanguageById(communicationPreferredLanguageId, locale).name;
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? provinceTerritoryStateService.getProvinceTerritoryStateById(state.mailingAddress.province).abbr : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
   const clientApplicationMailingProvinceTerritoryStateAbbr = state.clientApplication.contactInformation.mailingProvince
-    ? provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince).abbr
+    ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince)
     : undefined;
 
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? provinceTerritoryStateService.getProvinceTerritoryStateById(state.homeAddress.province).abbr : undefined;
-  const clientApplicationHomeProvinceTerritoryStateAbbr = state.clientApplication.contactInformation.homeProvince ? provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince).abbr : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
+  const clientApplicationHomeProvinceTerritoryStateAbbr = state.clientApplication.contactInformation.homeProvince ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince) : undefined;
 
   const mailingCountryId = state.mailingAddress?.country ?? state.clientApplication.contactInformation.mailingCountry;
   const mailingCountryName = await countryService.getLocalizedCountryById(mailingCountryId, locale);
@@ -135,14 +135,14 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? {
         address: state.mailingAddress.address,
         city: state.mailingAddress.city,
-        province: mailingProvinceTerritoryStateAbbr,
+        province: mailingProvinceTerritoryStateAbbr?.abbr,
         postalCode: state.mailingAddress.postalCode,
         country: mailingCountryName.name,
       }
     : {
         address: state.clientApplication.contactInformation.mailingAddress,
         city: state.clientApplication.contactInformation.mailingCity,
-        province: clientApplicationHomeProvinceTerritoryStateAbbr,
+        province: clientApplicationHomeProvinceTerritoryStateAbbr?.abbr,
         postalCode: state.clientApplication.contactInformation.mailingPostalCode,
         country: mailingCountryName.name,
         apartment: state.clientApplication.contactInformation.mailingApartment,
@@ -154,7 +154,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     homeAddressInfo = {
       address: state.homeAddress.address,
       city: state.homeAddress.city,
-      provinceState: homeProvinceTerritoryStateAbbr,
+      provinceState: homeProvinceTerritoryStateAbbr?.abbr,
       postalZipCode: state.homeAddress.postalCode,
       country: homeCountryName.name,
     };
@@ -165,7 +165,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     homeAddressInfo = {
       address: state.clientApplication.contactInformation.homeAddress,
       city: state.clientApplication.contactInformation.homeCity,
-      provinceState: clientApplicationMailingProvinceTerritoryStateAbbr,
+      provinceState: clientApplicationMailingProvinceTerritoryStateAbbr?.abbr,
       postalZipCode: state.clientApplication.contactInformation.homePostalCode,
       country: homeCountryName.name,
       apartment: state.clientApplication.contactInformation.homeApartment,

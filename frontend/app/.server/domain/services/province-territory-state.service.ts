@@ -19,7 +19,7 @@ export interface ProvinceTerritoryStateService {
    *
    * @returns An array of province territory state DTOs.
    */
-  listProvinceTerritoryStates(): ReadonlyArray<ProvinceTerritoryStateDto>;
+  listProvinceTerritoryStates(): Promise<ReadonlyArray<ProvinceTerritoryStateDto>>;
 
   /**
    * Retrieves a specific province territory state by its ID.
@@ -28,7 +28,7 @@ export interface ProvinceTerritoryStateService {
    * @returns The province territory state DTO corresponding to the specified ID.
    * @throws {ProvinceTerritoryStateNotFoundException} If no province territory state is found with the specified ID.
    */
-  getProvinceTerritoryStateById(id: string): ProvinceTerritoryStateDto;
+  getProvinceTerritoryStateById(id: string): Promise<ProvinceTerritoryStateDto>;
 
   /**
    * Retrieves a specific province territory state by its Code.
@@ -37,15 +37,14 @@ export interface ProvinceTerritoryStateService {
    * @returns The province territory state DTO corresponding to the specified code.
    * @throws {ProvinceTerritoryStateNotFoundException} If no province territory state is found with the specified Code.
    */
-  getProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateDto;
-
+  getProvinceTerritoryStateByCode(code: string): Promise<ProvinceTerritoryStateDto>;
   /**
    * Retrieves a list of all province territory states, localized to the specified locale.
    *
    * @param locale - The locale code for localization.
    * @returns An array of localized province territory state DTOs.
    */
-  listAndSortLocalizedProvinceTerritoryStates(locale: AppLocale): ReadonlyArray<ProvinceTerritoryStateLocalizedDto>;
+  listAndSortLocalizedProvinceTerritoryStates(locale: AppLocale): Promise<ReadonlyArray<ProvinceTerritoryStateLocalizedDto>>;
 
   /**
    * Retrieves a list of province territory states filtered by country ID and localized to the specified locale, then sorted by name.
@@ -54,7 +53,7 @@ export interface ProvinceTerritoryStateService {
    * @param locale - The locale code for localization.
    * @returns An array of localized province territory state DTOs filtered by country ID and sorted by name.
    */
-  listAndSortLocalizedProvinceTerritoryStatesByCountryId(countryId: string, locale: AppLocale): ReadonlyArray<ProvinceTerritoryStateLocalizedDto>;
+  listAndSortLocalizedProvinceTerritoryStatesByCountryId(countryId: string, locale: AppLocale): Promise<ReadonlyArray<ProvinceTerritoryStateLocalizedDto>>;
 
   /**
    * Retrieves a specific province territory state by its ID, localized to the specified locale.
@@ -64,7 +63,7 @@ export interface ProvinceTerritoryStateService {
    * @returns The localized province territory state DTO corresponding to the specified ID.
    * @throws {ProvinceTerritoryStateNotFoundException} If no province territory state is found with the specified ID.
    */
-  getLocalizedProvinceTerritoryStateById(id: string, locale: AppLocale): ProvinceTerritoryStateLocalizedDto;
+  getLocalizedProvinceTerritoryStateById(id: string, locale: AppLocale): Promise<ProvinceTerritoryStateLocalizedDto>;
 
   /**
    * Retrieves a specific province territory state by its code, localized to the specified locale.
@@ -74,7 +73,7 @@ export interface ProvinceTerritoryStateService {
    * @returns The localized province territory state DTO corresponding to the specified code.
    * @throws {ProvinceTerritoryStateNotFoundException} If no province territory state is found with the specified code.
    */
-  getLocalizedProvinceTerritoryStateByCode(code: string, locale: AppLocale): ProvinceTerritoryStateLocalizedDto;
+  getLocalizedProvinceTerritoryStateByCode(code: string, locale: AppLocale): Promise<ProvinceTerritoryStateLocalizedDto>;
 }
 
 @injectable()
@@ -113,7 +112,6 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
       maxSize: Infinity,
       onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateById memo'),
     });
-
     this.getProvinceTerritoryStateByCode = moize(this.getProvinceTerritoryStateByCode, {
       maxAge: provinceTerritoryStateCacheTTL,
       maxSize: Infinity,
@@ -123,17 +121,17 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     this.log.debug('DefaultProvinceTerritoryStateService initiated.');
   }
 
-  listProvinceTerritoryStates(): ReadonlyArray<ProvinceTerritoryStateDto> {
+  async listProvinceTerritoryStates(): Promise<ReadonlyArray<ProvinceTerritoryStateDto>> {
     this.log.debug('Get all province territory states');
-    const provinceTerritoryStateEntities = this.provinceTerritoryStateRepository.listAllProvinceTerritoryStates();
+    const provinceTerritoryStateEntities = await this.provinceTerritoryStateRepository.listAllProvinceTerritoryStates();
     const provinceTerritoryStateDtos = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntitiesToProvinceTerritoryStateDtos(provinceTerritoryStateEntities);
     this.log.trace('Returning province territory states: [%j]', provinceTerritoryStateDtos);
     return provinceTerritoryStateDtos;
   }
 
-  getProvinceTerritoryStateById(id: string): ProvinceTerritoryStateDto {
+  async getProvinceTerritoryStateById(id: string): Promise<ProvinceTerritoryStateDto> {
     this.log.debug('Get province territory state with id: [%s]', id);
-    const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateById(id);
+    const provinceTerritoryStateEntity = await this.provinceTerritoryStateRepository.findProvinceTerritoryStateById(id);
 
     if (!provinceTerritoryStateEntity) {
       throw new ProvinceTerritoryStateNotFoundException(`Province territory state: [${id}] not found`);
@@ -144,9 +142,9 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     return provinceTerritoryStateDto;
   }
 
-  getProvinceTerritoryStateByCode(code: string): ProvinceTerritoryStateDto {
+  async getProvinceTerritoryStateByCode(code: string): Promise<ProvinceTerritoryStateDto> {
     this.log.debug('Get province territory state with code: [%s]', code);
-    const provinceTerritoryStateEntity = this.provinceTerritoryStateRepository.findProvinceTerritoryStateByCode(code);
+    const provinceTerritoryStateEntity = await this.provinceTerritoryStateRepository.findProvinceTerritoryStateByCode(code);
 
     if (!provinceTerritoryStateEntity) {
       throw new ProvinceTerritoryStateNotFoundException(`Province territory state with code [${code}] not found`);
@@ -157,41 +155,41 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     return provinceTerritoryStateDto;
   }
 
-  listAndSortLocalizedProvinceTerritoryStates(locale: AppLocale): ReadonlyArray<ProvinceTerritoryStateLocalizedDto> {
+  async listAndSortLocalizedProvinceTerritoryStates(locale: AppLocale): Promise<ReadonlyArray<ProvinceTerritoryStateLocalizedDto>> {
     this.log.debug('Get and sort all localized province territory states with locale: [%s]', locale);
-    const provinceTerritoryStateDtos = this.listProvinceTerritoryStates();
+    const provinceTerritoryStateDtos = await this.listProvinceTerritoryStates();
     const localizedProvinceTerritoryStateDtos = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos(provinceTerritoryStateDtos, locale);
     const sortedLocalizedProvinceTerritoryStateDtos = this.sortLocalizedProvinceTerritoryStateDtos(localizedProvinceTerritoryStateDtos, locale);
     this.log.trace('Returning localized and sorted province territory states: [%j]', sortedLocalizedProvinceTerritoryStateDtos);
     return sortedLocalizedProvinceTerritoryStateDtos;
   }
 
-  listAndSortLocalizedProvinceTerritoryStatesByCountryId(countryId: string, locale: AppLocale): ReadonlyArray<ProvinceTerritoryStateLocalizedDto> {
+  async listAndSortLocalizedProvinceTerritoryStatesByCountryId(countryId: string, locale: AppLocale): Promise<ReadonlyArray<ProvinceTerritoryStateLocalizedDto>> {
     this.log.debug('Get and sort all localized province territory states with countryId: [%s] and locale: [%s]', countryId, locale);
     const filterByCountryIdPredicate = (dto: ProvinceTerritoryStateDto) => dto.countryId === countryId;
-    const provinceTerritoryStateDtos = this.listProvinceTerritoryStates().filter(filterByCountryIdPredicate);
+    const provincesTerritoriesStates = await this.listProvinceTerritoryStates();
+    const provinceTerritoryStateDtos = provincesTerritoriesStates.filter(filterByCountryIdPredicate);
     const localizedProvinceTerritoryStateDtos = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtosToProvinceTerritoryStateLocalizedDtos(provinceTerritoryStateDtos, locale);
     const sortedLocalizedProvinceTerritoryStateDtos = this.sortLocalizedProvinceTerritoryStateDtos(localizedProvinceTerritoryStateDtos, locale);
     this.log.trace('Returning localized and sorted province territory states: [%j]', sortedLocalizedProvinceTerritoryStateDtos);
     return sortedLocalizedProvinceTerritoryStateDtos;
   }
 
-  getLocalizedProvinceTerritoryStateById(id: string, locale: AppLocale): ProvinceTerritoryStateLocalizedDto {
+  async getLocalizedProvinceTerritoryStateById(id: string, locale: AppLocale): Promise<ProvinceTerritoryStateLocalizedDto> {
     this.log.debug('Get localized province territory state with id: [%s] and locale: [%s]', id, locale);
-    const provinceTerritoryStateDto = this.getProvinceTerritoryStateById(id);
+    const provinceTerritoryStateDto = await this.getProvinceTerritoryStateById(id);
     const localizedProvinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto(provinceTerritoryStateDto, locale);
     this.log.trace('Returning localized province territory state: [%j]', localizedProvinceTerritoryStateDto);
     return localizedProvinceTerritoryStateDto;
   }
 
-  getLocalizedProvinceTerritoryStateByCode(code: string, locale: AppLocale): ProvinceTerritoryStateLocalizedDto {
+  async getLocalizedProvinceTerritoryStateByCode(code: string, locale: AppLocale): Promise<ProvinceTerritoryStateLocalizedDto> {
     this.log.debug('Get localized province territory state with code: [%s] and locale: [%s]', code, locale);
-    const provinceTerritoryStateDto = this.getProvinceTerritoryStateByCode(code);
+    const provinceTerritoryStateDto = await this.getProvinceTerritoryStateByCode(code);
     const localizedProvinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateDtoToProvinceTerritoryStateLocalizedDto(provinceTerritoryStateDto, locale);
     this.log.trace('Returning localized province territory state with code [%s]: [%j]', code, localizedProvinceTerritoryStateDto);
     return localizedProvinceTerritoryStateDto;
   }
-
   /**
    * Sort the localized province territory states by name.
    */
