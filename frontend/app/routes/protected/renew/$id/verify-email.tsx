@@ -105,9 +105,16 @@ export async function action({ context: { appContainer, session }, params, reque
 
     if (state.editMode) {
       invariant(state.editModeEmail, 'Expected editModeEmail to be defined');
-      invariant(state.editModeCommunicationPreferences, 'Expected editModeCommunicationPreferences to be defined');
       await verificationCodeService.sendVerificationCodeEmail({
         email: state.editModeEmail,
+        verificationCode: verificationCode,
+        preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
+        userId: idToken.sub,
+      });
+      return { status: 'verification-code-sent' } as const;
+    } else if (state.email) {
+      await verificationCodeService.sendVerificationCodeEmail({
+        email: state.email,
         verificationCode: verificationCode,
         preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
         userId: idToken.sub,
