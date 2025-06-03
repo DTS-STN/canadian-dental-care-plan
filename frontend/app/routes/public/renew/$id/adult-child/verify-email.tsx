@@ -207,8 +207,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
   return (
     <>
       <div className="my-6 sm:my-8">
-        {/* TODO: Update the progress value to reflect the actual progress of the application */}
-        <Progress value={76} size="lg" label={t('renew:progress.label')} />
+        <Progress value={52} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <ErrorAlert>

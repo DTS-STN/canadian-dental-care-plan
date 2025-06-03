@@ -168,7 +168,7 @@ export default function RenewFlowEmail({ loaderData, params }: Route.ComponentPr
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={70} size="lg" label={t('renew:progress.label')} />
+        <Progress value={74} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <errorSummary.ErrorSummary />

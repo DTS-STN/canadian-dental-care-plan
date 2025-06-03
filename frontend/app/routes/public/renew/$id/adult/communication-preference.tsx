@@ -128,8 +128,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
   return (
     <>
       <div className="my-6 sm:my-8">
-        {/* TODO: Update the progress value to reflect the actual progress of the application */}
-        <Progress value={70} size="lg" label={t('renew:progress.label')} />
+        <Progress value={55} size="lg" label={t('renew:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('renew:required-label')}</p>
