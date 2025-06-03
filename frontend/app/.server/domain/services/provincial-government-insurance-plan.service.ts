@@ -11,12 +11,12 @@ import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
 export interface ProvincialGovernmentInsurancePlanService {
-  listProvincialGovernmentInsurancePlans(): ReadonlyArray<ProvincialGovernmentInsurancePlanDto>;
-  findProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto | null;
-  getProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto;
-  listAndSortLocalizedProvincialGovernmentInsurancePlans(locale: AppLocale): ReadonlyArray<ProvincialGovernmentInsurancePlanLocalizedDto>;
-  findLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): ProvincialGovernmentInsurancePlanLocalizedDto | null;
-  getLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): ProvincialGovernmentInsurancePlanLocalizedDto;
+  listProvincialGovernmentInsurancePlans(): Promise<ReadonlyArray<ProvincialGovernmentInsurancePlanDto>>;
+  findProvincialGovernmentInsurancePlanById(id: string): Promise<ProvincialGovernmentInsurancePlanDto | null>;
+  getProvincialGovernmentInsurancePlanById(id: string): Promise<ProvincialGovernmentInsurancePlanDto>;
+  listAndSortLocalizedProvincialGovernmentInsurancePlans(locale: AppLocale): Promise<ReadonlyArray<ProvincialGovernmentInsurancePlanLocalizedDto>>;
+  findLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): Promise<ProvincialGovernmentInsurancePlanLocalizedDto | null>;
+  getLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): Promise<ProvincialGovernmentInsurancePlanLocalizedDto>;
 }
 
 @injectable()
@@ -64,17 +64,17 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     this.log.debug('DefaultProvincialGovernmentInsurancePlanService initiated.');
   }
 
-  listProvincialGovernmentInsurancePlans(): ReadonlyArray<ProvincialGovernmentInsurancePlanDto> {
+  async listProvincialGovernmentInsurancePlans(): Promise<ReadonlyArray<ProvincialGovernmentInsurancePlanDto>> {
     this.log.debug('Get all provincial government insurance plans');
-    const provincialGovernmentInsurancePlanEntities = this.GovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans();
+    const provincialGovernmentInsurancePlanEntities = await this.GovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans();
     const provincialGovernmentInsurancePlanDtos = this.provincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities);
     this.log.trace('Returning provincial government insurance plans: [%j]', provincialGovernmentInsurancePlanDtos);
     return provincialGovernmentInsurancePlanDtos;
   }
 
-  findProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto | null {
+  async findProvincialGovernmentInsurancePlanById(id: string): Promise<ProvincialGovernmentInsurancePlanDto | null> {
     this.log.debug('Finding provincial government insurance plan with id: [%s]', id);
-    const provincialGovernmentInsurancePlanEntity = this.GovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById(id);
+    const provincialGovernmentInsurancePlanEntity = await this.GovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById(id);
 
     if (!provincialGovernmentInsurancePlanEntity) {
       this.log.trace('Provincial government insurance plan with id: [%s] not found. Returning null', id);
@@ -86,9 +86,9 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     return provincialGovernmentInsurancePlanDto;
   }
 
-  getProvincialGovernmentInsurancePlanById(id: string): ProvincialGovernmentInsurancePlanDto {
+  async getProvincialGovernmentInsurancePlanById(id: string): Promise<ProvincialGovernmentInsurancePlanDto> {
     this.log.debug('Get provincial government insurance plan with id: [%s]', id);
-    const provincialGovernmentInsurancePlanEntity = this.GovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById(id);
+    const provincialGovernmentInsurancePlanEntity = await this.GovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById(id);
 
     if (!provincialGovernmentInsurancePlanEntity) throw new ProvincialGovernmentInsurancePlanNotFoundException(`Provincial government insurance plan with id: [${id}] not found`);
 
@@ -97,18 +97,18 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     return provincialGovernmentInsurancePlanDto;
   }
 
-  listAndSortLocalizedProvincialGovernmentInsurancePlans(locale: AppLocale): ReadonlyArray<ProvincialGovernmentInsurancePlanLocalizedDto> {
+  async listAndSortLocalizedProvincialGovernmentInsurancePlans(locale: AppLocale): Promise<ReadonlyArray<ProvincialGovernmentInsurancePlanLocalizedDto>> {
     this.log.debug('Get and sort all localized provincial government insurance plans');
-    const provincialGovernmentInsurancePlanDtos = this.listProvincialGovernmentInsurancePlans();
+    const provincialGovernmentInsurancePlanDtos = await this.listProvincialGovernmentInsurancePlans();
     const provincialGovernmentInsurancePlanLocalizedDtos = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtosToProvincialGovernmentInsurancePlanLocalizedDtos(provincialGovernmentInsurancePlanDtos, locale);
     const sortedProvincialGovernmentInsurancePlanLocalizedDtos = this.sortLocalizedProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanLocalizedDtos, locale);
     this.log.trace('Returning localized and sorted provincial government insurance plans: [%j]', sortedProvincialGovernmentInsurancePlanLocalizedDtos);
     return sortedProvincialGovernmentInsurancePlanLocalizedDtos;
   }
 
-  findLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): ProvincialGovernmentInsurancePlanLocalizedDto | null {
+  async findLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): Promise<ProvincialGovernmentInsurancePlanLocalizedDto | null> {
     this.log.debug('Finding provincial government insurance plan with id [%s] and locale [%s]', id, locale);
-    const provincialGovernmentInsurancePlanDto = this.findProvincialGovernmentInsurancePlanById(id);
+    const provincialGovernmentInsurancePlanDto = await this.findProvincialGovernmentInsurancePlanById(id);
 
     if (!provincialGovernmentInsurancePlanDto) {
       this.log.trace('Provincial government insurance plan with id: [%s] not found. Returning null', id);
@@ -120,9 +120,9 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     return provincialGovernmentInsurancePlanLocalizedDto;
   }
 
-  getLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): ProvincialGovernmentInsurancePlanLocalizedDto {
+  async getLocalizedProvincialGovernmentInsurancePlanById(id: string, locale: AppLocale): Promise<ProvincialGovernmentInsurancePlanLocalizedDto> {
     this.log.debug('Get localized provincial government insurance plan with id: [%s]', id);
-    const provincialGovernmentInsurancePlanDto = this.getProvincialGovernmentInsurancePlanById(id);
+    const provincialGovernmentInsurancePlanDto = await this.getProvincialGovernmentInsurancePlanById(id);
     const provincialGovernmentInsurancePlanLocalizedDto = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto(provincialGovernmentInsurancePlanDto, locale);
     this.log.trace('Returning localized provincial government insurance plan: [%j]', provincialGovernmentInsurancePlanLocalizedDto);
     return provincialGovernmentInsurancePlanLocalizedDto;
