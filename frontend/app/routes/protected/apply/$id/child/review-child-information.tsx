@@ -79,12 +79,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const children = state.children.map((child) => {
     // prettier-ignore
     const selectFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
-      ? federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
     // prettier-ignore
     const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
-      ? provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
     const idToken: IdToken = session.get('idToken');

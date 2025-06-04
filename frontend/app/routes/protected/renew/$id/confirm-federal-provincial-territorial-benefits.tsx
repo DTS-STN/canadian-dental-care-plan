@@ -78,7 +78,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-dental-benefits.title') }) };
 
   const clientDentalBenefits = state.clientApplication.dentalBenefits.reduce((benefits, id) => {
-    const federalProgram = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findFederalGovernmentInsurancePlanById(id);
+    const federalProgram = await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findFederalGovernmentInsurancePlanById(id);
     if (federalProgram) {
       return {
         ...benefits,
@@ -87,7 +87,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       };
     }
 
-    const provincialProgram = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findProvincialGovernmentInsurancePlanById(id);
+    const provincialProgram = await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findProvincialGovernmentInsurancePlanById(id);
     if (provincialProgram) {
       return {
         ...benefits,

@@ -73,18 +73,18 @@ export async function loader({ context: { appContainer, session }, params, reque
     const immutableChild = state.clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information?.socialInsuranceNumber);
 
     const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
-      ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      ? await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
     const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
-      ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      ? await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
     const clientDentalBenefits = immutableChild?.dentalBenefits.flatMap((id) => {
-      const federalProgram = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findLocalizedFederalGovernmentInsurancePlanById(id, locale);
+      const federalProgram = await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findLocalizedFederalGovernmentInsurancePlanById(id, locale);
       if (federalProgram) return [federalProgram.name];
 
-      const provincialProgram = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
+      const provincialProgram = await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
       if (provincialProgram) return [provincialProgram.name];
 
       return [];
