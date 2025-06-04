@@ -125,6 +125,9 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
       PreferredMethodCommunicationCode: {
         ReferenceDataID: string;
       };
+      PreferredMethodCommunicationGCCode: {
+        ReferenceDataID: string;
+      };
     };
     BenefitApplicationCategoryCode: {
       ReferenceDataID: string;
