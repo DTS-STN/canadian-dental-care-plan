@@ -104,6 +104,10 @@ export async function action({ context: { appContainer, session }, params, reque
     return { status: 'select-member' };
   }
 
+  if (isInvitationToApplyClient(state.clientApplication) && state.editMode === false) {
+    return redirect(getPathById('protected/renew/$id/review-adult-information', params));
+  }
+
   return redirect(getPathById('protected/renew/$id/communication-preference', params));
 }
 

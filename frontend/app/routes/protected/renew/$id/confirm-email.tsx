@@ -9,7 +9,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirm-email';
 
 import { TYPES } from '~/.server/constants';
-import { isPrimaryApplicantStateComplete, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isInvitationToApplyClient, isPrimaryApplicantStateComplete, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -165,9 +165,14 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/verify-email', params));
   }
 
+  if (isInvitationToApplyClient(state.clientApplication)) {
+    return redirect(getPathById('protected/renew/$id/dental-insurance', params));
+  }
+
   if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
     return redirect(getPathById('protected/renew/$id/review-child-information', params));
   }
+
   return redirect(getPathById('protected/renew/$id/review-adult-information', params));
 }
 

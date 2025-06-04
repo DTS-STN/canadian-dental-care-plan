@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/communication-preference';
 
 import { TYPES } from '~/.server/constants';
-import { isPrimaryApplicantStateComplete, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import { isInvitationToApplyClient, isPrimaryApplicantStateComplete, loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -52,6 +52,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     defaultState: { ...state.communicationPreferences },
+    isInvitationToApplyClient: isInvitationToApplyClient(state.clientApplication),
+    isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
     editMode: state.editMode,
   };
 }
@@ -93,6 +95,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (parsedDataResult.data.preferredMethod !== PREFERRED_SUN_LIFE_METHOD.email && parsedDataResult.data.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail) {
     saveProtectedRenewState({ params, request, session, state: { communicationPreferences: parsedDataResult.data, email: undefined, emailVerified: undefined } });
+    if (isInvitationToApplyClient(state.clientApplication)) {
+      return redirect(getPathById('protected/renew/$id/dental-insurance', params));
+    }
     if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)) {
       return redirect(getPathById('protected/renew/$id/review-child-information', params));
     }
@@ -104,7 +109,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode } = loaderData;
+  const { defaultState, isInvitationToApplyClient, isHomeAddressSameAsMailingAddress, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -181,7 +186,7 @@ export default function ProtectedRenewCommunicationPreferencePage({ loaderData, 
             </LoadingButton>
             <ButtonLink
               id="back-button"
-              routeId="protected/renew/$id/member-selection"
+              routeId={isInvitationToApplyClient ? (isHomeAddressSameAsMailingAddress ? 'protected/renew/$id/confirm-address' : 'protected/renew/$id/confirm-home-address') : 'protected/renew/$id/member-selection'}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
