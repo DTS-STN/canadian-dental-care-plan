@@ -605,7 +605,7 @@
     "page-title": "Verify your email address",
     "verification-code": "An email with a verification code has been sent to {{email}}. Please enter the 5-digit verification code and select \"Continue\".",
     "request-new": "It may take up to 60 seconds for the email to arrive. If you don't see it, check your junk or spam folder. If you still don't have the code, you can request a new one.",
-    "unable-to-verify": "If you are not able to verify your email, select “Back” to update the email address.",
+    "unable-to-verify": "If you are not able to verify your email, select “Back” to update the email address  or <communicationLink>modify your communication preference</communicationLink>.",
     "verification-code-label": "Verification code",
     "request-new-code": "Request new verification code",
     "back": "Back",
