@@ -109,6 +109,10 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/confirm-home-address', params));
   }
 
+  if (isInvitationToApplyClient(state.clientApplication) && state.editMode === false) {
+    return redirect(getPathById('protected/renew/$id/communication-preference', params));
+  }
+
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));
   }

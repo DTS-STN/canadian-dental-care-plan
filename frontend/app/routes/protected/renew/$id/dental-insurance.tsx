@@ -1,5 +1,6 @@
 import { data, redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -74,11 +75,16 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
+  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     if (isInvitationToApplyClient(state.clientApplication)) {
-      return redirect(getPathById('protected/renew/$id/confirm-address', params));
+      invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
+      if (state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail') {
+        return redirect(getPathById('protected/renew/$id/confirm-email', params));
+      }
+      return redirect(getPathById('protected/renew/$id/communication-preference', params));
     }
     return redirect(getPathById('protected/renew/$id/member-selection', params));
   }
