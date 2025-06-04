@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { AddressCorrectionRequestEntity, AddressCorrectionResultEntity } from '~/.server/domain/entities';
+import type { AddressCorrectionRequestEntity } from '~/.server/domain/entities';
 import { DefaultAddressValidationRepository, MockAddressValidationRepository } from '~/.server/domain/repositories';
 import type { DefaultAddressValidationRepositoryServerConfig } from '~/.server/domain/repositories';
 import type { HttpClient } from '~/.server/http';
@@ -156,6 +156,6 @@ describe('MockAddressValidationRepository', () => {
           'wsaddr:StatusCode': expect.any(String),
         },
       },
-    } satisfies AddressCorrectionResultEntity);
+    });
   });
 });
