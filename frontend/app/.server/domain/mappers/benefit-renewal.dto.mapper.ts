@@ -76,12 +76,29 @@ interface ToEmailAddressArgs {
 export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   private readonly serverConfig: Pick<
     ServerConfig,
-    'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
+    | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
+    | 'APPLICANT_CATEGORY_CODE_FAMILY'
+    | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
+    | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
+    | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
+    | 'COMMUNICATION_METHOD_MAIL_ID'
+    | 'COMMUNICATION_METHOD_EMAIL_ID'
+    | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
   >;
 
   constructor(
     @inject(TYPES.configs.ServerConfig)
-    serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'>,
+    serverConfig: Pick<
+      ServerConfig,
+      | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
+      | 'APPLICANT_CATEGORY_CODE_FAMILY'
+      | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
+      | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
+      | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
+      | 'COMMUNICATION_METHOD_MAIL_ID'
+      | 'COMMUNICATION_METHOD_EMAIL_ID'
+      | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
+    >,
   ) {
     this.serverConfig = serverConfig;
   }
@@ -184,7 +201,10 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
           RelatedPerson: this.toRelatedPersons(partnerInformation, children),
           MailingSameAsHomeIndicator: contactInformation.copyMailingAddress,
           PreferredMethodCommunicationCode: {
-            ReferenceDataID: communicationPreferences.preferredMethod,
+            ReferenceDataID: this.toPreferredMethodCommunicationCode(communicationPreferences.preferredMethod),
+          },
+          PreferredMethodCommunicationGCCode: {
+            ReferenceDataID: this.toPreferredMethodCommunicationGCCode(communicationPreferences.preferredMethodGovernmentOfCanada),
           },
         },
         BenefitApplicationCategoryCode: {
@@ -439,6 +459,20 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         },
       ],
     }));
+  }
+
+  private toPreferredMethodCommunicationCode(preferredMethod?: string) {
+    const { COMMUNICATION_METHOD_EMAIL_ID, COMMUNICATION_METHOD_MAIL_ID } = this.serverConfig;
+    if (preferredMethod === 'email') return COMMUNICATION_METHOD_EMAIL_ID;
+    if (preferredMethod === 'mail') return COMMUNICATION_METHOD_MAIL_ID;
+    throw new Error(`Unexpected preferredMethod [${preferredMethod}]`);
+  }
+
+  private toPreferredMethodCommunicationGCCode(preferredMethodGovernmentOfCanada?: string) {
+    const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_MAIL_ID } = this.serverConfig;
+    if (preferredMethodGovernmentOfCanada === 'msca') return COMMUNICATION_METHOD_GC_DIGITAL_ID;
+    if (preferredMethodGovernmentOfCanada === 'mail') return COMMUNICATION_METHOD_MAIL_ID;
+    throw new Error(`Unexpected preferredMethodGovernmentOfCanada [${preferredMethodGovernmentOfCanada}]`);
   }
 
   private toBenefitApplicationCategoryCode(typeOfApplication: RenewalTypeOfApplicationDto) {
