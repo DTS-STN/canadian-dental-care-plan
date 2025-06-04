@@ -53,10 +53,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const selectedFederalBenefit = state.dentalBenefits?.federalSocialProgram
-    ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
+    ? await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
     : undefined;
   const selectedProvincialBenefits = state.dentalBenefits?.provincialTerritorialSocialProgram
-    ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    ? await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const primaryApplicantInfo = isPrimaryApplicantStateComplete(state, demographicSurveyEnabled)
@@ -71,37 +71,43 @@ export async function loader({ context: { appContainer, session }, params, reque
       }
     : undefined;
 
-  const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).map((child) => {
-    if (child.isParentOrLegalGuardian === undefined || child.dentalInsurance === undefined || child.information === undefined) {
-      throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
-    }
+  const children = await getChildren();
 
-    const federalBenefit = child.dentalBenefits?.federalSocialProgram
-      ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
-      : undefined;
-    const provincialTerritorialSocialProgram = child.dentalBenefits?.provincialTerritorialSocialProgram
-      ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
-      : undefined;
+  async function getChildren() {
+    return await Promise.all(
+      validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).map(async (child) => {
+        if (child.isParentOrLegalGuardian === undefined || child.dentalInsurance === undefined || child.information === undefined) {
+          throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
+        }
 
-    return {
-      id: child.id,
-      firstName: child.information.firstName,
-      lastName: child.information.lastName,
-      isParent: child.information.isParent,
-      dentalInsurance: {
-        acessToDentalInsurance: child.dentalInsurance,
-        federalBenefit: {
-          access: child.dentalBenefits?.hasFederalBenefits,
-          benefit: federalBenefit?.name,
-        },
-        provTerrBenefit: {
-          access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
-          province: child.dentalBenefits?.province,
-          benefit: provincialTerritorialSocialProgram?.name,
-        },
-      },
-    };
-  });
+        const federalBenefit = child.dentalBenefits?.federalSocialProgram
+          ? await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+          : undefined;
+        const provincialTerritorialSocialProgram = child.dentalBenefits?.provincialTerritorialSocialProgram
+          ? await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+          : undefined;
+
+        return {
+          id: child.id,
+          firstName: child.information.firstName,
+          lastName: child.information.lastName,
+          isParent: child.information.isParent,
+          dentalInsurance: {
+            acessToDentalInsurance: child.dentalInsurance,
+            federalBenefit: {
+              access: child.dentalBenefits?.hasFederalBenefits,
+              benefit: federalBenefit?.name,
+            },
+            provTerrBenefit: {
+              access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
+              province: child.dentalBenefits?.province,
+              benefit: provincialTerritorialSocialProgram?.name,
+            },
+          },
+        };
+      }),
+    );
+  }
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm.page-title') }) };
 

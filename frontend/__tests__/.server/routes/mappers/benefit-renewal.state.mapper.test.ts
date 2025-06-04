@@ -9,7 +9,7 @@ import type { RenewAdultChildState } from '~/.server/routes/mappers';
 
 describe('DefaultBenefitRenewalStateMapper', () => {
   const mockFederalGovernmentInsurancePlanService = mock<FederalGovernmentInsurancePlanService>();
-  mockFederalGovernmentInsurancePlanService.listFederalGovernmentInsurancePlans.mockReturnValue([
+  mockFederalGovernmentInsurancePlanService.listFederalGovernmentInsurancePlans.mockResolvedValue([
     {
       id: 'Original federal benefit',
       nameEn: 'English example name',
@@ -24,7 +24,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
   ]);
 
   const mockProvincialGovernmentInsurancePlanService = mock<ProvincialGovernmentInsurancePlanService>();
-  mockProvincialGovernmentInsurancePlanService.listProvincialGovernmentInsurancePlans.mockReturnValue([
+  mockProvincialGovernmentInsurancePlanService.listProvincialGovernmentInsurancePlans.mockResolvedValue([
     {
       id: 'Original provincial benefit',
       nameEn: 'English example name',

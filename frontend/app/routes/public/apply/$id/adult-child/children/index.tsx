@@ -62,25 +62,31 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.index.page-title') }) };
 
-  const children = getChildrenState(state).map((child) => {
-    const federalGovernmentInsurancePlan =
-      child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.federalSocialProgram
-        ? appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
-        : undefined;
+  const children = await getChildren();
 
-    const provincialTerritorialSocialProgram =
-      child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.provincialTerritorialSocialProgram
-        ? appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
-        : undefined;
-    return {
-      ...child,
-      dentalBenefits: {
-        ...child.dentalBenefits,
-        federalSocialProgram: federalGovernmentInsurancePlan?.name,
-        provincialTerritorialSocialProgram: provincialTerritorialSocialProgram?.name,
-      },
-    };
-  });
+  async function getChildren() {
+    return await Promise.all(
+      getChildrenState(state).map(async (child) => {
+        const federalGovernmentInsurancePlan =
+          child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.federalSocialProgram
+            ? await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+            : undefined;
+
+        const provincialTerritorialSocialProgram =
+          child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.provincialTerritorialSocialProgram
+            ? await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+            : undefined;
+        return {
+          ...child,
+          dentalBenefits: {
+            ...child.dentalBenefits,
+            federalSocialProgram: federalGovernmentInsurancePlan?.name,
+            provincialTerritorialSocialProgram: provincialTerritorialSocialProgram?.name,
+          },
+        };
+      }),
+    );
+  }
 
   return { meta, children, editMode: state.editMode };
 }

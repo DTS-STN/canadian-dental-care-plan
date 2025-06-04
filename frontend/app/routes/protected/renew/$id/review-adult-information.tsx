@@ -180,7 +180,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const clientDentalBenefits = state.clientApplication.dentalBenefits.flatMap((id) => {
+  const clientDentalBenefits = state.clientApplication.dentalBenefits.flatMap(async (id) => {
     const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
     if (federalProgram) return [federalProgram.name];
 

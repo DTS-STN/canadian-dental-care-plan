@@ -69,46 +69,52 @@ export async function loader({ context: { appContainer, session }, params, reque
   const copiedState = JSON.parse(JSON.stringify(state));
   copiedState.children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
-  const children = validatedChildren.map((child) => {
-    const immutableChild = state.clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information?.socialInsuranceNumber);
+  const children = await getChildren();
 
-    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
-      ? await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
-      : undefined;
+  async function getChildren() {
+    return await Promise.all(
+      validatedChildren.map(async (child) => {
+        const immutableChild = state.clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information?.socialInsuranceNumber);
 
-    const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
-      ? await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
-      : undefined;
+        const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
+          ? await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+          : undefined;
 
-    const clientDentalBenefits = immutableChild?.dentalBenefits.flatMap((id) => {
-      const federalProgram = await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findLocalizedFederalGovernmentInsurancePlanById(id, locale);
-      if (federalProgram) return [federalProgram.name];
+        const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
+          ? await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+          : undefined;
 
-      const provincialProgram = await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
-      if (provincialProgram) return [provincialProgram.name];
+        const clientDentalBenefits = immutableChild?.dentalBenefits.flatMap(async (id) => {
+          const federalProgram = await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findLocalizedFederalGovernmentInsurancePlanById(id, locale);
+          if (federalProgram) return [federalProgram.name];
 
-      return [];
-    });
+          const provincialProgram = await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
+          if (provincialProgram) return [provincialProgram.name];
 
-    const dentalBenefits = child.dentalBenefits
-      ? [child.dentalBenefits.hasFederalBenefits && selectedFederalGovernmentInsurancePlan?.name, child.dentalBenefits.hasProvincialTerritorialBenefits && selectedProvincialBenefit?.name].filter(Boolean)
-      : clientDentalBenefits;
+          return [];
+        });
 
-    const idToken: IdToken = session.get('idToken');
-    appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-child-information', { userId: idToken.sub });
+        const dentalBenefits = child.dentalBenefits
+          ? [child.dentalBenefits.hasFederalBenefits && selectedFederalGovernmentInsurancePlan?.name, child.dentalBenefits.hasProvincialTerritorialBenefits && selectedProvincialBenefit?.name].filter(Boolean)
+          : clientDentalBenefits;
 
-    return {
-      id: child.id,
-      firstName: child.information?.firstName,
-      lastName: child.information?.lastName,
-      birthday: child.information?.dateOfBirth ?? '',
-      clientNumber: child.information?.clientNumber,
-      socialInsuranceNumber: child.information?.socialInsuranceNumber,
-      acessToDentalInsurance: child.dentalInsurance,
-      dentalBenefits,
-      demographicSurvey: child.demographicSurvey,
-    };
-  });
+        const idToken: IdToken = session.get('idToken');
+        appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-child-information', { userId: idToken.sub });
+
+        return {
+          id: child.id,
+          firstName: child.information?.firstName,
+          lastName: child.information?.lastName,
+          birthday: child.information?.dateOfBirth ?? '',
+          clientNumber: child.information?.clientNumber,
+          socialInsuranceNumber: child.information?.socialInsuranceNumber,
+          acessToDentalInsurance: child.dentalInsurance,
+          dentalBenefits,
+          demographicSurvey: child.demographicSurvey,
+        };
+      }),
+    );
+  }
 
   return { children, meta };
 }

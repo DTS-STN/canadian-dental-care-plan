@@ -77,7 +77,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-dental-benefits.title') }) };
 
-  const clientDentalBenefits = state.clientApplication.dentalBenefits.reduce((benefits, id) => {
+  const clientDentalBenefits = state.clientApplication.dentalBenefits.reduce(async (benefits, id) => {
     const federalProgram = await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findFederalGovernmentInsurancePlanById(id);
     if (federalProgram) {
       return {

@@ -85,38 +85,44 @@ export async function loader({ context: { appContainer, session }, params, reque
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
 
-  const children = state.children.map((child) => {
-    // prettier-ignore
-    const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
+  const children = await getChildren();
+
+  async function getChildren() {
+    return await Promise.all(
+      state.children.map(async (child) => {
+        // prettier-ignore
+        const selectedFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
       ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
       : undefined;
 
-    // prettier-ignore
-    const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
+        // prettier-ignore
+        const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
       ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
       : undefined;
 
-    return {
-      id: child.id,
-      firstName: child.information.firstName,
-      lastName: child.information.lastName,
-      birthday: child.information.dateOfBirth,
-      sin: child.information.socialInsuranceNumber,
-      isParent: child.information.isParent,
-      dentalInsurance: {
-        acessToDentalInsurance: child.dentalInsurance,
-        federalBenefit: {
-          access: child.dentalBenefits?.hasFederalBenefits,
-          benefit: selectedFederalGovernmentInsurancePlan?.name,
-        },
-        provTerrBenefit: {
-          access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
-          province: child.dentalBenefits?.province,
-          benefit: selectedProvincialBenefit?.name,
-        },
-      },
-    };
-  });
+        return {
+          id: child.id,
+          firstName: child.information.firstName,
+          lastName: child.information.lastName,
+          birthday: child.information.dateOfBirth,
+          sin: child.information.socialInsuranceNumber,
+          isParent: child.information.isParent,
+          dentalInsurance: {
+            acessToDentalInsurance: child.dentalInsurance,
+            federalBenefit: {
+              access: child.dentalBenefits?.hasFederalBenefits,
+              benefit: selectedFederalGovernmentInsurancePlan?.name,
+            },
+            provTerrBenefit: {
+              access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
+              province: child.dentalBenefits?.province,
+              benefit: selectedProvincialBenefit?.name,
+            },
+          },
+        };
+      }),
+    );
+  }
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.review-child-information', { userId: idToken.sub });
