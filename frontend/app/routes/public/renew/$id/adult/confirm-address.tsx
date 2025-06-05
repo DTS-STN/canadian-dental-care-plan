@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/confirm-address';
+import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadRenewAdultState } from '~/.server/routes/helpers/renew-adult-route-helpers';
@@ -53,12 +54,11 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadRenewAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { COMMUNICATION_METHOD_EMAIL_ID } = appContainer.get(TYPES.configs.ClientConfig);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult:confirm-address.page-title') }) };
 
   invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
-  const backToEmail = state.communicationPreferences.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID || state.communicationPreferences.preferredNotificationMethod !== 'mail';
+  const backToEmail = state.communicationPreferences.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email || state.communicationPreferences.preferredNotificationMethod !== PREFERRED_NOTIFICATION_METHOD.mail;
 
   return { meta, defaultState: { hasAddressChanged: state.hasAddressChanged }, backToEmail, editMode: state.editMode };
 }
