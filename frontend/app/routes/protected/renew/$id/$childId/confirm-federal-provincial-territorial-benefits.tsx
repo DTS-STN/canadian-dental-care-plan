@@ -65,9 +65,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
   const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
 
-  const federalSocialPrograms = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const federalSocialPrograms = await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
   const provinceTerritoryStates = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
-  const provincialTerritorialSocialPrograms = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
+  const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('protected-renew:children.update-dental-benefits.title', { childName }) }),

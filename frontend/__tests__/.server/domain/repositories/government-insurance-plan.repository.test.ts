@@ -74,10 +74,10 @@ describe('MockGovernmentInsurancePlanRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all federal government insurance plans', () => {
+  it('should get all federal government insurance plans', async () => {
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const federalGovernmentInsurancePlans = repository.listAllFederalGovernmentInsurancePlans();
+    const federalGovernmentInsurancePlans = await repository.listAllFederalGovernmentInsurancePlans();
 
     expect(federalGovernmentInsurancePlans).toEqual([
       {
@@ -95,20 +95,20 @@ describe('MockGovernmentInsurancePlanRepository', () => {
     ]);
   });
 
-  it('should handle empty federal government insurance plans data', () => {
+  it('should handle empty federal government insurance plans data', async () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const federalGovernmentInsurancePlans = repository.listAllFederalGovernmentInsurancePlans();
+    const federalGovernmentInsurancePlans = await repository.listAllFederalGovernmentInsurancePlans();
 
     expect(federalGovernmentInsurancePlans).toEqual([]);
   });
 
-  it('should get a federal government insurance plan by id', () => {
+  it('should get a federal government insurance plan by id', async () => {
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('3');
+    const federalGovernmentInsurancePlan = await repository.findFederalGovernmentInsurancePlanById('3');
 
     expect(federalGovernmentInsurancePlan).toEqual({
       esdc_governmentinsuranceplanid: '3',
@@ -118,18 +118,18 @@ describe('MockGovernmentInsurancePlanRepository', () => {
     });
   });
 
-  it('should return null for non-existent federal government insurance plan id', () => {
+  it('should return null for non-existent federal government insurance plan id', async () => {
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const federalGovernmentInsurancePlan = repository.findFederalGovernmentInsurancePlanById('non-existent-id');
+    const federalGovernmentInsurancePlan = await repository.findFederalGovernmentInsurancePlanById('non-existent-id');
 
     expect(federalGovernmentInsurancePlan).toBeNull();
   });
 
-  it('should get all provincial government insurance plans', () => {
+  it('should get all provincial government insurance plans', async () => {
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
+    const provincialGovernmentInsurancePlans = await repository.listAllProvincialGovernmentInsurancePlans();
 
     expect(provincialGovernmentInsurancePlans).toEqual([
       {
@@ -147,20 +147,20 @@ describe('MockGovernmentInsurancePlanRepository', () => {
     ]);
   });
 
-  it('should handle empty provincial government insurance plans data', () => {
+  it('should handle empty provincial government insurance plans data', async () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const provincialGovernmentInsurancePlans = repository.listAllProvincialGovernmentInsurancePlans();
+    const provincialGovernmentInsurancePlans = await repository.listAllProvincialGovernmentInsurancePlans();
 
     expect(provincialGovernmentInsurancePlans).toEqual([]);
   });
 
-  it('should get a provincial government insurance plan by id', () => {
+  it('should get a provincial government insurance plan by id', async () => {
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const provincialGovernmentInsurancePlans = repository.findProvincialGovernmentInsurancePlanById('1');
+    const provincialGovernmentInsurancePlans = await repository.findProvincialGovernmentInsurancePlanById('1');
 
     expect(provincialGovernmentInsurancePlans).toEqual({
       esdc_governmentinsuranceplanid: '1',
@@ -170,10 +170,10 @@ describe('MockGovernmentInsurancePlanRepository', () => {
     });
   });
 
-  it('should return null for non-existent provincial government insurance plan id', () => {
+  it('should return null for non-existent provincial government insurance plan id', async () => {
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const provincialGovernmentInsurancePlans = repository.findProvincialGovernmentInsurancePlanById('non-existent-id');
+    const provincialGovernmentInsurancePlans = await repository.findProvincialGovernmentInsurancePlanById('non-existent-id');
 
     expect(provincialGovernmentInsurancePlans).toBeNull();
   });
