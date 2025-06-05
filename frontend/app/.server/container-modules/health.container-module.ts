@@ -3,7 +3,7 @@ import type { BindingConstraints } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import { AddressValidationHealthCheck, ApplicantHealthCheck, ApplicationStatusHealthCheck, CountryHealthCheck, HCaptchaHealthCheck, LetterHealthCheck, NotificationHealthCheck, RedisHealthCheck } from '~/.server/health';
+import { AddressValidationHealthCheck, ApplicantHealthCheck, ApplicationStatusHealthCheck, CountryHealthCheck, HCaptchaHealthCheck, LetterHealthCheck, NotificationHealthCheck, ProvinceTerritoryStateHealthCheck, RedisHealthCheck } from '~/.server/health';
 
 function featureEnabled(serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>, feature: ServerConfig['ENABLED_FEATURES'][number]) {
   return (metadata: BindingConstraints) => {
@@ -26,6 +26,7 @@ export function createHealthContainerModule(serverConfig: Pick<ServerConfig, 'EN
     options.bind(TYPES.health.HealthCheck).to(ApplicantHealthCheck);
     options.bind(TYPES.health.HealthCheck).to(ApplicationStatusHealthCheck);
     options.bind(TYPES.health.HealthCheck).to(CountryHealthCheck);
+    options.bind(TYPES.health.HealthCheck).to(ProvinceTerritoryStateHealthCheck);
     options.bind(TYPES.health.HealthCheck).to(HCaptchaHealthCheck).when(featureEnabled(serverConfig, 'hcaptcha'));
     options.bind(TYPES.health.HealthCheck).to(LetterHealthCheck);
     options.bind(TYPES.health.HealthCheck).to(NotificationHealthCheck);

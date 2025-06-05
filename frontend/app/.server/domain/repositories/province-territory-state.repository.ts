@@ -29,6 +29,21 @@ export interface ProvinceTerritoryStateRepository {
    * @returns The province territory state entity or null if not found.
    */
   findProvinceTerritoryStateByCode(code: string): Promise<ProvinceTerritoryStateEntity | null>;
+
+  /**
+   * Retrieves metadata associated with the province territory state repository.
+   *
+   * @returns A record where the keys and values are strings representing metadata information.
+   */
+  getMetadata(): Record<string, string>;
+
+  /**
+   * Performs a health check to ensure that the province territory state repository is operational.
+   *
+   * @throws An error if the health check fails or the repository is unavailable.
+   * @returns A promise that resolves when the health check completes successfully.
+   */
+  checkHealth(): Promise<void>;
 }
 
 export type DefaultProvinceTerritoryStateRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
@@ -38,17 +53,19 @@ export class DefaultProvinceTerritoryStateRepository implements ProvinceTerritor
   private readonly log: Logger;
   private readonly serverConfig: DefaultProvinceTerritoryStateRepositoryServerConfig;
   private readonly httpClient: HttpClient;
+  private readonly baseUrl: string;
 
   constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultProvinceTerritoryStateRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultProvinceTerritoryStateRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
+    this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1`;
   }
 
   async listAllProvinceTerritoryStates(): Promise<ProvinceTerritoryStateEntity[]> {
     this.log.trace('Fetching all province territory states');
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/esdc_countries`);
+    const url = new URL(`${this.baseUrl}/esdc_countries`);
     url.searchParams.set('$select', 'esdc_groupkey');
     url.searchParams.set('$filter', 'statecode eq 0 and esdc_groupkey ne null');
     url.searchParams.set('$expand', 'esdc_ProvinceTerritoryState_Countryid_esd($select=esdc_provinceterritorystateid,esdc_nameenglish,esdc_namefrench,esdc_internationalalphacode;$filter=statecode eq 0 and esdc_enabledentalapplicationportal eq true)');
@@ -113,6 +130,16 @@ export class DefaultProvinceTerritoryStateRepository implements ProvinceTerritor
     this.log.trace('Returning province, territory, and state : [%j]', provinceTerritoryEntity);
     return provinceTerritoryEntity;
   }
+
+  getMetadata(): Record<string, string> {
+    return {
+      baseUrl: this.baseUrl,
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    await this.listAllProvinceTerritoryStates();
+  }
 }
 
 @injectable()
@@ -162,5 +189,15 @@ export class MockProvinceTerritoryStateRepository implements ProvinceTerritorySt
     }
 
     return await Promise.resolve(provinceTerritoryStateEntity);
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      mockEnabled: 'true',
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    return await Promise.resolve();
   }
 }

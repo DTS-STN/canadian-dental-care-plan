@@ -6,3 +6,4 @@ export * from './hcaptcha.health';
 export * from './letter.health';
 export * from './notification.health';
 export * from './redis.health';
+export * from './province-territory-state.health';
