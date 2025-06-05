@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = await Promise.all(
     getChildrenState(state).map(async (child) => {
-      const federalGovernmentInsurancePlanService =
+      const federalGovernmentInsurancePlanProgram =
         child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.federalSocialProgram ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale) : undefined;
 
       const provincialTerritorialSocialProgram =
@@ -64,7 +64,7 @@ export async function loader({ context: { appContainer, session }, params, reque
           ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
           : undefined;
 
-      return { ...child, dentalBenefits: { ...child.dentalBenefits, federalSocialProgram: federalGovernmentInsurancePlanService?.name, provincialTerritorialSocialProgram: provincialTerritorialSocialProgram?.name } };
+      return { ...child, dentalBenefits: { ...child.dentalBenefits, federalSocialProgram: federalGovernmentInsurancePlanProgram?.name, provincialTerritorialSocialProgram: provincialTerritorialSocialProgram?.name } };
     }),
   );
 
