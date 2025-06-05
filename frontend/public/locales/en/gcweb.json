@@ -141,5 +141,10 @@
   },
   "screen-reader": {
     "new-tab": "opens in a new tab"
+  },
+  "browser-compatibility-banner": {
+    "content": "It looks like you're using a browser that is not compatible with this website. As a result, some key features may not work as expected, and you may experience issues performing essential tasks or saving your progress.",
+    "dismiss": "Dismiss",
+    "title": "Browser not supported"
   }
 }

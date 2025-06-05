@@ -1,0 +1,61 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`BrowserCompatibilityBanner > should render the BrowserCompatibilityBanner > expected html 1`] = `
+<div>
+  <div
+    class="bg-red-50 shadow-md"
+    id="browser-compatibility-banner"
+    role="alert"
+  >
+    <div
+      class="container"
+    >
+      <div
+        class="flex items-stretch"
+      >
+        <div
+          class="hidden items-center bg-red-200 p-4 sm:flex"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle-exclamation size-6 shrink-0 text-red-700"
+            data-icon="circle-exclamation"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 512 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+        <div
+          class="grow space-y-2 py-4 pl-4"
+        >
+          <h2
+            class="font-lato font-bold"
+          >
+            gcweb:browser-compatibility-banner.title
+          </h2>
+          <p>
+            gcweb:browser-compatibility-banner.content
+          </p>
+          <div
+            class="text-right"
+          >
+            <button
+              class="font-lato rounded-sm border border-red-300 px-3 py-2 text-sm text-red-700 outline-offset-4 hover:border-red-400 hover:bg-red-100 focus:border-red-400 focus:bg-red-100"
+              type="button"
+            >
+              gcweb:browser-compatibility-banner.dismiss
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

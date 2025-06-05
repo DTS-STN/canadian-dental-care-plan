@@ -17,6 +17,7 @@ import { PageDetails } from '~/components/page-details';
 import { PageHeaderBrand } from '~/components/page-header-brand';
 import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
+import { useBrowserCompatiblityBanner } from '~/hooks';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
@@ -109,10 +110,12 @@ function NavigationMenu() {
 function PageHeader() {
   const { t } = useTranslation(i18nNamespaces);
   const { SCCH_BASE_URI } = getClientEnv();
+  const browserCompatiblityBanner = useBrowserCompatiblityBanner();
 
   return (
     <header>
       <SkipNavigationLinks />
+      {browserCompatiblityBanner}
       {useFeature('show-prototype-banner') && <Banner alert={t('gcweb:header.banner.alert')} description={t('gcweb:header.banner.desc')} />}
       <PageHeaderBrand />
       <section className="bg-gray-700 text-white">
