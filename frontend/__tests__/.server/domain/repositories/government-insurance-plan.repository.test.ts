@@ -1,6 +1,9 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
 import { DefaultGovernmentInsurancePlanRepository, MockGovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
+import type { DefaultGovernmentInsurancePlanRepositoryServerConfig } from '~/.server/domain/repositories';
+import type { HttpClient } from '~/.server/http';
 
 const dataSource = vi.hoisted(() => ({
   default: {
@@ -36,36 +39,177 @@ const dataSource = vi.hoisted(() => ({
 vi.mock('~/.server/resources/power-platform/government-insurance-plan.json', () => dataSource);
 
 describe('DefaultGovernmentInsurancePlanRepository', () => {
+  let serverConfigMock: DefaultGovernmentInsurancePlanRepositoryServerConfig;
+
+  beforeEach(() => {
+    serverConfigMock = {
+      INTEROP_API_BASE_URI: 'https://api.example.com',
+      INTEROP_API_SUBSCRIPTION_KEY: 'SUBSCRIPTION_KEY',
+      INTEROP_API_MAX_RETRIES: 10,
+      INTEROP_API_BACKOFF_MS: 3,
+    };
+  });
+
   afterEach(() => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
   });
 
-  //TODO implement test
+  it('should throw error on listAllFederalGovernmentInsurancePlans call', async () => {
+    const responseDataMock = [
+      {
+        esdc_governmentinsuranceplanid: '0',
+        esdc_nameenglish: 'name english',
+        esdc_namefrench: 'name french',
+        _esdc_provinceterritorystateid_value: null,
+      },
+    ];
 
-  /*it('should throw error on listAllFederalGovernmentInsurancePlans call', () => {
-    const repository = new DefaultGovernmentInsurancePlanRepository();
+    const httpClientMock = mock<HttpClient>();
+    httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
 
-    expect(() => repository.listAllFederalGovernmentInsurancePlans()).toThrowError('Federal government insurance plan service is not yet implemented');
+    // act
+    const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
+    const actual = await repository.listAllFederalGovernmentInsurancePlans();
+
+    expect(actual).toEqual(responseDataMock);
+
+    expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
+      'http.client.interop-api.government-insurance-plans.gets',
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/governmentinsuranceplans?%24select=+esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
+      {
+        proxyUrl: serverConfigMock.HTTP_PROXY_URL,
+        method: 'GET',
+        headers: {
+          'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+        retryOptions: {
+          backoffMs: 3,
+          retries: 10,
+          retryConditions: {
+            '502': [],
+          },
+        },
+      },
+    );
   });
 
-  it('should throw error on findFederalGovernmentInsurancePlanById call', () => {
-    const repository = new DefaultGovernmentInsurancePlanRepository();
+  it('should throw error on findFederalGovernmentInsurancePlanById call', async () => {
+    const responseDataMock = [
+      {
+        esdc_governmentinsuranceplanid: '0',
+        esdc_nameenglish: 'name english',
+        esdc_namefrench: 'name french',
+        _esdc_provinceterritorystateid_value: null,
+      },
+    ];
 
-    expect(() => repository.findFederalGovernmentInsurancePlanById('1')).toThrowError('Federal government insurance plan service is not yet implemented');
+    const httpClientMock = mock<HttpClient>();
+    httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
+
+    // act
+    const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
+    const actual = await repository.findFederalGovernmentInsurancePlanById('0');
+
+    expect(actual).toEqual(responseDataMock[0]);
+
+    expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
+      'http.client.interop-api.government-insurance-plans.gets',
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/governmentinsuranceplans?%24select=+esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
+      {
+        proxyUrl: serverConfigMock.HTTP_PROXY_URL,
+        method: 'GET',
+        headers: {
+          'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+        retryOptions: {
+          backoffMs: 3,
+          retries: 10,
+          retryConditions: {
+            '502': [],
+          },
+        },
+      },
+    );
   });
 
-  it('should throw error on listAllProvincialGovernmentInsurancePlans call', () => {
-    const repository = new DefaultGovernmentInsurancePlanRepository();
+  it('should throw error on listAllProvincialGovernmentInsurancePlans call', async () => {
+    const responseDataMock = [
+      {
+        esdc_governmentinsuranceplanid: '0',
+        esdc_nameenglish: 'name english',
+        esdc_namefrench: 'name french',
+        _esdc_provinceterritorystateid_value: '0',
+      },
+    ];
 
-    expect(() => repository.listAllProvincialGovernmentInsurancePlans()).toThrowError('Provincial government insurance plan service is not yet implemented');
+    const httpClientMock = mock<HttpClient>();
+    httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
+
+    // act
+    const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
+    const actual = await repository.listAllProvincialGovernmentInsurancePlans();
+
+    expect(actual).toEqual(responseDataMock);
+
+    expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
+      'http.client.interop-api.government-insurance-plans.gets',
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/governmentinsuranceplans?%24select=+esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
+      {
+        proxyUrl: serverConfigMock.HTTP_PROXY_URL,
+        method: 'GET',
+        headers: {
+          'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+        retryOptions: {
+          backoffMs: 3,
+          retries: 10,
+          retryConditions: {
+            '502': [],
+          },
+        },
+      },
+    );
   });
 
-  it('should throw error on findProvincialGovernmentInsurancePlanById call', () => {
-    const repository = new DefaultGovernmentInsurancePlanRepository();
+  it('should throw error on findProvincialGovernmentInsurancePlanById call', async () => {
+    const responseDataMock = [
+      {
+        esdc_governmentinsuranceplanid: '0',
+        esdc_nameenglish: 'name english',
+        esdc_namefrench: 'name french',
+        _esdc_provinceterritorystateid_value: '0',
+      },
+    ];
 
-    expect(() => repository.findProvincialGovernmentInsurancePlanById('1')).toThrowError('Provincial government insurance plan service is not yet implemented');
-  });*/
+    const httpClientMock = mock<HttpClient>();
+    httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
+
+    // act
+    const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
+    const actual = await repository.findProvincialGovernmentInsurancePlanById('0');
+
+    expect(actual).toEqual(responseDataMock[0]);
+
+    expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
+      'http.client.interop-api.government-insurance-plans.gets',
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/governmentinsuranceplans?%24select=+esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
+      {
+        proxyUrl: serverConfigMock.HTTP_PROXY_URL,
+        method: 'GET',
+        headers: {
+          'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
+        },
+        retryOptions: {
+          backoffMs: 3,
+          retries: 10,
+          retryConditions: {
+            '502': [],
+          },
+        },
+      },
+    );
+  });
 });
 
 describe('MockGovernmentInsurancePlanRepository', () => {
