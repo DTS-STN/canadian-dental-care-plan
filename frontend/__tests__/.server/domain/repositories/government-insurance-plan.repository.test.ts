@@ -55,7 +55,7 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should throw error on listAllFederalGovernmentInsurancePlans call', async () => {
+  it('should fetch all federal government insurance plans', async () => {
     const responseDataMock = [
       {
         esdc_governmentinsuranceplanid: '0',
@@ -94,7 +94,7 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     );
   });
 
-  it('should throw error on findFederalGovernmentInsurancePlanById call', async () => {
+  it('should fetch federal government insurance plan by id', async () => {
     const responseDataMock = [
       {
         esdc_governmentinsuranceplanid: '0',
@@ -133,7 +133,7 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     );
   });
 
-  it('should throw error on listAllProvincialGovernmentInsurancePlans call', async () => {
+  it('should fetch all provincial government insurance plans', async () => {
     const responseDataMock = [
       {
         esdc_governmentinsuranceplanid: '0',
@@ -172,7 +172,7 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     );
   });
 
-  it('should throw error on findProvincialGovernmentInsurancePlanById call', async () => {
+  it('should fetch provincial government insurance plan by id', async () => {
     const responseDataMock = [
       {
         esdc_governmentinsuranceplanid: '0',
