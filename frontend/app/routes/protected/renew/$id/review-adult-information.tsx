@@ -174,17 +174,17 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const dentalInsurance = state.dentalInsurance;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram ? federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
 
   const selectedProvincialBenefit = state.dentalBenefits?.provincialTerritorialSocialProgram
-    ? provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const clientDentalBenefits = state.clientApplication.dentalBenefits.flatMap((id) => {
-    const federalProgram = federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
+  const clientDentalBenefits = state.clientApplication.dentalBenefits.flatMap(async (id) => {
+    const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
     if (federalProgram) return [federalProgram.name];
 
-    const provincialProgram = provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
+    const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
     if (provincialProgram) return [provincialProgram.name];
 
     return [];

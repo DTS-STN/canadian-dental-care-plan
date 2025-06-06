@@ -71,14 +71,17 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const federalSocialPrograms = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
+
+  const federalSocialPrograms = await federalGovernmentInsurancePlanService.listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
   const provinceTerritoryStates = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
-  const provincialTerritorialSocialPrograms = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
+  const provincialTerritorialSocialPrograms = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-dental-benefits.title') }) };
 
-  const clientDentalBenefits = state.clientApplication.dentalBenefits.reduce((benefits, id) => {
-    const federalProgram = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findFederalGovernmentInsurancePlanById(id);
+  const clientDentalBenefits = state.clientApplication.dentalBenefits.reduce(async (benefits, id) => {
+    const federalProgram = await federalGovernmentInsurancePlanService.findFederalGovernmentInsurancePlanById(id);
     if (federalProgram) {
       return {
         ...benefits,
@@ -87,7 +90,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       };
     }
 
-    const provincialProgram = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findProvincialGovernmentInsurancePlanById(id);
+    const provincialProgram = await provincialGovernmentInsurancePlanService.findProvincialGovernmentInsurancePlanById(id);
     if (provincialProgram) {
       return {
         ...benefits,

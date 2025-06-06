@@ -65,9 +65,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childNumber = t('protected-renew:children.child-number', { childNumber: state.childNumber });
   const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
 
-  const federalSocialPrograms = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
+
+  const federalSocialPrograms = await federalGovernmentInsurancePlanService.listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
   const provinceTerritoryStates = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
-  const provincialTerritorialSocialPrograms = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
+  const provincialTerritorialSocialPrograms = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('protected-renew:children.update-dental-benefits.title', { childName }) }),
@@ -75,8 +78,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const immutableChild = renewState.clientApplication.children.find((c) => c.information.socialInsuranceNumber === state.information?.socialInsuranceNumber);
-  const clientDentalBenefits = immutableChild?.dentalBenefits.reduce((benefits, id) => {
-    const federalProgram = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).findFederalGovernmentInsurancePlanById(id);
+  const clientDentalBenefits = immutableChild?.dentalBenefits.reduce(async (benefits, id) => {
+    const federalProgram = await federalGovernmentInsurancePlanService.findFederalGovernmentInsurancePlanById(id);
     if (federalProgram) {
       return {
         ...benefits,
@@ -85,7 +88,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       };
     }
 
-    const provincialProgram = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).findProvincialGovernmentInsurancePlanById(id);
+    const provincialProgram = await provincialGovernmentInsurancePlanService.findProvincialGovernmentInsurancePlanById(id);
     if (provincialProgram) {
       return {
         ...benefits,
