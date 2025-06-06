@@ -22,6 +22,21 @@ export interface ClientFriendlyStatusRepository {
    * @returns The client-friendly status entity or null if not found.
    */
   findClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusEntity | null>;
+
+  /**
+   * Retrieves metadata associated with the country repository.
+   *
+   * @returns A record where the keys and values are strings representing metadata information.
+   */
+  getMetadata(): Record<string, string>;
+
+  /**
+   * Performs a health check to ensure that the country repository is operational.
+   *
+   * @throws An error if the health check fails or the repository is unavailable.
+   * @returns A promise that resolves when the health check completes successfully.
+   */
+  checkHealth(): Promise<void>;
 }
 
 export type DefaultClientFriendlyStatusRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
@@ -31,17 +46,19 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
   private readonly log: Logger;
   private readonly serverConfig: DefaultClientFriendlyStatusRepositoryServerConfig;
   private readonly httpClient: HttpClient;
+  private readonly baseUrl: string;
 
   constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultClientFriendlyStatusRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultClientFriendlyStatusRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
+    this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1`;
   }
 
   async listAllClientFriendlyStatuses(): Promise<ClientFriendlyStatusEntity[]> {
     this.log.trace('Fetching all client friendly statuses');
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/esdc_clientfriendlystatuses`);
+    const url = new URL(`${this.baseUrl}/esdc_clientfriendlystatuses`);
     url.searchParams.set('$select', 'esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench');
     url.searchParams.set('$filter', 'statecode eq 0');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.client-friendly-statuses.gets', url, {
@@ -89,6 +106,16 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
     this.log.trace('Returning client friendly status: [%j]', clientFriendlyStatusEntity);
     return clientFriendlyStatusEntity;
   }
+
+  getMetadata(): Record<string, string> {
+    return {
+      baseUrl: this.baseUrl,
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    await this.listAllClientFriendlyStatuses();
+  }
 }
 
 @injectable()
@@ -124,5 +151,15 @@ export class MockClientFriendlyStatusRepository implements ClientFriendlyStatusR
     }
 
     return await Promise.resolve(clientFriendlyStatusEntity);
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      mockEnabled: 'true',
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    return await Promise.resolve();
   }
 }
