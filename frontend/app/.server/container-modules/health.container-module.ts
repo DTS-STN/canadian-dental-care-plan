@@ -9,6 +9,7 @@ import {
   ApplicationStatusHealthCheck,
   ClientFriendlyStatusHealthCheck,
   CountryHealthCheck,
+  GovernmentInsurancePlanHealthCheck,
   HCaptchaHealthCheck,
   LetterHealthCheck,
   LetterTypeHealthCheck,
@@ -41,6 +42,7 @@ export function createHealthContainerModule(serverConfig: Pick<ServerConfig, 'EN
     options.bind(TYPES.health.HealthCheck).to(ClientFriendlyStatusHealthCheck);
     options.bind(TYPES.health.HealthCheck).to(ProvinceTerritoryStateHealthCheck);
     options.bind(TYPES.health.HealthCheck).to(LetterTypeHealthCheck);
+    options.bind(TYPES.health.HealthCheck).to(GovernmentInsurancePlanHealthCheck);
     options.bind(TYPES.health.HealthCheck).to(HCaptchaHealthCheck).when(featureEnabled(serverConfig, 'hcaptcha'));
     options.bind(TYPES.health.HealthCheck).to(LetterHealthCheck);
     options.bind(TYPES.health.HealthCheck).to(NotificationHealthCheck);
