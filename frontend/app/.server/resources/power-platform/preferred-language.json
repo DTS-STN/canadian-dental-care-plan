@@ -8,7 +8,7 @@
         "MetadataId": "d27aef54-eaff-ed11-8f6d-000d3a09d640",
         "Options": [
           {
-            "Value": 1033,
+            "Value": "english",
             "Color": null,
             "IsManaged": false,
             "ExternalValue": "",
@@ -62,7 +62,7 @@
             }
           },
           {
-            "Value": 1036,
+            "Value": "french",
             "Color": null,
             "IsManaged": false,
             "ExternalValue": "",

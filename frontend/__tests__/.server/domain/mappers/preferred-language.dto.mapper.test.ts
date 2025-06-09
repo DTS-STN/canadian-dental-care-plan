@@ -16,7 +16,7 @@ describe('DefaultPreferredLanguageDtoMapper', () => {
   describe('mapPreferredLanguageEntityToPreferredLanguageDto', () => {
     it('maps a PreferredLanguageEntity with both English and French labels to a PreferredLanguageDto', () => {
       const mockEntity: PreferredLanguageEntity = {
-        Value: 1033,
+        Value: 'english',
         Label: {
           LocalizedLabels: [
             { Label: 'English', LanguageCode: 1033 },
@@ -25,7 +25,7 @@ describe('DefaultPreferredLanguageDtoMapper', () => {
         },
       };
 
-      const expectedDto: PreferredLanguageDto = { id: '1033', nameEn: 'English', nameFr: 'Anglais' };
+      const expectedDto: PreferredLanguageDto = { id: 'english', nameEn: 'English', nameFr: 'Anglais' };
 
       const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);
 
@@ -36,7 +36,7 @@ describe('DefaultPreferredLanguageDtoMapper', () => {
 
     it('throws an error if the PreferredLanguageEntity is missing the English label', () => {
       const mockEntity: PreferredLanguageEntity = {
-        Value: 1033,
+        Value: 'invalidId',
         Label: {
           LocalizedLabels: [{ Label: 'Anglais', LanguageCode: 1036 }],
         },
@@ -44,12 +44,12 @@ describe('DefaultPreferredLanguageDtoMapper', () => {
 
       const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);
 
-      expect(() => mapper.mapPreferredLanguageEntityToPreferredLanguageDto(mockEntity)).toThrowError(`Preferred language missing English or French name; id: [1033]`);
+      expect(() => mapper.mapPreferredLanguageEntityToPreferredLanguageDto(mockEntity)).toThrowError(`Preferred language missing English or French name; id: [invalidId]`);
     });
 
     it('throws an error if the PreferredLanguageEntity is missing the French label', () => {
       const mockEntity: PreferredLanguageEntity = {
-        Value: 1033,
+        Value: 'invalidId',
         Label: {
           LocalizedLabels: [{ Label: 'English', LanguageCode: 1033 }],
         },
@@ -57,7 +57,7 @@ describe('DefaultPreferredLanguageDtoMapper', () => {
 
       const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);
 
-      expect(() => mapper.mapPreferredLanguageEntityToPreferredLanguageDto(mockEntity)).toThrowError(`Preferred language missing English or French name; id: [1033]`);
+      expect(() => mapper.mapPreferredLanguageEntityToPreferredLanguageDto(mockEntity)).toThrowError(`Preferred language missing English or French name; id: [invalidId]`);
     });
   });
 
@@ -65,7 +65,7 @@ describe('DefaultPreferredLanguageDtoMapper', () => {
     it('maps an array of PreferredLanguageEntities to an array of PreferredLanguageDtos', () => {
       const mockEntities: PreferredLanguageEntity[] = [
         {
-          Value: 1033,
+          Value: 'english',
           Label: {
             LocalizedLabels: [
               { Label: 'English', LanguageCode: 1033 },
@@ -74,7 +74,7 @@ describe('DefaultPreferredLanguageDtoMapper', () => {
           },
         },
         {
-          Value: 1036,
+          Value: 'french',
           Label: {
             LocalizedLabels: [
               { Label: 'French', LanguageCode: 1033 },
@@ -85,8 +85,8 @@ describe('DefaultPreferredLanguageDtoMapper', () => {
       ];
 
       const expectedDtos: PreferredLanguageDto[] = [
-        { id: '1033', nameEn: 'English', nameFr: 'Anglais' },
-        { id: '1036', nameEn: 'French', nameFr: 'Français' },
+        { id: 'english', nameEn: 'English', nameFr: 'Anglais' },
+        { id: 'french', nameEn: 'French', nameFr: 'Français' },
       ];
 
       const mapper = new DefaultPreferredLanguageDtoMapper(mockServerConfig);

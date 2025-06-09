@@ -39,6 +39,8 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
     | 'COMMUNICATION_METHOD_MAIL_ID'
     | 'COMMUNICATION_METHOD_EMAIL_ID'
+    | 'ENGLISH_LANGUAGE_CODE'
+    | 'FRENCH_LANGUAGE_CODE'
     | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
     | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
   >;
@@ -53,6 +55,8 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
       | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
       | 'COMMUNICATION_METHOD_MAIL_ID'
       | 'COMMUNICATION_METHOD_EMAIL_ID'
+      | 'ENGLISH_LANGUAGE_CODE'
+      | 'FRENCH_LANGUAGE_CODE'
       | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
       | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
     >,
@@ -72,7 +76,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     const { applicantInformation, applicationYearId, children, communicationPreferences, contactInformation, dateOfBirth, dentalBenefits, dentalInsurance, livingIndependently, partnerInformation, termsAndConditions, typeOfApplication } =
       benefitApplication;
 
-    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC } = this.serverConfig;
+    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC, ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = this.serverConfig;
     return {
       BenefitApplication: {
         Applicant: {
@@ -97,7 +101,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           PersonLanguage: [
             {
               CommunicationCategoryCode: {
-                ReferenceDataID: communicationPreferences.preferredLanguage,
+                ReferenceDataID: (communicationPreferences.preferredLanguage === 'english' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE).toString(),
               },
               PreferredIndicator: true,
             },
