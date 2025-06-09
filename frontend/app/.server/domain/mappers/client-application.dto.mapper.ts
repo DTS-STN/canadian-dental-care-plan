@@ -14,9 +14,9 @@ export interface ClientApplicationDtoMapper {
 
 @injectable()
 export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMapper {
-  private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>;
+  private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENGLISH_LANGUAGE_CODE'>;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'>) {
+  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENGLISH_LANGUAGE_CODE'>) {
     this.serverConfig = serverConfig;
   }
 
@@ -57,6 +57,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
   }
 
   mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity: ClientApplicationEntity): ClientApplicationDto {
+    const { ENGLISH_LANGUAGE_CODE } = this.serverConfig;
     const applicant = clientApplicationEntity.BenefitApplication.Applicant;
 
     const applicantInformation = {
@@ -105,7 +106,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
 
     const communicationPreferences = {
       email: applicant.PersonContactInformation[0].EmailAddress?.at(0)?.EmailAddressID,
-      preferredLanguage: applicant.PersonLanguage[0].CommunicationCategoryCode.ReferenceDataID,
+      preferredLanguage: applicant.PersonLanguage[0].CommunicationCategoryCode.ReferenceDataID === ENGLISH_LANGUAGE_CODE.toString() ? 'english' : 'french',
       preferredMethod: applicant.PreferredMethodCommunicationCode.ReferenceDataID,
     };
 

@@ -6,7 +6,11 @@ import type { ClientApplicationEntity, ClientApplicationSinRequestEntity } from 
 import { DefaultClientApplicationDtoMapper } from '~/.server/domain/mappers';
 
 describe('DefaultClientApplicationDtoMapper', () => {
-  const mockServerConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'> = { APPLICANT_CATEGORY_CODE_INDIVIDUAL: '111111111', APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: '222222222' };
+  const mockServerConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENGLISH_LANGUAGE_CODE'> = {
+    APPLICANT_CATEGORY_CODE_INDIVIDUAL: '111111111',
+    APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: '222222222',
+    ENGLISH_LANGUAGE_CODE: 1,
+  };
   const mapper = new DefaultClientApplicationDtoMapper(mockServerConfig);
 
   describe('mapClientApplicationEntityToClientApplicationDto', () => {
@@ -88,7 +92,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
             PersonLanguage: [
               {
                 CommunicationCategoryCode: {
-                  ReferenceDataID: 'ENG',
+                  ReferenceDataID: '1',
                 },
                 PreferredIndicator: true,
               },
@@ -195,7 +199,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
         children: [],
         communicationPreferences: {
           email: 'email@example.com',
-          preferredLanguage: 'ENG',
+          preferredLanguage: 'english',
           preferredMethod: 'EMAIL',
         },
         contactInformation: {

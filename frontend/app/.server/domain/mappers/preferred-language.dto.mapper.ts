@@ -35,7 +35,7 @@ export class DefaultPreferredLanguageDtoMapper implements PreferredLanguageDtoMa
   mapPreferredLanguageEntityToPreferredLanguageDto(preferredLanguageEntity: PreferredLanguageEntity): PreferredLanguageDto {
     const { ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = this.serverConfig;
 
-    const id = preferredLanguageEntity.Value.toString();
+    const id = preferredLanguageEntity.Value;
     const nameEn = preferredLanguageEntity.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label;
     const nameFr = preferredLanguageEntity.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label;
 

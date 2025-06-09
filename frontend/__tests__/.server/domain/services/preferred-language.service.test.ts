@@ -37,7 +37,7 @@ describe('DefaultPreferredLanguageService', () => {
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
       mockPreferredLanguageRepository.listAllPreferredLanguages.mockReturnValueOnce([
         {
-          Value: 1033,
+          Value: 'english',
           Label: {
             LocalizedLabels: [
               { Label: 'English', LanguageCode: 1033 },
@@ -46,7 +46,7 @@ describe('DefaultPreferredLanguageService', () => {
           },
         },
         {
-          Value: 1036,
+          Value: 'french',
           Label: {
             LocalizedLabels: [
               { Label: 'French', LanguageCode: 1033 },
@@ -79,7 +79,7 @@ describe('DefaultPreferredLanguageService', () => {
       const id = '1033';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
       mockPreferredLanguageRepository.findPreferredLanguageById.mockReturnValueOnce({
-        Value: 1033,
+        Value: 'english',
         Label: {
           LocalizedLabels: [
             { Label: 'English', LanguageCode: 1033 },
@@ -123,7 +123,7 @@ describe('DefaultPreferredLanguageService', () => {
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
       mockPreferredLanguageRepository.listAllPreferredLanguages.mockReturnValueOnce([
         {
-          Value: 1036,
+          Value: 'french',
           Label: {
             LocalizedLabels: [
               { Label: 'French', LanguageCode: 1033 },
@@ -132,7 +132,7 @@ describe('DefaultPreferredLanguageService', () => {
           },
         },
         {
-          Value: 1033,
+          Value: 'english',
           Label: {
             LocalizedLabels: [
               { Label: 'English', LanguageCode: 1033 },
@@ -173,7 +173,7 @@ describe('DefaultPreferredLanguageService', () => {
       const locale = 'en';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
       mockPreferredLanguageRepository.findPreferredLanguageById.mockReturnValueOnce({
-        Value: 1033,
+        Value: 'english',
         Label: {
           LocalizedLabels: [
             { Label: 'English', LanguageCode: 1033 },
