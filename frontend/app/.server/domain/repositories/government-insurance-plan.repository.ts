@@ -35,6 +35,21 @@ export interface GovernmentInsurancePlanRepository {
    * @returns The provincial government insurance plan entity or null if not found.
    */
   findProvincialGovernmentInsurancePlanById(id: string): Promise<GovernmentInsurancePlanEntity | null>;
+
+  /**
+   * Retrieves metadata associated with the government insurance repository.
+   *
+   * @returns A record where the keys and values are strings representing metadata information.
+   */
+  getMetadata(): Record<string, string>;
+
+  /**
+   * Performs a health check to ensure that the government insurance repository is operational.
+   *
+   * @throws An error if the health check fails or the repository is unavailable.
+   * @returns A promise that resolves when the health check completes successfully.
+   */
+  checkHealth(): Promise<void>;
 }
 
 export type DefaultGovernmentInsurancePlanRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
@@ -44,17 +59,19 @@ export class DefaultGovernmentInsurancePlanRepository implements GovernmentInsur
   private readonly log: Logger;
   private readonly serverConfig: DefaultGovernmentInsurancePlanRepositoryServerConfig;
   private readonly httpClient: HttpClient;
+  private readonly baseUrl: string;
 
   constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultGovernmentInsurancePlanRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultGovernmentInsurancePlanRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
+    this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1`;
   }
 
   async listAllFederalGovernmentInsurancePlans(): Promise<GovernmentInsurancePlanEntity[]> {
     this.log.trace('Fetching all federal government insurance plans');
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/governmentinsuranceplans`);
+    const url = new URL(`${this.baseUrl}/governmentinsuranceplans`);
     url.searchParams.set('$select', ' esdc_governmentinsuranceplanid,esdc_nameenglish,esdc_namefrench,_esdc_provinceterritorystateid_value');
     url.searchParams.set('$filter', 'statecode eq 0');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.government-insurance-plans.gets', url, {
@@ -154,6 +171,16 @@ export class DefaultGovernmentInsurancePlanRepository implements GovernmentInsur
     this.log.trace('Returning provincial government insurance plan: [%j]', provincialGovernmentInsurancePlanEntity);
     return provincialGovernmentInsurancePlanEntity;
   }
+
+  getMetadata(): Record<string, string> {
+    return {
+      baseUrl: this.baseUrl,
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    await this.listAllFederalGovernmentInsurancePlans();
+  }
 }
 
 @injectable()
@@ -216,5 +243,15 @@ export class MockGovernmentInsurancePlanRepository implements GovernmentInsuranc
     }
 
     return await Promise.resolve(provincialGovernmentInsurancePlanEntity);
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      mockEnabled: 'true',
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    return await Promise.resolve();
   }
 }
