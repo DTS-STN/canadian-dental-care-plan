@@ -4,8 +4,6 @@ export const routes = [
   {
     file: 'routes/public/layout.tsx',
     children: [
-      { id: 'public/address-validation/index', file: 'routes/public/address-validation/index.tsx', paths: { en: '/:lang/address-validation', fr: '/:lang/validation-adresse' } },
-      { id: 'public/address-validation/review', file: 'routes/public/address-validation/review.tsx', paths: { en: '/:lang/address-validation/review', fr: '/:lang/validation-adresse/revue' } },
       {
         file: 'routes/public/apply/layout.tsx',
         children: [
