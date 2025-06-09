@@ -22,6 +22,21 @@ export interface LetterTypeRepository {
    * @returns The letter type entity or null if not found.
    */
   findLetterTypeById(id: string): Promise<LetterTypeEntity | null>;
+
+  /**
+   * Retrieves metadata associated with the country repository.
+   *
+   * @returns A record where the keys and values are strings representing metadata information.
+   */
+  getMetadata(): Record<string, string>;
+
+  /**
+   * Performs a health check to ensure that the country repository is operational.
+   *
+   * @throws An error if the health check fails or the repository is unavailable.
+   * @returns A promise that resolves when the health check completes successfully.
+   */
+  checkHealth(): Promise<void>;
 }
 
 export type DefaultLetterTypeRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
@@ -31,17 +46,19 @@ export class DefaultLetterTypeRepository implements LetterTypeRepository {
   private readonly log: Logger;
   private readonly serverConfig: DefaultLetterTypeRepositoryServerConfig;
   private readonly httpClient: HttpClient;
+  private readonly baseUrl: string;
 
   constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultLetterTypeRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultLetterTypeRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
+    this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/`;
   }
 
   async listAllLetterTypes(): Promise<ReadonlyArray<LetterTypeEntity>> {
     this.log.trace('Fetching all letter types');
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/esdc_cctlettertypes`);
+    const url = new URL(`${this.baseUrl}/esdc_cctlettertypes`);
     url.searchParams.set('$select', 'esdc_portalnameenglish,esdc_portalnamefrench,_esdc_parentid_value,esdc_value');
     url.searchParams.set('$filter', 'esdc_displayonportal eq 1 and statecode eq 0');
     url.searchParams.set('$expand', 'esdc_ParentId($select=esdc_portalnameenglish,esdc_portalnamefrench');
@@ -90,6 +107,16 @@ export class DefaultLetterTypeRepository implements LetterTypeRepository {
     this.log.trace('Returning letter type: [%j]', letterTypeEntity);
     return letterTypeEntity;
   }
+
+  getMetadata(): Record<string, string> {
+    return {
+      baseUrl: this.baseUrl,
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    await this.listAllLetterTypes();
+  }
 }
 
 @injectable()
@@ -120,5 +147,15 @@ export class MockLetterTypeRepository implements LetterTypeRepository {
     }
 
     return await Promise.resolve(letterTypeEntity);
+  }
+
+  getMetadata(): Record<string, string> {
+    return {
+      mockEnabled: 'true',
+    };
+  }
+
+  async checkHealth(): Promise<void> {
+    return await Promise.resolve();
   }
 }
