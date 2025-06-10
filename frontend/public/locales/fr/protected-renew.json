@@ -420,6 +420,8 @@
   "confirm-communication-preference": {
     "page-title": "Communication",
     "preferred-language": "Quelle langue officielle de communication préférez-vous?",
+    "english": "Anglais",
+    "french": "Français",
     "preferred-method": "Comment préférez-vous recevoir les communications au sujet de votre Régime canadien de soins dentaires de la Sun Life et du gouvernement du Canada\u00a0?",
     "email": "Adresse courriel",
     "confirm-email": "Confirmer l'adresse courriel",
@@ -509,6 +511,8 @@
     "comm-pref-change": "Modifier la préférence de communication",
     "lang-pref-title": "Langue de préférence",
     "lang-pref-change": "Modifier la langue de préférence",
+    "english": "Anglais",
+    "french": "Français",
     "dental-title": "Accès à l'assurance dentaire",
     "dental-insurance-title": "Accès à d'autres assurances ou couvertures de soins dentaires",
     "dental-insurance-change": "Modifier la réponse à «\u00a0accès à l'assurance dentaire\u00a0»",
