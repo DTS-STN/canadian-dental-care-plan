@@ -392,7 +392,7 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
               </p>
               <p>
                 <InlineLink id="change-communication-preference" routeId="protected/renew/$id/communication-preference" params={params}>
-                  {t('protected-renew:review-adult-information.comm-pref-change')}
+                  {t('protected-renew:review-adult-information.sun-life-comm-pref-change')}
                 </InlineLink>
               </p>
             </DescriptionListItem>
