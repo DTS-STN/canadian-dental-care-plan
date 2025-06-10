@@ -42,6 +42,8 @@ const FORM_ACTION = {
   submit: 'submit',
 } as const;
 
+const PREFERRED_LANGUAGE = { english: 'english', french: 'french' } as const;
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.reviewAdultInformation,
@@ -77,7 +79,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
 
   const maritalStatusService = appContainer.get(TYPES.domain.services.MaritalStatusService);
-  const preferredLanguageService = appContainer.get(TYPES.domain.services.PreferredLanguageService);
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
   const countryService = appContainer.get(TYPES.domain.services.CountryService);
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
@@ -86,9 +87,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const maritalStatusId = state.maritalStatus ?? state.clientApplication.applicantInformation.maritalStatus;
   invariant(typeof maritalStatusId === 'string', 'Expected maritalStatusId to be defined');
   const maritalStatusName = maritalStatusService.getLocalizedMaritalStatusById(maritalStatusId, locale).name;
-
-  const communicationPreferredLanguageId = state.preferredLanguage ?? state.clientApplication.communicationPreferences.preferredLanguage;
-  const communicationPreferredLanguageName = preferredLanguageService.getLocalizedPreferredLanguageById(communicationPreferredLanguageId, locale).name;
 
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
   const clientApplicationMailingProvinceTerritoryStateAbbr = state.clientApplication.contactInformation.mailingProvince
@@ -117,7 +115,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     contactInformationEmail: state.email ?? state.clientApplication.contactInformation.email,
     communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
-    preferredLanguage: communicationPreferredLanguageName,
+    preferredLanguage: state.preferredLanguage ?? state.clientApplication.communicationPreferences.preferredLanguage,
     clientApplicationEmail: state.clientApplication.communicationPreferences.email,
     isItaClient: isInvitationToApplyClient(state.clientApplication),
   };
@@ -410,7 +408,7 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
             </DescriptionListItem>
             {userInfo.preferredLanguage && (
               <DescriptionListItem term={t('protected-renew:review-adult-information.lang-pref-title')}>
-                <p>{userInfo.preferredLanguage}</p>
+                <p>{userInfo.preferredLanguage === PREFERRED_LANGUAGE.english ? t('protected-renew:review-adult-information.english') : t('protected-renew:review-adult-information.french')}</p>
                 <div className="mt-4">
                   <InlineLink id="change-language-preference" routeId="protected/renew/$id/confirm-communication-preference" params={params}>
                     {t('protected-renew:review-adult-information.lang-pref-change')}

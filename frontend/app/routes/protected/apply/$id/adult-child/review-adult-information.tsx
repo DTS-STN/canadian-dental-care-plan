@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-adult-information';
-import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
+import { PREFERRED_LANGUAGE, PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultChildStateForReview } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
@@ -73,7 +73,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
   const countryMailing = await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
   const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
-  const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
 
   const userInfo = {
@@ -89,6 +88,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     previouslyEnrolled: state.newOrExistingMember,
     email: state.email,
+    preferredLanguage: state.communicationPreferences.preferredLanguage,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -144,12 +144,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     userInfo,
     spouseInfo,
-    preferredLanguage: preferredLanguage.name,
     homeAddressInfo,
     mailingAddressInfo,
     dentalInsurance,
     dentalBenefit,
-
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
@@ -184,7 +182,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ReviewInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, siteKey, hCaptchaEnabled } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, siteKey, hCaptchaEnabled } = loaderData;
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -370,16 +368,14 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
           <section>
             <h2 className="font-lato mt-8 text-2xl font-bold">{t('protected-apply-adult-child:review-adult-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
-              {preferredLanguage && (
-                <DescriptionListItem term={t('protected-apply-adult-child:review-adult-information.lang-pref-title')}>
-                  {preferredLanguage}
-                  <p className="mt-4">
-                    <InlineLink id="change-language-preference" routeId="protected/apply/$id/adult-child/communication-preference" params={params}>
-                      {t('protected-apply-adult-child:review-adult-information.lang-pref-change')}
-                    </InlineLink>
-                  </p>
-                </DescriptionListItem>
-              )}
+              <DescriptionListItem term={t('protected-apply-adult-child:review-adult-information.lang-pref-title')}>
+                {userInfo.preferredLanguage === PREFERRED_LANGUAGE.english ? t('protected-apply-adult-child:review-adult-information.english') : t('protected-apply-adult-child:review-adult-information.french')}
+                <p className="mt-4">
+                  <InlineLink id="change-language-preference" routeId="protected/apply/$id/adult-child/communication-preference" params={params}>
+                    {t('protected-apply-adult-child:review-adult-information.lang-pref-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
               <DescriptionListItem term={t('protected-apply-adult-child:review-adult-information.sun-life-comm-pref-title')}>
                 <p>
                   {userInfo.communicationSunLifePreference === PREFERRED_SUN_LIFE_METHOD.email

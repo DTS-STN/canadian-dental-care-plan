@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-adult-information';
-import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
+import { PREFERRED_LANGUAGE, PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyChildStateForReview } from '~/.server/routes/helpers/apply-child-route-helpers';
@@ -72,7 +72,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryMailing = await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
   const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
   const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
-  const preferredLanguage = appContainer.get(TYPES.domain.services.PreferredLanguageService).getLocalizedPreferredLanguageById(state.communicationPreferences.preferredLanguage, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -87,6 +86,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     previouslyEnrolled: state.newOrExistingMember,
     email: state.email,
+    preferredLanguage: state.communicationPreferences.preferredLanguage,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -121,7 +121,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     userInfo,
     spouseInfo,
-    preferredLanguage: preferredLanguage.name,
     homeAddressInfo,
     mailingAddressInfo,
     meta,
@@ -155,7 +154,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ReviewInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, payload } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, payload } = loaderData;
   const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const hCaptchaEnabled = useFeature('hcaptcha');
   const fetcher = useFetcher<typeof action>();
@@ -344,7 +343,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             <h2 className="font-lato mt-8 text-2xl font-bold">{t('apply-child:review-adult-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-child:review-adult-information.lang-pref-title')}>
-                {preferredLanguage}
+                {userInfo.preferredLanguage === PREFERRED_LANGUAGE.english ? t('apply-child:review-adult-information.english') : t('apply-child:review-adult-information.french')}
                 <p className="mt-4">
                   <InlineLink id="change-language-preference" routeId="public/apply/$id/child/communication-preference" params={params}>
                     {t('apply-child:review-adult-information.lang-pref-change')}

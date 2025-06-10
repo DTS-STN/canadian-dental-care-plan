@@ -10,7 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
 import { saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import type { CommunicationPreferencesState } from '~/.server/routes/helpers/protected-apply-route-helpers';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -29,6 +29,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as const;
 export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
+export const PREFERRED_LANGUAGE = { english: 'english', french: 'french' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-apply-adult-child', 'protected-apply', 'gcweb'),
@@ -50,9 +51,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-
-  const preferredLanguages = appContainer.get(TYPES.domain.services.PreferredLanguageService).listAndSortLocalizedPreferredLanguages(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:communication-preference.page-title') }) };
 
@@ -61,7 +59,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     meta,
-    preferredLanguages,
     defaultState: {
       ...state.communicationPreferences,
     },
@@ -118,7 +115,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { preferredLanguages, defaultState, editMode } = loaderData;
+  const { defaultState, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -143,20 +140,25 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            {preferredLanguages.length > 0 && (
-              <InputRadios
-                id="preferred-language"
-                name="preferredLanguage"
-                legend={t('protected-apply-adult-child:communication-preference.preferred-language')}
-                options={preferredLanguages.map((language) => ({
-                  defaultChecked: defaultState.preferredLanguage === language.id,
-                  children: language.name,
-                  value: language.id,
-                }))}
-                errorMessage={errors?.preferredLanguage}
-                required
-              />
-            )}
+            <InputRadios
+              id="preferred-language"
+              name="preferredLanguage"
+              legend={t('protected-apply-adult-child:communication-preference.preferred-language')}
+              options={[
+                {
+                  value: PREFERRED_LANGUAGE.english,
+                  children: t('protected-apply-adult-child:communication-preference.english'),
+                  defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.english,
+                },
+                {
+                  value: PREFERRED_LANGUAGE.french,
+                  children: t('protected-apply-adult-child:communication-preference.french'),
+                  defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.french,
+                },
+              ]}
+              errorMessage={errors?.preferredLanguage}
+              required
+            />
             <InputRadios
               id="preferred-methods"
               legend={t('protected-apply-adult-child:communication-preference.preferred-method')}

@@ -7,7 +7,7 @@ import type { Route } from './+types/confirm-communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedRenewState, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -20,6 +20,8 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+export const PREFERRED_LANGUAGE = { english: 'english', french: 'french' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
@@ -41,8 +43,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-  const preferredLanguages = appContainer.get(TYPES.domain.services.PreferredLanguageService).listAndSortLocalizedPreferredLanguages(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm-communication-preference.page-title') }) };
 
@@ -51,7 +51,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     meta,
-    preferredLanguages,
     defaultState: state.preferredLanguage ?? state.clientApplication.communicationPreferences.preferredLanguage,
   };
 }
@@ -92,7 +91,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewConfirmCommunicationPreference({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { preferredLanguages, defaultState } = loaderData;
+  const { defaultState } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -109,20 +108,25 @@ export default function ProtectedRenewConfirmCommunicationPreference({ loaderDat
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
         <div className="mb-8 space-y-6">
-          {preferredLanguages.length > 0 && (
-            <InputRadios
-              id="preferred-language"
-              name="preferredLanguage"
-              legend={t('protected-renew:confirm-communication-preference.preferred-language')}
-              options={preferredLanguages.map((language) => ({
-                defaultChecked: defaultState === language.id,
-                children: language.name,
-                value: language.id,
-              }))}
-              errorMessage={errors?.preferredLanguage}
-              required
-            />
-          )}
+          <InputRadios
+            id="preferred-language"
+            name="preferredLanguage"
+            legend={t('protected-renew:confirm-communication-preference.preferred-language')}
+            options={[
+              {
+                value: PREFERRED_LANGUAGE.english,
+                children: t('protected-renew:confirm-communication-preference.english'),
+                defaultChecked: defaultState === PREFERRED_LANGUAGE.english,
+              },
+              {
+                value: PREFERRED_LANGUAGE.french,
+                children: t('protected-renew:confirm-communication-preference.french'),
+                defaultChecked: defaultState === PREFERRED_LANGUAGE.french,
+              },
+            ]}
+            errorMessage={errors?.preferredLanguage}
+            required
+          />
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Communication click">
