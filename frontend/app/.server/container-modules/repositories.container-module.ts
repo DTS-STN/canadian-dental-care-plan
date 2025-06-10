@@ -20,7 +20,6 @@ import {
   DefaultLetterTypeRepository,
   DefaultMaritalStatusRepository,
   DefaultPreferredCommunicationMethodRepository,
-  DefaultPreferredLanguageRepository,
   DefaultProvinceTerritoryStateRepository,
   DefaultVerificationCodeRepository,
   MockAddressValidationRepository,
@@ -37,7 +36,6 @@ import {
   MockLetterTypeRepository,
   MockMaritalStatusRepository,
   MockPreferredCommunicationMethodRepository,
-  MockPreferredLanguageRepository,
   MockProvinceTerritoryStateRepository,
   MockVerificationCodeRepository,
 } from '~/.server/domain/repositories';
@@ -120,9 +118,6 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
 
     options.bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(DefaultPreferredCommunicationMethodRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
     options.bind(TYPES.domain.repositories.PreferredCommunicationMethodRepository).to(MockPreferredCommunicationMethodRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
-
-    options.bind(TYPES.domain.repositories.PreferredLanguageRepository).to(DefaultPreferredLanguageRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
-    options.bind(TYPES.domain.repositories.PreferredLanguageRepository).to(MockPreferredLanguageRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
 
     options.bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(DefaultProvinceTerritoryStateRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
     options.bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(MockProvinceTerritoryStateRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
