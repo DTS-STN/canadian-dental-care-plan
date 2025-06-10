@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { ClientFriendlyStatusEntity } from '~/.server/domain/entities';
+import type { ClientFriendlyStatusEntity, ClientFriendlyStatusResponseEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
@@ -14,7 +14,7 @@ export interface ClientFriendlyStatusRepository {
    * Fetch all client-friendly status entities.
    * @returns All client-friendly status entities.
    */
-  listAllClientFriendlyStatuses(): Promise<ClientFriendlyStatusEntity[]>;
+  listAllClientFriendlyStatuses(): Promise<ReadonlyArray<ClientFriendlyStatusEntity>>;
 
   /**
    * Fetch a client-friendly status entity by its id.
@@ -55,7 +55,7 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
     this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1`;
   }
 
-  async listAllClientFriendlyStatuses(): Promise<ClientFriendlyStatusEntity[]> {
+  async listAllClientFriendlyStatuses(): Promise<ReadonlyArray<ClientFriendlyStatusEntity>> {
     this.log.trace('Fetching all client friendly statuses');
 
     const url = new URL(`${this.baseUrl}/esdc_clientfriendlystatuses`);
@@ -86,9 +86,10 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
       throw new Error(`Failed to fetch client friendly statuses. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const clientFriendlyStatusEntities: ClientFriendlyStatusEntity[] = await response.json();
-    this.log.trace('Client friendly statuses: [%j]', clientFriendlyStatusEntities);
+    const clientFriendlyStatusResponseEntity: ClientFriendlyStatusResponseEntity = await response.json();
+    const clientFriendlyStatusEntities = clientFriendlyStatusResponseEntity.value;
 
+    this.log.trace('Client friendly statuses: [%j]', clientFriendlyStatusEntities);
     return clientFriendlyStatusEntities;
   }
 

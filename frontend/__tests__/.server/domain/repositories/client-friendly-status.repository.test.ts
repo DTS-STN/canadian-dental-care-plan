@@ -42,13 +42,15 @@ describe('DefaultClientFriendlyStatusRepository', () => {
   });
 
   it('should fetch all client friendly statuses', async () => {
-    const responseDataMock = [
-      {
-        esdc_clientfriendlystatusid: '1',
-        esdc_descriptionenglish: 'english',
-        esdc_descriptionfrench: 'french',
-      },
-    ];
+    const responseDataMock = {
+      value: [
+        {
+          esdc_clientfriendlystatusid: '1',
+          esdc_descriptionenglish: 'english',
+          esdc_descriptionfrench: 'french',
+        },
+      ],
+    };
 
     const httpClientMock = mock<HttpClient>();
     httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
@@ -57,7 +59,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
     const repository = new DefaultClientFriendlyStatusRepository(serverConfigMock, httpClientMock);
     const actual = await repository.listAllClientFriendlyStatuses();
 
-    expect(actual).toEqual(responseDataMock);
+    expect(actual).toEqual(responseDataMock.value);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.client-friendly-statuses.gets',
       new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_clientfriendlystatuses?%24select=esdc_clientfriendlystatusid%2Cesdc_descriptionenglish%2Cesdc_descriptionfrench&%24filter=statecode+eq+0'),
@@ -79,13 +81,15 @@ describe('DefaultClientFriendlyStatusRepository', () => {
   });
 
   it('should fetch client friendly status by id', async () => {
-    const responseDataMock = [
-      {
-        esdc_clientfriendlystatusid: '1',
-        esdc_descriptionenglish: 'english',
-        esdc_descriptionfrench: 'french',
-      },
-    ];
+    const responseDataMock = {
+      value: [
+        {
+          esdc_clientfriendlystatusid: '1',
+          esdc_descriptionenglish: 'english',
+          esdc_descriptionfrench: 'french',
+        },
+      ],
+    };
 
     const httpClientMock = mock<HttpClient>();
     httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
@@ -94,7 +98,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
     const repository = new DefaultClientFriendlyStatusRepository(serverConfigMock, httpClientMock);
     const actual = await repository.findClientFriendlyStatusById('1');
 
-    expect(actual).toEqual(responseDataMock[0]);
+    expect(actual).toEqual(responseDataMock.value[0]);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.client-friendly-statuses.gets',
       new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_clientfriendlystatuses?%24select=esdc_clientfriendlystatusid%2Cesdc_descriptionenglish%2Cesdc_descriptionfrench&%24filter=statecode+eq+0'),

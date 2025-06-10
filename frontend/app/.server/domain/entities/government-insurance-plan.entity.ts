@@ -1,3 +1,7 @@
+export type GovernmentInsurancePlanResponseEntity = Readonly<{
+  value: ReadonlyArray<GovernmentInsurancePlanEntity>;
+}>;
+
 export type GovernmentInsurancePlanEntity = Readonly<{
   esdc_governmentinsuranceplanid: string;
   esdc_nameenglish: string;

@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { GovernmentInsurancePlanEntity } from '~/.server/domain/entities';
+import type { GovernmentInsurancePlanEntity, GovernmentInsurancePlanResponseEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
@@ -71,8 +71,8 @@ export class DefaultGovernmentInsurancePlanRepository implements GovernmentInsur
   async listAllFederalGovernmentInsurancePlans(): Promise<GovernmentInsurancePlanEntity[]> {
     this.log.trace('Fetching all federal government insurance plans');
 
-    const url = new URL(`${this.baseUrl}/governmentinsuranceplans`);
-    url.searchParams.set('$select', ' esdc_governmentinsuranceplanid,esdc_nameenglish,esdc_namefrench,_esdc_provinceterritorystateid_value');
+    const url = new URL(`${this.baseUrl}/esdc_governmentinsuranceplans`);
+    url.searchParams.set('$select', 'esdc_governmentinsuranceplanid,esdc_nameenglish,esdc_namefrench,_esdc_provinceterritorystateid_value');
     url.searchParams.set('$filter', 'statecode eq 0');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.government-insurance-plans.gets', url, {
       method: 'GET',
@@ -99,10 +99,11 @@ export class DefaultGovernmentInsurancePlanRepository implements GovernmentInsur
       throw new Error(`Failed to fetch federal government insurance plans. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const federalGovernmentInsurancePlanEntities: GovernmentInsurancePlanEntity[] = await response.json();
-    this.log.trace('Federal government insurance plans: [%j]', federalGovernmentInsurancePlanEntities);
+    const governmentInsurancePlanResponseEntity: GovernmentInsurancePlanResponseEntity = await response.json();
+    const federalGovernmentInsurancePlanEntities = governmentInsurancePlanResponseEntity.value.filter((plan) => plan._esdc_provinceterritorystateid_value === null);
 
-    return federalGovernmentInsurancePlanEntities.filter((plan) => plan._esdc_provinceterritorystateid_value === null);
+    this.log.trace('Federal government insurance plans: [%j]', federalGovernmentInsurancePlanEntities);
+    return federalGovernmentInsurancePlanEntities;
   }
 
   async findFederalGovernmentInsurancePlanById(id: string): Promise<GovernmentInsurancePlanEntity | null> {
@@ -123,8 +124,8 @@ export class DefaultGovernmentInsurancePlanRepository implements GovernmentInsur
   async listAllProvincialGovernmentInsurancePlans(): Promise<GovernmentInsurancePlanEntity[]> {
     this.log.trace('Fetching all provincial government insurance plans');
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1/governmentinsuranceplans`);
-    url.searchParams.set('$select', ' esdc_governmentinsuranceplanid,esdc_nameenglish,esdc_namefrench,_esdc_provinceterritorystateid_value');
+    const url = new URL(`${this.baseUrl}/esdc_governmentinsuranceplans`);
+    url.searchParams.set('$select', 'esdc_governmentinsuranceplanid,esdc_nameenglish,esdc_namefrench,_esdc_provinceterritorystateid_value');
     url.searchParams.set('$filter', 'statecode eq 0');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.government-insurance-plans.gets', url, {
       method: 'GET',
@@ -151,10 +152,11 @@ export class DefaultGovernmentInsurancePlanRepository implements GovernmentInsur
       throw new Error(`Failed to fetch provincial government insurance plans. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const provincialGovernmentInsurancePlanEntities: GovernmentInsurancePlanEntity[] = await response.json();
-    this.log.trace('Provincial government insurance plans: [%j]', provincialGovernmentInsurancePlanEntities);
+    const governmentInsurancePlanResponseEntity: GovernmentInsurancePlanResponseEntity = await response.json();
+    const provincialGovernmentInsurancePlanEntities = governmentInsurancePlanResponseEntity.value.filter((plan) => plan._esdc_provinceterritorystateid_value !== null);
 
-    return provincialGovernmentInsurancePlanEntities.filter((plan) => plan._esdc_provinceterritorystateid_value !== null);
+    this.log.trace('Provincial government insurance plans: [%j]', provincialGovernmentInsurancePlanEntities);
+    return provincialGovernmentInsurancePlanEntities;
   }
 
   async findProvincialGovernmentInsurancePlanById(id: string): Promise<GovernmentInsurancePlanEntity | null> {

@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { CountryEntity } from '~/.server/domain/entities';
+import type { CountryEntity, CountryResponseEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
@@ -86,9 +86,10 @@ export class DefaultCountryRepository implements CountryRepository {
       throw new Error(`Failed to fetch countries. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const countryEntities: CountryEntity[] = await response.json();
-    this.log.trace('Countries: [%j]', countryEntities);
+    const countryResponseEntity: CountryResponseEntity = await response.json();
+    const countryEntities = countryResponseEntity.value;
 
+    this.log.trace('Countries: [%j]', countryEntities);
     return countryEntities;
   }
 
