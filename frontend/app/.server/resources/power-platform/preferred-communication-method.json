@@ -8,7 +8,7 @@
         "MetadataId": "f376aa5f-a903-ee11-8f6e-000d3a09d1b8",
         "Options": [
           {
-            "Value": 775170000,
+            "Value": "email",
             "Color": null,
             "IsManaged": false,
             "ExternalValue": "",
@@ -36,7 +36,7 @@
               ],
               "UserLocalizedLabel": {
                 "Label": "Email",
-                "LanguageCode": 1033,
+                "LanguageCode": "email",
                 "IsManaged": false,
                 "MetadataId": "3ea460be-a92b-4a7d-a33a-f14142a1beba",
                 "HasChanged": null
@@ -46,7 +46,7 @@
               "LocalizedLabels": [
                 {
                   "Label": "",
-                  "LanguageCode": 1033,
+                  "LanguageCode": "email",
                   "IsManaged": false,
                   "MetadataId": "04b3cc46-dc8e-4365-81cd-f2151306e426",
                   "HasChanged": null
@@ -54,7 +54,7 @@
               ],
               "UserLocalizedLabel": {
                 "Label": "",
-                "LanguageCode": 1033,
+                "LanguageCode": "email",
                 "IsManaged": false,
                 "MetadataId": "04b3cc46-dc8e-4365-81cd-f2151306e426",
                 "HasChanged": null
@@ -62,7 +62,7 @@
             }
           },
           {
-            "Value": 775170002,
+            "Value": "mail",
             "Color": null,
             "IsManaged": false,
             "ExternalValue": "",

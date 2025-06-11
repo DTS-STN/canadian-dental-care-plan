@@ -34,7 +34,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
       mockPreferredCommunicationMethodRepository.listAllPreferredCommunicationMethods.mockReturnValueOnce([
         {
-          Value: 1,
+          Value: 'email',
           Label: {
             LocalizedLabels: [
               { Label: 'Email', LanguageCode: 1033 },
@@ -43,7 +43,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
           },
         },
         {
-          Value: 2,
+          Value: 'mail',
           Label: {
             LocalizedLabels: [
               { Label: 'Mail', LanguageCode: 1033 },
@@ -76,7 +76,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
       const id = '1';
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
       mockPreferredCommunicationMethodRepository.findPreferredCommunicationMethodById.mockReturnValueOnce({
-        Value: 1,
+        Value: 'email',
         Label: {
           LocalizedLabels: [
             { Label: 'Email', LanguageCode: 1033 },
@@ -120,7 +120,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
       mockPreferredCommunicationMethodRepository.listAllPreferredCommunicationMethods.mockReturnValueOnce([
         {
-          Value: 1,
+          Value: 'email',
           Label: {
             LocalizedLabels: [
               { Label: 'Email', LanguageCode: 1033 },
@@ -129,7 +129,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
           },
         },
         {
-          Value: 2,
+          Value: 'mail',
           Label: {
             LocalizedLabels: [
               { Label: 'Mail', LanguageCode: 1033 },
@@ -170,7 +170,7 @@ describe('DefaultPreferredCommunicationMethodService', () => {
       const locale = 'en';
       const mockPreferredCommunicationMethodRepository = mock<PreferredCommunicationMethodRepository>();
       mockPreferredCommunicationMethodRepository.findPreferredCommunicationMethodById.mockReturnValueOnce({
-        Value: 1,
+        Value: 'email',
         Label: {
           LocalizedLabels: [
             { Label: 'Email', LanguageCode: 1033 },

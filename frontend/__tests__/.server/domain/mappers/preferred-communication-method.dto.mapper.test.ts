@@ -58,7 +58,7 @@ describe('DefaultPreferredCommunicationMethodDtoMapper', () => {
   describe('mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto', () => {
     it('maps a PreferredCommunicationMethodEntity with both English and French labels to a PreferredCommunicationMethodDto', () => {
       const mockEntity: PreferredCommunicationMethodEntity = {
-        Value: 1033,
+        Value: 'english',
         Label: {
           LocalizedLabels: [
             { Label: 'English', LanguageCode: 1033 },
@@ -78,7 +78,7 @@ describe('DefaultPreferredCommunicationMethodDtoMapper', () => {
 
     it('throws an error if the PreferredCommunicationMethodEntity is missing the English label', () => {
       const mockEntity: PreferredCommunicationMethodEntity = {
-        Value: 1033,
+        Value: 'english',
         Label: {
           LocalizedLabels: [{ Label: 'Anglais', LanguageCode: 1036 }],
         },
@@ -91,7 +91,7 @@ describe('DefaultPreferredCommunicationMethodDtoMapper', () => {
 
     it('throws an error if the PreferredCommunicationMethodEntity is missing the French label', () => {
       const mockEntity: PreferredCommunicationMethodEntity = {
-        Value: 1033,
+        Value: 'english',
         Label: {
           LocalizedLabels: [{ Label: 'English', LanguageCode: 1033 }],
         },
@@ -107,7 +107,7 @@ describe('DefaultPreferredCommunicationMethodDtoMapper', () => {
     it('maps an array of PreferredCommunicationMethodEntities to an array of PreferredCommunicationMethodDtos', () => {
       const mockEntities: PreferredCommunicationMethodEntity[] = [
         {
-          Value: 1033,
+          Value: 'english',
           Label: {
             LocalizedLabels: [
               { Label: 'English', LanguageCode: 1033 },
@@ -116,7 +116,7 @@ describe('DefaultPreferredCommunicationMethodDtoMapper', () => {
           },
         },
         {
-          Value: 1036,
+          Value: 'french',
           Label: {
             LocalizedLabels: [
               { Label: 'French', LanguageCode: 1033 },

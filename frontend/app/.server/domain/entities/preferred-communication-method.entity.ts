@@ -1,7 +1,7 @@
 import type { ReadonlyDeep } from 'type-fest';
 
 export type PreferredCommunicationMethodEntity = ReadonlyDeep<{
-  Value: number;
+  Value: string;
   Label: {
     LocalizedLabels: {
       LanguageCode: number;
