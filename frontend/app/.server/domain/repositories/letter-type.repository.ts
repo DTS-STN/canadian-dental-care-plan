@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { LetterTypeEntity } from '~/.server/domain/entities';
+import type { LetterTypeEntity, LetterTypeResponseEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
@@ -61,7 +61,7 @@ export class DefaultLetterTypeRepository implements LetterTypeRepository {
     const url = new URL(`${this.baseUrl}/esdc_cctlettertypes`);
     url.searchParams.set('$select', 'esdc_portalnameenglish,esdc_portalnamefrench,_esdc_parentid_value,esdc_value');
     url.searchParams.set('$filter', 'esdc_displayonportal eq 1 and statecode eq 0');
-    url.searchParams.set('$expand', 'esdc_ParentId($select=esdc_portalnameenglish,esdc_portalnamefrench');
+    url.searchParams.set('$expand', 'esdc_ParentId($select=esdc_portalnameenglish,esdc_portalnamefrench)');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.letter-types.gets', url, {
       method: 'GET',
       headers: {
@@ -87,9 +87,10 @@ export class DefaultLetterTypeRepository implements LetterTypeRepository {
       throw new Error(`Failed to fetch letter types. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const letterTypeEntities: LetterTypeEntity[] = await response.json();
-    this.log.trace('Letter types: [%j]', letterTypeEntities);
+    const letterTypeResponseEntity: LetterTypeResponseEntity = await response.json();
+    const letterTypeEntities = letterTypeResponseEntity.value;
 
+    this.log.trace('Letter types: [%j]', letterTypeEntities);
     return letterTypeEntities;
   }
 

@@ -44,20 +44,22 @@ describe('DefaultCountryRepository', () => {
   });
 
   it('should return results for listAllCountries call', async () => {
-    const responseDataMock = [
-      {
-        esdc_countrycodealpha3: 'CAN',
-        esdc_countryid: '1',
-        esdc_nameenglish: 'Canada English',
-        esdc_namefrench: 'Canada Français',
-      },
-      {
-        esdc_countrycodealpha3: 'USA',
-        esdc_countryid: '2',
-        esdc_nameenglish: 'United States English',
-        esdc_namefrench: 'États-Unis Français',
-      },
-    ];
+    const responseDataMock = {
+      value: [
+        {
+          esdc_countrycodealpha3: 'CAN',
+          esdc_countryid: '1',
+          esdc_nameenglish: 'Canada English',
+          esdc_namefrench: 'Canada Français',
+        },
+        {
+          esdc_countrycodealpha3: 'USA',
+          esdc_countryid: '2',
+          esdc_nameenglish: 'United States English',
+          esdc_namefrench: 'États-Unis Français',
+        },
+      ],
+    };
 
     const httpClientMock = mock<HttpClient>();
     httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
@@ -66,7 +68,7 @@ describe('DefaultCountryRepository', () => {
     const repository = new DefaultCountryRepository(serverConfigMock, httpClientMock);
     const actual = await repository.listAllCountries();
 
-    expect(actual).toEqual(responseDataMock);
+    expect(actual).toEqual(responseDataMock.value);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.countries.gets',
       new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_countries?%24select=esdc_countryid%2Cesdc_nameenglish%2Cesdc_namefrench%2Cesdc_countrycodealpha3&%24filter=statecode+eq+0+and+esdc_enabledentalapplicationportal+eq+true'),
@@ -88,14 +90,16 @@ describe('DefaultCountryRepository', () => {
   });
 
   it('should return singular result for findCountryById call', async () => {
-    const responseDataMock = [
-      {
-        esdc_countrycodealpha3: 'CAN',
-        esdc_countryid: '1',
-        esdc_nameenglish: 'Canada English',
-        esdc_namefrench: 'Canada Français',
-      },
-    ];
+    const responseDataMock = {
+      value: [
+        {
+          esdc_countrycodealpha3: 'CAN',
+          esdc_countryid: '1',
+          esdc_nameenglish: 'Canada English',
+          esdc_namefrench: 'Canada Français',
+        },
+      ],
+    };
 
     const httpClientMock = mock<HttpClient>();
     httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
@@ -104,7 +108,7 @@ describe('DefaultCountryRepository', () => {
     const repository = new DefaultCountryRepository(serverConfigMock, httpClientMock);
     const actual = await repository.findCountryById('1');
 
-    expect(actual).toEqual(responseDataMock[0]);
+    expect(actual).toEqual(responseDataMock.value[0]);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.countries.gets',
       new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_countries?%24select=esdc_countryid%2Cesdc_nameenglish%2Cesdc_namefrench%2Cesdc_countrycodealpha3&%24filter=statecode+eq+0+and+esdc_enabledentalapplicationportal+eq+true'),

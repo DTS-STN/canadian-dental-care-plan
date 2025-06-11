@@ -56,14 +56,16 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
   });
 
   it('should fetch all federal government insurance plans', async () => {
-    const responseDataMock = [
-      {
-        esdc_governmentinsuranceplanid: '0',
-        esdc_nameenglish: 'name english',
-        esdc_namefrench: 'name french',
-        _esdc_provinceterritorystateid_value: null,
-      },
-    ];
+    const responseDataMock = {
+      value: [
+        {
+          esdc_governmentinsuranceplanid: '0',
+          esdc_nameenglish: 'name english',
+          esdc_namefrench: 'name french',
+          _esdc_provinceterritorystateid_value: null,
+        },
+      ],
+    };
 
     const httpClientMock = mock<HttpClient>();
     httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
@@ -72,11 +74,11 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
     const actual = await repository.listAllFederalGovernmentInsurancePlans();
 
-    expect(actual).toEqual(responseDataMock);
+    expect(actual).toEqual(responseDataMock.value);
 
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.government-insurance-plans.gets',
-      new URL('https://api.example.com/dental-care/code-list/pp/v1/governmentinsuranceplans?%24select=+esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_governmentinsuranceplans?%24select=esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
       {
         proxyUrl: serverConfigMock.HTTP_PROXY_URL,
         method: 'GET',
@@ -95,14 +97,16 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
   });
 
   it('should fetch federal government insurance plan by id', async () => {
-    const responseDataMock = [
-      {
-        esdc_governmentinsuranceplanid: '0',
-        esdc_nameenglish: 'name english',
-        esdc_namefrench: 'name french',
-        _esdc_provinceterritorystateid_value: null,
-      },
-    ];
+    const responseDataMock = {
+      value: [
+        {
+          esdc_governmentinsuranceplanid: '0',
+          esdc_nameenglish: 'name english',
+          esdc_namefrench: 'name french',
+          _esdc_provinceterritorystateid_value: null,
+        },
+      ],
+    };
 
     const httpClientMock = mock<HttpClient>();
     httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
@@ -111,11 +115,11 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
     const actual = await repository.findFederalGovernmentInsurancePlanById('0');
 
-    expect(actual).toEqual(responseDataMock[0]);
+    expect(actual).toEqual(responseDataMock.value[0]);
 
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.government-insurance-plans.gets',
-      new URL('https://api.example.com/dental-care/code-list/pp/v1/governmentinsuranceplans?%24select=+esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_governmentinsuranceplans?%24select=esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
       {
         proxyUrl: serverConfigMock.HTTP_PROXY_URL,
         method: 'GET',
@@ -134,14 +138,16 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
   });
 
   it('should fetch all provincial government insurance plans', async () => {
-    const responseDataMock = [
-      {
-        esdc_governmentinsuranceplanid: '0',
-        esdc_nameenglish: 'name english',
-        esdc_namefrench: 'name french',
-        _esdc_provinceterritorystateid_value: '0',
-      },
-    ];
+    const responseDataMock = {
+      value: [
+        {
+          esdc_governmentinsuranceplanid: '0',
+          esdc_nameenglish: 'name english',
+          esdc_namefrench: 'name french',
+          _esdc_provinceterritorystateid_value: '0',
+        },
+      ],
+    };
 
     const httpClientMock = mock<HttpClient>();
     httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
@@ -150,11 +156,11 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
     const actual = await repository.listAllProvincialGovernmentInsurancePlans();
 
-    expect(actual).toEqual(responseDataMock);
+    expect(actual).toEqual(responseDataMock.value);
 
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.government-insurance-plans.gets',
-      new URL('https://api.example.com/dental-care/code-list/pp/v1/governmentinsuranceplans?%24select=+esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_governmentinsuranceplans?%24select=esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
       {
         proxyUrl: serverConfigMock.HTTP_PROXY_URL,
         method: 'GET',
@@ -173,14 +179,16 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
   });
 
   it('should fetch provincial government insurance plan by id', async () => {
-    const responseDataMock = [
-      {
-        esdc_governmentinsuranceplanid: '0',
-        esdc_nameenglish: 'name english',
-        esdc_namefrench: 'name french',
-        _esdc_provinceterritorystateid_value: '0',
-      },
-    ];
+    const responseDataMock = {
+      value: [
+        {
+          esdc_governmentinsuranceplanid: '0',
+          esdc_nameenglish: 'name english',
+          esdc_namefrench: 'name french',
+          _esdc_provinceterritorystateid_value: '0',
+        },
+      ],
+    };
 
     const httpClientMock = mock<HttpClient>();
     httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
@@ -189,11 +197,11 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
     const actual = await repository.findProvincialGovernmentInsurancePlanById('0');
 
-    expect(actual).toEqual(responseDataMock[0]);
+    expect(actual).toEqual(responseDataMock.value[0]);
 
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.government-insurance-plans.gets',
-      new URL('https://api.example.com/dental-care/code-list/pp/v1/governmentinsuranceplans?%24select=+esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
+      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_governmentinsuranceplans?%24select=esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
       {
         proxyUrl: serverConfigMock.HTTP_PROXY_URL,
         method: 'GET',
