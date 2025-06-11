@@ -67,7 +67,7 @@ describe('DefaultPreferredCommunicationMethodDtoMapper', () => {
         },
       };
 
-      const expectedDto: PreferredCommunicationMethodDto = { id: '1033', nameEn: 'English', nameFr: 'Anglais' };
+      const expectedDto: PreferredCommunicationMethodDto = { id: 'english', nameEn: 'English', nameFr: 'Anglais' };
 
       const mapper = new DefaultPreferredCommunicationMethodDtoMapper(mockServerConfig);
 
@@ -86,7 +86,7 @@ describe('DefaultPreferredCommunicationMethodDtoMapper', () => {
 
       const mapper = new DefaultPreferredCommunicationMethodDtoMapper(mockServerConfig);
 
-      expect(() => mapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto(mockEntity)).toThrowError(`Preferred communication method missing English or French name; id: [1033]`);
+      expect(() => mapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto(mockEntity)).toThrowError(`Preferred communication method missing English or French name; id: [english]`);
     });
 
     it('throws an error if the PreferredCommunicationMethodEntity is missing the French label', () => {
@@ -99,7 +99,7 @@ describe('DefaultPreferredCommunicationMethodDtoMapper', () => {
 
       const mapper = new DefaultPreferredCommunicationMethodDtoMapper(mockServerConfig);
 
-      expect(() => mapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto(mockEntity)).toThrowError(`Preferred communication method missing English or French name; id: [1033]`);
+      expect(() => mapper.mapPreferredCommunicationMethodEntityToPreferredCommunicationMethodDto(mockEntity)).toThrowError(`Preferred communication method missing English or French name; id: [english]`);
     });
   });
 
@@ -127,8 +127,8 @@ describe('DefaultPreferredCommunicationMethodDtoMapper', () => {
       ];
 
       const expectedDtos: PreferredCommunicationMethodDto[] = [
-        { id: '1033', nameEn: 'English', nameFr: 'Anglais' },
-        { id: '1036', nameEn: 'French', nameFr: 'Français' },
+        { id: 'english', nameEn: 'English', nameFr: 'Anglais' },
+        { id: 'french', nameEn: 'French', nameFr: 'Français' },
       ];
 
       const mapper = new DefaultPreferredCommunicationMethodDtoMapper(mockServerConfig);
