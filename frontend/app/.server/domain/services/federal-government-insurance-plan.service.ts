@@ -115,7 +115,7 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
 
   async listFederalGovernmentInsurancePlans(): Promise<ReadonlyArray<FederalGovernmentInsurancePlanDto>> {
     this.log.debug('Get all federal government insurance plans');
-    const federalGovernmentInsurancePlanEntities = await this.governmentInsurancePlanRepository.listAllFederalGovernmentInsurancePlans();
+    const federalGovernmentInsurancePlanEntities = await this.governmentInsurancePlanRepository.listAllGovernmentInsurancePlans();
     const federalGovernmentInsurancePlanDtos = this.federalGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(federalGovernmentInsurancePlanEntities);
     this.log.trace('Returning federal government insurance plans: [%j]', federalGovernmentInsurancePlanDtos);
     return federalGovernmentInsurancePlanDtos;
@@ -123,7 +123,7 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
 
   async findFederalGovernmentInsurancePlanById(id: string): Promise<FederalGovernmentInsurancePlanDto | null> {
     this.log.debug('Finding federal government insurance plan with id: [%s]', id);
-    const federalGovernmentInsurancePlanEntity = await this.governmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById(id);
+    const federalGovernmentInsurancePlanEntity = await this.governmentInsurancePlanRepository.findGovernmentInsurancePlanById(id);
 
     if (!federalGovernmentInsurancePlanEntity) {
       this.log.trace('Federal government insurance plan with id: [%s] not found. Returning null', id);
@@ -137,7 +137,7 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
 
   async getFederalGovernmentInsurancePlanById(id: string): Promise<FederalGovernmentInsurancePlanDto> {
     this.log.debug('Get federal government insurance plan with id: [%s]', id);
-    const federalGovernmentInsurancePlanEntity = await this.governmentInsurancePlanRepository.findFederalGovernmentInsurancePlanById(id);
+    const federalGovernmentInsurancePlanEntity = await this.governmentInsurancePlanRepository.findGovernmentInsurancePlanById(id);
 
     if (!federalGovernmentInsurancePlanEntity) {
       this.log.error('Federal government insurance plan with id: [%s] not found', id);

@@ -55,7 +55,7 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should fetch all federal government insurance plans', async () => {
+  it('should fetch all government insurance plans', async () => {
     const responseDataMock = {
       value: [
         {
@@ -63,6 +63,12 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
           esdc_nameenglish: 'name english',
           esdc_namefrench: 'name french',
           _esdc_provinceterritorystateid_value: null,
+        },
+        {
+          esdc_governmentinsuranceplanid: '1',
+          esdc_nameenglish: 'name english',
+          esdc_namefrench: 'name french',
+          _esdc_provinceterritorystateid_value: '0',
         },
       ],
     };
@@ -72,7 +78,7 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
 
     // act
     const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
-    const actual = await repository.listAllFederalGovernmentInsurancePlans();
+    const actual = await repository.listAllGovernmentInsurancePlans();
 
     expect(actual).toEqual(responseDataMock.value);
 
@@ -96,7 +102,7 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     );
   });
 
-  it('should fetch federal government insurance plan by id', async () => {
+  it('should fetch government insurance plan by id', async () => {
     const responseDataMock = {
       value: [
         {
@@ -105,46 +111,11 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
           esdc_namefrench: 'name french',
           _esdc_provinceterritorystateid_value: null,
         },
-      ],
-    };
-
-    const httpClientMock = mock<HttpClient>();
-    httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
-
-    // act
-    const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
-    const actual = await repository.findFederalGovernmentInsurancePlanById('0');
-
-    expect(actual).toEqual(responseDataMock.value[0]);
-
-    expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
-      'http.client.interop-api.government-insurance-plans.gets',
-      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_governmentinsuranceplans?%24select=esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
-      {
-        proxyUrl: serverConfigMock.HTTP_PROXY_URL,
-        method: 'GET',
-        headers: {
-          'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
-        },
-        retryOptions: {
-          backoffMs: 3,
-          retries: 10,
-          retryConditions: {
-            '502': [],
-          },
-        },
-      },
-    );
-  });
-
-  it('should fetch all provincial government insurance plans', async () => {
-    const responseDataMock = {
-      value: [
         {
-          esdc_governmentinsuranceplanid: '0',
+          esdc_governmentinsuranceplanid: '1',
           esdc_nameenglish: 'name english',
           esdc_namefrench: 'name french',
-          _esdc_provinceterritorystateid_value: '0',
+          _esdc_provinceterritorystateid_value: '1',
         },
       ],
     };
@@ -154,48 +125,7 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
 
     // act
     const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
-    const actual = await repository.listAllProvincialGovernmentInsurancePlans();
-
-    expect(actual).toEqual(responseDataMock.value);
-
-    expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
-      'http.client.interop-api.government-insurance-plans.gets',
-      new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_governmentinsuranceplans?%24select=esdc_governmentinsuranceplanid%2Cesdc_nameenglish%2Cesdc_namefrench%2C_esdc_provinceterritorystateid_value&%24filter=statecode+eq+0'),
-      {
-        proxyUrl: serverConfigMock.HTTP_PROXY_URL,
-        method: 'GET',
-        headers: {
-          'Ocp-Apim-Subscription-Key': serverConfigMock.INTEROP_API_SUBSCRIPTION_KEY,
-        },
-        retryOptions: {
-          backoffMs: 3,
-          retries: 10,
-          retryConditions: {
-            '502': [],
-          },
-        },
-      },
-    );
-  });
-
-  it('should fetch provincial government insurance plan by id', async () => {
-    const responseDataMock = {
-      value: [
-        {
-          esdc_governmentinsuranceplanid: '0',
-          esdc_nameenglish: 'name english',
-          esdc_namefrench: 'name french',
-          _esdc_provinceterritorystateid_value: '0',
-        },
-      ],
-    };
-
-    const httpClientMock = mock<HttpClient>();
-    httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock));
-
-    // act
-    const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
-    const actual = await repository.findProvincialGovernmentInsurancePlanById('0');
+    const actual = await repository.findGovernmentInsurancePlanById('0');
 
     expect(actual).toEqual(responseDataMock.value[0]);
 
@@ -226,12 +156,24 @@ describe('MockGovernmentInsurancePlanRepository', () => {
     vi.clearAllMocks();
   });
 
-  it('should get all federal government insurance plans', async () => {
+  it('should get all government insurance plans', async () => {
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const federalGovernmentInsurancePlans = await repository.listAllFederalGovernmentInsurancePlans();
+    const governmentInsurancePlans = await repository.listAllGovernmentInsurancePlans();
 
-    expect(federalGovernmentInsurancePlans).toEqual([
+    expect(governmentInsurancePlans).toEqual([
+      {
+        esdc_governmentinsuranceplanid: '1',
+        esdc_nameenglish: 'First Provincial Insurance Plan',
+        esdc_namefrench: "Premier plan d'assurance provincial",
+        _esdc_provinceterritorystateid_value: '10',
+      },
+      {
+        esdc_governmentinsuranceplanid: '2',
+        esdc_nameenglish: 'Second Provincial Insurance Plan',
+        esdc_namefrench: "Deuxième plan d'assurance provincial",
+        _esdc_provinceterritorystateid_value: '20',
+      },
       {
         esdc_governmentinsuranceplanid: '3',
         esdc_nameenglish: 'First Insurance Plan Federal',
@@ -247,22 +189,22 @@ describe('MockGovernmentInsurancePlanRepository', () => {
     ]);
   });
 
-  it('should handle empty federal government insurance plans data', async () => {
+  it('should handle empty government insurance plans data', async () => {
     vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
 
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const federalGovernmentInsurancePlans = await repository.listAllFederalGovernmentInsurancePlans();
+    const governmentInsurancePlans = await repository.listAllGovernmentInsurancePlans();
 
-    expect(federalGovernmentInsurancePlans).toEqual([]);
+    expect(governmentInsurancePlans).toEqual([]);
   });
 
-  it('should get a federal government insurance plan by id', async () => {
+  it('should get a government insurance plan by id', async () => {
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const federalGovernmentInsurancePlan = await repository.findFederalGovernmentInsurancePlanById('3');
+    const governmentInsurancePlan = await repository.findGovernmentInsurancePlanById('3');
 
-    expect(federalGovernmentInsurancePlan).toEqual({
+    expect(governmentInsurancePlan).toEqual({
       esdc_governmentinsuranceplanid: '3',
       esdc_nameenglish: 'First Insurance Plan Federal',
       esdc_namefrench: "Premier plan d'assurance fédéral",
@@ -270,63 +212,11 @@ describe('MockGovernmentInsurancePlanRepository', () => {
     });
   });
 
-  it('should return null for non-existent federal government insurance plan id', async () => {
+  it('should return null for non-existent government insurance plan id', async () => {
     const repository = new MockGovernmentInsurancePlanRepository();
 
-    const federalGovernmentInsurancePlan = await repository.findFederalGovernmentInsurancePlanById('non-existent-id');
+    const governmentInsurancePlan = await repository.findGovernmentInsurancePlanById('non-existent-id');
 
-    expect(federalGovernmentInsurancePlan).toBeNull();
-  });
-
-  it('should get all provincial government insurance plans', async () => {
-    const repository = new MockGovernmentInsurancePlanRepository();
-
-    const provincialGovernmentInsurancePlans = await repository.listAllProvincialGovernmentInsurancePlans();
-
-    expect(provincialGovernmentInsurancePlans).toEqual([
-      {
-        esdc_governmentinsuranceplanid: '1',
-        esdc_nameenglish: 'First Provincial Insurance Plan',
-        esdc_namefrench: "Premier plan d'assurance provincial",
-        _esdc_provinceterritorystateid_value: '10',
-      },
-      {
-        esdc_governmentinsuranceplanid: '2',
-        esdc_nameenglish: 'Second Provincial Insurance Plan',
-        esdc_namefrench: "Deuxième plan d'assurance provincial",
-        _esdc_provinceterritorystateid_value: '20',
-      },
-    ]);
-  });
-
-  it('should handle empty provincial government insurance plans data', async () => {
-    vi.spyOn(dataSource, 'default', 'get').mockReturnValueOnce({ value: [] });
-
-    const repository = new MockGovernmentInsurancePlanRepository();
-
-    const provincialGovernmentInsurancePlans = await repository.listAllProvincialGovernmentInsurancePlans();
-
-    expect(provincialGovernmentInsurancePlans).toEqual([]);
-  });
-
-  it('should get a provincial government insurance plan by id', async () => {
-    const repository = new MockGovernmentInsurancePlanRepository();
-
-    const provincialGovernmentInsurancePlans = await repository.findProvincialGovernmentInsurancePlanById('1');
-
-    expect(provincialGovernmentInsurancePlans).toEqual({
-      esdc_governmentinsuranceplanid: '1',
-      esdc_nameenglish: 'First Provincial Insurance Plan',
-      esdc_namefrench: "Premier plan d'assurance provincial",
-      _esdc_provinceterritorystateid_value: '10',
-    });
-  });
-
-  it('should return null for non-existent provincial government insurance plan id', async () => {
-    const repository = new MockGovernmentInsurancePlanRepository();
-
-    const provincialGovernmentInsurancePlans = await repository.findProvincialGovernmentInsurancePlanById('non-existent-id');
-
-    expect(provincialGovernmentInsurancePlans).toBeNull();
+    expect(governmentInsurancePlan).toBeNull();
   });
 });
