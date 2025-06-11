@@ -86,6 +86,12 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
     | 'ENGLISH_LANGUAGE_CODE'
     | 'FRENCH_LANGUAGE_CODE'
+    | 'MARITAL_STATUS_CODE_SINGLE'
+    | 'MARITAL_STATUS_CODE_MARRIED'
+    | 'MARITAL_STATUS_CODE_COMMON_LAW'
+    | 'MARITAL_STATUS_CODE_DIVORCED'
+    | 'MARITAL_STATUS_CODE_WIDOWED'
+    | 'MARITAL_STATUS_CODE_SEPARATED'
   >;
 
   constructor(
@@ -102,6 +108,12 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
       | 'ENGLISH_LANGUAGE_CODE'
       | 'FRENCH_LANGUAGE_CODE'
+      | 'MARITAL_STATUS_CODE_SINGLE'
+      | 'MARITAL_STATUS_CODE_MARRIED'
+      | 'MARITAL_STATUS_CODE_COMMON_LAW'
+      | 'MARITAL_STATUS_CODE_DIVORCED'
+      | 'MARITAL_STATUS_CODE_WIDOWED'
+      | 'MARITAL_STATUS_CODE_SEPARATED'
     >,
   ) {
     this.serverConfig = serverConfig;
@@ -146,7 +158,26 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     }: ToBenefitRenewalRequestEntityArgs,
     isProtectedRoute: boolean,
   ): BenefitRenewalRequestEntity {
-    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC, ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = this.serverConfig;
+    const {
+      BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED,
+      BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC,
+      ENGLISH_LANGUAGE_CODE,
+      FRENCH_LANGUAGE_CODE,
+      MARITAL_STATUS_CODE_SINGLE,
+      MARITAL_STATUS_CODE_MARRIED,
+      MARITAL_STATUS_CODE_COMMON_LAW,
+      MARITAL_STATUS_CODE_SEPARATED,
+      MARITAL_STATUS_CODE_DIVORCED,
+      MARITAL_STATUS_CODE_WIDOWED,
+    } = this.serverConfig;
+    const MARITAL_STATUS_CODE_MAP: Record<string, string> = {
+      single: MARITAL_STATUS_CODE_SINGLE,
+      married: MARITAL_STATUS_CODE_MARRIED,
+      commonlaw: MARITAL_STATUS_CODE_COMMON_LAW,
+      separated: MARITAL_STATUS_CODE_SEPARATED,
+      divorced: MARITAL_STATUS_CODE_DIVORCED,
+      widowed: MARITAL_STATUS_CODE_WIDOWED,
+    };
     return {
       BenefitApplication: {
         Applicant: {
@@ -190,7 +221,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
           ],
           PersonMaritalStatus: {
             StatusCode: {
-              ReferenceDataID: applicantInformation.maritalStatus,
+              ReferenceDataID: MARITAL_STATUS_CODE_MAP[applicantInformation.maritalStatus],
             },
           },
           PersonName: [
