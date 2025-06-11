@@ -78,6 +78,14 @@ const serverEnv = clientEnvSchema.extend({
   ENGLISH_LANGUAGE_CODE: z.coerce.number().default(1033),
   FRENCH_LANGUAGE_CODE: z.coerce.number().default(1036),
 
+  // marital status codes
+  MARITAL_STATUS_CODE_SINGLE: z.string().trim().min(1).default("775170000"),
+  MARITAL_STATUS_CODE_MARRIED: z.string().trim().min(1).default("775170001"),
+  MARITAL_STATUS_CODE_COMMON_LAW: z.string().trim().min(1).default("775170002"),
+  MARITAL_STATUS_CODE_SEPARATED: z.string().trim().min(1).default("775170003"),
+  MARITAL_STATUS_CODE_DIVORCED: z.string().trim().min(1).default("775170004"),
+  MARITAL_STATUS_CODE_WIDOWED: z.string().trim().min(1).default("775170005"),
+
   // interop api settings
   INTEROP_API_BASE_URI: z.string().url(),
   INTEROP_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
