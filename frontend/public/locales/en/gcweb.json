@@ -143,8 +143,8 @@
     "new-tab": "opens in a new tab"
   },
   "browser-compatibility-banner": {
-    "content": "It looks like you're using a browser that is not compatible with this website. As a result, some key features may not work as expected, and you may experience issues performing essential tasks or saving your progress.",
+    "content": "You are using an older browser that might not work well with this website. Some important features might not work, and you could have trouble completing the application. Try updating your browser to a newer version for a better experience. You may need to update your device or use a different one.",
     "dismiss": "Dismiss",
-    "title": "Browser not supported"
+    "title": "Update your browser"
   }
 }

@@ -143,8 +143,8 @@
     "new-tab": "s'ouvre dans un nouvel onglet"
   },
   "browser-compatibility-banner": {
-    "content": "Il semble que vous utilisiez un navigateur qui n'est pas compatible avec ce site Web. Par conséquent, certaines fonctionnalités clés pourraient ne pas fonctionner correctement, et vous pourriez rencontrer des problèmes pour effectuer des tâches essentielles ou enregistrer votre progression.",
+    "content": "Vous utilisez un navigateur plus ancien qui pourrait ne pas bien fonctionner avec ce site Web. Certaines fonctions importantes pourraient ne pas fonctionner correctement et il se peut que vous ayez de la difficulté à remplir le formulaire de demande. Pour améliorer votre expérience, nous vous recommandons de mettre à jour votre navigateur vers une version plus récente. Il est possible que vous deviez mettre à jour votre appareil ou en utiliser un autre.",
     "dismiss": "Fermer",
-    "title": "Navigateur non pris en charge"
+    "title": "Mettez à niveau votre navigateur"
   }
 }
