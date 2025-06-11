@@ -23,17 +23,17 @@ export interface ProvincialGovernmentInsurancePlanService {
 export class DefaultProvincialGovernmentInsurancePlanService implements ProvincialGovernmentInsurancePlanService {
   private readonly log: Logger;
   private readonly provincialGovernmentInsurancePlanDtoMapper: ProvincialGovernmentInsurancePlanDtoMapper;
-  private readonly GovernmentInsurancePlanRepository: GovernmentInsurancePlanRepository;
+  private readonly governmentInsurancePlanRepository: GovernmentInsurancePlanRepository;
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.domain.mappers.ProvincialGovernmentInsurancePlanDtoMapper) provincialGovernmentInsurancePlanDtoMapper: ProvincialGovernmentInsurancePlanDtoMapper,
-    @inject(TYPES.domain.repositories.GovernmentInsurancePlanRepository) GovernmentInsurancePlanRepository: GovernmentInsurancePlanRepository,
+    @inject(TYPES.domain.repositories.GovernmentInsurancePlanRepository) governmentInsurancePlanRepository: GovernmentInsurancePlanRepository,
     @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
   ) {
     this.log = createLogger('DefaultProvincialGovernmentInsurancePlanService');
     this.provincialGovernmentInsurancePlanDtoMapper = provincialGovernmentInsurancePlanDtoMapper;
-    this.GovernmentInsurancePlanRepository = GovernmentInsurancePlanRepository;
+    this.governmentInsurancePlanRepository = governmentInsurancePlanRepository;
     this.serverConfig = serverConfig;
     this.init();
   }
@@ -66,7 +66,7 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
 
   async listProvincialGovernmentInsurancePlans(): Promise<ReadonlyArray<ProvincialGovernmentInsurancePlanDto>> {
     this.log.debug('Get all provincial government insurance plans');
-    const provincialGovernmentInsurancePlanEntities = await this.GovernmentInsurancePlanRepository.listAllProvincialGovernmentInsurancePlans();
+    const provincialGovernmentInsurancePlanEntities = await this.governmentInsurancePlanRepository.listAllGovernmentInsurancePlans();
     const provincialGovernmentInsurancePlanDtos = this.provincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities);
     this.log.trace('Returning provincial government insurance plans: [%j]', provincialGovernmentInsurancePlanDtos);
     return provincialGovernmentInsurancePlanDtos;
@@ -74,7 +74,7 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
 
   async findProvincialGovernmentInsurancePlanById(id: string): Promise<ProvincialGovernmentInsurancePlanDto | null> {
     this.log.debug('Finding provincial government insurance plan with id: [%s]', id);
-    const provincialGovernmentInsurancePlanEntity = await this.GovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById(id);
+    const provincialGovernmentInsurancePlanEntity = await this.governmentInsurancePlanRepository.findGovernmentInsurancePlanById(id);
 
     if (!provincialGovernmentInsurancePlanEntity) {
       this.log.trace('Provincial government insurance plan with id: [%s] not found. Returning null', id);
@@ -88,7 +88,7 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
 
   async getProvincialGovernmentInsurancePlanById(id: string): Promise<ProvincialGovernmentInsurancePlanDto> {
     this.log.debug('Get provincial government insurance plan with id: [%s]', id);
-    const provincialGovernmentInsurancePlanEntity = await this.GovernmentInsurancePlanRepository.findProvincialGovernmentInsurancePlanById(id);
+    const provincialGovernmentInsurancePlanEntity = await this.governmentInsurancePlanRepository.findGovernmentInsurancePlanById(id);
 
     if (!provincialGovernmentInsurancePlanEntity) throw new ProvincialGovernmentInsurancePlanNotFoundException(`Provincial government insurance plan with id: [${id}] not found`);
 
