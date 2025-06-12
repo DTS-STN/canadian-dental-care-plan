@@ -118,24 +118,24 @@ export default function ProtectedRenewConfirmCommunicationPreference({ loaderDat
                     {
                       value: PREFERRED_LANGUAGE.french,
                       children: t('protected-renew:confirm-communication-preference.french'),
-                      defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.french,
+                      defaultChecked: defaultState === PREFERRED_LANGUAGE.french,
                     },
                     {
                       value: PREFERRED_LANGUAGE.english,
                       children: t('protected-renew:confirm-communication-preference.english'),
-                      defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.english,
+                      defaultChecked: defaultState === PREFERRED_LANGUAGE.english,
                     },
                   ]
                 : [
                     {
                       value: PREFERRED_LANGUAGE.english,
                       children: t('protected-renew:confirm-communication-preference.english'),
-                      defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.english,
+                      defaultChecked: defaultState === PREFERRED_LANGUAGE.english,
                     },
                     {
                       value: PREFERRED_LANGUAGE.french,
                       children: t('protected-renew:confirm-communication-preference.french'),
-                      defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.french,
+                      defaultChecked: defaultState === PREFERRED_LANGUAGE.french,
                     },
                   ]
             }
