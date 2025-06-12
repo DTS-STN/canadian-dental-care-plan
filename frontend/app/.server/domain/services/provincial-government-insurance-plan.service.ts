@@ -66,7 +66,8 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
 
   async listProvincialGovernmentInsurancePlans(): Promise<ReadonlyArray<ProvincialGovernmentInsurancePlanDto>> {
     this.log.debug('Get all provincial government insurance plans');
-    const provincialGovernmentInsurancePlanEntities = await this.governmentInsurancePlanRepository.listAllGovernmentInsurancePlans();
+    const governmentInsurancePlanEntities = await this.governmentInsurancePlanRepository.listAllGovernmentInsurancePlans();
+    const provincialGovernmentInsurancePlanEntities = governmentInsurancePlanEntities.filter((entity) => entity._esdc_provinceterritorystateid_value !== null);
     const provincialGovernmentInsurancePlanDtos = this.provincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos(provincialGovernmentInsurancePlanEntities);
     this.log.trace('Returning provincial government insurance plans: [%j]', provincialGovernmentInsurancePlanDtos);
     return provincialGovernmentInsurancePlanDtos;

@@ -115,7 +115,8 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
 
   async listFederalGovernmentInsurancePlans(): Promise<ReadonlyArray<FederalGovernmentInsurancePlanDto>> {
     this.log.debug('Get all federal government insurance plans');
-    const federalGovernmentInsurancePlanEntities = await this.governmentInsurancePlanRepository.listAllGovernmentInsurancePlans();
+    const governmentInsurancePlanEntities = await this.governmentInsurancePlanRepository.listAllGovernmentInsurancePlans();
+    const federalGovernmentInsurancePlanEntities = governmentInsurancePlanEntities.filter((entity) => entity._esdc_provinceterritorystateid_value === null);
     const federalGovernmentInsurancePlanDtos = this.federalGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos(federalGovernmentInsurancePlanEntities);
     this.log.trace('Returning federal government insurance plans: [%j]', federalGovernmentInsurancePlanDtos);
     return federalGovernmentInsurancePlanDtos;

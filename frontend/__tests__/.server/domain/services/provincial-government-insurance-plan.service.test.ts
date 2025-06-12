@@ -45,6 +45,12 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
           esdc_namefrench: "Deuxième plan d'assurance",
           _esdc_provinceterritorystateid_value: '20',
         },
+        {
+          esdc_governmentinsuranceplanid: '3',
+          esdc_nameenglish: 'Third Insurance Plan',
+          esdc_namefrench: "Troisième plan d'assurance",
+          _esdc_provinceterritorystateid_value: null, // Federal plan - should be filtered out
+        },
       ]);
 
       const mockDtos: ProvincialGovernmentInsurancePlanDto[] = [
@@ -71,7 +77,20 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       expect(dtos).toEqual(mockDtos);
       expect(mockGovernmentInsurancePlanRepository.listAllGovernmentInsurancePlans).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledExactlyOnceWith([
+        {
+          esdc_governmentinsuranceplanid: '1',
+          esdc_nameenglish: 'First Insurance Plan',
+          esdc_namefrench: "Premier plan d'assurance",
+          _esdc_provinceterritorystateid_value: '10',
+        },
+        {
+          esdc_governmentinsuranceplanid: '2',
+          esdc_nameenglish: 'Second Insurance Plan',
+          esdc_namefrench: "Deuxième plan d'assurance",
+          _esdc_provinceterritorystateid_value: '20',
+        },
+      ]);
     });
   });
 
@@ -183,6 +202,12 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
           esdc_namefrench: "Deuxième plan d'assurance",
           _esdc_provinceterritorystateid_value: '20',
         },
+        {
+          esdc_governmentinsuranceplanid: '3',
+          esdc_nameenglish: 'Third Insurance Plan',
+          esdc_namefrench: "Troisième plan d'assurance",
+          _esdc_provinceterritorystateid_value: null, // Federal plan - should be filtered out
+        },
       ]);
 
       const mockDtos: ProvincialGovernmentInsurancePlanDto[] = [
@@ -205,7 +230,20 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       expect(dtos).toEqual(mockLocalizedDtos);
       expect(mockGovernmentInsurancePlanRepository.listAllGovernmentInsurancePlans).toHaveBeenCalledOnce();
-      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
+      expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledExactlyOnceWith([
+        {
+          esdc_governmentinsuranceplanid: '1',
+          esdc_nameenglish: 'First Insurance Plan',
+          esdc_namefrench: "Premier plan d'assurance",
+          _esdc_provinceterritorystateid_value: '10',
+        },
+        {
+          esdc_governmentinsuranceplanid: '2',
+          esdc_nameenglish: 'Second Insurance Plan',
+          esdc_namefrench: "Deuxième plan d'assurance",
+          _esdc_provinceterritorystateid_value: '20',
+        },
+      ]);
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtosToProvincialGovernmentInsurancePlanLocalizedDtos).toHaveBeenCalledOnce();
     });
   });
