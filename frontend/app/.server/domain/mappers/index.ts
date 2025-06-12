@@ -12,7 +12,6 @@ export * from './federal-government-insurance-plan.dto.mapper';
 export * from './letter-type.dto.mapper';
 export * from './letter.dto.mapper';
 export * from './marital-status.dto.mapper';
-export * from './preferred-communication-method.dto.mapper';
 export * from './province-territory-state.dto.mapper';
 export * from './provincial-government-insurance-plan.dto.mapper';
 export * from './verification-code.dto.mapper';

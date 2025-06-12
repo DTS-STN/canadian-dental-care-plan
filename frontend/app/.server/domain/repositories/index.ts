@@ -11,7 +11,6 @@ export * from './demographic-survey.repository';
 export * from './letter-type.repository';
 export * from './letter.repository';
 export * from './marital-status.repository';
-export * from './preferred-communication-method.repository';
 export * from './province-territory-state.repository';
 export * from './government-insurance-plan.repository';
 export * from './verification-code.repository';
