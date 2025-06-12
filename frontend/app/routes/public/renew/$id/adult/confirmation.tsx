@@ -67,13 +67,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
   const countryMailing = state.mailingAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
   const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
-  const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined;
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
-    martialStatus: maritalStatus?.name,
+    martialStatus: state.maritalStatus,
     clientNumber: state.applicantInformation.clientNumber,
   };
 

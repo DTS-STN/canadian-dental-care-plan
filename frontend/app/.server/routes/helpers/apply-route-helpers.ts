@@ -325,8 +325,7 @@ export function getChildrenState<TState extends Pick<ApplyState, 'children'>>(st
 }
 
 export function applicantInformationStateHasPartner(maritalStatus?: string) {
-  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
-  return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
+  return maritalStatus === 'commonlaw' || maritalStatus === 'married';
 }
 
 type EligibilityRule = {

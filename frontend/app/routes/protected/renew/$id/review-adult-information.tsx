@@ -78,16 +78,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const maritalStatusService = appContainer.get(TYPES.domain.services.MaritalStatusService);
   const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
   const countryService = appContainer.get(TYPES.domain.services.CountryService);
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
-
-  const maritalStatusId = state.maritalStatus ?? state.clientApplication.applicantInformation.maritalStatus;
-  invariant(typeof maritalStatusId === 'string', 'Expected maritalStatusId to be defined');
-  const maritalStatusName = maritalStatusService.getLocalizedMaritalStatusById(maritalStatusId, locale).name;
-
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
   const clientApplicationMailingProvinceTerritoryStateAbbr = state.clientApplication.contactInformation.mailingProvince
     ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince)
@@ -111,7 +105,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     phoneNumber: state.contactInformation?.phoneNumber,
     altPhoneNumber: state.contactInformation?.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
-    maritalStatus: maritalStatusName,
+    maritalStatus: state.maritalStatus,
     contactInformationEmail: state.email ?? state.clientApplication.contactInformation.email,
     communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
