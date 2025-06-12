@@ -71,7 +71,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
   const countryMailing = await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
   const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
-  const maritalStatus = state.maritalStatus ? appContainer.get(TYPES.domain.services.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : undefined;
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -80,7 +79,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     altPhoneNumber: state.contactInformation.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    maritalStatus: maritalStatus,
+    maritalStatus: state.maritalStatus,
     contactInformationEmail: state.email,
     communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,

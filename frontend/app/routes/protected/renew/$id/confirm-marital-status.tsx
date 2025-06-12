@@ -12,7 +12,7 @@ import type { Route } from './+types/confirm-marital-status';
 import { TYPES } from '~/.server/constants';
 import { isInvitationToApplyClient, loadProtectedRenewState, renewStateHasPartner, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import type { PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -24,7 +24,6 @@ import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -36,6 +35,15 @@ const FORM_ACTION = {
   continue: 'continue',
   cancel: 'cancel',
   save: 'save',
+} as const;
+
+const MARITAL_STATUS = {
+  single: 'single',
+  married: 'married',
+  commonlaw: 'commonlaw',
+  separated: 'separated',
+  divorced: 'divorced',
+  widowed: 'widowed',
 } as const;
 
 export const handle = {
@@ -63,8 +71,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-  const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:marital-status.page-title') }) };
 
   const hasPartner = renewStateHasPartner(state.maritalStatus ?? state.clientApplication.applicantInformation.maritalStatus);
@@ -84,7 +90,6 @@ export async function loader({ context: { appContainer, session }, params, reque
       maritalStatus: state.maritalStatus ?? (isInvitationToApplyClient(state.clientApplication) ? undefined : state.clientApplication.applicantInformation.maritalStatus),
       partnerInformation,
     },
-    maritalStatuses,
     meta,
     editMode: state.editMode,
   };
@@ -178,9 +183,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, maritalStatuses, editMode } = loaderData;
+  const { defaultState, editMode } = loaderData;
 
-  const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -199,8 +203,45 @@ export default function ProtectedRenewMaritalStatus({ loaderData, params }: Rout
   };
 
   const maritalStatusOptions = useMemo<InputRadiosProps['options']>(() => {
-    return maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState.maritalStatus, children: status.name, value: status.id, onChange: handleChange }));
-  }, [defaultState, maritalStatuses]);
+    return [
+      {
+        value: MARITAL_STATUS.single,
+        children: t('protected-renew:marital-status.single'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.single,
+        onChange: handleChange,
+      },
+      {
+        value: MARITAL_STATUS.married,
+        children: t('protected-renew:marital-status.married'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.married,
+        onChange: handleChange,
+      },
+      {
+        value: MARITAL_STATUS.commonlaw,
+        children: t('protected-renew:marital-status.common-law'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.commonlaw,
+        onChange: handleChange,
+      },
+      {
+        value: MARITAL_STATUS.separated,
+        children: t('protected-renew:marital-status.separated'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.separated,
+        onChange: handleChange,
+      },
+      {
+        value: MARITAL_STATUS.divorced,
+        children: t('protected-renew:marital-status.divorced'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.divorced,
+        onChange: handleChange,
+      },
+      {
+        value: MARITAL_STATUS.widowed,
+        children: t('protected-renew:marital-status.widowed'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.widowed,
+        onChange: handleChange,
+      },
+    ];
+  }, [defaultState, t]);
 
   return (
     <div className="max-w-prose">
@@ -211,7 +252,7 @@ export default function ProtectedRenewMaritalStatus({ loaderData, params }: Rout
         <div className="mb-8 space-y-6">
           <InputRadios id="marital-status" name="maritalStatus" legend={t('protected-renew:marital-status.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required />
 
-          {(marriedOrCommonlaw === MARITAL_STATUS_CODE_COMMONLAW.toString() || marriedOrCommonlaw === MARITAL_STATUS_CODE_MARRIED.toString()) && (
+          {(marriedOrCommonlaw === MARITAL_STATUS.commonlaw || marriedOrCommonlaw === MARITAL_STATUS.married) && (
             <>
               <h2 className="font-lato mb-6 text-2xl font-bold">{t('protected-renew:marital-status.spouse-or-commonlaw')}</h2>
               <p className="mb-4">{t('protected-renew:marital-status.provide-sin')}</p>

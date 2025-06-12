@@ -13,7 +13,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyChildState } from '~/.server/routes/helpers/protected-apply-child-route-helpers';
 import type { PartnerInformationState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { applicantInformationStateHasPartner, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -26,7 +26,6 @@ import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
-import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -38,6 +37,15 @@ const FORM_ACTION = {
   continue: 'continue',
   cancel: 'cancel',
   save: 'save',
+} as const;
+
+const MARITAL_STATUS = {
+  single: 'single',
+  married: 'married',
+  commonlaw: 'commonlaw',
+  separated: 'separated',
+  divorced: 'divorced',
+  widowed: 'widowed',
 } as const;
 
 export const handle = {
@@ -61,15 +69,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplyChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-  const maritalStatuses = appContainer.get(TYPES.domain.services.MaritalStatusService).listLocalizedMaritalStatuses(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:marital-status.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.marital-status', { userId: idToken.sub });
 
-  return { defaultState: { newUser: state.newOrExistingMember?.isNewOrExistingMember, maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, maritalStatuses, meta };
+  return { defaultState: { newUser: state.newOrExistingMember?.isNewOrExistingMember, maritalStatus: state.maritalStatus, ...state.partnerInformation }, editMode: state.editMode, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -168,8 +174,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyChildMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, editMode, maritalStatuses } = loaderData;
-  const { MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
+  const { defaultState, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -197,8 +202,45 @@ export default function ApplyChildMaritalStatus({ loaderData, params }: Route.Co
   };
 
   const maritalStatusOptions = useMemo<InputRadiosProps['options']>(() => {
-    return maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState.maritalStatus, children: status.name, value: status.id, onChange: handleChange }));
-  }, [defaultState, maritalStatuses]);
+    return [
+      {
+        value: MARITAL_STATUS.single,
+        children: t('protected-apply-child:marital-status.single'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.single,
+        onChange: handleChange,
+      },
+      {
+        value: MARITAL_STATUS.married,
+        children: t('protected-apply-child:marital-status.married'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.married,
+        onChange: handleChange,
+      },
+      {
+        value: MARITAL_STATUS.commonlaw,
+        children: t('protected-apply-child:marital-status.common-law'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.commonlaw,
+        onChange: handleChange,
+      },
+      {
+        value: MARITAL_STATUS.separated,
+        children: t('protected-apply-child:marital-status.separated'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.separated,
+        onChange: handleChange,
+      },
+      {
+        value: MARITAL_STATUS.divorced,
+        children: t('protected-apply-child:marital-status.divorced'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.divorced,
+        onChange: handleChange,
+      },
+      {
+        value: MARITAL_STATUS.widowed,
+        children: t('protected-apply-child:marital-status.widowed'),
+        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.widowed,
+        onChange: handleChange,
+      },
+    ];
+  }, [defaultState, t]);
 
   return (
     <>
@@ -213,7 +255,7 @@ export default function ApplyChildMaritalStatus({ loaderData, params }: Route.Co
           <div className="mb-8 space-y-6">
             <InputRadios id="marital-status" name="maritalStatus" legend={t('protected-apply-child:marital-status.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required />
 
-            {(marriedOrCommonlaw === MARITAL_STATUS_CODE_COMMONLAW.toString() || marriedOrCommonlaw === MARITAL_STATUS_CODE_MARRIED.toString()) && (
+            {(marriedOrCommonlaw === MARITAL_STATUS.commonlaw || marriedOrCommonlaw === MARITAL_STATUS.married) && (
               <>
                 <h2 className="font-lato mb-6 text-2xl font-bold">{t('protected-apply-child:marital-status.spouse-or-commonlaw')}</h2>
                 <p className="mb-4">{t('protected-apply-child:marital-status.provide-sin')}</p>
