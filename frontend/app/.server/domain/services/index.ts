@@ -13,7 +13,6 @@ export * from './federal-government-insurance-plan.service';
 export * from './letter-type.service';
 export * from './letter.service';
 export * from './marital-status.service';
-export * from './preferred-communication-method.service';
 export * from './province-territory-state.service';
 export * from './provincial-government-insurance-plan.service';
 export * from './verification-code.service';

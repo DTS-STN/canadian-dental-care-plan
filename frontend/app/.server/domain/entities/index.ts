@@ -12,6 +12,5 @@ export type * from './government-insurance-plan.entity';
 export type * from './letter-type.entity';
 export type * from './letter.entity';
 export type * from './marital-status.entity';
-export type * from './preferred-communication-method.entity';
 export type * from './province-territory-state.entity';
 export type * from './verification-code.entity';
