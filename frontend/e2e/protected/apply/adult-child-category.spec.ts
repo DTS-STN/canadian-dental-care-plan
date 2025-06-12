@@ -27,7 +27,6 @@ test.describe('Adult-Child category', () => {
     await clickContinue(page);
   });
 
-  // TODO: Add test cases for living-independently and new-or-existing-member
   test('Should complete flow as adult-child applicant', async ({ page }) => {
     const applyAdultChildPage = new AdultChildPage(page);
 
