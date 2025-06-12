@@ -27,7 +27,6 @@ test.describe('Child category', () => {
     await clickContinue(page);
   });
 
-  // TODO: Add test cases for living-independently and new-or-existing-user
   test('Should complete flow as child applicant', async ({ page }) => {
     const applyChildPage = new ChildPage(page);
 

@@ -113,7 +113,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedApplyFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t, i18n } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -143,18 +143,33 @@ export default function ProtectedApplyFlowCommunicationPreferencePage({ loaderDa
               id="preferred-language"
               name="preferredLanguage"
               legend={t('protected-apply-adult:communication-preference.preferred-language')}
-              options={[
-                {
-                  value: PREFERRED_LANGUAGE.english,
-                  children: t('protected-apply-adult:communication-preference.english'),
-                  defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.english,
-                },
-                {
-                  value: PREFERRED_LANGUAGE.french,
-                  children: t('protected-apply-adult:communication-preference.french'),
-                  defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.french,
-                },
-              ]}
+              options={
+                i18n.language === 'fr'
+                  ? [
+                      {
+                        value: PREFERRED_LANGUAGE.french,
+                        children: t('protected-apply-adult:communication-preference.french'),
+                        defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.french,
+                      },
+                      {
+                        value: PREFERRED_LANGUAGE.english,
+                        children: t('protected-apply-adult:communication-preference.english'),
+                        defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.english,
+                      },
+                    ]
+                  : [
+                      {
+                        value: PREFERRED_LANGUAGE.english,
+                        children: t('protected-apply-adult:communication-preference.english'),
+                        defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.english,
+                      },
+                      {
+                        value: PREFERRED_LANGUAGE.french,
+                        children: t('protected-apply-adult:communication-preference.french'),
+                        defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.french,
+                      },
+                    ]
+              }
               errorMessage={errors?.preferredLanguage}
               required
             />

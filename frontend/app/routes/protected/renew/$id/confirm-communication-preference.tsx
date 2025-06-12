@@ -90,7 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewConfirmCommunicationPreference({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t, i18n } = useTranslation(handle.i18nNamespaces);
   const { defaultState } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -112,18 +112,33 @@ export default function ProtectedRenewConfirmCommunicationPreference({ loaderDat
             id="preferred-language"
             name="preferredLanguage"
             legend={t('protected-renew:confirm-communication-preference.preferred-language')}
-            options={[
-              {
-                value: PREFERRED_LANGUAGE.english,
-                children: t('protected-renew:confirm-communication-preference.english'),
-                defaultChecked: defaultState === PREFERRED_LANGUAGE.english,
-              },
-              {
-                value: PREFERRED_LANGUAGE.french,
-                children: t('protected-renew:confirm-communication-preference.french'),
-                defaultChecked: defaultState === PREFERRED_LANGUAGE.french,
-              },
-            ]}
+            options={
+              i18n.language === 'fr'
+                ? [
+                    {
+                      value: PREFERRED_LANGUAGE.french,
+                      children: t('protected-renew:confirm-communication-preference.french'),
+                      defaultChecked: defaultState === PREFERRED_LANGUAGE.french,
+                    },
+                    {
+                      value: PREFERRED_LANGUAGE.english,
+                      children: t('protected-renew:confirm-communication-preference.english'),
+                      defaultChecked: defaultState === PREFERRED_LANGUAGE.english,
+                    },
+                  ]
+                : [
+                    {
+                      value: PREFERRED_LANGUAGE.english,
+                      children: t('protected-renew:confirm-communication-preference.english'),
+                      defaultChecked: defaultState === PREFERRED_LANGUAGE.english,
+                    },
+                    {
+                      value: PREFERRED_LANGUAGE.french,
+                      children: t('protected-renew:confirm-communication-preference.french'),
+                      defaultChecked: defaultState === PREFERRED_LANGUAGE.french,
+                    },
+                  ]
+            }
             errorMessage={errors?.preferredLanguage}
             required
           />
