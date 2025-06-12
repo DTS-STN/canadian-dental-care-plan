@@ -5,8 +5,8 @@ import { applicantInformationStateHasPartner, getAgeCategoryFromAge, getChildren
 
 vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(() => ({
-    MARITAL_STATUS_CODE_MARRIED: "married",
-    MARITAL_STATUS_CODE_COMMONLAW: "commonlaw",
+    MARITAL_STATUS_CODE_MARRIED: 'married',
+    MARITAL_STATUS_CODE_COMMONLAW: 'commonlaw',
   })),
 }));
 
