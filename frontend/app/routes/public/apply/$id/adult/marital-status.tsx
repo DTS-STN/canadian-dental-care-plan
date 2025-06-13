@@ -198,7 +198,7 @@ export default function ApplyAdultMaritalStatus({ loaderData, params }: Route.Co
       },
       {
         value: MARITAL_STATUS.commonlaw,
-        children: t('apply-adult:marital-status.common-law'),
+        children: t('apply-adult:marital-status.commonlaw'),
         defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.commonlaw,
         onChange: handleChange,
       },

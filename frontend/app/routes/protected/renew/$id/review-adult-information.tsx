@@ -274,7 +274,7 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
               <p>{userInfo.clientNumber}</p>
             </DescriptionListItem>
             <DescriptionListItem term={t('protected-renew:review-adult-information.marital-title')}>
-              <p>{userInfo.maritalStatus}</p>
+              <p>{t(`protected-renew:marital-status.${userInfo.maritalStatus}`, { defaultValue: '' })}</p>
               <div className="mt-4">
                 <InlineLink id="change-martial-status" routeId="protected/renew/$id/confirm-marital-status" params={params}>
                   {t('protected-renew:review-adult-information.marital-change')}

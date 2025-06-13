@@ -218,7 +218,7 @@ export default function ProtectedRenewMaritalStatus({ loaderData, params }: Rout
       },
       {
         value: MARITAL_STATUS.commonlaw,
-        children: t('protected-renew:marital-status.common-law'),
+        children: t('protected-renew:marital-status.commonlaw'),
         defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.commonlaw,
         onChange: handleChange,
       },

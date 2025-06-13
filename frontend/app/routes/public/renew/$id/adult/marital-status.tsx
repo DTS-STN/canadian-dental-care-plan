@@ -199,7 +199,7 @@ export default function RenewAdultMaritalStatus({ loaderData, params }: Route.Co
       },
       {
         value: MARITAL_STATUS.commonlaw,
-        children: t('renew-adult:marital-status.common-law'),
+        children: t('renew-adult:marital-status.commonlaw'),
         defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.commonlaw,
         onChange: handleChange,
       },
