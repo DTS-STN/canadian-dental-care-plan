@@ -235,7 +235,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                 </p>
               </DescriptionListItem>
               <DescriptionListItem term={t('protected-apply-child:review-adult-information.marital-title')}>
-                {userInfo.maritalStatus}
+                {t(`protected-apply-child:marital-status.${userInfo.maritalStatus}`, { defaultValue: '' })}
                 <p className="mt-4">
                   <InlineLink id="change-martial-status" routeId="protected/apply/$id/child/marital-status" params={params}>
                     {t('protected-apply-child:review-adult-information.marital-change')}

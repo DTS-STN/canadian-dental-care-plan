@@ -269,7 +269,7 @@ export default function ProtectedReviewInformation({ loaderData, params }: Route
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('protected-apply-adult:review-information.marital-title')}>
-                <p>{userInfo.maritalStatus}</p>
+                <p>{t(`protected-apply-adult:marital-status.${userInfo.maritalStatus}`, { defaultValue: '' })}</p>
                 <div className="mt-4">
                   <InlineLink id="change-martial-status" routeId="protected/apply/$id/adult/marital-status" params={params}>
                     {t('protected-apply-adult:review-information.marital-change')}

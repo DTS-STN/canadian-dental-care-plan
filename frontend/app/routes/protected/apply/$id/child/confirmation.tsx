@@ -77,7 +77,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     preferredLanguage: state.communicationPreferences.preferredLanguage,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    martialStatus: state.maritalStatus,
+    maritalStatus: state.maritalStatus,
     contactInformationEmail: state.email,
     communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
@@ -284,7 +284,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 <DescriptionListItem term={t('confirm.sin')}>
                   <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
                 </DescriptionListItem>
-                <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.marital-status')}>{t(`protected-apply-child:marital-status.${userInfo.maritalStatus}`, { defaultValue: '' })}</DescriptionListItem>
                 {userInfo.previouslyEnrolled && (
                   <DescriptionListItem term={t('confirm.previously-enrolled-title')}>
                     {userInfo.previouslyEnrolled.isNewOrExistingMember ? (

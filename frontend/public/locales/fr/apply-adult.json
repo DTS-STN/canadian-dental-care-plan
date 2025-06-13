@@ -54,7 +54,7 @@
     "required-information": "Ces renseignements sont nécessaires pour calculer le revenu familial net rajusté. Votre époux/épouse ou conjoint/conjointe de fait doit présenter sa propre demande au Régime canadien de soins dentaires.",
     "single": "Célibataire",
     "married": "Marié(e)",
-    "common-law": "Conjoint(e) de fait",
+    "commonlaw": "Conjoint(e) de fait",
     "separated": "Séparé(e)",
     "divorced": "Divorcé(e)",
     "widowed": "Veuf ou veuve",

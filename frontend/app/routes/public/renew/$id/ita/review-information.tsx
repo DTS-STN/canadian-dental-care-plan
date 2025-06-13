@@ -242,7 +242,7 @@ export default function RenewItaReviewInformation({ loaderData, params }: Route.
                 <p>{userInfo.clientNumber}</p>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-ita:review-information.marital-title')}>
-                <p>{userInfo.maritalStatus}</p>
+                <p>{t(`renew-ita:marital-status.${userInfo.maritalStatus}`, { defaultValue: '' })}</p>
                 <div className="mt-4">
                   <InlineLink id="change-martial-status" routeId="public/renew/$id/ita/marital-status" params={params}>
                     {t('renew-ita:review-information.marital-change')}

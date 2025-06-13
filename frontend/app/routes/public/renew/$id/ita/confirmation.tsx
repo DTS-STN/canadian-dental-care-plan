@@ -79,7 +79,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     phoneNumber: state.contactInformation.phoneNumber,
     altPhoneNumber: state.contactInformation.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
-    martialStatus: state.maritalStatus,
+    maritalStatus: state.maritalStatus,
     contactInformationEmail: state.email,
     clientNumber: state.applicantInformation.clientNumber,
   };
@@ -200,7 +200,7 @@ export default function RenewFlowConfirm({ loaderData, params }: Route.Component
             <DescriptionListItem term={t('confirm.client-number')}>
               <span className="text-nowrap">{formatSubmissionApplicationCode(userInfo.clientNumber)}</span>
             </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.marital-status')}>{t(`renew-ita:marital-status.${userInfo.maritalStatus}`, { defaultValue: '' })}</DescriptionListItem>
           </dl>
         </section>
 
