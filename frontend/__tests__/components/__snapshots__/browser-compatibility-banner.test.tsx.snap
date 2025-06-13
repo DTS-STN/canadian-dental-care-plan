@@ -43,6 +43,9 @@ exports[`BrowserCompatibilityBanner > should render the BrowserCompatibilityBann
           <p>
             gcweb:browser-compatibility-banner.content
           </p>
+          <p>
+            gcweb:browser-compatibility-banner.contact
+          </p>
           <div
             class="text-right"
           >

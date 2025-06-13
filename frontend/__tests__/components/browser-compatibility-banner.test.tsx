@@ -1,8 +1,17 @@
 import { render } from '@testing-library/react';
 
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BrowserCompatibilityBanner } from '~/components/browser-compatibility-banner';
+
+beforeEach(() => {
+  vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+    Trans: ({ i18nKey }: { i18nKey: string }) => i18nKey,
+  }));
+});
 
 describe('BrowserCompatibilityBanner', () => {
   it('should render the BrowserCompatibilityBanner', () => {
