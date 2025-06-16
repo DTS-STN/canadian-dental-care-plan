@@ -9,4 +9,5 @@ export const maritalStatusMap = {
   divorced: 'marital-status.divorced',
   widowed: 'marital-status.widowed',
   separated: 'marital-status.separated',
+  commonlaw: 'marital-status.commonlaw',
 } as const;
