@@ -32,6 +32,7 @@ import { pageIds } from '~/page-ids';
 import { useFeature } from '~/root';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { maritalStatusMap } from '~/utils/marital-status-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -274,7 +275,7 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
               <p>{userInfo.clientNumber}</p>
             </DescriptionListItem>
             <DescriptionListItem term={t('protected-renew:review-adult-information.marital-title')}>
-              <p>{t(`protected-renew:marital-status.${userInfo.maritalStatus}`, { defaultValue: '' })}</p>
+              <p>{userInfo.maritalStatus ? t(`protected-renew:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
               <div className="mt-4">
                 <InlineLink id="change-martial-status" routeId="protected/renew/$id/confirm-marital-status" params={params}>
                   {t('protected-renew:review-adult-information.marital-change')}

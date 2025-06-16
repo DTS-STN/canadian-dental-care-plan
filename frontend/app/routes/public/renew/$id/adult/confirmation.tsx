@@ -18,6 +18,7 @@ import { pageIds } from '~/page-ids';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { maritalStatusMap } from '~/utils/marital-status-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -190,7 +191,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
             <DescriptionListItem term={t('confirm.client-number')}>
               <span className="text-nowrap">{formatSubmissionApplicationCode(userInfo.clientNumber)}</span>
             </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus ? t(`renew-adult:marital-status.${userInfo.maritalStatus}`, { defaultValue: '' }) : <p>{t('renew-adult:confirm.no-update')}</p>}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus ? t(`renew-adult:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</DescriptionListItem>
           </dl>
         </section>
 
