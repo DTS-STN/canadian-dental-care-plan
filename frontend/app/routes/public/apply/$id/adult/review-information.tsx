@@ -30,6 +30,7 @@ import { useFeature } from '~/root';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { maritalStatusMap } from '~/utils/marital-status-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -199,7 +200,6 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-
     // Get the clicked button's value and append it to the FormData object
     const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
     invariant(submitter, 'Expected submitter to be defined');
@@ -257,7 +257,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.marital-title')}>
-                <p>{userInfo.maritalStatus}</p>
+                <p>{userInfo.maritalStatus ? t(`apply-adult:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
                 <div className="mt-4">
                   <InlineLink id="change-martial-status" routeId="public/apply/$id/adult/marital-status" params={params}>
                     {t('apply-adult:review-information.marital-change')}

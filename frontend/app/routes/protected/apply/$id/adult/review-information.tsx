@@ -31,6 +31,7 @@ import { useFeature } from '~/root';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { maritalStatusMap } from '~/utils/marital-status-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -269,7 +270,7 @@ export default function ProtectedReviewInformation({ loaderData, params }: Route
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('protected-apply-adult:review-information.marital-title')}>
-                <p>{userInfo.maritalStatus}</p>
+                <p>{userInfo.maritalStatus ? t(`protected-apply-adult:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
                 <div className="mt-4">
                   <InlineLink id="change-martial-status" routeId="protected/apply/$id/adult/marital-status" params={params}>
                     {t('protected-apply-adult:review-information.marital-change')}

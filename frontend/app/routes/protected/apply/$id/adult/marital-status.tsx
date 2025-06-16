@@ -210,7 +210,7 @@ export default function ProtectedApplyAdultMaritalStatus({ loaderData, params }:
       },
       {
         value: MARITAL_STATUS.commonlaw,
-        children: t('protected-apply-adult:marital-status.common-law'),
+        children: t('protected-apply-adult:marital-status.commonlaw'),
         defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.commonlaw,
         onChange: handleChange,
       },

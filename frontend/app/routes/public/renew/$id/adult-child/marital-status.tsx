@@ -199,7 +199,7 @@ export default function RenewAdultChildMaritalStatus({ loaderData, params }: Rou
       },
       {
         value: MARITAL_STATUS.commonlaw,
-        children: t('renew-adult-child:marital-status.common-law'),
+        children: t('renew-adult-child:marital-status.commonlaw'),
         defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.commonlaw,
         onChange: handleChange,
       },

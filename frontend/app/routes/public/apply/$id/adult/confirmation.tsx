@@ -22,6 +22,7 @@ import { useFeature } from '~/root';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { maritalStatusMap } from '~/utils/marital-status-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -81,7 +82,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     preferredLanguage: state.communicationPreferences.preferredLanguage,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    martialStatus: state.maritalStatus,
+    maritalStatus: state.maritalStatus,
     contactInformationEmail: state.email,
     communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
@@ -243,7 +244,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
             <DescriptionListItem term={t('confirm.sin')}>
               <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
             </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus ? t(`apply-adult:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</DescriptionListItem>
             {userInfo.previouslyEnrolled && (
               <DescriptionListItem term={t('confirm.previously-enrolled-title')}>
                 {userInfo.previouslyEnrolled.isNewOrExistingMember ? (

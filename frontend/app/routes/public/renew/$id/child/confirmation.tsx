@@ -18,6 +18,7 @@ import { pageIds } from '~/page-ids';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { maritalStatusMap } from '~/utils/marital-status-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -66,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
-    martialStatus: state.maritalStatus,
+    maritalStatus: state.maritalStatus,
     clientNumber: state.applicantInformation.clientNumber,
   };
 
@@ -244,7 +245,7 @@ export default function RenewAdultChildConfirm({ loaderData, params }: Route.Com
             <DescriptionListItem term={t('confirm.client-number')}>
               <span className="text-nowrap">{formatSubmissionApplicationCode(userInfo.clientNumber)}</span>
             </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus ?? <p>{t('renew-child:confirm.no-update')}</p>}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus ? t(`renew-child:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</DescriptionListItem>
           </dl>
         </section>
 

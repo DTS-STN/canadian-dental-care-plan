@@ -30,6 +30,7 @@ import { useClientEnv, useFeature } from '~/root';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { maritalStatusMap } from '~/utils/marital-status-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -242,7 +243,7 @@ export default function RenewItaReviewInformation({ loaderData, params }: Route.
                 <p>{userInfo.clientNumber}</p>
               </DescriptionListItem>
               <DescriptionListItem term={t('renew-ita:review-information.marital-title')}>
-                <p>{userInfo.maritalStatus}</p>
+                <p>{userInfo.maritalStatus ? t(`renew-ita:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
                 <div className="mt-4">
                   <InlineLink id="change-martial-status" routeId="public/renew/$id/ita/marital-status" params={params}>
                     {t('renew-ita:review-information.marital-change')}

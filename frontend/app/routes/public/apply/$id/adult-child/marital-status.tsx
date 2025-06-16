@@ -203,7 +203,7 @@ export default function ApplyAdultChildMaritalStatus({ loaderData, params }: Rou
       },
       {
         value: MARITAL_STATUS.commonlaw,
-        children: t('apply-adult-child:marital-status.common-law'),
+        children: t('apply-adult-child:marital-status.commonlaw'),
         defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.commonlaw,
         onChange: handleChange,
       },
