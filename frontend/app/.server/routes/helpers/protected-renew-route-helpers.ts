@@ -435,5 +435,7 @@ export function validateProtectedChildrenStateForReview(childrenState: Protected
 }
 
 export function isInvitationToApplyClient(clientApplication: ProtectedClientApplicationState) {
-  return clientApplication.isInvitationToApplyClient || clientApplication.applicantInformation.maritalStatus === undefined;
+  return (
+    clientApplication.isInvitationToApplyClient || clientApplication.applicantInformation.maritalStatus === undefined || (renewStateHasPartner(clientApplication.applicantInformation.maritalStatus) && clientApplication.partnerInformation === undefined)
+  );
 }
