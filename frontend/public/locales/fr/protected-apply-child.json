@@ -356,7 +356,7 @@
   },
   "verify-email": {
     "page-title": "Confirmation de votre adresse courriel",
-    "verification-code": "Un courriel contenant un code de vérification a été envoyé à {{email}}, veuillez saisir le code à 5 chiffres ci-dessous et cliquer sur «\u00a0Continuer\u00a0».",
+    "verification-code": "Un courriel contenant un code de vérification a été envoyé à {{email}}. Veuillez saisir le code à 5 chiffres ci-dessous et cliquer sur «\u00a0Continuer\u00a0».",
     "request-new": "Le courriel peut prendre jusqu'à 60 secondes avant d'arriver. Si vous ne le voyez pas, vérifiez votre dossier de courrier indésirable. Si le code ne s'y trouve pas non plus, vous pouvez en demander un nouveau.",
     "unable-to-verify": "Si vous n'êtes pas en mesure de confirmer votre courriel, cliquez sur «\u00a0Retour\u00a0» pour mettre à jour votre adresse courriel ou <communicationLink>modifier vos préférences de communication</communicationLink>.",
     "verification-code-label": "Code de vérification",
