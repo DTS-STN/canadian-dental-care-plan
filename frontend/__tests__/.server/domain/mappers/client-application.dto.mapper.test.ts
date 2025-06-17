@@ -6,10 +6,27 @@ import type { ClientApplicationEntity, ClientApplicationSinRequestEntity } from 
 import { DefaultClientApplicationDtoMapper } from '~/.server/domain/mappers';
 
 describe('DefaultClientApplicationDtoMapper', () => {
-  const mockServerConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENGLISH_LANGUAGE_CODE'> = {
+  const mockServerConfig: Pick<
+    ServerConfig,
+    | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
+    | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
+    | 'ENGLISH_LANGUAGE_CODE'
+    | 'MARITAL_STATUS_CODE_SINGLE'
+    | 'MARITAL_STATUS_CODE_MARRIED'
+    | 'MARITAL_STATUS_CODE_COMMON_LAW'
+    | 'MARITAL_STATUS_CODE_DIVORCED'
+    | 'MARITAL_STATUS_CODE_WIDOWED'
+    | 'MARITAL_STATUS_CODE_SEPARATED'
+  > = {
     APPLICANT_CATEGORY_CODE_INDIVIDUAL: '111111111',
     APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: '222222222',
     ENGLISH_LANGUAGE_CODE: 1,
+    MARITAL_STATUS_CODE_SINGLE: 'single',
+    MARITAL_STATUS_CODE_MARRIED: 'married',
+    MARITAL_STATUS_CODE_COMMON_LAW: 'commonlaw',
+    MARITAL_STATUS_CODE_DIVORCED: 'divorced',
+    MARITAL_STATUS_CODE_WIDOWED: 'widowed',
+    MARITAL_STATUS_CODE_SEPARATED: 'separated',
   };
   const mapper = new DefaultClientApplicationDtoMapper(mockServerConfig);
 
@@ -99,7 +116,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
             ],
             PersonMaritalStatus: {
               StatusCode: {
-                ReferenceDataID: 'MARRIED',
+                ReferenceDataID: 'married',
               },
             },
             PersonName: [
@@ -191,7 +208,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
         applicantInformation: {
           firstName: 'John',
           lastName: 'Doe',
-          maritalStatus: 'MARRIED',
+          maritalStatus: 'married',
           socialInsuranceNumber: '80000002',
           clientId: '00000000-0000-0000-0000-000000000000',
           clientNumber: '00000000000',

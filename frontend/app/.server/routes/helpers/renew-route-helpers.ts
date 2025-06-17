@@ -6,7 +6,6 @@ import { z } from 'zod';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
-import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteRenewUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
@@ -283,8 +282,7 @@ export function startRenewState({ applicationYear, id, session }: StartArgs) {
 }
 
 export function renewStateHasPartner(maritalStatus: string) {
-  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
-  return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
+  return ['married', 'commonlaw'].includes(maritalStatus);
 }
 
 export function isNewChildState(child: ChildState) {

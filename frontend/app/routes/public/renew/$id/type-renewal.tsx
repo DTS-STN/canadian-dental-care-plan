@@ -8,8 +8,7 @@ import { z } from 'zod';
 import type { Route } from './+types/type-renewal';
 
 import { TYPES } from '~/.server/constants';
-import { renewStateHasPartner } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import { loadRenewState, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
+import { loadRenewState, renewStateHasPartner, saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';

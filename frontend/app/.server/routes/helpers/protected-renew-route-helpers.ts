@@ -5,7 +5,6 @@ import { z } from 'zod';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
-import { getEnv } from '~/.server/utils/env.utils';
 import { isRedirectResponse } from '~/.server/utils/response.utils';
 import type { Session } from '~/.server/web/session';
 import { getAgeFromDateString } from '~/utils/date-utils';
@@ -288,8 +287,7 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
 
 export function renewStateHasPartner(maritalStatus?: string) {
   if (!maritalStatus) return false;
-  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
-  return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
+  return ['married', 'commonlaw'].includes(maritalStatus);
 }
 
 export function isNewChildState(child: ProtectedChildState) {

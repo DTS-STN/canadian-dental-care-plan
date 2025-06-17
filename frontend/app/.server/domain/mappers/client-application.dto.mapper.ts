@@ -14,9 +14,34 @@ export interface ClientApplicationDtoMapper {
 
 @injectable()
 export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMapper {
-  private readonly serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENGLISH_LANGUAGE_CODE'>;
+  private readonly serverConfig: Pick<
+    ServerConfig,
+    | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
+    | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
+    | 'ENGLISH_LANGUAGE_CODE'
+    | 'MARITAL_STATUS_CODE_SINGLE'
+    | 'MARITAL_STATUS_CODE_MARRIED'
+    | 'MARITAL_STATUS_CODE_COMMON_LAW'
+    | 'MARITAL_STATUS_CODE_DIVORCED'
+    | 'MARITAL_STATUS_CODE_WIDOWED'
+    | 'MARITAL_STATUS_CODE_SEPARATED'
+  >;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'ENGLISH_LANGUAGE_CODE'>) {
+  constructor(
+    @inject(TYPES.configs.ServerConfig)
+    serverConfig: Pick<
+      ServerConfig,
+      | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
+      | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
+      | 'ENGLISH_LANGUAGE_CODE'
+      | 'MARITAL_STATUS_CODE_SINGLE'
+      | 'MARITAL_STATUS_CODE_MARRIED'
+      | 'MARITAL_STATUS_CODE_COMMON_LAW'
+      | 'MARITAL_STATUS_CODE_DIVORCED'
+      | 'MARITAL_STATUS_CODE_WIDOWED'
+      | 'MARITAL_STATUS_CODE_SEPARATED'
+    >,
+  ) {
     this.serverConfig = serverConfig;
   }
 
@@ -63,7 +88,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     const applicantInformation = {
       firstName: applicant.PersonName[0].PersonGivenName[0],
       lastName: applicant.PersonName[0].PersonSurName,
-      maritalStatus: applicant.PersonMaritalStatus.StatusCode?.ReferenceDataID,
+      maritalStatus: this.toMaritalStatusCode(applicant.PersonMaritalStatus.StatusCode?.ReferenceDataID),
       clientId:
         applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID ??
         (() => {
@@ -188,5 +213,18 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     if (typeOfApplication === APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY) return 'child';
     if (typeOfApplication === APPLICANT_CATEGORY_CODE_INDIVIDUAL) return 'adult';
     return 'adult-child';
+  }
+
+  private toMaritalStatusCode(powerPlatformMaritalStatusCode: string | undefined): string | undefined {
+    const { MARITAL_STATUS_CODE_SINGLE, MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_WIDOWED, MARITAL_STATUS_CODE_DIVORCED, MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_SEPARATED } = this.serverConfig;
+    const MARITAL_STATUS_CODE_MAP: Record<string, string> = {
+      [MARITAL_STATUS_CODE_SINGLE]: 'single',
+      [MARITAL_STATUS_CODE_MARRIED]: 'married',
+      [MARITAL_STATUS_CODE_COMMON_LAW]: 'commonlaw',
+      [MARITAL_STATUS_CODE_SEPARATED]: 'separated',
+      [MARITAL_STATUS_CODE_DIVORCED]: 'divorced',
+      [MARITAL_STATUS_CODE_WIDOWED]: 'widowed',
+    };
+    return powerPlatformMaritalStatusCode ? MARITAL_STATUS_CODE_MAP[powerPlatformMaritalStatusCode] : undefined;
   }
 }
