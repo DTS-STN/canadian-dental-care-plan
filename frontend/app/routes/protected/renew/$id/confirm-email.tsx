@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     meta,
-    defaultState: state.email,
+    defaultState: state.email ?? state.clientApplication.contactInformation.email,
     editMode: state.editMode,
   };
 }
