@@ -49,10 +49,6 @@ export const clientEnvSchema = z.object({
   LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_003),
   GENDER_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_004),
 
-  // marital status codes
-  MARITAL_STATUS_CODE_MARRIED: z.coerce.number().default(775_170_001),
-  MARITAL_STATUS_CODE_COMMONLAW:z.coerce.number().default(775_170_002),
-
   // lookup identifiers
   CANADA_COUNTRY_ID: z.string().trim().min(1).default('0cf5389e-97ae-eb11-8236-000d3af4bfc3'),
   USA_COUNTRY_ID: z.string().trim().min(1).default('fcf7389e-97ae-eb11-8236-000d3af4bfc3'),
