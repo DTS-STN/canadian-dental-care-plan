@@ -296,7 +296,8 @@ export function clearProtectedApplyState({ params, session }: ClearStateArgs) {
 }
 
 export function applicantInformationStateHasPartner(maritalStatus?: string) {
-  return ['married', 'commonlaw'].includes(String(maritalStatus));
+  if (!maritalStatus) return false;
+  return ['married', 'commonlaw'].includes(maritalStatus);
 }
 
 export type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
