@@ -106,7 +106,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     phoneNumber: state.contactInformation?.phoneNumber,
     altPhoneNumber: state.contactInformation?.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
-    maritalStatus: state.maritalStatus,
+    maritalStatus: state.maritalStatus ?? state.clientApplication.applicantInformation.maritalStatus,
     contactInformationEmail: state.email ?? state.clientApplication.contactInformation.email,
     communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
@@ -275,7 +275,7 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
               <p>{userInfo.clientNumber}</p>
             </DescriptionListItem>
             <DescriptionListItem term={t('protected-renew:review-adult-information.marital-title')}>
-              <p>{userInfo.maritalStatus ? t(`protected-renew:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
+              <p>{t(`protected-renew:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`)}</p>
               <div className="mt-4">
                 <InlineLink id="change-martial-status" routeId="protected/renew/$id/confirm-marital-status" params={params}>
                   {t('protected-renew:review-adult-information.marital-change')}
