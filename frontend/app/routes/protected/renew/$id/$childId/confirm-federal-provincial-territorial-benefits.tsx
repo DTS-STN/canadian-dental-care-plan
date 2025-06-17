@@ -78,7 +78,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const immutableChild = renewState.clientApplication.children.find((c) => c.information.socialInsuranceNumber === state.information?.socialInsuranceNumber);
-  const clientDentalBenefits = immutableChild?.dentalBenefits.reduce(async (benefits, id) => {
+  const clientDentalBenefits = (await immutableChild?.dentalBenefits.reduce(async (benefitsPromise, id) => {
+    const benefits = await benefitsPromise;
+
     const federalProgram = await federalGovernmentInsurancePlanService.findFederalGovernmentInsurancePlanById(id);
     if (federalProgram) {
       return {
@@ -99,7 +101,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     }
 
     return benefits;
-  }, {}) as ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
+  }, Promise.resolve({}))) as ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
 
   const dentalBenefits = state.dentalBenefits ?? clientDentalBenefits;
 

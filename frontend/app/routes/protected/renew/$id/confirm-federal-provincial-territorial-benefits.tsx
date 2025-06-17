@@ -80,10 +80,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-dental-benefits.title') }) };
 
-  const clientDentalBenefits = (await state.clientApplication.dentalBenefits.reduce(async (benefits, id) => {
+  const clientDentalBenefits = (await state.clientApplication.dentalBenefits.reduce(async (benefitsPromise, id) => {
+    const benefits = await benefitsPromise;
+
     const federalProgram = await federalGovernmentInsurancePlanService.findFederalGovernmentInsurancePlanById(id);
     if (federalProgram) {
-      return await {
+      return {
         ...benefits,
         hasFederalBenefits: true,
         federalSocialProgram: id,
@@ -92,7 +94,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
     const provincialProgram = await provincialGovernmentInsurancePlanService.findProvincialGovernmentInsurancePlanById(id);
     if (provincialProgram) {
-      return await {
+      return {
         ...benefits,
         hasProvincialTerritorialBenefits: true,
         provincialTerritorialSocialProgram: id,
@@ -100,10 +102,10 @@ export async function loader({ context: { appContainer, session }, params, reque
       };
     }
 
-    return await benefits;
+    return benefits;
   }, Promise.resolve({}))) as ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
 
-  const dentalBenefits = isInvitationToApplyClient(state.clientApplication) ? state.dentalBenefits : clientDentalBenefits;
+  const dentalBenefits = state.dentalBenefits ?? (isInvitationToApplyClient(state.clientApplication) ? undefined : clientDentalBenefits);
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
