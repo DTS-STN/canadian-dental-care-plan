@@ -75,25 +75,24 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
 
   async findProvincialGovernmentInsurancePlanById(id: string): Promise<ProvincialGovernmentInsurancePlanDto | null> {
     this.log.debug('Finding provincial government insurance plan with id: [%s]', id);
-    const provincialGovernmentInsurancePlanEntity = await this.governmentInsurancePlanRepository.findGovernmentInsurancePlanById(id);
+    const provincialGovernmentInsurancePlans = await this.listProvincialGovernmentInsurancePlans();
+    const provincialGovernmentInsurancePlanDto = provincialGovernmentInsurancePlans.find((plan) => plan.id === id);
 
-    if (!provincialGovernmentInsurancePlanEntity) {
+    if (!provincialGovernmentInsurancePlanDto) {
       this.log.trace('Provincial government insurance plan with id: [%s] not found. Returning null', id);
       return null;
     }
 
-    const provincialGovernmentInsurancePlanDto = this.provincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity);
     this.log.trace('Returning provincial government insurance plan: [%j]', provincialGovernmentInsurancePlanDto);
     return provincialGovernmentInsurancePlanDto;
   }
 
   async getProvincialGovernmentInsurancePlanById(id: string): Promise<ProvincialGovernmentInsurancePlanDto> {
     this.log.debug('Get provincial government insurance plan with id: [%s]', id);
-    const provincialGovernmentInsurancePlanEntity = await this.governmentInsurancePlanRepository.findGovernmentInsurancePlanById(id);
+    const provincialGovernmentInsurancePlanDto = await this.findProvincialGovernmentInsurancePlanById(id);
 
-    if (!provincialGovernmentInsurancePlanEntity) throw new ProvincialGovernmentInsurancePlanNotFoundException(`Provincial government insurance plan with id: [${id}] not found`);
+    if (!provincialGovernmentInsurancePlanDto) throw new ProvincialGovernmentInsurancePlanNotFoundException(`Provincial government insurance plan with id: [${id}] not found`);
 
-    const provincialGovernmentInsurancePlanDto = this.provincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToProvincialGovernmentInsurancePlanDto(provincialGovernmentInsurancePlanEntity);
     this.log.trace('Returning provincial government insurance plan: [%j]', provincialGovernmentInsurancePlanDto);
     return provincialGovernmentInsurancePlanDto;
   }

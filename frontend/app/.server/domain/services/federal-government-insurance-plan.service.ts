@@ -124,28 +124,27 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
 
   async findFederalGovernmentInsurancePlanById(id: string): Promise<FederalGovernmentInsurancePlanDto | null> {
     this.log.debug('Finding federal government insurance plan with id: [%s]', id);
-    const federalGovernmentInsurancePlanEntity = await this.governmentInsurancePlanRepository.findGovernmentInsurancePlanById(id);
+    const federalGovernmentInsurancePlans = await this.listFederalGovernmentInsurancePlans();
+    const federalGovernmentInsurancePlanDto = federalGovernmentInsurancePlans.find((plan) => plan.id === id);
 
-    if (!federalGovernmentInsurancePlanEntity) {
+    if (!federalGovernmentInsurancePlanDto) {
       this.log.trace('Federal government insurance plan with id: [%s] not found. Returning null', id);
       return null;
     }
 
-    const federalGovernmentInsurancePlanDto = this.federalGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto(federalGovernmentInsurancePlanEntity);
     this.log.trace('Returning federal government insurance plan: [%j]', federalGovernmentInsurancePlanDto);
     return federalGovernmentInsurancePlanDto;
   }
 
   async getFederalGovernmentInsurancePlanById(id: string): Promise<FederalGovernmentInsurancePlanDto> {
     this.log.debug('Get federal government insurance plan with id: [%s]', id);
-    const federalGovernmentInsurancePlanEntity = await this.governmentInsurancePlanRepository.findGovernmentInsurancePlanById(id);
+    const federalGovernmentInsurancePlanDto = await this.findFederalGovernmentInsurancePlanById(id);
 
-    if (!federalGovernmentInsurancePlanEntity) {
+    if (!federalGovernmentInsurancePlanDto) {
       this.log.error('Federal government insurance plan with id: [%s] not found', id);
       throw new FederalGovernmentInsurancePlanNotFoundException(`Federal government insurance plan with id: [${id}] not found`);
     }
 
-    const federalGovernmentInsurancePlanDto = this.federalGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntityToFederalGovernmentInsurancePlanDto(federalGovernmentInsurancePlanEntity);
     this.log.trace('Returning federal government insurance plan: [%j]', federalGovernmentInsurancePlanDto);
     return federalGovernmentInsurancePlanDto;
   }
