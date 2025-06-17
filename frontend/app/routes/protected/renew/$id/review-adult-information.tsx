@@ -98,6 +98,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   invariant(typeof homeCountryId === 'string', 'Expected homeCountryId to be defined');
   const homeCountryName = await countryService.getLocalizedCountryById(homeCountryId, locale);
 
+  const maritalStatusService = appContainer.get(TYPES.domain.services.MaritalStatusService);
+
+  const maritalStatusId = state.clientApplication.applicantInformation.maritalStatus;
+  invariant(typeof maritalStatusId === 'string', 'Expected maritalStatusId to be defined');
+  const maritalStatusName = maritalStatusService.getLocalizedMaritalStatusById(maritalStatusId, locale).name;
+
   const userInfo = {
     firstName: state.clientApplication.applicantInformation.firstName,
     lastName: state.clientApplication.applicantInformation.lastName,
@@ -106,7 +112,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     phoneNumber: state.contactInformation?.phoneNumber,
     altPhoneNumber: state.contactInformation?.phoneNumberAlt,
     birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
-    maritalStatus: state.maritalStatus,
+    maritalStatus: maritalStatusName,
+    updatedMaritalStatus: state.maritalStatus,
     contactInformationEmail: state.email ?? state.clientApplication.contactInformation.email,
     communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
@@ -275,7 +282,7 @@ export default function ProtectedRenewReviewAdultInformation({ loaderData, param
               <p>{userInfo.clientNumber}</p>
             </DescriptionListItem>
             <DescriptionListItem term={t('protected-renew:review-adult-information.marital-title')}>
-              <p>{userInfo.maritalStatus ? t(`protected-renew:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
+              <p>{userInfo.updatedMaritalStatus ? t(`protected-renew:${maritalStatusMap[userInfo.updatedMaritalStatus as keyof typeof maritalStatusMap]}`) : userInfo.maritalStatus}</p>
               <div className="mt-4">
                 <InlineLink id="change-martial-status" routeId="protected/renew/$id/confirm-marital-status" params={params}>
                   {t('protected-renew:review-adult-information.marital-change')}
