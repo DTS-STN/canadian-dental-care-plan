@@ -159,6 +159,7 @@ interface ToApplicantInformationArgs {
 interface ToChildrenArgs {
   existingChildren: readonly ReadonlyObjectDeep<ClientChildDto>[];
   renewedChildren: ChildState[];
+  isProtectedRenewal?: boolean;
 }
 
 interface ToCommunicationPreferencesArgs {
@@ -553,6 +554,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       children: this.toChildren({
         existingChildren: clientApplication.children,
         renewedChildren: children,
+        isProtectedRenewal: true,
       }),
       communicationPreferences: this.toCommunicationPreferences({
         communicationPreferences,
@@ -618,7 +620,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  private toChildren({ existingChildren, renewedChildren }: ToChildrenArgs): RenewalChildDto[] {
+  private toChildren({ existingChildren, renewedChildren, isProtectedRenewal }: ToChildrenArgs): RenewalChildDto[] {
     return renewedChildren.map((renewedChild) => {
       const existingChild = existingChildren.find((existingChild) => existingChild.information.clientNumber === renewedChild.information?.clientNumber);
       invariant(existingChild, 'Expected existingChild to be defined');
@@ -637,7 +639,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
           })(),
         dentalBenefits: this.toDentalBenefits({
           existingDentalBenefits: existingChild.dentalBenefits,
-          hasFederalProvincialTerritorialBenefitsChanged: true,
+          hasFederalProvincialTerritorialBenefitsChanged: isProtectedRenewal ? !!renewedChild.dentalBenefits : true,
           renewedDentalBenefits: renewedChild.dentalBenefits,
         }),
         demographicSurvey: renewedChild.demographicSurvey,
