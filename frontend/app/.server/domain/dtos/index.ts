@@ -12,7 +12,6 @@ export type * from './demographic-survey.dto';
 export type * from './federal-government-insurance-plan.dto';
 export type * from './letter-type.dto';
 export type * from './letter.dto';
-export type * from './marital-status.dto';
 export type * from './province-territory-state.dto';
 export type * from './provincial-government-insurance-plan.dto';
 export type * from './verification-code.dto';

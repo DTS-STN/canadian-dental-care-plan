@@ -18,7 +18,6 @@ import {
   DefaultGovernmentInsurancePlanRepository,
   DefaultLetterRepository,
   DefaultLetterTypeRepository,
-  DefaultMaritalStatusRepository,
   DefaultProvinceTerritoryStateRepository,
   DefaultVerificationCodeRepository,
   MockAddressValidationRepository,
@@ -33,7 +32,6 @@ import {
   MockGovernmentInsurancePlanRepository,
   MockLetterRepository,
   MockLetterTypeRepository,
-  MockMaritalStatusRepository,
   MockProvinceTerritoryStateRepository,
   MockVerificationCodeRepository,
 } from '~/.server/domain/repositories';
@@ -107,9 +105,6 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
 
     options.bind(TYPES.domain.repositories.LetterTypeRepository).to(DefaultLetterTypeRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
     options.bind(TYPES.domain.repositories.LetterTypeRepository).to(MockLetterTypeRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
-
-    options.bind(TYPES.domain.repositories.MaritalStatusRepository).to(DefaultMaritalStatusRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
-    options.bind(TYPES.domain.repositories.MaritalStatusRepository).to(MockMaritalStatusRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
 
     options.bind(TYPES.domain.repositories.VerificationCodeRepository).to(DefaultVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', false));
     options.bind(TYPES.domain.repositories.VerificationCodeRepository).to(MockVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', true));
