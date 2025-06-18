@@ -21,7 +21,6 @@ import {
   DefaultFederalGovernmentInsurancePlanService,
   DefaultLetterService,
   DefaultLetterTypeService,
-  DefaultMaritalStatusService,
   DefaultProvinceTerritoryStateService,
   DefaultProvincialGovernmentInsurancePlanService,
   DefaultVerificationCodeService,
@@ -69,7 +68,6 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
     options.bind(TYPES.domain.services.FederalGovernmentInsurancePlanService).to(DefaultFederalGovernmentInsurancePlanService);
     options.bind(TYPES.domain.services.LetterService).to(DefaultLetterService);
     options.bind(TYPES.domain.services.LetterTypeService).to(DefaultLetterTypeService);
-    options.bind(TYPES.domain.services.MaritalStatusService).to(DefaultMaritalStatusService);
     options.bind(TYPES.domain.services.ProvinceTerritoryStateService).to(DefaultProvinceTerritoryStateService);
     options.bind(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).to(DefaultProvincialGovernmentInsurancePlanService);
 
