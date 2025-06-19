@@ -8,7 +8,6 @@ export type ClientApplicationDto = ReadonlyDeep<{
   dateOfBirth: string;
   dentalBenefits: string[];
   dentalInsurance?: boolean;
-  disabilityTaxCredit?: boolean;
   hasFiledTaxes: boolean;
   isInvitationToApplyClient: boolean;
   livingIndependently?: boolean;

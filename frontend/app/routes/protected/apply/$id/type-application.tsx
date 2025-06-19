@@ -12,15 +12,12 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
-import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
-import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
-import { useFeature } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -109,30 +106,13 @@ export default function ProtectedApplyFlowTypeOfApplication({ loaderData, params
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, { typeOfApplication: 'input-radio-type-of-application-option-0' });
 
-  const eligibilityRequirements = <InlineLink to={t('protected-apply:type-of-application.info-alert.links.apply-qualify')} className="external-link" newTabIndicator target="_blank" />;
-  const whenApply = <InlineLink to={t('protected-apply:type-of-application.info-alert.links.apply-when')} className="external-link" newTabIndicator target="_blank" />;
-
   return (
     <>
       <div className="my-6 sm:my-8">
         <Progress value={20} size="lg" label={t('protected-apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        {useFeature('apply-eligibility') && (
-          <ContextualAlert type="info">
-            <div className="space-y-4">
-              <h2 className="mb-2 font-bold">{t('protected-apply:type-of-application.info-alert.heading')}</h2>
-              <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="protected-apply:type-of-application.info-alert.eligibility-requirements" components={{ eligibilityRequirements }} />
-              </p>
-              <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="protected-apply:type-of-application.info-alert.schedule-when" components={{ whenApply }} />
-              </p>
-            </div>
-          </ContextualAlert>
-        )}
         <p className="mt-8 mb-4 italic">{t('protected-apply:required-label')}</p>
-
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />

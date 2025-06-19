@@ -61,7 +61,6 @@ export type ClientApplicationEntity = ReadonlyDeep<{
         ReferenceDataID: string;
       };
       ApplicantDetail: {
-        DisabilityTaxCreditIndicator: boolean;
         InsurancePlan?: Array<{
           InsurancePlanIdentification: Array<{
             IdentificationID: string;

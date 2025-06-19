@@ -133,7 +133,6 @@ describe('DefaultClientApplicationDtoMapper', () => {
               ReferenceDataID: 'EMAIL',
             },
             ApplicantDetail: {
-              DisabilityTaxCreditIndicator: true,
               InsurancePlan: [
                 {
                   InsurancePlanIdentification: [
@@ -240,7 +239,6 @@ describe('DefaultClientApplicationDtoMapper', () => {
         dateOfBirth: '2000-01-01',
         dentalBenefits: ['ID-123456'],
         dentalInsurance: true,
-        disabilityTaxCredit: true,
         hasFiledTaxes: true,
         isInvitationToApplyClient: false,
         livingIndependently: true,

@@ -85,7 +85,6 @@ describe('DefaultClientApplicationService', () => {
           ReferenceDataID: 'EMAIL',
         },
         ApplicantDetail: {
-          DisabilityTaxCreditIndicator: true,
           InsurancePlan: [
             {
               InsurancePlanIdentification: [
