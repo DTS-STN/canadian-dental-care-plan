@@ -18,7 +18,6 @@ interface FillApplicantInformationFormArgs {
   day: string;
   month: string;
   year: string;
-  dtcEligible?: boolean;
   page: Page;
 }
 
@@ -181,16 +180,13 @@ export class ChildPage extends BasePage {
     await page.getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
   }
 
-  async fillApplicantInformationForm({ firstName, lastName, sin, day, month, year, dtcEligible, page }: FillApplicantInformationFormArgs) {
+  async fillApplicantInformationForm({ firstName, lastName, sin, day, month, year, page }: FillApplicantInformationFormArgs) {
     await page.getByRole('textbox', { name: 'First name' }).fill(firstName);
     await page.getByRole('textbox', { name: 'Last name' }).fill(lastName);
     await page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill(sin);
     await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
     await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
     await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-    if (dtcEligible !== undefined) {
-      await page.getByRole('radio', { name: dtcEligible ? 'Yes' : 'No', exact: true }).check();
-    }
   }
 
   async fillChildrenInformationForm({ firstName, lastName, sin, day, month, year, hasSin, isGuardian, page }: FillChildrenInformationFormArgs) {

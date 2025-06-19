@@ -32,7 +32,7 @@ test.describe('Public Apply Flow - Minimal Scenario', { tag: '@smoke' }, () => {
 
     await test.step('Should fill out applicant information form and proceed', async () => {
       await applyAdultPage.isLoaded('applicant-information');
-      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Doe', sin: '900000001', day: '1', month: '01', year: '1970', dtcEligible: true, page });
+      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Doe', sin: '900000001', day: '1', month: '01', year: '1970', page });
       await clickContinue(page);
     });
 
