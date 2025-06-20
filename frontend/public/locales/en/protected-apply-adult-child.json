@@ -14,10 +14,6 @@
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
     "save-btn": "Save",
-    "radio-options": {
-      "no": "No",
-      "yes": "Yes"
-    },
     "help-message": {
       "sin": "Enter the 9-digit SIN"
     },

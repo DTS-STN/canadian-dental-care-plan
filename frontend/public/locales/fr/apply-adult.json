@@ -13,10 +13,6 @@
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
-    "radio-options": {
-      "no": "Non",
-      "yes": "Oui"
-    },
     "help-message": {
       "sin": "Entrez un NAS de 9 chiffres"
     },
