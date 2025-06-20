@@ -30,7 +30,7 @@ export default defineConfig({
       AUTH_RAOIDC_BASE_URL: 'http://localhost:3000/oidc',
       AUTH_RAOIDC_CLIENT_ID: 'CDCP',
       AUTH_RASCL_LOGOUT_URL: 'http://localhost:3000/',
-      ENABLED_FEATURES: "hcaptcha,view-letters,status,show-prototype-banner,apply-eligibility",
+      ENABLED_FEATURES: "hcaptcha,view-letters,status,show-prototype-banner",
       ENABLED_MOCKS: 'cct,code-tables,gc-notify,power-platform,raoidc,status-check,verification-code,wsaddress',
       GC_NOTIFY_API_KEY: '00000000000000000000000000000000',
       HCAPTCHA_SECRET_KEY: '0x0000000000000000000000000000000000000000',
