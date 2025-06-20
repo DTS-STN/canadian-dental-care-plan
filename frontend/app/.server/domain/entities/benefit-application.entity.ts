@@ -5,7 +5,6 @@ export type BenefitApplicationRequestEntity = ReadonlyDeep<{
     Applicant: {
       ApplicantDetail: {
         PrivateDentalInsuranceIndicator?: boolean;
-        DisabilityTaxCreditIndicator?: boolean;
         LivingIndependentlyIndicator?: boolean;
         TermsAndConditionsIndicator: boolean;
         PrivacyStatementIndicator: boolean;

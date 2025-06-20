@@ -9,16 +9,11 @@
     "dob": "Date de naissance",
     "single-legal-name": "Si vous utilisez un seul nom légal",
     "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
-    "dtc-question": "Avez-vous un certificat valide pour le crédit d'impôt pour personnes handicapées (CIPH) auprès de l'Agence du revenu du Canada?",
     "marital-status": "État civil",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
-    "radio-options": {
-      "no": "Non",
-      "yes": "Oui"
-    },
     "help-message": {
       "sin": "Entrez un NAS de 9 chiffres"
     },
@@ -40,7 +35,6 @@
       "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
       "date-of-birth-year-required": "La date de naissance doit inclure une année",
       "child-age-required": "Sélectionnez si tous les enfants ont moins de 18 ans",
-      "dtc-required": "Sélectionnez si vous avez un crédit d'impôt d'invalidité valide",
       "alert": {
         "heading": "Vous ne pouvez pas souscrire pour le moment",
         "detail": "Compte tenu de votre date de naissance, vous ne pouvez pas souscrire au Régime canadien de soins dentaires pour le moment.",

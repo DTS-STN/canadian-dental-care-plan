@@ -79,7 +79,7 @@ test.describe('Child category', () => {
     await test.step('Should navigate to applicant information page', async () => {
       await applyChildPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(35);
-      await applyChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: undefined, page });
+      await applyChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, page });
 
       await clickContinue(page);
     });
@@ -277,7 +277,7 @@ test.describe('Child category - parent or legual guardian miscellaneous checks',
     await test.step('Should navigate to applicant information page', async () => {
       await applyChildPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(15);
-      await applyChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: undefined, page });
+      await applyChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, page });
 
       await clickContinue(page);
     });
@@ -291,7 +291,7 @@ test.describe('Child category - parent or legual guardian miscellaneous checks',
     const applyChildPage = new ChildPage(page);
     await test.step('Should navigate to applicant information page', async () => {
       await applyChildPage.isLoaded('applicant-information');
-      await applyChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: '10', month: '10', year: '2006', dtcEligible: undefined, page });
+      await applyChildPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: '10', month: '10', year: '2006', page });
 
       await clickContinue(page);
     });

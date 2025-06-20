@@ -44,7 +44,6 @@ interface ToBenefitRenewalRequestEntityArgs {
   demographicSurvey?: DemographicSurveyDto;
   dentalBenefits: readonly string[];
   dentalInsurance?: boolean;
-  disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation?: RenewalPartnerInformationDto;
   typeOfApplication: RenewalTypeOfApplicationDto;
@@ -151,7 +150,6 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       demographicSurvey,
       dentalBenefits,
       dentalInsurance,
-      disabilityTaxCredit,
       livingIndependently,
       partnerInformation,
       typeOfApplication,
@@ -183,7 +181,6 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         Applicant: {
           ApplicantDetail: {
             PrivateDentalInsuranceIndicator: dentalInsurance,
-            DisabilityTaxCreditIndicator: disabilityTaxCredit,
             LivingIndependentlyIndicator: livingIndependently,
             PrivacyStatementIndicator: true,
             TermsAndConditionsIndicator: true,

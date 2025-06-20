@@ -5,7 +5,6 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
     Applicant: {
       ApplicantDetail: {
         PrivateDentalInsuranceIndicator?: boolean;
-        DisabilityTaxCreditIndicator?: boolean;
         LivingIndependentlyIndicator?: boolean;
         MaritalStatusChangedIndicator?: boolean;
         AddressChangedIndicator?: boolean;

@@ -32,7 +32,7 @@ test.describe('Children application', () => {
 
     await test.step('Should navigate to applicant information page', async () => {
       const { year, month, day } = calculateDOB(70);
-      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
+      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
     // TODO: Add the rest of the children flow tests.
@@ -43,7 +43,7 @@ test.describe('Children application', () => {
 
     await test.step('Should navigate to applicant information page', async () => {
       const { year, month, day } = calculateDOB(70);
-      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
+      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
     // TODO: Add the rest of the children flow tests.
@@ -54,7 +54,7 @@ test.describe('Children application', () => {
 
     await test.step('Should navigate to applicant information page', async () => {
       const { year, month, day } = calculateDOB(70);
-      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
+      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
     // TODO: Add the rest of the children flow tests.

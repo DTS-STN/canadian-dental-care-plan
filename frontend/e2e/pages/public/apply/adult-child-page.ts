@@ -4,7 +4,6 @@ interface FillApplicantInformationFormArgs {
   day: string;
   month: string;
   year: string;
-  dtcEligible: boolean;
 }
 
 export class AdultChildPage extends BasePage {
@@ -135,7 +134,7 @@ export class AdultChildPage extends BasePage {
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
   }
 
-  async fillApplicantInformationForm({ day, month, year, dtcEligible }: FillApplicantInformationFormArgs) {
+  async fillApplicantInformationForm({ day, month, year }: FillApplicantInformationFormArgs) {
     await this.isLoaded('applicant-information');
     await this.page.getByRole('textbox', { name: 'First name' }).fill('John');
     await this.page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
@@ -143,7 +142,6 @@ export class AdultChildPage extends BasePage {
     await this.page.getByRole('combobox', { name: 'Month' }).selectOption(month);
     await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
     await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-    await this.page.getByRole('radio', { name: dtcEligible ? 'Yes' : 'No', exact: true }).check();
   }
 
   async fillCommunicationForm() {

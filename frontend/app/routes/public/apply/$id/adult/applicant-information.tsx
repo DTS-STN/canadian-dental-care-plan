@@ -9,9 +9,9 @@ import type { Route } from './+types/applicant-information';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
-import { getAgeCategoryFromDateString, getEligibilityByAge, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { getAgeCategoryFromDateString, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
 import type { ApplicantInformationState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -20,14 +20,12 @@ import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorAlert } from '~/components/error-alert';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
-import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { useFeature } from '~/root';
-import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
+import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -40,11 +38,6 @@ const FORM_ACTION = {
   continue: 'continue',
   cancel: 'cancel',
   save: 'save',
-} as const;
-
-const DTC_OPTION = {
-  no: 'no',
-  yes: 'yes',
 } as const;
 
 export const handle = {
@@ -71,7 +64,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
-  const locale = getLocale(request);
 
   const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
@@ -80,8 +72,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
-  const applyEligibilityEnabled = ENABLED_FEATURES.includes('apply-eligibility');
 
   if (formAction === FORM_ACTION.cancel) {
     invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
@@ -121,22 +111,6 @@ export async function action({ context: { appContainer, session }, params, reque
       dateOfBirthMonth: z.number({ required_error: t('applicant-information.error-message.date-of-birth-month-required') }),
       dateOfBirthDay: z.number({ required_error: t('applicant-information.error-message.date-of-birth-day-required'), invalid_type_error: t('applicant-information.error-message.date-of-birth-day-number') }),
       dateOfBirth: z.string(),
-      disabilityTaxCredit: z
-        .string()
-        .optional()
-        .refine(
-          (val) => {
-            if (applyEligibilityEnabled) {
-              // disabilityTaxCredit must not be empty
-              return val !== undefined && val !== '';
-            }
-            return true;
-          },
-          {
-            message: t('applicant-information.error-message.dtc-required'),
-            path: ['disabilityTaxCredit'],
-          },
-        ),
     })
     .superRefine((val, ctx) => {
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
@@ -164,7 +138,6 @@ export async function action({ context: { appContainer, session }, params, reque
     dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
     dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
     dateOfBirth: '',
-    disabilityTaxCredit: String(formData.get('dtc') ?? ''),
   });
 
   if (!parsedDataResult.success) {
@@ -172,15 +145,6 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
-
-  // Seniors and DTC certificate owners do no need to be eligibility checked.
-  if (ageCategory === 'adults' && parsedDataResult.data.disabilityTaxCredit !== DTC_OPTION.yes && applyEligibilityEnabled) {
-    const eligibilityResult = getEligibilityByAge(parsedDataResult.data.dateOfBirth);
-
-    if (!eligibilityResult.eligible) {
-      return { status: 'not-eligible', startDate: toLocaleDateString(parseDateTimeString(eligibilityResult.startDate ?? ''), locale) } as const;
-    }
-  }
 
   if (state.editMode && (ageCategory === 'youth' || ageCategory === 'children' || parsedDataResult.data.dateOfBirthYear >= 2006)) {
     // Temporary state save until the user is finished with editMode workflow.
@@ -193,7 +157,6 @@ export async function action({ context: { appContainer, session }, params, reque
           lastName: parsedDataResult.data.lastName,
           dateOfBirth: parsedDataResult.data.dateOfBirth,
           socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
-          disabilityTaxCredit: parsedDataResult.data.disabilityTaxCredit,
         },
         ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
           // Handle marital-status back button
@@ -211,7 +174,6 @@ export async function action({ context: { appContainer, session }, params, reque
           lastName: parsedDataResult.data.lastName,
           dateOfBirth: parsedDataResult.data.dateOfBirth,
           socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
-          disabilityTaxCredit: parsedDataResult.data.disabilityTaxCredit,
         },
         ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
           // Handle marital-status back button
@@ -242,7 +204,6 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
   const { t } = useTranslation(handle.i18nNamespaces);
   const { currentLanguage } = useCurrentLanguage();
   const { defaultState, editMode } = loaderData;
-  const applyEligibilityEnabled = useFeature('apply-eligibility');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -261,7 +222,6 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
       ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
       : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
     dateOfBirthYear: 'date-picker-date-of-birth-year',
-    disabilityTaxCredit: 'input-radio-dtc-option-0',
     socialInsuranceNumber: 'social-insurance-number',
   });
 
@@ -320,27 +280,6 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
               required
             />
-            {applyEligibilityEnabled && (
-              <InputRadios
-                id="dtc"
-                name="dtc"
-                legend={t('apply-adult:applicant-information.dtc-question')}
-                options={[
-                  {
-                    value: DTC_OPTION.yes,
-                    children: t('apply-adult:applicant-information.radio-options.yes'),
-                    defaultChecked: defaultState?.disabilityTaxCredit === DTC_OPTION.yes,
-                  },
-                  {
-                    value: DTC_OPTION.no,
-                    children: t('apply-adult:applicant-information.radio-options.no'),
-                    defaultChecked: defaultState?.disabilityTaxCredit === DTC_OPTION.no,
-                  },
-                ]}
-                required
-                errorMessage={errors?.disabilityTaxCredit}
-              />
-            )}
             <InputPatternField
               id="social-insurance-number"
               name="socialInsuranceNumber"

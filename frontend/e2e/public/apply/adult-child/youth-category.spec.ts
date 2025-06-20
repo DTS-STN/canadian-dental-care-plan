@@ -32,7 +32,7 @@ test.describe('Youth category', () => {
 
     await test.step('Should navigate to applicant information page', async () => {
       const { year, month, day } = calculateDOB(16);
-      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
+      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
@@ -51,7 +51,7 @@ test.describe('Youth category', () => {
 
     await test.step('Should navigate to date of birth page', async () => {
       const { year, month, day } = calculateDOB(15);
-      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year, dtcEligible: true });
+      await applyAdultChildPage.fillApplicantInformationForm({ day: day, month: month, year: year });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 

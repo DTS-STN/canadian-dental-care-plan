@@ -33,10 +33,8 @@ test.describe('Adult category', () => {
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(35);
-      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, page });
 
-      // DTC question
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
       await clickContinue(page);
     });
 
@@ -138,7 +136,7 @@ test.describe('Adult category', () => {
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(15);
-      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, page });
 
       await clickContinue(page);
     });
@@ -155,7 +153,7 @@ test.describe('Adult category', () => {
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(17);
-      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, page });
 
       await clickContinue(page);
     });
@@ -179,7 +177,7 @@ test.describe('Adult category', () => {
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
       const { year, month, day } = calculateDOB(17);
-      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, dtcEligible: true, page });
+      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: day, month: month, year: year, page });
 
       await clickContinue(page);
     });
@@ -210,7 +208,7 @@ test.describe('Adult category', () => {
 
     await test.step('Should navigate to applicant information page', async () => {
       await applyAdultPage.isLoaded('applicant-information');
-      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: '10', month: '10', year: '2006', dtcEligible: true, page });
+      await applyAdultPage.fillApplicantInformationForm({ firstName: 'John', lastName: 'Smith', sin: '900000001', day: '10', month: '10', year: '2006', page });
 
       await clickContinue(page);
     });

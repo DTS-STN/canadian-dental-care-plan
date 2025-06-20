@@ -21,7 +21,6 @@ export type ProtectedApplyState = ReadonlyDeep<{
     lastName: string;
     dateOfBirth: string;
     socialInsuranceNumber: string;
-    disabilityTaxCredit?: string;
   };
   editModeLivingIndependently?: boolean;
   applicantInformation?: {
@@ -29,7 +28,6 @@ export type ProtectedApplyState = ReadonlyDeep<{
     lastName: string;
     dateOfBirth: string;
     socialInsuranceNumber: string;
-    disabilityTaxCredit?: string;
   };
   applicationYear: {
     applicationYearId: string;

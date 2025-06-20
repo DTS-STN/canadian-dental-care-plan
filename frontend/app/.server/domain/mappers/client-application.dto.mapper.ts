@@ -199,7 +199,6 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       dateOfBirth: applicant.PersonBirthDate.date,
       dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.[0].InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
       dentalInsurance: applicant.ApplicantDetail.PrivateDentalInsuranceIndicator,
-      disabilityTaxCredit: applicant.ApplicantDetail.DisabilityTaxCreditIndicator,
       hasFiledTaxes: applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
       isInvitationToApplyClient: applicant.ApplicantDetail.InvitationToApplyIndicator,
       livingIndependently: applicant.ApplicantDetail.LivingIndependentlyIndicator,
