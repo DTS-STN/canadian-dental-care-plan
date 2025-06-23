@@ -26,13 +26,7 @@ export const handle = {
   pageTitleI18nKey: 'renew:terms-and-conditions.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
-  if (!data) {
-    return [];
-  }
-
-  return getTitleMetaTags(data.meta.title);
-});
+export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   loadRenewState({ params, session });
