@@ -174,27 +174,24 @@ export default function RenewFlowEmail({ loaderData, params }: Route.ComponentPr
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <fieldset className="mb-6">
-            <p className="mb-4">{t('renew-adult-child:confirm-email.provide-email')}</p>
-            <p className="mb-8">{t('renew-adult-child:confirm-email.verify-email')}</p>
-            <p className="mb-4 italic">{t('renew:required-label')}</p>
-            <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField
-                id="email"
-                name="email"
-                type="email"
-                inputMode="email"
-                className="w-full"
-                autoComplete="email"
-                defaultValue={defaultState}
-                errorMessage={errors?.email}
-                label={t('renew-adult-child:confirm-email.email-legend')}
-                maxLength={64}
-                aria-describedby="adding-email"
-                required
-              />
-            </div>
-          </fieldset>
+          <p className="mb-4">{t('renew-adult-child:confirm-email.provide-email')}</p>
+          <p className="mb-8">{t('renew-adult-child:confirm-email.verify-email')}</p>
+          <p className="mb-4 italic">{t('renew:required-label')}</p>
+          <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
+            <InputField
+              id="email"
+              name="email"
+              type="email"
+              inputMode="email"
+              className="w-full"
+              autoComplete="email"
+              defaultValue={defaultState}
+              errorMessage={errors?.email}
+              label={t('renew-adult-child:confirm-email.email-legend')}
+              maxLength={64}
+              required
+            />
+          </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button variant="primary" id="save-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Save - Email click">
