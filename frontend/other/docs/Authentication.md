@@ -31,7 +31,6 @@ The login process consists of three main steps:
 1. CDCP initiates the login process by sending a GET request to
    `/auth/login/{provider-id}`, which redirects the user to the authorization
    endpoint RAOIDC. The authorization request includes the following parameters:
-
    - `response_type=code`: indicates that CDCP expects an _authorization code_ as the response
    - `client_id`: the unique identifier of CDCP registered with RAOIDC
    - `redirect_uri`: the CDCP URL where the user will be redirected after authorization
@@ -44,7 +43,6 @@ The login process consists of three main steps:
 1. RAOIDC authenticates the user and (optionally) obtains their consent for the
    requested scope. If successful, RAOIDC redirects the user back to the
    `redirect_uri` with the following parameters:
-
    - `code`: the authorization code that can be exchanged for an access token and an ID token
    - `state`: the same value that was sent in the previous request, this is used to ensure
      that the response being handled is for the same authentication request
@@ -53,7 +51,6 @@ The login process consists of three main steps:
    matches the one stored in the session, and sends a POST request to RAOIDC's
    token endpoint to exchange the authorization code for a token response. The
    token exchange request includes the following parameters:
-
    - `grant_type=authorization_code`: indicates that CDCP is using the authorization code grant type
    - `client_id`: the same value that was sent in the first request
    - `code`: the authorization code received in the previous step
@@ -63,7 +60,6 @@ The login process consists of three main steps:
    During the token exchange, RAOIDC verifies that the `code_verifier` matches
    the `code_challenge` that was sent in the first request, and returns a token
    response that contains the following:
-
    - `access_token`: a JSON Web Token (JWT) that can be used to access protected
      resources, such as the userinfo endpoint. The access token is encrypted by
      RAOIDC and **cannot** be decrypted by CDCP.

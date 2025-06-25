@@ -57,11 +57,9 @@ This document provides guidelines for naming repository methods in TypeScript No
 ##### Retrieval (Read) Operations
 
 1. **`get`:** Used to retrieve a single entity or value that is expected to exist. If not found, it may throw an error or handle it based on use-case.
-
    - Repository Example: `getUserById(id: number): Promise<UserEntity>`
 
 2. **`find`:** Used when searching for one or more entities where results might not be found. These methods typically return `null` or `undefined` for single items, or an empty list for collections.
-
    - Repository Example: `findUserByEmail(email: string): Promise<UserEntity | null>`
 
 3. **`list`:** Used to retrieve collections without specific filtering criteria, typically returning a full list of entities.
