@@ -50,13 +50,7 @@ export const handle = {
   pageIdentifier: pageIds.public.apply.adultChild.federalProvincialTerritorialBenefits,
 };
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
-  if (!data) {
-    return [];
-  }
-
-  return getTitleMetaTags(data.meta.title);
-});
+export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
