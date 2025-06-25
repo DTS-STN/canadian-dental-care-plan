@@ -55,25 +55,20 @@ If any are missing, the script will throw an error and exit.
 ## How It Works
 
 1. **Welcome Screen**
-
    - Displays a greeting and prompts the user to select scripts to run.
 
 2. **Validation**
-
    - Ensures all expected scripts exist in `package.json`.
 
 3. **Selection**
-
    - Uses a checkbox prompt to let the user pick which scripts to run.
 
 4. **Execution**
-
    - Each selected script is executed using `npm run <script> [args]`.
    - Real-time spinner updates show progress.
    - Output is streamed and printed live in the console.
 
 5. **Completion**
-
    - On success: shows success messages.
    - On failure: prints full output and exits with error.
 
