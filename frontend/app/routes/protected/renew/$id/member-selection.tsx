@@ -28,9 +28,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const FORM_ACTION = {
   continue: 'continue',
-  cancel: 'cancel',
-  save: 'save',
-  back: 'back',
 } as const;
 
 export const handle = {

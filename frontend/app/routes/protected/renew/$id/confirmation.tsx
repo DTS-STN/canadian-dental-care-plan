@@ -20,7 +20,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const FORM_ACTION = {
-  submit: 'submit',
   close: 'close',
 } as const;
 

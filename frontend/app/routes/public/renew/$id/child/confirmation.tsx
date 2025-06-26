@@ -25,7 +25,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 const FORM_ACTION = {
-  submit: 'submit',
   close: 'close',
 } as const;
 

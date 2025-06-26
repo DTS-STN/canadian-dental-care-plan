@@ -24,7 +24,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatAddressLine } from '~/utils/string-utils';
 
 const FORM_ACTION = {
-  cancel: 'cancel',
   save: 'save',
 } as const;
 
