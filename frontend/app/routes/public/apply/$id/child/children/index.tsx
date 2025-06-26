@@ -32,7 +32,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-const FORM_ACTION = { add: 'add', continue: 'continue', cancel: 'cancel', save: 'save', remove: 'remove' } as const;
+const FORM_ACTION = { add: 'add', continue: 'continue', remove: 'remove' } as const;
 
 export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'), pageIdentifier: pageIds.public.apply.child.childSummary, pageTitleI18nKey: 'apply-child:children.index.page-title' } as const satisfies RouteHandleData;
 

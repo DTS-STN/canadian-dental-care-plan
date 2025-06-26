@@ -33,7 +33,6 @@ import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils'
 
 const FORM_ACTION = {
   continue: 'continue',
-  cancel: 'cancel',
   save: 'save',
 } as const;
 

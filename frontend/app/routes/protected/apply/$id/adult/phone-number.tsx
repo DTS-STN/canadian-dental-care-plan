@@ -27,7 +27,6 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const FORM_ACTION = {
-  cancel: 'cancel',
   save: 'save',
 } as const;
 

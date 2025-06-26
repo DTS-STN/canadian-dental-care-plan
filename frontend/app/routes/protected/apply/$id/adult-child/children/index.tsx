@@ -36,8 +36,6 @@ import { formatSin } from '~/utils/sin-utils';
 const FORM_ACTION = {
   add: 'add',
   continue: 'continue',
-  cancel: 'cancel',
-  save: 'save',
   remove: 'remove',
   back: 'back',
 } as const;
