@@ -127,7 +127,6 @@ export default function ProtectedRenewCommunicationPreferencePage({ loaderData, 
             id="preferred-methods"
             legend={t('protected-renew:communication-preference.preferred-method')}
             name="preferredMethod"
-            helpMessagePrimary={t('protected-renew:communication-preference.preferred-method-help-message')}
             options={[
               {
                 value: PREFERRED_SUN_LIFE_METHOD.email,
