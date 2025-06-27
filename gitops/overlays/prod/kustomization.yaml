@@ -25,8 +25,8 @@ resources:
   #
   # For renewal application downtime with a 404 response, uncomment ./ingresses-renew-error-404.yaml
   #
-  - ./ingresses.yaml
-  # - ./ingresses-maintenance.yaml
+  # - ./ingresses.yaml
+  - ./ingresses-maintenance.yaml
   # - ./ingresses-apply-maintenance.yaml
   # Note: for the letters maintenance page, see the maintenance configMapGenerator below
   # - ./ingresses-letters-maintenance.yaml
