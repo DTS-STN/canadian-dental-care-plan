@@ -134,7 +134,6 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               id="preferred-methods"
               legend={t('renew-adult:communication-preference.preferred-method')}
               name="preferredMethod"
-              helpMessagePrimary={t('renew-adult:communication-preference.preferred-method-help-message')}
               options={[
                 {
                   value: PREFERRED_SUN_LIFE_METHOD.email,
