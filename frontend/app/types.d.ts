@@ -5,8 +5,6 @@ import type { ClientEnv } from '~/.server/utils/env.utils';
 import type { InstanceName } from '~/.server/utils/instance-registry';
 import type { APP_LOCALES } from '~/utils/locale-utils';
 
-/* eslint-disable no-var */
-
 /**
  * Application-scoped global types.
  */

@@ -32,16 +32,16 @@ const allowedScripts: AllowedScripts = [
     emoji: '✨',
   },
   {
-    value: 'lint',
-    name: 'ESLint',
-    description: 'Statically analyzes your code to find problems',
-    emoji: '🔍',
-  },
-  {
     value: 'typecheck',
     name: 'Typescript',
     description: 'Run compiler by checking your code',
     emoji: '📝',
+  },
+  {
+    value: 'lint',
+    name: 'ESLint',
+    description: 'Statically analyzes your code to find problems',
+    emoji: '🔍',
   },
   {
     value: 'build',
