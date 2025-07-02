@@ -20,7 +20,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    esbuildOptions: {
+    rollupOptions: {
       target: 'es2022',
     },
     // Configure Remix plugin optimizeDeps entries since is has a bug on Windows

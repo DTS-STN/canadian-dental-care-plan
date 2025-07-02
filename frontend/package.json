@@ -136,7 +136,7 @@
     "type-fest": "^4.41.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^6.3.5",
+    "vite": "npm:rolldown-vite@latest",
     "vite-plugin-static-copy": "^3.1.0",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
@@ -171,8 +171,6 @@
     ]
   },
   "overrides": {
-    "vite": {
-      "rollup": "$@rollup/wasm-node"
-    }
+    "vite": "npm:rolldown-vite@latest"
   }
 }
