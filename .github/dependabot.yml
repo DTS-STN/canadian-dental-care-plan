@@ -28,6 +28,7 @@ updates:
         exclude-patterns:
           - 'react-router'
           - '@react-router/*'
+          - 'undici'
       react-router-versions:
         update-types:
           - minor
