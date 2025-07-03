@@ -1,94 +1,161 @@
-import type { RedisOptions } from 'ioredis';
-import Redis from 'ioredis';
+import { invariant } from '@dts-stn/invariant';
+import { createClient, createSentinel } from 'redis';
+import type { RedisClientOptions, RedisClientType, RedisSentinelOptions, RedisSentinelType } from 'redis';
 
 import type { ServerConfig } from '~/.server/configs';
 import { createLogger } from '~/.server/logging';
 import { getEnv } from '~/.server/utils/env.utils';
 
 /**
- * A holder for our singleton redis client instance.
+ * Holds the singleton Redis client instance.
  */
-const clientHolder: { client?: Redis } = {};
+const clientHolder: { client?: RedisClientType | RedisSentinelType } = {};
 
 /**
- * Retrieves the application's redis client instance.
- * If the client does not exist, it initializes a new one.
+ * Retrieves the singleton Redis client.
+ * Chooses between standalone or sentinel configuration based on environment.
  */
-export function getRedisClient() {
-  return (clientHolder.client ??= createRedisClient());
-}
-
-/**
- * Creates a new Redis client and sets up logging for connection and error events.
- */
-function createRedisClient(): Redis {
-  const log = createLogger('session.server/createRedisClient');
-  log.info('Creating new redis client');
+export async function getRedisClient(): Promise<RedisClientType | RedisSentinelType> {
+  if (clientHolder.client) return clientHolder.client;
 
   const serverConfig = getEnv();
+  clientHolder.client = serverConfig.REDIS_SENTINEL_NAME //
+    ? await createRedisSentinelClient(serverConfig)
+    : await createRedisClient(serverConfig);
 
-  const { REDIS_SENTINEL_NAME, REDIS_SENTINEL_HOST, REDIS_SENTINEL_PORT, REDIS_STANDALONE_HOST, REDIS_STANDALONE_PORT } = serverConfig;
-  const REDIS_HOST = REDIS_SENTINEL_NAME ? REDIS_SENTINEL_HOST : REDIS_STANDALONE_HOST;
-  const REDIS_PORT = REDIS_SENTINEL_NAME ? REDIS_SENTINEL_PORT : REDIS_STANDALONE_PORT;
-  const REDIS_CONNECTION_TYPE = REDIS_SENTINEL_NAME ? 'sentinel' : 'standalone';
-
-  // prettier-ignore
-  return new Redis(getRedisConfig(serverConfig))
-      .on('connect', () => log.info('Connected to %s://%s:%s/', REDIS_CONNECTION_TYPE, REDIS_HOST, REDIS_PORT))
-      .on('error', (error) => log.error('Redis client error: %s', error.message));
+  return clientHolder.client;
 }
 
 /**
- * Constructs the configuration object for the Redis client based on the server environment.
+ * Configuration required for a standalone Redis client.
  */
-function getRedisConfig(serverConfig: ServerConfig): RedisOptions {
-  const log = createLogger('session.server/getRedisConfig');
-  const {
-    REDIS_COMMAND_TIMEOUT_SECONDS, //
-    REDIS_SENTINEL_HOST,
-    REDIS_SENTINEL_NAME,
-    REDIS_SENTINEL_PORT,
-    REDIS_STANDALONE_HOST,
-    REDIS_STANDALONE_PORT,
-    REDIS_USERNAME,
-    REDIS_PASSWORD,
-  } = serverConfig;
+type RedisStandaloneClientServerConfig = Pick<
+  ServerConfig,
+  | 'REDIS_COMMAND_TIMEOUT_SECONDS' //
+  | 'REDIS_STANDALONE_HOST'
+  | 'REDIS_STANDALONE_PORT'
+  | 'REDIS_USERNAME'
+  | 'REDIS_PASSWORD'
+>;
 
-  const retryStrategy = (times: number): number => {
-    // exponential backoff starting at 250ms to a maximum of 5s
-    const retryIn = Math.min(250 * Math.pow(2, times - 1), 5000);
-    log.error('Could not connect to Redis (attempt #%s); retry in %s ms', times, retryIn);
-    return retryIn;
+/**
+ * Creates and connects a standalone Redis client with logging.
+ */
+async function createRedisClient(config: RedisStandaloneClientServerConfig): Promise<RedisClientType> {
+  const log = createLogger('redis-client/createRedisClient');
+  log.info('Creating standalone Redis client');
+
+  log.debug('Validating config values');
+  invariant(config.REDIS_STANDALONE_HOST, 'REDIS_STANDALONE_HOST must be defined');
+  invariant(config.REDIS_STANDALONE_PORT, 'REDIS_STANDALONE_PORT must be defined');
+  invariant(config.REDIS_USERNAME, 'REDIS_USERNAME must be defined');
+  invariant(config.REDIS_PASSWORD, 'REDIS_PASSWORD must be defined');
+
+  const redisClientOptions: RedisClientOptions = {
+    url: `redis://${config.REDIS_STANDALONE_HOST}:${config.REDIS_STANDALONE_PORT}`,
+    username: config.REDIS_USERNAME,
+    password: config.REDIS_PASSWORD,
+    socket: {
+      connectTimeout: config.REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
+      reconnectStrategy: exponentialBackoffReconnectionStrategy,
+    },
   };
 
-  const connectionType = REDIS_SENTINEL_NAME ? 'sentinel' : 'standalone';
+  log.debug('Connecting to Redis...');
+  const client = createClient(redisClientOptions);
 
-  switch (connectionType) {
-    case 'standalone': {
-      log.debug('      configuring Redis client in standalone mode');
-      return {
-        host: REDIS_STANDALONE_HOST,
-        port: REDIS_STANDALONE_PORT,
-        username: REDIS_USERNAME,
-        password: REDIS_PASSWORD,
-        commandTimeout: REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
-        enableAutoPipelining: true,
-        retryStrategy,
-      };
-    }
+  client.on('connect', () => {
+    log.info('Connected to redis://%s:%s/', config.REDIS_STANDALONE_HOST, config.REDIS_STANDALONE_PORT);
+  });
+  client.on('error', (error) => {
+    log.error('Redis error: %s', error.message);
+  });
 
-    case 'sentinel': {
-      log.debug('      configuring Redis client in sentinel mode');
+  await client.connect();
+  return client as RedisClientType;
+}
 
-      return {
-        name: REDIS_SENTINEL_NAME,
-        sentinels: [{ host: REDIS_SENTINEL_HOST, port: REDIS_SENTINEL_PORT }],
-        username: REDIS_USERNAME,
-        password: REDIS_PASSWORD,
-        commandTimeout: REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
-        enableAutoPipelining: true,
-        retryStrategy,
-      };
-    }
-  }
+/**
+ * Configuration required for a Redis Sentinel client.
+ */
+type RedisSentinelClientServerConfig = Pick<
+  ServerConfig,
+  | 'REDIS_COMMAND_TIMEOUT_SECONDS' //
+  | 'REDIS_SENTINEL_NAME'
+  | 'REDIS_SENTINEL_HOST'
+  | 'REDIS_SENTINEL_PORT'
+  | 'REDIS_USERNAME'
+  | 'REDIS_PASSWORD'
+>;
+
+/**
+ * Creates and connects a Redis Sentinel client with logging.
+ */
+async function createRedisSentinelClient(config: RedisSentinelClientServerConfig): Promise<RedisSentinelType> {
+  const log = createLogger('redis-client/createRedisSentinelClient');
+  log.info('Creating Redis Sentinel client');
+
+  log.debug('Validating sentinel config values');
+  invariant(config.REDIS_SENTINEL_NAME, 'REDIS_SENTINEL_NAME must be defined');
+  invariant(config.REDIS_SENTINEL_HOST, 'REDIS_SENTINEL_HOST must be defined');
+  invariant(config.REDIS_SENTINEL_PORT, 'REDIS_SENTINEL_PORT must be defined');
+  invariant(config.REDIS_USERNAME, 'REDIS_USERNAME must be defined');
+  invariant(config.REDIS_PASSWORD, 'REDIS_PASSWORD must be defined');
+
+  const sentinelOptions: RedisSentinelOptions = {
+    name: config.REDIS_SENTINEL_NAME,
+    sentinelRootNodes: [
+      {
+        host: config.REDIS_SENTINEL_HOST,
+        port: config.REDIS_SENTINEL_PORT,
+      },
+    ],
+    nodeClientOptions: {
+      username: config.REDIS_USERNAME,
+      password: config.REDIS_PASSWORD,
+      socket: {
+        connectTimeout: config.REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
+        reconnectStrategy: exponentialBackoffReconnectionStrategy,
+      },
+    },
+    sentinelClientOptions: {
+      username: config.REDIS_USERNAME,
+      password: config.REDIS_PASSWORD,
+    },
+  };
+
+  log.debug('Connecting to Redis Sentinel...');
+  const client = createSentinel(sentinelOptions);
+
+  client.on('connect', () => {
+    log.info('Connected to sentinel://%s:%s/', config.REDIS_SENTINEL_HOST, config.REDIS_SENTINEL_PORT);
+  });
+  client.on('error', (error) => {
+    log.error('Redis Sentinel error: %s', error.message);
+  });
+
+  await client.connect();
+  return client as RedisSentinelType;
+}
+
+/**
+ * `reconnectionStrategy` function that implements a custom exponential backoff strategy
+ *
+ * see: https://github.com/redis/docs/blob/5e1b0aad58aedd24a7f93aba58502b4a27e67c32/content/develop/clients/nodejs/connect.md?plain=1#L312
+ * @param retries
+ * @param cause
+ * @returns
+ */
+function exponentialBackoffReconnectionStrategy(retries: number, cause: Error): number {
+  const log = createLogger('redis-client/reconnectionStrategy');
+  // Generate a random jitter between 0 – 100 ms:
+  const jitter = Math.floor(Math.random() * 100);
+
+  // Delay is an exponential backoff, (2^retries) * 50 ms, with a
+  // maximum value of 3000 ms:
+  const delay = Math.min(Math.pow(2, retries) * 50, 3000);
+
+  const retryIn = delay + jitter;
+  log.error('Could not connect to redis (attempt #%s); retry in %s ms; cause: %s', retries, retryIn, cause.message);
+  return retryIn;
 }
