@@ -1,3 +1,4 @@
+import { None } from 'oxide.ts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -59,7 +60,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
     const repository = new DefaultClientFriendlyStatusRepository(serverConfigMock, httpClientMock);
     const actual = await repository.listAllClientFriendlyStatuses();
 
-    expect(actual).toEqual(responseDataMock.value);
+    expect(actual.ok().unwrap()).toEqual(responseDataMock.value);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.client-friendly-statuses.gets',
       new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_clientfriendlystatuses?%24select=esdc_clientfriendlystatusid%2Cesdc_descriptionenglish%2Cesdc_descriptionfrench&%24filter=statecode+eq+0'),
@@ -98,7 +99,7 @@ describe('DefaultClientFriendlyStatusRepository', () => {
     const repository = new DefaultClientFriendlyStatusRepository(serverConfigMock, httpClientMock);
     const actual = await repository.findClientFriendlyStatusById('1');
 
-    expect(actual).toEqual(responseDataMock.value[0]);
+    expect(actual.unwrap().unwrap()).toEqual(responseDataMock.value[0]);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.client-friendly-statuses.gets',
       new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_clientfriendlystatuses?%24select=esdc_clientfriendlystatusid%2Cesdc_descriptionenglish%2Cesdc_descriptionfrench&%24filter=statecode+eq+0'),
@@ -131,7 +132,7 @@ describe('MockClientFriendlyStatusRepository', () => {
 
     const clientFriendlyStatuses = await repository.listAllClientFriendlyStatuses();
 
-    expect(clientFriendlyStatuses).toEqual([
+    expect(clientFriendlyStatuses.unwrap()).toEqual([
       {
         esdc_clientfriendlystatusid: '1',
         esdc_descriptionenglish: 'You have qualified for the Canadian Dental Care Plan.',
@@ -152,7 +153,7 @@ describe('MockClientFriendlyStatusRepository', () => {
 
     const clientFriendlyStatuses = await repository.listAllClientFriendlyStatuses();
 
-    expect(clientFriendlyStatuses).toEqual([]);
+    expect(clientFriendlyStatuses.unwrap()).toEqual([]);
   });
 
   it('should get a client friendly status by id', async () => {
@@ -160,7 +161,7 @@ describe('MockClientFriendlyStatusRepository', () => {
 
     const clientFriendlyStatus = await repository.findClientFriendlyStatusById('1');
 
-    expect(clientFriendlyStatus).toEqual({
+    expect(clientFriendlyStatus.unwrap().unwrap()).toEqual({
       esdc_clientfriendlystatusid: '1',
       esdc_descriptionenglish: 'You have qualified for the Canadian Dental Care Plan.',
       esdc_descriptionfrench: 'Vous êtes admissible au Régime canadien de soins dentaires.',
@@ -172,6 +173,6 @@ describe('MockClientFriendlyStatusRepository', () => {
 
     const clientFriendlyStatus = await repository.findClientFriendlyStatusById('non-existent-id');
 
-    expect(clientFriendlyStatus).toBeNull();
+    expect(clientFriendlyStatus.unwrap()).toBe(None);
   });
 });

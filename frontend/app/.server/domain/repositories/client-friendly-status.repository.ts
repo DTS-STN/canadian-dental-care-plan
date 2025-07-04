@@ -1,4 +1,6 @@
 import { inject, injectable } from 'inversify';
+import type { Option, Result } from 'oxide.ts';
+import { Err, None, Ok, Some } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -14,14 +16,14 @@ export interface ClientFriendlyStatusRepository {
    * Fetch all client-friendly status entities.
    * @returns All client-friendly status entities.
    */
-  listAllClientFriendlyStatuses(): Promise<ReadonlyArray<ClientFriendlyStatusEntity>>;
+  listAllClientFriendlyStatuses(): Promise<Result<ReadonlyArray<ClientFriendlyStatusEntity>, Error>>;
 
   /**
    * Fetch a client-friendly status entity by its id.
    * @param id The id of the client-friendly status entity.
    * @returns The client-friendly status entity or null if not found.
    */
-  findClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusEntity | null>;
+  findClientFriendlyStatusById(id: string): Promise<Result<Option<ClientFriendlyStatusEntity>, Error>>;
 
   /**
    * Retrieves metadata associated with the country repository.
@@ -55,7 +57,7 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
     this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/code-list/pp/v1`;
   }
 
-  async listAllClientFriendlyStatuses(): Promise<ReadonlyArray<ClientFriendlyStatusEntity>> {
+  async listAllClientFriendlyStatuses(): Promise<Result<ReadonlyArray<ClientFriendlyStatusEntity>, Error>> {
     this.log.trace('Fetching all client friendly statuses');
 
     const url = new URL(`${this.baseUrl}/esdc_clientfriendlystatuses`);
@@ -83,29 +85,34 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
         url,
         responseBody: await response.text(),
       });
-      throw new Error(`Failed to fetch client friendly statuses. Status: ${response.status}, Status Text: ${response.statusText}`);
+      return Err(new Error(`Failed to fetch client friendly statuses. Status: ${response.status}, Status Text: ${response.statusText}`));
     }
 
     const clientFriendlyStatusResponseEntity: ClientFriendlyStatusResponseEntity = await response.json();
     const clientFriendlyStatusEntities = clientFriendlyStatusResponseEntity.value;
 
     this.log.trace('Client friendly statuses: [%j]', clientFriendlyStatusEntities);
-    return clientFriendlyStatusEntities;
+    return Ok(clientFriendlyStatusEntities);
   }
 
-  async findClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusEntity | null> {
+  async findClientFriendlyStatusById(id: string): Promise<Result<Option<ClientFriendlyStatusEntity>, Error>> {
     this.log.debug('Fetching client friendly status with id: [%s]', id);
 
     const clientFriendlyStatusEntities = await this.listAllClientFriendlyStatuses();
-    const clientFriendlyStatusEntity = clientFriendlyStatusEntities.find((status) => status.esdc_clientfriendlystatusid === id);
+
+    if (clientFriendlyStatusEntities.isErr()) {
+      return clientFriendlyStatusEntities.unwrap();
+    }
+
+    const clientFriendlyStatusEntity = clientFriendlyStatusEntities.unwrap().find((status) => status.esdc_clientfriendlystatusid === id);
 
     if (!clientFriendlyStatusEntity) {
       this.log.warn('Client friendly status not found; id: [%s]', id);
-      return null;
+      return Ok(None);
     }
 
     this.log.trace('Returning client friendly status: [%j]', clientFriendlyStatusEntity);
-    return clientFriendlyStatusEntity;
+    return Ok(Some(clientFriendlyStatusEntity));
   }
 
   getMetadata(): Record<string, string> {
@@ -127,20 +134,20 @@ export class MockClientFriendlyStatusRepository implements ClientFriendlyStatusR
     this.log = createLogger('MockClientFriendlyStatusRepository');
   }
 
-  async listAllClientFriendlyStatuses(): Promise<ClientFriendlyStatusEntity[]> {
+  async listAllClientFriendlyStatuses(): Promise<Result<ReadonlyArray<ClientFriendlyStatusEntity>, Error>> {
     this.log.debug('Fetching all client friendly statuses');
     const clientFriendlyStatusEntities = clientFriendlyStatusJsonDataSource.value;
 
     if (clientFriendlyStatusEntities.length === 0) {
       this.log.warn('No client friendly statuses found');
-      return [];
+      return Ok([]);
     }
 
     this.log.trace('Returning client friendly statuses: [%j]', clientFriendlyStatusEntities);
-    return await Promise.resolve(clientFriendlyStatusEntities);
+    return await Promise.resolve(Ok(clientFriendlyStatusEntities));
   }
 
-  async findClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusEntity | null> {
+  async findClientFriendlyStatusById(id: string): Promise<Result<Option<ClientFriendlyStatusEntity>, Error>> {
     this.log.debug('Fetching client friendly status with id: [%s]', id);
 
     const clientFriendlyStatusEntities = clientFriendlyStatusJsonDataSource.value;
@@ -148,10 +155,10 @@ export class MockClientFriendlyStatusRepository implements ClientFriendlyStatusR
 
     if (!clientFriendlyStatusEntity) {
       this.log.warn('Client friendly status not found; id: [%s]', id);
-      return null;
+      return Ok(None);
     }
 
-    return await Promise.resolve(clientFriendlyStatusEntity);
+    return await Promise.resolve(Ok(Some(clientFriendlyStatusEntity)));
   }
 
   getMetadata(): Record<string, string> {
