@@ -66,6 +66,7 @@
     "moderndash": "^4.0.0",
     "moize": "^6.1.6",
     "morgan": "^1.10.0",
+    "oxide.ts": "^1.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-i18next": "^15.5.3",

@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientFriendlyStatus = statusId ? await appContainer.get(TYPES.domain.services.ClientFriendlyStatusService).getLocalizedClientFriendlyStatusById(statusId, locale) : null;
 
   return {
-    statusResult: { alertType, clientFriendlyStatus },
+    statusResult: { alertType, clientFriendlyStatus: clientFriendlyStatus?.unwrap() },
     meta,
   };
 }
