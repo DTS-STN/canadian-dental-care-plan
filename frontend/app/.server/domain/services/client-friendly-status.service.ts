@@ -87,29 +87,34 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
     this.log.debug('DefaultClientFriendlyStatusService initiated.');
   }
 
-  /**
-   * Retrieves a list of all client friendly statuses.
-   *
-   * @returns An array of ClientFriendlyStatus DTOs.
-   */
   async getClientFriendlyStatusById(id: string): Promise<Result<ClientFriendlyStatusDto, ClientFriendlyStatusNotFoundException>> {
     this.log.debug('Get client friendly status with id: [%s]', id);
-    const clientFriendlyStatusEntity = await this.clientFriendlyStatusRepository.findClientFriendlyStatusById(id);
 
-    if (clientFriendlyStatusEntity.unwrap().isNone()) {
+    const findClientFriendlyStatusByIdResult = await this.clientFriendlyStatusRepository.findClientFriendlyStatusById(id);
+    const clientFriendlyStatusEntityOption = findClientFriendlyStatusByIdResult.unwrap();
+
+    if (clientFriendlyStatusEntityOption.isNone()) {
       this.log.error('Client friendly status with id: [%s] not found', id);
       return Err(new ClientFriendlyStatusNotFoundException(`Client friendly status with id: [${id}] not found`));
     }
 
-    const clientFriendlyStatusDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto(clientFriendlyStatusEntity.unwrap().unwrap());
+    const clientFriendlyStatusEntity = clientFriendlyStatusEntityOption.unwrap();
+    const clientFriendlyStatusDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto(clientFriendlyStatusEntity);
     this.log.trace('Returning client friendly status: [%j]', clientFriendlyStatusDto);
     return Ok(clientFriendlyStatusDto);
   }
 
   async getLocalizedClientFriendlyStatusById(id: string, locale: AppLocale): Promise<Result<ClientFriendlyStatusLocalizedDto, ClientFriendlyStatusNotFoundException>> {
     this.log.debug('Get localized client friendly status with id: [%s] and locale: [%s]', id, locale);
-    const clientFriendlyStatusDto = await this.getClientFriendlyStatusById(id);
-    const clientFriendlyStatusLocalizedDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto(clientFriendlyStatusDto.unwrap(), locale);
+
+    const getClientFriendlyStatusByIdResult = await this.getClientFriendlyStatusById(id);
+
+    if (getClientFriendlyStatusByIdResult.isErr()) {
+      return Err(getClientFriendlyStatusByIdResult.unwrapErr());
+    }
+
+    const clientFriendlyStatusDto = getClientFriendlyStatusByIdResult.unwrap();
+    const clientFriendlyStatusLocalizedDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto(clientFriendlyStatusDto, locale);
     this.log.trace('Returning localized client friendly status: [%j]', clientFriendlyStatusLocalizedDto);
     return Ok(clientFriendlyStatusLocalizedDto);
   }
