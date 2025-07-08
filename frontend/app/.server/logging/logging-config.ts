@@ -96,7 +96,7 @@ const loggingConfigSchema = z.object({
  * @returns The validated logging configuration object with all required fields
  */
 export function getLoggingConfig(): LoggingConfig {
-  return singleton<LoggingConfig>('loggingConfig', () => {
+  return singleton('loggingConfig', () => {
     // Parse environment variables, applying validation rules
     // The singleton ensures we only validate once per application instance
     return loggingConfigSchema.parse(process.env);

@@ -1,5 +1,4 @@
 import { invariant } from '@dts-stn/invariant';
-import type winston from 'winston';
 
 import { singleton } from '../utils/instance-registry';
 import { getLoggingConfig } from './logging-config';
@@ -44,7 +43,7 @@ export function createLogger(label: string): Logger {
 
   // Get or create the singleton Winston logger instance
   // This ensures we only create one logger for the entire application
-  const winstonLogger = singleton<winston.Logger>('winstonLogger', () => {
+  const winstonLogger = singleton('winstonLogger', () => {
     const config = getLoggingConfig();
     const logger = createWinstonInstance(config);
     logger.info('Winston Logger Singleton Initialized 🚀');
