@@ -6,17 +6,44 @@
  * and retrieve these instances, and it supports the use of factory
  * functions for creating instances on demand.
  */
+import type { Logger } from 'winston';
+
+import type { LoggingConfig } from '~/.server/logging/logging-config';
+import type { ServerEnv } from '~/.server/utils/env.utils';
 import { AppError } from '~/errors/app-error';
 import { ErrorCodes } from '~/errors/error-codes';
-
-export const instanceNames = ['clientEnv', 'loggingConfig', 'serverEnv', 'winstonLogger'] as const;
-export type InstanceName = (typeof instanceNames)[number];
+import type { ClientEnv } from '~/utils/env-utils';
 
 /**
- * Retrieves a singleton instance. If the instance does not exist, it is created using the provided factory function.
- * @throws {AppError} If the instance is not found and no factory function is provided.
+ * Maps instance names to their corresponding types for singleton management.
+ * Each property key represents a unique instance name, and its value is the type
+ * of the singleton instance associated with that name.
  */
-export function singleton<T>(instanceName: InstanceName, factory?: () => T): T {
+interface InstanceTypeMap {
+  clientEnv: ClientEnv;
+  loggingConfig: LoggingConfig;
+  serverEnv: ServerEnv;
+  winstonLogger: Logger;
+}
+
+/**
+ * Represents the valid keys of InstanceTypeMap.
+ * Used to constrain the allowed instance names for singleton retrieval and registration.
+ */
+type InstanceName = keyof InstanceTypeMap;
+
+/**
+ * Retrieves a singleton instance by name. If the instance does not exist, it is created using the provided factory function.
+ *
+ * @param instanceName - The unique name of the singleton instance to retrieve.
+ * @param factory - Optional. A function to create the instance if it does not exist.
+ * @returns The singleton instance associated with the given name.
+ * @throws {AppError} If the instance is not found and no factory function is provided.
+ *
+ * Example usage:
+ *   const env = singleton('serverEnv', () => loadServerEnv());
+ */
+export function singleton<N extends InstanceName, T extends InstanceTypeMap[N]>(instanceName: N, factory?: () => T): T {
   /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
   globalThis.__instanceRegistry ??= new Map<InstanceName, unknown>();
 
