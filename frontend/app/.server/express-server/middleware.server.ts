@@ -76,7 +76,7 @@ export function logging(isProduction: boolean): RequestHandler {
 /**
  * Configures session middleware, optionally skipping it for bots and specific paths.
  */
-export function session(isProduction: boolean, serverConfig: ServerConfig): RequestHandler {
+export async function session(isProduction: boolean, serverConfig: ServerConfig): Promise<RequestHandler> {
   const log = createLogger('express.server/sessionRequestHandler');
 
   const ignorePatterns = ['/api/buildinfo', '/api/health', '/api/readyz', '/.well-known/jwks.json'];
@@ -85,7 +85,7 @@ export function session(isProduction: boolean, serverConfig: ServerConfig): Requ
 
   const sessionStore =
     SESSION_STORAGE_TYPE === 'redis' //
-      ? createRedisStore(serverConfig)
+      ? await createRedisStore(serverConfig)
       : createMemoryStore();
 
   const middleware = sessionMiddleware({

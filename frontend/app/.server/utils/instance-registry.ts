@@ -8,6 +8,7 @@
  */
 import type { Logger } from 'winston';
 
+import type { RedisClient } from '~/.server/data';
 import type { LoggingConfig } from '~/.server/logging/logging-config';
 import type { ServerEnv } from '~/.server/utils/env.utils';
 import { AppError } from '~/errors/app-error';
@@ -22,6 +23,7 @@ import type { ClientEnv } from '~/utils/env-utils';
 interface InstanceTypeMap {
   clientEnv: ClientEnv;
   loggingConfig: LoggingConfig;
+  redisClient: RedisClient;
   serverEnv: ServerEnv;
   winstonLogger: Logger;
 }

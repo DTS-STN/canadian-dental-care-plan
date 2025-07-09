@@ -27,11 +27,12 @@ export function createMemoryStore(): MemoryStore {
  * This function initializes a new `RedisStore` instance, using the
  * Redis client and session configuration from the provided server environment.
  */
-export function createRedisStore(serverConfig: Pick<ServerConfig, 'SESSION_EXPIRES_SECONDS' | 'SESSION_KEY_PREFIX'>): RedisStore {
+export async function createRedisStore(serverConfig: Pick<ServerConfig, 'SESSION_EXPIRES_SECONDS' | 'SESSION_KEY_PREFIX'>): Promise<RedisStore> {
   const log = createLogger('session.server/createRedisStore');
   log.info('      initializing new Redis session store');
+  const redisClient = await getRedisClient();
   return new RedisStore({
-    client: getRedisClient(),
+    client: redisClient,
     prefix: serverConfig.SESSION_KEY_PREFIX,
     // The Redis TTL is set to the session expiration
     // time, plus 5% to allow for clock drift

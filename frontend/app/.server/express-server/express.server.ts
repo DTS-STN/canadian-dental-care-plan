@@ -61,7 +61,7 @@ log.info('    ✓ security headers middleware');
 app.use(securityHeaders());
 
 log.info('    ✓ session middleware (%s)', environment.SESSION_STORAGE_TYPE);
-app.use(session(isProduction, environment));
+app.use(await session(isProduction, environment));
 
 if (viteDevServer) {
   log.info('    ✓ vite dev server middlewares');

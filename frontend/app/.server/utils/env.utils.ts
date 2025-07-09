@@ -129,7 +129,7 @@ const serverEnv = clientEnvSchema.extend({
   HTTP_PROXY_TLS_TIMEOUT: z.coerce.number().default(30*1000),
 
   // session configuration
-  SESSION_STORAGE_TYPE: z.enum(['file', 'redis']).default('file'),
+  SESSION_STORAGE_TYPE: z.enum(['memory', 'redis']).default('memory'),
   SESSION_EXPIRES_SECONDS: z.coerce.number().default(1200),
   SESSION_COOKIE_NAME: z.string().trim().min(1).default('__CDCP||session'),
   SESSION_COOKIE_DOMAIN: z.string().trim().min(1).optional(),
@@ -138,15 +138,18 @@ const serverEnv = clientEnvSchema.extend({
   SESSION_COOKIE_SECRET: z.string().trim().min(16).default(randomUUID()),
   SESSION_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
   SESSION_COOKIE_SECURE: z.string().transform(toBoolean).default('true'),
-  SESSION_FILE_DIR: z.string().trim().min(1).default('./node_modules/cache/sessions/'),
   SESSION_KEY_PREFIX: z.string().trim().min(1).default('SESSION:'),
 
 
   // redis server configuration
   REDIS_SENTINEL_NAME: z.string().trim().transform(emptyToUndefined).optional(),
-  REDIS_SENTINEL_HOST: z.string().trim().transform(emptyToUndefined).optional(),
-  REDIS_SENTINEL_PORT: z.coerce.number().optional(),
+  REDIS_SENTINEL_HOST: z.string().trim().min(1).default('localhost'),
+  // Sentinels by default run listening for connections to TCP port 26379
+  REDIS_SENTINEL_PORT: z.coerce.number().default(26_379),
+  REDIS_SENTINEL_USERNAME: z.string().trim().min(1).optional(),
+  REDIS_SENTINEL_PASSWORD: z.string().trim().min(1).optional(),
   REDIS_STANDALONE_HOST: z.string().trim().min(1).default('localhost'),
+  // Redis by default run listening for connections to TCP port 6379
   REDIS_STANDALONE_PORT: z.coerce.number().default(6379),
   REDIS_USERNAME: z.string().trim().min(1).optional(),
   REDIS_PASSWORD: z.string().trim().min(1).optional(),
