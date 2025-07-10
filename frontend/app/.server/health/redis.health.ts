@@ -30,8 +30,8 @@ export class RedisHealthCheck implements HealthCheck {
       REDIS_STANDALONE_HOST: this.serverConfig.REDIS_STANDALONE_HOST,
       REDIS_STANDALONE_PORT: this.serverConfig.REDIS_STANDALONE_PORT.toString(),
       REDIS_SENTINEL_NAME: this.serverConfig.REDIS_SENTINEL_NAME ?? '',
-      REDIS_SENTINEL_HOST: this.serverConfig.REDIS_SENTINEL_HOST ?? '',
-      REDIS_SENTINEL_PORT: (this.serverConfig.REDIS_SENTINEL_PORT ?? '').toString(),
+      REDIS_SENTINEL_HOST: this.serverConfig.REDIS_SENTINEL_HOST,
+      REDIS_SENTINEL_PORT: this.serverConfig.REDIS_SENTINEL_PORT.toString(),
       REDIS_COMMAND_TIMEOUT_SECONDS: this.serverConfig.REDIS_COMMAND_TIMEOUT_SECONDS.toString(),
     };
 

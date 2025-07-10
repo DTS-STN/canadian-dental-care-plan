@@ -1,9 +1,6 @@
-import { inject, injectable } from 'inversify';
-import type { RedisOptions } from 'ioredis';
-import Redis from 'ioredis';
+import { injectable } from 'inversify';
 
-import type { ServerConfig } from '~/.server/configs';
-import { TYPES } from '~/.server/constants';
+import { getRedisClient } from '~/.server/data/redis.client';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
 
@@ -39,78 +36,43 @@ export interface RedisService {
 @injectable()
 export class DefaultRedisService implements RedisService {
   private readonly log: Logger;
-  private readonly redisClient: Redis;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig) {
+  constructor() {
     this.log = createLogger('DefaultRedisService');
-    this.redisClient = new Redis(this.getRedisConfig(serverConfig));
-
-    const redisUrl = serverConfig.REDIS_SENTINEL_NAME //
-      ? `sentinel://${serverConfig.REDIS_SENTINEL_HOST}:${serverConfig.REDIS_SENTINEL_PORT}`
-      : `redis://${serverConfig.REDIS_STANDALONE_HOST}:${serverConfig.REDIS_STANDALONE_PORT}`;
-
-    this.redisClient
-      .on('connect', () => this.log.info(`Redis client initiating connection to [${redisUrl}]`))
-      .on('ready', () => this.log.info('Redis client is ready to use'))
-      .on('reconnecting', () => this.log.info(`Redis client is reconnecting to [${redisUrl}]`))
-      .on('error', (error: Error) => this.log.error(`Redis client error connecting to [${redisUrl}]: ${error.message}`));
   }
 
   async get<T>(key: string): Promise<T | null> {
-    const value = await this.redisClient.get(key);
+    const redisClient = await getRedisClient();
+    const value = await redisClient.get(key);
+    this.log.debug('GET key=[%s] hit=[%s]', key, value);
     return value ? JSON.parse(value) : null;
   }
 
   async set(key: string, value: unknown, ttlSecs: number): Promise<'OK'> {
-    return await this.redisClient.set(key, JSON.stringify(value), 'EX', ttlSecs);
+    const redisClient = await getRedisClient();
+    const result = await redisClient.setEx(key, ttlSecs, JSON.stringify(value));
+    this.log.debug('SET key=[%s] ttl=[%s]', key, ttlSecs);
+    return result;
   }
 
   async del(key: string): Promise<number> {
-    return await this.redisClient.del(key);
+    const redisClient = await getRedisClient();
+    const result = await redisClient.del(key);
+    this.log.debug('DEL key=[%s] result=[%s]', key, result);
+    return result;
   }
 
   async ping(): Promise<'PONG'> {
-    return await this.redisClient.ping();
+    const redisClient = await getRedisClient();
+    await redisClient.ping();
+    this.log.debug('PING successful');
+    return 'PONG';
   }
 
   async ttl(key: string): Promise<number> {
-    return await this.redisClient.ttl(key);
-  }
-
-  private getRedisConfig(serverConfig: ServerConfig): RedisOptions {
-    if (serverConfig.REDIS_SENTINEL_NAME) {
-      this.log.debug('      configuring Redis client in sentinel mode');
-
-      return {
-        name: serverConfig.REDIS_SENTINEL_NAME,
-        sentinels: [
-          {
-            host: serverConfig.REDIS_SENTINEL_HOST,
-            port: serverConfig.REDIS_SENTINEL_PORT,
-          },
-        ],
-        username: serverConfig.REDIS_USERNAME,
-        password: serverConfig.REDIS_PASSWORD,
-        commandTimeout: serverConfig.REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
-        retryStrategy: this.retryStrategy,
-      };
-    }
-
-    this.log.debug('      configuring Redis client in standalone mode');
-    return {
-      host: serverConfig.REDIS_STANDALONE_HOST,
-      port: serverConfig.REDIS_STANDALONE_PORT,
-      username: serverConfig.REDIS_USERNAME,
-      password: serverConfig.REDIS_PASSWORD,
-      commandTimeout: serverConfig.REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
-      retryStrategy: this.retryStrategy,
-    };
-  }
-
-  retryStrategy(times: number): number {
-    // exponential backoff starting at 250ms to a maximum of 5s
-    const retryIn = Math.min(250 * Math.pow(2, times - 1), 5000);
-    this.log.error('Could not connect to Redis (attempt #%s); retry in %s ms', times, retryIn);
-    return retryIn;
+    const redisClient = await getRedisClient();
+    const ttl = await redisClient.ttl(key);
+    this.log.debug('TTL key=[%s] ttl=[%s]', key, ttl);
+    return ttl;
   }
 }
