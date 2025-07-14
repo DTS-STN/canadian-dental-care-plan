@@ -134,7 +134,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   // Fetch client application data using ClientApplicationService
-  const clientApplication = await clientApplicationService.findClientApplicationByBasicInfo({
+  const clientApplicationOption = await clientApplicationService.findClientApplicationByBasicInfo({
     firstName: parsedDataResult.data.firstName,
     lastName: parsedDataResult.data.lastName,
     dateOfBirth: parsedDataResult.data.dateOfBirth,
@@ -143,9 +143,11 @@ export async function action({ context: { appContainer, session }, params, reque
     userId: 'anonymous',
   });
 
-  if (!clientApplication) {
+  if (clientApplicationOption.isNone()) {
     return { status: 'status-not-found' } as const;
   }
+
+  const clientApplication = clientApplicationOption.unwrap();
 
   saveRenewState({ params, session, state: { applicantInformation: parsedDataResult.data, clientApplication, editMode: false } });
 

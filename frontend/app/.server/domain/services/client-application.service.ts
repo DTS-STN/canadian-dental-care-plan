@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { None, Option, Some } from 'oxide.ts';
 
 import { TYPES } from '~/.server/constants';
 import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
@@ -18,7 +19,7 @@ export interface ClientApplicationService {
    * @param clientApplicationBasicInfoRequestDto The basic info request dto.
    * @returns A Promise that resolves to the client application dto if found, or `null` otherwise.
    */
-  findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): Promise<ClientApplicationDto | null>;
+  findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): Promise<Option<ClientApplicationDto>>;
 
   /**
    * Finds a client application by SIN.
@@ -26,7 +27,7 @@ export interface ClientApplicationService {
    * @param clientApplicationSinRequestDto The SIN request dto.
    * @returns A Promise that resolves to the client application dto if found, or `null` otherwise.
    */
-  findClientApplicationBySin(clientApplicationSinRequestDto: ClientApplicationSinRequestDto): Promise<ClientApplicationDto | null>;
+  findClientApplicationBySin(clientApplicationSinRequestDto: ClientApplicationSinRequestDto): Promise<Option<ClientApplicationDto>>;
 }
 
 @injectable()
@@ -52,27 +53,27 @@ export class DefaultClientApplicationService implements ClientApplicationService
     this.log.debug('DefaultClientApplicationService initiated.');
   }
 
-  async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): Promise<ClientApplicationDto | null> {
+  async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): Promise<Option<ClientApplicationDto>> {
     this.log.trace('Get client application by basic info: [%j]', clientApplicationBasicInfoRequestDto);
 
     this.auditService.createAudit('client-application.basic-info.get', { userId: clientApplicationBasicInfoRequestDto.userId });
 
     const clientApplicationBasicInfoRequestEntity = this.clientApplicationDtoMapper.mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto);
     const clientApplicationEntity = await this.clientApplicationRepository.findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity);
-    const clientApplicationDto = clientApplicationEntity ? this.clientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity) : null;
+    const clientApplicationDto = clientApplicationEntity.isSome() ? Some(this.clientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity.unwrap())) : None;
 
     this.log.trace('Returning client application: [%j]', clientApplicationDto);
     return clientApplicationDto;
   }
 
-  async findClientApplicationBySin(clientApplicationSinRequestDto: ClientApplicationSinRequestDto): Promise<ClientApplicationDto | null> {
+  async findClientApplicationBySin(clientApplicationSinRequestDto: ClientApplicationSinRequestDto): Promise<Option<ClientApplicationDto>> {
     this.log.trace('Get client application with sin: [%j]', clientApplicationSinRequestDto);
 
     this.auditService.createAudit('client-application.sin.get', { userId: clientApplicationSinRequestDto.userId });
 
     const clientApplicationSinRequestEntity = this.clientApplicationDtoMapper.mapClientApplicationSinRequestDtoToClientApplicationSinRequestEntity(clientApplicationSinRequestDto);
     const clientApplicationEntity = await this.clientApplicationRepository.findClientApplicationBySin(clientApplicationSinRequestEntity);
-    const clientApplicationDto = clientApplicationEntity ? this.clientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity) : null;
+    const clientApplicationDto = clientApplicationEntity.isSome() ? Some(this.clientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity.unwrap())) : None;
 
     this.log.trace('Returning client application: [%j]', clientApplicationDto);
     return clientApplicationDto;

@@ -1,3 +1,4 @@
+import { None } from 'oxide.ts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -76,7 +77,7 @@ describe('DefaultClientApplicationRepository', () => {
 
       const result = await repository.findClientApplicationByBasicInfo(requestEntity);
 
-      expect(result).toEqual(responseDataMock);
+      expect(result.unwrap()).toEqual(responseDataMock);
       expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
         'http.client.interop-api.retrieve-benefit-application_by-basic-info.posts',
         new URL('https://api.example.com/dental-care/applicant-information/dts/v1/retrieve-benefit-application'),
@@ -110,7 +111,7 @@ describe('DefaultClientApplicationRepository', () => {
 
       const result = await repository.findClientApplicationByBasicInfo(requestEntity);
 
-      expect(result).toBeNull();
+      expect(result).toBe(None);
     });
 
     it('should throw Error for other non-200/204 responses', async () => {
@@ -157,7 +158,7 @@ describe('DefaultClientApplicationRepository', () => {
 
       const result = await repository.findClientApplicationBySin(requestEntity);
 
-      expect(result).toEqual(responseDataMock);
+      expect(result.unwrap()).toEqual(responseDataMock);
       expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith('http.client.interop-api.retrieve-benefit-application_by-sin.posts', new URL('https://api.example.com/dental-care/applicant-information/dts/v1/retrieve-benefit-application'), {
         proxyUrl: serverConfigMock.HTTP_PROXY_URL,
         method: 'POST',
@@ -185,7 +186,7 @@ describe('DefaultClientApplicationRepository', () => {
 
       const result = await repository.findClientApplicationBySin(requestEntity);
 
-      expect(result).toBeNull();
+      expect(result).toBe(None);
     });
 
     it('should throw Error for other non-200/204 responses', async () => {
@@ -227,13 +228,14 @@ describe('MockClientApplicationRepository', () => {
         },
       };
 
-      const result = await repository.findClientApplicationByBasicInfo(requestEntity);
+      const resultOption = await repository.findClientApplicationByBasicInfo(requestEntity);
+      const result = resultOption.unwrap();
 
-      expect(result?.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator).toBe(true);
-      expect(result?.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator).toBe(false);
-      expect(result?.BenefitApplication.Applicant.PersonName[0].PersonGivenName[0]).toBe('John');
-      expect(result?.BenefitApplication.Applicant.PersonName[0].PersonSurName).toBe('Doe');
-      expect(result?.BenefitApplication.Applicant.PersonBirthDate.date).toBe('2000-01-01');
+      expect(result.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator).toBe(true);
+      expect(result.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator).toBe(false);
+      expect(result.BenefitApplication.Applicant.PersonName[0].PersonGivenName[0]).toBe('John');
+      expect(result.BenefitApplication.Applicant.PersonName[0].PersonSurName).toBe('Doe');
+      expect(result.BenefitApplication.Applicant.PersonBirthDate.date).toBe('2000-01-01');
     });
 
     it('should return client application with default flags for unknown ID', async () => {
@@ -249,13 +251,14 @@ describe('MockClientApplicationRepository', () => {
         },
       };
 
-      const result = await repository.findClientApplicationByBasicInfo(requestEntity);
+      const resultOption = await repository.findClientApplicationByBasicInfo(requestEntity);
+      const result = resultOption.unwrap();
 
-      expect(result?.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator).toBe(false);
-      expect(result?.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator).toBe(false);
-      expect(result?.BenefitApplication.Applicant.PersonName[0].PersonGivenName[0]).toBe('Jane');
-      expect(result?.BenefitApplication.Applicant.PersonName[0].PersonSurName).toBe('Smith');
-      expect(result?.BenefitApplication.Applicant.PersonBirthDate.date).toBe('1990-01-01');
+      expect(result.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator).toBe(false);
+      expect(result.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator).toBe(false);
+      expect(result.BenefitApplication.Applicant.PersonName[0].PersonGivenName[0]).toBe('Jane');
+      expect(result.BenefitApplication.Applicant.PersonName[0].PersonSurName).toBe('Smith');
+      expect(result.BenefitApplication.Applicant.PersonBirthDate.date).toBe('1990-01-01');
     });
 
     it('should return null for specific ID (10000000000)', async () => {
@@ -273,7 +276,7 @@ describe('MockClientApplicationRepository', () => {
 
       const result = await repository.findClientApplicationByBasicInfo(requestEntity);
 
-      expect(result).toBeNull();
+      expect(result).toBe(None);
     });
   });
 
@@ -289,11 +292,12 @@ describe('MockClientApplicationRepository', () => {
         },
       };
 
-      const result = await repository.findClientApplicationBySin(requestEntity);
+      const resultOption = await repository.findClientApplicationBySin(requestEntity);
+      const result = resultOption.unwrap();
 
-      expect(result?.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator).toBe(true);
-      expect(result?.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator).toBe(true);
-      expect(result?.BenefitApplication.Applicant.PersonSINIdentification.IdentificationID).toBe('800000002');
+      expect(result.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator).toBe(true);
+      expect(result.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator).toBe(true);
+      expect(result.BenefitApplication.Applicant.PersonSINIdentification.IdentificationID).toBe('800000002');
     });
 
     it('should return client application with default flags for unknown SIN', async () => {
@@ -307,11 +311,12 @@ describe('MockClientApplicationRepository', () => {
         },
       };
 
-      const result = await repository.findClientApplicationBySin(requestEntity);
+      const resultOption = await repository.findClientApplicationBySin(requestEntity);
+      const result = resultOption.unwrap();
 
-      expect(result?.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator).toBe(false);
-      expect(result?.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator).toBe(false);
-      expect(result?.BenefitApplication.Applicant.PersonSINIdentification.IdentificationID).toBe('999999999');
+      expect(result.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator).toBe(false);
+      expect(result.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator).toBe(false);
+      expect(result.BenefitApplication.Applicant.PersonSINIdentification.IdentificationID).toBe('999999999');
     });
 
     it('should return null for specific SIN (900000001)', async () => {
@@ -327,7 +332,7 @@ describe('MockClientApplicationRepository', () => {
 
       const result = await repository.findClientApplicationBySin(requestEntity);
 
-      expect(result).toBeNull();
+      expect(result).toBe(None);
     });
   });
 });

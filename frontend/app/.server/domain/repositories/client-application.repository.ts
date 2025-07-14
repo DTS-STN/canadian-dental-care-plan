@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { None, Option, Some } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -22,7 +23,7 @@ export interface ClientApplicationRepository {
    * @param clientApplicationBasicInfoRequestEntity The basic info request entity.
    * @returns A Promise that resolves to the client application entity if found, or `null` otherwise.
    */
-  findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null>;
+  findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<Option<ClientApplicationEntity>>;
 
   /**
    * Finds a client application by SIN.
@@ -30,7 +31,7 @@ export interface ClientApplicationRepository {
    * @param clientApplicationSinRequestEntity The SIN request entity.
    * @returns A Promise that resolves to the client application entity if found, or `null` otherwise.
    */
-  findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<ClientApplicationEntity | null>;
+  findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<Option<ClientApplicationEntity>>;
 }
 
 @injectable()
@@ -45,7 +46,7 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
     this.httpClient = httpClient;
   }
 
-  async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null> {
+  async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<Option<ClientApplicationEntity>> {
     this.log.trace('Fetching client application for basic info [%j]', clientApplicationBasicInfoRequestEntity);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/retrieve-benefit-application`);
@@ -62,12 +63,12 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
     if (response.status === 200) {
       const data = await response.json();
       this.log.trace('Client application [%j]', data);
-      return data;
+      return Some(data);
     }
 
     if (response.status === 204) {
       this.log.trace('Client application not found for basic info [%j]', clientApplicationBasicInfoRequestEntity);
-      return null;
+      return None;
     }
 
     this.log.error('%j', {
@@ -86,7 +87,7 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
     throw new Error(`Failed to 'POST' for client application data by basic info. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  async findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<ClientApplicationEntity | null> {
+  async findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<Option<ClientApplicationEntity>> {
     this.log.trace('Fetching client application for sin [%j]', clientApplicationSinRequestEntity);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/retrieve-benefit-application`);
@@ -103,12 +104,12 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
     if (response.status === 200) {
       const data = await response.json();
       this.log.trace('Client application [%j]', data);
-      return data;
+      return Some(data);
     }
 
     if (response.status === 204) {
       this.log.trace('Client application not found for sin [%j]', clientApplicationSinRequestEntity);
-      return null;
+      return None;
     }
 
     this.log.error('%j', {
@@ -176,7 +177,7 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     this.log = createLogger('MockClientApplicationRepository');
   }
 
-  async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<ClientApplicationEntity | null> {
+  async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<Option<ClientApplicationEntity>> {
     this.log.debug('Fetching client application for basic info [%j]', clientApplicationBasicInfoRequestEntity);
 
     const identificationId = clientApplicationBasicInfoRequestEntity.Applicant.ClientIdentification[0].IdentificationID;
@@ -187,7 +188,7 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     // If the ID is '10000000000', return a 404 error
     if (identificationId === '10000000000') {
       this.log.debug('Client application not found for basic info [%j]', clientApplicationBasicInfoRequestEntity);
-      return await Promise.resolve(null);
+      return await Promise.resolve(None);
     }
 
     // Otherwise, return specific flags or the default
@@ -222,10 +223,10 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     };
 
     this.log.debug('Client application [%j]', clientApplicationEntity);
-    return await Promise.resolve(clientApplicationEntity);
+    return await Promise.resolve(Some(clientApplicationEntity));
   }
 
-  async findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<ClientApplicationEntity | null> {
+  async findClientApplicationBySin(clientApplicationSinRequestEntity: ClientApplicationSinRequestEntity): Promise<Option<ClientApplicationEntity>> {
     this.log.debug('Fetching client application for sin [%j]', clientApplicationSinRequestEntity);
 
     const personSINIdentification = clientApplicationSinRequestEntity.Applicant.PersonSINIdentification.IdentificationID;
@@ -233,7 +234,7 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     // If the ID is '900000001', return a 404 error
     if (personSINIdentification === '900000001') {
       this.log.debug('Client application not found for sin [%j]', clientApplicationSinRequestEntity);
-      return await Promise.resolve(null);
+      return await Promise.resolve(None);
     }
 
     // Otherwise, return specific flags or the default
@@ -262,6 +263,6 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     };
 
     this.log.debug('Client application [%j]', clientApplicationEntity);
-    return await Promise.resolve(clientApplicationEntity);
+    return await Promise.resolve(Some(clientApplicationEntity));
   }
 }

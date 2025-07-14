@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
   const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
-  if (!clientApplication) {
+  if (clientApplication.isNone()) {
     throw redirect(getPathById('protected/data-unavailable', params));
   }
 
@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       taxYear: applicationYear.taxYear,
       coverageEndDate: applicationYear.dependentEligibilityEndDate,
     },
-    clientApplication,
+    clientApplication: clientApplication.unwrap(),
     id,
     session,
   });
