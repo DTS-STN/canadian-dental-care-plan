@@ -1,4 +1,5 @@
 import type { Moized } from 'moize';
+import { None, Some } from 'oxide.ts';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -70,12 +71,14 @@ describe('DefaultCountryService', () => {
     it('fetches country by id', async () => {
       const id = '1';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findCountryById.mockResolvedValueOnce({
-        esdc_countryid: '1',
-        esdc_nameenglish: 'Canada English',
-        esdc_namefrench: 'Canada Français',
-        esdc_countrycodealpha3: 'CAN',
-      });
+      mockCountryRepository.findCountryById.mockResolvedValueOnce(
+        Some({
+          esdc_countryid: '1',
+          esdc_nameenglish: 'Canada English',
+          esdc_namefrench: 'Canada Français',
+          esdc_countrycodealpha3: 'CAN',
+        }),
+      );
 
       const mockDto: CountryDto = { id: '1', nameEn: 'Canada English', nameFr: 'Canada Français' };
 
@@ -94,7 +97,7 @@ describe('DefaultCountryService', () => {
     it('fetches country by id throws not found exception', async () => {
       const id = '1033';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findCountryById.mockResolvedValueOnce(null);
+      mockCountryRepository.findCountryById.mockResolvedValueOnce(None);
 
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
 
@@ -159,12 +162,14 @@ describe('DefaultCountryService', () => {
     it('fetches localized country by id', async () => {
       const id = '1';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findCountryById.mockResolvedValueOnce({
-        esdc_countryid: '1',
-        esdc_nameenglish: 'Canada English',
-        esdc_namefrench: 'Canada Français',
-        esdc_countrycodealpha3: 'CAN',
-      });
+      mockCountryRepository.findCountryById.mockResolvedValueOnce(
+        Some({
+          esdc_countryid: '1',
+          esdc_nameenglish: 'Canada English',
+          esdc_namefrench: 'Canada Français',
+          esdc_countrycodealpha3: 'CAN',
+        }),
+      );
 
       const mockDto: CountryLocalizedDto = { id: '1', name: 'Canada English' };
 
@@ -183,7 +188,7 @@ describe('DefaultCountryService', () => {
     it('fetches localized country by id throws not found exception', async () => {
       const id = '1033';
       const mockCountryRepository = mock<CountryRepository>();
-      mockCountryRepository.findCountryById.mockResolvedValueOnce(null);
+      mockCountryRepository.findCountryById.mockResolvedValueOnce(None);
 
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
 

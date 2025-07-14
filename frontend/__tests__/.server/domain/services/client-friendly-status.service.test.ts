@@ -1,5 +1,5 @@
 import type { Moized } from 'moize';
-import { None, Ok, Some } from 'oxide.ts';
+import { None, Some } from 'oxide.ts';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -33,13 +33,11 @@ describe('DefaultClientFriendlyStatusService', () => {
       const id = '1';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
       mockClientFriendlyStatusRepository.findClientFriendlyStatusById.mockResolvedValueOnce(
-        Ok(
-          Some({
-            esdc_clientfriendlystatusid: '1',
-            esdc_descriptionenglish: 'You have qualified for the Canadian Dental Care Plan.',
-            esdc_descriptionfrench: 'Vous êtes admissible au Régime canadien de soins dentaires.',
-          }),
-        ),
+        Some({
+          esdc_clientfriendlystatusid: '1',
+          esdc_descriptionenglish: 'You have qualified for the Canadian Dental Care Plan.',
+          esdc_descriptionfrench: 'Vous êtes admissible au Régime canadien de soins dentaires.',
+        }),
       );
 
       const mockDto: ClientFriendlyStatusDto = {
@@ -55,7 +53,7 @@ describe('DefaultClientFriendlyStatusService', () => {
 
       const dto = await service.getClientFriendlyStatusById(id);
 
-      expect(dto.unwrap()).toEqual(mockDto);
+      expect(dto).toEqual(mockDto);
       expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).toHaveBeenCalledOnce();
     });
@@ -63,14 +61,13 @@ describe('DefaultClientFriendlyStatusService', () => {
     it('fetches client friendly status by id throws not found exception', async () => {
       const id = '1033';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
-      mockClientFriendlyStatusRepository.findClientFriendlyStatusById.mockResolvedValueOnce(Ok(None));
+      mockClientFriendlyStatusRepository.findClientFriendlyStatusById.mockResolvedValueOnce(None);
 
       const mockClientFriendlyStatusDtoMapper = mock<ClientFriendlyStatusDtoMapper>();
 
       const service = new DefaultClientFriendlyStatusService(mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
-      const result = await service.getClientFriendlyStatusById(id);
-      expect(result.unwrapErr()).toBeInstanceOf(ClientFriendlyStatusNotFoundException);
+      await expect(async () => await service.getClientFriendlyStatusById(id)).rejects.toThrow(ClientFriendlyStatusNotFoundException);
       expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).not.toHaveBeenCalled();
     });
@@ -81,13 +78,11 @@ describe('DefaultClientFriendlyStatusService', () => {
       const id = '1';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
       mockClientFriendlyStatusRepository.findClientFriendlyStatusById.mockResolvedValueOnce(
-        Ok(
-          Some({
-            esdc_clientfriendlystatusid: '1',
-            esdc_descriptionenglish: 'You have qualified for the Canadian Dental Care Plan.',
-            esdc_descriptionfrench: 'Vous êtes admissible au Régime canadien de soins dentaires.',
-          }),
-        ),
+        Some({
+          esdc_clientfriendlystatusid: '1',
+          esdc_descriptionenglish: 'You have qualified for the Canadian Dental Care Plan.',
+          esdc_descriptionfrench: 'Vous êtes admissible au Régime canadien de soins dentaires.',
+        }),
       );
 
       const mockDto: ClientFriendlyStatusLocalizedDto = { id: '1', name: 'You have qualified for the Canadian Dental Care Plan.' };
@@ -99,7 +94,7 @@ describe('DefaultClientFriendlyStatusService', () => {
 
       const dto = await service.getLocalizedClientFriendlyStatusById(id, 'en');
 
-      expect(dto.unwrap()).toEqual(mockDto);
+      expect(dto).toEqual(mockDto);
       expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto).toHaveBeenCalledOnce();
     });
@@ -107,14 +102,13 @@ describe('DefaultClientFriendlyStatusService', () => {
     it('fetches localized client friendly status by id throws not found exception', async () => {
       const id = '1033';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
-      mockClientFriendlyStatusRepository.findClientFriendlyStatusById.mockResolvedValueOnce(Ok(None));
+      mockClientFriendlyStatusRepository.findClientFriendlyStatusById.mockResolvedValueOnce(None);
 
       const mockClientFriendlyStatusDtoMapper = mock<ClientFriendlyStatusDtoMapper>();
 
       const service = new DefaultClientFriendlyStatusService(mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
-      const result = await service.getClientFriendlyStatusById(id);
-      expect(result.unwrapErr()).toBeInstanceOf(ClientFriendlyStatusNotFoundException);
+      await expect(async () => await service.getClientFriendlyStatusById(id)).rejects.toThrow(ClientFriendlyStatusNotFoundException);
       expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto).not.toHaveBeenCalled();
     });
