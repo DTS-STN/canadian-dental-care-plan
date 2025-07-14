@@ -1,5 +1,6 @@
 import type { AppLoadContext } from 'react-router';
 
+import { None } from 'oxide.ts';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
 
@@ -22,6 +23,7 @@ describe('Letters Page', () => {
 
       mockAppLoadContext.session.get.calledWith('idToken').mockReturnValueOnce({ sub: '00000000-0000-0000-0000-000000000000' });
       mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999', sub: '1111111' });
+      mockAppLoadContext.session.find.calledWith('clientNumber').mockReturnValueOnce(None);
 
       mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
       mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
@@ -68,6 +70,7 @@ describe('Letters Page', () => {
 
     mockAppLoadContext.session.get.calledWith('idToken').mockReturnValueOnce({ sub: '00000000-0000-0000-0000-000000000000' });
     mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999' });
+    mockAppLoadContext.session.find.calledWith('clientNumber').mockReturnValueOnce(None);
 
     mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
     mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValue({

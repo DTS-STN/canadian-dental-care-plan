@@ -169,7 +169,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     this.log.debug('Validating CSRF token');
 
     const requestToken = String(formData.get('_csrf'));
-    const sessionToken = String(session.find('csrfToken'));
+    const sessionToken = session.get<string>('csrfToken');
 
     const result = this.csrfTokenValidator.validateCsrfToken({ requestToken, sessionToken });
 
