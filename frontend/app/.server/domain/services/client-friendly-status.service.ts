@@ -1,7 +1,5 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
-import type { Result } from 'oxide.ts';
-import { Err, Ok } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -23,7 +21,7 @@ export interface ClientFriendlyStatusService {
    * @returns The ClientFriendlyStatus DTO corresponding to the specified ID.
    * @throws {ClientFriendlyStatusNotFoundException} If no client friendly status is found with the specified ID.
    */
-  getClientFriendlyStatusById(id: string): Promise<Result<ClientFriendlyStatusDto, ClientFriendlyStatusNotFoundException>>;
+  getClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusDto>;
 
   /**
    * Retrieves a specific client friendly status by its ID with localized names.
@@ -33,7 +31,7 @@ export interface ClientFriendlyStatusService {
    * @returns The ClientFriendlyStatusLocalized DTO corresponding to the specified ID.
    * @throws {ClientFriendlyStatusNotFoundException} If no client friendly status is found with the specified ID.
    */
-  getLocalizedClientFriendlyStatusById(id: string, locale: AppLocale): Promise<Result<ClientFriendlyStatusLocalizedDto, ClientFriendlyStatusNotFoundException>>;
+  getLocalizedClientFriendlyStatusById(id: string, locale: AppLocale): Promise<ClientFriendlyStatusLocalizedDto>;
 }
 
 export type ClientFriendlyStatusServiceImpl_ServerConfig = Pick<ServerConfig, 'LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS'>;
@@ -87,35 +85,26 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
     this.log.debug('DefaultClientFriendlyStatusService initiated.');
   }
 
-  async getClientFriendlyStatusById(id: string): Promise<Result<ClientFriendlyStatusDto, ClientFriendlyStatusNotFoundException>> {
+  async getClientFriendlyStatusById(id: string): Promise<ClientFriendlyStatusDto> {
     this.log.debug('Get client friendly status with id: [%s]', id);
 
-    const findClientFriendlyStatusByIdResult = await this.clientFriendlyStatusRepository.findClientFriendlyStatusById(id);
-    const clientFriendlyStatusEntityOption = findClientFriendlyStatusByIdResult.unwrap();
+    const clientFriendlyStatusEntity = await this.clientFriendlyStatusRepository.findClientFriendlyStatusById(id);
 
-    if (clientFriendlyStatusEntityOption.isNone()) {
+    if (clientFriendlyStatusEntity.isNone()) {
       this.log.error('Client friendly status with id: [%s] not found', id);
-      return Err(new ClientFriendlyStatusNotFoundException(`Client friendly status with id: [${id}] not found`));
+      throw new ClientFriendlyStatusNotFoundException(`Client friendly status with id: [${id}] not found`);
     }
 
-    const clientFriendlyStatusEntity = clientFriendlyStatusEntityOption.unwrap();
-    const clientFriendlyStatusDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto(clientFriendlyStatusEntity);
+    const clientFriendlyStatusDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto(clientFriendlyStatusEntity.unwrap());
     this.log.trace('Returning client friendly status: [%j]', clientFriendlyStatusDto);
-    return Ok(clientFriendlyStatusDto);
+    return clientFriendlyStatusDto;
   }
 
-  async getLocalizedClientFriendlyStatusById(id: string, locale: AppLocale): Promise<Result<ClientFriendlyStatusLocalizedDto, ClientFriendlyStatusNotFoundException>> {
+  async getLocalizedClientFriendlyStatusById(id: string, locale: AppLocale): Promise<ClientFriendlyStatusLocalizedDto> {
     this.log.debug('Get localized client friendly status with id: [%s] and locale: [%s]', id, locale);
-
-    const getClientFriendlyStatusByIdResult = await this.getClientFriendlyStatusById(id);
-
-    if (getClientFriendlyStatusByIdResult.isErr()) {
-      return Err(getClientFriendlyStatusByIdResult.unwrapErr());
-    }
-
-    const clientFriendlyStatusDto = getClientFriendlyStatusByIdResult.unwrap();
+    const clientFriendlyStatusDto = await this.getClientFriendlyStatusById(id);
     const clientFriendlyStatusLocalizedDto = this.clientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto(clientFriendlyStatusDto, locale);
     this.log.trace('Returning localized client friendly status: [%j]', clientFriendlyStatusLocalizedDto);
-    return Ok(clientFriendlyStatusLocalizedDto);
+    return clientFriendlyStatusLocalizedDto;
   }
 }

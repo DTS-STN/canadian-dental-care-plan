@@ -136,12 +136,12 @@ export class DefaultCountryService implements CountryService {
     this.log.debug('Get country with id: [%s]', id);
     const countryEntity = await this.countryRepository.findCountryById(id);
 
-    if (!countryEntity) {
+    if (countryEntity.isNone()) {
       this.log.error('Country with id: [%s] not found', id);
       throw new CountryNotFoundException(`Country with id: [${id}] not found`);
     }
 
-    const countryDto = this.countryDtoMapper.mapCountryEntityToCountryDto(countryEntity);
+    const countryDto = this.countryDtoMapper.mapCountryEntityToCountryDto(countryEntity.unwrap());
     this.log.trace('Returning country: [%j]', countryDto);
     return countryDto;
   }

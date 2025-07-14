@@ -1,3 +1,4 @@
+import { None } from 'oxide.ts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -108,7 +109,7 @@ describe('DefaultCountryRepository', () => {
     const repository = new DefaultCountryRepository(serverConfigMock, httpClientMock);
     const actual = await repository.findCountryById('1');
 
-    expect(actual).toEqual(responseDataMock.value[0]);
+    expect(actual.unwrap()).toEqual(responseDataMock.value[0]);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.countries.gets',
       new URL('https://api.example.com/dental-care/code-list/pp/v1/esdc_countries?%24select=esdc_countryid%2Cesdc_nameenglish%2Cesdc_namefrench%2Cesdc_countrycodealpha3&%24filter=statecode+eq+0+and+esdc_enabledentalapplicationportal+eq+true'),
@@ -172,7 +173,7 @@ describe('MockCountryRepository', () => {
 
     const country = await repository.findCountryById('1');
 
-    expect(country).toEqual({
+    expect(country.unwrap()).toEqual({
       esdc_countryid: '1',
       esdc_nameenglish: 'Canada English',
       esdc_namefrench: 'Canada Français',
@@ -185,6 +186,6 @@ describe('MockCountryRepository', () => {
 
     const country = await repository.findCountryById('non-existent-id');
 
-    expect(country).toBeNull();
+    expect(country).toBe(None);
   });
 });
