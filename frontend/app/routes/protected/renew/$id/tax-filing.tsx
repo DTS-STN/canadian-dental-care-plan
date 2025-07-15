@@ -61,7 +61,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const taxFilingSchema = z.object({
-    taxFiling: z.nativeEnum(TAX_FILING_OPTION, {
+    taxFiling: z.enum(TAX_FILING_OPTION, {
       errorMap: () => ({ message: t('protected-renew:tax-filing.error-message.tax-filing-required') }),
     }),
   });

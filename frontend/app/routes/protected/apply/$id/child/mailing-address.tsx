@@ -89,7 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   const idToken: IdToken = session.get('idToken');
   const state = loadProtectedApplyChildState({ params, request, session });
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
 
   if (formAction === FORM_ACTION.cancel) {

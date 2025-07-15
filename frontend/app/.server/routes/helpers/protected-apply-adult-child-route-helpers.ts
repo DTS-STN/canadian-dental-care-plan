@@ -64,7 +64,7 @@ export function loadProtectedApplyAdultSingleChildState({ params, request, sessi
   const log = createLogger('protected-apply-adult-child-route-helpers.server/loadProtectedApplyAdultSingleChildState');
   const protectedApplyState = loadProtectedApplyAdultChildState({ params, request, session });
 
-  const parsedChildId = z.string().uuid().safeParse(params.childId);
+  const parsedChildId = z.uuid().safeParse(params.childId);
 
   if (!parsedChildId.success) {
     log.warn('Invalid "childId" param format; childId: [%s]', params.childId);

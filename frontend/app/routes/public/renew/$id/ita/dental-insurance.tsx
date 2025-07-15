@@ -58,10 +58,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // state validation schema
   const dentalInsuranceSchema = z.object({
-    dentalInsurance: z.boolean({ errorMap: () => ({ message: t('renew-ita:dental-insurance.error-message.dental-insurance-required') }) }),
+    dentalInsurance: z.boolean({ error: t('renew-ita:dental-insurance.error-message.dental-insurance-required') }),
   });
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     if (state.hasAddressChanged) {
       if (state.isHomeAddressSameAsMailingAddress) {
@@ -80,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveRenewState({ params, session, state: { dentalInsurance: parsedDataResult.data.dentalInsurance } });

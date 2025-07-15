@@ -77,7 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const parentOrGuardianSchema = z.object({
-    parentOrGuardian: z.nativeEnum(PARENT_OR_GUARDIAN_OPTION, {
+    parentOrGuardian: z.enum(PARENT_OR_GUARDIAN_OPTION, {
       errorMap: () => ({ message: t('protected-renew:children.parent-or-guardian.error-message.parent-or-guardian-required') }),
     }),
   });

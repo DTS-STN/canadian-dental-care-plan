@@ -121,14 +121,14 @@ export async function action({ context: { appContainer, session }, params, reque
       .min(1, t('protected-renew:marital-status.error-message.sin-required'))
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:marital-status.error-message.sin-valid') });
+          ctx.addIssue({ code: 'custom', message: t('protected-renew:marital-status.error-message.sin-valid') });
         } else if (
           [state.clientApplication.applicantInformation.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
             .filter((sin) => sin !== undefined)
             .map((sin) => formatSin(sin))
             .includes(formatSin(sin))
         ) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:marital-status.error-message.sin-unique') });
+          ctx.addIssue({ code: 'custom', message: t('protected-renew:marital-status.error-message.sin-unique') });
         }
       }),
   }) satisfies z.ZodType<PartnerInformationState>;

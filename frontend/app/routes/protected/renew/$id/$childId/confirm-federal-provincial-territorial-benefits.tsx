@@ -138,7 +138,7 @@ export async function action({ context: { appContainer, session }, params, reque
     })
     .superRefine((val, ctx) => {
       if (val.hasFederalBenefits && (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram))) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:children.update-dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
+        ctx.addIssue({ code: 'custom', message: t('protected-renew:children.update-dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
       }
     })
     .transform((val) => {
@@ -157,9 +157,9 @@ export async function action({ context: { appContainer, session }, params, reque
     .superRefine((val, ctx) => {
       if (val.hasProvincialTerritorialBenefits) {
         if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:children.update-dental-benefits.error-message.provincial-territorial-required'), path: ['province'] });
+          ctx.addIssue({ code: 'custom', message: t('protected-renew:children.update-dental-benefits.error-message.provincial-territorial-required'), path: ['province'] });
         } else if (!val.provincialTerritorialSocialProgram || validator.isEmpty(val.provincialTerritorialSocialProgram)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:children.update-dental-benefits.error-message.provincial-benefit-program-required'), path: ['provincialTerritorialSocialProgram'] });
+          ctx.addIssue({ code: 'custom', message: t('protected-renew:children.update-dental-benefits.error-message.provincial-benefit-program-required'), path: ['provincialTerritorialSocialProgram'] });
         }
       }
     })

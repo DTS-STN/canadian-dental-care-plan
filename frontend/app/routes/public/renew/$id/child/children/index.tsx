@@ -83,7 +83,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadRenewChildState({ params, request, session });
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.back) {
     return redirect(getPathById('public/renew/$id/type-renewal', params));

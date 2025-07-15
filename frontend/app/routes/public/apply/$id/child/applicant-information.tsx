@@ -64,7 +64,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.cancel) {
     invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
@@ -79,16 +79,17 @@ export async function action({ context: { appContainer, session }, params, reque
         .string()
         .trim()
         .min(1, t('apply-child:applicant-information.error-message.sin-required'))
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:applicant-information.error-message.sin-valid') });
+            ctx.addIssue({ code: 'custom', message: t('apply-child:applicant-information.error-message.sin-valid') });
           } else if (
             [state.partnerInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
               .filter((sin) => sin !== undefined)
               .map((sin) => formatSin(sin))
               .includes(formatSin(sin))
           ) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:children.information.error-message.sin-unique') });
+            ctx.addIssue({ code: 'custom', message: t('apply-child:children.information.error-message.sin-unique') });
           }
         }),
       firstName: z
@@ -105,22 +106,23 @@ export async function action({ context: { appContainer, session }, params, reque
         .max(100)
         .refine(isAllValidInputCharacters, t('apply-child:applicant-information.error-message.characters-valid'))
         .refine((lastName) => !hasDigits(lastName), t('apply-child:applicant-information.error-message.last-name-no-digits')),
-      dateOfBirthYear: z.number({ required_error: t('apply-child:applicant-information.error-message.date-of-birth-year-required'), invalid_type_error: t('apply-child:applicant-information.error-message.date-of-birth-year-number') }),
-      dateOfBirthMonth: z.number({ required_error: t('apply-child:applicant-information.error-message.date-of-birth-month-required') }),
-      dateOfBirthDay: z.number({ required_error: t('apply-child:applicant-information.error-message.date-of-birth-day-required'), invalid_type_error: t('apply-child:applicant-information.error-message.date-of-birth-day-number') }),
+      dateOfBirthYear: z.number({ error: (issue) => (issue.input === undefined ? t('apply-child:applicant-information.error-message.date-of-birth-year-required') : t('apply-child:applicant-information.error-message.date-of-birth-year-number')) }),
+      dateOfBirthMonth: z.number({ error: (issue) => (issue.input === undefined ? t('apply-child:applicant-information.error-message.date-of-birth-month-required') : undefined) }),
+      dateOfBirthDay: z.number({ error: (issue) => (issue.input === undefined ? t('apply-child:applicant-information.error-message.date-of-birth-day-required') : t('apply-child:applicant-information.error-message.date-of-birth-day-number')) }),
       dateOfBirth: z.string(),
     })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
 
       if (!isValidDateString(dateOfBirth)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:applicant-information.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('apply-child:applicant-information.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
       } else if (!isPastDateString(dateOfBirth)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:applicant-information.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('apply-child:applicant-information.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:applicant-information.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('apply-child:applicant-information.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
       }
     })
     .transform((val) => {
@@ -140,7 +142,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);

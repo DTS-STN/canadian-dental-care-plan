@@ -71,7 +71,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.cancel) {
     return redirect(getPathById('public/status/index', params));

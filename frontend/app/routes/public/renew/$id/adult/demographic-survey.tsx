@@ -86,7 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = loadRenewAdultState({ params, request, session });
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.back) {
     if (state.hasFederalProvincialTerritorialBenefitsChanged) {
@@ -116,13 +116,14 @@ export async function action({ context: { appContainer, session }, params, reque
       locationBornStatus: z.string().trim().optional(),
       genderStatus: z.string().trim().optional(),
     })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     .superRefine((val, ctx) => {
       if (val.indigenousStatus === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && !val.firstNations) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:demographic-survey.error-message.first-nations-required'), path: ['firstNations'] });
+        ctx.addIssue({ code: 'custom', message: t('renew-adult:demographic-survey.error-message.first-nations-required'), path: ['firstNations'] });
       }
 
       if (val.ethnicGroups.includes(ANOTHER_ETHNIC_GROUP_OPTION.toString()) && !val.anotherEthnicGroup) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult:demographic-survey.error-message.another-ethnic-group-required'), path: ['anotherEthnicGroup'] });
+        ctx.addIssue({ code: 'custom', message: t('renew-adult:demographic-survey.error-message.another-ethnic-group-required'), path: ['anotherEthnicGroup'] });
       }
     });
 
@@ -139,7 +140,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveRenewState({
