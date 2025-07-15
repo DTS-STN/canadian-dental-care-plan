@@ -35,13 +35,13 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('stub-login:index.page-title') }) };
 
-  const idToken = session.find<IdToken>('idToken');
-  const userInfoToken = session.find<UserinfoToken>('userInfoToken');
+  const idTokenOption = session.find<IdToken>('idToken');
+  const userInfoTokenOption = session.find<UserinfoToken>('userInfoToken');
 
   const defaultValues = {
-    sin: userInfoToken?.sin ?? '',
-    sid: idToken?.sid ?? '00000000-0000-0000-0000-000000000000',
-    sub: idToken?.sub ?? '00000000-0000-0000-0000-000000000000',
+    sin: userInfoTokenOption.mapOr<string>('', (userInfoToken) => userInfoToken.sin ?? ''),
+    sid: idTokenOption.mapOr<string>('00000000-0000-0000-0000-000000000000', (idToken) => idToken.sid),
+    sub: idTokenOption.mapOr<string>('00000000-0000-0000-0000-000000000000', (idToken) => idToken.sub),
   };
 
   return { meta, defaultValues };

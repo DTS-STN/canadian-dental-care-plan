@@ -1,5 +1,7 @@
 import type { Request } from 'express';
 import assert from 'node:assert';
+import type { Option } from 'oxide.ts';
+import { None, Some } from 'oxide.ts';
 import validator from 'validator';
 
 import { createLogger } from '~/.server/logging';
@@ -18,7 +20,7 @@ type RequestSession = Request['session'];
 export interface Session {
   /**
    * The unique ID of the session.
-   * @returns {string} The session ID.
+   * @returns The session ID.
    */
   id: string;
 
@@ -28,19 +30,21 @@ export interface Session {
    * This method allows checking if a key is present in the session.
    *
    * @param key The session key to check.
-   * @returns {boolean} True if the key exists in the session, false otherwise.
+   * @returns True if the key exists in the session, false otherwise.
    */
   has(key: string): boolean;
 
   /**
    * Finds a value in the session by its key.
    *
-   * This method retrieves the value associated with a given session key. If the key doesn't exist, it returns `undefined`.
+   * Retrieves the value associated with the given session key, wrapped in an Option.
+   * Returns `None` if the key does not exist or is reserved. This method is useful
+   * for safely accessing session data without throwing errors.
    *
-   * @param key The session key to find.
-   * @returns {T | undefined} The value associated with the key, or `undefined` if the key does not exist in the session.
+   * @param key The session key to look up.
+   * @returns An Option containing the value if present, or None if not found.
    */
-  find<T>(key: string): T | undefined;
+  find<T>(key: string): Option<T>;
 
   /**
    * Retrieves a value from the session by its key.
@@ -48,8 +52,8 @@ export interface Session {
    * This method works similarly to `find()`, but it throws an error if the key does not exist in the session.
    *
    * @param key The session key to retrieve.
-   * @returns {T} The value associated with the session key.
-   * @throws {Error} Throws an error if the key is not found in the session.
+   * @returns The value associated with the session key.
+   * @throws Throws an error if the key is not found in the session.
    */
   get<T>(key: string): T;
 
@@ -60,9 +64,8 @@ export interface Session {
    *
    * @param key The session key to set.
    * @param value The value to set for the session key.
-   * @returns {this} The current instance of the session, enabling method chaining.
    */
-  set<T = unknown>(key: string, value: T): this;
+  set<T = unknown>(key: string, value: T): void;
 
   /**
    * Removes a key-value pair from the session.
@@ -96,7 +99,7 @@ export class ExpressSession implements Session {
   constructor(session: RequestSession) {
     this.session = session;
     assert.ok(session, 'Session object is undefined. Ensure session middleware is properly configured.');
-    this.log = createLogger('~/.server/web/Session');
+    this.log = createLogger('~/.server/web/ExpressSession');
     this.log.trace('Session initialized with ID: %s', this.id);
   }
 
@@ -112,25 +115,25 @@ export class ExpressSession implements Session {
     return exists;
   }
 
-  find<T>(key: string): T | undefined {
-    if (!this.has(key)) return undefined;
+  find<T>(key: string): Option<T> {
+    if (!this.has(key)) return None;
     const sanitizedKey = this.sanitizeKey(key);
-    const value = this.session[sanitizedKey] as T | undefined;
+    const value = Some(this.session[sanitizedKey] as T);
     this.log.trace('Found value for session key: %s, value: %s', sanitizedKey, value);
     return value;
   }
 
   get<T>(key: string): T {
     const value = this.find<T>(key);
-    if (value === undefined) {
+    if (value.isNone()) {
       this.log.error('Session key not found: %s, sessionId: %s', key, this.id);
       throw new Error(`Key '${key}' not found in session [${this.id}]`);
     }
     this.log.trace('Retrieved value for session key: %s, value: %s', key, value);
-    return value;
+    return value.unwrap();
   }
 
-  set<T = unknown>(key: string, value: T): this {
+  set<T = unknown>(key: string, value: T): void {
     const sanitizedKey = this.sanitizeKey(key);
     this.assertNotReservedKey(sanitizedKey);
     this.session[sanitizedKey] = value;
@@ -141,7 +144,6 @@ export class ExpressSession implements Session {
         this.log.trace('Session key set successfully: %s', sanitizedKey);
       }
     });
-    return this;
   }
 
   unset(key: string): boolean {
@@ -203,15 +205,15 @@ export class NoopSession implements Session {
     return false;
   }
 
-  find<T>(key: string): T | undefined {
-    return undefined;
+  find<T>(key: string): Option<T> {
+    return None;
   }
 
   get<T>(key: string): T {
     throw new Error('No session available in stateless context');
   }
 
-  set<T = unknown>(key: string, value: T): this {
+  set<T = unknown>(key: string, value: T): void {
     throw new Error('No session available in stateless context');
   }
 

@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
   const clientNumber =
-    session.find<string>('clientNumber') ??
+    session.find<string>('clientNumber').unwrapUnchecked() ??
     (await appContainer.get(TYPES.domain.services.ApplicantService).findClientNumberBySin({
       sin: userInfoToken.sin,
       userId: userInfoToken.sub,

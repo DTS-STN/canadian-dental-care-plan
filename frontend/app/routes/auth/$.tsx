@@ -133,7 +133,7 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
 
   const raoidcService = appContainer.get(TYPES.auth.RaoidcService);
   const codeVerifier = session.get<string>('codeVerifier');
-  const returnUrl = session.find<string>('returnUrl') ?? '/';
+  const returnUrl = session.find<string>('returnUrl').unwrapOr('/');
   const state = session.get<string>('state');
 
   const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');

@@ -61,18 +61,18 @@ describe('Session', () => {
       it('should return the value if key exists', () => {
         mockRequestSession.key = 'value';
         const session = new ExpressSession(mockRequestSession);
-        expect(session.find<string>('key')).toBe('value');
+        expect(session.find<string>('key').unwrap()).toBe('value');
       });
 
       it('should return undefined if key does not exist', () => {
         const session = new ExpressSession(mockRequestSession);
-        expect(session.find('key')).toBeUndefined();
+        expect(session.find('key').isNone()).toBe(true);
       });
 
       it('should sanitize the key', () => {
         mockRequestSession['_sanitized_key___$__'] = 'value';
         const session = new ExpressSession(mockRequestSession);
-        expect(session.find<string>(' sanitized key!@#$%^')).toBe('value');
+        expect(session.find<string>(' sanitized key!@#$%^').unwrap()).toBe('value');
       });
     });
 
@@ -191,7 +191,7 @@ describe('Session', () => {
     });
 
     it('should always return undefined for find', () => {
-      expect(session.find('anyKey')).toBeUndefined();
+      expect(session.find('anyKey').isNone()).toBe(true);
     });
 
     it('should throw error on get', () => {
