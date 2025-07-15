@@ -178,7 +178,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       const dto = await service.findProvincialGovernmentInsurancePlanById(id);
 
-      expect(dto).toEqual({
+      expect(dto.unwrap()).toEqual({
         id: '1',
         nameEn: 'First Insurance Plan',
         nameFr: "Premier plan d'assurance",
@@ -200,7 +200,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       const dto = await service.findProvincialGovernmentInsurancePlanById(id);
 
-      expect(dto).toBeNull();
+      expect(dto.isNone()).toBe(true);
       expect(mockGovernmentInsurancePlanRepository.listAllGovernmentInsurancePlans).toHaveBeenCalledOnce();
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
     });
@@ -304,7 +304,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       const dto = await service.findLocalizedProvincialGovernmentInsurancePlanById(id, 'en');
 
-      expect(dto).toEqual(mockLocalizedDto);
+      expect(dto.unwrap()).toEqual(mockLocalizedDto);
       expect(mockGovernmentInsurancePlanRepository.listAllGovernmentInsurancePlans).toHaveBeenCalledOnce();
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto).toHaveBeenCalledOnce();
@@ -322,7 +322,7 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
 
       const dto = await service.findLocalizedProvincialGovernmentInsurancePlanById(id, 'en');
 
-      expect(dto).toBeNull();
+      expect(dto.isNone()).toBe(true);
       expect(mockGovernmentInsurancePlanRepository.listAllGovernmentInsurancePlans).toHaveBeenCalledOnce();
       expect(mockProvincialGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToProvincialGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
     });

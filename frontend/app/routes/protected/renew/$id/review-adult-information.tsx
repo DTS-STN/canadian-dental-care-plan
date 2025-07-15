@@ -169,10 +169,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const clientDentalBenefits = state.clientApplication.dentalBenefits.flatMap(async (id) => {
     const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
-    if (federalProgram) return [federalProgram.name];
+    if (federalProgram.isSome()) return [federalProgram.unwrap().name];
 
     const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
-    if (provincialProgram) return [provincialProgram.name];
+    if (provincialProgram.isSome()) return [provincialProgram.unwrap().name];
 
     return [];
   });
